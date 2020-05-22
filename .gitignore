@@ -32,32 +32,24 @@ mix-manifest.json
 !/zb_users/plugin/api
 !/zb_users/plugin/AdminColor
 !/zb_users/plugin/AuditRecords
-!/zb_users/plugin/AutoPublisher
 !/zb_users/plugin/CloudStorage
 !/zb_users/plugin/CustomMeta
 !/zb_users/plugin/Gravatar
-!/zb_users/plugin/HeartVote
 !/zb_users/plugin/Howl
-!/zb_users/plugin/KindEditor
-!/zb_users/plugin/Pad
 !/zb_users/plugin/RegPage
 !/zb_users/plugin/SQLLog
 !/zb_users/plugin/STACentre
-!/zb_users/plugin/Sitemap
-!/zb_users/plugin/Storage
 !/zb_users/plugin/Totoro
 !/zb_users/plugin/UEditor
 !/zb_users/plugin/ZBPDK
 !/zb_users/plugin/alipay
 !/zb_users/plugin/clinic
-!/zb_users/plugin/passwordvisit
 !/zb_users/plugin/upyun
 !/zb_users/plugin/tpluginmaker
 !/zb_users/plugin/wearingtheme
 !/zb_users/plugin/wp2zbp
 !/zb_users/plugin/LargeData
 !/zb_users/plugin/ZBPJFExample
-!/zb_users/plugin/markdown
 !/zb_users/plugin/LinksManage
 
 # Unoffical Theme
