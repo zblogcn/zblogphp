@@ -1402,7 +1402,7 @@ class ZBlogPHP
         $mem_ids_need_load = array();
         
         foreach ($list as $obj) {
-            if (!isset($obj->AuthorID) || ((int) $obj->AuthorID <= 0)) {
+            if (!isset($obj->AuthorID) || ($obj->AuthorID == null)) {
                 continue;
             }
 
@@ -1418,9 +1418,7 @@ class ZBlogPHP
             return true;
         }
 
-        $array = $this->GetMemberList(null, array(
-            array('IN', 'mem_ID', $mem_ids_need_load)
-        ));
+        $array = $this->GetMemberList(null, array(array('IN', 'mem_ID', $mem_ids_need_load)));
         foreach ($array as $m) {
             $this->members[$m->ID] = $m;
             $this->membersbyname[$m->Name] = &$this->members[$m->ID];
@@ -1429,6 +1427,11 @@ class ZBlogPHP
         return true;
     }
 
+    /**
+     * 私有方法之递归加载分类.
+     *
+     * @return array
+     */
     private function LoadCategories_Recursion($deep, $id, &$lv)
     {
         $subarray = array();

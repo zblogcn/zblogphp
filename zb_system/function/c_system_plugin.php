@@ -2294,7 +2294,7 @@ DefinePluginFilter('Filter_Plugin_CSP_Backend');
 '**************************************************<
 '类型:Filter
 '名称:Filter_Plugin_API_Begin
-'参数:&$input
+'参数:
 '说明:api页的begin接口(1.6.1加入)
 '调用:
 '**************************************************>
