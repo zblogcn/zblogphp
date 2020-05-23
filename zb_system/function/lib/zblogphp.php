@@ -1390,6 +1390,45 @@ class ZBlogPHP
         return true;
     }
 
+    /**
+     * 通过列表（文章/评论）一次性将用户预载入到 members 里.
+     *
+     * @param array $list 文章/评论列表数组
+     *
+     * @return boolean
+     */
+    public function LoadMembersInList($list)
+    {
+        $mem_ids_need_load = array();
+        
+        foreach ($list as $obj) {
+            if (!isset($obj->AuthorID) || ((int) $obj->AuthorID <= 0)) {
+                continue;
+            }
+
+            // 已经载入的用户不重新载入
+            if (isset($this->members[$obj->AuthorID])) {
+                continue;
+            }
+
+            $mem_ids_need_load[] = $obj->AuthorID;
+        }
+
+        if (count($mem_ids_need_load) === 0) {
+            return true;
+        }
+
+        $array = $this->GetMemberList(null, array(
+            array('IN', 'mem_ID', $mem_ids_need_load)
+        ));
+        foreach ($array as $m) {
+            $this->members[$m->ID] = $m;
+            $this->membersbyname[$m->Name] = &$this->members[$m->ID];
+        }
+
+        return true;
+    }
+
     private function LoadCategories_Recursion($deep, $id, &$lv)
     {
         $subarray = array();
