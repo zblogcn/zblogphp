@@ -218,6 +218,11 @@ class Template
             foreach ($this->dirs as $key => $value) {
                 $s = str_replace('/theme/' . $this->theme . '/template', '/cache/compiled/' . $this->theme, $value);
                 if (file_exists($s)) {
+                    foreach (GetFilesInDir($s, 'php') as $t) {
+                        if (file_exists($t)) {
+                            @unlink($t);
+                        }
+                    }
                     @rmdir($s);
                 }
             }

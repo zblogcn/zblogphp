@@ -596,7 +596,12 @@ class ZBlogPHP
         }
 
         $parsedHost = parse_url($this->host);
-        $this->fullcurrenturl = $parsedHost['scheme'] . '://' . $parsedHost['host'] . $this->currenturl;
+        $this->fullcurrenturl = $parsedHost['scheme'] . '://' . $parsedHost['host'];
+        if (isset($parsedHost['port'])) {
+            $this->fullcurrenturl .= ':' . $parsedHost['port'];
+        }
+        $this->fullcurrenturl .= $this->currenturl;
+
         if (substr($this->host, 0, 8) == 'https://') {
             $this->isHttps = true;
         }
