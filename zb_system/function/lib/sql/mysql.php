@@ -36,6 +36,7 @@ class SQL__MySQL extends SQL__Global
      */
     public function exist($table, $dbname = '')
     {
+        $table = str_replace('%pre%', $this->db->dbpre, $table);
         $this->pri_sql = array("SELECT COUNT(*) FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA='$dbname' AND TABLE_NAME='$table'");
 
         return $this;
