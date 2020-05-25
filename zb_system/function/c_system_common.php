@@ -1050,14 +1050,18 @@ function JsonError4ShowErrorHook($errorCode, $errorString, $file, $line)
 }
 
 /**
- * 以JSON形式输出错误信息.
+ * 以JSON形式输出错误信息.(err code为0认为是没有错误，所以把0转为1)
  *
  * @param string $errorCode   错误编号
  * @param string $errorString 错误内容
- * @param object
+ * @param object $data 具体内容
+ * @param boolean $exit 是否exit退出
  */
-function JsonError($errorCode, $errorString, $data)
+function JsonError($errorCode, $errorString, $data, $exit = true)
 {
+    if ($errorCode == 0 && $exit) {
+        $errorCode = 1;
+    }
     $result = array(
         'data' => $data,
         'err'  => array(
@@ -1069,7 +1073,7 @@ function JsonError($errorCode, $errorString, $data)
     );
     @ob_clean();
     echo json_encode($result);
-    if ($errorCode != 0) {
+    if ($exit) {
         exit;
     }
 }
@@ -1081,7 +1085,7 @@ function JsonError($errorCode, $errorString, $data)
  */
 function JsonReturn($data)
 {
-    JsonError(0, "", $data);
+    JsonError(0, "", $data, false);
 }
 
 /**

@@ -24,12 +24,17 @@ zbpform::password('aaaa','文本框');
 class ZbpForm
 {
 
+    static public $setreturn = false;
+
     public static function radio($name, $array = array('否', '是'), $checkedkey = 0)
     {
         $s = '';
         foreach ((array) $array as $k => $v) {
             $checked = $k == $checkedkey ? ' checked="checked"' : '';
             $s .= "<input type=\"radio\" name=\"$name\" id=\"$name-$k\" class=\"$name\" value=\"$k\"$checked /><label for=\"$name-$k\">$v</label>\r\n";
+        }
+        if (self::$setreturn) {
+            return $s;
         }
         echo $s;
     }
@@ -38,6 +43,9 @@ class ZbpForm
     {
         $s = '';
         $s .= "<input name=\"$name\" id=\"$name\" class=\"$name checkbox\" style=\"display:none;\" type=\"text\" value=\"$ischecked\">\r\n";
+        if (self::$setreturn) {
+            return $s;
+        }
         echo $s;
     }
 
@@ -51,6 +59,9 @@ class ZbpForm
         $s = "<select name=\"$name\" id=\"$name\" class=\"$name\"$onchange> \r\n";
         $s .= self::options($array, $checkedkey);
         $s .= "</select> \r\n";
+        if (self::$setreturn) {
+            return $s;
+        }
         echo $s;
     }
 
@@ -61,7 +72,9 @@ class ZbpForm
             $checked = $k == $checkedkey ? ' selected="selected"' : '';
             $s .= "<option value=\"$k\"$checked>$v</option> \r\n";
         }
-
+        if (self::$setreturn) {
+            return $s;
+        }
         return $s;
     }
 
@@ -73,6 +86,9 @@ class ZbpForm
 
             $s .= "<input type=\"checkbox\" name=\"" . $name . "[]\" id=\"$name-$k\" class=\"$name\" value=\"$k\"$checked /><label for=\"$name-$k\">$v[0]</label>\r\n";
         }
+        if (self::$setreturn) {
+            return $s;
+        }
         echo $s;
     }
 
@@ -80,6 +96,9 @@ class ZbpForm
     {
         $style = $width ? ' style="width: ' . $width . ';"' : '';
         $s = "<input type=\"text\" name=\"$name\" id=\"$name\" class=\"$name\" value=\"$value\"$style/>\r\n";
+        if (self::$setreturn) {
+            return $s;
+        }
         echo $s;
     }
 
@@ -93,6 +112,9 @@ class ZbpForm
     {
         $style = $width ? ' style="width: ' . $width . '; height: ' . $height . '"' : '';
         $s = "<textarea name=\"$name\" id=\"$name\" class=\"$name\"$style>$value</textarea>\r\n";
+        if (self::$setreturn) {
+            return $s;
+        }
         echo $s;
     }
 
@@ -100,6 +122,9 @@ class ZbpForm
     {
         $style = $width ? ' style="width: ' . $width . ';"' : '';
         $s = "<input type=\"password\" name=\"$name\" id=\"$name\" class=\"$name\" value=\"$value\"$style/>\r\n";
+        if (self::$setreturn) {
+            return $s;
+        }
         echo $s;
     }
 
