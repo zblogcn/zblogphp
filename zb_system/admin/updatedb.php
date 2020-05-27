@@ -11,6 +11,8 @@ require '../function/c_system_admin.php';
 
 $zbp->Load();
 
+Add_Filter_Plugin('Filter_Plugin_Zbp_ShowError', 'JsonError4ShowErrorHook', PLUGIN_EXITSIGNAL_RETURN);
+
 if (!$zbp->CheckRights('root')) {
     $zbp->ShowError(6);
     die();
@@ -77,11 +79,12 @@ function updatedb()
     @$db->sql->get()->drop($t['Post'])->index('%pre%log_VTSC')->query;
 
     //ZBlogException::ResumeErrorHook();
-    $zbp->option['ZC_LAST_VERSION'] = 162330;
+    $zbp->option['ZC_LAST_VERSION'] = 172330;
     $zbp->SaveOption();
 }
 
-if ($zbp->version >= 162330 && (int) $zbp->option['ZC_LAST_VERSION'] < 162330) {
+if ($zbp->version >= 172330 && (int) $zbp->option['ZC_LAST_VERSION'] < 172330) {
     updatedb();
+    JsonReturn($zbp->langs->msg->operation_succeed);
 }
 die;

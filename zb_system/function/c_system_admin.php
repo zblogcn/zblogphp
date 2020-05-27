@@ -84,9 +84,9 @@ function Include_Admin_UpdateDB()
 {
     global $zbp;
 
-    if ($zbp->version >= 162330 && (int) $zbp->option['ZC_LAST_VERSION'] < 162330) {
+    if ($zbp->version >= 172330 && (int) $zbp->option['ZC_LAST_VERSION'] < 172330) {
         if (substr(GetValueInArray(get_included_files(), 0), -9) == 'index.php') {
-            $zbp->SetHint('tips', '<a href="#" onclick="$.get(bloghost+\'zb_system/admin/updatedb.php\', function(data){alert(\'' . $zbp->langs->msg->operation_succeed . '\');window.location.reload();});">' . @$zbp->langs->msg->update_db . '</a>');
+            $zbp->SetHint('tips', '<a href="#" onclick="$.get(bloghost+\'zb_system/admin/updatedb.php\', function(data){alert(JSON.parse(data).data);window.location.reload();});">' . @$zbp->langs->msg->update_db . '</a>');
         }
     }
 }

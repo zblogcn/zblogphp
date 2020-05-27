@@ -410,6 +410,21 @@ function ViewFeed()
 
     $w = array(array('=', 'log_Status', 0));
 
+    if (GetVars('cate', 'GET') != null) {
+        $w[] = array('=', 'log_CateID', (int) GetVars('cate', 'GET'));
+    } elseif (GetVars('auth', 'GET') != null) {
+        $w[] = array('=', 'log_AuthorID', (int) GetVars('auth', 'GET'));
+    } elseif (GetVars('date', 'GET') != null) {
+        $d = strtotime(GetVars('date', 'GET'));
+        if (strrpos(GetVars('date', 'GET'), '-') !== strpos(GetVars('date', 'GET'), '-')) {
+            $w[] = array('BETWEEN', 'log_PostTime', $d, strtotime('+1 day', $d));
+        } else {
+            $w[] = array('BETWEEN', 'log_PostTime', $d, strtotime('+1 month', $d));
+        }
+    } elseif (GetVars('tags', 'GET') != null) {
+        $w[] = array('LIKE', 'log_Tag', '%{' . (int) GetVars('tags', 'GET') . '}%');
+    }
+
     foreach ($GLOBALS['hooks']['Filter_Plugin_ViewFeed_Core'] as $fpname => &$fpsignal) {
         $fpname($w);
     }
