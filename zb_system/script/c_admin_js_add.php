@@ -205,9 +205,11 @@ function AddHeaderIcon(s){
 
 
 function AutoHideTips(){
-    if($("p.hint:visible").length>0){
-        $("p.hint:visible").delay(10000).hide(1500,function(){});
-    }
+    $("p.hint:visible").each(function(i){
+        if ( !$(this).hasClass("hint_always") ){
+            $(this).delay(10000).hide(1500,function(){});
+        }
+    });
 }
 
 function ShowCSRFHint() {

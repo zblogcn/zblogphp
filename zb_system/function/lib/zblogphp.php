@@ -3159,11 +3159,11 @@ class ZBlogPHP
     public function SetHint($signal, $content = '')
     {
         if ($content == '') {
-            if ($signal == 'good') {
+            if (substr($signal, 0, 4) == 'good') {
                 $content = $this->lang['msg']['operation_succeed'];
             }
 
-            if ($signal == 'bad') {
+            if (substr($signal, 0, 3) == 'bad') {
                 $content = $this->lang['msg']['operation_failed'];
             }
         }
@@ -3219,11 +3219,11 @@ class ZBlogPHP
     public function ShowHint($signal, $content = '')
     {
         if ($content == '') {
-            if ($signal == 'good') {
+            if (substr($signal, 0, 4) == 'good') {
                 $content = $this->lang['msg']['operation_succeed'];
             }
 
-            if ($signal == 'bad') {
+            if (substr($signal, 0, 3) == 'bad') {
                 $content = $this->lang['msg']['operation_failed'];
             }
         }
