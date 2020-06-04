@@ -1046,6 +1046,9 @@ function HasNameInString($s, $name)
  */
 function JsonError4ShowErrorHook($errorCode, $errorString, $file, $line)
 {
+    if ($errorCode === 0) {
+        $errorCode = 1;
+    }
     JsonError($errorCode, $errorString, null);
 }
 
@@ -1060,9 +1063,6 @@ function JsonError($errorCode, $errorString, $data)
 {
     $exit = true;
     if ($errorCode === 0) {
-        $errorCode = 1;
-    } elseif ($errorCode === '0') {
-        $errorCode = 0;
         $exit = false;
     }
     $result = array(
@@ -1088,7 +1088,7 @@ function JsonError($errorCode, $errorString, $data)
  */
 function JsonReturn($data)
 {
-    JsonError('0', '', $data);
+    JsonError(0, '', $data);
 }
 
 /**
