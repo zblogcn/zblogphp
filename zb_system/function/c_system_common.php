@@ -257,8 +257,11 @@ function GetEnvironment()
         $ajax = substr(get_class($ajax), 9);
     }
     if ($ajax == 'curl') {
-        if (ini_get("safe_mode") || (version_compare(PHP_VERSION, '5.6.0', '<') && ini_get("open_basedir"))) {
-            $ajax .= '-safemode';
+        if (ini_get("safe_mode")) {
+            $ajax .= '-s';
+        }
+        if (ini_get("open_basedir")) {
+            $ajax .= '-o';
         }
         $array = curl_version();
         $ajax .= $array['version'];
