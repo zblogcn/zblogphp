@@ -186,15 +186,16 @@ select { padding: 0.15em 0.25em 0.20em 0.25em; border: 1px solid #ccc; backgroun
 textarea { border: 1px solid #ccc; background-position: bottom; background: #fff; font-size: 1em; }
 input.button,
 input[type="submit"],
-input[type="button"] { color: #ffffff; font-size: 1.1em; height: 29px; padding: 2px 18px 3px 18px; margin: 0 0.5em; background: #3a6ea5; border: 1px solid #3399cc; cursor: pointer; }
+input[type="button"] { color: #ffffff; font-size: 1.1em; height: 29px; padding: 2px 18px 3px 18px; margin: 0 0.5em; background: #3a6ea5; border: 1px solid #046190; cursor: pointer; }
 input.button:hover { background: #3399cc; }
 input.button2 { width: auto; }
 input[disabled],
 input[disabled]:hover { background: #eee; border: 1px solid #ccc; cursor: not-allowed; color: black; }
 input[readonly],
 input[readonly]:hover { background: #eee; border: 1px solid #ccc; cursor: not-allowed; color: #808080; }
-select.edit { width: 300px; }
-input.edit { width: 293px; }
+select.edit { width: 300px; height:33px; padding:5px 10px; }
+input.edit { width: 300px; height:33px; padding:5px 10px; }
+#edtIntro { padding:5px 10px; }
 .form-group { display: inline-block; margin-bottom: 0; vertical-align: middle; width: 100%; margin-bottom: 10px; }
 .form-group label { padding-top: 7px; margin-bottom: 0; position: relative; min-height: 1px; max-width: 100%; display: inline-block; }
 .form-group label.title { padding-top: 7px; width: 12%; float: left; font-weight: bold; }
@@ -208,6 +209,7 @@ input.edit { width: 293px; }
 .form-group .imgcheck { margin-top: 8px; margin-left: 0px; }
 textarea#editor_content { width: 100%; height: 300px; margin: 0; padding: 0.5em 0.5em; }
 textarea#editor_intro { width: 100%; height: 150px; margin: 0; padding: 0.5em 0.5em; }
+#editor_content table { margin:0; }
 
 /*提示DIV*/
 div.hint { width: 100%; margin: 0 0 0.2em 0; }
@@ -221,39 +223,47 @@ div.hint p.hint_tips { background: #dbe3ff url(../image/admin/information.png) n
 form.search { background: #f0f0f0; padding: 0.5em; -ms-text-size-adjust: 100%; /*用于解决IE10 for WP8字体过大的问题*/ }
 form.search{box-shadow:0 0 0.1em rgba(0,0,0,0.3);padding:1em;position:relative;background:#fff;margin:0.4em 0 0.8em 0;border-radius:0.1em;}
 hr { width: 100%; height: 1px; border: none; padding: 0; visibility: hidden; }
+form.search select,form.search input[type=text] { height:33px; padding:0 10px; outline:0; vertical-align:top; }
+form.search input[type=file] { outline:0; }
+form.search input[type=checkbox] { width:14px; height:14px; margin-right:3px; vertical-align:middle; }
+form.search .button, form.search .reset { height:33px; }
 
 /*后台编辑页,文章编辑和页面编辑*/
 #divEditRight { float: right; width: 270px; text-align: right; margin-left: -270px }
 #divEditPost { margin-top: 30px; }
 #divEditLeft { float: left; width: 100%; }
+#divEditLeft label { vertical-align:middle; }
 
 /*文章编辑提交区随动*/
 #divBox { width: 270px; position: relative; }
 #divFloat { width: 258px; }
 #divFloat input.button { margin: 0.2em 0; }
+#divFloat select,#divFloat #edtDateTime { height:33px; padding:5px 10px; outline:0; }
+#divFloat label { vertical-align:middle; }
 .boxfloat { position: fixed; _position: absolute; top: 0px; z-index: 295; }
 .editmod2 { margin: 0.2em 0; padding-right: 275px; }
 #divIntro { padding-bottom: 20px; }
 .editmod { margin: 1em 0; }
 .editmod3 { margin: 0; width: 99%; }
 .editinputname { padding: 0 2px 0 3px; line-height: 1em; font-size: 1.1em; font-weight: bold; display: inline-block; }
-div.post_edit input#edtTitle { margin: 5px 0 0 0; padding: 3px; line-height: 1.8em; height: 1.8em; font-size: 1.2em; width: 99%; color: #333; }
+div.post_edit input#edtTitle { margin: 5px 0 0 0; padding: 0 10px; line-height: 1.8em; height: 33px; font-size: 1.2em; width: 99%; color: #333; }
 div.post_edit input#edtAlias,
-input#edtTag { margin-top: 5px; padding: 3px; width: 50%; }
+input#edtTag { margin-top: 5px; padding: 0 10px; width: 50%; height:33px; }
 #ulTag { margin: 0 3em; }
-#ajaxtags { background: #f8f8f8; box-shadow: 0 0 10px #aaa; padding: .5em; }
-#ajaxtags a { margin-right: .5em; }
+#ajaxtags { background: #f8f8f8; box-shadow: 0 0 10px #aaa; padding: 1em; }
+#ajaxtags a { margin-right: 1em; }
 #ajaxtags a.selected { color: black; background: #F8F889; }
 #editor_txt { width: 100%; height: 300px; }
 
 /*后台主题管理页*/
 div.theme { width: 230px; height: 320px; }
 div.theme img { margin-bottom: -3px; }
-div.theme-now { float: left; background: #b0cdee; padding: .6em 1em; margin: 0 1em 1em 0; }
-div.theme-other { float: left; background: #f0f0f0; padding: .6em 1em; margin: 0 1em 1em 0; }
+div.theme-now { float: left; background: #b0cdee; padding: .6em 1em; margin: 0 1em 1em 0; border:1px solid #8eb5e2; }
+div.theme-other { float: left; background: #f0f0f0; padding: .6em 1em; margin: 0 1em 1em 0; border:1px solid #e2e2e2; }
+div.theme-other:hover { border:1px solid #c3c3c3; box-shadow:0 2px 2px 0 #ddd; }
 div.theme-other a { cursor: pointer; }
 div.theme-other .theme-name img { opacity: 0.50; }
-div.theme>.theme-name,div.theme>.theme-author,div.theme>.theme-style,div.theme>p{height:2.4em;}
+/*div.theme>.theme-name,div.theme>.theme-author,div.theme>.theme-style,div.theme>p{height:2.4em;}*/
 div.theme>.theme-name{overflow: hidden;white-space :nowrap;}
 div.theme-now .betterTip img { box-shadow: 0 0 10px #3a6ea5; }
 div.theme-now .betterTip img,
@@ -261,10 +271,13 @@ div.theme-other .betterTip img { border: 2px solid #f6f6f6; }
 div.theme-other .betterTip img { box-shadow: 0 0 10px #aaa; }
 div.theme-other .betterTip img:hover { border: 2px solid #b0cdee; box-shadow: 0 0 10px #3399cc; }
 div.theme-now div,
-div.theme-other div { max-width: 220px;     /*overflow:hidden;*/ padding: 0.5em 0 0.5em 0; }
+div.theme-other div { max-width: 220px;     /*overflow:hidden;*/ padding: 0.5em 0 0.5em 0; zoom:1; }
+div.theme-other div:after { content:""; display:block; clear:both; }
 input.theme-config,
 input.theme-activate { float: right; height: 26px; width: 64px; margin: 0; padding: 2px 5px 3px 5px; font-size: 1em; }
 input.theme-config { margin-top: -3px; }
+div.theme select.edit { width: 130px; height: 26px; padding: 0 5px; border-color:#3a63a5; outline: 0; }
+div.theme p { padding:0; }
 .hidden { display: none; }
 .pagebar { padding: 1em 0 2em 0; }
 span.title { font-weight: bold; }
@@ -345,3 +358,6 @@ span.button:hover { box-shadow: 0 0 1px #000; border-radius: 0.3em; padding: 2px
 #loading { display: none; position: fixed; z-index: 1000; top: 0; left: 0; height: 100%; width: 100%; background: rgba(170, 170, 170, .3) url('../image/admin/loading-big.gif') 50% 50% no-repeat; }
 .login { height: 100px; margin: 0 auto; padding-left: 10px; }
 .login dd { width: 180px; float: left; }
+
+.tab-content td input[type=text],.tab-content td select { height:33px; padding:5px 10px; }
+.tab-content td textarea { padding:5px 10px; }

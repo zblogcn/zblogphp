@@ -57,7 +57,9 @@ if (!isset($_GET['id'])) {
         $userid = 'User' . $key;
         $count = 0;
         if ($zbp->Config('Howl')->HasKey($userid)) {
-            $count = count($zbp->Config('Howl')->$userid);
+            if (is_array($zbp->Config('Howl')->$userid)) {
+                $count = count($zbp->Config('Howl')->$userid);
+            }
         }
         if ($count > 0) {
             $count = " (已设置{$count}项)";

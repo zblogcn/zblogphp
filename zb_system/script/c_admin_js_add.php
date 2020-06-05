@@ -125,6 +125,9 @@ function bmx2table(){
 //*********************************************************
 function ChangeCheckValue(obj){
 
+    if ($(obj).hasClass("imgcheck-disabled")) {
+        return;
+    }
     $(obj).toggleClass('imgcheck-on');
 
     if($(obj).hasClass('imgcheck-on')){
@@ -243,10 +246,17 @@ $(document).ready(function(){
     }
 
     //checkbox
-    $('input.checkbox').css("display","none");
     $('input.checkbox[value="1"]').after('<span class="imgcheck imgcheck-on"></span>');
     $('input.checkbox[value!="1"]').after('<span class="imgcheck"></span>');
-
+    $("input.checkbox").each(function(i){
+        $(this).next("span").css("display",$(this).css("display"));
+        $(this).next("span").attr("alt",$(this).attr("alt"));
+        $(this).next("span").attr("title",$(this).attr("title"));
+        if($(this).attr("disabled")=="disabled"){
+            $(this).next("span").addClass("imgcheck-disabled");
+        }
+    });
+    $('input.checkbox').css("display","none");
 
     $("body").on("click","span.imgcheck", function(){ChangeCheckValue(this)});
 
