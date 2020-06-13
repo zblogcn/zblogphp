@@ -167,11 +167,11 @@ unset($post_data['token']);
     }
     ?>
 
-                <p>
+                <div class="goback">
                     <a href="javascript:history.back(-1);"><?php echo $GLOBALS['lang']['msg']['back']; ?></a>&nbsp;&nbsp;&nbsp;&nbsp;
                     <a href="javascript:location.reload();"><?php echo $GLOBALS['lang']['msg']['refresh']; ?></a>&nbsp;&nbsp;&nbsp;&nbsp;
                     <a href="<?php echo $GLOBALS['bloghost']; ?>zb_system/cmd.php?act=login"><?php echo $GLOBALS['lang']['msg']['login']; ?></a>
-                </p>
+                </div>
             </form>
         </div>
     </div>

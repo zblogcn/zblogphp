@@ -58,8 +58,8 @@ body.short .logo { height: 60px; margin: 60px auto 60px auto; }
 .loginw { width: 700px; margin-bottom: 120px; }
 .loginw .content>div>p { font-weight: bold; font-size: 1.2em; padding: 10px; background: #eee; margin-bottom: 10px; }
 .loginw .content>div { padding-bottom: 20px; }
-.loginw>form>p { padding: 10px 10px 50px 10px; }
-.loginw>form>p>a { font-size: 1.1em; }
+.loginw div.goback { padding: 10px 10px 50px 10px; }
+.loginw div.goback a { font-size: 1.1em; }
 .loginw .content>div>div { padding: 0 10px; }
 
 @media only screen and (max-width:768px) {
