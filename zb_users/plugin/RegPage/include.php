@@ -45,7 +45,7 @@ function InstallPlugin_RegPage()
         $zbp->SaveConfig('RegPage');
 
         RegPage_CreateTable();
-        RegPage_CreateCode(100);
+        RegPage_CreateCode(500);
     }
 }
 

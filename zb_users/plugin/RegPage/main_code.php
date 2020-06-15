@@ -23,7 +23,7 @@ if (count($_POST) > 0) {
         CheckIsRefererValid();
     }
     if (GetVars('reset', 'POST') == 'add') {
-        RegPage_CreateCode(1000);
+        RegPage_CreateCode(500);
     }
 
     if (GetVars('reset', 'POST') == 'del') {
@@ -59,7 +59,7 @@ require $blogpath . 'zb_system/admin/admin_top.php';
 <input id="reset" name="reset" type="hidden" value="" />
       <hr/>
       <p>
-        <input type="submit" class="button" onclick="$('#reset').val('add');" value="生成1000个邀请码" />
+        <input type="submit" class="button" onclick="$('#reset').val('add');" value="生成500个邀请码" />
 
         <input type="submit" class="button" onclick="$('#reset').val('del');" value="删除已使用过的邀请码" />
         

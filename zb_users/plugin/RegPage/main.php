@@ -28,7 +28,7 @@ if (count($_POST) > 0) {
     $zbp->Config('RegPage')->title_text = $_POST['title_text'];
     $zbp->Config('RegPage')->loginpage_addon = (int) $_POST['loginpage_addon'];
     $zbp->Config('RegPage')->loginpage_text = $_POST['loginpage_text'];
-    $zbp->Config('RegPage')->only_on_ip = (int) $_POST['only_on_ip'];
+    $zbp->Config('RegPage')->only_one_ip = (int) $_POST['only_one_ip'];
     $zbp->Config('RegPage')->disable_website = $_POST['disable_website'];
     $zbp->Config('RegPage')->disable_validcode = $_POST['disable_validcode'];
     $zbp->Config('RegPage')->rewrite_url = trim($_POST['rewrite_url']);
@@ -115,7 +115,7 @@ require $blogpath . 'zb_system/admin/admin_top.php';
 </tr>
 <tr>
     <td class="td30"><p align='left'><b>同一IP一天只能注册一个账号</b></p></td>
-    <td><input type="text" class="checkbox" name="only_on_ip" value="<?php echo $zbp->Config('RegPage')->only_on_ip; ?>" /></td>
+    <td><input type="text" class="checkbox" name="only_one_ip" value="<?php echo $zbp->Config('RegPage')->only_one_ip; ?>" /></td>
 </tr>
 <tr>
     <td class="td30"><p align='left'><b>不用填写网址</b></p></td>

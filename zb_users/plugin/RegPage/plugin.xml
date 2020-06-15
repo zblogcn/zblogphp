@@ -11,17 +11,17 @@
 <author>
   <name>zxasd</name>
   <email>rainbowsoft@gmail.com</email>
-  <url>http://www.zdevo.com/</url>
+  <url>https://www.zblogcn.com/</url>
 </author>
 <source>
   <name></name>
   <email></email>
   <url></url>
 </source>
-<adapted>140220</adapted>
-<version>2.3</version>
+<adapted>151935</adapted>
+<version>2.6</version>
 <pubdate>2013-07-07</pubdate>
-<modified>2017-11-05</modified>
+<modified>2020-06-15</modified>
 <price>0</price>
 <phpver>5.2</phpver>
 <advanced>
@@ -36,5 +36,9 @@
   <sidebar3></sidebar3>
   <sidebar4></sidebar4>
   <sidebar5></sidebar5>
+  <sidebar6></sidebar6>
+  <sidebar7></sidebar7>
+  <sidebar8></sidebar8>
+  <sidebar9></sidebar9>
 </sidebars>
 </plugin>

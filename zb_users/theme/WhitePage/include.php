@@ -21,10 +21,10 @@ function ActivePlugin_WhitePage()
         $s .= "body{background-color:#" . $zbp->Config('WhitePage')->custom_bgcolor . ";}div.post-body>p>code,div.post-body>pre.prism-highlight,div.post-body blockquote{background-color:#" . $zbp->Config('WhitePage')->custom_bgcolor . ";}";
     }
     if ($zbp->Config('WhitePage')->HasKey("custom_pagecolor")) {
-        $s .= "textarea,input[type=text],#divNavBar li ul{background-color:#" . $zbp->Config('WhitePage')->custom_pagecolor . "}";
+        $s .= "textarea,input[type=text],input[type=password],#divNavBar li ul{background-color:#" . $zbp->Config('WhitePage')->custom_pagecolor . "}";
     }
     if ($zbp->Config('WhitePage')->HasKey("custom_fontcolor")) {
-        $s .= "body{color:#" . $zbp->Config('WhitePage')->custom_fontcolor . ";}textarea,input[type=text]{color:#" . $zbp->Config('WhitePage')->custom_fontcolor . ";}";
+        $s .= "body{color:#" . $zbp->Config('WhitePage')->custom_fontcolor . ";}textarea,input[type=text],input[type=password]{color:#" . $zbp->Config('WhitePage')->custom_fontcolor . ";}";
     }
     if ($zbp->Config('WhitePage')->HasKey("custom_acolor")) {
         $s .= "a,span.now-page,#BlogTitle a{color:#" . $zbp->Config('WhitePage')->custom_acolor . ";}";
