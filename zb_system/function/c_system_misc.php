@@ -78,7 +78,6 @@ function misc_statistic()
     $current_theme_version = '{$theme_version}';
 
     $r .= '<!--debug_mode_note-->';
-    $r .= "<script type=\"text/javascript\">$('#statistic').attr('title','" . date("c", $zbp->cache->reload_statistic_time) . "');</script>";
     $r .= "<tr><td class='td20'>{$zbp->lang['msg']['current_member']}</td><td class='td30'><a href='../cmd.php?act=misc&type=vrs' target='_blank'>{$current_member}</a></td><td class='td20'>{$zbp->lang['msg']['current_version']}</td><td class='td30'>{$current_version}</td></tr>";
     $r .= "<tr><td class='td20'>{$zbp->lang['msg']['all_artiles']}</td><td>{$all_articles}</td><td>{$zbp->lang['msg']['all_categorys']}</td><td>{$all_categories}</td></tr>";
     $r .= "<tr><td class='td20'>{$zbp->lang['msg']['all_pages']}</td><td>{$all_pages}</td><td>{$zbp->lang['msg']['all_tags']}</td><td>{$all_tags}</td></tr>";
@@ -86,7 +85,7 @@ function misc_statistic()
     $r .= "<tr><td class='td20'>{$zbp->lang['msg']['current_theme']}</td><td>{$current_theme}/{$current_style} {$current_theme_version}</td><td>{$zbp->lang['msg']['all_members']}</td><td>{$all_members}</td></tr>";
     $r .= '<!--debug_mode_moreinfo-->';
     $r .= "<tr><td class='td20'>{$zbp->lang['msg']['protocol_address']}</td><td>{$xmlrpc_address} , {$api_address}</td><td>{$zbp->lang['msg']['system_environment']}</td><td><a href='../cmd.php?act=misc&type=phpinfo' target='_blank'>{$system_environment}</a></td></tr>";
-
+    $r .= "<script type=\"text/javascript\">$('#statistic').attr('title','" . date("c", $zbp->cache->reload_statistic_time) . "');</script>";
 
     $zbp->cache->reload_statistic = $r;
     $zbp->cache->reload_statistic_time = time();
@@ -106,7 +105,12 @@ function misc_statistic()
     $r = str_replace('{$zbp->user->Name}', $zbp->user->Name, $r);
     $r = str_replace('{$zbp->theme}', $zbp->theme, $r);
     $r = str_replace('{$zbp->style}', $zbp->style, $r);
-    $r = str_replace('{$zbp->version}', ZC_VERSION_FULL, $r);
+    $app = $zbp->LoadApp('plugin','AppCentre');
+    $sv = ZC_VERSION_FULL;
+    if ($app->isloaded == true) {
+        $sv .= '; AppCentre' . $app->version;
+    }
+    $r = str_replace('{$zbp->version}', $sv, $r);
     $r = str_replace('{$system_environment}', $zbp->cache->system_environment, $r);
     $r = str_replace('{$theme_version}', '(v' . $zbp->themeapp->version . ')', $r);
 

@@ -800,7 +800,12 @@ function Admin_SiteInfo()
         $r = str_replace('{$zbp->theme}', $zbp->theme, $r);
         $r = str_replace('{$zbp->style}', $zbp->style, $r);
         $r = str_replace('{$system_environment}', GetEnvironment(), $r);
-        $r = str_replace('{$zbp->version}', ZC_VERSION_FULL, $r);
+        $app = $zbp->LoadApp('plugin','AppCentre');
+        $sv = ZC_VERSION_FULL;
+        if ($app->isloaded == true) {
+            $sv .= '; AppCentre' . $app->version;
+        }
+        $r = str_replace('{$zbp->version}', $sv, $r);
         $r = str_replace('{$theme_version}', '(v' . $zbp->themeapp->version . ')', $r);
         if ($zbp->option['ZC_DEBUG_MODE']) {
             $r = str_replace('<!--debug_mode_note-->', "<tr><td colspan='4' style='text-align: center'>{$zbp->lang['msg']['debugging_warning']}</td></tr>", $r);

@@ -282,7 +282,8 @@ function GetEnvironment()
         $zbp->option['ZC_DATABASE_TYPE'] . $zbp->db->version . '; ' . $ajax;
 
     if (defined('OPENSSL_VERSION_TEXT')) {
-        $system_environment .= '; ' . str_replace(' ', '', OPENSSL_VERSION_TEXT);
+        $a = explode(' ', OPENSSL_VERSION_TEXT);
+        $system_environment .= '; ' . GetValueInArray($a,0) . GetValueInArray($a,1);
     }
 
     return $system_environment;

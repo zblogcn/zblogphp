@@ -249,6 +249,15 @@ require $blogpath . 'zb_system/admin/admin_top.php';
       return false;
     }
   }
+
+  // fnReplaceHost("旧内容","新内容");
+  function fnReplaceHost(o, n) {
+    $("input[name='href[]']").each(function() {
+      let curVal = $(this).val();
+      let newVal = curVal.replace(o, n);
+      $(this).val(newVal);
+    });
+  }
 </script>
 <?php
 require $blogpath . 'zb_system/admin/admin_footer.php';

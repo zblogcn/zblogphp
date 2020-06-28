@@ -76,7 +76,7 @@
 	})
 
 	// 评论回复接口，可能在为老版本使用的主题中会无效
-	// 另外，通过zbp.plugin.unbind("comment.reply", "system")可以解绑系统的相关事件。
+	// 另外，通过zbp.plugin.unbind("comment.reply", "system-default")可以解绑系统的相关事件。
 	zbp.plugin.on("comment.reply.start", "ZBPJFExample", function (id) {
 		console.log("回复评论ID：" + id);
 	});
