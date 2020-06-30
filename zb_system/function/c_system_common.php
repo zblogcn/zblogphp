@@ -1922,3 +1922,34 @@ function Logs_Dump()
         Logs($s);
     }
 }
+
+/**
+ * API 响应.
+ *
+ * @param array $result
+ * @param ZBlogException $error
+ */
+function ApiResponse($result, $error = null)
+{
+    if ($error) {
+        $error_info = array(
+            'code' => ZBlogException::$error_id,
+            'type' => $error->type,
+            'message' => $error->message,
+        );
+
+        if ($GLOBALS['option']['ZC_DEBUG_MODE']) {
+            $error_info['messagefull'] = $error->messagefull;
+            $error_info['file'] = $error->file;
+            $error_info['line'] = $error->line;
+        }
+    }
+
+    echo json_encode(array(
+        'is_error' => ($error !== null),
+        'result' => $result, 
+        'error_info' => isset($error_info) ? $error_info : null
+    ));
+
+    die;
+}

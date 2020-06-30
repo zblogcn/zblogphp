@@ -9,5 +9,7 @@
 
 function api_user_get()
 {
-    die;
+    global $zbp;
+    
+    return array();
 }

@@ -22,7 +22,7 @@ $act = GetVars('act', 'GET');
 
 if (file_exists($zbp->path . 'zb_system/api/' . $mod . '.php')) {
     include $zbp->path . 'zb_system/api/' . $mod . '.php';
-    call_user_func('api_' . $mod . '_' . $act);
+    ApiResponse(call_user_func('api_' . $mod . '_' . $act));
 }
 
 die;
