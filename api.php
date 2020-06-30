@@ -6,6 +6,8 @@
  * @author  Z-BlogPHP Team
  * @version 1.0 2020-05-18
  */
+define('ZBP_IN_API', true);
+
 require 'zb_system/function/c_system_base.php';
 
 $zbp->Load();

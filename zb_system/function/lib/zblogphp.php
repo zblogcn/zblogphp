@@ -1200,9 +1200,27 @@ class ZBlogPHP
      */
     public function Verify()
     {
-        $username = trim(GetVars('username', 'COOKIE'));
-        $token = trim(GetVars('token', 'COOKIE'));
-        $user = $this->VerifyUserToken($token, $username);
+        if (defined('ZBP_IN_API')) {
+            // 在 API 中
+            if (
+                // 获取 AUTHORIZATION 头
+                ($auth = GetVars('HTTP_AUTHORIZATION', 'SERVER'))
+                && (substr($auth, 0, 7) === 'Bearer ')
+            ) {
+                $api_token = substr($auth, 7);
+            } else {
+                // 获取（POST 或 GET 中的）请求参数
+                $api_token = GetVars('token');
+            }
+
+            $user = $this->VerifyAPIToken($api_token);
+        } else {
+            // 在普通 Web 页面中
+            $username = trim(GetVars('username', 'COOKIE'));
+            $token = trim(GetVars('token', 'COOKIE'));
+            $user = $this->VerifyUserToken($token, $username);
+        }
+        
         if (is_object($user)) {
             $this->user = $user;
 
@@ -1357,6 +1375,25 @@ class ZBlogPHP
         }
 
         return false;
+    }
+
+    /**
+     * 验证 API Token.
+     *
+     * @param string $api_token
+     * @return Member
+     */
+    public function VerifyAPIToken($api_token)
+    {
+        $api_token_array = explode('-', $api_token);
+
+        // 规定格式为 {username}-{token}
+        if (count($api_token_array) !== 2) {
+            return new Member;
+        }
+
+        list($username, $token) = $api_token_array;
+        return $this->VerifyUserToken($token, $username);
     }
 
     private $loadmembers_level = 0;
