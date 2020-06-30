@@ -1926,10 +1926,10 @@ function Logs_Dump()
 /**
  * API 响应.
  *
- * @param array|null $result
+ * @param array|null $data
  * @param ZBlogException|null $error
  */
-function ApiResponse($result, $error = null)
+function ApiResponse($data, $error = null)
 {
     if ($error) {
         $error_info = array(
@@ -1943,14 +1943,17 @@ function ApiResponse($result, $error = null)
             $error_info['file'] = $error->file;
             $error_info['line'] = $error->line;
         }
+
+        $data['error_info'] = $error_info;
     }
 
     header('Content-Type:application/json; charset=utf-8');
 
     echo json_encode(array(
-        'is_error' => ($error !== null),
-        'result' => $result, 
-        'error_info' => isset($error_info) ? $error_info : null
+        // @todo 状态码
+        'code' => 200,
+        'message' => ($error !== null) ? $error->message : 'OK',
+        'data' => $data,
     ));
 
     die;
