@@ -6,6 +6,7 @@
  * @author  Z-BlogPHP Team
  * @version 1.0 2020-05-18
  */
+define('ZBP_IN_API', true);
 require 'zb_system/function/c_system_base.php';
 
 $zbp->Load();
@@ -20,7 +21,7 @@ $act = GetVars('act', 'GET');
 
 if (file_exists($zbp->path . 'zb_system/api/' . $mod . '.php')) {
     include $zbp->path . 'zb_system/api/' . $mod . '.php';
-    call_user_func('api_' . $mod . '_' . $act);
+    ApiResponse(call_user_func('api_' . $mod . '_' . $act));
 }
 
 die;

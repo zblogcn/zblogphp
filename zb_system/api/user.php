@@ -8,6 +8,6 @@
  */
 
 function api_user_get()
-{
-    die;
+{ddd;
+    return array();
 }
