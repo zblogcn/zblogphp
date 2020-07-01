@@ -109,7 +109,6 @@ GET `https://example.com/api.php?mod=category&id=1`
 
   ```json
   {
-    	"code": 200,
     	"message": "OK",
     	"data": {
         	"id": 1,
@@ -117,7 +116,8 @@ GET `https://example.com/api.php?mod=category&id=1`
           "alias": "unnamed",
           "intro": "摘要",
           ...
-      }
+      },
+      "error": null
   }
   ```
 
@@ -271,7 +271,6 @@ GET/POST `https://example.com/api.php?mod=category&act=get_categories`
 
   ```json
   {
-    	"code": 200,
     	"message": "OK",
     	"data": [{
           "id": 1,
@@ -279,7 +278,8 @@ GET/POST `https://example.com/api.php?mod=category&act=get_categories`
           "alias": "unnamed",
           "intro": "摘要",
           ...
-      }]
+      }],
+      "error": null
   }
   ```
 

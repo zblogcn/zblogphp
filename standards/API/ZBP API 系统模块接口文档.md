@@ -38,7 +38,6 @@ POST `https://example.com/api.php?mod=system&act=get_info`
 
   ```json
   {
-    	"code": 200,
     	"message": "OK",
     	"data": {
           "environment": 1,
@@ -46,7 +45,8 @@ POST `https://example.com/api.php?mod=system&act=get_info`
           "minor_version": 0,
           "build_version": 2330,
           ...
-      }
+      },
+      "error": null
   }
   ```
 
@@ -106,13 +106,13 @@ POST `https://example.com/api.php?mod=system&act=update`
 
   ```json
   {
-    	"code": 200,
     	"message": "OK",
     	"data": {
           "has_new_version": false,
           "current_version": "1.6.4.2130 (Valyria)",
           "new_version": ""
-      }
+      },
+      "error": null
   }
   ```
 
@@ -162,12 +162,12 @@ POST `https://example.com/api.php?mod=system&act=upgrade`
 
   ```json
   {
-    	"code": 200,
     	"message": "OK",
     	"data": {
           "upgraded": true,
         	"message": "Upgraded successfully!"
-      }
+      },
+      "error": null
   }
   ```
 

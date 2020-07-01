@@ -105,7 +105,6 @@ GET `https://example.com/api.php?mod=atta&id=1`
 
   ```json
   {
-    	"code": 200,
     	"message": "OK",
     	"data": {
         	"id": 1,
@@ -115,7 +114,8 @@ GET `https://example.com/api.php?mod=atta&id=1`
           "user_id": 1,
           "type": "image/png",
           "date": "2020-06-28 16:48:40"
-      }
+      },
+      "error": null
   }
   ```
 
@@ -177,13 +177,13 @@ POST `https://example.com/api.php?mod=atta&act=delete`
 
   ```json
   {
-    	"code": 200,
     	"message": "OK",
     	"data": {
         "deleted": true,
         "message": "Deleted successfully!",
         "id": 1
-      }
+      },
+      "error": null
   }
   ```
 
@@ -231,7 +231,6 @@ POST `https://example.com/api.php?mod=atta&act=get_attas`
 
   ```json
   {
-    	"code": 200,
     	"message": "OK",
     	"data": [{
         	"id": 1,
@@ -241,7 +240,8 @@ POST `https://example.com/api.php?mod=atta&act=get_attas`
           "user_id": 1,
           "type": "image/png",
           "date": "2020-06-28 16:48:40"
-      }]
+      }],
+      "error": null
   }
   ```
 

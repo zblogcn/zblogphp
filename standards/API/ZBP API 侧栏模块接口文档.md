@@ -105,7 +105,6 @@ POST `https://example.com/api.php?mod=sidebar&act=get_module`
 
   ```json
   {
-    	"code": 200,
     	"message": "OK",
     	"data": {
         	"id": 1,
@@ -113,7 +112,8 @@ POST `https://example.com/api.php?mod=sidebar&act=get_module`
           "filename": "unnamed",
           "content": "内容",
           ...
-      }
+      },
+      "error": null
   }
   ```
 
@@ -293,7 +293,6 @@ POST `https://example.com/api.php?mod=sidebar&act=get_modules`
 
   ```json
   {
-    	"code": 200,
     	"message": "OK",
     	"data": [{
           "id": 1,
@@ -301,7 +300,8 @@ POST `https://example.com/api.php?mod=sidebar&act=get_modules`
           "filename": "unnamed",
           "content": "内容",
           ...
-      }]
+      }],
+      "error": null
   }
   ```
 

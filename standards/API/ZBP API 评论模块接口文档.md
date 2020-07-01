@@ -111,14 +111,14 @@ GET `https://example.com/api.php?mod=comment&id=1`
 
   ```json
   {
-    	"code": 200,
     	"message": "OK",
     	"data": {
           "post_id": 1,
           "content": "内容",
           "root_id": 0,
           ...
-      }
+      },
+      "error": null
   }
   ```
 
@@ -220,14 +220,14 @@ POST `https://example.com/api.php?mod=comment&act=get_comments`
 
   ```json
   {
-    	"code": 200,
     	"message": "OK",
     	"data": [{
           "post_id": 1,
           "content": "内容",
           "root_id": 0,
           ...
-      }]
+      }],
+      "error": null
   }
   ```
 

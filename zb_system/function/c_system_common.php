@@ -1928,8 +1928,9 @@ function Logs_Dump()
  *
  * @param array|null $data
  * @param ZBlogException|null $error
+ * @param string|null $message
  */
-function ApiResponse($data, $error = null)
+function ApiResponse($data, $error = null, $message = null)
 {
     if (!empty($error)) {
         $error_info = array(
@@ -1943,21 +1944,28 @@ function ApiResponse($data, $error = null)
             $error_info['file'] = $error->file;
             $error_info['line'] = $error->line;
         }
+
+        $message = $error->message;
     }
 
     if (!headers_sent()) {
         header('Content-Type: application/json; charset=utf-8');
     }
 
-    if ($GLOBALS['option']['ZC_RUNINFO_DISPLAY']) {
-        $data['runtime'] = RunTime(false);
-        $data['runtime'] = array_slice($data['runtime'], 0, 3);
-    }
-
-    echo JsonEncode(array(
+    $response = array(
+        'message' => !empty($message) ? $message : 'OK',
         'data' => $data,
         'error' => empty($error) ? null : $error_info,
-    ));
+    );
+
+    // 显示 Runtime 调试信息
+    if ($GLOBALS['option']['ZC_RUNINFO_DISPLAY']) {
+        $runtime = RunTime(false);
+        $runtime = array_slice($runtime, 0, 3);
+        $response['runtime'] = $runtime;
+    }
+
+    echo JsonEncode($response);
 
     die();
 }

@@ -53,14 +53,14 @@ POST `https://example.com/api.php?mod=user&act=login`
 
   ```json
   {
-    	"code": 200,
     	"message": "OK",
     	"data": {
         "user_id": 1,
         "username": "Chris",
         "nickname": "Chris",
         "level": 6
-      }
+      },
+      "error": null
   }
   ```
 
@@ -242,14 +242,14 @@ POST `https://example.com/api.php?mod=user`
 
   ```json	
   {
-    	"code": 200,
     	"message": "OK",
     	"data": {
         	"username": "Chris",
           "password": "123456",
           "emial": "123@example.com",
           ...
-      }
+      },
+      "error": null
   }
   ```
 
@@ -402,7 +402,6 @@ GET/POST `https://example.com/api.php?mod=user&act=list`
 
   ```json
   {
-    	"code": 200,
     	"message": "OK",
     	"data": [{
         	"user_id": 123,
@@ -413,7 +412,8 @@ GET/POST `https://example.com/api.php?mod=user&act=list`
         	"pages": 233,
         	"comments": 23,
         	"attas": 2
-      }]
+      }],
+      "error": null
   }
   ```
 
@@ -489,7 +489,6 @@ POST `https://example.com/api.php?mod=user&act=get_auth`
 
   ```json
   {
-    	"code": 200,
     	"message": "OK",
     	"data": {
         	"username": "Chris",
@@ -497,7 +496,8 @@ POST `https://example.com/api.php?mod=user&act=get_auth`
         	"login": true,
         	"logout": true,
         	...
-      }
+      },
+      "error": null
   }
   ```
 

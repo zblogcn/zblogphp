@@ -46,13 +46,13 @@ POST `https://example.com/api.php?mod=app&act=install`
 
   ```json
   {
-    	"code": 200,
     	"message": "OK",
     	"data": {
         "installed": true,
         "message": "Installed successfully!",
         "id": "UEditor"
-      }
+      },
+      "error": null
   }
   ```
 
@@ -118,7 +118,6 @@ GET `https://example.com/api.php?mod=app&id=UEditor`
 
   ```json
   {
-    	"code": 200,
     	"message": "OK",
     	"data": {
           "id": "UEditor",
@@ -126,7 +125,8 @@ GET `https://example.com/api.php?mod=app&id=UEditor`
           "url": "http://www.rainbowsoft.org",
           "note": "UEditor编辑器.",
           ...
-      }
+      },
+      "error": null
   }
   ```
 
@@ -193,13 +193,13 @@ POST `https://example.com/api.php?mod=app&act=enable`
 
   ```json
   {
-    	"code": 200,
     	"message": "OK",
     	"data": {
         "enabled": true,
         "message": "Enabled successfully!",
         "id": "UEditor"
-      }
+      },
+      "error": null
   }
   ```
 
@@ -257,13 +257,13 @@ POST `https://example.com/api.php?mod=app&act=disable`
 
   ```json
   {
-    	"code": 200,
     	"message": "OK",
     	"data": {
         "disabled": true,
         "message": "Disabled successfully!",
         "id": "UEditor"
-      }
+      },
+      "error": null
   }
   ```
 
@@ -321,13 +321,13 @@ POST `https://example.com/api.php?mod=app&act=delete`
 
   ```json
   {
-    	"code": 200,
     	"message": "OK",
     	"data": {
         "deleted": true,
         "message": "Deleted successfully!",
         "id": "UEditor"
-      }
+      },
+      "error": null
   }
   ```
 
@@ -378,7 +378,6 @@ POST `https://example.com/api.php?mod=app&act=get_apps`
 
   ```json
   {
-    	"code": 200,
     	"message": "OK",
     	"data": [{
           "id": "UEditor",
@@ -386,7 +385,8 @@ POST `https://example.com/api.php?mod=app&act=get_apps`
           "url": "http://www.rainbowsoft.org",
           "note": "UEditor编辑器.",
           ...
-      }]
+      }],
+      "error": null
   }
   ```
 
