@@ -2290,13 +2290,16 @@ DefinePluginFilter('Filter_Plugin_Xmlrpc_Begin');
  */
 DefinePluginFilter('Filter_Plugin_CSP_Backend');
 
+//###############################################################################################################
+//<api里的接口>
+
 /*
 '**************************************************<
 '类型:Filter
-'名称:Filter_Plugin_API_Begin
-'参数:
-'说明:api页的begin接口(1.6.1加入)
+'名称:Filter_Plugin_API_Mod
+'参数:&$mods
+'说明:定义 API Mod
 '调用:
 '**************************************************>
  */
-DefinePluginFilter('Filter_Plugin_API_Begin');
+DefinePluginFilter('Filter_Plugin_API_Mod');

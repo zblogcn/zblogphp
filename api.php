@@ -15,12 +15,21 @@ if (!$zbp->option['ZC_API_ENABLE']) {
     die;
 }
 
+$mods = array();
+foreach (GetFilesInDir($zbp->path . 'zb_system/api/', 'php') as $sortname => $fullname) {
+    $mods[$sortname] = $fullname;
+}
+
+foreach ($GLOBALS['hooks']['Filter_Plugin_API_Mod'] as $fpname => &$fpsignal) {
+    $fpname($mods);
+}
+
 $mod = GetVars('mod', 'GET');
 $mod = str_replace(array('\\','/','.'), '', $mod);
 $act = GetVars('act', 'GET');
 
-if (file_exists($zbp->path . 'zb_system/api/' . $mod . '.php')) {
-    include $zbp->path . 'zb_system/api/' . $mod . '.php';
+if (isset($mods[$mod]) && file_exists($mod_file = $mods[$mod])) {
+    include $mod_file;
     ApiResponse(call_user_func('api_' . $mod . '_' . $act));
 }
 
