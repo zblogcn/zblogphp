@@ -1935,11 +1935,11 @@ function JsonEncode($arr)
     RecHtmlSpecialChars($arr);
 
     if (version_compare(PHP_VERSION, '5.4.0', '<')) {
-        return preg_replace_callback(
+        return str_ireplace('\\', '', preg_replace_callback(
             '#\\\u([0-9a-f]{4})#i',
             'Ucs2Utf8',
-            str_ireplace('\\', '', json_encode($arr))
-        );
+            json_encode($arr)
+        ));
     } else {
         return json_encode(
             $arr,
