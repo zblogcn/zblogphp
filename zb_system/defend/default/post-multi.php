@@ -1,7 +1,7 @@
 {* Template Name:列表页普通文章 *}
 <div class="post multi">
 	<h4 class="post-date">{$article.Time('Y年m月d日')}</h4>
-	<h2 class="post-title"><a href="{$article.Url}">{$article.Title}</a></h2>
+	<h2 class="post-title"><a title="{$article.Title}" href="{$article.Url}">{$article.Title}</a></h2>
 	<div class="post-body">{$article.Intro}</div>
 	<h5 class="post-tags"></h5>
 	<h6 class="post-footer">

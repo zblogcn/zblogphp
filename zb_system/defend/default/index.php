@@ -5,7 +5,7 @@
 	<div id="divPage">
 	<div id="divMiddle">
 		<div id="divTop">
-			<h1 id="BlogTitle"><a href="{$host}">{$name}</a></h1>
+			<h1 id="BlogTitle"><a title="{$name}" href="{$host}">{$name}</a></h1>
 			<h3 id="BlogSubTitle">{$subname}</h3>
 		</div>
 		<div id="divNavBar">
