@@ -4034,7 +4034,13 @@ function ApiResponse($data, $error = null, $code = 200, $message = null)
         $response['runtime'] = $runtime;
     }
 
-    echo JsonEncode($response);
+    $response_text = JsonEncode($response);
+
+    foreach ($GLOBALS['hooks']['Filter_Plugin_API_Response'] as $fpname => &$fpsignal) {
+        $fpname($response_text);
+    }
+
+    echo $response_text;
 
     die();
 }
