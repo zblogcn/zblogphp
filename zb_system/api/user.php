@@ -211,7 +211,7 @@ function api_user_get_auth()
         if ($zbp->CheckRights($key)) {
             $authArr['auth'][$key] = array(
                 'description' => $zbp->GetActionDescription($key), 
-                'checked' => $zbp->CheckRights($key) ? 'true' : 'false'
+                'checked' => $zbp->CheckRights($key) ? true : false
             );
         }
     }
