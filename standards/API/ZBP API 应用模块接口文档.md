@@ -20,13 +20,13 @@ POST `https://example.com/api.php?mod=app&act=install`
 
   | 属性     | 类型   | 示例值  | 说明   |
   | -------- | ------ | ------- | ------ |
-  | username | string | UEditor | 用户名 |
+  | zba      | string | 无     | 应用 ZBA 文件包(需 base64 处理) |
 
   示例：
 
   ```json
   {
-    	"id": "UEditor"
+    	"zba": "PD94bWwgdmVyc2lvbj1cIjEuMFwiIGVuY29kaW5nPVwidXRmLTgiPz48YXBwIHZlcnNpb249InB..."
   }
   ```
 
@@ -62,7 +62,7 @@ POST `https://example.com/api.php?mod=app&act=install`
   | --------- | ------- | ----------------------- | ------------- |
   | installed | boolean | true                    | 是否安装成功  |
   | message   | string  | Installed successfully! | 消息          |
-  | id        | string  | UEditor                 | 用户昵称/别名 |
+  | id        | string  | UEditor                 | 本次安装的应用ID |
 
 
 
@@ -167,7 +167,8 @@ POST `https://example.com/api.php?mod=app&act=enable`
 
   | 属性 | 类型   | 示例值  | 说明           |
   | ---- | ------ | ------- | -------------- |
-  | id   | string | UEditor | 待启用的应用id |
+  | type | string | plugin  | 待启用的应用类型（theme:主题/plugin:插件） |
+  | id   | string | UEditor | 待启用的应用ID |
 
   示例：
 
@@ -209,7 +210,7 @@ POST `https://example.com/api.php?mod=app&act=enable`
   | ------- | ------- | --------------------- | ---------------- |
   | enabled | boolean | true                  | 是否启用成功     |
   | message | string  | Enabled successfully! | 消息             |
-  | id      | string  | UEditor               | 本次启用的应用id |
+  | id      | string  | UEditor               | 本次启用的应用ID |
 
 
 
@@ -380,6 +381,7 @@ POST `https://example.com/api.php?mod=app&act=get_apps`
   {
     	"message": "OK",
     	"data": [{
+          "is_active": true,
           "id": "UEditor",
           "name": "UEditor",
           "url": "http://www.rainbowsoft.org",
@@ -395,6 +397,7 @@ POST `https://example.com/api.php?mod=app&act=get_apps`
   | 键           | 类型   | 示例值                       | 说明       |
   | ------------ | ------ | ---------------------------- | ---------- |
   | id           | string | UEditor                      | 应用id     |
+  | is_active    | boolean | true                      | 是否启用     |
   | name         | string | UEditor                      | 应用名称   |
   | url          | string | `http://www.rainbowsoft.org` | 应用网址   |
   | note         | string | UEditor编辑器.               | 应用简介   |
