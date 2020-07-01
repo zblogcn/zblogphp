@@ -58,14 +58,17 @@ GET `https://example.com/zb_system/api/index.php?mod=user&act=login`
 
   ```json
   {
-    	"code": 200,
     	"message": "成功",
     	"data": {
-        "user_id": 1,
-        "username": "Chris",
-        "nickname": "Chris",
-        "level": 6
-      }
+        "user": {
+          "id": 1,
+          "username": "Chris",
+          "alias": "Chris",
+          "level": 6
+        },
+        "token": "emhvdXppc2h1LTJjZjMwOWM3ODA2NTY1ODQxOTQ1NjhlY2QyNTBmNmI1ZDk4M2FkNjNjMDEwMDIyYTk2YmUzYmI4NjBiOGNkNWIxNTkzNjg3MDk1"
+      },
+      "error": null
   }
   ```
 

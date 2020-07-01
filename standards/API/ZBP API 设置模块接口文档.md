@@ -56,7 +56,6 @@ POST `https://example.com/api.php?mod=setting`
 
   ```json	
   {
-    	"code": 200,
     	"message": "OK",
     	"data": {
           "zc_blog_host": "网址",
@@ -66,7 +65,8 @@ POST `https://example.com/api.php?mod=setting`
           "zc_blog_copyright": "版权说明",
           "zc_time_zone_name": "Asia/Shanghai +08:00",
         	...
-      }
+      },
+      "error": null
   }
   ```
 

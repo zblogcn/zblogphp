@@ -106,7 +106,6 @@ GET `https://example.com/api.php?mod=tag&id=1`
 
   ```json
   {
-    	"code": 200,
     	"message": "OK",
     	"data": {
         	"id": 1,
@@ -114,7 +113,8 @@ GET `https://example.com/api.php?mod=tag&id=1`
           "alias": "unnamed",
           "intro": "摘要",
           ...
-      }
+      },
+      "error": null
   }
   ```
 
@@ -262,7 +262,6 @@ GET/POST `https://example.com/api.php?mod=tag&act=get_tags`
 
   ```json
   {
-    	"code": 200,
     	"message": "OK",
     	"data": [{
           "id": 1,
@@ -270,7 +269,8 @@ GET/POST `https://example.com/api.php?mod=tag&act=get_tags`
           "alias": "unnamed",
           "intro": "摘要",
           ...
-      }]
+      }],
+      "error": null
   }
   ```
 
