@@ -38,7 +38,11 @@ foreach ($GLOBALS['hooks']['Filter_Plugin_API_Add_Mod'] as $fpname => &$fpsignal
 }
 
 $mod = strtolower(GetVars('mod', 'GET'));
-$act = strtolower(GetVars('act', 'GET') ? : 'get');
+$act = strtolower(GetVars('act', 'GET'));
+
+if (empty($act)) {
+    $act = 'get';
+}
 
 if (isset($mods[$mod]) && file_exists($mod_file = $mods[$mod])) {
     include $mod_file;
