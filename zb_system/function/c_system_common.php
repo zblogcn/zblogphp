@@ -1977,7 +1977,7 @@ function JsonEncode($arr)
         return preg_replace_callback(
             '#\\\u([0-9a-f]{4})#i',
             'Ucs2Utf8',
-            json_encode($arr)
+            str_ireplace('\\', '', json_encode($arr))
         );
     } else {
         return json_encode(
@@ -2013,5 +2013,40 @@ function RecHtmlSpecialChars(&$arr)
                 $value = htmlspecialchars($value);
             }
         }
+    }
+}
+
+/**
+ * API 检测权限.
+ *
+ * @param bool $loginRequire
+ * @param string $action
+ */
+function ApiCheckAuth($loginRequire = false, $action = 'misc')
+{
+    // 登录认证
+    if ($loginRequire && !$GLOBALS['zbp']->Verify()) {
+        if (!headers_sent()) {
+            header('HTTP/1.1 401 Unauthorized');
+            header('Status: 401 Unauthorized');
+        }
+
+        ApiResponse(array(
+            'code' => 401,
+            'message' => '请先登录！',
+        ));
+    }
+
+    // 权限认证
+    if (!empty($action) && !$GLOBALS['zbp']->CheckRights($action)) {
+        if (!headers_sent()) {
+            header('HTTP/1.1 403 Forbidden');
+            header('Status: 403 Forbidden');
+        }
+
+        ApiResponse(array(
+            'code' => 403,
+            'message' => '无操作权限！',
+        ));
     }
 }
