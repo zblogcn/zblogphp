@@ -15,7 +15,7 @@ require 'zb_system/function/c_system_base.php';
 $zbp->Load();
 
 if (!$GLOBALS['option']['ZC_API_ENABLE']) {
-    ApiResponse(null, null, 503, 'Web API is disabled!');
+    ApiResponse(null, null, 503, $GLOBALS['lang']['error']['95']);
 }
 
 $mods = array();
@@ -47,4 +47,4 @@ if (isset($mods[$mod]) && file_exists($mod_file = $mods[$mod])) {
         call_user_func($func);
     }
 }
-ApiResponse(null, null, 404, 'API is not available!');
+ApiResponse(null, null, 404, $GLOBALS['lang']['96']);

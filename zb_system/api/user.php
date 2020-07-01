@@ -37,10 +37,10 @@ function api_user_login()
                 'level' => $zbp->user->Level,
             ),
             'token' => base64_encode($zbp->user->Name.'-'.$zbp->GenerateUserToken($member, (int) $sdt)),
-        ), null, 200, '登录成功！');
+        ), null, 200, $GLOBALS['lang']['msg']['operation_succeed']);
     }
 
-    ApiResponse(null, null, 401, '登录失败，请重试！');
+    ApiResponse(null, null, 401, $GLOBALS['lang']['error']['8']);
 }
 
 /**
@@ -58,7 +58,7 @@ function api_user_logout()
         $fpname();
     }
 
-    ApiResponse(null, null, 200, '登出成功！');
+    ApiResponse(null, null, 200, $GLOBALS['lang']['msg']['operation_succeed']);
 }
 
 /**
@@ -75,10 +75,10 @@ function api_user_post()
         $zbp->BuildModule();
         $zbp->SaveCache();
     } catch (Exception $e) {
-        ApiResponse(null, null, 500, '新增用户失败！' . $e->getMessage());
+        ApiResponse(null, null, 500, $GLOBALS['lang']['msg']['operation_failed'] . ' ' . $e->getMessage());
     }
 
-    ApiResponse(null, null, 200, '新增用户成功！');
+    ApiResponse(null, null, 200, $GLOBALS['lang']['msg']['operation_succeed']);
 }
 
 /**
@@ -118,7 +118,7 @@ function api_user_get()
         ));
     }
 
-    ApiResponse(null, null, 404, '获取用户信息失败！');
+    ApiResponse(null, null, 404, $GLOBALS['lang']['error']['97']);
 }
 
 /**
@@ -135,10 +135,10 @@ function api_user_update()
         $zbp->BuildModule();
         $zbp->SaveCache();
     } catch (Exception $e) {
-        ApiResponse(null, null, 500, '更新用户失败！' . $e->getMessage());
+        ApiResponse(null, null, 500, $GLOBALS['lang']['msg']['operation_failed'] . ' ' . $e->getMessage());
     }
 
-    ApiResponse(null, null, 200, '更新用户成功！');
+    ApiResponse(null, null, 200, $GLOBALS['lang']['msg']['operation_succeed']);
 }
 
 /**
@@ -151,13 +151,13 @@ function api_user_delete()
     ApiCheckAuth(true, 'MemberDel');
 
     if (!DelMember()) {
-        ApiResponse(null, null, 500, '删除用户失败！');
+        ApiResponse(null, null, 500, $GLOBALS['lang']['msg']['operation_failed']);
     }
 
     $zbp->BuildModule();
     $zbp->SaveCache();
 
-    ApiResponse(null, null, 200, '删除用户成功！');
+    ApiResponse(null, null, 200, $GLOBALS['lang']['msg']['operation_succeed']);
 }
 
 /**

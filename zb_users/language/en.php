@@ -527,6 +527,9 @@ return array(
         '92' => 'Missing %s function, can not enable this application.',
         '93' => 'This article is updated by other pages, so we do not automatically back up the content on the current page unless you refresh the page.',
         '94' => 'You have been on this page for %s hours. To protect you from attacks, you may need to refresh the page.',
+        '95' => 'API is disabled!',
+        '96' => 'API is not available!',
+        '97' => 'Get information failed',
     ),
 
     'offical_urls' => array(
