@@ -29,19 +29,18 @@ function api_user_login()
         }
 
         ApiResponse(array(
-            'user_id' => $zbp->user->ID,
-            'username' => $zbp->user->Name,
-            'static_name' => $zbp->user->StaticName,
-            'level_name' => $zbp->user->LevelName,
-            'level' => $zbp->user->Level,
-            'token' => base64_encode($zbp->GenerateUserToken($member, (int) $sdt)),
-            'message' => '登录成功！',
-        ));
+            'user' => [
+                'id' => $zbp->user->ID,
+                'username' => $zbp->user->Name,
+                'static_name' => $zbp->user->StaticName,
+                'level_name' => $zbp->user->LevelName,
+                'level' => $zbp->user->Level,
+            ],
+            'token' => base64_encode($zbp->user->Name.'-'.$zbp->GenerateUserToken($member, (int) $sdt)),
+        ), null, 200, '登录成功！');
     }
 
-    ApiResponse(array(
-        'message' => '登录失败，请重试！',
-    ));
+    ApiResponse(null, null, 401, '登录失败，请重试！');
 }
 
 /**
@@ -59,9 +58,7 @@ function api_user_logout()
         $fpname();
     }
 
-    ApiResponse(array(
-        'message' => '登出成功！',
-    ));
+    ApiResponse(null, null, 200, '登出成功！');
 }
 
 /**
@@ -78,14 +75,10 @@ function api_user_post()
         $zbp->BuildModule();
         $zbp->SaveCache();
     } catch (Exception $e) {
-        ApiResponse(array(
-            'message' => '新增用户失败！' . $e->getMessage(),
-        ));
+        ApiResponse(null, null, 500, '新增用户失败！' . $e->getMessage());
     }
 
-    ApiResponse(array(
-        'message' => '新增用户成功！',
-    ));
+    ApiResponse(null, null, 200, '新增用户成功！');
 }
 
 /**
@@ -98,8 +91,8 @@ function api_user_get()
     ApiCheckAuth(false, 'ajax');
 
     $member = null;
-    $memberId = (int) GetVars('id', 'POST');
-    $memberName = GetVars('name', 'POST');
+    $memberId = (int) GetVars('id');
+    $memberName = GetVars('name');
 
     if ($memberId > 0) {
         $member = $zbp->GetMemberByID($memberId);
@@ -125,9 +118,7 @@ function api_user_get()
         ));
     }
 
-    ApiResponse(array(
-        'message' => '获取用户信息失败！',
-    ));
+    ApiResponse(null, null, 404, '获取用户信息失败！');
 }
 
 /**
@@ -144,14 +135,10 @@ function api_user_update()
         $zbp->BuildModule();
         $zbp->SaveCache();
     } catch (Exception $e) {
-        ApiResponse(array(
-            'message' => '更新用户失败！' . $e->getMessage(),
-        ));
+        ApiResponse(null, null, 500, '更新用户失败！' . $e->getMessage());
     }
 
-    ApiResponse(array(
-        'message' => '更新用户成功！',
-    ));
+    ApiResponse(null, null, 200, '更新用户成功！');
 }
 
 /**
@@ -164,17 +151,13 @@ function api_user_delete()
     ApiCheckAuth(true, 'MemberDel');
 
     if (!DelMember()) {
-        ApiResponse(array(
-            'message' => '删除用户失败！',
-        ));
+        ApiResponse(null, null, 500, '删除用户失败！');
     }
 
     $zbp->BuildModule();
     $zbp->SaveCache();
 
-    ApiResponse(array(
-        'message' => '删除用户成功！',
-    ));
+    ApiResponse(null, null, 200, '删除用户成功！');
 }
 
 /**
@@ -219,16 +202,6 @@ function api_user_get_auth()
 
     ApiCheckAuth(false, 'misc');
 
-    $authHeader = base64_decode((String) GetVars('HTTP_AUTHORIZATION', 'SERVER'));
-    if (!empty($authHeader) && stristr($authHeader, 'Bearer ') === 0) {
-        $authToken = substr($authHeader, 7);
-    } else {
-        $authToken = (String) GetVars('token');
-    }
-    $authTokenArr = explode('-', $authToken);
-
-    $zbp->user = $zbp->GetMemberByName($authTokenArr[0]);
-
     $authArr = array(
         'user' => $zbp->user->Name,
         'auth' => array(),
@@ -236,7 +209,10 @@ function api_user_get_auth()
 
     foreach ($GLOBALS['actions'] as $key => $value) {
         if ($zbp->CheckRights($key)) {
-            $authArr['auth'][$zbp->GetActionDescription($key)] = $zbp->CheckRights($key) ? 'true' : 'false';
+            $authArr['auth'][$key] = array(
+                'description' => $zbp->GetActionDescription($key), 
+                'checked' => $zbp->CheckRights($key) ? 'true' : 'false'
+            );
         }
     }
 

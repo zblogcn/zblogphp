@@ -3983,3 +3983,87 @@ function BuildModule_statistics($array = array())
 {
     return ModuleBuilder::Statistics($array);
 }
+
+/**
+ * API 响应.
+ *
+ * @param array|null $data
+ * @param ZBlogException|null $error
+ * @param int $code
+ * @param string|null $message
+ */
+function ApiResponse($data, $error = null, $code = 200, $message = null)
+{
+    if (!empty($error)) {
+        $error_info = array(
+            'code' => ZBlogException::$error_id,
+            'type' => $error->type,
+            'message' => $error->message,
+        );
+
+        if ($GLOBALS['option']['ZC_DEBUG_MODE']) {
+            $error_info['message_full'] = $error->messagefull;
+            $error_info['file'] = $error->file;
+            $error_info['line'] = $error->line;
+        }
+
+        if ($code === 200) {
+            $code = 500;
+        }
+        if (empty($message)) {
+            $message = 'System error: '.$error->message;
+        }
+    }
+
+    if (!headers_sent()) {
+        header('Content-Type: application/json; charset=utf-8');
+        SetHttpStatusCode($code);
+    }
+
+    $response = array(
+        'code' => $code,
+        'message' => !empty($message) ? $message : 'OK',
+        'data' => $data,
+        'error' => empty($error) ? null : $error_info,
+    );
+
+    // 显示 Runtime 调试信息
+    if ($GLOBALS['option']['ZC_RUNINFO_DISPLAY']) {
+        $runtime = RunTime(false);
+        $runtime = array_slice($runtime, 0, 3);
+        $response['runtime'] = $runtime;
+    }
+
+    echo JsonEncode($response);
+
+    die();
+}
+
+/**
+ * API 检测权限.
+ *
+ * @param bool $loginRequire
+ * @param string $action
+ */
+function ApiCheckAuth($loginRequire = false, $action = 'misc')
+{
+    // 登录认证
+    if ($loginRequire && !$GLOBALS['zbp']->user->ID) {
+        if (!headers_sent() ) {
+            SetHttpStatusCode(401);
+            header('Status: 401 Unauthorized');
+        }
+
+        ApiResponse(null, null, 401, '请先登录！');
+    }
+
+    // 权限认证
+    if (!empty($action) && !$GLOBALS['zbp']->CheckRights($action)) {
+        if (!headers_sent()) {
+            SetHttpStatusCode(403);
+            header('Status: 403 Forbidden');
+        }
+
+        ApiResponse(null, null, 401, '无操作权限！');
+    }
+}

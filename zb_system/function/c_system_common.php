@@ -1924,53 +1924,6 @@ function Logs_Dump()
 }
 
 /**
- * API 响应.
- *
- * @param array|null $data
- * @param ZBlogException|null $error
- * @param string|null $message
- */
-function ApiResponse($data, $error = null, $message = null)
-{
-    if (!empty($error)) {
-        $error_info = array(
-            'code' => ZBlogException::$error_id,
-            'type' => $error->type,
-            'message' => $error->message,
-        );
-
-        if ($GLOBALS['option']['ZC_DEBUG_MODE']) {
-            $error_info['message_full'] = $error->messagefull;
-            $error_info['file'] = $error->file;
-            $error_info['line'] = $error->line;
-        }
-
-        $message = $error->message;
-    }
-
-    if (!headers_sent()) {
-        header('Content-Type: application/json; charset=utf-8');
-    }
-
-    $response = array(
-        'message' => !empty($message) ? $message : 'OK',
-        'data' => $data,
-        'error' => empty($error) ? null : $error_info,
-    );
-
-    // 显示 Runtime 调试信息
-    if ($GLOBALS['option']['ZC_RUNINFO_DISPLAY']) {
-        $runtime = RunTime(false);
-        $runtime = array_slice($runtime, 0, 3);
-        $response['runtime'] = $runtime;
-    }
-
-    echo JsonEncode($response);
-
-    die();
-}
-
-/**
  * 中文与特殊字符友好的 JSON 编码.
  *
  * @param array $arr
@@ -2021,40 +1974,5 @@ function RecHtmlSpecialChars(&$arr)
                 $value = htmlspecialchars($value);
             }
         }
-    }
-}
-
-/**
- * API 检测权限.
- *
- * @param bool $loginRequire
- * @param string $action
- */
-function ApiCheckAuth($loginRequire = false, $action = 'misc')
-{
-    // 登录认证
-    if ($loginRequire && !$GLOBALS['zbp']->Verify()) {
-        if (!headers_sent()) {
-            header('HTTP/1.1 401 Unauthorized');
-            header('Status: 401 Unauthorized');
-        }
-
-        ApiResponse(array(
-            'code' => 401,
-            'message' => '请先登录！',
-        ));
-    }
-
-    // 权限认证
-    if (!empty($action) && !$GLOBALS['zbp']->CheckRights($action)) {
-        if (!headers_sent()) {
-            header('HTTP/1.1 403 Forbidden');
-            header('Status: 403 Forbidden');
-        }
-
-        ApiResponse(array(
-            'code' => 403,
-            'message' => '无操作权限！',
-        ));
     }
 }
