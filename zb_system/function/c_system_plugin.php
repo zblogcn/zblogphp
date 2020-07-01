@@ -2296,10 +2296,10 @@ DefinePluginFilter('Filter_Plugin_CSP_Backend');
 /*
 '**************************************************<
 '类型:Filter
-'名称:Filter_Plugin_API_Mod
+'名称:Filter_Plugin_API_Add_Mod
 '参数:&$mods
-'说明:定义 API Mod
+'说明:增加自定义 API Mod
 '调用:
 '**************************************************>
  */
-DefinePluginFilter('Filter_Plugin_API_Mod');
+DefinePluginFilter('Filter_Plugin_API_Add_Mod');

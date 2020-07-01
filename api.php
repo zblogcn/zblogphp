@@ -20,12 +20,21 @@ if (!$GLOBALS['option']['ZC_API_ENABLE']) {
 
 $mods = array();
 
-foreach (GetFilesInDir(ZBP_PATH . 'zb_system/api/', 'php') as $sortname => $fullname) {
-    $mods[$sortname] = $fullname;
+// 从 zb_system/api/ 目录中载入 mods
+foreach (GetFilesInDir(ZBP_PATH . 'zb_system/api/', 'php') as $mod => $file) {
+    $mods[$mod] = $file;
 }
 
-foreach ($GLOBALS['hooks']['Filter_Plugin_API_Mod'] as $fpname => &$fpsignal) {
-    $fpname($mods);
+// 增加插件自定义 mod
+foreach ($GLOBALS['hooks']['Filter_Plugin_API_Add_Mod'] as $fpname => &$fpsignal) {
+    $add_mods = $fpname();
+    foreach ($add_mods as $mod => $file) {
+        if (array_key_exists($mod, $mods)) {
+            continue;
+        }
+
+        $mods[$mod] = $file;
+    }
 }
 
 $mod = strtolower(GetVars('mod', 'GET'));
