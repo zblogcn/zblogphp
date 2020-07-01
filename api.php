@@ -13,12 +13,12 @@ $zbp->Load();
 
 if (!$zbp->option['ZC_API_ENABLE']) {
     ApiResponse(array(
-        'message' => 'API is not available!'
+        'message' => 'Web API is disabled!'
     ));
 }
 
 $mods = array();
-foreach (GetFilesInDir($zbp->path . 'zb_system/api/', 'php') as $sortname => $fullname) {
+foreach (GetFilesInDir(ZBP_PATH . 'zb_system/api/', 'php') as $sortname => $fullname) {
     $mods[$sortname] = $fullname;
 }
 
@@ -26,13 +26,19 @@ foreach ($GLOBALS['hooks']['Filter_Plugin_API_Mod'] as $fpname => &$fpsignal) {
     $fpname($mods);
 }
 
-$mod = GetVars('mod', 'GET');
-$mod = str_replace(array('\\','/','.'), '', $mod);
-$act = GetVars('act', 'GET');
+$mod = strtolower(GetVars('mod', 'GET'));
+$act = strtolower(GetVars('act', 'GET'));
 
 if (isset($mods[$mod]) && file_exists($mod_file = $mods[$mod])) {
     include $mod_file;
-    ApiResponse(call_user_func('api_' . $mod . '_' . $act));
+    $func = 'api_' . $mod . '_' . $act;
+    if (function_exists($func)) {
+        ApiResponse(call_user_func($func));
+    }
 }
+
+ApiResponse(array(
+    'message' => 'API is not available!'
+));
 
 die;
