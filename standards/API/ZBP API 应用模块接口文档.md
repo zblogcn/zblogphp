@@ -6,65 +6,6 @@
 
 #### 请求
 
-POST `https://example.com/api.php?mod=app&act=install`
-
-- Headers
-
-  见通用请求头
-
-- Cookies
-
-  通用请求 Cookies
-
-- Body
-
-  | 属性     | 类型   | 示例值  | 说明   |
-  | -------- | ------ | ------- | ------ |
-  | zba      | string | 无     | 应用 ZBA 文件包(需 base64 处理) |
-
-  示例：
-
-  ```json
-  {
-    	"zba": "PD94bWwgdmVyc2lvbj1cIjEuMFwiIGVuY29kaW5nPVwidXRmLTgiPz48YXBwIHZlcnNpb249InB..."
-  }
-  ```
-
-#### 响应
-
-- Headers
-
-  见通用响应头
-
-- Cookies
-
-  无
-
-- Body
-
-  示例：
-
-  ```json
-  {
-    	"message": "OK",
-    	"data": {
-        "installed": true,
-        "message": "Installed successfully!",
-        "id": "UEditor"
-      },
-      "error": null
-  }
-  ```
-
-  data 内容：
-
-  | 键        | 类型    | 示例值                  | 说明          |
-  | --------- | ------- | ----------------------- | ------------- |
-  | installed | boolean | true                    | 是否安装成功  |
-  | message   | string  | Installed successfully! | 消息          |
-  | id        | string  | UEditor                 | 本次安装的应用ID |
-
-
 
 ### 获取应用信息：get
 
@@ -275,70 +216,6 @@ POST `https://example.com/api.php?mod=app&act=disable`
   | disabled | boolean | true                   | 是否停用成功     |
   | message  | string  | Disabled successfully! | 消息             |
   | id       | string  | UEditor                | 本次停用的应用id |
-
-
-
-### 删除应用：delete
-
-#### 请求
-
-POST `https://example.com/api.php?mod=app&act=delete`
-
-- Headers
-
-  见通用请求头
-
-- Cookies
-
-  通用请求 Cookies
-
-- Body
-
-  | 属性 | 类型   | 示例值  | 说明           |
-  | ---- | ------ | ------- | -------------- |
-  | id   | string | UEditor | 待删除的应用id |
-
-  示例：
-
-  ```json
-  {
-    	"id": "UEditor"
-  }
-  ```
-
-#### 响应
-
-- Headers
-
-  见通用响应头
-
-- Cookies
-
-  无
-
-- Body
-
-  示例：
-
-  ```json
-  {
-    	"message": "OK",
-    	"data": {
-        "deleted": true,
-        "message": "Deleted successfully!",
-        "id": "UEditor"
-      },
-      "error": null
-  }
-  ```
-
-  data 内容：
-
-  | 键      | 类型    | 示例值                | 说明             |
-  | ------- | ------- | --------------------- | ---------------- |
-  | deleted | boolean | true                  | 是否删除成功     |
-  | message | string  | Deleted successfully! | 消息             |
-  | id      | string  | UEditor               | 本次删除的应用id |
 
 
 
