@@ -1945,7 +1945,9 @@ function ApiResponse($data, $error = null)
         }
     }
 
-    header('Content-Type:application/json; charset=utf-8');
+    if (!headers_sent()) {
+        header('Content-Type: application/json; charset=utf-8');
+    }
 
     if ($GLOBALS['option']['ZC_RUNINFO_DISPLAY']) {
         $data['runtime'] = RunTime(false);
@@ -1954,10 +1956,10 @@ function ApiResponse($data, $error = null)
 
     echo JsonEncode(array(
         'data' => $data,
-        'error' => empty($error) ? null : $error_info
+        'error' => empty($error) ? null : $error_info,
     ));
 
-    die;
+    die();
 }
 
 /**
