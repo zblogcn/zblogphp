@@ -1931,7 +1931,7 @@ function Logs_Dump()
  */
 function ApiResponse($data, $error = null)
 {
-    if ($error) {
+    if (!empty($error)) {
         $error_info = array(
             'code' => ZBlogException::$error_id,
             'type' => $error->type,
@@ -1939,21 +1939,17 @@ function ApiResponse($data, $error = null)
         );
 
         if ($GLOBALS['option']['ZC_DEBUG_MODE']) {
-            $error_info['messagefull'] = $error->messagefull;
+            $error_info['message_full'] = $error->messagefull;
             $error_info['file'] = $error->file;
             $error_info['line'] = $error->line;
         }
-
-        $data['error_info'] = $error_info;
     }
 
     header('Content-Type:application/json; charset=utf-8');
 
     echo json_encode(array(
-        // @todo 状态码
-        'code' => 200,
-        'message' => ($error !== null) ? $error->message : 'OK',
         'data' => $data,
+        'error' => empty($error) ? null : $error_info
     ));
 
     die;
