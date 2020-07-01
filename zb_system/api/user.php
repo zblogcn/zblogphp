@@ -29,13 +29,13 @@ function api_user_login()
         }
 
         ApiResponse(array(
-            'user' => [
+            'user' => array(
                 'id' => $zbp->user->ID,
                 'username' => $zbp->user->Name,
                 'static_name' => $zbp->user->StaticName,
                 'level_name' => $zbp->user->LevelName,
                 'level' => $zbp->user->Level,
-            ],
+            ),
             'token' => base64_encode($zbp->user->Name.'-'.$zbp->GenerateUserToken($member, (int) $sdt)),
         ), null, 200, '登录成功！');
     }
