@@ -181,7 +181,7 @@ Authorization: Bearer {yourtokenhere}
 当然，也可以在请求参数中附加，如：
 
 ```
-http://zblogphp.test/api.php?mod=setting&act=get&token=yourtokenhere}
+http://zblogphp.test/api.php?mod=setting&act=get&token={yourtokenhere}
 ```
 
 ## 公共消息响应头
@@ -211,6 +211,7 @@ http://zblogphp.test/api.php?mod=setting&act=get&token=yourtokenhere}
 
 ```json
 {
+    "code": 401,
     "message": "没有权限",
     "data": null,
     "error": {
@@ -225,6 +226,7 @@ http://zblogphp.test/api.php?mod=setting&act=get&token=yourtokenhere}
 
 ```json
 {
+    "code": 200",
     "message" : "OK",
   	"data": {
       	"id": 123,

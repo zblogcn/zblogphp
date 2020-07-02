@@ -53,6 +53,7 @@ POST `https://example.com/api.php?mod=user&act=login`
 
   ```json
   {
+      "code": 200,
     	"message": "OK",
     	"data": {
         "user_id": 1,
@@ -242,6 +243,7 @@ POST `https://example.com/api.php?mod=user`
 
   ```json	
   {
+      "code": 200,
     	"message": "OK",
     	"data": {
         	"username": "Chris",
@@ -402,6 +404,7 @@ GET/POST `https://example.com/api.php?mod=user&act=list`
 
   ```json
   {
+      "code": 200,
     	"message": "OK",
     	"data": [{
         	"user_id": 123,
@@ -489,6 +492,7 @@ POST `https://example.com/api.php?mod=user&act=get_auth`
 
   ```json
   {
+      "code": 200,
     	"message": "OK",
     	"data": {
         	"username": "Chris",
