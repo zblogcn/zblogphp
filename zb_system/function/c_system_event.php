@@ -3994,6 +3994,8 @@ function BuildModule_statistics($array = array())
  */
 function ApiResponse($data, $error = null, $code = 200, $message = null)
 {
+    ob_end_clean();
+
     if (!empty($error)) {
         $error_info = array(
             'code' => ZBlogException::$error_id,
@@ -4060,7 +4062,7 @@ function ApiCheckAuth($loginRequire = false, $action = 'misc')
             header('Status: 401 Unauthorized');
         }
 
-        ApiResponse(null, null, 401, '请先登录！');
+        ApiResponse(null, null, 401, $GLOBALS['lang']['error']['6']);
     }
 
     // 权限认证
@@ -4070,6 +4072,6 @@ function ApiCheckAuth($loginRequire = false, $action = 'misc')
             header('Status: 403 Forbidden');
         }
 
-        ApiResponse(null, null, 401, '无操作权限！');
+        ApiResponse(null, null, 401, $GLOBALS['lang']['error']['6']);
     }
 }
