@@ -226,7 +226,7 @@ http://zblogphp.test/api.php?mod=setting&act=get&token={yourtokenhere}
 
 ```json
 {
-    "code": 200",
+    "code": 200,
     "message" : "OK",
   	"data": {
       	"id": 123,
