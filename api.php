@@ -29,6 +29,7 @@ foreach (GetFilesInDir(ZBP_PATH . 'zb_system/api/', 'php') as $mod => $file) {
 foreach ($GLOBALS['hooks']['Filter_Plugin_API_Add_Mod'] as $fpname => &$fpsignal) {
     $add_mods = $fpname();
     foreach ($add_mods as $mod => $file) {
+        $mod = strtolower($mod);
         if (array_key_exists($mod, $mods)) {
             continue;
         }
