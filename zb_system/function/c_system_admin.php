@@ -347,7 +347,7 @@ function OutputOptionItemsOfCategories($default)
 function OutputOptionItemsOfTemplate($default, $refuse_file_filter = array(), $accept_type = array())
 {
     global $zbp;
-    $testRegExp = "/.*(\.|post-|module|header|footer|comment|sidebar|pagebar)/si";
+    $testRegExp = "/^(\.|post-|module|header|footer|comment|sidebar|pagebar|[a-zA-Z]\_)/si";
     $s = null;
     $tz = array();
     $tz[''] = $zbp->lang['msg']['none'];
