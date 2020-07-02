@@ -38,7 +38,9 @@ function misc_statistic()
 {
     global $zbp;
 
-    CheckIsRefererValid();
+    if (!defined('ZBP_IN_API')) {
+        CheckIsRefererValid();
+    }
     if (!$zbp->CheckRights('admin')) {
         echo $zbp->ShowError(6, __FILE__, __LINE__);
         die();
@@ -95,6 +97,8 @@ function misc_statistic()
     $zbp->cache->all_category_nums = $all_categories;
     $zbp->cache->all_view_nums = $all_views;
     $zbp->cache->all_tag_nums = $all_tags;
+    $zbp->cache->all_comment_nums = $all_comments;
+    $zbp->cache->all_member_nums = $all_members;
     $zbp->cache->check_comment_nums = $check_comment_nums;
 
     $zbp->AddBuildModule('statistics', array($all_articles, $all_pages, $all_categories, $all_tags, $all_views, $all_comments));

@@ -3992,7 +3992,7 @@ function BuildModule_statistics($array = array())
  * @param int $code
  * @param string|null $message
  */
-function ApiResponse($data, $error = null, $code = 200, $message = null)
+function ApiResponse($data = null, $error = null, $code = 200, $message = null)
 {
     ob_end_clean();
 

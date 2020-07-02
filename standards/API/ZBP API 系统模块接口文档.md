@@ -55,18 +55,56 @@ POST `https://example.com/api.php?mod=system&act=get_info`
   | 键               | 类型   | 示例值                      | 说明            |
   | ---------------- | ------ | --------------------------- | --------------- |
   | environment      | int    | Linux3.10.0; nginx1.18.0... | 系统环境        |
-  | major_version    | int    | 1                           | 主版本号        |
-  | minor_version    | int    | 7                           | 用户昵称/别名   |
-  | build_version    | int    | 0                           | 用户级别        |
-  | commit_version   | int    | 2330                        | 提交版本号      |
-  | version_codename | string | Alpha                       | 版本代号        |
+  | full_version     | string  | 1.7.0.2330 (Alpha); AppCentre2.53   | Z-BlogPHP 版本        |
   | articles         | int    | 2333                        | 文章总数        |
   | categories       | int    | 233                         | 分类总数        |
   | pages            | int    | 2333                        | 页面总数        |
   | tags             | int    | 23                          | 标签总数        |
   | comments         | int    | 23333                       | 评论总数        |
-  | page_views       | int    | 2333333                     | 浏览总数        |
-  | users            | int    | 23                          | 用户总数        |
+  | views            | int    | 2333333                     | 浏览总数        |
+  | members          | int    | 23                          | 用户总数        |
   | theme            | sring  | default                     | 当前主题        |
   | xml_rpc          | string | http://...                  | XML-RPC协议地址 |
 
+
+### 清空缓存并重新编译模板：statistic
+
+#### 请求
+
+GET `https://example.com/api.php?mod=system&act=statistic`
+
+POST `https://example.com/api.php?mod=system&act=statistic`
+
+- Headers
+
+  见通用请求头
+
+- Cookies
+
+  见通用请求 Cookies
+
+- Body
+
+  无
+
+#### 响应
+
+- Headers
+
+  见通用响应头
+
+- Cookies
+
+  无
+
+- Body
+
+  示例：
+
+  ```json
+  {
+    	"message": "操作成功",
+    	"data": null,
+      "error": null
+  }
+  ```
