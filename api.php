@@ -51,4 +51,4 @@ if (isset($mods[$mod]) && file_exists($mod_file = $mods[$mod])) {
         call_user_func($func);
     }
 }
-ApiResponse(null, null, 404, $GLOBALS['lang']['96']);
+ApiResponse(null, null, 404, $GLOBALS['lang']['error']['96']);
