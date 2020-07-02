@@ -26,22 +26,27 @@ function api_user_login()
         $zbp->user = $member;
         $sd = (float) GetVars('savedate', 'POST');
         $sd = ($sd < 1) ? 1 : $sd;
-        $sdt = time() + 3600 * 24 * $sd;
+        $sdt = (time() + 3600 * 24 * $sd);
 
         foreach ($GLOBALS['hooks']['Filter_Plugin_VerifyLogin_Succeed'] as $fpname => &$fpsignal) {
             $fpname();
         }
 
-        ApiResponse(array(
-            'user' => array(
-                'id' => $zbp->user->ID,
-                'username' => $zbp->user->Name,
-                'static_name' => $zbp->user->StaticName,
-                'level_name' => $zbp->user->LevelName,
-                'level' => $zbp->user->Level,
+        ApiResponse(
+            array(
+                'user' => array(
+                    'id' => $zbp->user->ID,
+                    'username' => $zbp->user->Name,
+                    'static_name' => $zbp->user->StaticName,
+                    'level_name' => $zbp->user->LevelName,
+                    'level' => $zbp->user->Level,
+                ),
+                'token' => base64_encode($zbp->user->Name . '-' . $zbp->GenerateUserToken($member, (int) $sdt)),
             ),
-            'token' => base64_encode($zbp->user->Name.'-'.$zbp->GenerateUserToken($member, (int) $sdt)),
-        ), null, 200, $GLOBALS['lang']['msg']['operation_succeed']);
+            null,
+            200,
+            $GLOBALS['lang']['msg']['operation_succeed']
+        );
     }
 
     ApiResponse(null, null, 401, $GLOBALS['lang']['error']['8']);
@@ -105,21 +110,23 @@ function api_user_get()
     }
 
     if ($member && $member->ID !== null) {
-        ApiResponse(array(
-            'id' => $member->ID,
-            'name' => $member->Name,
-            'static_name' => $member->StaticName,
-            'level_name' => $member->LevelName,
-            'status' => $member->Status,
-            'intro' => $member->Intro,
-            'url' => $member->Url,
-            'email' => $member->Email,
-            'alias' => $member->Alias,
-            'articles' => $member->Articles,
-            'pages' => $member->Pages,
-            'comments' => $member->Comments,
-            'uploads' => $member->Uploads,
-        ));
+        ApiResponse(
+            array(
+                'id' => $member->ID,
+                'name' => $member->Name,
+                'static_name' => $member->StaticName,
+                'level_name' => $member->LevelName,
+                'status' => $member->Status,
+                'intro' => $member->Intro,
+                'url' => $member->Url,
+                'email' => $member->Email,
+                'alias' => $member->Alias,
+                'articles' => $member->Articles,
+                'pages' => $member->Pages,
+                'comments' => $member->Comments,
+                'uploads' => $member->Uploads,
+            )
+        );
     }
 
     ApiResponse(null, null, 404, $GLOBALS['lang']['error']['97']);
@@ -214,7 +221,7 @@ function api_user_get_auth()
     foreach ($GLOBALS['actions'] as $key => $value) {
         if ($zbp->CheckRights($key)) {
             $authArr['auth'][$key] = array(
-                'description' => $zbp->GetActionDescription($key), 
+                'description' => $zbp->GetActionDescription($key),
                 'checked' => $zbp->CheckRights($key) ? true : false
             );
         }

@@ -4011,7 +4011,7 @@ function ApiResponse($data, $error = null, $code = 200, $message = null)
             $code = 500;
         }
         if (empty($message)) {
-            $message = 'System error: '.$error->message;
+            $message = 'System error: ' . $error->message;
         }
     }
 
@@ -4055,7 +4055,7 @@ function ApiCheckAuth($loginRequire = false, $action = 'misc')
 {
     // 登录认证
     if ($loginRequire && !$GLOBALS['zbp']->user->ID) {
-        if (!headers_sent() ) {
+        if (!headers_sent()) {
             SetHttpStatusCode(401);
             header('Status: 401 Unauthorized');
         }

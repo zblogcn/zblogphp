@@ -1202,11 +1202,8 @@ class ZBlogPHP
     {
         if (defined('ZBP_IN_API')) {
             // 在 API 中
-            if (
-                // 获取 AUTHORIZATION 头
-                ($auth = GetVars('HTTP_AUTHORIZATION', 'SERVER'))
-                && (substr($auth, 0, 7) === 'Bearer ')
-            ) {
+            if (($auth = GetVars('HTTP_AUTHORIZATION', 'SERVER')) && (substr($auth, 0, 7) === 'Bearer ')) {
+                // 获取 Authorization 头
                 $api_token = substr($auth, 7);
             } else {
                 // 获取（POST 或 GET 中的）请求参数

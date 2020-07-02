@@ -283,7 +283,7 @@ function GetEnvironment()
 
     if (defined('OPENSSL_VERSION_TEXT')) {
         $a = explode(' ', OPENSSL_VERSION_TEXT);
-        $system_environment .= '; ' . GetValueInArray($a,0) . GetValueInArray($a,1);
+        $system_environment .= '; ' . GetValueInArray($a, 0) . GetValueInArray($a, 1);
     }
 
     return $system_environment;
@@ -1935,15 +1935,19 @@ function JsonEncode($arr)
     RecHtmlSpecialChars($arr);
 
     if (version_compare(PHP_VERSION, '5.4.0', '<')) {
-        return str_ireplace('\\', '', preg_replace_callback(
-            '#\\\u([0-9a-f]{4})#i',
-            'Ucs2Utf8',
-            json_encode($arr)
-        ));
+        return str_ireplace(
+            '\\',
+            '',
+            preg_replace_callback(
+                '#\\\u([0-9a-f]{4})#i',
+                'Ucs2Utf8',
+                json_encode($arr)
+            )
+        );
     } else {
         return json_encode(
             $arr,
-            JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES
+            (JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES)
         );
     }
 }
@@ -1955,7 +1959,8 @@ function JsonEncode($arr)
  *
  * @return false|string
  */
-function Ucs2Utf8($matchs) {
+function Ucs2Utf8($matchs)
+{
     return iconv('UCS-2BE', 'UTF-8', pack('H4', $matchs[1]));
 }
 
