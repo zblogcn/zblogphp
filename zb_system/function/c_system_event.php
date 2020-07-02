@@ -4040,7 +4040,7 @@ function ApiResponse($data, $error = null, $code = 200, $message = null)
         $fpname($response);
     }
 
-    $response_text = JsonEncode($response);
+    echo JsonEncode($response);
 
     die();
 }
