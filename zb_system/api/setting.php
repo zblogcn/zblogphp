@@ -8,7 +8,7 @@ if (!defined('ZBP_PATH')) {
  * Z-Blog with PHP.
  *
  * @author  Z-BlogPHP Team
- * @version 1.0 2020-07-01
+ * @version 1.0 2020-07-02
  */
 
 $setting_keys = array(

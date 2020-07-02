@@ -11,13 +11,13 @@
 
 #### 请求
 
-GET `https://example.com/api.php?mod=app&act=get&id=UEditor`
+GET `https://example.com/api.php?mod=app&act=get&type=plugin&id=UEditor`
 
 POST `https://example.com/api.php?mod=app&act=get`
 
 或者省略 act：
 
-GET `https://example.com/api.php?mod=app&id=UEditor`
+GET `https://example.com/api.php?mod=app&id=UEditor&type=plugin&id=UEditor`
 
 - Headers
 
@@ -33,12 +33,14 @@ GET `https://example.com/api.php?mod=app&id=UEditor`
 
   | 属性 | 类型   | 示例值  | 说明   |
   | ---- | ------ | ------- | ------ |
+  | type | string | plugin  | 应用类型，theme:主题/plugin:插件 |
   | id   | string | UEditor | 应用id |
 
   示例：
 
   ```json
   {
+      "type": "plugin",
     	"id": "UEditor"
   }
   ```
@@ -59,8 +61,10 @@ GET `https://example.com/api.php?mod=app&id=UEditor`
 
   ```json
   {
+      "code": 200,
     	"message": "OK",
     	"data": {
+          "is_active": true,
           "id": "UEditor",
           "name": "UEditor",
           "url": "http://www.rainbowsoft.org",
@@ -90,11 +94,11 @@ GET `https://example.com/api.php?mod=app&id=UEditor`
 
 
 
-### 启用应用：enable
+### 启用插件：enable_plugin
 
 #### 请求
 
-POST `https://example.com/api.php?mod=app&act=enable`
+POST `https://example.com/api.php?mod=app&act=enable_plugin`
 
 - Headers
 
@@ -108,8 +112,7 @@ POST `https://example.com/api.php?mod=app&act=enable`
 
   | 属性 | 类型   | 示例值  | 说明           |
   | ---- | ------ | ------- | -------------- |
-  | type | string | plugin  | 待启用的应用类型（theme:主题/plugin:插件） |
-  | id   | string | UEditor | 待启用的应用ID |
+  | id   | string | UEditor | 待启用的插件ID |
 
   示例：
 
@@ -135,10 +138,10 @@ POST `https://example.com/api.php?mod=app&act=enable`
 
   ```json
   {
-    	"message": "OK",
+      "code": 200,
+    	"message": "操作成功",
     	"data": {
         "enabled": true,
-        "message": "Enabled successfully!",
         "id": "UEditor"
       },
       "error": null
@@ -150,16 +153,15 @@ POST `https://example.com/api.php?mod=app&act=enable`
   | 键      | 类型    | 示例值                | 说明             |
   | ------- | ------- | --------------------- | ---------------- |
   | enabled | boolean | true                  | 是否启用成功     |
-  | message | string  | Enabled successfully! | 消息             |
   | id      | string  | UEditor               | 本次启用的应用ID |
 
 
 
-### 停用应用：disable
+### 停用应用：disable_plugin
 
 #### 请求
 
-POST `https://example.com/api.php?mod=app&act=disable`
+POST `https://example.com/api.php?mod=app&act=disable_plugin`
 
 - Headers
 
@@ -202,7 +204,6 @@ POST `https://example.com/api.php?mod=app&act=disable`
     	"message": "OK",
     	"data": {
         "disabled": true,
-        "message": "Disabled successfully!",
         "id": "UEditor"
       },
       "error": null
@@ -214,7 +215,6 @@ POST `https://example.com/api.php?mod=app&act=disable`
   | 键       | 类型    | 示例值                 | 说明             |
   | -------- | ------- | ---------------------- | ---------------- |
   | disabled | boolean | true                   | 是否停用成功     |
-  | message  | string  | Disabled successfully! | 消息             |
   | id       | string  | UEditor                | 本次停用的应用id |
 
 
@@ -256,6 +256,7 @@ POST `https://example.com/api.php?mod=app&act=get_apps`
 
   ```json
   {
+      "code": 200,
     	"message": "OK",
     	"data": [{
           "is_active": true,
