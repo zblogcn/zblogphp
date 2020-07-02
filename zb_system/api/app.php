@@ -40,6 +40,8 @@ function api_app_enable_plugin()
 {
     global $zbp;
 
+    ApiCheckAuth(true, 'PluginEnb');
+
     $id = EnablePlugin(GetVars('id', 'POST'));
     $zbp->BuildModule();
     $zbp->SaveCache();
@@ -62,6 +64,8 @@ function api_app_disable_plugin()
 {
     global $zbp;
 
+    ApiCheckAuth(true, 'PluginDis');
+
     $result = DisablePlugin($id = GetVars('id', 'POST'));
     $zbp->BuildModule();
     $zbp->SaveCache();
@@ -69,6 +73,30 @@ function api_app_disable_plugin()
     ApiResponse(
         array(
             'disabled' => $result,
+            'id' => $id
+        ),
+        null,
+        200,
+        $GLOBALS['lang']['msg']['operation_succeed']
+    );
+}
+
+/**
+ * 更换主题接口.
+ */
+function api_app_set_theme()
+{
+    global $zbp;
+
+    ApiCheckAuth(true, 'ThemeSet');
+
+    $id = SetTheme(GetVars('id', 'POST'), GetVars('style', 'POST'));
+    $zbp->BuildModule();
+    $zbp->SaveCache();
+
+    ApiResponse(
+        array(
+            'enabled' => !empty($id),
             'id' => $id
         ),
         null,

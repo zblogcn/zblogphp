@@ -153,7 +153,7 @@ POST `https://example.com/api.php?mod=app&act=enable_plugin`
   | 键      | 类型    | 示例值                | 说明             |
   | ------- | ------- | --------------------- | ---------------- |
   | enabled | boolean | true                  | 是否启用成功     |
-  | id      | string  | UEditor               | 本次启用的应用ID |
+  | id      | string  | UEditor               | 本次启用的插件ID |
 
 
 
@@ -175,7 +175,7 @@ POST `https://example.com/api.php?mod=app&act=disable_plugin`
 
   | 属性 | 类型   | 示例值  | 说明           |
   | ---- | ------ | ------- | -------------- |
-  | id   | string | UEditor | 待停用的应用id |
+  | id   | string | UEditor | 待停用的插件ID |
 
   示例：
 
@@ -215,7 +215,72 @@ POST `https://example.com/api.php?mod=app&act=disable_plugin`
   | 键       | 类型    | 示例值                 | 说明             |
   | -------- | ------- | ---------------------- | ---------------- |
   | disabled | boolean | true                   | 是否停用成功     |
-  | id       | string  | UEditor                | 本次停用的应用id |
+  | id       | string  | UEditor                | 本次停用的插件ID |
+
+
+
+### 更换主题：set_theme
+
+#### 请求
+
+POST `https://example.com/api.php?mod=app&act=set_theme`
+
+- Headers
+
+  见通用请求头
+
+- Cookies
+
+  通用请求 Cookies
+
+- Body
+
+  | 属性 | 类型   | 示例值  | 说明           |
+  | ---- | ------ | ------- | -------------- |
+  | id   | string | tpure | 待更换的主题ID |
+  | style    | string  | style.css  |  样式 |
+
+  示例：
+
+  ```json
+  {
+      "id": "tpure",
+      "style": "style.css"
+  }
+  ```
+
+#### 响应
+
+- Headers
+
+  见通用响应头
+
+- Cookies
+
+  无
+
+- Body
+
+  示例：
+
+  ```json
+  {
+      "code": 200,
+    	"message": "操作成功",
+    	"data": {
+        "enabled": true,
+        "id": "tpure"
+      },
+      "error": null
+  }
+  ```
+
+  data 内容：
+
+  | 键      | 类型    | 示例值                | 说明             |
+  | ------- | ------- | --------------------- | ---------------- |
+  | enabled | boolean | true                  | 是否启用成功     |
+  | id      | string  | tpure                | 本次更换的主题ID |
 
 
 
