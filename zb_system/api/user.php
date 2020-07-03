@@ -22,7 +22,7 @@ function api_user_login()
 
     $member = null;
 
-    if ($zbp->Verify_MD5(trim(GetVars('username', 'POST')), trim(GetVars('password', 'POST')), $member)) {
+    if ($zbp->Verify_MD5(trim(GetVars('username', 'POST')), md5(trim(GetVars('password', 'POST'))), $member)) {
         $zbp->user = $member;
         $sd = (float) GetVars('savedate', 'POST');
         $sd = ($sd < 1) ? 1 : $sd;
