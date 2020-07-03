@@ -286,6 +286,7 @@ return array(
         'cmt'         => 'Post Comment',
         'getcmt'      => 'Get Recent Comments',
         'ajax'        => 'AJAX',
+        'view'        => 'View',
         'ArticleEdt'  => 'Edit Post',
         'ArticlePst'  => 'Add New Post',
         'ArticleDel'  => 'Delete Post',
