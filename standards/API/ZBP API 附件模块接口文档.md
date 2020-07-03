@@ -6,7 +6,7 @@
 
 #### 请求
 
-POST `https://example.com/api.php?mod=atta&act=post`
+POST `https://example.com/api.php?mod=upload&act=post`
 
 - Headers
 
@@ -18,23 +18,7 @@ POST `https://example.com/api.php?mod=atta&act=post`
 
 - Body
 
-  | 属性     | 类型    | 示例值     | 说明         |
-  | -------- | ------- | ---------- | ------------ |
-  | filename | UEditor | 文件名.png | 原始文件名   |
-  | user_id  | int     | 1          | 上传者id     |
-  | type     | string  | image/png  | 文件类型     |
-  | file     | blob    | xxxx       | 二进制文件流 |
-
-  示例：
-
-  ```json
-  {
-    	"filename": "文件名.png",
-    	"user_id": 1,
-    	"type": "image/png",
-    	"file": blob
-  }
-  ```
+  文件流
 
 #### 响应
 
@@ -57,13 +41,13 @@ POST `https://example.com/api.php?mod=atta&act=post`
 
 #### 请求
 
-GET `https://example.com/api.php?mod=atta&act=get&id=1`
+GET `https://example.com/api.php?mod=upload&act=get&id=1`
 
-POST `https://example.com/api.php?mod=atta&act=get`
+POST `https://example.com/api.php?mod=upload&act=get`
 
 或者省略 act：
 
-GET `https://example.com/api.php?mod=atta&id=1`
+GET `https://example.com/api.php?mod=upload&id=1`
 
 - Headers
 
@@ -137,7 +121,7 @@ GET `https://example.com/api.php?mod=atta&id=1`
 
 #### 请求
 
-POST `https://example.com/api.php?mod=atta&act=delete`
+POST `https://example.com/api.php?mod=upload&act=delete`
 
 - Headers
 
@@ -197,11 +181,11 @@ POST `https://example.com/api.php?mod=atta&act=delete`
 
 
 
-### 列出所有附件：get_attas
+### 列出所有附件：get_uploads
 
 #### 请求
 
-POST `https://example.com/api.php?mod=atta&act=get_attas`
+POST `https://example.com/api.php?mod=upload&act=list`
 
 - Headers
 
