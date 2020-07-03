@@ -43,13 +43,13 @@ function api_tag_get()
 }
 
 /**
- * 更新标签接口.
+ * 新增/修改标签接口.
  */
-function api_tag_update()
+function api_tag_post()
 {
     global $zbp;
 
-    ApiCheckAuth(true, 'TagEdt');
+    ApiCheckAuth(true, 'TagPst');
 
     try {
         PostTag();

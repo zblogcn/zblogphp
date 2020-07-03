@@ -43,13 +43,13 @@ function api_category_get()
 }
 
 /**
- * 更新分类接口.
+ * 新增/修改分类接口.
  */
-function api_category_update()
+function api_category_post()
 {
     global $zbp;
 
-    ApiCheckAuth(true, 'CategoryEdt');
+    ApiCheckAuth(true, 'CategoryPst');
 
     try {
         PostCategory();

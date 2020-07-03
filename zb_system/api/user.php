@@ -71,13 +71,13 @@ function api_user_logout()
 }
 
 /**
- * 新增用户接口.
+ * 新增/修改用户接口.
  */
 function api_user_post()
 {
     global $zbp;
 
-    ApiCheckAuth(true, 'MemberNew');
+    ApiCheckAuth(true, 'MemberPst');
 
     try {
         PostMember();
@@ -120,26 +120,6 @@ function api_user_get()
     }
 
     ApiResponse(null, null, 404, $GLOBALS['lang']['error']['97']);
-}
-
-/**
- * 更新用户接口.
- */
-function api_user_update()
-{
-    global $zbp;
-
-    ApiCheckAuth(true, 'MemberEdt');
-
-    try {
-        PostMember();
-        $zbp->BuildModule();
-        $zbp->SaveCache();
-    } catch (Exception $e) {
-        ApiResponse(null, null, 500, $GLOBALS['lang']['msg']['operation_failed'] . ' ' . $e->getMessage());
-    }
-
-    ApiResponse(null, null, 200, $GLOBALS['lang']['msg']['operation_succeed']);
 }
 
 /**
