@@ -43,7 +43,7 @@ function api_category_get()
 }
 
 /**
- * 更新用户接口.
+ * 更新分类接口.
  */
 function api_category_update()
 {
@@ -63,7 +63,7 @@ function api_category_update()
 }
 
 /**
- * 删除用户接口.
+ * 删除分类接口.
  */
 function api_category_delete()
 {
