@@ -82,12 +82,10 @@ function api_category_list()
 
     ApiCheckAuth(true, 'view');
 
-    $categoryList = $zbp->GetCategoryList();
-    $listArr = array();
-
-    foreach ($categoryList as $category) {
-        $listArr[] = ApiGetObjectArray($category, array('Url', 'Symbol', 'Level', 'SymbolName', 'AllCount'));
-    }
+    $listArr = ApiGetObjectArrayList(
+        $zbp->GetCategoryList(),
+        array('Url', 'Symbol', 'Level', 'SymbolName', 'AllCount')
+    );
 
     ApiResponse($listArr);
 }

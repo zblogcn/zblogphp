@@ -4094,3 +4094,19 @@ function ApiGetObjectArray($object, $other_properties = array(), $remove_propert
     }
     return $array;
 }
+
+/**
+ * API 获取指定属性的Array 列表.
+ *
+ * @param array $list
+ * @param array $other_properties 追加的属性
+ * @param array $remove_properties 要删除的属性
+ */
+function ApiGetObjectArrayList($list, $other_properties = array(), $remove_properties = array())
+{
+    foreach ($list as &$object) {
+        $object = ApiGetObjectArray($object, $other_properties, $remove_properties);
+    }
+
+    return $list;
+}
