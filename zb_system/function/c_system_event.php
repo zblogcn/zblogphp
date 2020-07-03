@@ -4078,15 +4078,19 @@ function ApiCheckAuth($loginRequire = false, $action = 'misc')
  * API 获取指定属性的Array
  *
  * @param object $object
- * @param array $other_properties
+ * @param array $other_properties 追加的属性
+ * @param array $remove_properties 要删除的属性
  */
-function ApiGetObjectArray($object, $other_properties = array())
+function ApiGetObjectArray($object, $other_properties = array(), $remove_properties = array())
 {
     $array = $object->GetData();
     unset($array['Meta']);
     $array['Metas'] = $object->Metas;
     foreach ($other_properties as $key => $value) {
         $array[$value] = $object->$value;
+    }
+    foreach ($remove_properties as $key => $value) {
+        unset($array[$value]);
     }
     return $array;
 }
