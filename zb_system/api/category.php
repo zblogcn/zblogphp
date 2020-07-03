@@ -23,8 +23,15 @@ function api_category_get()
     $category = null;
     $cateId = (int) GetVars('id');
     $cateAlias = GetVars('alias');
+    $cateName = GetVars('name');
 
-    $category = ($cateId > 0) ? $zbp->GetCategoryByID($cateId) : $zbp->GetCategoryByAlias($cateAlias);
+    if ($cateId > 0) {
+        $category = $zbp->GetCategoryByID($cateId);
+    } elseif ($cateAlias !== null) {
+        $category = $zbp->GetCategoryByAlias($cateAlias);
+    } else {
+        $category = $zbp->GetCategoryByName($cateName);
+    }
 
     $array = ApiGetObjectArray($category, array('Url', 'Symbol', 'Level', 'SymbolName', 'AllCount'));
 
