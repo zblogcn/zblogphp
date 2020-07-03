@@ -1274,6 +1274,8 @@ class ZBlogPHP
                 return $user;
             }
         }
+
+        return null;
     }
 
     /**
