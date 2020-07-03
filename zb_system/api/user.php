@@ -32,15 +32,15 @@ function api_user_login()
             $fpname();
         }
 
+        $user_array = ApiGetObjectArray(
+            $zbp->user,
+            array('Url', 'Template', 'Avatar', 'StaticName'),
+            array('Guid', 'Password', 'IP')
+        );
+
         ApiResponse(
             array(
-                'user' => array(
-                    'id' => $zbp->user->ID,
-                    'username' => $zbp->user->Name,
-                    'static_name' => $zbp->user->StaticName,
-                    'level_name' => $zbp->user->LevelName,
-                    'level' => $zbp->user->Level,
-                ),
+                'user' => $user_array,
                 'token' => base64_encode($zbp->user->Name . '-' . $zbp->GenerateUserToken($member, (int) $sdt)),
             ),
             null,
@@ -111,20 +111,10 @@ function api_user_get()
 
     if ($member && $member->ID !== null) {
         ApiResponse(
-            array(
-                'id' => $member->ID,
-                'name' => $member->Name,
-                'static_name' => $member->StaticName,
-                'level_name' => $member->LevelName,
-                'status' => $member->Status,
-                'intro' => $member->Intro,
-                'url' => $member->Url,
-                'email' => $member->Email,
-                'alias' => $member->Alias,
-                'articles' => $member->Articles,
-                'pages' => $member->Pages,
-                'comments' => $member->Comments,
-                'uploads' => $member->Uploads,
+            ApiGetObjectArray(
+                $member,
+                array('Url', 'Template', 'Avatar', 'StaticName'),
+                array('Guid', 'Password', 'IP')
             )
         );
     }
@@ -180,26 +170,9 @@ function api_user_list()
 
     ApiCheckAuth(true, 'MemberAll');
 
-    $memberList = $zbp->GetMemberList();
-    $listArr = array();
-
-    foreach ($memberList as $member) {
-        $memberArr = array();
-        $memberArr['id'] = $member->ID;
-        $memberArr['name'] = $member->Name;
-        $memberArr['static_name'] = $member->StaticName;
-        $memberArr['level_name'] = $member->LevelName;
-        $memberArr['status'] = $member->Status;
-        $memberArr['intro'] = $member->Intro;
-        $memberArr['url'] = $member->Url;
-        $memberArr['email'] = $member->Email;
-        $memberArr['alias'] = $member->Alias;
-        $memberArr['articles'] = $member->Articles;
-        $memberArr['pages'] = $member->Pages;
-        $memberArr['comments'] = $member->Comments;
-        $memberArr['uploads'] = $member->Uploads;
-        $listArr[] = $memberArr;
-    }
+    $listArr = ApiGetObjectArrayList(
+        $zbp->GetMemberList()
+    );
 
     ApiResponse($listArr);
 }
