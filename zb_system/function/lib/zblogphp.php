@@ -1378,24 +1378,23 @@ class ZBlogPHP
      * 验证 API Token.
      *
      * @param string $api_token
-     * @return Member
+     * @return Member|null
      */
     public function VerifyAPIToken($api_token)
     {
         $api_token = base64_decode($api_token);
-        if (! $api_token) {
-            return new Member;
+
+        if (empty($api_token)) {
+            return null;
         }
 
+        // 验证字符串格式为 {username}-{token}
         $api_token_array = explode('-', $api_token);
-
-        // 规定格式为 {username}-{token}
         if (count($api_token_array) !== 2) {
-            return new Member;
+            return null;
         }
 
-        list($username, $token) = $api_token_array;
-        return $this->VerifyUserToken($token, $username);
+        return $this->VerifyUserToken($api_token_array[1], $api_token_array[0]);
     }
 
     private $loadmembers_level = 0;

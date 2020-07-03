@@ -1936,8 +1936,8 @@ function JsonEncode($arr)
 
     if (version_compare(PHP_VERSION, '5.4.0', '<')) {
         return str_ireplace(
-            '\\',
-            '',
+            '\\/',
+            '/',
             preg_replace_callback(
                 '#\\\u([0-9a-f]{4})#i',
                 'Ucs2Utf8',
