@@ -4073,3 +4073,20 @@ function ApiCheckAuth($loginRequire = false, $action = 'misc')
         ApiResponse(null, null, 401, $GLOBALS['lang']['error']['6']);
     }
 }
+
+/**
+ * API 获取指定属性的Array
+ *
+ * @param object $object
+ * @param array $properties
+ */
+function ApiGetObjectArray($object, $properties = array())
+{
+    $array = $object->GetData();
+    unset($array['Meta']);
+    $array['Metas'] = $object->Metas;
+    foreach ($properties as $key => $value) {
+        $array[$value] = $object->$value;
+    }
+    return $array;
+}
