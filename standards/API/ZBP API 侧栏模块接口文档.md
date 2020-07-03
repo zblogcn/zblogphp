@@ -2,11 +2,11 @@
 
 ## 接口列表
 
-### 新增模块：post_module
+### 新增模块：post
 
 #### 请求
 
-POST `https://example.com/api.php?mod=sidebar&act=post`
+POST `https://example.com/api.php?mod=module&act=post`
 
 - Headers
 
@@ -57,13 +57,13 @@ POST `https://example.com/api.php?mod=sidebar&act=post`
 
 
 
-### 获取模块信息：get_module
+### 获取模块信息：get
 
 #### 请求
 
-GET `https://example.com/api.php?mod=sidebar&act=get_module&id=name`
+GET `https://example.com/api.php?mod=module&act=get&id=name`
 
-POST `https://example.com/api.php?mod=sidebar&act=get_module`
+POST `https://example.com/api.php?mod=module&act=get`
 
 - Headers
 
@@ -137,7 +137,7 @@ POST `https://example.com/api.php?mod=sidebar&act=get_module`
 
 #### 请求
 
-POST `https://example.com/api.php?mod=sidebar&act=update_module`
+POST `https://example.com/api.php?mod=module&act=update_module`
 
 - Headers
 
@@ -193,7 +193,7 @@ POST `https://example.com/api.php?mod=sidebar&act=update_module`
 
 #### 请求
 
-POST `https://example.com/api.php?mod=sidebar&act=delete_module`
+POST `https://example.com/api.php?mod=module&act=delete_module`
 
 - Headers
 
@@ -233,7 +233,7 @@ POST `https://example.com/api.php?mod=sidebar&act=delete_module`
 
   
 
-### 获取模块列表：get_modules
+### 获取模块列表：list
 
 可以通过指定模块代码来获取某种类型的模块。
 
@@ -249,9 +249,9 @@ POST `https://example.com/api.php?mod=sidebar&act=delete_module`
 
 #### 请求
 
-GET `https://example.com/api.php?mod=sidebar&act=get_modules&type=<模块代码>`
+GET `https://example.com/api.php?mod=module&act=list&type=<模块代码>`
 
-POST `https://example.com/api.php?mod=sidebar&act=get_modules`
+POST `https://example.com/api.php?mod=module&act=list`
 
 - Headers
 
@@ -309,11 +309,11 @@ POST `https://example.com/api.php?mod=sidebar&act=get_modules`
 
 
 
-### 设置侧栏模块：update
+### 设置侧栏模块：set_sidebar
 
 #### 请求
 
-POST `https://example.com/api.php?mod=sidebar&act=update`
+POST `https://example.com/api.php?mod=module&act=set_sidebar`
 
 - Headers
 
