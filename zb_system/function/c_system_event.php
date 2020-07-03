@@ -4078,14 +4078,14 @@ function ApiCheckAuth($loginRequire = false, $action = 'misc')
  * API 获取指定属性的Array
  *
  * @param object $object
- * @param array $properties
+ * @param array $other_properties
  */
-function ApiGetObjectArray($object, $properties = array())
+function ApiGetObjectArray($object, $other_properties = array())
 {
     $array = $object->GetData();
     unset($array['Meta']);
     $array['Metas'] = $object->Metas;
-    foreach ($properties as $key => $value) {
+    foreach ($other_properties as $key => $value) {
         $array[$value] = $object->$value;
     }
     return $array;
