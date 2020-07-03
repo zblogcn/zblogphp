@@ -1264,7 +1264,7 @@ class ZBlogPHP
      * @param string $token
      * @param string $username
      *
-     * @return Member
+     * @return Member|null
      */
     public function VerifyUserToken($token, $username)
     {
