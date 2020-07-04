@@ -2197,8 +2197,8 @@ function CheckComment()
 {
     global $zbp;
 
-    $id = (int) GetVars('id', 'GET');
-    $ischecking = (bool) GetVars('ischecking', 'GET');
+    $id = (int) GetVars('id');
+    $ischecking = (bool) GetVars('ischecking');
 
     $cmt = $zbp->GetCommentByID($id);
     $orig_check = (bool) $cmt->IsChecking;
