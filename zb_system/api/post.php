@@ -1,0 +1,201 @@
+<?php
+
+if (!defined('ZBP_PATH')) {
+    exit('Access denied');
+}
+
+/**
+ * Z-Blog with PHP.
+ *
+ * @author  Z-BlogPHP Team
+ * @version 1.0 2020-07-04
+ */
+
+/**
+ * 获取文章/页面接口.
+ */
+function api_post_get()
+{
+    global $zbp;
+
+    $postId = (int) GetVars('id');
+
+    if ($postId > 0) {
+        $post = new Post();
+        // 判断 id 是否有效
+        if ($post->LoadInfoByID($postId)) {
+            // 判断是文章还是页面
+            if ($post->Type) {
+                // 页面
+                if ($post->Status > 0) {
+                    // 非公开页面（草稿或审核状态）
+                    ApiCheckAuth(true, 'PageEdt');
+                }
+            } else {
+                // 文章
+                if ($post->Status === 2) {
+                    // 待审核文章
+                    ApiCheckAuth(true, 'ArticlePub');
+                } elseif ($post->Status === 1) {
+                    // 草稿文章
+                    ApiCheckAuth(true, 'ArticleEdt');
+                }
+            }
+            // 默认为公开状态的文章/页面
+            ApiCheckAuth(false, 'view');
+            $data = ApiGetObjectArray($post);
+            ApiResponse($data);
+        }
+    }
+
+    ApiResponse(null, null, 404, $GLOBALS['lang']['error']['97']);
+}
+
+/**
+ * 新增/修改 文章/页面接口.
+ */
+function api_post_post()
+{
+    global $zbp;
+
+    $postId = GetVars('id', 'POST');
+
+    if ($postId > 0) {
+        $post = new Post();
+        if ($post->LoadInfoByID($postId)) {
+            // 判断是文章还是页面
+            if ($post->Type) {
+                // 页面
+                ApiCheckAuth(true, 'PagePst');
+                try {
+                    PostPage();
+                    $zbp->BuildModule();
+                    $zbp->SaveCache();
+                } catch (Exception $e) {
+                    ApiResponse(null, null, 500, $GLOBALS['lang']['msg']['operation_failed'] . ' ' . $e->getMessage());
+                }
+            } else {
+                // 文章
+                ApiCheckAuth(true, 'ArticlePst');
+                try {
+                    PostArticle();
+                    $zbp->BuildModule();
+                    $zbp->SaveCache();
+                } catch (Exception $e) {
+                    ApiResponse(null, null, 500, $GLOBALS['lang']['msg']['operation_failed'] . ' ' . $e->getMessage());
+                }
+            }
+
+            ApiResponse(null, null, 200, $GLOBALS['lang']['msg']['operation_succeed']);
+        }
+    }
+
+    ApiResponse(null, null, 500, $GLOBALS['lang']['msg']['operation_failed']);
+}
+
+/**
+ * 删除文章/页面接口.
+ */
+function api_post_delete()
+{
+    global $zbp;
+
+    $postId = GetVars('id', 'POST');
+
+    if ($postId > 0) {
+        $post = new Post();
+        if ($post->LoadInfoByID($postId)) {
+            // 判断是文章还是页面
+            if ($post->Type) {
+                // 页面
+                ApiCheckAuth(true, 'PageDel');
+                try {
+                    DelPage();
+                    $zbp->BuildModule();
+                    $zbp->SaveCache();
+                } catch (Exception $e) {
+                    ApiResponse(null, null, 500, $GLOBALS['lang']['msg']['operation_failed'] . ' ' . $e->getMessage());
+                }
+            } else {
+                // 文章
+                ApiCheckAuth(true, 'ArticleDel');
+                try {
+                    DelArticle();
+                    $zbp->BuildModule();
+                    $zbp->SaveCache();
+                } catch (Exception $e) {
+                    ApiResponse(null, null, 500, $GLOBALS['lang']['msg']['operation_failed'] . ' ' . $e->getMessage());
+                }
+            }
+
+            ApiResponse(null, null, 200, $GLOBALS['lang']['msg']['operation_succeed']);
+        }
+    }
+
+    ApiResponse(null, null, 500, $GLOBALS['lang']['msg']['operation_failed']);
+}
+
+/**
+ * 列出文章/页面接口.
+ */
+function api_post_list()
+{
+    global $zbp;
+
+    $cateId = (int) GetVars('cate_id');
+    $tagId = (int) GetVars('tag_id');
+    $authId = (int) GetVars('auth_id');
+    $date = GetVars('date');
+    $mng = strtolower((String) GetVars('mng'));
+    $type = strtolower((String) GetVars('type'));
+
+    // 组织查询条件
+    $where = array();
+    if ($cateId > 0) {
+        $where[] = array('=', 'log_CateID', $cateId);
+    }
+    if ($tagId > 0) {
+        $where[] = array('LIKE', 'log_Tag', '%{' . $tagId . '}%');
+    }
+    if ($authId > 0) {
+        $where[] = array('=', 'log_AuthorID', $authId);
+    }
+    if (!empty($date)) {
+        $time = strtotime(GetVars('date', 'GET'));
+        if (strrpos($date, '-') !== strpos($date, '-')) {
+            $where[] = array('BETWEEN', 'log_PostTime', $time, strtotime('+1 day', $time));
+        } else {
+            $where[] = array('BETWEEN', 'log_PostTime', $time, strtotime('+1 month', $time));
+        }
+    }
+    if ($type == 'page') {
+        // 列出页面
+        $where[] = array('=', 'log_Type', 1);
+        if (!empty($mng)) {
+            // 管理页面
+            ApiCheckAuth(true, 'PageMng');
+        } else {
+            // 默认非管理模式
+            ApiCheckAuth(false, 'view');
+        }
+    } elseif ($type == 'article') {
+        // 列出文章
+        $where[] = array('=', 'log_Type', 0);
+        if ($mng == 'author') {
+            // 管理作者所属文章
+            ApiCheckAuth(true, 'ArticleMng');
+        } elseif ($mng == 'admin') {
+            // 管理所有文章
+            ApiCheckAuth(true, 'ArticleAll');
+        } else {
+            // 默认非管理模式
+            ApiCheckAuth(false, 'view');
+        }
+    } else {
+        // 列出文章和页面
+        ApiCheckAuth(true, 'ArticleAll');
+    }
+
+    $listArr = ApiGetObjectArrayList($zbp->GetPostList('*', $where));
+    ApiResponse($listArr);
+}

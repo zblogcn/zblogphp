@@ -150,7 +150,7 @@ GET `https://example.com/api.php?mod=post&id=1`
 
 #### 请求
 
-POST `https://example.com/api.php?mod=post&act=update`
+POST `https://example.com/api.php?mod=post&act=post`
 
 - Headers
 
@@ -251,11 +251,11 @@ POST `https://example.com/api.php?mod=post&act=delete`
 
   
 
-### 获取文章列表：get_articles
+### 获取文章/页面列表：list
 
 #### 请求
 
-GET/POST `https://example.com/api.php?mod=post&act=get_articles`
+GET/POST `https://example.com/api.php?mod=post&act=list`
 
 - Headers
 
@@ -266,8 +266,14 @@ GET/POST `https://example.com/api.php?mod=post&act=get_articles`
   通用请求 Cookies
 
 - Body
-
-  无
+  | 属性      | 类型    | 示例值              | 说明                            |
+    | --------- | ------- | ------------------- | ------------------------------- |
+    | mng        | string     | admin    | 管理类型，admin：管理所有文章；author：管理某个用户自己的文章 |
+    | cate_id    | int    | 1 | 分类id |
+    | tag_id    | int  | 1 | 标签id |
+    | auth_ id  | int | 1 | 用户id |
+    | date    | string  | 2020-7-4 |  日期 |
+    | type   | string  | page、article 或 all | 内容类型 |
 
 #### 响应
 
@@ -314,10 +320,4 @@ GET/POST `https://example.com/api.php?mod=post&act=get_articles`
   | is_top    | boolean | false               | 是否置顶                        |
   | is_lock   | boolean | false               | 是否禁止评论                    |
   | meta      | string  |                     | 附加元信息                      |
-
-
-
-### 获取页面列表：get_pages
-
-参考获取文章列表，除了 `act` 不同，其他内容一样。
 
