@@ -150,8 +150,35 @@ function api_user_list()
 
     ApiCheckAuth(true, 'MemberAll');
 
+    $level = GetVars('level');
+    $status = GetVars('status');
+
+    // 组织查询条件
+    $where = array();
+    if (!is_null($level)) {
+        $where[] = array('=', 'mem_Level', $level);
+    }
+    if (!is_null($status)) {
+        $where[] = array('=', 'mem_Status', $status);
+    }
+    $filter = ApiGetRequestFilter(
+        $GLOBALS['option']['ZC_DISPLAY_COUNT'],
+        array(
+            'id' => 'mem_ID',
+            'create_time' => 'mem_CreateTime',
+            'post_time' => 'mem_PostTime',
+            'update_time' => 'mem_UpdateTime',
+            'articles' => 'mem_Articles',
+            'pages' => 'mem_Pages',
+            'comments' => 'mem_Comments',
+            'uploads' => 'mem_Uploads',
+        )
+    );
+    $order = $filter['order'];
+    $limit = $filter['limit'];
+
     $listArr = ApiGetObjectArrayList(
-        $zbp->GetMemberList()
+        $zbp->GetMemberList('*', $where, $order, $limit)
     );
 
     ApiResponse($listArr);

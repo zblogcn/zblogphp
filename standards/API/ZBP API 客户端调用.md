@@ -8,7 +8,7 @@
 
 #### 客户端请求
 
-GET `https://example.com/zb_system/api/index.php?mod=user&act=login`
+GET `https://example.com/zb_system/api/index.php?mod=member&act=login`
 
 - Headers
 
@@ -16,7 +16,7 @@ GET `https://example.com/zb_system/api/index.php?mod=user&act=login`
   | --------------- | ------------------------------- |
   | Content-Type    | application/json; charset=utf-8 |
   | Accept-Encoding | gzip, deflate                   |
-  | User-Agent      | Mozilla/5.0                     |
+  | member-Agent      | Mozilla/5.0                     |
   | Accept-Language | zh-cn                           |
 
 - Cookies
@@ -25,7 +25,7 @@ GET `https://example.com/zb_system/api/index.php?mod=user&act=login`
 
   ```json
   {
-    	"username": "Chris",
+    	"membername": "Chris",
     	"password": "123456",
     	"recaptcha": "2430"
   }
@@ -51,7 +51,7 @@ GET `https://example.com/zb_system/api/index.php?mod=user&act=login`
 
   | 键       | 值         | 域          | 路径 | 过期 |
   | -------- | ---------- | ----------- | ---- | ---- |
-  | username | Chris      | example.com | /    | -    |
+  | membername | Chris      | example.com | /    | -    |
   | token    | xxxxxxxxxx | example.com | /    | -    |
 
 - Body
@@ -60,9 +60,9 @@ GET `https://example.com/zb_system/api/index.php?mod=user&act=login`
   {
     	"message": "成功",
     	"data": {
-        "user": {
+        "member": {
           "id": 1,
-          "username": "Chris",
+          "membername": "Chris",
           "alias": "Chris",
           "level": 6
         },
