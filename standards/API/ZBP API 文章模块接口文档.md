@@ -274,6 +274,18 @@ GET/POST `https://example.com/api.php?mod=post&act=list`
     | auth_ id  | int | 1 | 用户id |
     | date    | string  | 2020-7-4 |  日期 |
     | type   | string  | page、article 或 all | 内容类型 |
+    
+    支持的过滤器：limit、offset、page、perpage、sortby、order  
+    其中，sortby 支持的字段有：  
+    | URL sortby 参数 | 对应数据表属性 | 说明 |
+    | --- | --- | --- |
+    | id  | log_ID | id |
+    | create_time | log_CreateTime | 文章创建时间 |
+    | post_time | log_PostTime | 文章提交时间 |
+    | update_time | log_UpdateTime | 文章更新时间 |
+    | comm_num | log_CommNums | 文章评论数量 |
+    | view_num | log_ViewNums | 文章浏览数量 |
+    
 
 #### 响应
 

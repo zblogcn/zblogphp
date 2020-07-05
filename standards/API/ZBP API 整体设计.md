@@ -150,23 +150,19 @@ POST `https://example.com/api.php?mod=user&act=update`
 
 | 参数         | 类型   | 示例值      | 说明                            |
 | ------------ | ------ | ----------- | ------------------------------- |
-| id           | int    | 123         | 指定资源 id（一般是主键）       |
 | limit        | int    | 10          | 指定返回记录的数量              |
 | offset       | int    | 10          | 指定返回记录的开始位置          |
 | page         | int    | 2           | 指定第几页                      |
-| per_page     | int    | 100         | 每页的记录数                    |
-| sortby       | string | name        | 指定返回结果按照哪个属性排序    |
+| perpage     | int    | 100         | 每页的记录数                    |
+| sortby       | string | name        | 指定返回结果按照哪个属性排序，大小写敏感，必须与数据表列名一致    |
 | order        | string | asc 或 desc | 排序顺序，asc：升序，desc：降序 |
-| [数据表列名] | string | type_id     | 指定筛选条件（比如一些外键）    |
 
 概览：
 
-- id=123：指定资源 id（一般是主键）
 - limit=10：指定返回记录的数量
 - offset=10：指定返回记录的开始位置
-- page=2&per_page=100：指定第几页，以及每页的记录数
+- page=2&perpage=100：指定第几页，以及每页的记录数
 - sortby=name&order=asc：指定返回结果按照哪个属性排序，以及排序顺序
-- type_id=1：指定筛选条件（比如一些外键）
 
 
 

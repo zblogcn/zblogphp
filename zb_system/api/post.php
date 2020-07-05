@@ -168,6 +168,21 @@ function api_post_list()
             $where[] = array('BETWEEN', 'log_PostTime', $time, strtotime('+1 month', $time));
         }
     }
+    $filter = ApiGetRequestFilter(
+        $GLOBALS['option']['ZC_DISPLAY_COUNT'],
+        array(
+            'id' => 'log_ID',
+            'create_time' => 'log_CreateTime',
+            'post_time' => 'log_PostTime',
+            'update_time' => 'log_UpdateTime',
+            'comm_num' => 'log_CommNums',
+            'view_num' => 'log_ViewNums'
+        )
+    );
+    $order = $filter['order'];
+    $limit = $filter['limit'];
+
+    // 权限验证
     if ($type == 'page') {
         // 列出页面
         $where[] = array('=', 'log_Type', 1);
@@ -196,6 +211,6 @@ function api_post_list()
         ApiCheckAuth(true, 'ArticleAll');
     }
 
-    $listArr = ApiGetObjectArrayList($zbp->GetPostList('*', $where));
+    $listArr = ApiGetObjectArrayList($zbp->GetPostList('*', $where, $order, $limit));
     ApiResponse($listArr);
 }
