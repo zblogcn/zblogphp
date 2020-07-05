@@ -100,10 +100,10 @@ function api_user_get()
     ApiCheckAuth(false, 'ajax');
 
     $member = null;
-    $memberId = (int) GetVars('id');
+    $memberId = GetVars('id');
     $memberName = GetVars('name');
 
-    if ($memberId > 0) {
+    if ($memberId !== null) {
         $member = $zbp->GetMemberByID($memberId);
     } elseif (!empty($memberName)) {
         $member = $zbp->GetMemberByName($memberName);
