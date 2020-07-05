@@ -81,9 +81,19 @@ function api_comment_list()
     global $zbp;
 
     $postId = (int) GetVars('post_id');
+    $listArr = array();
+    $filter = ApiGetRequestFilter(
+        $GLOBALS['option']['ZC_COMMENTS_DISPLAY_COUNT'],
+        array(
+            'id' => 'comm_ID',
+            'post_time' => 'comm_PostTime'
+        )
+    );
+    $order = $filter['order'];
+    $limit = $filter['limit'];
 
-    // 列出文章下的评论
     if ($postId > 0) {
+        // 列出指定文章下的评论
         ApiCheckAuth(false, 'getcmt');
         $post = new Post();
         if ($post->LoadInfoByID($postId)) {
@@ -92,16 +102,19 @@ function api_comment_list()
                     '*',
                     array(
                         array('=', 'comm_LogID', $post->ID)
-                    )
+                    ),
+                    $order,
+                    $limit
                 )
             );
             ApiResponse($listArr);
         }
+    } else {
+        // 列出所有评论
+        ApiCheckAuth(true, 'CommentMng');
+        $listArr = ApiGetObjectArrayList($zbp->GetCommentList('*', null, $order, $limit));
     }
 
-    // 列出所有评论
-    ApiCheckAuth(true, 'CommentMng');
-    $listArr = ApiGetObjectArrayList($zbp->GetCommentList());
     ApiResponse($listArr);
 }
 
