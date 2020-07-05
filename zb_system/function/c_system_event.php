@@ -4110,3 +4110,51 @@ function ApiGetObjectArrayList($list, $other_properties = array(), $remove_prope
 
     return $list;
 }
+
+/**
+ * API 获取约束过滤条件
+ * 将请求中的参数转换为 SQL LIMIT/ORDER 查询条件.
+ *
+ * @param int $limitDefault 默认记录数
+ * @param array $sortableColumns sortby 对应的模块数据表中支持排序的属性
+ * @return array
+ */
+function ApiGetRequestFilter($limitDefault = 10, $sortableColumns = array())
+{
+    $condition = array(
+        'limit' => array(0, $limitDefault),
+        'order' => null
+    );
+    $sortBy = strtolower((String) GetVars('sortby'));
+    $order = strtoupper((String) GetVars('order'));
+    $limit = (Int) GetVars('limit');
+    $offset = (Int) GetVars('offset');
+    $page = (Int) GetVars('page');
+    $perPage = (Int) GetVars('perpage');
+
+    // 排序顺序
+    if (!empty($sortBy) && isset($sortableColumns[$sortBy])) {
+        $condition['order'] = array($sortableColumns[$sortBy] => 'ASC');
+    }
+    if (!is_null($condition['order']) && $order == 'DESC') {
+        $condition['order'][1] = $order;
+    }
+
+    // 限制查询数量
+    if ($limit > 0) {
+        $limitDefault = $limit;
+        $condition['limit'][1] = $limit;
+    }
+    if ($offset > 0) {
+        $condition['limit'][0] = $offset;
+    }
+    if ($perPage > 0) {
+        $limitDefault = $perPage;
+        $condition['limit'][1] = $perPage;
+    }
+    if ($page > 0) {
+        $condition['limit'][0] = ($page * $limitDefault);
+    }
+
+    return $condition;
+}
