@@ -16,8 +16,6 @@ if (!defined('ZBP_PATH')) {
  */
 function api_post_get()
 {
-    global $zbp;
-
     $postId = (int) GetVars('id');
 
     if ($postId > 0) {
@@ -58,39 +56,31 @@ function api_post_post()
 {
     global $zbp;
 
-    $postId = GetVars('id', 'POST');
+    $postType = strtolower((String) GetVars('type', 'POST'));
 
-    if ($postId > 0) {
-        $post = new Post();
-        if ($post->LoadInfoByID($postId)) {
-            // 判断是文章还是页面
-            if ($post->Type) {
-                // 页面
-                ApiCheckAuth(true, 'PagePst');
-                try {
-                    PostPage();
-                    $zbp->BuildModule();
-                    $zbp->SaveCache();
-                } catch (Exception $e) {
-                    ApiResponse(null, null, 500, $GLOBALS['lang']['msg']['operation_failed'] . ' ' . $e->getMessage());
-                }
-            } else {
-                // 文章
-                ApiCheckAuth(true, 'ArticlePst');
-                try {
-                    PostArticle();
-                    $zbp->BuildModule();
-                    $zbp->SaveCache();
-                } catch (Exception $e) {
-                    ApiResponse(null, null, 500, $GLOBALS['lang']['msg']['operation_failed'] . ' ' . $e->getMessage());
-                }
-            }
-
-            ApiResponse(null, null, 200, $GLOBALS['lang']['msg']['operation_succeed']);
+    if (!empty($postType) && $postType == 'page') {
+        // 新增/修改页面
+        ApiCheckAuth(true, 'PagePst');
+        try {
+            PostPage();
+            $zbp->BuildModule();
+            $zbp->SaveCache();
+        } catch (Exception $e) {
+            ApiResponse(null, null, 500, $GLOBALS['lang']['msg']['operation_failed'] . ' ' . $e->getMessage());
+        }
+    } else {
+        // 默认为新增/修改文章
+        ApiCheckAuth(true, 'ArticlePst');
+        try {
+            PostArticle();
+            $zbp->BuildModule();
+            $zbp->SaveCache();
+        } catch (Exception $e) {
+            ApiResponse(null, null, 500, $GLOBALS['lang']['msg']['operation_failed'] . ' ' . $e->getMessage());
         }
     }
 
-    ApiResponse(null, null, 500, $GLOBALS['lang']['msg']['operation_failed']);
+    ApiResponse(null, null, 200, $GLOBALS['lang']['msg']['operation_succeed']);
 }
 
 /**
@@ -100,7 +90,7 @@ function api_post_delete()
 {
     global $zbp;
 
-    $postId = GetVars('id', 'POST');
+    $postId = (Int) GetVars('id', 'POST');
 
     if ($postId > 0) {
         $post = new Post();
@@ -132,7 +122,7 @@ function api_post_delete()
         }
     }
 
-    ApiResponse(null, null, 500, $GLOBALS['lang']['msg']['operation_failed']);
+    ApiResponse(null, null, 404, $GLOBALS['lang']['error']['97']);
 }
 
 /**

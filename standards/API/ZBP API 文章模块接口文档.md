@@ -2,7 +2,7 @@
 
 ## 接口列表
 
-### 新增文章：post
+### 新增/修改 文章/页面：post
 
 #### 请求
 
@@ -17,30 +17,35 @@ POST `https://example.com/api.php?mod=post&act=post`
   通用请求 Cookies
 
 - Body
-
+  
   | 属性      | 类型    | 示例值              | 说明                            |
   | --------- | ------- | ------------------- | ------------------------------- |
-  | title     | string  | 用户名              | 文章标题                        |
-  | content   | string  | 正文                | 正文内容                        |
-  | intro     | string  | 摘要                | 摘要内容                        |
-  | alias     | string  | article_1           | 别名                            |
-  | tags      | string  | 1,2,3,4             | 标签id                          |
-  | category  | int     | 1                   | 分类id                          |
-  | status    | int     | 0                   | 状态，0：公开；1：草稿，2：审核 |
-  | author_id | int     | 1                   | 作者id                          |
-  | date      | string  | 2020-06-30 10:19:14 | 发布时间                        |
-  | is_top    | boolean | false               | 是否置顶                        |
-  | is_lock   | boolean | false               | 是否禁止评论                    |
-| meta      | string  |                     | 附加元信息                      |
+  | ID     | int  | 0     | 文章id，0为新增操作，大于0时为修改操作             |
+  | Type     | int  | 0     | 类型，0为文章，1为页面             |
+  | Title     | string  | 标题              | 文章标题                        |
+  | Content   | string  | 正文                | 正文内容                        |
+  | Intro     | string  | 摘要                | 摘要内容                        |
+  | Alias     | string  | article_1           | 别名                            |
+  | Tag      | string  | 标签1,标签2             | 标签名                          |
+  | CateID  | int     | 1                   | 分类id                          |
+  | Status    | int     | 0                   | 状态，0：公开；1：草稿，2：审核 |
+  | AuthorID | int     | 1                   | 作者id                          |
+  | PostTime      | string  | 2020-06-30 10:19:14 | 发布时间                        |
+  | IsTop    | int | 0               | 是否置顶，0:不置顶；1:全局；2:首页；4:分类                      |
+  | IsLock   | boolean | false               | 是否禁止评论                    |
+  | Metas      | string  |                     | 附加元信息                      |
+  | Template      | string  |                     | 模板                      |
   
 
 示例：
 
   ```json
   {
-    	"title": "标题",
-    	"content": "正文",
-    	"intro": "摘要",
+        "ID": 0,
+        "Type": 0,
+    	"Title": "标题",
+    	"Content": "正文",
+    	"Intro": "摘要",
     	...
   }
   ```
@@ -143,68 +148,6 @@ GET `https://example.com/api.php?mod=post&id=1`
   | is_top    | boolean | false               | 是否置顶                        |
   | is_lock   | boolean | false               | 是否禁止评论                    |
   | meta | string |  | 附加元信息 |
-
-
-
-### 修改文章：update
-
-#### 请求
-
-POST `https://example.com/api.php?mod=post&act=post`
-
-- Headers
-
-  见通用请求头
-
-- Cookies
-
-  通用请求 Cookies
-
-- Body
-
-  | 属性      | 类型    | 示例值              | 说明                            |
-  | --------- | ------- | ------------------- | ------------------------------- |
-  | id        | int     | 1                   | 文章id                          |
-  | title     | string  | 标题                | 文章标题                        |
-  | content   | string  | 正文                | 正文内容                        |
-  | intro     | string  | 摘要                | 摘要内容                        |
-  | alias     | string  | article_1           | 别名                            |
-  | tags      | string  | 1,2,3,4             | 标签id                          |
-  | category  | int     | 1                   | 分类id                          |
-  | status    | int     | 0                   | 状态，0：公开；1：草稿，2：审核 |
-  | author_id | int     | 1                   | 作者id                          |
-  | date      | string  | 2020-06-30 10:19:14 | 发布时间                        |
-  | is_top    | boolean | false               | 是否置顶                        |
-  | is_lock   | boolean | false               | 是否禁止评论                    |
-| meta      | string  |                     | 附加元信息                      |
-  
-
-示例：
-
-  ```json
-  {
-    	"id": 1,
-    	"title": "标题",
-    	"content": "正文",
-    	"intro": "摘要",
-    	...
-  }
-  ```
-
-#### 响应
-
-- Headers
-
-  见通用响应头
-
-- Cookies
-
-  无
-
-- Body
-
-  见通用响应体
-
 
 
 ### 删除文章：delete
