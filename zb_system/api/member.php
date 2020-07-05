@@ -14,7 +14,7 @@ if (!defined('ZBP_PATH')) {
 /**
  * 用户登录接口.
  */
-function api_user_login()
+function api_member_login()
 {
     global $zbp;
 
@@ -32,7 +32,7 @@ function api_user_login()
             $fpname();
         }
 
-        $user_array = ApiGetObjectArray(
+        $member_array = ApiGetObjectArray(
             $zbp->user,
             array('Url', 'Template', 'Avatar', 'StaticName'),
             array('Guid', 'Password', 'IP')
@@ -40,7 +40,7 @@ function api_user_login()
 
         ApiResponse(
             array(
-                'user' => $user_array,
+                'user' => $member_array,
                 'token' => base64_encode($zbp->user->Name . '-' . $zbp->GenerateUserToken($member, (int) $sdt)),
             ),
             null,
@@ -55,10 +55,8 @@ function api_user_login()
 /**
  * 用户登出接口.
  */
-function api_user_logout()
+function api_member_logout()
 {
-    global $zbp;
-
     ApiCheckAuth(true, 'logout');
 
     // 客户端自行删除 token 即可
@@ -73,7 +71,7 @@ function api_user_logout()
 /**
  * 新增/修改用户接口.
  */
-function api_user_post()
+function api_member_post()
 {
     global $zbp;
 
@@ -83,17 +81,16 @@ function api_user_post()
         PostMember();
         $zbp->BuildModule();
         $zbp->SaveCache();
+        ApiResponse(null, null, 200, $GLOBALS['lang']['msg']['operation_succeed']);
     } catch (Exception $e) {
         ApiResponse(null, null, 500, $GLOBALS['lang']['msg']['operation_failed'] . ' ' . $e->getMessage());
     }
-
-    ApiResponse(null, null, 200, $GLOBALS['lang']['msg']['operation_succeed']);
 }
 
 /**
  * 获取用户信息接口.
  */
-function api_user_get()
+function api_member_get()
 {
     global $zbp;
 
@@ -125,26 +122,25 @@ function api_user_get()
 /**
  * 删除用户接口.
  */
-function api_user_delete()
+function api_member_delete()
 {
     global $zbp;
 
     ApiCheckAuth(true, 'MemberDel');
 
-    if (!DelMember()) {
-        ApiResponse(null, null, 500, $GLOBALS['lang']['msg']['operation_failed']);
+    if (DelMember()) {
+        $zbp->BuildModule();
+        $zbp->SaveCache();
+        ApiResponse(null, null, 200, $GLOBALS['lang']['msg']['operation_succeed']);
     }
 
-    $zbp->BuildModule();
-    $zbp->SaveCache();
-
-    ApiResponse(null, null, 200, $GLOBALS['lang']['msg']['operation_succeed']);
+    ApiResponse(null, null, 500, $GLOBALS['lang']['msg']['operation_failed']);
 }
 
 /**
  * 列出用户接口.
  */
-function api_user_list()
+function api_member_list()
 {
     global $zbp;
 
@@ -177,17 +173,17 @@ function api_user_list()
     $order = $filter['order'];
     $limit = $filter['limit'];
 
-    $listArr = ApiGetObjectArrayList(
-        $zbp->GetMemberList('*', $where, $order, $limit)
+    ApiResponse(
+        ApiGetObjectArrayList(
+            $zbp->GetMemberList('*', $where, $order, $limit)
+        )
     );
-
-    ApiResponse($listArr);
 }
 
 /**
  * 获取用户权限接口.
  */
-function api_user_get_auth()
+function api_member_get_auth()
 {
     global $zbp;
 
