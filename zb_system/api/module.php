@@ -121,11 +121,7 @@ function api_module_list()
             $modules = $zbp->modules;
     }
 
-    $listArr = ApiGetObjectArrayList(
-        $modules
-    );
-
-    ApiResponse($listArr);
+    ApiResponse(ApiGetObjectArrayList($modules));
 }
 
 /**
@@ -150,7 +146,7 @@ function api_module_list_sidebar()
 {
     global $zbp;
 
-    ApiCheckAuth(true, 'SidebarSet');
+    ApiCheckAuth(true, 'ModuleMng');
 
     $sidebarId = (int) GetVars('id');
     $data = array();
