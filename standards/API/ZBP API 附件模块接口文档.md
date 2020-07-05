@@ -181,7 +181,7 @@ POST `https://example.com/api.php?mod=upload&act=delete`
 
 
 
-### 列出所有附件：get_uploads
+### 列出所有附件：list
 
 #### 请求
 
@@ -197,7 +197,20 @@ POST `https://example.com/api.php?mod=upload&act=list`
 
 - Body
 
-  无
+  | 属性    | 类型   | 示例值 | 说明   |
+    | ------- | ------ | ------ | ------ |
+    | author_id | int | 1      | 用户id |
+    | post_id | int | 1      | 文章id |
+    
+    支持的过滤器：limit、offset、page、perpage、sortby、order  
+    其中，sortby 支持的字段有：  
+    | URL sortby 参数 | 对应数据表属性 | 说明 |
+    | --- | --- | --- |
+    | id  | ul_ID | id |
+    | post_time | ul_PostTime | 附件提交时间 |
+    | name | ul_Name | 附件文件名 |
+    | source_name | ul_SourceName | 附件原始文件名 |
+    | downloads | ul_DownNums | 附件下载数量 |
 
 #### 响应
 
