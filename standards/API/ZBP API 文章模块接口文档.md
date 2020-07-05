@@ -67,7 +67,7 @@ POST `https://example.com/api.php?mod=post&act=post`
 
 
 
-### 获取文章：get
+### 获取文章/页面：get
 
 #### 请求
 
@@ -150,7 +150,7 @@ GET `https://example.com/api.php?mod=post&id=1`
   | meta | string |  | 附加元信息 |
 
 
-### 删除文章：delete
+### 删除文章/页面：delete
 
 #### 请求
 
@@ -168,12 +168,14 @@ POST `https://example.com/api.php?mod=post&act=delete`
 
   | 属性 | 类型 | 示例值 | 说明   |
   | ---- | ---- | ------ | ------ |
-  | id   | int  | 1      | 文章id |
+  | type   | string  | article 或 page  | 数据类型，article为文章，page为页面 |
+  | id   | int  | 1      | 文章/页面 id |
 
   示例：
 
   ```json
   {
+        "type": "article",
     	"id": 1
   }
   ```

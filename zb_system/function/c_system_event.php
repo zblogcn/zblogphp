@@ -1687,7 +1687,7 @@ function DelArticle()
 {
     global $zbp;
 
-    $id = (int) GetVars('id', 'GET');
+    $id = (int) GetVars('id');
 
     $article = new Post();
     $article->LoadInfoByID($id);
@@ -1924,7 +1924,7 @@ function DelPage()
 {
     global $zbp;
 
-    $id = (int) GetVars('id', 'GET');
+    $id = (int) GetVars('id');
 
     $article = new Post();
     $article->LoadInfoByID($id);

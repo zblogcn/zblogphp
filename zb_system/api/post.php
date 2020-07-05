@@ -56,9 +56,9 @@ function api_post_post()
 {
     global $zbp;
 
-    $postType = strtolower((String) GetVars('type', 'POST'));
+    $postType = (Int) GetVars('Type', 'POST');
 
-    if (!empty($postType) && $postType == 'page') {
+    if ($postType == 1) {
         // 新增/修改页面
         ApiCheckAuth(true, 'PagePst');
         try {
@@ -90,39 +90,31 @@ function api_post_delete()
 {
     global $zbp;
 
-    $postId = (Int) GetVars('id', 'POST');
+    $type = strtolower((string) GetVars('type', 'POST'));
 
-    if ($postId > 0) {
-        $post = new Post();
-        if ($post->LoadInfoByID($postId)) {
-            // 判断是文章还是页面
-            if ($post->Type) {
-                // 页面
-                ApiCheckAuth(true, 'PageDel');
-                try {
-                    DelPage();
-                    $zbp->BuildModule();
-                    $zbp->SaveCache();
-                } catch (Exception $e) {
-                    ApiResponse(null, null, 500, $GLOBALS['lang']['msg']['operation_failed'] . ' ' . $e->getMessage());
-                }
-            } else {
-                // 文章
-                ApiCheckAuth(true, 'ArticleDel');
-                try {
-                    DelArticle();
-                    $zbp->BuildModule();
-                    $zbp->SaveCache();
-                } catch (Exception $e) {
-                    ApiResponse(null, null, 500, $GLOBALS['lang']['msg']['operation_failed'] . ' ' . $e->getMessage());
-                }
-            }
-
-            ApiResponse(null, null, 200, $GLOBALS['lang']['msg']['operation_succeed']);
+    if (!empty($type) && $type == 'page') {
+        // 删除页面
+        ApiCheckAuth(true, 'PageDel');
+        try {
+            DelPage();
+            $zbp->BuildModule();
+            $zbp->SaveCache();
+        } catch (Exception $e) {
+            ApiResponse(null, null, 500, $GLOBALS['lang']['msg']['operation_failed'] . ' ' . $e->getMessage());
+        }
+    } else {
+        // 默认为删除文章
+        ApiCheckAuth(true, 'ArticleDel');
+        try {
+            DelArticle();
+            $zbp->BuildModule();
+            $zbp->SaveCache();
+        } catch (Exception $e) {
+            ApiResponse(null, null, 500, $GLOBALS['lang']['msg']['operation_failed'] . ' ' . $e->getMessage());
         }
     }
 
-    ApiResponse(null, null, 404, $GLOBALS['lang']['error']['97']);
+    ApiResponse(null, null, 200, $GLOBALS['lang']['msg']['operation_succeed']);
 }
 
 /**
