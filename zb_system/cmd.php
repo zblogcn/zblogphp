@@ -10,7 +10,7 @@ require './function/c_system_base.php';
 $zbp->Load();
 $zbp->action = GetVars('act', 'GET');
 if ($zbp->action == 'ajax' || strcasecmp(GetVars('HTTP_X_REQUESTED_WITH', 'SERVER'), 'XMLHttpRequest') == 0) {
-    define('IN_AJAX_PROCESSING', true);
+    define('ZBP_IN_AJAX', true);
 }
 
 if (!$zbp->CheckRights($zbp->action)) {

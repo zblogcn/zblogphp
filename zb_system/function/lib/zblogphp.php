@@ -620,6 +620,13 @@ class ZBlogPHP
 
         $this->isinitialized = true;
 
+        if (defined('ZBP_IN_API')) {
+            //挂载API错误显示
+            Add_Filter_Plugin('Filter_Plugin_Debug_Display', 'ApiDebugDisplay');
+            //挂载Token验证
+            Add_Filter_Plugin('Filter_Plugin_Zbp_Load_Pre', 'ApiTokenVerify');
+        }
+
         return true;
     }
 

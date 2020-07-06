@@ -2652,7 +2652,7 @@ function PostMember()
 
     if (isset($data['Password'])) {
         if ($mem->ID == $zbp->user->ID) {
-            if (!defined('IN_AJAX_PROCESSING') || constant('IN_AJAX_PROCESSING') != true) {
+            if (!defined('ZBP_IN_AJAX') && !defined('ZBP_IN_API')) {
                 Redirect($zbp->host . 'zb_system/cmd.php?act=login');
             }
         }
@@ -3167,7 +3167,7 @@ function SaveSetting()
 
     if ($zbp->option['ZC_PERMANENT_DOMAIN_ENABLE'] == 1) {
         if ($oldHost != $zbp->option['ZC_BLOG_HOST']) {
-            if (!defined('IN_AJAX_PROCESSING') || constant('IN_AJAX_PROCESSING') != true) {
+            if (!defined('ZBP_IN_AJAX') && !defined('ZBP_IN_API')) {
                 Redirect($zbp->option['ZC_BLOG_HOST'] . 'zb_system/cmd.php?act=login');
             }
         }
@@ -3987,6 +3987,31 @@ function BuildModule_statistics($array = array())
 //###############################################################################################################
 
 /**
+ * API TokenVerify
+ */
+function ApiTokenVerify(){
+    global $zbp;
+    // 在 API 中
+    if (($auth = GetVars('HTTP_AUTHORIZATION', 'SERVER')) && (substr($auth, 0, 7) === 'Bearer ')) {
+        // 获取 Authorization 头
+        $api_token = substr($auth, 7);
+    } else {
+        // 获取（POST 或 GET 中的）请求参数
+        $api_token = GetVars('token');
+    }
+    $zbp->user = $zbp->VerifyAPIToken($api_token);
+    unset($auth, $api_token);
+}
+
+
+/**
+ * API 报错函数
+ */
+function ApiDebugDisplay($error){
+    ApiResponse(null, $error);
+}
+
+/**
  * API 增加插件自定义的拓展 mod.
  */
 function ApiAddAppExtendedMods(&$mods)
@@ -4080,7 +4105,7 @@ function ApiResponse($data = null, $error = null, $code = 200, $message = null)
  * @param bool $loginRequire
  * @param string $action
  */
-function ApiCheckAuth($loginRequire = false, $action = 'misc')
+function ApiCheckAuth($loginRequire = false, $action = 'view')
 {
     // 登录认证
     if ($loginRequire && !$GLOBALS['zbp']->user->ID) {
