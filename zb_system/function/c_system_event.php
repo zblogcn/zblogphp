@@ -3985,6 +3985,30 @@ function BuildModule_statistics($array = array())
 }
 
 /**
+ * API 增加插件自定义的拓展 mod.
+ */
+function ApiAddAppExtendedMods(&$mods)
+{
+    global $zbp;
+
+    foreach ($zbp->GetPreActivePlugin() as $app) {
+        if (! function_exists($fn = ('AddApiMods_' . $app))) {
+            continue;
+        }
+
+        $add_mods = $fn();
+        foreach ($add_mods as $mod => $file) {
+            $mod = strtolower($mod);
+            if (array_key_exists($mod, $mods)) {
+                continue;
+            }
+    
+            $mods[$mod] = $file;
+        }
+    }
+}
+
+/**
  * API 响应.
  *
  * @param array|null $data
