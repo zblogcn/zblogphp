@@ -612,7 +612,7 @@ class ZBlogPHP
         $this->searchurl = $this->host . 'search.php';
         $this->ajaxurl = $this->host . 'zb_system/cmd.php?act=ajax&src=';
         $this->xmlrpcurl = $this->host . 'zb_system/xml-rpc/index.php';
-        $this->apiurl = $this->host . 'zb_system/api/index.php';
+        $this->apiurl = $this->host . 'api.php';
 
         $this->LoadConfigsOnlySystem(false);
 
@@ -663,7 +663,7 @@ class ZBlogPHP
         $this->LoadModules();
         $this->RegBuildModules();
 
-        if (!(get_class($this->user) === 'Member' && $this->user->Level > 0 && !empty($this->user->ID))) {
+        if (!(is_subclass_of($this->user, 'BaseMember') && $this->user->Level > 0 && !empty($this->user->ID))) {
             $this->Verify();
         }
 
@@ -1200,23 +1200,11 @@ class ZBlogPHP
      */
     public function Verify()
     {
-        if (defined('ZBP_IN_API')) {
-            // 在 API 中
-            if (($auth = GetVars('HTTP_AUTHORIZATION', 'SERVER')) && (substr($auth, 0, 7) === 'Bearer ')) {
-                // 获取 Authorization 头
-                $api_token = substr($auth, 7);
-            } else {
-                // 获取（POST 或 GET 中的）请求参数
-                $api_token = GetVars('token');
-            }
 
-            $user = $this->VerifyAPIToken($api_token);
-        } else {
-            // 在普通 Web 页面中
-            $username = trim(GetVars('username', 'COOKIE'));
-            $token = trim(GetVars('token', 'COOKIE'));
-            $user = $this->VerifyUserToken($token, $username);
-        }
+        // 在普通 Web 页面中
+        $username = trim(GetVars('username', 'COOKIE'));
+        $token = trim(GetVars('token', 'COOKIE'));
+        $user = $this->VerifyUserToken($token, $username);
 
         if (is_object($user)) {
             $this->user = $user;

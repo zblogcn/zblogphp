@@ -12,6 +12,17 @@ define('ZBP_IN_API', true);
 
 require 'zb_system/function/c_system_base.php';
 
+// 在 API 中
+if (($auth = GetVars('HTTP_AUTHORIZATION', 'SERVER')) && (substr($auth, 0, 7) === 'Bearer ')) {
+    // 获取 Authorization 头
+    $api_token = substr($auth, 7);
+} else {
+    // 获取（POST 或 GET 中的）请求参数
+    $api_token = GetVars('token');
+}
+$zbp->user = $zbp->VerifyAPIToken($api_token);
+unset($auth, $api_token);
+
 $zbp->Load();
 
 if (!$GLOBALS['option']['ZC_API_ENABLE']) {
@@ -36,7 +47,7 @@ if (empty($act)) {
 }
 
 if (isset($mods[$mod]) && file_exists($mod_file = $mods[$mod])) {
-    include $mod_file;
+    include_once $mod_file;
     $func = 'api_' . $mod . '_' . $act;
     if (function_exists($func)) {
         call_user_func($func);

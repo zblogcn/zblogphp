@@ -2297,9 +2297,21 @@ DefinePluginFilter('Filter_Plugin_CSP_Backend');
 '**************************************************<
 '类型:Filter
 '名称:Filter_Plugin_API_Response
-'参数:&$mods
+'参数:&$response
 '说明:API 响应内容处理
 '调用:
 '**************************************************>
  */
 DefinePluginFilter('Filter_Plugin_API_Response');
+
+
+/*
+'**************************************************<
+'类型:Filter
+'名称:Filter_Plugin_API_AddAppExtendedMods
+'参数:&$mods
+'说明:API的应用追加模块机制
+'调用:
+'**************************************************>
+ */
+DefinePluginFilter('Filter_Plugin_API_Add_Mod');

@@ -3984,6 +3984,8 @@ function BuildModule_statistics($array = array())
     return ModuleBuilder::Statistics($array);
 }
 
+//###############################################################################################################
+
 /**
  * API 增加插件自定义的拓展 mod.
  */
@@ -3991,12 +3993,14 @@ function ApiAddAppExtendedMods(&$mods)
 {
     global $zbp;
 
-    foreach ($zbp->GetPreActivePlugin() as $app) {
-        if (! function_exists($fn = ('AddApiMods_' . $app))) {
+    foreach ($GLOBALS['hooks']['Filter_Plugin_API_Add_Mod'] as $fpname => &$fpsignal) {
+
+        $add_mods = $fpname();
+
+        if (!is_array($add_mods)) {
             continue;
         }
 
-        $add_mods = $fn();
         foreach ($add_mods as $mod => $file) {
             $mod = strtolower($mod);
             if (array_key_exists($mod, $mods)) {
@@ -4006,6 +4010,7 @@ function ApiAddAppExtendedMods(&$mods)
             $mods[$mod] = $file;
         }
     }
+
 }
 
 /**
