@@ -4020,7 +4020,7 @@ function ApiLoadMods(&$mods)
 {
     global $zbp;
 
-    foreach ($GLOBALS['hooks']['Filter_Plugin_API_Add_App_Extended_Mods'] as $fpname => &$fpsignal) {
+    foreach ($GLOBALS['hooks']['Filter_Plugin_API_Add_Extended_Mods'] as $fpname => &$fpsignal) {
         $add_mods = $fpname();
 
         if (!is_array($add_mods)) {
