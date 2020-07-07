@@ -34,7 +34,7 @@ function api_system_get_info()
         'xml_rpc' => $zbp->xmlrpcurl,
     );
 
-    ApiResponse($data);
+    ApiResponse(array('info' => $data));
 }
 
 /**

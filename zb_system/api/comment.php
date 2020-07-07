@@ -28,7 +28,7 @@ function api_comment_get()
         $array = ApiGetObjectArray($comment);
 
         if ($comment && $comment->ID != null) {
-            ApiResponse($array);
+            ApiResponse(array('comment' => $array));
         }
     }
 

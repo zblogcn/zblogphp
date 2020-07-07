@@ -33,7 +33,7 @@ function api_module_get()
     $array = ApiGetObjectArray($module);
 
     if ($module && $module->ID !== null) {
-        ApiResponse($array);
+        ApiResponse(array('module' => $array));
     }
 
     ApiResponse(null, null, 404, $GLOBALS['lang']['error']['97']);
@@ -121,7 +121,11 @@ function api_module_list()
             $modules = $zbp->modules;
     }
 
-    ApiResponse(ApiGetObjectArrayList($modules));
+    ApiResponse(
+        array(
+            'list' => ApiGetObjectArrayList($modules),
+        )
+    );
 }
 
 /**

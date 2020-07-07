@@ -56,7 +56,7 @@ function api_setting_get()
         $settingList[$key] = $zbp->option[$key];
     }
     
-    ApiResponse($settingList);
+    ApiResponse(array('list' => $settingList));
 }
 
 /**
@@ -82,5 +82,5 @@ function api_setting_update()
         $settingList[$key] = $zbp->option[$key];
     }
     
-    ApiResponse($settingList, null, 200, $GLOBALS['lang']['msg']['operation_succeed']);
+    ApiResponse(array('list' => $settingList), null, 200, $GLOBALS['lang']['msg']['operation_succeed']);
 }

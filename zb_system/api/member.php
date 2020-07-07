@@ -108,10 +108,12 @@ function api_member_get()
 
     if ($member && $member->ID !== null) {
         ApiResponse(
-            ApiGetObjectArray(
-                $member,
-                array('Url', 'Template', 'Avatar', 'StaticName'),
-                array('Guid', 'Password', 'IP')
+            array(
+                'member' => ApiGetObjectArray(
+                    $member,
+                    array('Url', 'Template', 'Avatar', 'StaticName'),
+                    array('Guid', 'Password', 'IP')
+                )
             )
         );
     }

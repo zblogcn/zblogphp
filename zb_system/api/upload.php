@@ -27,7 +27,7 @@ function api_upload_get()
         $uploadData = ApiGetObjectArray($upload);
 
         if ($upload && $upload->ID !== null) {
-            ApiResponse($uploadData);
+            ApiResponse(array('upload' => $uploadData));
         }
     }
 

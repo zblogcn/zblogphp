@@ -36,7 +36,7 @@ function api_tag_get()
     $array = ApiGetObjectArray($tag, array('Url', 'Template'));
 
     if ($tag && $tag->ID != null) {
-        ApiResponse($array);
+        ApiResponse(array('tag' => $array));
     }
 
     ApiResponse(null, null, 404, $GLOBALS['lang']['error']['97']);

@@ -36,7 +36,7 @@ function api_category_get()
     $array = ApiGetObjectArray($category, array('Url', 'Symbol', 'Level', 'SymbolName', 'AllCount'));
 
     if ($category && $category->ID != null) {
-        ApiResponse($array);
+        ApiResponse(array('category' => $array));
     }
 
     ApiResponse(null, null, 404, $GLOBALS['lang']['error']['97']);

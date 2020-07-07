@@ -30,7 +30,11 @@ function api_app_get()
     $app = $zbp->LoadApp($type, $id);
     $app = array_merge(array('is_actived' => $zbp->CheckPlugin($id)), (array) $app);
 
-    ApiResponse((array) $app);
+    ApiResponse(
+        array(
+            'app' => (array) $app
+        )
+    );
 }
 
 /**
@@ -123,7 +127,11 @@ function api_app_get_apps()
         $apps[] = $app;
     }
 
-    ApiResponse($apps);
+    ApiResponse(
+        array(
+            'list' => $apps
+        )
+    );
 }
 
 /**
@@ -143,7 +151,11 @@ function api_app_get_plugins()
         $apps[] = $app;
     }
 
-    ApiResponse($apps);
+    ApiResponse(
+        array(
+            'list' => $apps
+        )
+    );
 }
 
 /**
@@ -163,5 +175,9 @@ function api_app_get_themes()
         $apps[] = $app;
     }
 
-    ApiResponse($apps);
+    ApiResponse(
+        array(
+            'list' => $apps
+        )
+    );
 }

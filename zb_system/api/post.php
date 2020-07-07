@@ -42,7 +42,7 @@ function api_post_get()
             // 默认为公开状态的文章/页面
             ApiCheckAuth(false, 'view');
             $data = ApiGetObjectArray($post);
-            ApiResponse($data);
+            ApiResponse(array('post' => $data));
         }
     }
 
