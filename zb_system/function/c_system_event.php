@@ -3989,8 +3989,10 @@ function BuildModule_statistics($array = array())
 /**
  * API TokenVerify
  */
-function ApiTokenVerify(){
+function ApiTokenVerify()
+{
     global $zbp;
+
     // 在 API 中
     if (($auth = GetVars('HTTP_AUTHORIZATION', 'SERVER')) && (substr($auth, 0, 7) === 'Bearer ')) {
         // 获取 Authorization 头
@@ -3999,26 +4001,26 @@ function ApiTokenVerify(){
         // 获取（POST 或 GET 中的）请求参数
         $api_token = GetVars('token');
     }
+
     $zbp->user = $zbp->VerifyAPIToken($api_token);
 }
-
 
 /**
  * API 报错函数
  */
-function ApiDebugDisplay($error){
+function ApiDebugDisplay($error)
+{
     ApiResponse(null, $error);
 }
 
 /**
- * API 增加插件自定义的拓展 mod.
+ * 载入 API Mods.
  */
-function ApiAddAppExtendedMods(&$mods)
+function ApiLoadMods(&$mods)
 {
     global $zbp;
 
-    foreach ($GLOBALS['hooks']['Filter_Plugin_API_Add_Mod'] as $fpname => &$fpsignal) {
-
+    foreach ($GLOBALS['hooks']['Filter_Plugin_API_Add_App_Extended_Mods'] as $fpname => &$fpsignal) {
         $add_mods = $fpname();
 
         if (!is_array($add_mods)) {

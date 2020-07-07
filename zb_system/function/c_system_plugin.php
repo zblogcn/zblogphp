@@ -2314,4 +2314,4 @@ DefinePluginFilter('Filter_Plugin_API_Response');
 '调用:
 '**************************************************>
  */
-DefinePluginFilter('Filter_Plugin_API_Add_Mod');
+DefinePluginFilter('Filter_Plugin_API_Add_Extended_Mods');

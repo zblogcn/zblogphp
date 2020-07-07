@@ -19,8 +19,8 @@ if (!$GLOBALS['option']['ZC_API_ENABLE']) {
 }
 
 $mods = array();
-// 加载 系统和插件mod
-ApiAddAppExtendedMods($mods);
+// 载入系统和应用的 mod
+ApiLoadMods($mods);
 
 $mod = strtolower(GetVars('mod', 'GET'));
 $act = strtolower(GetVars('act', 'GET'));
