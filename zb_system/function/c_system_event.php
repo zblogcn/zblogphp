@@ -4182,13 +4182,14 @@ function ApiGetRequestFilter($limitDefault = 10, $sortableColumns = array())
 {
     $condition = array(
         'limit' => array(0, $limitDefault),
-        'order' => null
+        'order' => null,
+        'option' => null,
     );
     $sortBy = strtolower((String) GetVars('sortby'));
     $order = strtoupper((String) GetVars('order'));
     $limit = (Int) GetVars('limit');
     $offset = (Int) GetVars('offset');
-    $page = (Int) GetVars('page');
+    $pageNow = (Int) GetVars('pagenow');
     $perPage = (Int) GetVars('perpage');
 
     // 排序顺序
@@ -4199,21 +4200,53 @@ function ApiGetRequestFilter($limitDefault = 10, $sortableColumns = array())
         $condition['order'][1] = $order;
     }
 
-    // 限制查询数量
-    if ($limit > 0) {
-        $limitDefault = $limit;
-        $condition['limit'][1] = $limit;
-    }
-    if ($offset > 0) {
-        $condition['limit'][0] = $offset;
-    }
-    if ($perPage > 0) {
-        $limitDefault = $perPage;
-        $condition['limit'][1] = $perPage;
-    }
-    if ($page > 0) {
-        $condition['limit'][0] = ($page * $limitDefault);
+    if ($perPage) {
+        $p = new Pagebar(null, false); // 第一个参数为 null，不需要分页 Url 处理
+        $p->PageNow = (int) $pageNow == 0 ? 1 : (int) $pageNow;
+        $p->PageCount = $perPage;
+        $limit = array(($p->PageNow - 1) * $p->PageCount, $p->PageCount);
+        $op = array('pagebar' => &$p);
+
+        $condition['limit'] = $limit;
+        $condition['option'] = $op;
+    } else {
+        if ($limit > 0) {
+            $limitDefault = $limit;
+            $condition['limit'][1] = $limit;
+        }
+
+        if ($offset > 0) {
+            $condition['limit'][0] = $offset;
+        }
     }
 
     return $condition;
+}
+
+/**
+ * 获取分页信息.
+ *
+ * @param PageBar|null $pagebar
+ * @return array
+ */
+function ApiGetPaginationInfo($pagebar = null)
+{
+    if ($pagebar === null) {
+        // 用 StdClass 而不用 array() ，为了为空时 json 显示 {} 而不是 []
+        return new StdClass;
+    }
+
+    $info = array();
+    $pagebar = &$pagebar['pagebar'];
+
+    $info['Count'] = $pagebar->Count;
+    $info['PageCount'] = $pagebar->PageBarCount;
+    $info['PageAll'] = $pagebar->PageAll;
+    $info['PageNow'] = $pagebar->PageNow;
+    $info['PageFirst'] = $pagebar->PageFirst;
+    $info['PageLast'] = $pagebar->PageLast;
+    $info['PagePrevious'] = $pagebar->PagePrevious;
+    $info['PageNext'] = $pagebar->PageNext;
+
+    return $info;
 }

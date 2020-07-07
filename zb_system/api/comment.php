@@ -91,6 +91,7 @@ function api_comment_list()
     );
     $order = $filter['order'];
     $limit = $filter['limit'];
+    $option = $filter['option'];
 
     if ($postId > 0) {
         // 列出指定文章下的评论
@@ -104,7 +105,8 @@ function api_comment_list()
                         array('=', 'comm_LogID', $post->ID)
                     ),
                     $order,
-                    $limit
+                    $limit,
+                    $option
                 )
             );
             ApiResponse($listArr);
@@ -112,8 +114,16 @@ function api_comment_list()
     } else {
         // 列出所有评论
         ApiCheckAuth(true, 'CommentMng');
-        $listArr = ApiGetObjectArrayList($zbp->GetCommentList('*', null, $order, $limit));
+        $listArr = ApiGetObjectArrayList($zbp->GetCommentList('*', null, $order, $limit, $option));
     }
+
+    $paginationArr = ApiGetPaginationInfo($option);
+    ApiResponse(
+        array(
+            'list' => $listArr,
+            'pagination' => $paginationArr,
+        )
+    );
 
     ApiResponse($listArr);
 }

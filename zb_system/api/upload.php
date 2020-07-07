@@ -97,9 +97,15 @@ function api_upload_list()
     );
     $order = $filter['order'];
     $limit = $filter['limit'];
+    $option = $filter['option'];
 
     $listArr = ApiGetObjectArrayList(
-        $zbp->GetUploadList('*', $where, $order, $limit)
+        array(
+            'list' => ApiGetObjectArrayList(
+                $zbp->GetUploadList('*', $where, $order, $limit, $option)
+            ),
+            'pagination' => ApiGetPaginationInfo($option),
+        )
     );
 
     ApiResponse($listArr);

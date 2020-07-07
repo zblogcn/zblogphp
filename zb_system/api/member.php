@@ -172,10 +172,14 @@ function api_member_list()
     );
     $order = $filter['order'];
     $limit = $filter['limit'];
+    $option = $filter['option'];
 
     ApiResponse(
-        ApiGetObjectArrayList(
-            $zbp->GetMemberList('*', $where, $order, $limit)
+        array(
+            'list' => ApiGetObjectArrayList(
+                $zbp->GetMemberList('*', $where, $order, $limit, $option)
+            ),
+            'pagination' => ApiGetPaginationInfo($option),
         )
     );
 }

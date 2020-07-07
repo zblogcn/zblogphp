@@ -163,6 +163,7 @@ function api_post_list()
     );
     $order = $filter['order'];
     $limit = $filter['limit'];
+    $option = $filter['option'];
 
     // 权限验证
     if ($type == ZC_POST_TYPE_PAGE) {
@@ -193,6 +194,12 @@ function api_post_list()
         ApiCheckAuth(true, 'ArticleAll');
     }
 
-    $listArr = ApiGetObjectArrayList($zbp->GetPostList('*', $where, $order, $limit));
-    ApiResponse($listArr);
+    $listArr = ApiGetObjectArrayList($zbp->GetPostList('*', $where, $order, $limit, $option));
+    $paginationArr = ApiGetPaginationInfo($option);
+    ApiResponse(
+        array(
+            'list' => $listArr,
+            'pagination' => $paginationArr,
+        )
+    );
 }
