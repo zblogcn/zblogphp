@@ -218,7 +218,7 @@ GET/POST `https://example.com/api.php?mod=post&act=list`
     | tag_id    | int  | 1 | 标签id |
     | auth_ id  | int | 1 | 用户id |
     | date    | string  | 2020-7-4 |  日期 |
-    | type   | string  | page、article 或 all | 内容类型 |
+    | type   | int  | 1(page)、(0)article | post类型 |
     
     支持的过滤器：limit、offset、page、perpage、sortby、order  
     其中，sortby 支持的字段有：  

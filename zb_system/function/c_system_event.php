@@ -4000,7 +4000,6 @@ function ApiTokenVerify(){
         $api_token = GetVars('token');
     }
     $zbp->user = $zbp->VerifyAPIToken($api_token);
-    unset($auth, $api_token);
 }
 
 
@@ -4036,6 +4035,10 @@ function ApiAddAppExtendedMods(&$mods)
         }
     }
 
+    // 从 zb_system/api/ 目录中载入 mods
+    foreach (GetFilesInDir(ZBP_PATH . 'zb_system/api/', 'php') as $mod => $file) {
+        $mods[$mod] = $file;
+    }
 }
 
 /**

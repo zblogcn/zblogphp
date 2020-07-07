@@ -129,7 +129,7 @@ function api_post_list()
     $authId = (int) GetVars('auth_id');
     $date = GetVars('date');
     $mng = strtolower((String) GetVars('mng'));
-    $type = strtolower((String) GetVars('type'));
+    $type = (int) GetVars('type');
 
     // 组织查询条件
     $where = array();
@@ -165,9 +165,9 @@ function api_post_list()
     $limit = $filter['limit'];
 
     // 权限验证
-    if ($type == 'page') {
+    if ($type == ZC_POST_TYPE_PAGE) {
         // 列出页面
-        $where[] = array('=', 'log_Type', 1);
+        $where[] = array('=', 'log_Type', ZC_POST_TYPE_PAGE);
         if (!empty($mng)) {
             // 管理页面
             ApiCheckAuth(true, 'PageMng');
@@ -175,9 +175,9 @@ function api_post_list()
             // 默认非管理模式
             ApiCheckAuth(false, 'view');
         }
-    } elseif ($type == 'article') {
+    } elseif ($type == ZC_POST_TYPE_ARTICLE) {
         // 列出文章
-        $where[] = array('=', 'log_Type', 0);
+        $where[] = array('=', 'log_Type', ZC_POST_TYPE_ARTICLE);
         if ($mng == 'author') {
             // 管理作者所属文章
             ApiCheckAuth(true, 'ArticleMng');

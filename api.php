@@ -19,13 +19,7 @@ if (!$GLOBALS['option']['ZC_API_ENABLE']) {
 }
 
 $mods = array();
-
-// 从 zb_system/api/ 目录中载入 mods
-foreach (GetFilesInDir(ZBP_PATH . 'zb_system/api/', 'php') as $mod => $file) {
-    $mods[$mod] = $file;
-}
-
-// 增加插件自定义 mod
+// 加载 系统和插件mod
 ApiAddAppExtendedMods($mods);
 
 $mod = strtolower(GetVars('mod', 'GET'));
