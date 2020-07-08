@@ -1385,8 +1385,8 @@ class ZBlogPHP
             return null;
         }
 
-        // 验证字符串格式为 {username}-{token}
-        $api_token_array = explode('-', $api_token);
+        // 验证字符串格式为 {username}|||{token}
+        $api_token_array = explode('|||', $api_token);
         if (count($api_token_array) !== 2) {
             return null;
         }
