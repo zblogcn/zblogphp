@@ -4002,7 +4002,12 @@ function ApiTokenVerify()
         $api_token = GetVars('token');
     }
 
-    $zbp->user = $zbp->VerifyAPIToken($api_token);
+    $user = $zbp->VerifyAPIToken($api_token);
+
+    if ($user != null) {
+        define('ZBP_IN_API_VERIFYBYTOKEN', true);
+        $zbp->user = $user;
+    }
 }
 
 /**
@@ -4249,4 +4254,21 @@ function ApiGetPaginationInfo($pagebar = null)
     $info['PageNext'] = $pagebar->PageNext;
 
     return $info;
+}
+
+/**
+ * API 传统登录时的Csrf验证 
+ */
+function ApiCsrfByLocalLogin() {
+    global $zbp;
+
+    if (!defined('ZBP_IN_API_VERIFYBYTOKEN')) {
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $csrftoken = GetVars('csrftoken');
+            if (!$zbp->VerifyCSRFToken($csrftoken, 'api')) {
+                //die($zbp->GetCSRFToken('api'));
+                ApiResponse(null, null, 500, $GLOBALS['lang']['error']['5']);
+            }
+        }
+    }
 }

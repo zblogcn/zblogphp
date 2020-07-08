@@ -18,7 +18,10 @@ if (!$GLOBALS['option']['ZC_API_ENABLE']) {
     ApiResponse(null, null, 503, $GLOBALS['lang']['error']['95']);
 }
 
+ApiCsrfByLocalLogin();
+
 $mods = array();
+
 // 载入系统和应用的 mod
 ApiLoadMods($mods);
 
@@ -43,4 +46,5 @@ if (isset($mods[$mod]) && file_exists($mod_file = $mods[$mod])) {
         );
     }
 }
+
 ApiResponse(null, null, 404, $GLOBALS['lang']['error']['96']);
