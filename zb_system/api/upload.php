@@ -13,6 +13,8 @@ if (!defined('ZBP_PATH')) {
 
 /**
  * 获取附件信息接口.
+ *
+ * @return array
  */
 function api_upload_get()
 {
@@ -27,15 +29,22 @@ function api_upload_get()
         $uploadData = ApiGetObjectArray($upload);
 
         if ($upload && $upload->ID !== null) {
-            ApiResponse(array('upload' => $uploadData));
+            return array(
+                'data' => array('upload' => $uploadData,),
+            );
         }
     }
 
-    ApiResponse(null, null, 404, $GLOBALS['lang']['error']['97']);
+    return array(
+        'code' => 404,
+        'message' => $GLOBALS['lang']['error']['97'],
+    );
 }
 
 /**
  * 新增附件接口.
+ *
+ * @return array
  */
 function api_upload_post()
 {
@@ -43,14 +52,22 @@ function api_upload_post()
 
     try {
         PostUpload();
-        ApiResponse(null, null, 200, $GLOBALS['lang']['msg']['operation_succeed']);
+
+        return array(
+            'message' => $GLOBALS['lang']['msg']['operation_succeed'],
+        );
     } catch (Exception $e) {
-        ApiResponse(null, null, 500, $GLOBALS['lang']['msg']['operation_failed'] . ' ' . $e->getMessage());
+        return array(
+            'code' => 500,
+            'message' => $GLOBALS['lang']['msg']['operation_failed'] . ' ' . $e->getMessage(),
+        );
     }
 }
 
 /**
  * 删除附件接口.
+ *
+ * @return array
  */
 function api_upload_delete()
 {
@@ -59,14 +76,21 @@ function api_upload_delete()
     ApiCheckAuth(true, 'UploadDel');
 
     if (DelUpload()) {
-        ApiResponse(null, null, 200, $GLOBALS['lang']['msg']['operation_succeed']);
+        return array(
+            'message' => $GLOBALS['lang']['msg']['operation_succeed'],
+        );
     }
 
-    ApiResponse(null, null, 500, $GLOBALS['lang']['msg']['operation_failed']);
+    return array(
+        'code' => 500,
+        'message' => $GLOBALS['lang']['msg']['operation_failed'],
+    );
 }
 
 /**
  * 列出附件接口.
+ *
+ * @return array
  */
 function api_upload_list()
 {
@@ -99,7 +123,7 @@ function api_upload_list()
     $limit = $filter['limit'];
     $option = $filter['option'];
 
-    $listArr = ApiGetObjectArrayList(
+    $data = ApiGetObjectArrayList(
         array(
             'list' => ApiGetObjectArrayList(
                 $zbp->GetUploadList('*', $where, $order, $limit, $option)
@@ -108,5 +132,5 @@ function api_upload_list()
         )
     );
 
-    ApiResponse($listArr);
+    return compact('data');
 }

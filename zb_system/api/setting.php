@@ -44,6 +44,8 @@ $setting_keys = array(
 
 /**
  * 设置获取接口.
+ *
+ * @return array
  */
 function api_setting_get()
 {
@@ -55,12 +57,16 @@ function api_setting_get()
     foreach ($setting_keys as $key) {
         $settingList[$key] = $zbp->option[$key];
     }
-    
-    ApiResponse(array('list' => $settingList));
+
+    return array(
+        'data' => array('list' => $settingList),
+    );
 }
 
 /**
  * 设置更新接口.
+ *
+ * @return array
  */
 function api_setting_update()
 {
@@ -82,5 +88,8 @@ function api_setting_update()
         $settingList[$key] = $zbp->option[$key];
     }
     
-    ApiResponse(array('list' => $settingList), null, 200, $GLOBALS['lang']['msg']['operation_succeed']);
+    return array(
+        'data' => array('list' => $settingList,),
+        'message' => $GLOBALS['lang']['msg']['operation_succeed'],
+    );
 }

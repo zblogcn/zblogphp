@@ -13,6 +13,8 @@ if (!defined('ZBP_PATH')) {
 
 /**
  * 获取文章/页面接口.
+ *
+ * @return array
  */
 function api_post_get()
 {
@@ -41,16 +43,26 @@ function api_post_get()
             }
             // 默认为公开状态的文章/页面
             ApiCheckAuth(false, 'view');
-            $data = ApiGetObjectArray($post);
-            ApiResponse(array('post' => $data));
+            $array = ApiGetObjectArray($post);
+
+            return array(
+                'data' => array(
+                    'post' => $array,
+                ),
+            );
         }
     }
 
-    ApiResponse(null, null, 404, $GLOBALS['lang']['error']['97']);
+    return array(
+        'code' => 404,
+        'message' => $GLOBALS['lang']['error']['97'],
+    );
 }
 
 /**
  * 新增/修改 文章/页面接口.
+ *
+ * @return array
  */
 function api_post_post()
 {
@@ -66,7 +78,10 @@ function api_post_post()
             $zbp->BuildModule();
             $zbp->SaveCache();
         } catch (Exception $e) {
-            ApiResponse(null, null, 500, $GLOBALS['lang']['msg']['operation_failed'] . ' ' . $e->getMessage());
+            return array(
+                'code' => 500,
+                'message' => $GLOBALS['lang']['msg']['operation_failed'] . ' ' . $e->getMessage(),
+            );
         }
     } else {
         // 默认为新增/修改文章
@@ -76,15 +91,22 @@ function api_post_post()
             $zbp->BuildModule();
             $zbp->SaveCache();
         } catch (Exception $e) {
-            ApiResponse(null, null, 500, $GLOBALS['lang']['msg']['operation_failed'] . ' ' . $e->getMessage());
+            return array(
+                'code' => 500,
+                'message' => $GLOBALS['lang']['msg']['operation_failed'] . ' ' . $e->getMessage(),
+            );
         }
     }
 
-    ApiResponse(null, null, 200, $GLOBALS['lang']['msg']['operation_succeed']);
+    return array(
+        'message' => $GLOBALS['lang']['msg']['operation_succeed'],
+    );
 }
 
 /**
  * 删除文章/页面接口.
+ *
+ * @return array
  */
 function api_post_delete()
 {
@@ -100,7 +122,10 @@ function api_post_delete()
             $zbp->BuildModule();
             $zbp->SaveCache();
         } catch (Exception $e) {
-            ApiResponse(null, null, 500, $GLOBALS['lang']['msg']['operation_failed'] . ' ' . $e->getMessage());
+            return array(
+                'code' => 500,
+                'message' => $GLOBALS['lang']['msg']['operation_failed'] . ' ' . $e->getMessage(),
+            );
         }
     } else {
         // 默认为删除文章
@@ -110,15 +135,22 @@ function api_post_delete()
             $zbp->BuildModule();
             $zbp->SaveCache();
         } catch (Exception $e) {
-            ApiResponse(null, null, 500, $GLOBALS['lang']['msg']['operation_failed'] . ' ' . $e->getMessage());
+            return array(
+                'code' => 500,
+                'message' => $GLOBALS['lang']['msg']['operation_failed'] . ' ' . $e->getMessage(),
+            );
         }
     }
 
-    ApiResponse(null, null, 200, $GLOBALS['lang']['msg']['operation_succeed']);
+    return array(
+        'message' => $GLOBALS['lang']['msg']['operation_succeed'],
+    );
 }
 
 /**
  * 列出文章/页面接口.
+ *
+ * @return array
  */
 function api_post_list()
 {
@@ -196,10 +228,11 @@ function api_post_list()
 
     $listArr = ApiGetObjectArrayList($zbp->GetPostList('*', $where, $order, $limit, $option));
     $paginationArr = ApiGetPaginationInfo($option);
-    ApiResponse(
-        array(
+
+    return array(
+        'data' => array(
             'list' => $listArr,
             'pagination' => $paginationArr,
-        )
+        ),
     );
 }

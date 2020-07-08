@@ -13,6 +13,8 @@ if (!defined('ZBP_PATH')) {
 
 /**
  * 获取评论接口.
+ *
+ * @return array
  */
 function api_comment_get()
 {
@@ -28,15 +30,22 @@ function api_comment_get()
         $array = ApiGetObjectArray($comment);
 
         if ($comment && $comment->ID != null) {
-            ApiResponse(array('comment' => $array));
+            return array(
+                'data' => array('comment' => $array),
+            );
         }
     }
 
-    ApiResponse(null, null, 404, $GLOBALS['lang']['error']['97']);
+    return array(
+        'code' => 404,
+        'message' => $GLOBALS['lang']['error']['97'],
+    );
 }
 
 /**
  * 新增评论接口.
+ *
+ * @return array
  */
 function api_comment_post()
 {
@@ -49,14 +58,21 @@ function api_comment_post()
         $zbp->BuildModule();
         $zbp->SaveCache();
     } catch (Exception $e) {
-        ApiResponse(null, null, 500, $GLOBALS['lang']['msg']['operation_failed'] . ' ' . $e->getMessage());
+        return array(
+            'code' => 500,
+            'message' => $GLOBALS['lang']['msg']['operation_failed'] . ' ' . $e->getMessage(),
+        );
     }
 
-    ApiResponse(null, null, 200, $GLOBALS['lang']['msg']['operation_succeed']);
+    return array(
+        'message' => $GLOBALS['lang']['msg']['operation_succeed'],
+    );
 }
 
 /**
  * 删除评论接口.
+ *
+ * @return array
  */
 function api_comment_delete()
 {
@@ -67,14 +83,22 @@ function api_comment_delete()
     if (DelComment()) {
         $zbp->BuildModule();
         $zbp->SaveCache();
-        ApiResponse(null, null, 200, $GLOBALS['lang']['msg']['operation_succeed']);
+
+        return array(
+            'message' => $GLOBALS['lang']['msg']['operation_succeed'],
+        );
     }
 
-    ApiResponse(null, null, 500, $GLOBALS['lang']['msg']['operation_failed']);
+    return array(
+        'code' => 500,
+        'message' => $GLOBALS['lang']['msg']['operation_failed'],
+    );
 }
 
 /**
  * 列出评论接口.
+ *
+ * @return array
  */
 function api_comment_list()
 {
@@ -109,7 +133,9 @@ function api_comment_list()
                     $option
                 )
             );
-            ApiResponse($listArr);
+            return array(
+                'data' => $listArr,
+            );
         }
     } else {
         // 列出所有评论
@@ -118,18 +144,19 @@ function api_comment_list()
     }
 
     $paginationArr = ApiGetPaginationInfo($option);
-    ApiResponse(
-        array(
+
+    return array(
+        'data' => array(
             'list' => $listArr,
             'pagination' => $paginationArr,
-        )
+        ),
     );
-
-    ApiResponse($listArr);
 }
 
 /**
  * 审核评论接口.
+ *
+ * @return array
  */
 function api_comment_check()
 {
@@ -141,11 +168,15 @@ function api_comment_check()
     $zbp->BuildModule();
     $zbp->SaveCache();
 
-    ApiResponse(null, null, 200, $GLOBALS['lang']['msg']['operation_succeed']);
+    return array(
+        'message' => $GLOBALS['lang']['msg']['operation_succeed'],
+    );
 }
 
 /**
  * 评论批量操作接口.
+ *
+ * @return array
  */
 function api_comment_batch()
 {
@@ -157,5 +188,7 @@ function api_comment_batch()
     $zbp->BuildModule();
     $zbp->SaveCache();
 
-    ApiResponse(null, null, 200, $GLOBALS['lang']['msg']['operation_succeed']);
+    return array(
+        'message' => $GLOBALS['lang']['msg']['operation_succeed'],
+    );
 }

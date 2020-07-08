@@ -13,6 +13,8 @@ if (!defined('ZBP_PATH')) {
 
 /**
  * 获取模块信息接口.
+ *
+ * @return array
  */
 function api_module_get()
 {
@@ -33,14 +35,21 @@ function api_module_get()
     $array = ApiGetObjectArray($module);
 
     if ($module && $module->ID !== null) {
-        ApiResponse(array('module' => $array));
+        return array(
+            'data' => array('module' => $array),
+        );
     }
 
-    ApiResponse(null, null, 404, $GLOBALS['lang']['error']['97']);
+    return array(
+        'code' => 404,
+        'message' => $GLOBALS['lang']['error']['97'],
+    );
 }
 
 /**
  * 新增/修改模块接口.
+ *
+ * @return array
  */
 function api_module_post()
 {
@@ -51,14 +60,22 @@ function api_module_post()
     if (PostModule()) {
         $zbp->BuildModule();
         $zbp->SaveCache();
-        ApiResponse(null, null, 200, $GLOBALS['lang']['msg']['operation_succeed']);
+
+        return array(
+            'message' => $GLOBALS['lang']['msg']['operation_succeed'],
+        );
     }
 
-    ApiResponse(null, null, 500, $GLOBALS['lang']['msg']['operation_failed']);
+    return array(
+        'code' => 500,
+        'message' => $GLOBALS['lang']['msg']['operation_failed'],
+    );
 }
 
 /**
  * 删除模块接口.
+ *
+ * @return array
  */
 function api_module_delete()
 {
@@ -69,14 +86,22 @@ function api_module_delete()
     if (DelModule()) {
         $zbp->BuildModule();
         $zbp->SaveCache();
-        ApiResponse(null, null, 200, $GLOBALS['lang']['msg']['operation_succeed']);
+        
+        return array(
+            'message' => $GLOBALS['lang']['msg']['operation_succeed'],
+        );
     }
 
-    ApiResponse(null, null, 500, $GLOBALS['lang']['msg']['operation_failed']);
+    return array(
+        'code' => 500,
+        'message' => $GLOBALS['lang']['msg']['operation_failed'],
+    );
 }
 
 /**
  * 列出模块接口.
+ *
+ * @return array
  */
 function api_module_list()
 {
@@ -121,15 +146,17 @@ function api_module_list()
             $modules = $zbp->modules;
     }
 
-    ApiResponse(
-        array(
+    return array(
+        'data' => array(
             'list' => ApiGetObjectArrayList($modules),
-        )
+        ),
     );
 }
 
 /**
  * 设置侧栏模接口.
+ *
+ * @return array
  */
 function api_module_set_sidebar()
 {
@@ -140,11 +167,16 @@ function api_module_set_sidebar()
     SetSidebar();
     $zbp->BuildModule();
     $zbp->SaveCache();
-    ApiResponse(null, null, 200, $GLOBALS['lang']['msg']['operation_succeed']);
+
+    return array(
+        'message' => $GLOBALS['lang']['msg']['operation_succeed'],
+    );
 }
 
 /**
  * 列出侧栏接口.
+ *
+ * @return array
  */
 function api_module_list_sidebar()
 {
@@ -172,5 +204,5 @@ function api_module_list_sidebar()
         }
     }
 
-    ApiResponse($data);
+    return compact('data');
 }

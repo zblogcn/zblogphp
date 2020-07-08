@@ -13,6 +13,8 @@ if (!defined('ZBP_PATH')) {
 
 /**
  * 获取应用信息接口.
+ *
+ * @return array
  */
 function api_app_get()
 {
@@ -23,22 +25,27 @@ function api_app_get()
     } elseif ($type === 'plugin') {
         ApiCheckAuth(true, 'PluginMng');
     } else {
-        ApiResponse(null, null, 404, $GLOBALS['lang']['error']['97']);
+        return array(
+            'code' => 404,
+            'message' => $GLOBALS['lang']['error']['97'],
+        );
     }
     $id = GetVars('id');
 
     $app = $zbp->LoadApp($type, $id);
     $app = array_merge(array('is_actived' => $zbp->CheckPlugin($id)), (array) $app);
 
-    ApiResponse(
-        array(
-            'app' => (array) $app
-        )
+    return array(
+        'data' => array(
+            'app' => (array) $app,
+        ),
     );
 }
 
 /**
  * 启用插件接口.
+ *
+ * @return array
  */
 function api_app_enable_plugin()
 {
@@ -50,19 +57,19 @@ function api_app_enable_plugin()
     $zbp->BuildModule();
     $zbp->SaveCache();
 
-    ApiResponse(
-        array(
+    return array(
+        'data' => array(
             'enabled' => !empty($id),
             'id' => $id
         ),
-        null,
-        200,
-        $GLOBALS['lang']['msg']['operation_succeed']
+        'message' => $GLOBALS['lang']['msg']['operation_succeed'],
     );
 }
 
 /**
  * 停用插件接口.
+ *
+ * @return array
  */
 function api_app_disable_plugin()
 {
@@ -74,19 +81,19 @@ function api_app_disable_plugin()
     $zbp->BuildModule();
     $zbp->SaveCache();
 
-    ApiResponse(
-        array(
+    return array(
+        'data' => array(
             'disabled' => $result,
             'id' => $id
         ),
-        null,
-        200,
-        $GLOBALS['lang']['msg']['operation_succeed']
+        'message' => $GLOBALS['lang']['msg']['operation_succeed'],
     );
 }
 
 /**
  * 更换主题接口.
+ *
+ * @return array
  */
 function api_app_set_theme()
 {
@@ -98,19 +105,19 @@ function api_app_set_theme()
     $zbp->BuildModule();
     $zbp->SaveCache();
 
-    ApiResponse(
-        array(
+    return array(
+        'data' => array(
             'enabled' => !empty($id),
             'id' => $id
         ),
-        null,
-        200,
-        $GLOBALS['lang']['msg']['operation_succeed']
+        'message' => $GLOBALS['lang']['msg']['operation_succeed'],
     );
 }
 
 /**
  * 获取所有应用接口.
+ *
+ * @return array
  */
 function api_app_get_apps()
 {
@@ -127,15 +134,17 @@ function api_app_get_apps()
         $apps[] = $app;
     }
 
-    ApiResponse(
-        array(
-            'list' => $apps
-        )
+    return array(
+        'data' => array(
+            'list' => $apps,
+        ),
     );
 }
 
 /**
  * 获取所有插件接口.
+ *
+ * @return array
  */
 function api_app_get_plugins()
 {
@@ -151,15 +160,17 @@ function api_app_get_plugins()
         $apps[] = $app;
     }
 
-    ApiResponse(
-        array(
-            'list' => $apps
-        )
+    return array(
+        'data' => array(
+            'list' => $apps,
+        ),
     );
 }
 
 /**
  * 获取所有主题接口.
+ *
+ * @return array
  */
 function api_app_get_themes()
 {
@@ -175,9 +186,9 @@ function api_app_get_themes()
         $apps[] = $app;
     }
 
-    ApiResponse(
-        array(
-            'list' => $apps
-        )
+    return array(
+        'data' => array(
+            'list' => $apps,
+        ),
     );
 }

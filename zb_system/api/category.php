@@ -13,6 +13,8 @@ if (!defined('ZBP_PATH')) {
 
 /**
  * 获取分类信息接口.
+ *
+ * @return array
  */
 function api_category_get()
 {
@@ -36,14 +38,21 @@ function api_category_get()
     $array = ApiGetObjectArray($category, array('Url', 'Symbol', 'Level', 'SymbolName', 'AllCount'));
 
     if ($category && $category->ID != null) {
-        ApiResponse(array('category' => $array));
+        return array(
+            'data' => array('category' => $array),
+        );
     }
 
-    ApiResponse(null, null, 404, $GLOBALS['lang']['error']['97']);
+    return array(
+        'code' => 404,
+        'message' => $GLOBALS['lang']['error']['97'],
+    );
 }
 
 /**
  * 新增/修改分类接口.
+ *
+ * @return array
  */
 function api_category_post()
 {
@@ -56,14 +65,21 @@ function api_category_post()
         $zbp->BuildModule();
         $zbp->SaveCache();
     } catch (Exception $e) {
-        ApiResponse(null, null, 500, $GLOBALS['lang']['msg']['operation_failed'] . ' ' . $e->getMessage());
+        return array(
+            'code' => 500,
+            'message' => $GLOBALS['lang']['msg']['operation_failed'] . ' ' . $e->getMessage(),
+        );
     }
 
-    ApiResponse(null, null, 200, $GLOBALS['lang']['msg']['operation_succeed']);
+    return array(
+        'message' => $GLOBALS['lang']['msg']['operation_succeed'],
+    );
 }
 
 /**
  * 删除分类接口.
+ *
+ * @return array
  */
 function api_category_delete()
 {
@@ -72,17 +88,24 @@ function api_category_delete()
     ApiCheckAuth(true, 'CategoryDel');
 
     if (!DelCategory()) {
-        ApiResponse(null, null, 500, $GLOBALS['lang']['msg']['operation_failed']);
+        return array(
+            'code' => 500,
+            'message' => $GLOBALS['lang']['msg']['operation_failed'],
+        );
     }
 
     $zbp->BuildModule();
     $zbp->SaveCache();
 
-    ApiResponse(null, null, 200, $GLOBALS['lang']['msg']['operation_succeed']);
+    return array(
+        'message' => $GLOBALS['lang']['msg']['operation_succeed'],
+    );
 }
 
 /**
  * 列出分类接口.
+ *
+ * @return array
  */
 function api_category_list()
 {
@@ -95,5 +118,7 @@ function api_category_list()
         array('Url', 'Symbol', 'Level', 'SymbolName', 'AllCount')
     );
 
-    ApiResponse($listArr);
+    return array(
+        'data' => $listArr,
+    );
 }

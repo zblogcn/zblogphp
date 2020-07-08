@@ -33,7 +33,14 @@ if (isset($mods[$mod]) && file_exists($mod_file = $mods[$mod])) {
     include_once $mod_file;
     $func = 'api_' . $mod . '_' . $act;
     if (function_exists($func)) {
-        call_user_func($func);
+        $result = call_user_func($func);
+
+        ApiResponse(
+            isset($result['data']) ? $result['data'] : null,
+            isset($result['error']) ? $result['error'] : null,
+            isset($result['code']) ? $result['code'] : 200,
+            isset($result['message']) ? $result['message'] : 'OK'
+        );
     }
 }
 ApiResponse(null, null, 404, $GLOBALS['lang']['error']['96']);

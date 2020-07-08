@@ -13,6 +13,8 @@ if (!defined('ZBP_PATH')) {
 
 /**
  * 获取标签信息接口.
+ *
+ * @return array
  */
 function api_tag_get()
 {
@@ -36,14 +38,21 @@ function api_tag_get()
     $array = ApiGetObjectArray($tag, array('Url', 'Template'));
 
     if ($tag && $tag->ID != null) {
-        ApiResponse(array('tag' => $array));
+        return array(
+            'data' => array('tag' => $array),
+        );
     }
 
-    ApiResponse(null, null, 404, $GLOBALS['lang']['error']['97']);
+    return array(
+        'code' => 404,
+        'message' => $GLOBALS['lang']['error']['97'],
+    );
 }
 
 /**
  * 新增/修改标签接口.
+ *
+ * @return array
  */
 function api_tag_post()
 {
@@ -56,14 +65,21 @@ function api_tag_post()
         $zbp->BuildModule();
         $zbp->SaveCache();
     } catch (Exception $e) {
-        ApiResponse(null, null, 500, $GLOBALS['lang']['msg']['operation_failed'] . ' ' . $e->getMessage());
+        return array(
+            'code' => 500,
+            'message' => $GLOBALS['lang']['msg']['operation_failed'] . ' ' . $e->getMessage(),
+        );
     }
 
-    ApiResponse(null, null, 200, $GLOBALS['lang']['msg']['operation_succeed']);
+    return array(
+        'message' => $GLOBALS['lang']['msg']['operation_succeed'],
+    );
 }
 
 /**
  * 删除标签接口.
+ *
+ * @return array
  */
 function api_tag_delete()
 {
@@ -72,17 +88,24 @@ function api_tag_delete()
     ApiCheckAuth(true, 'TagDel');
 
     if (!DelTag()) {
-        ApiResponse(null, null, 500, $GLOBALS['lang']['msg']['operation_failed']);
+        return array(
+            'code' => 500,
+            'message' => $GLOBALS['lang']['msg']['operation_failed'],
+        );
     }
 
     $zbp->BuildModule();
     $zbp->SaveCache();
 
-    ApiResponse(null, null, 200, $GLOBALS['lang']['msg']['operation_succeed']);
+    return array(
+        'message' => $GLOBALS['lang']['msg']['operation_succeed'],
+    );
 }
 
 /**
  * 列出标签接口.
+ *
+ * @return array
  */
 function api_tag_list()
 {
@@ -95,5 +118,9 @@ function api_tag_list()
         array('Url', 'Template')
     );
 
-    ApiResponse($listArr);
+    return array(
+        'data' => array(
+            'list' => $listArr,
+        ),
+    );
 }

@@ -13,6 +13,8 @@ if (!defined('ZBP_PATH')) {
 
 /**
  * 用户登录接口.
+ *
+ * @return array
  */
 function api_member_login()
 {
@@ -38,22 +40,25 @@ function api_member_login()
             array('Guid', 'Password', 'IP')
         );
 
-        ApiResponse(
-            array(
+        return array(
+            'data' => array(
                 'user' => $member_array,
                 'token' => base64_encode($zbp->user->Name . '-' . $zbp->GenerateUserToken($member, (int) $sdt)),
             ),
-            null,
-            200,
-            $GLOBALS['lang']['msg']['operation_succeed']
+            'message' => $GLOBALS['lang']['msg']['operation_succeed'],
         );
     }
 
-    ApiResponse(null, null, 401, $GLOBALS['lang']['error']['8']);
+    return array(
+        'code' => 401,
+        'message' => $GLOBALS['lang']['error']['8'],
+    );
 }
 
 /**
  * 用户登出接口.
+ *
+ * @return array
  */
 function api_member_logout()
 {
@@ -65,11 +70,15 @@ function api_member_logout()
         $fpname();
     }
 
-    ApiResponse(null, null, 200, $GLOBALS['lang']['msg']['operation_succeed']);
+    return array(
+        'message' => $GLOBALS['lang']['msg']['operation_succeed'],
+    );
 }
 
 /**
  * 新增/修改用户接口.
+ *
+ * @return array
  */
 function api_member_post()
 {
@@ -81,14 +90,21 @@ function api_member_post()
         PostMember();
         $zbp->BuildModule();
         $zbp->SaveCache();
-        ApiResponse(null, null, 200, $GLOBALS['lang']['msg']['operation_succeed']);
+        return array(
+            'message' => $GLOBALS['lang']['msg']['operation_succeed'],
+        );
     } catch (Exception $e) {
-        ApiResponse(null, null, 500, $GLOBALS['lang']['msg']['operation_failed'] . ' ' . $e->getMessage());
+        return array(
+            'code' => 500,
+            'message' => $GLOBALS['lang']['msg']['operation_failed'] . ' ' . $e->getMessage(),
+        );
     }
 }
 
 /**
  * 获取用户信息接口.
+ *
+ * @return array
  */
 function api_member_get()
 {
@@ -107,22 +123,27 @@ function api_member_get()
     }
 
     if ($member && $member->ID !== null) {
-        ApiResponse(
-            array(
+        return array(
+            'data' => array(
                 'member' => ApiGetObjectArray(
                     $member,
                     array('Url', 'Template', 'Avatar', 'StaticName'),
                     array('Guid', 'Password', 'IP')
-                )
-            )
+                ),
+            ),
         );
     }
 
-    ApiResponse(null, null, 404, $GLOBALS['lang']['error']['97']);
+    return array(
+        'code' => 404,
+        'message' => $GLOBALS['lang']['error']['97'],
+    );
 }
 
 /**
  * 删除用户接口.
+ *
+ * @return array
  */
 function api_member_delete()
 {
@@ -133,14 +154,22 @@ function api_member_delete()
     if (DelMember()) {
         $zbp->BuildModule();
         $zbp->SaveCache();
-        ApiResponse(null, null, 200, $GLOBALS['lang']['msg']['operation_succeed']);
+        
+        return array(
+            'message' => $GLOBALS['lang']['msg']['operation_succeed'],
+        );
     }
 
-    ApiResponse(null, null, 500, $GLOBALS['lang']['msg']['operation_failed']);
+    return array(
+        'code' => 500,
+        'message' => $GLOBALS['lang']['msg']['operation_failed'],
+    );
 }
 
 /**
  * 列出用户接口.
+ *
+ * @return array
  */
 function api_member_list()
 {
@@ -176,18 +205,20 @@ function api_member_list()
     $limit = $filter['limit'];
     $option = $filter['option'];
 
-    ApiResponse(
-        array(
+    return array(
+        'data' => array(
             'list' => ApiGetObjectArrayList(
                 $zbp->GetMemberList('*', $where, $order, $limit, $option)
             ),
             'pagination' => ApiGetPaginationInfo($option),
-        )
+        ),
     );
 }
 
 /**
  * 获取用户权限接口.
+ *
+ * @return array
  */
 function api_member_get_auth()
 {
@@ -209,5 +240,7 @@ function api_member_get_auth()
         }
     }
 
-    ApiResponse($authArr);
+    return array(
+        'data' => $authArr,
+    );
 }
