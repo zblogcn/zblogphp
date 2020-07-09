@@ -281,6 +281,7 @@ $GLOBALS['datainfo'] = array(
         'CommNums'   => array('log_CommNums', 'integer', '', 0),
         'ViewNums'   => array('log_ViewNums', 'integer', '', 0),
         'Template'   => array('log_Template', 'string', 250, ''),
+        'Thumb'      => array('log_Thumb', 'string', 250, ''),
         'Meta'       => array('log_Meta', 'string', '', ''),
     ),
     'Category' => array(

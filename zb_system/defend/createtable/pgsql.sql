@@ -18,6 +18,7 @@ CREATE TABLE %pre%post (
  log_CommNums integer NOT NULL DEFAULT '0',
  log_ViewNums integer NOT NULL DEFAULT '0',
  log_Template varchar(250) NOT NULL DEFAULT '',
+ log_Thumb varchar(250) NOT NULL DEFAULT '',
  log_Meta text NOT NULL,
   PRIMARY KEY (log_ID)
 ) ;
