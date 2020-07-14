@@ -43,7 +43,7 @@ function api_member_login()
         return array(
             'data' => array(
                 'user' => $member_array,
-                'token' => base64_encode($zbp->user->Name . '|||' . $zbp->GenerateUserToken($member, (int) $sdt)),
+                'token' => $zbp->GenerateApiToken($member, $sdt),
             ),
             'message' => $GLOBALS['lang']['msg']['operation_succeed'],
         );

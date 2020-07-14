@@ -1254,6 +1254,19 @@ class ZBlogPHP
     }
 
     /**
+     * 生成Api Token，用于 API 模式下的用户验证.
+     *
+     * @param Member $user
+     * @param int    $time
+     *
+     * @return string
+     */
+    public function GenerateApiToken($user, $time = 0)
+    {
+        return base64_encode($user->Name . '|||' . $this->GenerateUserToken($user, (int) $time));
+    }
+
+    /**
      * 验证用户登录Token.
      *
      * @param string $token
