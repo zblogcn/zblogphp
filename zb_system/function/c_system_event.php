@@ -4257,18 +4257,17 @@ function ApiGetPaginationInfo($pagebar = null)
 }
 
 /**
- * API 传统登录时的Csrf验证 
+ * API 传统登录时的 CSRF 验证.
  */
-function ApiCsrfByLocalLogin() {
+function ApiVerifyCSRF()
+{
     global $zbp;
 
     if (!defined('ZBP_IN_API_VERIFYBYTOKEN')) {
-        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            $csrftoken = GetVars('csrftoken');
-            if (!$zbp->VerifyCSRFToken($csrftoken, 'api')) {
-                //die($zbp->GetCSRFToken('api'));
-                ApiResponse(null, null, 500, $GLOBALS['lang']['error']['5']);
-            }
+        $csrftoken = GetVars('csrftoken');
+
+        if (!$zbp->VerifyCSRFToken($csrftoken, 'api')) {
+            ApiResponse(null, null, 500, $GLOBALS['lang']['error']['5']);
         }
     }
 }

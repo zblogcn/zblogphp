@@ -80,6 +80,7 @@ function api_comment_delete()
 
     ApiCheckAuth(true, 'CommentDel');
 
+    ApiVerifyCSRF();
     if (DelComment()) {
         $zbp->BuildModule();
         $zbp->SaveCache();

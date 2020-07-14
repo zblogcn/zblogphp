@@ -85,6 +85,7 @@ function api_tag_delete()
 {
     global $zbp;
 
+    ApiVerifyCSRF();
     ApiCheckAuth(true, 'TagDel');
 
     if (!DelTag()) {

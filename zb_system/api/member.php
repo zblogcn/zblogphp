@@ -151,6 +151,7 @@ function api_member_delete()
 
     ApiCheckAuth(true, 'MemberDel');
 
+    ApiVerifyCSRF();
     if (DelMember()) {
         $zbp->BuildModule();
         $zbp->SaveCache();

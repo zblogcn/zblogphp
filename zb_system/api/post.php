@@ -112,6 +112,8 @@ function api_post_delete()
 {
     global $zbp;
 
+    ApiVerifyCSRF();
+
     $type = strtolower((string) GetVars('type', 'POST'));
 
     if (!empty($type) && $type == 'page') {

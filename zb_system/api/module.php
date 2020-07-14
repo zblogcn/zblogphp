@@ -83,6 +83,7 @@ function api_module_delete()
 
     ApiCheckAuth(true, 'ModuleDel');
 
+    ApiVerifyCSRF();
     if (DelModule()) {
         $zbp->BuildModule();
         $zbp->SaveCache();

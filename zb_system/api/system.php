@@ -50,6 +50,8 @@ function api_system_statistic()
 {
     global $zbp;
 
+    ApiVerifyCSRF();
+
     ApiCheckAuth(true, 'misc');
     ApiCheckAuth(true, 'root');
 

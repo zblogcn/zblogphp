@@ -75,6 +75,7 @@ function api_upload_delete()
 
     ApiCheckAuth(true, 'UploadDel');
 
+    ApiVerifyCSRF();
     if (DelUpload()) {
         return array(
             'message' => $GLOBALS['lang']['msg']['operation_succeed'],

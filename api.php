@@ -18,8 +18,6 @@ if (!$GLOBALS['option']['ZC_API_ENABLE']) {
     ApiResponse(null, null, 503, $GLOBALS['lang']['error']['95']);
 }
 
-ApiCsrfByLocalLogin();
-
 $mods = array();
 
 // 载入系统和应用的 mod
@@ -30,6 +28,10 @@ $act = strtolower(GetVars('act', 'GET'));
 
 if (empty($act)) {
     $act = 'get';
+}
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && (! ($mod === 'member' && $act === 'login'))) {
+    ApiVerifyCSRF();
 }
 
 if (isset($mods[$mod]) && file_exists($mod_file = $mods[$mod])) {
