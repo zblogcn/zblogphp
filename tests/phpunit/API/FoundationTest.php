@@ -6,6 +6,9 @@ use Base;
 use Exception;
 use Member;
 
+/**
+ * API 底层测试.
+ */
 class FoundationTest extends TestCase
 {
     /** @test */
