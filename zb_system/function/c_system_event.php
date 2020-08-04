@@ -4058,8 +4058,6 @@ function ApiLoadMods(&$mods)
  */
 function ApiResponse($data = null, $error = null, $code = 200, $message = null)
 {
-    ob_end_clean();
-
     if (!empty($error)) {
         $error_info = array(
             'code' => ZBlogException::$error_id,
@@ -4081,11 +4079,6 @@ function ApiResponse($data = null, $error = null, $code = 200, $message = null)
         }
     }
 
-    if (!headers_sent()) {
-        header('Content-Type: application/json; charset=utf-8');
-        SetHttpStatusCode($code);
-    }
-
     $response = array(
         'code' => $code,
         'message' => !empty($message) ? $message : 'OK',
@@ -4104,9 +4097,20 @@ function ApiResponse($data = null, $error = null, $code = 200, $message = null)
         $fpname($response);
     }
 
-    echo JsonEncode($response);
+    if (! defined('ZBP_API_IN_TEST')) {
+        ob_end_clean();
+        if (!headers_sent()) {
+            header('Content-Type: application/json; charset=utf-8');
+            SetHttpStatusCode($code);
+        }
+        echo JsonEncode($response);
+    }
 
-    die();
+    if (empty($error) && $code !== 200) {
+        // 如果 code 不为 200，又不是系统抛出的错误，再来抛出一个 Exception，适配 phpunit
+        ZBlogException::SuspendErrorHook();
+        throw new Exception($message, $code);
+    }
 }
 
 /**
@@ -4119,7 +4123,7 @@ function ApiCheckAuth($loginRequire = false, $action = 'view')
 {
     // 登录认证
     if ($loginRequire && !$GLOBALS['zbp']->user->ID) {
-        if (!headers_sent()) {
+        if (!defined('ZBP_API_IN_TEST') && !headers_sent()) {
             SetHttpStatusCode(401);
             header('Status: 401 Unauthorized');
         }
@@ -4129,13 +4133,15 @@ function ApiCheckAuth($loginRequire = false, $action = 'view')
 
     // 权限认证
     if (!empty($action) && !$GLOBALS['zbp']->CheckRights($action)) {
-        if (!headers_sent()) {
+        if (!defined('ZBP_API_IN_TEST') && !headers_sent()) {
             SetHttpStatusCode(403);
             header('Status: 403 Forbidden');
         }
 
-        ApiResponse(null, null, 401, $GLOBALS['lang']['error']['6']);
+        ApiResponse(null, null, 403, $GLOBALS['lang']['error']['6']);
     }
+
+    return true;
 }
 
 /**
@@ -4263,11 +4269,11 @@ function ApiVerifyCSRF()
 {
     global $zbp;
 
-    if (!defined('ZBP_IN_API_VERIFYBYTOKEN')) {
-        $csrftoken = GetVars('csrftoken');
+    if (! defined('ZBP_IN_API_VERIFYBYTOKEN')) {
+        $csrftoken = GetVars('csrf_token');
 
-        if (!$zbp->VerifyCSRFToken($csrftoken, 'api')) {
-            ApiResponse(null, null, 500, $GLOBALS['lang']['error']['5']);
+        if (! $zbp->VerifyCSRFToken($csrftoken, 'api')) {
+            ApiResponse(null, null, 419, $GLOBALS['lang']['error']['5']);
         }
     }
 }
