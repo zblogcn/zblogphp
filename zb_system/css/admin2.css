@@ -141,6 +141,7 @@ label { cursor: pointer; }
 .divHeader { height: 1.8em; line-height: 1.8em; font-size: 1.5em; padding: 5px 0 42px 0; }
 .divHeader2 { height: 1.8em; line-height: 1.8em; font-size: 1.5em; padding: 5px 0 42px 0; border-bottom: 5px solid #e0e0e0; margin-bottom:5px; }
 .main>#divMain>div[class^="divHeader"],.main>#divMain2>div[class^="divHeader"]{padding-left:40px;background:url('../image/admin/none.gif') 3px 9px no-repeat;background-size:32px;}
+#divMain2 [class^="icon-"] {font-size: 16px;color: #3a6ea5;}
 
 
 /*表   格*/

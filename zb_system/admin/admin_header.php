@@ -22,6 +22,7 @@ if ($zbp->option['ZC_ADDITIONAL_SECURITY']) {
 <title><?php echo $blogname . ' - ' . $blogtitle; ?></title>
 <link href="<?php echo $bloghost; ?>zb_system/css/admin2.css?v=<?php echo $blogversion; ?>" rel="stylesheet" type="text/css" />
 <link rel="stylesheet" type="text/css" href="<?php echo $bloghost; ?>zb_system/css/jquery-ui.custom.css?v=<?php echo $blogversion; ?>"/>
+<link rel="stylesheet" type="text/css" href="<?php echo $bloghost; ?>zb_system/image/icon/icon.css?v=<?php echo $blogversion; ?>"/>
 <script src="<?php echo $bloghost; ?>zb_system/script/jquery-2.2.4.min.js"></script>
 <script src="<?php echo $bloghost; ?>zb_system/script/zblogphp.js?v=<?php echo $blogversion; ?>"></script>
 <script src="<?php echo $bloghost; ?>zb_system/script/c_admin_js_add.php?v=<?php echo $blogversion; ?>"></script>
