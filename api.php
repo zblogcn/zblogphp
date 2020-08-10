@@ -46,8 +46,6 @@ if (isset($mods[$mod]) && file_exists($mod_file = $mods[$mod])) {
             isset($result['code']) ? $result['code'] : 200,
             isset($result['message']) ? $result['message'] : 'OK'
         );
-
-        die;
     }
 }
 

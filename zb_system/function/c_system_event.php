@@ -4105,7 +4105,6 @@ function ApiResponse($data = null, $error = null, $code = 200, $message = null)
             header('Content-Type: application/json; charset=utf-8');
             SetHttpStatusCode($code);
         }
-        echo JsonEncode($response);
     }
 
     if (empty($error) && $code !== 200) {
@@ -4113,6 +4112,9 @@ function ApiResponse($data = null, $error = null, $code = 200, $message = null)
         ZBlogException::SuspendErrorHook();
         throw new Exception($message, $code);
     }
+
+    echo JsonEncode($response);
+    die;
 }
 
 /**
