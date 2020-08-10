@@ -8,7 +8,7 @@ if (!defined('ZBP_PATH')) {
  * Z-Blog with PHP.
  *
  * @author  Z-BlogPHP Team
- * @version 1.0 2020-07-02
+ * @version 1.0 2020-08-10
  */
 
 /**
@@ -30,9 +30,21 @@ function api_app_get()
             'message' => $GLOBALS['lang']['error']['97'],
         );
     }
-    $id = GetVars('id');
 
-    $app = $zbp->LoadApp($type, $id);
+    $id = GetVars('id');
+    $app = null;
+
+    if (isValidAppId($id, $type)) {
+        $app = $zbp->LoadApp($type, $id);
+    }
+
+    if (is_null($app) || is_null($app->name)) {
+        return array(
+            'code' => 404,
+            'message' => $GLOBALS['lang']['error']['97'],
+        );
+    }
+
     $app = array_merge(array('is_actived' => $zbp->CheckPlugin($id)), (array) $app);
 
     return array(
@@ -53,13 +65,29 @@ function api_app_enable_plugin()
 
     ApiCheckAuth(true, 'PluginEnb');
 
-    $id = EnablePlugin(GetVars('id', 'POST'));
-    $zbp->BuildModule();
-    $zbp->SaveCache();
+    $id = (string) GetVars('id', 'POST');
+
+    if (!isValidAppId($id, 'plugin')) {
+        return array(
+            'code' => 404,
+            'message' => $GLOBALS['lang']['error']['61'],
+        );
+    }
+
+    try {
+        EnablePlugin($id);
+        $zbp->BuildModule();
+        $zbp->SaveCache();
+    } catch (Exception $e) {
+        return array(
+            'code' => 500,
+            'message' => $GLOBALS['lang']['msg']['operation_failed'] . ' ' . $e->getMessage(),
+        );
+    }
 
     return array(
         'data' => array(
-            'enabled' => !empty($id),
+            'enabled' => true,
             'id' => $id
         ),
         'message' => $GLOBALS['lang']['msg']['operation_succeed'],
@@ -77,7 +105,27 @@ function api_app_disable_plugin()
 
     ApiCheckAuth(true, 'PluginDis');
 
-    $result = DisablePlugin($id = GetVars('id', 'POST'));
+    $id = (string) GetVars('id', 'POST');
+
+    if (!isValidAppId($id, 'plugin')) {
+        return array(
+            'code' => 404,
+            'message' => $GLOBALS['lang']['error']['61'],
+        );
+    }
+
+    $result = DisablePlugin($id);
+
+    if ($result instanceof App) {
+        return array(
+            'data' => array(
+                'id' => $id,
+                'dependency' => $result->name . '(' . $result->id . ')',
+            ),
+            'message' => $GLOBALS['lang']['msg']['operation_failed'],
+        );
+    }
+
     $zbp->BuildModule();
     $zbp->SaveCache();
 
@@ -101,9 +149,25 @@ function api_app_set_theme()
 
     ApiCheckAuth(true, 'ThemeSet');
 
-    $id = SetTheme(GetVars('id', 'POST'), GetVars('style', 'POST'));
-    $zbp->BuildModule();
-    $zbp->SaveCache();
+    $id = (string) GetVars('id', 'POST');
+
+    if (!isValidAppId($id, 'theme')) {
+        return array(
+            'code' => 404,
+            'message' => $GLOBALS['lang']['error']['61'],
+        );
+    }
+
+    try {
+        SetTheme($id, (string) GetVars('style', 'POST'));
+        $zbp->BuildModule();
+        $zbp->SaveCache();
+    } catch (Exception $e) {
+        return array(
+            'code' => 500,
+            'message' => $GLOBALS['lang']['msg']['operation_failed'] . ' ' . $e->getMessage(),
+        );
+    }
 
     return array(
         'data' => array(
@@ -191,4 +255,41 @@ function api_app_get_themes()
             'list' => $apps,
         ),
     );
+}
+
+/**
+ * 验证 App id 是否合法.
+ *
+ * @param string $id
+ * @param string $type
+ *
+ * @return bool
+ */
+function isValidAppId($id = '', $type = '')
+{
+    global $zbp;
+
+    $apps = array();
+    $appIds = array();
+
+    switch ($type) {
+        case 'plugin':
+            array_push($apps, $zbp->LoadPlugins());
+            break;
+        case 'theme':
+            array_push($apps, $zbp->LoadThemes());
+            break;
+        default:
+            array_push($apps, $zbp->LoadPlugins(), $zbp->LoadThemes());
+    }
+
+    foreach ($apps as $app) {
+        $appIds[] = $app->id;
+    }
+
+    if (in_array($id, $appIds)) {
+        return true;
+    }
+
+    return false;
 }
