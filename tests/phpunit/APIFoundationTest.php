@@ -1,5 +1,9 @@
 <?php
 
+if (! defined('ZBP_API_IN_TEST')) {
+    define('ZBP_API_IN_TEST', true);
+}
+
 /**
  * API 底层测试.
  */
