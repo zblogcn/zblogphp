@@ -1,15 +1,9 @@
 <?php
 
-namespace Tests\PHPUnit\API;
-
-use Base;
-use Exception;
-use Member;
-
 /**
  * API 底层测试.
  */
-class FoundationTest extends TestCase
+class FoundationTest extends PHPUnit\Framework\TestCase
 {
     /** @test */
     public function testCheckAuthWhenNotLoggedIn()
@@ -21,6 +15,8 @@ class FoundationTest extends TestCase
                 401
             )
         );
+
+        $this->expectOutputString('{"code":401,"message":"'.$GLOBALS['lang']['error']['6'].'","data":null,"error":null}');
 
         // 未登录状态
 
@@ -55,6 +51,8 @@ class FoundationTest extends TestCase
                 403
             )
         );
+
+        $this->expectOutputString('{"code":403,"message":"'.$GLOBALS['lang']['error']['6'].'","data":null,"error":null}');
 
         ApiCheckAuth(true, 'admin');
     }
@@ -121,6 +119,8 @@ class FoundationTest extends TestCase
     public function testCSRFCheckWhenUsingCookie()
     {
         $this->expectExceptionObject(new Exception($GLOBALS['lang']['error']['5'], 419));
+
+        $this->expectOutputString('{"code":419,"message":"'.$GLOBALS['lang']['error']['5'].'","data":null,"error":null}');
         ApiVerifyCSRF();
     }
 }

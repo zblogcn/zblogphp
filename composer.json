@@ -29,10 +29,5 @@
             "type": "composer",
             "url": "https://mirrors.aliyun.com/composer/"
         }
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "Tests\\PHPUnit\\": "tests/phpunit/"
-        }
     }
 }
