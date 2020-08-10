@@ -8,7 +8,7 @@ if (!defined('ZBP_PATH')) {
  * Z-Blog with PHP.
  *
  * @author  Z-BlogPHP Team
- * @version 1.0 2020-07-03
+ * @version 1.0 2020-08-10
  */
 
 /**
@@ -88,10 +88,19 @@ function api_category_delete()
     ApiVerifyCSRF();
     ApiCheckAuth(true, 'CategoryDel');
 
-    if (!DelCategory()) {
+    try {
+        if (!DelCategory()) {
+            return array(
+                'message' => $GLOBALS['lang']['msg']['operation_failed'],
+                'data' => array(
+                    'id' => GetVars('id'),
+                ),
+            );
+        }
+    } catch (Exception $e) {
         return array(
             'code' => 500,
-            'message' => $GLOBALS['lang']['msg']['operation_failed'],
+            'message' => $GLOBALS['lang']['msg']['operation_failed'] . ' ' . $e->getMessage(),
         );
     }
 
