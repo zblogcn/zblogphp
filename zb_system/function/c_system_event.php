@@ -2410,7 +2410,7 @@ function DelCategory()
 {
     global $zbp;
 
-    $id = (int) GetVars('id', 'GET');
+    $id = (int) GetVars('id');
     $cate = $zbp->GetCategoryByID($id);
     if ($cate->ID > 0) {
         if (count($cate->SubCategories) > 0) {
@@ -2429,9 +2429,11 @@ function DelCategory()
         foreach ($GLOBALS['hooks']['Filter_Plugin_DelCategory_Succeed'] as $fpname => &$fpsignal) {
             $fpname($cate);
         }
+
+        return true;
     }
 
-    return true;
+    return false;
 }
 
 /**
