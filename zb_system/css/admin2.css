@@ -340,4 +340,4 @@ span.button:hover { box-shadow: 0 0 1px #000; border-radius: 0.3em; padding: 2px
 
 .tab-content td input[type=text],.tab-content td select { height:33px; padding:5px 10px; }
 .tab-content td textarea { padding:5px 10px; }
-i.icon-layout-text-sidebar-reverse { color: #3a6ea5; }
+.theme-name i.icon-layout-text-sidebar-reverse { color: #3a6ea5; }
