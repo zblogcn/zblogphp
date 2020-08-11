@@ -48,11 +48,7 @@ function api_system_get_info()
  */
 function api_system_statistic()
 {
-    global $zbp;
-
     ApiVerifyCSRF();
-
-    ApiCheckAuth(true, 'misc');
     ApiCheckAuth(true, 'root');
 
     include ZBP_PATH . 'zb_system/function/c_system_misc.php';
