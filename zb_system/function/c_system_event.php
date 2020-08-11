@@ -3071,16 +3071,40 @@ function SetTheme($theme, $style)
 
 /**
  * 设置侧栏.
+ *
+ * @return bool
  */
 function SetSidebar()
 {
     global $zbp;
-    for ($i = 1; $i <= 9; $i++) {
-        $optionName = $i === 1 ? 'ZC_SIDEBAR_ORDER' : "ZC_SIDEBAR${i}_ORDER";
-        $formName = $i === 1 ? 'sidebar' : "sidebar${i}";
-        $zbp->option[$optionName] = trim(GetVars($formName, 'POST'), '|');
+
+    $modFileNames = array();
+    $mods = $zbp->GetModuleList();
+
+    foreach ($mods as $m) {
+        $modFileNames[] = $m->FileName;
     }
+
+    for ($i = 1; $i <= 9; $i++) {
+        $optionName = $i === 1 ? 'ZC_SIDEBAR_ORDER' : 'ZC_SIDEBAR' . $i . '_ORDER';
+        $formName = $i === 1 ? 'sidebar' : 'sidebar' . $i;
+
+        $fileNames = GetVars($formName, 'POST');
+        if ($fileNames !== null) {
+            $fileNames = trim($fileNames, '|');
+            foreach (explode('|', $fileNames) as $fileName) {
+                if (!in_array($fileName, $modFileNames)) {
+                    return false;
+                }
+            }
+
+            $zbp->option[$optionName] = $fileNames;
+        }
+    }
+
     $zbp->SaveOption();
+
+    return true;
 }
 
 /**
