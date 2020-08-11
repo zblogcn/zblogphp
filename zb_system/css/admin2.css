@@ -270,6 +270,11 @@ span.note { font-size: 0.9em; }
 .SubMenu a { color: black; background: #e0e1e2; margin: 0 5px 0 0; float: left; }
 .SubMenu span.m-now { background: #3399cc; color: white; }
 
+/* 插件管理 */
+.plugin-list i.icon-power { font-weight: bold; }
+.plugin-list i.icon-power.off { color: #6c6c6c; }
+.plugin-list i.icon-power.off:hover { color: #d60000; }
+
 /* 网站设置页 */
 .content-box ul { padding: 10px 0 0 0px; }
 .content-box li { float: left; padding: 0 0 0 0; height: 2em; line-height: 2em; margin: 0; }
@@ -308,6 +313,7 @@ span.button:hover { box-shadow: 0 0 1px #000; border-radius: 0.3em; padding: 2px
 .widget-title { margin: 0px; padding: 6px; color: #333; cursor: move; }
 .widget-title span { display: inline-block; }
 .widget_ishidden_true img.more-action { opacity: 0.40; }
+.widget-title i { margin-left: 5px; margin-right: 5px; color: #64a7da; }
 .widget-action { float: right; }
 .siderbar-drop { float: right; background: #fefefe; border: 2px solid #eee; margin: 0 5px 10px 15px; }
 .siderbar-sort-list { float: right; width: 262px; min-height: 30px; position: relative; z-index: 0; }
