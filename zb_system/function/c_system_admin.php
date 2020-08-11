@@ -947,7 +947,7 @@ function Admin_ArticleMng()
         $tabletds[] = '<td class="td5">' . $article->ID . '</td>';
         $tabletds[] = '<td class="td10">' . $article->Category->Name . '</td>';
         $tabletds[] = '<td class="td10">' . $article->Author->Name . '</td>';
-        $tabletds[] = '<td><a href="' . $article->Url . '" target="_blank"><img src="../image/admin/link.png" alt="" title="" width="16" /></a> ' . $article->Title . '</td>';
+        $tabletds[] = '<td><a href="' . $article->Url . '" target="_blank"><i class="icon-link-45deg"></i></a> ' . $article->Title . '</td>';
         $tabletds[] = '<td class="td20">' . $article->Time() . '</td>';
         $tabletds[] = '<td class="td5">' . $article->CommNums . '</td>';
         $tabletds[] = '<td class="td5">' . ($article->IsTop ? $zbp->lang['msg']['top'] . '|' : '') . $article->StatusName . '</td>';
@@ -1057,14 +1057,14 @@ function Admin_PageMng()
         $tabletds[] = '<tr>';
         $tabletds[] = '<td class="td5">' . $article->ID . '</td>';
         $tabletds[] = '<td class="td10">' . $article->Author->Name . '</td>';
-        $tabletds[] = '<td><a href="' . $article->Url . '" target="_blank"><img src="../image/admin/link.png" alt="" title="" width="16" /></a> ' . $article->Title . '</td>';
+        $tabletds[] = '<td><a href="' . $article->Url . '" target="_blank"><i class="icon-link-45deg"></i></a> ' . $article->Title . '</td>';
         $tabletds[] = '<td class="td20">' . $article->Time() . '</td>';
         $tabletds[] = '<td class="td5">' . $article->CommNums . '</td>';
         $tabletds[] = '<td class="td5">' . $article->StatusName . '</td>';
         $tabletds[] = '<td class="td10 tdCenter">' .
-            '<a href="../cmd.php?act=PageEdt&amp;id=' . $article->ID . '"><img src="../image/admin/page_edit.png" alt="' . $zbp->lang['msg']['edit'] . '" title="' . $zbp->lang['msg']['edit'] . '" width="16" /></a>' .
+            '<a href="../cmd.php?act=PageEdt&amp;id=' . $article->ID . '"><i class="icon-pencil-square"></i></a>' .
             '&nbsp;&nbsp;&nbsp;&nbsp;' .
-            '<a onclick="return window.confirm(\'' . str_replace(array('"','\''), '', $zbp->lang['msg']['confirm_operating']) . '\');" href="' . BuildSafeCmdURL('act=PageDel&id=' . $article->ID) . '"><img src="../image/admin/delete.png" alt="' . $zbp->lang['msg']['del'] . '" title="' . $zbp->lang['msg']['del'] . '" width="16" /></a>' .
+            '<a onclick="return window.confirm(\'' . str_replace(array('"','\''), '', $zbp->lang['msg']['confirm_operating']) . '\');" href="' . BuildSafeCmdURL('act=PageDel&amp;id=' . $article->ID) . '"><i class="icon-trash"></i></a>' .
             '</td>';
         if ($zbp->CheckRights('PostBat') && $zbp->option['ZC_POST_BATCH_DELETE']) {
             $tabletds[] = '<td class="td5 tdCenter"><input type="checkbox" id="id' . $article->ID . '" name="id[]" value="' . $article->ID . '"></td>';
@@ -1131,7 +1131,7 @@ function Admin_CategoryMng()
         $tabletds[] = '<tr>';
         $tabletds[] = '<td class="td5">' . $category->ID . '</td>';
         $tabletds[] = '<td class="td5">' . $category->Order . '</td>';
-        $tabletds[] = '<td class="td25"><a href="' . $category->Url . '" target="_blank"><img src="../image/admin/link.png" alt="" title="" width="16" /></a> ' . $category->Symbol . $category->Name . '</td>';
+        $tabletds[] = '<td class="td25"><a href="' . $category->Url . '" target="_blank"><i class="icon-link-45deg"></i></a> ' . $category->Symbol . $category->Name . '</td>';
         $tabletds[] = '<td class="td20">' . $category->Alias . '</td>';
         $tabletds[] = '<td class="td10">' . $category->Count . '</td>';
         $tabletds[] = '<td class="td10 tdCenter">' .
@@ -1253,7 +1253,7 @@ function Admin_CommentMng()
         $tabletds[] = '<td class="td10"><span class="cmt-note" title="' . $zbp->lang['msg']['email'] . ':' . htmlspecialchars($cmt->Email) . '"><a href="mailto:' . htmlspecialchars($cmt->Email) . '">' . $cmt->Author->Name . '</a></span></td>';
         $tabletds[] = '<td><div style="overflow:hidden;max-width:500px;">' .
             (
-                ($article) ? '<a href="' . $article->Url . '" target="_blank"><img src="../image/admin/link.png" alt="" title="" width="16" /></a> ' : '<a href="javascript:;"><img src="../image/admin/delete.png" alt="no exists" title="no exists" width="16" /></a>') .
+                ($article) ? '<a href="' . $article->Url . '" target="_blank"><i class="icon-link-45deg"></i></a> ' : '<a href="javascript:;"><img src="../image/admin/delete.png" alt="no exists" title="no exists" width="16" /></a>') .
             $cmt->Content . '<div></td>';
         $tabletds[] = '<td class="td5">' . $cmt->LogID . '</td>';
         $tabletds[] = '<td class="td15">' . $cmt->Time() . '</td>';
@@ -1380,7 +1380,7 @@ function Admin_MemberMng()
         $tabletds[] = '<tr>';
         $tabletds[] = '<td class="td5">' . $member->ID . '</td>';
         $tabletds[] = '<td class="td10">' . $member->LevelName . ($member->Status > 0 ? '(' . $zbp->lang['user_status_name'][$member->Status] . ')' : '') . '</td>';
-        $tabletds[] = '<td><a href="' . $member->Url . '" target="_blank"><img src="../image/admin/link.png" alt="" title="" width="16" /></a> ' . $member->Name . '</td>';
+        $tabletds[] = '<td><a href="' . $member->Url . '" target="_blank"><i class="icon-link-45deg"></i></a> ' . $member->Name . '</td>';
         $tabletds[] = '<td class="td15">' . $member->Alias . '</td>';
         $tabletds[] = '<td class="td10">' . $member->Articles . '</td>';
         $tabletds[] = '<td class="td10">' . $member->Pages . '</td>';
@@ -1479,7 +1479,7 @@ function Admin_UploadMng()
         $ret[] = '<tr>';
         $ret[] = '<td class="td5">' . $upload->ID . '</td>';
         $ret[] = '<td class="td10">' . htmlspecialchars($upload->Author->Name) . '</td>';
-        $ret[] = '<td><a href="' . htmlspecialchars($upload->Url) . '" target="_blank"><img src="../image/admin/link.png" alt="" title="" width="16" /></a> ' . htmlspecialchars($upload->Name) . '</td>';
+        $ret[] = '<td><a href="' . htmlspecialchars($upload->Url) . '" target="_blank"><i class="icon-link-45deg"></i></a> ' . htmlspecialchars($upload->Name) . '</td>';
         $ret[] = '<td class="td15">' . $upload->Time() . '</td>';
         $ret[] = '<td class="td10">' . $upload->Size . '</td>';
         $ret[] = '<td class="td20">' . htmlspecialchars($upload->MimeType) . '</td>';
@@ -1571,7 +1571,7 @@ function Admin_TagMng()
         $tabletds = array(); //table string
         $tabletds[] = '<tr>';
         $tabletds[] = '<td class="td5">' . $tag->ID . '</td>';
-        $tabletds[] = '<td class="td25"><a href="' . $tag->Url . '" target="_blank"><img src="../image/admin/link.png" alt="" title="" width="16" /></a> ' . $tag->Name . '</td>';
+        $tabletds[] = '<td class="td25"><a href="' . $tag->Url . '" target="_blank"><i class="icon-link-45deg"></i></a> ' . $tag->Name . '</td>';
         $tabletds[] = '<td class="td20">' . $tag->Alias . '</td>';
         $tabletds[] = '<td class="td10">' . $tag->Count . '</td>';
         $tabletds[] = '<td class="td10 tdCenter">' .
