@@ -92,38 +92,10 @@ label { cursor: pointer; }
 .left #leftmenu li.sub span.m-now { font-weight: bold; }
 
 /*导航图标区*/
-#leftmenu li span { background-repeat: no-repeat; background-position: 100px 8px; background-image: url(../image/common/window_1.png); }
-#leftmenu li.on span { background-image: url(../image/common/window_2.png); }
-#leftmenu #nav_build span { background-image: url(../image/common/rebuild_1.png); }
-#leftmenu #nav_home span { background-image: url(../image/common/home_1.png); }
-#leftmenu #nav_new span { background-image: url(../image/common/new_1.png); }
-#leftmenu #nav_article span { background-image: url(../image/common/article_1.png); }
-#leftmenu #nav_page span { background-image: url(../image/common/page_1.png); }
-#leftmenu #nav_category span { background-image: url(../image/common/category_1.png); }
-#leftmenu #nav_tags span { background-image: url(../image/common/tags_1.png); }
-#leftmenu #nav_comment span { background-image: url(../image/common/comments_1.png); }
-#leftmenu #nav_quoted span { background-image: url(../image/common/quoted_1.png); }
-#leftmenu #nav_upload span { background-image: url(../image/common/accessories_1.png); }
-#leftmenu #nav_theme span { background-image: url(../image/common/themes_1.png); }
-#leftmenu #nav_plugin span { background-image: url(../image/common/plugin_1.png); }
-#leftmenu #nav_module span { background-image: url(../image/common/link_1.png); }
-#leftmenu #nav_member span { background-image: url(../image/common/user_1.png); }
+#leftmenu li span { background-repeat: no-repeat; background-position: 100px 8px; }
+#leftmenu li span i { margin-right: 8px; margin-left: -22px; }
 
 /*高亮导航图标区*/
-#leftmenu #nav_build.on span { background-image: url(../image/common/rebuild_2.png); }
-#leftmenu #nav_home.on span { background-image: url(../image/common/home_2.png); }
-#leftmenu #nav_new.on span { background-image: url(../image/common/new_2.png); }
-#leftmenu #nav_article.on span { background-image: url(../image/common/article_2.png); }
-#leftmenu #nav_page.on span { background-image: url(../image/common/page_2.png); }
-#leftmenu #nav_category.on span { background-image: url(../image/common/category_2.png); }
-#leftmenu #nav_tags.on span { background-image: url(../image/common/tags_2.png); }
-#leftmenu #nav_comment.on span { background-image: url(../image/common/comments_2.png); }
-#leftmenu #nav_quoted.on span { background-image: url(../image/common/quoted_2.png); }
-#leftmenu #nav_upload.on span { background-image: url(../image/common/accessories_2.png); }
-#leftmenu #nav_theme.on span { background-image: url(../image/common/themes_2.png); }
-#leftmenu #nav_plugin.on span { background-image: url(../image/common/plugin_2.png); }
-#leftmenu #nav_module.on span { background-image: url(../image/common/link_2.png); }
-#leftmenu #nav_member.on span { background-image: url(../image/common/user_2.png); }
 #leftmenu li span { background-repeat: no-repeat; background-position: 0px 8px; }
 #leftmenu li.split { height: 0px !important; background: #fff; }
 #leftmenu li.split hr { display: none; }
