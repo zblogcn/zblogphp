@@ -112,7 +112,7 @@ label { cursor: pointer; }
 #divMain2 { padding: 0px; margin: 0px; }
 .divHeader { height: 1.8em; line-height: 1.8em; font-size: 1.5em; padding: 5px 0 42px 0; }
 .divHeader2 { height: 1.8em; line-height: 1.8em; font-size: 1.5em; padding: 5px 0 42px 0; border-bottom: 5px solid #e0e0e0; margin-bottom:5px; }
-.divHeader i, .divHeader2 i { margin-left: -38px; margin-right: 2px; }
+.divHeader i, .divHeader2 i { margin-left: -38px; margin-right: -2px; vertical-align: text-bottom; }
 .divHeader span, .divHeader2 span { vertical-align: middle; }
 .main>#divMain>div[class^="divHeader"],.main>#divMain2>div[class^="divHeader"]{padding-left:40px;background:url('../image/admin/none.gif') 3px 9px no-repeat;background-size:32px;}
 #divMain2 [class^="icon-"] {font-size: 16px;/* color: #3a6ea5; */}
