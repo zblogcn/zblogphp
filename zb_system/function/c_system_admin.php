@@ -1641,10 +1641,10 @@ function Admin_ThemeMng()
         }
 
         if ($theme->IsUsed() && $theme->path) {
-            echo '<a href="' . $theme->GetManageUrl() . '" title="' . $zbp->lang['msg']['manage'] . '" class="button"><i class="icon-tools"></i></a>&nbsp;&nbsp;';
+            echo '<a href="' . $theme->GetManageUrl() . '" title="' . $zbp->lang['msg']['manage'] . '" class="button"><i class="icon-layout-text-sidebar-reverse"></i></a>&nbsp;&nbsp;';
         } else {
             /** @todo ICON */
-            echo '<img width="16" title="" alt="" src="../image/admin/layout.png"/>&nbsp;&nbsp;';
+            echo '<i class="icon-layout-text-sidebar-reverse"></i>&nbsp;&nbsp;';
         }
         echo '<a target="_blank" href="' . htmlspecialchars($theme->url) . '" title=""><strong style="display:none;">' . htmlspecialchars($theme->id) . '</strong>';
         echo '<b>' . htmlspecialchars($theme->name) . '</b></a></div>';
