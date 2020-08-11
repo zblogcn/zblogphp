@@ -2191,54 +2191,71 @@ function GetSubComments($id, &$array)
 }
 
 /**
- *检查评论数据并保存、更新计数、更新“最新评论”模块.
+ * 检查评论数据并保存、更新计数、更新“最新评论”模块.
+ *
+ * @return bool
  */
 function CheckComment()
 {
     global $zbp;
 
-    $id = (int) GetVars('id', 'GET');
-    $ischecking = (bool) GetVars('ischecking', 'GET');
+    $cmt = null;
+    $id = (int) GetVars('id');
 
-    $cmt = $zbp->GetCommentByID($id);
-    $orig_check = (bool) $cmt->IsChecking;
-    $cmt->IsChecking = $ischecking;
-
-    foreach ($GLOBALS['hooks']['Filter_Plugin_CheckComment_Core'] as $fpname => &$fpsignal) {
-        $fpname($cmt);
+    if ($id > 0) {
+        $cmt = $zbp->GetCommentByID($id);
     }
 
-    $cmt->Save();
+    if ($cmt !== null && $cmt->ID !== 0) {
+        $newCheckState = (bool) GetVars('ischecking');
+        $oldCheckState = (bool) $cmt->IsChecking;
+        $cmt->IsChecking = $newCheckState;
 
-    foreach ($GLOBALS['hooks']['Filter_Plugin_CheckComment_Succeed'] as $fpname => &$fpsignal) {
-        $fpname($cmt);
-    }
-
-    if (($orig_check) && (!$ischecking)) {
-        CountPostArray(array($cmt->LogID), +1);
-        CountCommentNums(0, -1);
-        if ($cmt->AuthorID > 0) {
-            CountMember($cmt->Author, array(0, 0, +1, 0));
-            $cmt->Author->Save();
+        foreach ($GLOBALS['hooks']['Filter_Plugin_CheckComment_Core'] as $fpname => &$fpsignal) {
+            $fpname($cmt);
         }
-    } elseif ((!$orig_check) && ($ischecking)) {
-        CountPostArray(array($cmt->LogID), -1);
-        CountCommentNums(0, +1);
-        if ($cmt->AuthorID > 0) {
-            CountMember($cmt->Author, array(0, 0, -1, 0));
-            $cmt->Author->Save();
+
+        $cmt->Save();
+
+        foreach ($GLOBALS['hooks']['Filter_Plugin_CheckComment_Succeed'] as $fpname => &$fpsignal) {
+            $fpname($cmt);
         }
+
+        if ($oldCheckState && !$newCheckState) {
+            // 取消审核
+            CountPostArray(array($cmt->LogID), +1);
+            CountCommentNums(0, -1);
+            if ($cmt->AuthorID > 0) {
+                CountMember($cmt->Author, array(0, 0, +1, 0));
+                $cmt->Author->Save();
+            }
+        } elseif (!$oldCheckState && $newCheckState) {
+            // 通过审核
+            CountPostArray(array($cmt->LogID), -1);
+            CountCommentNums(0, +1);
+            if ($cmt->AuthorID > 0) {
+                CountMember($cmt->Author, array(0, 0, -1, 0));
+                $cmt->Author->Save();
+            }
+        }
+
+        $zbp->AddBuildModule('comments');
+
+        return true;
     }
 
-    $zbp->AddBuildModule('comments');
+    return false;
 }
 
 /**
  * 评论批量处理（删除、通过审核、加入审核）.
+ *
+ * @return bool
  */
 function BatchComment()
 {
     global $zbp;
+
     if (isset($_POST['all_del'])) {
         $type = 'all_del';
     } elseif (isset($_POST['all_pass'])) {
@@ -2246,11 +2263,13 @@ function BatchComment()
     } elseif (isset($_POST['all_audit'])) {
         $type = 'all_audit';
     } else {
-        return;
+        return false;
     }
-    if (!isset($_POST['id'])) {
-        return;
+
+    if (!isset($_POST['id']) || empty($_POST['id'])) {
+        return false;
     }
+
     $array = $_POST['id'];
     if (is_array($array)) {
         $array = array_unique($array);
@@ -2268,6 +2287,10 @@ function BatchComment()
         }
         $childArray[] = $cmt;
         GetSubComments($cmt->ID, $childArray);
+    }
+
+    if (empty($childArray)) {
+        return false;
     }
 
     // Unique child array
@@ -2320,6 +2343,8 @@ function BatchComment()
     }
 
     $zbp->AddBuildModule('comments');
+
+    return true;
 }
 
 //###############################################################################################################
