@@ -107,6 +107,9 @@ $tag = $zbp->GetTagByID($tagid);
         <script>
             AddHeaderIcon("<?php echo $zbp->host . 'zb_system/image/common/tag_32.png'; ?>");
         </script>
+        <script>
+            AddHeaderFontIcon("icon-tags-fill");
+        </script>
     </div>
 </div>
 

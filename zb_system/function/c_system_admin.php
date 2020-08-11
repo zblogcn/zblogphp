@@ -843,7 +843,7 @@ function Admin_SiteInfo()
     $s = str_replace('相关链接', $zbp->lang['msg']['website'], $s);
     echo $s;
     echo '<script>ActiveTopMenu("topmenu1");</script>';
-    echo '<script>AddHeaderIcon("' . $zbp->host . 'zb_system/image/common/home_32.png' . '");</script>';
+    echo '<script>AddHeaderFontIcon("icon-house-door-fill");</script>';
 }
 
 //###############################################################################################################
@@ -986,7 +986,7 @@ function Admin_ArticleMng()
     }
     echo '</p></form></div>';
     echo '<script>ActiveLeftMenu("aArticleMng");</script>';
-    echo '<script>AddHeaderIcon("' . $zbp->host . 'zb_system/image/common/article_32.png' . '");</script>';
+    echo '<script>AddHeaderFontIcon("icon-stickies");</script>';
 }
 
 //###############################################################################################################
@@ -1094,7 +1094,7 @@ function Admin_PageMng()
     }
     echo '</p><form></div>';
     echo '<script>ActiveLeftMenu("aPageMng");</script>';
-    echo '<script>AddHeaderIcon("' . $zbp->host . 'zb_system/image/common/page_32.png' . '");</script>';
+    echo '<script>AddHeaderFontIcon("icon-stickies-fill");</script>';
 }
 
 //###############################################################################################################
@@ -1154,7 +1154,7 @@ function Admin_CategoryMng()
     echo '</table>';
     echo '</div>';
     echo '<script>ActiveLeftMenu("aCategoryMng");</script>';
-    echo '<script>AddHeaderIcon("' . $zbp->host . 'zb_system/image/common/category_32.png' . '");</script>';
+    echo '<script>AddHeaderFontIcon("icon-folder-fill");</script>';
 }
 
 //###############################################################################################################
@@ -1305,7 +1305,7 @@ function Admin_CommentMng()
 
     echo '</div>';
     echo '<script>ActiveLeftMenu("aCommentMng");</script>';
-    echo '<script>AddHeaderIcon("' . $zbp->host . 'zb_system/image/common/comments_32.png' . '");$(".cmt-note").tooltip();</script>';
+    echo '<script>AddHeaderFontIcon("icon-chat-text-fill"); $(".cmt-note").tooltip();</script>';
 }
 
 //###############################################################################################################
@@ -1415,7 +1415,7 @@ function Admin_MemberMng()
     }
     echo '</p></div>';
     echo '<script>ActiveLeftMenu("aMemberMng");</script>';
-    echo '<script>AddHeaderIcon("' . $zbp->host . 'zb_system/image/common/user_32.png' . '");</script>';
+    echo '<script>AddHeaderFontIcon("icon-people-fill");</script>';
 }
 
 //###############################################################################################################
@@ -1508,7 +1508,7 @@ function Admin_UploadMng()
     }
     echo '</p></div>';
     echo '<script>ActiveLeftMenu("aUploadMng");</script>';
-    echo '<script>AddHeaderIcon("' . $zbp->host . 'zb_system/image/common/accessories_32.png' . '");</script>';
+    echo '<script>AddHeaderFontIcon("icon-inboxes-fill");</script>';
 }
 
 //###############################################################################################################
@@ -1603,7 +1603,7 @@ function Admin_TagMng()
     echo '</p></div>';
 
     echo '<script>ActiveLeftMenu("aTagMng");</script>';
-    echo '<script>AddHeaderIcon("' . $zbp->host . 'zb_system/image/common/tag_32.png' . '");</script>';
+    echo '<script>AddHeaderFontIcon("icon-tags-fill");</script>';
 }
 
 //###############################################################################################################
@@ -1663,7 +1663,7 @@ function Admin_ThemeMng()
 
     echo '</form></div>';
     echo '<script>ActiveLeftMenu("aThemeMng");</script>';
-    echo '<script>AddHeaderIcon("' . $zbp->host . 'zb_system/image/common/themes_32.png' . '");</script>';
+    echo '<script>AddHeaderFontIcon("icon-grid-1x2-fill");</script>';
 }
 
 //###############################################################################################################
@@ -1977,7 +1977,7 @@ function Admin_ModuleMng()
         });
     </script>
     <?php
-    echo '<script>AddHeaderIcon("' . $zbp->host . 'zb_system/image/common/link_32.png' . '");</script>';
+    echo '<script>AddHeaderFontIcon("icon-grid-fill");</script>';
 }
 
 //###############################################################################################################
@@ -2059,7 +2059,7 @@ function Admin_PluginMng()
     echo '</table>';
     echo '</div>';
     echo '<script>ActiveLeftMenu("aPluginMng");';
-    echo 'AddHeaderIcon("' . $zbp->host . 'zb_system/image/common/plugin_32.png' . '");$(".plugin-note").tooltip();</script>';
+    echo 'AddHeaderFontIcon("icon-plug-fill"); $(".plugin-note").tooltip();</script>';
 }
 
 //###############################################################################################################
@@ -2222,5 +2222,5 @@ function changeDomain(newurl){
     </form>
     <?php
     echo '<script>ActiveTopMenu("topmenu2");</script>';
-    echo '<script>AddHeaderIcon("' . $zbp->host . 'zb_system/image/common/setting_32.png' . '");</script>';
+    echo '<script>AddHeaderFontIcon("icon-gear-fill");</script>';
 }

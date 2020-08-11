@@ -206,6 +206,10 @@ function AddHeaderIcon(s){
   $("div.divHeader,div.divHeader2").first().css({"background-image":"url('"+s+"')"});
 }
 
+function AddHeaderFontIcon(icon_class){
+    $("div.divHeader,div.divHeader2").first().prepend('<i class="'+icon_class+'"></i> ');
+}
+
 
 function AutoHideTips(){
     $("p.hint:visible").each(function(i){
@@ -267,8 +271,8 @@ $(document).ready(function(){
 
     $("img[width='16']").each(function(){if($(this).parent().is("a")){$(this).parent().addClass("button")}});
 
-    if ($("div.divHeader,div.divHeader2").first().css("background-image") == "none") { 
-        AddHeaderIcon("<?php echo $bloghost ?>zb_system/image/common/window.png");
+    if ($("div.divHeader,div.divHeader2").first().css("background-image") == "none") {
+        AddHeaderFontIcon("icon-window");
     }
 
     AutoHideTips();
@@ -276,9 +280,9 @@ $(document).ready(function(){
     SetCookie("timezone",(new Date().getTimezoneOffset()/60)*(-1));
 
     var s = $("div.divHeader,div.divHeader2").first().css("background-image");
-    if(s != undefined && s.indexOf("none.gif") != -1 ){
-        AddHeaderIcon(bloghost + "zb_system/image/common/window.png");
-    }
+    if ( $("div.divHeader i,div.divHeader2 i").length <= 0 && (s != undefined && s.indexOf("none.gif") != -1) ) {
+        AddHeaderFontIcon("icon-window");
+    } 
 
     var startTime = new Date().getTime();
     var csrfInterval = setInterval(function () {

@@ -182,7 +182,7 @@ $member = $zbp->GetMemberByID($memberid);
             ActiveLeftMenu("aMemberMng");
         </script>
         <script>
-            AddHeaderIcon("<?php echo $zbp->host . 'zb_system/image/common/user_32.png'; ?>");
+            AddHeaderFontIcon("icon-person-fill");
         </script>
     </div>
 </div>

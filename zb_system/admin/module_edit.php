@@ -210,7 +210,7 @@ if ($mod->Source == 'theme') {
             ActiveLeftMenu("aModuleMng");
         </script>
         <script>
-            AddHeaderIcon("<?php echo $zbp->host . 'zb_system/image/common/link_32.png'; ?>");
+            AddHeaderFontIcon("icon-grid-fill");
         </script>
     </div>
 </div>
