@@ -3128,6 +3128,7 @@ function SaveSetting()
         }
         if ($key == 'ZC_UPLOAD_FILETYPE') {
             $value = strtolower($value);
+            $value = str_replace(array(' ','　'), '', $value);
             $value = DelNameInString($value, 'php');
             $value = DelNameInString($value, 'asp');
         }
