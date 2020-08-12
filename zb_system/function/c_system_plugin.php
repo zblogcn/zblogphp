@@ -2304,14 +2304,35 @@ DefinePluginFilter('Filter_Plugin_CSP_Backend');
  */
 DefinePluginFilter('Filter_Plugin_API_Response');
 
+/*
+'**************************************************<
+'类型:Filter
+'名称:Filter_Plugin_API_Extend_Mods
+'参数:
+'说明:API 的应用追加模块机制
+'调用:
+'**************************************************>
+ */
+DefinePluginFilter('Filter_Plugin_API_Extend_Mods');
 
 /*
 '**************************************************<
 '类型:Filter
-'名称:Filter_Plugin_API_Add_Extended_Mods
-'参数:&$mods
-'说明:API的应用追加模块机制
+'名称:Filter_Plugin_API_Get_Request_Filter
+'参数:&$condition
+'说明:API 获取约束过滤条件
 '调用:
 '**************************************************>
  */
-DefinePluginFilter('Filter_Plugin_API_Add_Extended_Mods');
+DefinePluginFilter('Filter_Plugin_API_Get_Request_Filter');
+
+/*
+'**************************************************<
+'类型:Filter
+'名称:Filter_Plugin_API_Get_Pagination_Info
+'参数:&$info
+'说明:API 获取分页信息
+'调用:
+'**************************************************>
+ */
+DefinePluginFilter('Filter_Plugin_API_Get_Pagination_Info');

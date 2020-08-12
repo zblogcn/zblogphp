@@ -4027,7 +4027,7 @@ function ApiLoadMods(&$mods)
 {
     global $zbp;
 
-    foreach ($GLOBALS['hooks']['Filter_Plugin_API_Add_Extended_Mods'] as $fpname => &$fpsignal) {
+    foreach ($GLOBALS['hooks']['Filter_Plugin_API_Extend_Mods'] as $fpname => &$fpsignal) {
         $add_mods = $fpname();
 
         if (!is_array($add_mods)) {
@@ -4236,6 +4236,9 @@ function ApiGetRequestFilter($limitDefault = 10, $sortableColumns = array())
         }
     }
 
+    foreach ($GLOBALS['hooks']['Filter_Plugin_API_Get_Request_Filter'] as $fpname => &$fpsignal) {
+        $fpname($condition);
+    }
     return $condition;
 }
 
@@ -4248,8 +4251,8 @@ function ApiGetRequestFilter($limitDefault = 10, $sortableColumns = array())
 function ApiGetPaginationInfo($pagebar = null)
 {
     if ($pagebar === null) {
-        // 用 StdClass 而不用 array() ，为了为空时 json 显示 {} 而不是 []
-        return new StdClass;
+        // 用 stdClass 而不用 array() ，为了为空时 json 显示 {} 而不是 []
+        return new stdClass;
     }
 
     $info = array();
