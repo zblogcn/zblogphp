@@ -7,7 +7,7 @@ if (! defined('ZBP_API_IN_TEST')) {
 /**
  * API 底层测试.
  */
-class FoundationTest extends PHPUnit\Framework\TestCase
+class APIFoundationTest extends PHPUnit\Framework\TestCase
 {
     /** @test */
     public function testCheckAuthWhenNotLoggedIn()
