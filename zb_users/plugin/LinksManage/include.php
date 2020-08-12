@@ -113,6 +113,13 @@ function LinksManage_GenModCon($items, $fileName)
       $item->ico = "";
     }
     $item->subs = (array) $item->subs;
+    foreach ($item->subs as $itemSub) {
+      if (isset($itemSub->ico) && !empty($itemSub->ico)) {
+        $itemSub->ico = "<i class=\"{$itemSub->ico}\"></i>";
+      } else {
+        $itemSub->ico = "";
+      }
+    }
     $zbp->template->SetTags('item', $item);
     $zbp->template->SetTags('id', $fileName);
     $content .= $zbp->template->Output($outTpl);

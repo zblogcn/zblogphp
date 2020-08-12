@@ -1641,7 +1641,7 @@ function Admin_ThemeMng()
         }
 
         if ($theme->IsUsed() && $theme->path) {
-            echo '<a href="' . $theme->GetManageUrl() . '" title="' . $zbp->lang['msg']['manage'] . '" class="button"><i class="icon-layout-text-sidebar-reverse"></i></a>&nbsp;&nbsp;';
+            echo '<a href="' . $theme->GetManageUrl() . '" title="' . $zbp->lang['msg']['manage'] . '"><i class="icon-tools"></i></a>&nbsp;&nbsp;';
         } else {
             /** @todo ICON */
             echo '<i class="icon-layout-text-sidebar-reverse"></i>&nbsp;&nbsp;';
