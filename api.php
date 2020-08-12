@@ -26,27 +26,9 @@ ApiLoadMods($mods);
 $mod = strtolower(GetVars('mod', 'GET'));
 $act = strtolower(GetVars('act', 'GET'));
 
-if (empty($act)) {
-    $act = 'get';
-}
-
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && (! ($mod === 'member' && $act === 'login'))) {
     ApiVerifyCSRF();
 }
 
-if (isset($mods[$mod]) && file_exists($mod_file = $mods[$mod])) {
-    include_once $mod_file;
-    $func = 'api_' . $mod . '_' . $act;
-    if (function_exists($func)) {
-        $result = call_user_func($func);
-
-        ApiResponse(
-            isset($result['data']) ? $result['data'] : null,
-            isset($result['error']) ? $result['error'] : null,
-            isset($result['code']) ? $result['code'] : 200,
-            isset($result['message']) ? $result['message'] : 'OK'
-        );
-    }
-}
-
-ApiResponse(null, null, 404, $GLOBALS['lang']['error']['96']);
+// 派发 API
+ApiDispatch($mods, $mod, $act);
