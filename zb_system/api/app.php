@@ -34,7 +34,7 @@ function api_app_get()
     $id = GetVars('id');
     $app = null;
 
-    if (isValidAppId($id, $type)) {
+    if (IsValidAppId($id, $type)) {
         $app = $zbp->LoadApp($type, $id);
     }
 
@@ -67,7 +67,7 @@ function api_app_enable_plugin()
 
     $id = (string) GetVars('id', 'POST');
 
-    if (!isValidAppId($id, 'plugin')) {
+    if (!IsValidAppId($id, 'plugin')) {
         return array(
             'code' => 404,
             'message' => $GLOBALS['lang']['error']['61'],
@@ -107,7 +107,7 @@ function api_app_disable_plugin()
 
     $id = (string) GetVars('id', 'POST');
 
-    if (!isValidAppId($id, 'plugin')) {
+    if (!IsValidAppId($id, 'plugin')) {
         return array(
             'code' => 404,
             'message' => $GLOBALS['lang']['error']['61'],
@@ -151,7 +151,7 @@ function api_app_set_theme()
 
     $id = (string) GetVars('id', 'POST');
 
-    if (!isValidAppId($id, 'theme')) {
+    if (!IsValidAppId($id, 'theme')) {
         return array(
             'code' => 404,
             'message' => $GLOBALS['lang']['error']['61'],
@@ -265,7 +265,7 @@ function api_app_get_themes()
  *
  * @return bool
  */
-function isValidAppId($id = '', $type = '')
+function IsValidAppId($id = '', $type = '')
 {
     global $zbp;
 
