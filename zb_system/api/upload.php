@@ -99,8 +99,8 @@ function api_upload_list()
 
     ApiCheckAuth(true, 'UploadMng');
 
-    $authId = (Int) GetVars('author_id');
-    $postId = (Int) GetVars('post_id');
+    $authId = (int) GetVars('author_id');
+    $postId = (int) GetVars('post_id');
 
     // 组织查询条件
     $where = array();

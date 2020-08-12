@@ -4201,12 +4201,12 @@ function ApiGetRequestFilter($limitDefault = 10, $sortableColumns = array())
         'order' => null,
         'option' => null,
     );
-    $sortBy = strtolower((String) GetVars('sortby'));
-    $order = strtoupper((String) GetVars('order'));
-    $limit = (Int) GetVars('limit');
-    $offset = (Int) GetVars('offset');
-    $pageNow = (Int) GetVars('pagenow');
-    $perPage = (Int) GetVars('perpage');
+    $sortBy = strtolower((string) GetVars('sortby'));
+    $order = strtoupper((string) GetVars('order'));
+    $limit = (int) GetVars('limit');
+    $offset = (int) GetVars('offset');
+    $pageNow = (int) GetVars('pagenow');
+    $perPage = (int) GetVars('perpage');
 
     // 排序顺序
     if (!empty($sortBy) && isset($sortableColumns[$sortBy])) {

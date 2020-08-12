@@ -68,7 +68,7 @@ function api_post_post()
 {
     global $zbp;
 
-    $postType = (Int) GetVars('Type', 'POST');
+    $postType = (int) GetVars('Type', 'POST');
 
     if ($postType == 1) {
         // 新增/修改页面
@@ -162,7 +162,7 @@ function api_post_list()
     $tagId = (int) GetVars('tag_id');
     $authId = (int) GetVars('auth_id');
     $date = GetVars('date');
-    $mng = strtolower((String) GetVars('mng'));
+    $mng = strtolower((string) GetVars('mng'));
     $type = (int) GetVars('type');
 
     // 组织查询条件
