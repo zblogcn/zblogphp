@@ -209,8 +209,10 @@ function AddHeaderIcon(s){
 }
 
 function AddHeaderFontIcon(icon_class){
-    var text = $("div.divHeader,div.divHeader2").first().text();
-    $("div.divHeader,div.divHeader2").first().html('<i class="'+icon_class+'"></i> <span>'+text+'</span>');
+    var element = $("div.divHeader,div.divHeader2").first();
+    element.css("background-image", "url(\"" + zbp.options.bloghost + "zb_system/image/admin/none.gif\")");
+    var text = element.text();
+    element.html('<i class="'+icon_class+'"></i> <span>'+text+'</span>');
 }
 
 
