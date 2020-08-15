@@ -2049,7 +2049,10 @@ function Admin_PluginMng()
             }
         }
         if ($plugin->IsUsed() && $plugin->CanManage()) {
-            echo '&nbsp;&nbsp;&nbsp;&nbsp;<a href="' . $plugin->GetManageUrl() . '" title="' . $zbp->lang['msg']['manage'] . '"><i class="icon-tools"></i></a>';
+            if ($plugin->type !== 'theme') {
+                echo '&nbsp;&nbsp;&nbsp;&nbsp;';
+            }
+            echo '<a href="' . $plugin->GetManageUrl() . '" title="' . $zbp->lang['msg']['manage'] . '"><i class="icon-tools"></i></a>';
         }
 
         echo '</td>';
