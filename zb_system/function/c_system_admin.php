@@ -147,7 +147,7 @@ function ResponseAdmin_LeftMenu()
 
     $leftmenus['nav_theme'] = MakeLeftMenu("ThemeMng", $zbp->lang['msg']['theme_manage'], $zbp->host . "zb_system/cmd.php?act=ThemeMng", "nav_theme", "aThemeMng", "", "icon-grid-1x2-fill");
     $leftmenus['nav_module'] = MakeLeftMenu("ModuleMng", $zbp->lang['msg']['module_manage'], $zbp->host . "zb_system/cmd.php?act=ModuleMng", "nav_module", "aModuleMng", "", "icon-grid-fill");
-    $leftmenus['nav_plugin'] = MakeLeftMenu("PluginMng", $zbp->lang['msg']['plugin_manage'], $zbp->host . "zb_system/cmd.php?act=PluginMng", "nav_plugin", "aPluginMng", "", "icon-plug-fill");
+    $leftmenus['nav_plugin'] = MakeLeftMenu("PluginMng", $zbp->lang['msg']['plugin_manage'], $zbp->host . "zb_system/cmd.php?act=PluginMng", "nav_plugin", "aPluginMng", "", "icon-puzzle-fill");
 
     foreach ($GLOBALS['hooks']['Filter_Plugin_Admin_LeftMenu'] as $fpname => &$fpsignal) {
         $fpname($leftmenus);
@@ -2059,7 +2059,7 @@ function Admin_PluginMng()
     echo '</table>';
     echo '</div>';
     echo '<script>ActiveLeftMenu("aPluginMng");';
-    echo 'AddHeaderFontIcon("icon-plug-fill"); $(".plugin-note").tooltip();</script>';
+    echo 'AddHeaderFontIcon("icon-puzzle-fill"); $(".plugin-note").tooltip();</script>';
 }
 
 //###############################################################################################################
