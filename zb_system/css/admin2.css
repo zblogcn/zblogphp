@@ -190,11 +190,11 @@ div.hint p { padding: 0.2em 0.5em 0.3em 0.8em; line-height: 1.5em; border:0px so
 div.hint font { color: black; }
 div.hint p:before { font-family: 'icomoon'!important; speak: never; font-style: normal; font-weight: normal; font-variant: normal; text-transform: none; vertical-align: middle; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; margin-right: 8px; }
 div.hint p.hint_good { border-color:#a8de9e;background:#e9fde5; }
-div.hint p.hint_good:before { content: "\ea5d"; color: #277723; }
+div.hint p.hint_good:before { content: "\ea62"; color: #277723; }
 div.hint p.hint_bad { border-color:#e1a9a9;background:#fce0e0; }
-div.hint p.hint_bad:before { content: "\eaed"; color: #ec705b; }
+div.hint p.hint_bad:before { content: "\eaf9"; color: #ec705b; }
 div.hint p.hint_tips { border-color:#aab7e6;background:#e4eafd; }
-div.hint p.hint_tips:before { content: "\eaed"; color: #4e6b9e; }
+div.hint p.hint_tips:before { content: "\ed79"; color: #4e6b9e; }
 
 /*后台*/
 form.search { background: #f0f0f0; padding: 0.5em; -ms-text-size-adjust: 100%; /*用于解决IE10 for WP8字体过大的问题*/ }
