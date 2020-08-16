@@ -1,3 +1,57 @@
-<svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-up-circle-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-  <path fill-rule="evenodd" d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-7.5 3.5a.5.5 0 0 1-1 0V5.707L5.354 7.854a.5.5 0 1 1-.708-.708l3-3a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 5.707V11.5z"/>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   inkscape:version="1.0 (4035a4fb49, 2020-05-01)"
+   sodipodi:docname="arrow-up-circle-fill.svg"
+   id="svg2801"
+   version="1.1"
+   fill="currentColor"
+   class="bi bi-arrow-up-circle-fill"
+   viewBox="0 0 16 16"
+   height="1em"
+   width="1em">
+  <metadata
+     id="metadata2807">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs2805" />
+  <sodipodi:namedview
+     inkscape:current-layer="svg2801"
+     inkscape:window-maximized="1"
+     inkscape:window-y="-9"
+     inkscape:window-x="-9"
+     inkscape:cy="8"
+     inkscape:cx="8"
+     inkscape:zoom="50.0625"
+     showgrid="false"
+     id="namedview2803"
+     inkscape:window-height="1001"
+     inkscape:window-width="1920"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0"
+     guidetolerance="10"
+     gridtolerance="10"
+     objecttolerance="10"
+     borderopacity="1"
+     bordercolor="#666666"
+     pagecolor="#ffffff"
+     inkscape:document-rotation="0" />
+  <path
+     d="M 8.0390625,0 A 8,8 0 0 0 0,8 8,8 0 0 0 16,8 8,8 0 0 0 8.0390625,0 Z m -0.076172,4 a 0.5,0.5 0 0 1 0.390625,0.1464844 l 3.0000004,3 A 0.5006316,0.5006316 0 0 1 10.646484,7.8535156 L 8.5,5.7070312 V 11.5 a 0.5,0.5 0 0 1 -1,0 V 5.7070312 L 5.3535156,7.8535156 A 0.5006316,0.5006316 0 0 1 4.6464844,7.1464844 l 3,-3 A 0.5,0.5 0 0 1 7.9628906,4 Z"
+     style="fill:#000000;fill-opacity:1;fill-rule:evenodd"
+     id="path2799" />
 </svg>

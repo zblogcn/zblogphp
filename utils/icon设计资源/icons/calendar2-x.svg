@@ -1,5 +1,55 @@
-<svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-calendar2-x" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-  <path fill-rule="evenodd" d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM2 2a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1H2z"/>
-  <path d="M2.5 4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5H3a.5.5 0 0 1-.5-.5V4z"/>
-  <path stroke="#000" stroke-linecap="round" d="M9.5 8.5l-3 3m0-3l3 3"/>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   inkscape:version="1.0 (4035a4fb49, 2020-05-01)"
+   sodipodi:docname="calendar2-x.svg"
+   id="svg844"
+   version="1.1"
+   fill="currentColor"
+   class="bi bi-calendar2-x"
+   viewBox="0 0 16 16"
+   height="1em"
+   width="1em">
+  <metadata
+     id="metadata850">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs848" />
+  <sodipodi:namedview
+     inkscape:current-layer="svg844"
+     inkscape:window-maximized="0"
+     inkscape:window-y="0"
+     inkscape:window-x="0"
+     inkscape:cy="7.2289157"
+     inkscape:cx="8"
+     inkscape:zoom="51.875"
+     showgrid="false"
+     id="namedview846"
+     inkscape:window-height="952"
+     inkscape:window-width="1607"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0"
+     guidetolerance="10"
+     gridtolerance="10"
+     objecttolerance="10"
+     borderopacity="1"
+     bordercolor="#666666"
+     pagecolor="#ffffff" />
+  <path
+     d="M 3.4882812,0 A 0.5,0.5 0 0 0 3,0.5 V 1 H 2 A 2,2 0 0 0 0,3 v 11 a 2,2 0 0 0 2,2 h 12 a 2,2 0 0 0 2,-2 V 3 A 2,2 0 0 0 14,1 H 13 V 0.5 a 0.5,0.5 0 0 0 -1,0 V 1 H 4 V 0.5 A 0.5,0.5 0 0 0 3.5,0 0.5,0.5 0 0 0 3.4882812,0 Z M 2,2 h 12 a 1,1 0 0 1 1,1 v 11 a 1,1 0 0 1 -1,1 H 2 A 1,1 0 0 1 1,14 V 3 A 1,1 0 0 1 2,2 Z M 2.9882812,3.5 A 0.5,0.5 0 0 0 2.5,4 V 5 A 0.5,0.5 0 0 0 3,5.5 H 13 A 0.5,0.5 0 0 0 13.5,5 V 4 A 0.5,0.5 0 0 0 13,3.5 H 3 a 0.5,0.5 0 0 0 -0.011719,0 z"
+     id="path838" />
 </svg>

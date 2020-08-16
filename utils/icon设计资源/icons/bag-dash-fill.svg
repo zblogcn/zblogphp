@@ -1,3 +1,56 @@
-<svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-bag-dash-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-  <path fill-rule="evenodd" d="M5.5 4a2.5 2.5 0 0 1 5 0h-5zm-1 0H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4h-3.5a3.5 3.5 0 1 0-7 0zM6 9.5a.5.5 0 0 0 0 1h4a.5.5 0 0 0 0-1H6z"/>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   inkscape:version="1.0 (4035a4fb49, 2020-05-01)"
+   sodipodi:docname="bag-dash-fill.svg"
+   id="svg1996"
+   version="1.1"
+   fill="currentColor"
+   class="bi bi-bag-dash-fill"
+   viewBox="0 0 16 16"
+   height="1em"
+   width="1em">
+  <metadata
+     id="metadata2002">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs2000" />
+  <sodipodi:namedview
+     inkscape:current-layer="svg1996"
+     inkscape:window-maximized="1"
+     inkscape:window-y="-9"
+     inkscape:window-x="-9"
+     inkscape:cy="8"
+     inkscape:cx="8"
+     inkscape:zoom="51.875"
+     showgrid="false"
+     id="namedview1998"
+     inkscape:window-height="1001"
+     inkscape:window-width="1920"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0"
+     guidetolerance="10"
+     gridtolerance="10"
+     objecttolerance="10"
+     borderopacity="1"
+     bordercolor="#666666"
+     pagecolor="#ffffff" />
+  <path
+     d="M 7.9921875,0.5 A 3.5,3.5 0 0 0 4.5,4 H 1 v 10 a 2,2 0 0 0 2,2 h 10 a 2,2 0 0 0 2,-2 V 4 H 11.5 A 3.5,3.5 0 0 0 7.9921875,0.5 Z M 8.0625,1.5 A 2.5,2.5 0 0 1 10.5,4 h -5 A 2.5,2.5 0 0 1 8.0625,1.5 Z M 6,9.5 h 4 a 0.5,0.5 0 0 1 0,1 H 6 a 0.5,0.5 0 0 1 0,-1 z"
+     style="fill:#000000;fill-opacity:1;fill-rule:evenodd"
+     id="path1994" />
 </svg>

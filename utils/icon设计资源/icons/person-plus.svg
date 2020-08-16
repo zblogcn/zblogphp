@@ -1,3 +1,56 @@
-<svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-person-plus" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-  <path fill-rule="evenodd" d="M11 14s1 0 1-1-1-4-6-4-6 3-6 4 1 1 1 1h10zm-9.978-1h9.956a.274.274 0 0 0 .014-.002l.008-.002c-.001-.246-.154-.986-.832-1.664C9.516 10.68 8.289 10 6 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664a1.05 1.05 0 0 0 .022.004zM6 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm3-2a3 3 0 1 1-6 0 3 3 0 0 1 6 0zm4.5 0a.5.5 0 0 1 .5.5V7h1.5a.5.5 0 0 1 0 1H14v1.5a.5.5 0 0 1-1 0V8h-1.5a.5.5 0 0 1 0-1H13V5.5a.5.5 0 0 1 .5-.5z"/>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   inkscape:version="1.0 (4035a4fb49, 2020-05-01)"
+   sodipodi:docname="person-plus.svg"
+   id="svg4"
+   version="1.1"
+   fill="currentColor"
+   class="bi bi-person-plus"
+   viewBox="0 0 16 16"
+   height="1em"
+   width="1em">
+  <metadata
+     id="metadata10">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs8" />
+  <sodipodi:namedview
+     inkscape:current-layer="svg4"
+     inkscape:window-maximized="1"
+     inkscape:window-y="-9"
+     inkscape:window-x="-9"
+     inkscape:cy="8"
+     inkscape:cx="8"
+     inkscape:zoom="51.875"
+     showgrid="false"
+     id="namedview6"
+     inkscape:window-height="1001"
+     inkscape:window-width="1920"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0"
+     guidetolerance="10"
+     gridtolerance="10"
+     objecttolerance="10"
+     borderopacity="1"
+     bordercolor="#666666"
+     pagecolor="#ffffff" />
+  <path
+     d="m 11,14 c 0,0 1,0 1,-1 0,-1 -1,-4 -6,-4 -5,0 -6,3 -6,4 0,1 1,1 1,1 z M 1.022,13 h 9.956 a 0.274,0.274 0 0 0 0.014,-0.002 L 11,12.996 C 10.999,12.75 10.846,12.01 10.168,11.332 9.516,10.68 8.289,10 6,10 3.71,10 2.484,10.68 1.832,11.332 1.154,12.01 1.002,12.75 1,12.996 A 1.05,1.05 0 0 0 1.022,13 Z M 6,7 A 2,2 0 1 0 6,3 2,2 0 0 0 6,7 Z M 9,5 A 3,3 0 1 1 3,5 3,3 0 0 1 9,5 Z m 4.5,0 A 0.5,0.5 0 0 1 14,5.5 V 7 h 1.5 a 0.5,0.5 0 0 1 0,1 H 14 v 1.5 a 0.5,0.5 0 0 1 -1,0 V 8 h -1.5 a 0.5,0.5 0 0 1 0,-1 H 13 V 5.5 A 0.5,0.5 0 0 1 13.5,5 Z"
+     style="fill:#000000;fill-opacity:1;fill-rule:evenodd"
+     id="path2" />
 </svg>
