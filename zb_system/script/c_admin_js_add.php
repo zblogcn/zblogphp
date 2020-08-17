@@ -181,7 +181,6 @@ function statistic(s){
             setTimeout(function () {
                 $("#statistic i").removeClass("loading-status");
             }, 200);
-            $("#statistic i").removeClass("loading-status");
             $("#updatatime").show();
         },
         success: function(data){

@@ -4268,6 +4268,9 @@ function ApiGetPaginationInfo($pagebar = null)
     $info['PagePrevious'] = $pagebar->PagePrevious;
     $info['PageNext'] = $pagebar->PageNext;
 
+    foreach ($GLOBALS['hooks']['Filter_Plugin_API_Get_Pagination_Info'] as $fpname => &$fpsignal) {
+        $fpname($info, $pagebar);
+    }
     return $info;
 }
 

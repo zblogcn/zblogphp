@@ -2330,7 +2330,7 @@ DefinePluginFilter('Filter_Plugin_API_Get_Request_Filter');
 '**************************************************<
 '类型:Filter
 '名称:Filter_Plugin_API_Get_Pagination_Info
-'参数:&$info
+'参数:&$info,&$pagebar
 '说明:API 获取分页信息
 '调用:
 '**************************************************>
