@@ -788,7 +788,7 @@ function Admin_SiteInfo()
     if ($zbp->CheckRights('root')) {
         echo '&nbsp;<a href="javascript:statistic(\'' . BuildSafeCmdURL('act=misc&type=statistic&forced=1') . '\');" id="statistic"><i class="icon-arrow-repeat" style="vertical-align: text-bottom;"  alt="' . $zbp->lang['msg']['refresh_cache'] . '" title="' . $zbp->lang['msg']['refresh_cache'] . '"></i><small>' . $zbp->lang['msg']['refresh_cache'] . '</small>' . '</a>';
     }
-    echo ' <img id="statloading" style="display:none" src="../image/admin/loading.gif" alt=""/></th></tr>';
+    echo ' </th></tr>';
 
     if ((time() - (int) $zbp->cache->reload_statistic_time) > (6 * 24 * 60 * 60)) {
         echo '<script>$(document).ready(function(){ statistic(\'' . BuildSafeCmdURL('act=misc&type=statistic') . '\'); });</script>';
@@ -822,7 +822,7 @@ function Admin_SiteInfo()
     if ($zbp->CheckRights('root')) {
         echo '&nbsp;<a href="javascript:updateinfo(\'' . BuildSafeCmdURL('act=misc&type=updateinfo') . '\');"><i class="icon-arrow-repeat" style="vertical-align: text-bottom;" alt="' . $zbp->lang['msg']['refresh'] . '" title="' . $zbp->lang['msg']['refresh'] . '"></i><small>' . $zbp->lang['msg']['refresh'] . '</small></a>';
     }
-    echo ' <img id="infoloading" style="display:none" src="../image/admin/loading.gif" alt=""/></th></tr>';
+    echo ' </th></tr>';
 
     if ((time() - (int) $zbp->cache->reload_updateinfo_time) > (47 * 60 * 60) && $zbp->CheckRights('root') && $echoStatistic == true) {
         echo '<script>$(document).ready(function(){ updateinfo(\'' . BuildSafeCmdURL('act=misc&type=updateinfo') . '\'); });</script>';

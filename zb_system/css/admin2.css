@@ -355,3 +355,23 @@ span.button:hover { box-shadow: 0 0 1px #000; border-radius: 0.3em; padding: 2px
 
 #tbUpdateInfo>th>a{width:20px;}
 #tbUpdateInfo>th>a:hover{width:200px;}
+
+@keyframes refreshloading {
+    0%{
+      transform: rotate(0deg);
+      -ms-transform: rotate(0deg);
+      -webkit-transform: rotate(0deg);
+    }
+    100%{
+      transform: rotate(-360deg);
+      -ms-transform: rotate(-360deg);
+      -webkit-transform: rotate(-360deg);
+    }
+}
+
+@keyframes refreshloading {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+i.icon-arrow-repeat.loading-status:before { animation: refreshloading 1.5s linear infinite; display: inline-block; }
