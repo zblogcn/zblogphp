@@ -3513,6 +3513,9 @@
 .icon-window:before {
   content: "\ed75";
 }
+.icon-window-fill:before {
+  content: "\ed8c";
+}
 .icon-wrench:before {
   content: "\ed76";
 }

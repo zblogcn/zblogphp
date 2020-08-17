@@ -285,7 +285,7 @@ $(document).ready(function(){
     $("img[width='16']").each(function(){if($(this).parent().is("a")){$(this).parent().addClass("button")}});
 
     if ($("div.divHeader,div.divHeader2").first().css("background-image") == "none") {
-        AddHeaderFontIcon("icon-window");
+        AddHeaderFontIcon("icon-window-fill");
     }
 
     AutoHideTips();
@@ -294,7 +294,7 @@ $(document).ready(function(){
 
     var s = $("div.divHeader,div.divHeader2").first().css("background-image");
     if ( $("div.divHeader i,div.divHeader2 i").length <= 0 && (s != undefined && s.indexOf("none.gif") != -1) ) {
-        AddHeaderFontIcon("icon-window");
+        AddHeaderFontIcon("icon-window-fill");
     } 
 
     var startTime = new Date().getTime();
