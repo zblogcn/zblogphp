@@ -1988,9 +1988,7 @@ function Admin_ModuleMng()
 function Admin_PluginMng()
 {
     global $zbp;
-$zbp->ShowHint('good');
-$zbp->ShowHint('bad');
-$zbp->ShowHint('tips', '提示下啊');
+
     $allplugins = $zbp->LoadPlugins();
 
     echo '<div class="divHeader">' . $zbp->lang['msg']['plugin_manage'] . '</div>';
