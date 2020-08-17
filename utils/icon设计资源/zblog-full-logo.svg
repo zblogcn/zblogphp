@@ -23,7 +23,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -68,7 +68,7 @@
      inkscape:window-y="-9"
      inkscape:window-x="-9"
      inkscape:cy="32.734033"
-     inkscape:cx="106.35087"
+     inkscape:cx="101.10087"
      inkscape:zoom="4"
      showgrid="false"
      id="namedview7"
@@ -85,26 +85,27 @@
      inkscape:document-rotation="0" />
   <text
      xml:space="preserve"
-     style="font-style:normal;font-weight:normal;font-size:44.7848px;line-height:1.25;font-family:sans-serif;fill:#000000;fill-opacity:1;stroke:none;stroke-width:8.3971"
-     x="64.60392"
-     y="47.618736"
+     style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:44.7848px;line-height:1.25;font-family:'Eras Demi ITC';-inkscape-font-specification:'Eras Demi ITC';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:1px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:8.3971"
+     x="65.389633"
+     y="46.425549"
      id="text852"
      transform="scale(0.95455115,1.0476128)"><tspan
        sodipodi:role="line"
        id="tspan850"
-       x="64.60392"
-       y="47.618736"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:44.7848px;font-family:'Eras Bd BT';-inkscape-font-specification:'Eras Bd BT';stroke-width:8.3971">Z-Blog</tspan></text>
+       x="65.389633"
+       y="46.425549"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:44.7848px;font-family:'Eras Demi ITC';-inkscape-font-specification:'Eras Demi ITC';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:8.3971"
+       dy="0">Z-Blog</tspan></text>
   <text
      xml:space="preserve"
      style="font-style:normal;font-weight:normal;font-size:13.1193px;line-height:1.25;font-family:sans-serif;fill:#000000;fill-opacity:1;stroke:none;stroke-width:2.45986"
-     x="112.2638"
+     x="114.15147"
      y="64.054886"
      id="text856"
      transform="scale(1.0595062,0.94383592)"><tspan
        sodipodi:role="line"
        id="tspan854"
-       x="112.2638"
+       x="114.15147"
        y="64.054886"
        style="font-size:13.1193px;stroke-width:2.45986">for PHP</tspan></text>
   <path
