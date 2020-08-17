@@ -1,6 +1,68 @@
-<?xml version="1.0" encoding="utf-8"?>
-<svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-zoom-in" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-  <g style="" transform="matrix(1.242819, 0, 0, 1.247261, -1.9236, -2.006514)">
-    <path id="path1" transform="rotate(0,8,8) translate(1.6,1.6) scale(0.4,0.4)  " fill="#050505" d="M32,8.2999992L32,25.5 17.399994,32 17.399994,14.700001z M0,8.2000008L14.699997,14.700001 14.699997,32 0,25.5z M15.800003,0L32,6.2999992 15.800003,13.200001 0.099990845,6.2999992z"/>
-  </g>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   inkscape:version="1.0 (4035a4fb49, 2020-05-01)"
+   sodipodi:docname="zblog-appcenter.svg"
+   id="svg5"
+   version="1.1"
+   fill="currentColor"
+   class="bi bi-zoom-in"
+   viewBox="0 0 16 16"
+   height="1em"
+   width="1em">
+  <metadata
+     id="metadata11">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs9" />
+  <sodipodi:namedview
+     inkscape:current-layer="svg5"
+     inkscape:window-maximized="1"
+     inkscape:window-y="-9"
+     inkscape:window-x="-9"
+     inkscape:cy="9.8615623"
+     inkscape:cx="8"
+     inkscape:zoom="36.681164"
+     showgrid="false"
+     id="namedview7"
+     inkscape:window-height="1001"
+     inkscape:window-width="1920"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0"
+     guidetolerance="10"
+     gridtolerance="10"
+     objecttolerance="10"
+     borderopacity="1"
+     bordercolor="#666666"
+     pagecolor="#ffffff" />
+  <path
+     style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke-width:0.158544"
+     d="m 15.820546,8.7136471 c 0,-1.6834919 0.02456,-2.3721927 0.05452,-1.5304472 0.03003,0.8417463 0.03003,2.2191486 0,3.0608951 -0.03003,0.841745 -0.05452,0.153045 -0.05452,-1.5304479 z"
+     id="path853" />
+  <path
+     style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke-width:0.158544"
+     d="m 0.16405916,8.638991 c -1.4899e-4,-1.6424308 0.0244456,-2.3347061 0.0546554,-1.5383896 0.0302097,0.7963173 0.0303309,2.140124 2.6935e-4,2.9862386 -0.0300574,0.846114 -0.0547765,0.194582 -0.0549289,-1.447849 z"
+     id="path851" />
+  <path
+     style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke-width:0.158544"
+     d="M 11.7661,5.6160197 C 13.417718,4.7328857 14.841346,3.8918482 14.92971,3.7470478 15.02619,3.5889743 15.029981,3.3880413 14.93921,3.2441951 14.856042,3.1124271 13.394534,2.34323 11.691398,1.5348682 7.5716302,-0.42049794 7.8650054,-0.41900585 4.0945128,1.4962234 2.5324228,2.2896901 1.1792969,3.0632693 1.0875671,3.2152888 c -0.10165754,0.1684723 -0.10738192,0.3705397 -0.01466,0.517492 0.083667,0.1326007 1.5072927,0.971452 3.1636112,1.8641136 3.9679429,2.1384952 3.5678506,2.1374789 7.5295457,0.019125 z"
+     id="path867" />
+  <path
+     style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke-width:0.16045"
+     d="M 12.072112,14.411369 C 16.190411,12.525206 15.957586,12.893605 15.885216,8.377904 15.830493,4.9641176 15.775518,4.7501254 15.008766,4.9672034 14.83282,5.0170198 13.355579,5.8091576 11.726012,6.7275167 10.096444,7.645876 8.5793501,8.4398386 8.3546927,8.491878 7.7576177,8.6301838 7.3629269,8.4553382 3.9987754,6.5622518 0.83812661,4.7836809 0.41099924,4.6498904 0.19797035,5.3717162 0.02815884,5.9471056 0.0849936,11.182571 0.26753242,11.779584 c 0.22782285,0.745117 0.74836348,1.117711 3.22321458,2.30713 1.140608,0.548177 2.444956,1.175947 2.8985516,1.395041 1.4796875,0.714702 1.9986183,0.61696 5.6828134,-1.070386 z"
+     id="path865" />
 </svg>
