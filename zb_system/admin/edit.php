@@ -361,7 +361,7 @@ require ZBP_PATH . 'zb_system/admin/admin_top.php';
     } else {
         echo '<script>ActiveLeftMenu("aArticleMng");</script>';
     }
-    echo '<script>AddHeaderFontIcon("icon-pencil-square");</script>';
+    echo '<script>AddHeaderFontIcon("icon-pencil-square-fill");</script>';
     ?>
 
     <script>
