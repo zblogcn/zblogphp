@@ -580,7 +580,7 @@ function CreateModuleDiv($m, $button = true)
     global $zbp;
 
     echo '<div class="widget widget_source_' . $m->SourceType . ' widget_id_' . $m->FileName . '">';
-    echo '<div class="widget-title"><i class="icon-box module-icon"></i>' . (($m->SourceType != 'theme' || $m->Source == 'plugin_' . $zbp->theme) ? $m->Name : $m->FileName) . '';
+    echo '<div class="widget-title"><i class="icon-layout-wtf module-icon"></i>' . (($m->SourceType != 'theme' || $m->Source == 'plugin_' . $zbp->theme) ? $m->Name : $m->FileName) . '';
 
     if ($button) {
         if (!$m->IsIncludeFile) {
@@ -1640,7 +1640,7 @@ function Admin_ThemeMng()
             $theme->name = $zbp->lang[$theme->id]['theme_name'];
         }
 
-        if ($theme->IsUsed() && $theme->path) {
+        if ($theme->IsUsed() && $theme->path && !in_array('AppCentre', $zbp->GetPreActivePlugin())) {
             echo '<a href="' . $theme->GetManageUrl() . '" title="' . $zbp->lang['msg']['manage'] . '"><i class="icon-tools"></i></a>&nbsp;&nbsp;';
         } else {
             /** @todo ICON */
