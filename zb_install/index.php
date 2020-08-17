@@ -75,6 +75,7 @@ if ($zbp->option['ZC_DATABASE_TYPE'] !== '') {
   <script src="../zb_system/script/jquery-ui.custom.min.js"></script>
   <link rel="stylesheet" href="../zb_system/css/jquery-ui.custom.css" type="text/css" media="screen" />
   <link rel="stylesheet" href="../zb_system/css/admin3.css" type="text/css" media="screen" />
+  <link rel="stylesheet" href="../zb_system/image/icon/icon.css" type="text/css" media="screen" />  
   <title>Z-BlogPHP <?php echo ZC_BLOG_VERSION . ' ' . $zbp->lang['zb_install']['install_program']; ?> </title>
   <?php Include_AddonAdminFont(); ?>
 </head>
@@ -217,7 +218,7 @@ function Setup0()
   <dl>
     <dt></dt>
     <dd id="ddleft">
-      <div id="headerimg"><img src="../zb_system/image/admin/install.png" alt="Z-BlogPHP" />
+      <div id="headerimg"><img src="../zb_system/image/admin/logo.svg" alt="Z-BlogPHP" />
         <strong><?php echo $zbp->lang['zb_install']['install_program']; ?></strong></div>
       <div class="left"><?php echo $zbp->lang['zb_install']['install_progress']; ?>&nbsp;</div>
       <div id="setup0" class="left"></div>
@@ -244,7 +245,7 @@ function Setup1()
   <dl>
     <dt></dt>
     <dd id="ddleft">
-      <div id="headerimg"><img src="../zb_system/image/admin/install.png" alt="Z-BlogPHP" />
+      <div id="headerimg"><img src="../zb_system/image/admin/logo.svg" alt="Z-BlogPHP" />
         <strong><?php echo $zbp->lang['zb_install']['install_program']; ?></strong></div>
       <div class="left"><?php echo $zbp->lang['zb_install']['install_progress']; ?>&nbsp;</div>
       <div id="setup1" class="left"></div>
@@ -332,7 +333,7 @@ function Setup2()
   <dl>
     <dt></dt>
     <dd id="ddleft">
-      <div id="headerimg"><img src="../zb_system/image/admin/install.png" alt="Z-BlogPHP" />
+      <div id="headerimg"><img src="../zb_system/image/admin/logo.svg" alt="Z-BlogPHP" />
         <strong><?php echo $zbp->lang['zb_install']['install_program']; ?></strong></div>
       <div class="left"><?php echo $zbp->lang['zb_install']['install_progress']; ?>&nbsp;</div>
       <div id="setup2" class="left"></div>
@@ -630,7 +631,7 @@ function Setup3()
   <dl>
     <dt></dt>
     <dd id="ddleft">
-      <div id="headerimg"><img src="../zb_system/image/admin/install.png" alt="Z-BlogPHP" />
+      <div id="headerimg"><img src="../zb_system/image/admin/logo.svg" alt="Z-BlogPHP" />
         <strong><?php echo $zbp->lang['zb_install']['install_program']; ?></strong></div>
       <div class="left"><?php echo $zbp->lang['zb_install']['install_progress']; ?>&nbsp;</div>
       <div id="setup3" class="left"></div>
@@ -892,7 +893,7 @@ function Setup4()
   <dl>
     <dt></dt>
     <dd id="ddleft">
-      <div id="headerimg"><img src="../zb_system/image/admin/install.png" alt="Z-BlogPHP" />
+      <div id="headerimg"><img src="../zb_system/image/admin/logo.svg" alt="Z-BlogPHP" />
         <strong><?php echo $zbp->lang['zb_install']['install_program']; ?></strong></div>
       <div class="left"><?php echo $zbp->lang['zb_install']['install_progress']; ?>&nbsp;</div>
       <div id="setup4" class="left"></div>

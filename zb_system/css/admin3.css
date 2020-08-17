@@ -48,8 +48,8 @@ th:last-child{border-right:none;}
 }
 .bingo,
 .error { display: inline-block; width: 16px; height: 16px; }
-.bingo { color: green; background: url(../image/admin/ok.png) no-repeat left center }
-.error { color: red; background: url(../image/admin/exclamation.png) no-repeat left center }
+.bingo:before { color: green; content: "\ea62";font-family: 'icomoon'!important; }
+.error:before { color: red; content: "\ed79";font-family: 'icomoon'!important; }
 
 /*进 度 条*/
 .left { float: left; margin: 12px 0; }

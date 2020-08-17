@@ -33,7 +33,7 @@ img { border: none; }
 .bg { position: absolute; top: 0; left: 0; z-index: -1000; height: 260px; width: 100%; background: #3a6ea5; }
 #wrapper { width: 100%; padding: 0; margin: 0 auto; }
 .logo { width: 200px; height: 70px; margin: 170px auto 60px auto; }
-.logo img { width: 200px; height: 70px; background: url("../image/admin/logo.png"); }
+.logo img { width: 200px; height: 70px; background: url("../image/admin/logo_white.svg"); }
 input { float: left; vertical-align: middle; }
 input[type="text"],input[type="password"] { border: 1px solid #3a6ea5; }
 input[type="checkbox"] { margin: 8px 0 0 0; padding: 0; }
