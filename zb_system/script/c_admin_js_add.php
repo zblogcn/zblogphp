@@ -189,7 +189,7 @@ function statistic(s){
             $("#tbStatistic tr:first").after(data);
             setTimeout(function () {
                 $("#statistic i").removeClass("loading-status");
-            }, 200);
+            }, 500);
             $("#updatatime").show();
         }
     });
@@ -204,7 +204,7 @@ function updateinfo(s){
             $("#tbUpdateInfo tr:first").after(data);
             setTimeout(function () {
                 $("#tbUpdateInfo i").removeClass("loading-status");
-            }, 200);
+            }, 500);
         }
     );
 }
