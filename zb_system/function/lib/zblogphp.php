@@ -1780,6 +1780,16 @@ class ZBlogPHP
         $languagePtr = include $languagePath;
         $this->langpacklist[] = array($type, $id, $language);
         if ($type == 'system') {
+            if (is_readable($this->path . 'zb_system/defend/en.php')) {
+                $defend_en = include $this->path . 'zb_system/defend/en.php';
+                $nowlang = $languagePtr;
+                $this->lang =  $nowlang + $defend_en;
+                foreach ($this->lang as $key => $value) {
+                    if (is_array($value)) {
+                        $this->lang[$key] = $nowlang[$key] + $defend_en[$key];
+                    }
+                }
+            }
             $this->langs = json_decode(json_encode($this->lang));
         } else {
             if ($id != '' && isset($this->lang[$id])) {

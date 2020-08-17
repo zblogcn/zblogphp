@@ -271,6 +271,8 @@ return array(
         'get_text_intro'                    => '文章編輯時獲取純文本摘要',
         'update_db'                         => '請點擊該鏈接升級數據庫結構。',
         'enable_post_batch_delete'          => '啟用文章批量刪除',
+        'enable_api'                        => '啟用API協議',
+        'enable_xmlrpc'                     => '啟用XML-RPC協議',
         ''                                  => '',
     ),
 
