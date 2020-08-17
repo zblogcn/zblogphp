@@ -167,8 +167,9 @@ function notify(s){
 
 
 function statistic(s){
-    $("#statloading").show();
+    $("#statistic i").addClass("loading-status");
     $("#updatatime").hide();
+
     $.ajax({
         type: "GET",
         url: s+"&tm="+Math.random(),
@@ -177,13 +178,18 @@ function statistic(s){
             if( xhr.status == "500") {
                  alert('<?php echo $lang['msg']['refresh_cache']; ?>\n\r<?php echo $lang['msg']['operation_failed']; ?>');
             }
-            $("#statloading").hide();
+            setTimeout(function () {
+                $("#statistic i").removeClass("loading-status");
+            }, 200);
+            $("#statistic i").removeClass("loading-status");
             $("#updatatime").show();
         },
         success: function(data){
             $("#tbStatistic tr:first ~ tr").remove();
             $("#tbStatistic tr:first").after(data);
-            $("#statloading").hide();
+            setTimeout(function () {
+                $("#statistic i").removeClass("loading-status");
+            }, 200);
             $("#updatatime").show();
         }
     });
@@ -191,12 +197,14 @@ function statistic(s){
 }
 
 function updateinfo(s){
-    $("#infoloading").show();
+    $("#tbUpdateInfo i").addClass("loading-status");
     $.get(s+"&tm="+Math.random(),{},
         function(data){
             $("#tbUpdateInfo tr:first ~ tr").remove();
             $("#tbUpdateInfo tr:first").after(data);
-            $("#infoloading").hide();
+            setTimeout(function () {
+                $("#tbUpdateInfo i").removeClass("loading-status");
+            }, 200);
         }
     );
 }
