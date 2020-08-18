@@ -7,15 +7,15 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   inkscape:version="1.0 (4035a4fb49, 2020-05-01)"
-   sodipodi:docname="stickies.svg"
-   id="svg1427"
-   version="1.1"
-   fill="currentColor"
-   class="bi bi-stickies"
-   viewBox="0 0 16 16"
+   width="1em"
    height="1em"
-   width="1em">
+   viewBox="0 0 16 16"
+   class="bi bi-stickies"
+   fill="currentColor"
+   version="1.1"
+   id="svg1427"
+   sodipodi:docname="stickies.svg"
+   inkscape:version="1.0 (4035a4fb49, 2020-05-01)">
   <metadata
      id="metadata1433">
     <rdf:RDF>
@@ -30,67 +30,68 @@
   <defs
      id="defs1431" />
   <sodipodi:namedview
-     showguides="false"
-     inkscape:current-layer="svg1427"
-     inkscape:window-maximized="1"
-     inkscape:window-y="-9"
-     inkscape:window-x="-9"
-     inkscape:cy="7.4207449"
-     inkscape:cx="4.9446839"
-     inkscape:zoom="45.254834"
-     showgrid="false"
-     id="namedview1429"
-     inkscape:window-height="1001"
-     inkscape:window-width="1920"
-     inkscape:pageshadow="2"
-     inkscape:pageopacity="0"
-     guidetolerance="10"
-     gridtolerance="10"
-     objecttolerance="10"
-     borderopacity="1"
+     inkscape:document-rotation="0"
+     pagecolor="#ffffff"
      bordercolor="#666666"
-     pagecolor="#ffffff" />
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1413"
+     inkscape:window-height="1030"
+     id="namedview1429"
+     showgrid="false"
+     inkscape:zoom="45.254834"
+     inkscape:cx="4.9446839"
+     inkscape:cy="7.3765507"
+     inkscape:window-x="64"
+     inkscape:window-y="0"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="svg1427"
+     showguides="false" />
   <path
-     style="fill:#000000;fill-opacity:1"
-     id="path1421"
+     fill-rule="evenodd"
      d="M0 1.5A1.5 1.5 0 0 1 1.5 0H13a1 1 0 0 1 1 1H1.5a.5.5 0 0 0-.5.5V14a1 1 0 0 1-1-1V1.5z"
-     fill-rule="evenodd" />
+     id="path1421"
+     style="fill:#000000;fill-opacity:1" />
   <path
-     style="fill:#000000;fill-opacity:1"
-     id="path1423"
+     fill-rule="evenodd"
      d="M2 3.5A1.5 1.5 0 0 1 3.5 2h11A1.5 1.5 0 0 1 16 3.5v6.086a1.5 1.5 0 0 1-.44 1.06l-4.914 4.915a1.5 1.5 0 0 1-1.06.439H3.5A1.5 1.5 0 0 1 2 14.5v-11zM3.5 3a.5.5 0 0 0-.5.5v11a.5.5 0 0 0 .5.5h6.086a.5.5 0 0 0 .353-.146l4.915-4.915A.5.5 0 0 0 15 9.586V3.5a.5.5 0 0 0-.5-.5h-11z"
-     fill-rule="evenodd" />
+     id="path1423"
+     style="fill:#000000;fill-opacity:1" />
   <path
-     style="fill:#000000;fill-opacity:1"
-     id="path1425"
+     fill-rule="evenodd"
      d="M10.5 10a.5.5 0 0 0-.5.5v5H9v-5A1.5 1.5 0 0 1 10.5 9h5v1h-5z"
-     fill-rule="evenodd" />
+     id="path1425"
+     style="fill:#000000;fill-opacity:1" />
   <rect
-     y="3.585542"
-     x="3.7204821"
-     height="1.979396"
-     width="10.46747"
+     style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke-width:1.15795"
      id="rect2066"
-     style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke-width:1.25425" />
+     width="10.406051"
+     height="1.6970567"
+     x="3.7598045"
+     y="3.9562695" />
   <rect
-     y="6.3638463"
-     x="3.7287164"
-     height="1.9328445"
-     width="10.478513"
+     style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke-width:1.17171"
      id="rect2070"
-     style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke-width:1.31403" />
+     width="10.456942"
+     height="1.5400248"
+     x="3.750288"
+     y="6.7566657" />
   <rect
-     y="9.3706856"
-     x="3.7148597"
-     height="2.0441375"
-     width="4.5569324"
+     style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke-width:1.16816"
      id="rect2072"
-     style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke-width:1.24449" />
+     width="4.5569324"
+     height="1.8010695"
+     x="3.8032482"
+     y="9.3043938" />
   <rect
-     style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke-width:1.22137"
-     id="rect2072-0"
+     y="12.168858"
+     x="3.7164834"
+     height="1.7546467"
      width="4.6453204"
-     height="1.9314233"
-     x="3.6943862"
-     y="12.36773" />
+     id="rect2072-0"
+     style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke-width:1.16413" />
 </svg>

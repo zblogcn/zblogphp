@@ -57,17 +57,17 @@ function AdminColor_Css()
     echo '<link rel="stylesheet" type="text/css" href="' . $zbp->host . 'zb_users/plugin/AdminColor/css.php?id=' . $zbp->Config('AdminColor')->ColorID . '&hast=' . crc32($zbp->Config('AdminColor')) . '&v=' . $app->modified . '"/>' . "\r\n";
 
     if ($zbp->Config('AdminColor')->ColorID != 10) {
-        echo '<script type="text/javascript">var lang_admincolor_closemenu = "' . $zbp->lang['AdminColor']['closemenu'] . '";var lang_admincolor_expandmenu = "' . $zbp->lang['AdminColor']['expandmenu'] . '"</script>' . "\r\n";
+        echo '<script type="text/javascript">var lang_admincolor_closemenu2 = "' . $zbp->lang['AdminColor']['closemenu'] . '";var lang_admincolor_closemenu = "<i class=icon-caret-left-fill></i>' . $zbp->lang['AdminColor']['closemenu'] . '";var lang_admincolor_expandmenu2 = "' . $zbp->lang['AdminColor']['expandmenu'] . '";var lang_admincolor_expandmenu = "<i class=icon-caret-right-fill></i>' . $zbp->lang['AdminColor']['expandmenu'] . '"</script>' . "\r\n";
         Add_Filter_Plugin('Filter_Plugin_Admin_LeftMenu', 'AdminColor_Add_Button');
         $hm = GetVars('admincolor_hm', 'COOKIE');
         if ($hm == '1') {
-            echo '<style type="text/css">.left{width:36px;background-color:#ededed;}.left #leftmenu span{margin-left:10px;padding-left:100px;}div.main,section.main{padding-left:46px;}</style>';
+            echo '<style type="text/css">.left{width:36px;background-color:#ededed;}.left #leftmenu span{margin-left:10px;padding-left:22px;}.left #leftmenu span i {margin-right:18px;}div.main,section.main{padding-left:46px;}</style>';
         }
     } else {
         Add_Filter_Plugin('Filter_Plugin_Admin_LeftMenu', 'AdminColor_Add_Button2');
         $hm = GetVars('admincolor_hm', 'COOKIE');
         if ($hm == '1') {
-            echo '<style type="text/css">.left{width:36px;background-color:#333333;}.left #leftmenu span{margin-left:10px;padding-left:100px;}div.main,section.main{padding-left:46px;}body{background-position:-125px center;}.left #leftmenu #nav_admincolor2 span{margin-left:10px;padding-left:20px ;background-position:0px 12px;}</style>';
+            echo '<style type="text/css">.left{width:36px;background-color:#333333;}.left #leftmenu span{margin-left:10px;padding-left:22px;}.left #leftmenu span i {margin-right:18px;}div.main,section.main{padding-left:46px;}body{background-position:-125px center;}.left #leftmenu #nav_admincolor2 span{margin-left:10px;padding-left:20px ;background-position:0px 12px;}</style>';
         }
     }
 }
@@ -75,28 +75,28 @@ function AdminColor_Css()
 function AdminColor_Add_Button(&$leftmenus)
 {
     global $zbp;
-    if ($zbp->Config('AdminColor')->SlidingButton == false) {
+    if ($GLOBALS['blogversion'] < 172360 || $zbp->Config('AdminColor')->SlidingButton == false) {
         return;
     }
     $hm = GetVars('admincolor_hm', 'COOKIE');
     if ($hm == '1') {
-        $leftmenus['nav_admincolor'] = MakeLeftMenu(5, $zbp->lang['AdminColor']['expandmenu'], "javascript:admincolor_showMenu();", "nav_admincolor", "aAdminColor", $zbp->host . "zb_users/plugin/AdminColor/images/arror2.png");
+        $leftmenus['nav_admincolor'] = MakeLeftMenu(5, $zbp->lang['AdminColor']['expandmenu'], "javascript:admincolor_showMenu();", "nav_admincolor", "aAdminColor", $zbp->host . "zb_users/plugin/AdminColor/images/arror2.png", 'icon-caret-right-fill');
     } else {
-        $leftmenus['nav_admincolor'] = MakeLeftMenu(5, $zbp->lang['AdminColor']['closemenu'], "javascript:admincolor_hideMenu();", "nav_admincolor", "aAdminColor", $zbp->host . "zb_users/plugin/AdminColor/images/arror.png");
+        $leftmenus['nav_admincolor'] = MakeLeftMenu(5, $zbp->lang['AdminColor']['closemenu'], "javascript:admincolor_hideMenu();", "nav_admincolor", "aAdminColor", $zbp->host . "zb_users/plugin/AdminColor/images/arror.png", 'icon-caret-left-fill');
     }
 }
 
 function AdminColor_Add_Button2(&$leftmenus)
 {
     global $zbp;
-    if ($zbp->Config('AdminColor')->SlidingButton == false) {
+    if ($GLOBALS['blogversion'] < 172360 || $zbp->Config('AdminColor')->SlidingButton == false) {
         return;
     }
     $hm = GetVars('admincolor_hm', 'COOKIE');
     if ($hm == '1') {
-        array_push($leftmenus, MakeLeftMenu(5, '', "javascript:admincolor_showMenu();", "nav_admincolor2", "aAdminColor2", $zbp->host . "zb_users/plugin/AdminColor/images/arror2.png"));
+        array_push($leftmenus, MakeLeftMenu(5, '', "javascript:admincolor_showMenu();", "nav_admincolor2", "aAdminColor2", $zbp->host . "zb_users/plugin/AdminColor/images/arror2.png", 'icon-caret-right-fill'));
     } else {
-        array_push($leftmenus, MakeLeftMenu(5, '', "javascript:admincolor_hideMenu();", "nav_admincolor2", "aAdminColor2", $zbp->host . "zb_users/plugin/AdminColor/images/arror.png"));
+        array_push($leftmenus, MakeLeftMenu(5, '', "javascript:admincolor_hideMenu();", "nav_admincolor2", "aAdminColor2", $zbp->host . "zb_users/plugin/AdminColor/images/arror.png", 'icon-caret-left-fill'));
     }
 }
 
@@ -125,32 +125,33 @@ function AdminColor_AddJS()
     global $zbp;
     $js1 = <<<EOD
 function admincolor_hideMenu(){
+ $("#aAdminColor").attr('href','javascript:admincolor_showMenu()');
+ $("#aAdminColor").find('span').html(lang_admincolor_expandmenu);
+ $("#aAdminColor").attr('title',lang_admincolor_expandmenu2);
  $("div.left,aside.left").css({"background-color":"#ededed"});
  $("div.left,aside.left").animate({"width":"36px"});
  $("div.main,section.main").animate({"padding-left":"46px"});
- $("#leftmenu span").animate({"margin-left":"10px","padding-left":"100px"}); 
- 
- $("#aAdminColor>span").css("background-image","url("+bloghost + "zb_users/plugin/AdminColor/images/arror2.png)");
- $("#aAdminColor").attr('href','javascript:admincolor_showMenu()');
- $("#aAdminColor").find('span').html(lang_admincolor_expandmenu);
+ $("#leftmenu span").animate({"margin-left":"10px","padding-left":"22px"}); 
+ $("#leftmenu span i").animate({"margin-right":"8px","margin-right":"18px"}); 
+
  SetCookie('admincolor_hm','1',365);
  admincolor_tooptip();
- $("#aAdminColor").attr('title',lang_admincolor_expandmenu);
+
 }
 
 function admincolor_showMenu(){
+ $("#aAdminColor").attr('href','javascript:admincolor_hideMenu()');
+ $("#aAdminColor").find('span').html(lang_admincolor_closemenu);
+ $("#aAdminColor").attr('title',lang_admincolor_closemenu2);
  $("div.left,aside.left").css({"background-color":"transparent"});
  $("div.left,aside.left").animate({"width":"140px"});
  $("div.main,section.main").animate({"padding-left":"150px"});
  $("#leftmenu span").animate({"margin-left":"25px","padding-left":"22px"});
- 
- $("#aAdminColor>span").css("background-image","url("+bloghost + "zb_users/plugin/AdminColor/images/arror.png)");
- $("#aAdminColor").attr('href','javascript:admincolor_hideMenu()');
- $("#aAdminColor").find('span').html(lang_admincolor_closemenu);
+ $("#leftmenu span i").animate({"margin-right":"18px","margin-right":"8px"}); 
+
  SetCookie('admincolor_hm','',-1); 
  $("#leftmenu a").tooltip({disabled: true});
  //$("#leftmenu a").tooltip( "destroy" );
- $("#aAdminColor").attr('title',lang_admincolor_closemenu);
 }
 
 function admincolor_tooptip(){
@@ -177,27 +178,31 @@ EOD;
 
     $js2 = <<<EOD
 function admincolor_hideMenu(){
+ $("#aAdminColor2").attr('href','javascript:admincolor_showMenu()');
+ $("#aAdminColor2 span i").attr('class','icon-caret-right-fill');
  $("div.left,aside.left").css({"background-color":"#333333"});
  $("div.left,aside.left").animate({"width":"36px"});
  $("div.main,section.main").animate({"padding-left":"46px"});
- $("#leftmenu span").animate({"margin-left":"10px","padding-left":"100px"}); 
+ $("#leftmenu span").animate({"margin-left":"10px","padding-left":"22px"}); 
+ $("#leftmenu span i").animate({"margin-right":"8px","margin-right":"18px"}); 
+
  $("#leftmenu #nav_admincolor2 span").animate({"margin-left":"10px","padding-left":"20px","background-positionX":"0px"}); 
  $("body").animate({"background-positionX":"-125px"}); 
- $("#aAdminColor2>span").css("background-image","url("+bloghost + "zb_users/plugin/AdminColor/images/arror2.png)");
- $("#aAdminColor2").attr('href','javascript:admincolor_showMenu()');
  SetCookie('admincolor_hm','1',365);
  admincolor_tooptip();
 }
 
 function admincolor_showMenu(){
+ $("#aAdminColor2").attr('href','javascript:admincolor_hideMenu()');
+ $("#aAdminColor2 span i").attr('class','icon-caret-left-fill');
  $("div.left,aside.left").css({"background-color":"#333333"});
  $("div.left,aside.left").animate({"width":"160px"});
  $("div.main,section.main").animate({"padding-left":"170px"});
  $("#leftmenu span").animate({"margin-left":"25px","padding-left":"29px"});
+ $("#leftmenu span i").animate({"margin-right":"18px","margin-right":"8px"}); 
+
  $("#leftmenu #nav_admincolor2 span").animate({"padding-left":"60px","background-positionX":"40px"}); 
  $("body").animate({"background-positionX":"+0px"}); 
- $("#aAdminColor2>span").css("background-image","url("+bloghost + "zb_users/plugin/AdminColor/images/arror.png)");
- $("#aAdminColor2").attr('href','javascript:admincolor_hideMenu()');
  SetCookie('admincolor_hm','',-1); 
  $("#leftmenu a").tooltip({disabled: true});
  //$("#leftmenu a").tooltip( "destroy" );
@@ -227,32 +232,30 @@ EOD;
 
     $js3 = <<<EOD
 function admincolor_hideMenu(){
+ $("#aAdminColor").attr('href','javascript:admincolor_showMenu()');
+ $("#aAdminColor").find('span').html(lang_admincolor_expandmenu);
+ $("#aAdminColor").attr('title',lang_admincolor_expandmenu2);
  $("div.left,aside.left").css({"background-color":"#e3eaf3"});
  $("div.left,aside.left").animate({"width":"36px"});
  $("div.main,section.main").animate({"padding-left":"46px"});
- $("#leftmenu span").animate({"margin-left":"10px","padding-left":"100px"}); 
- 
- $("#aAdminColor>span").css("background-image","url("+bloghost + "zb_users/plugin/AdminColor/images/arror2.png)");
- $("#aAdminColor").attr('href','javascript:admincolor_showMenu()');
- $("#aAdminColor").find('span').html(lang_admincolor_expandmenu);
+ $("#leftmenu span").animate({"margin-left":"10px","padding-left":"22px"}); 
+ $("#leftmenu span i").animate({"margin-right":"8px","margin-right":"18px"});  
  SetCookie('admincolor_hm','1',365);
  admincolor_tooptip();
- $("#aAdminColor").attr('title',lang_admincolor_expandmenu);
 }
 
 function admincolor_showMenu(){
+ $("#aAdminColor").attr('href','javascript:admincolor_hideMenu()');
+ $("#aAdminColor").find('span').html(lang_admincolor_closemenu);
+ $("#aAdminColor").attr('title',lang_admincolor_closemenu2);
  $("div.left,aside.left").css({"background-color":"Transparent"});
  $("div.left,aside.left").animate({"width":"140px"});
  $("div.main,section.main").animate({"padding-left":"150px"});
  $("#leftmenu span").animate({"margin-left":"25px","padding-left":"22px"});
- 
- $("#aAdminColor>span").css("background-image","url("+bloghost + "zb_users/plugin/AdminColor/images/arror.png)");
- $("#aAdminColor").attr('href','javascript:admincolor_hideMenu()');
- $("#aAdminColor").find('span').html(lang_admincolor_closemenu);
+ $("#leftmenu span i").animate({"margin-right":"18px","margin-right":"8px"}); 
  SetCookie('admincolor_hm','',-1); 
  $("#leftmenu a").tooltip({disabled: true});
  //$("#leftmenu a").tooltip( "destroy" );
- $("#aAdminColor").attr('title',lang_admincolor_closemenu);
 }
 
 function admincolor_tooptip(){
