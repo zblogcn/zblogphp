@@ -166,14 +166,14 @@ function ResponseAdmin_TopMenu()
     global $zbp;
     global $topmenus;
 
-    $topmenus[] = MakeTopMenu("admin", $zbp->lang['msg']['dashboard'], $zbp->host . "zb_system/cmd.php?act=admin", "", "");
-    $topmenus[] = MakeTopMenu("SettingMng", @$zbp->lang['msg']['web_settings'], $zbp->host . "zb_system/cmd.php?act=SettingMng", "", "");
+    $topmenus[] = MakeTopMenu("admin", $zbp->lang['msg']['dashboard'], $zbp->host . "zb_system/cmd.php?act=admin", "", "", "icon-house-door-fill");
+    $topmenus[] = MakeTopMenu("SettingMng", @$zbp->lang['msg']['web_settings'], $zbp->host . "zb_system/cmd.php?act=SettingMng", "", "", "icon-gear-fill");
 
     foreach ($GLOBALS['hooks']['Filter_Plugin_Admin_TopMenu'] as $fpname => &$fpsignal) {
         $fpname($topmenus);
     }
 
-    $topmenus[] = MakeTopMenu("misc", $zbp->lang['msg']['official_website'], "https://www.zblogcn.com/", "_blank", "");
+    $topmenus[] = MakeTopMenu("misc", $zbp->lang['msg']['official_website'], "https://www.zblogcn.com/", "_blank", "", "icon-zblog-square-fill");
 
     foreach ($topmenus as $m) {
         echo $m;
@@ -218,10 +218,11 @@ function MakeSubMenu($strName, $strUrl, $strClass = 'm-left', $strTarget = '', $
  * @param $strUrl
  * @param $strTarget
  * @param $strLiId
+ * @param $strIconClass
  *
  * @return null|string
  */
-function MakeTopMenu($requireAction, $strName, $strUrl, $strTarget, $strLiId)
+function MakeTopMenu($requireAction, $strName, $strUrl, $strTarget, $strLiId, $strIconClass = "")
 {
     global $zbp;
 
@@ -238,7 +239,8 @@ function MakeTopMenu($requireAction, $strName, $strUrl, $strTarget, $strLiId)
     if ($strLiId == "") {
         $strLiId = "topmenu" . $AdminTopMenuCount;
     }
-    $tmp = "<li id=\"" . $strLiId . "\"><a href=\"" . $strUrl . "\" target=\"" . $strTarget . "\" title=\"" . htmlspecialchars($strName) . "\">" . $strName . "</a></li>";
+    $strIconElem = $strIconClass !== "" ? "<i class=\"" . $strIconClass . "\"></i><span>" : "";
+    $tmp = "<li id=\"" . $strLiId . "\"><a href=\"" . $strUrl . "\" target=\"" . $strTarget . "\" title=\"" . htmlspecialchars($strName) . "\">" . $strIconElem . $strName . "</span></a></li>";
 
     return $tmp;
 }
