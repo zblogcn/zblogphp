@@ -9,7 +9,7 @@
 <include>include.php</include>
 <level>1</level>
 <author>
-  <name>zxasd</name>
+  <name>zx.asd</name>
   <email>rainbowsoft@gmail.com</email>
   <url>http://www.zdevo.com/</url>
 </author>
@@ -19,9 +19,9 @@
   <url></url>
 </source>
 <adapted>151935</adapted>
-<version>4.7</version>
+<version>4.8</version>
 <pubdate>2013-07-07</pubdate>
-<modified>2020-06-05</modified>
+<modified>2020-08-18</modified>
 <price>0</price>
 <phpver>5.2</phpver>
 <advanced>

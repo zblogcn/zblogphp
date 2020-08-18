@@ -205,8 +205,8 @@ height: 40px;
 .left #leftmenu #nav_admincolor2 span {
     float: left;
     width: auto;
-    height: 30px;
-    line-height: 30px;
+    height: 36px;
+    line-height: 36px;
     text-align: left;
     cursor: pointer;
     margin-left: 25px;

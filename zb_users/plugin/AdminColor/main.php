@@ -135,7 +135,7 @@ require $blogpath . 'zb_system/admin/admin_top.php';
                   <td>
 <input id="ac_TableShadow" name="ac_TableShadow" class="checkbox" type="text" value="<?php echo $zbp->Config('AdminColor')->TableShadow; ?>"  size="100"/><br/>
                   </td>
-                <tr height="32">
+                <tr height="32" <?php if ($GLOBALS['blogversion'] < 172360)echo 'style="display:none;"';?>>
                   <td width="30%" align="left"><p><b>· 显示收缩菜单</b></p></td>
                   <td>
 <input id="ac_HeaderPath" name="ac_SlidingButton" class="checkbox" type="text" value="<?php echo $zbp->Config('AdminColor')->SlidingButton; ?>"  size="100"/><br/>
