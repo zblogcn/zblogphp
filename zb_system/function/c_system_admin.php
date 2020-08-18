@@ -788,7 +788,7 @@ function Admin_SiteInfo()
 
     echo '<table class="tableFull tableBorder table_striped table_hover" id="tbStatistic"><tr><th colspan="4"  scope="col">&nbsp;' . $zbp->lang['msg']['site_analyze'];
     if ($zbp->CheckRights('root')) {
-        echo '&nbsp;<a href="javascript:statistic(\'' . BuildSafeCmdURL('act=misc&type=statistic&forced=1') . '\');" id="statistic"><i class="icon-arrow-repeat" style="vertical-align: text-bottom;"  alt="' . $zbp->lang['msg']['refresh_cache'] . '" title="' . $zbp->lang['msg']['refresh_cache'] . '"></i><small>' . $zbp->lang['msg']['refresh_cache'] . '</small>' . '</a>';
+        echo '&nbsp;<a href="javascript:statistic(\'' . BuildSafeCmdURL('act=misc&type=statistic&forced=1') . '\');" id="statistic"><i class="icon-arrow-repeat" style="font-size:small"  alt="' . $zbp->lang['msg']['refresh_cache'] . '" title="' . $zbp->lang['msg']['refresh_cache'] . '"></i><small>' . $zbp->lang['msg']['refresh_cache'] . '</small>' . '</a>';
     }
     echo ' </th></tr>';
 
@@ -822,7 +822,7 @@ function Admin_SiteInfo()
 
     echo '<table class="tableFull tableBorder table_striped table_hover" id="tbUpdateInfo"><tr><th>&nbsp;' . $zbp->lang['msg']['latest_news'];
     if ($zbp->CheckRights('root')) {
-        echo '&nbsp;<a href="javascript:updateinfo(\'' . BuildSafeCmdURL('act=misc&type=updateinfo') . '\');"><i class="icon-arrow-repeat" style="vertical-align: text-bottom;" alt="' . $zbp->lang['msg']['refresh'] . '" title="' . $zbp->lang['msg']['refresh'] . '"></i><small>' . $zbp->lang['msg']['refresh'] . '</small></a>';
+        echo '&nbsp;<a href="javascript:updateinfo(\'' . BuildSafeCmdURL('act=misc&type=updateinfo') . '\');"><i class="icon-arrow-repeat" style="font-size:small;" alt="' . $zbp->lang['msg']['refresh'] . '" title="' . $zbp->lang['msg']['refresh'] . '"></i><small>' . $zbp->lang['msg']['refresh'] . '</small></a>';
     }
     echo ' </th></tr>';
 
