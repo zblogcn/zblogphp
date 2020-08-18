@@ -1522,10 +1522,8 @@ function PostArticle()
 			if(is_file($imgs)){
 				//缩略图路径
 				$imgNew = ImgToThumbUrl($imgs);
-				//引入函数库
-				include_once ZBP_PATH.'zb_system/function/lib/image.php';
 				//缩略并裁剪
-				if(ImageClipThumb($imgs,$imgNew,$zbp->option['ZC_ARTICLE_THUMB_WIDTH'],$zbp->option['ZC_ARTICLE_THUMB_HEIGHT'])){
+				if(Image::ClipThumb($imgs,$imgNew,$zbp->option['ZC_ARTICLE_THUMB_WIDTH'],$zbp->option['ZC_ARTICLE_THUMB_HEIGHT'])){
 					//最终存入数据库
 					$_POST['Thumb'] = ImgToThumbUrl('{#ZC_BLOG_HOST#}'.$img);
 				}
