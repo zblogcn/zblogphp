@@ -8,7 +8,7 @@ if (!defined('ZBP_PATH')) {
  * Z-Blog with PHP.
  *
  * @author  Z-BlogPHP Team
- * @version 1.0 2020-07-02
+ * @version 1.1 2020-08-18
  */
 
 $setting_keys = array(
@@ -38,6 +38,8 @@ $setting_keys = array(
     'ZC_UPLOAD_FILETYPE',
     'ZC_UPLOAD_FILESIZE',
     'ZC_ARTICLE_INTRO_WITH_TEXT',
+    'ZC_ARTICLE_THUMB_WIDTH',
+    'ZC_ARTICLE_THUMB_HEIGHT',
     'ZC_MANAGE_COUNT',
     'ZC_POST_BATCH_DELETE',
 );

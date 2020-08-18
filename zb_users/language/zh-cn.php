@@ -127,6 +127,8 @@ return array(
         'blog_language'                     => '网站语言',
         'allow_upload_type'                 => '允许上传文件的类型',
         'allow_upload_size'                 => '允许上传文件的大小(单位MB)',
+        'thumb_width'                       => '文章生成缩略图的宽(单位PX)',
+        'thumb_height'                      => '文章生成缩略图的高(单位PX)',
         'debug_mode'                        => '调试模式',
         'display_count'                     => '列表页显示文章的数量',
         'pagebar_count'                     => '翻页条显示翻页的数量',

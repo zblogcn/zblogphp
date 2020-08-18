@@ -131,6 +131,8 @@ return array(
         'blog_language'                     => 'Site Language',
         'allow_upload_type'                 => 'Allows to Upload a File of Type',
         'allow_upload_size'                 => 'Allow Upload File Size (in MB)',
+        'thumb_width'                       => 'Width of article generated thumbnail (in PX)',
+        'thumb_height'                      => 'Height of article generated thumbnail (in PX)',
         'debug_mode'                        => 'Development Mode',
         'display_count'                     => 'List Page Displays the Number of Posts',
         'pagebar_count'                     => 'Pagebar Displays the Number of Pages',

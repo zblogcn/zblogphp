@@ -146,6 +146,10 @@ return array(
     'ZC_ARTICLE_EXCERPT_MAX' => 250,
     'ZC_ARTICLE_INTRO_WITH_TEXT' => true,
 
+    // '缩略图的宽高
+    'ZC_ARTICLE_THUMB_WIDTH' => 300,
+    'ZC_ARTICLE_THUMB_HEIGHT' => 300,
+
     // '侧栏评论最大字数
     'ZC_COMMENT_EXCERPT_MAX' => 20,
 
