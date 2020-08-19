@@ -12,10 +12,10 @@ class Image
     /**
      * 图片裁切
      *
-     * @param string $sourcefile	原图片路径(绝对路径/abc.jpg)
-     * @param string $destfile 		裁切后生成新名称(绝对路径/rename.jpg)
-     * @param int $forcedwidth 		生成的宽度
-     * @param int $forcedheight 	生成的高度
+     * @param string $sourcefile    原图片路径(绝对路径/abc.jpg)
+     * @param string $destfile      裁切后生成新名称(绝对路径/rename.jpg)
+     * @param int $forcedwidth      生成的宽度
+     * @param int $forcedheight     生成的高度
      * return array array('filesize'=>0, 'width'=>0, 'height'=>0)
      * Image::Thumb('xxx.jpg', 'xxx_thumb.jpg', 200, 200);
      */
@@ -99,17 +99,17 @@ class Image
         is_file($tmpfile) && unlink($tmpfile);
         imagedestroy($img_dst);
         return $r;
-	}
+    }
 
     /**
      * 图片裁切
      *
-     * @param string $sourcefile	原图片路径(绝对路径/abc.jpg)
-     * @param string $destfile 		裁切后生成新名称(绝对路径/rename.jpg)
-     * @param int $clipx 			被裁切图片的X坐标
-     * @param int $clipy 			被裁切图片的Y坐标
-     * @param int $clipwidth 		被裁区域的宽度
-     * @param int $clipheight 		被裁区域的高度
+     * @param string $sourcefile    原图片路径(绝对路径/abc.jpg)
+     * @param string $destfile      裁切后生成新名称(绝对路径/rename.jpg)
+     * @param int $clipx            被裁切图片的X坐标
+     * @param int $clipy            被裁切图片的Y坐标
+     * @param int $clipwidth        被裁区域的宽度
+     * @param int $clipheight       被裁区域的高度
      * Image::Clip('xxx/x.jpg', 'xxx/newx.jpg', 10, 40, 150, 150)
      */
     public static function Clip($sourcefile, $destfile, $clipx, $clipy, $clipwidth, $clipheight)
@@ -157,7 +157,7 @@ class Image
         copy($tmpfile, $destfile);
         is_file($tmpfile) && @unlink($tmpfile);
         return $n;
-	}
+    }
 
     // 先裁切后缩略，因为确定了，width, height, 不需要返回宽高。
     public static function ClipThumb($sourcefile, $destfile, $forcedwidth = 80, $forcedheight = 80)

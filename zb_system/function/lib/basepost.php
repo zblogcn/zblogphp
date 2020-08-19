@@ -128,6 +128,7 @@ class BasePost extends Base
             case 'Prev':
             case 'Next':
             case 'RelatedList':
+            case 'FirstImg':
                 return;
             case 'Template':
                 if ($value == $zbp->GetPostType_Template($this->Type)) {
