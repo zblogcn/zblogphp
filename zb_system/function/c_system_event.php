@@ -1512,20 +1512,44 @@ function PostArticle()
 		//缩略图处理
 		$intro = isset($_POST['Intro'])?$_POST['Intro']:'';
 		//获取内容的第一张图片
-		preg_match_all('/<img[^>]*?\s+src="([^\s"]{5,})"(\/?>|\s[^<]*?>)/i', $intro . $_POST['Content'], $imgs);
+		preg_match_all('/<img[^>]*?\s+src="([^\s"]{5,})"[^>]*?>/i', $intro . $_POST['Content'], $imgs);
 		$img = isset($imgs[1][0]) ? $imgs[1][0] : false;
 		if($img){
-			//将图片地址的host干掉
-			$img = str_replace($zbp->host,'',$img);
-			//绝对地址
-			$imgs = $zbp->path.str_replace($zbp->host,'',$img);
-			if(is_file($imgs)){
-				//缩略图路径
-				$imgNew = ImgToThumbUrl($imgs);
-				//缩略并裁剪
-				if(Image::ClipThumb($imgs,$imgNew,$zbp->option['ZC_ARTICLE_THUMB_WIDTH'],$zbp->option['ZC_ARTICLE_THUMB_HEIGHT'])){
-					//最终存入数据库
-					$_POST['Thumb'] = ImgToThumbUrl('{#ZC_BLOG_HOST#}'.$img);
+			//判断是否为本地图片
+			if(stripos($img,$zbp->host) !== false) {
+				//将图片地址的host干掉
+				$img = str_replace($zbp->host,'',$img);
+				//绝对地址
+				$imgs = $zbp->path.str_replace($zbp->host,'',$img);
+				if(is_file($imgs)){
+					//缩略图路径
+					$imgNew = ImgToThumbUrl($imgs);
+					//缩略并裁剪
+					if(Image::ClipThumb($imgs,$imgNew,$zbp->option['ZC_ARTICLE_THUMB_WIDTH'],$zbp->option['ZC_ARTICLE_THUMB_HEIGHT'])){
+						$_POST['Thumb'] = ImgToThumbUrl('{#ZC_BLOG_HOST#}'.$img);
+					}
+				}
+			}else{
+				$http = Network::Create();
+				$http->open('GET',$img);
+				$http->send();
+				if ($http->status == 200){
+					$r = $http->responseText;
+					if($r){
+						$path = 'zb_users/upload/' . date('Y/m') . '/';
+						$dir = ZBP_PATH.$path;
+						//如果设置的上传目录不存在，则创建
+						if (!file_exists($dir)) @mkdir($dir,0777,true);
+						$ext = strtolower(substr(strrchr($img, '.'), 1));
+						$name = date('Ymd').(microtime(true)*10000).'.'.$ext;
+						$url = $dir.$name;
+						if(file_put_contents($url,$r)){
+							$imgNew = ImgToThumbUrl($url);
+							if(Image::ClipThumb($url,$imgNew,$zbp->option['ZC_ARTICLE_THUMB_WIDTH'],$zbp->option['ZC_ARTICLE_THUMB_HEIGHT'])){
+								$_POST['Thumb'] = '{#ZC_BLOG_HOST#}'.$path.ImgToThumbUrl($name);
+							}
+						}
+					}
 				}
 			}
 		}

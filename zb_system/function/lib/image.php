@@ -19,7 +19,7 @@ class Image
      * return array array('filesize'=>0, 'width'=>0, 'height'=>0)
      * Image::Thumb('xxx.jpg', 'xxx_thumb.jpg', 200, 200);
      */
-    public static function Thumb($sourcefile, $destfile, $forcedwidth = 80, $forcedheight = 80)
+    public static function Thumb($sourcefile, $destfile, $forcedwidth = 300, $forcedheight = 300)
     {
         $return = array('filesize' => 0, 'width' => 0, 'height' => 0);
         $destext = strtolower(substr(strrchr($destfile, '.'), 1));

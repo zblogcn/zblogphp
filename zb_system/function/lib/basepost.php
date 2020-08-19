@@ -314,6 +314,9 @@ class BasePost extends Base
                 return $toptype;
             case 'TypeName':
                 return $zbp->GetPostType_Name($this->Type);
+            case 'Img':
+                $pos = strripos($this->Thumb,'_thumb');
+                return substr($this->Thumb,0,$pos).substr($this->Thumb,$pos+6);
             default:
                 foreach ($GLOBALS['hooks']['Filter_Plugin_Post_Get'] as $fpname => &$fpsignal) {
                     $fpreturn = $fpname($this, $name);
