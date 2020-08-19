@@ -775,6 +775,9 @@ class Template
     private function GetAllFileDir($dir)
     {
         global $zbp;
+        if (!file_exists($dir)) {
+            return ;
+        }
         if (function_exists('scandir')) {
             foreach (scandir($dir) as $d) {
                 if (is_dir($dir . $d)) {
