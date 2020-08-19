@@ -146,7 +146,7 @@ function ResponseAdmin_LeftMenu()
     $leftmenus[] = "<li class='split'><hr/></li>";
 
     $leftmenus['nav_theme'] = MakeLeftMenu("ThemeMng", $zbp->lang['msg']['theme_manage'], $zbp->host . "zb_system/cmd.php?act=ThemeMng", "nav_theme", "aThemeMng", "", "icon-grid-1x2-fill");
-    $leftmenus['nav_module'] = MakeLeftMenu("ModuleMng", $zbp->lang['msg']['module_manage'], $zbp->host . "zb_system/cmd.php?act=ModuleMng", "nav_module", "aModuleMng", "", "icon-grid-fill");
+    $leftmenus['nav_module'] = MakeLeftMenu("ModuleMng", $zbp->lang['msg']['module_manage'], $zbp->host . "zb_system/cmd.php?act=ModuleMng", "nav_module", "aModuleMng", "", "icon-grid-3x3-gap-fill");
     $leftmenus['nav_plugin'] = MakeLeftMenu("PluginMng", $zbp->lang['msg']['plugin_manage'], $zbp->host . "zb_system/cmd.php?act=PluginMng", "nav_plugin", "aPluginMng", "", "icon-puzzle-fill");
 
     foreach ($GLOBALS['hooks']['Filter_Plugin_Admin_LeftMenu'] as $fpname => &$fpsignal) {
@@ -1979,7 +1979,7 @@ function Admin_ModuleMng()
         });
     </script>
     <?php
-    echo '<script>AddHeaderFontIcon("icon-grid-fill");</script>';
+    echo '<script>AddHeaderFontIcon("icon-grid-3x3-gap-fill");</script>';
 }
 
 //###############################################################################################################
@@ -2045,7 +2045,7 @@ function Admin_PluginMng()
 
         if ($plugin->type == 'plugin') {
             if ($plugin->IsUsed()) {
-                echo '<a href="' . BuildSafeCmdURL('act=PluginDis&amp;name=' . htmlspecialchars($plugin->id)) . '" title="' . $zbp->lang['msg']['disable'] . '"><i class="icon-power on"></i></a>';
+                echo '<a href="' . BuildSafeCmdURL('act=PluginDis&amp;name=' . htmlspecialchars($plugin->id)) . '" title="' . $zbp->lang['msg']['disable'] . '"><i class="icon-cancel on"></i></a>';
             } else {
                 echo '<a href="' . BuildSafeCmdURL('act=PluginEnb&amp;name=' . htmlspecialchars($plugin->id)) . '" title="' . $zbp->lang['msg']['enable'] . '"><i class="icon-power off"></i></a>';
             }

@@ -334,24 +334,8 @@
 .icon-bag-plus-fill:before {
   content: "\e96e";
 }
-.icon-bag-x .path1:before {
+.icon-bag-x:before {
   content: "\e96f";
-  color: rgb(68, 68, 68);
-}
-.icon-bag-x .path2:before {
-  content: "\e970";
-  margin-left: -1em;
-  color: rgb(68, 68, 68);
-}
-.icon-bag-x .path3:before {
-  content: "\e971";
-  margin-left: -1em;
-  color: rgb(0, 0, 0);
-}
-.icon-bag-x .path4:before {
-  content: "\e972";
-  margin-left: -1em;
-  color: rgb(0, 0, 0);
 }
 .icon-bag-x-fill:before {
   content: "\e973";
@@ -473,19 +457,8 @@
 .icon-bookmark-star-fill:before {
   content: "\e99c";
 }
-.icon-bookmark-x .path1:before {
+.icon-bookmark-x:before {
   content: "\e99d";
-  color: rgb(68, 68, 68);
-}
-.icon-bookmark-x .path2:before {
-  content: "\e99e";
-  margin-left: -1em;
-  color: rgb(0, 0, 0);
-}
-.icon-bookmark-x .path3:before {
-  content: "\e99f";
-  margin-left: -1em;
-  color: rgb(0, 0, 0);
 }
 .icon-bookmark-x-fill:before {
   content: "\e9a0";
@@ -841,6 +814,9 @@
 .icon-camera2:before {
   content: "\ea0c";
 }
+.icon-cancel:before {
+  content: "\e99e";
+}
 .icon-capslock:before {
   content: "\ea14";
 }
@@ -1171,24 +1147,8 @@
 .icon-clipboard-plus:before {
   content: "\ea81";
 }
-.icon-clipboard-x .path1:before {
+.icon-clipboard-x:before {
   content: "\ea82";
-  color: rgb(68, 68, 68);
-}
-.icon-clipboard-x .path2:before {
-  content: "\ea83";
-  margin-left: -1em;
-  color: rgb(68, 68, 68);
-}
-.icon-clipboard-x .path3:before {
-  content: "\ea84";
-  margin-left: -1em;
-  color: rgb(0, 0, 0);
-}
-.icon-clipboard-x .path4:before {
-  content: "\ea85";
-  margin-left: -1em;
-  color: rgb(0, 0, 0);
 }
 .icon-clock:before {
   content: "\ea86";
@@ -2702,19 +2662,8 @@
 .icon-person-x:before {
   content: "\ec74";
 }
-.icon-person-x-fill .path1:before {
+.icon-person-x-fill:before {
   content: "\ec75";
-  color: rgb(68, 68, 68);
-}
-.icon-person-x-fill .path2:before {
-  content: "\ec76";
-  margin-left: -1em;
-  color: rgb(0, 0, 0);
-}
-.icon-person-x-fill .path3:before {
-  content: "\ec77";
-  margin-left: -1em;
-  color: rgb(0, 0, 0);
 }
 .icon-phone:before {
   content: "\ec78";
@@ -2746,6 +2695,9 @@
 .icon-play:before {
   content: "\ec81";
 }
+.icon-play-circle-outline:before {
+  content: "\e972";
+}
 .icon-play-fill:before {
   content: "\ec82";
 }
@@ -2758,36 +2710,14 @@
 .icon-plus:before {
   content: "\ec85";
 }
-.icon-plus-circle .path1:before {
+.icon-plus-circle:before {
   content: "\ec86";
-  color: rgb(68, 68, 68);
-}
-.icon-plus-circle .path2:before {
-  content: "\ec87";
-  margin-left: -1em;
-  color: rgb(0, 0, 0);
-}
-.icon-plus-circle .path3:before {
-  content: "\ec88";
-  margin-left: -1em;
-  color: rgb(0, 0, 0);
 }
 .icon-plus-circle-fill:before {
   content: "\ec89";
 }
-.icon-plus-square .path1:before {
+.icon-plus-square:before {
   content: "\ec8a";
-  color: rgb(68, 68, 68);
-}
-.icon-plus-square .path2:before {
-  content: "\ec8b";
-  margin-left: -1em;
-  color: rgb(0, 0, 0);
-}
-.icon-plus-square .path3:before {
-  content: "\ec8c";
-  margin-left: -1em;
-  color: rgb(0, 0, 0);
 }
 .icon-plus-square-fill:before {
   content: "\ec8d";
@@ -2942,19 +2872,8 @@
 .icon-shield-slash-fill:before {
   content: "\ecbf";
 }
-.icon-shield-x .path1:before {
+.icon-shield-x:before {
   content: "\ecc0";
-  color: rgb(68, 68, 68);
-}
-.icon-shield-x .path2:before {
-  content: "\ecc1";
-  margin-left: -1em;
-  color: rgb(0, 0, 0);
-}
-.icon-shield-x .path3:before {
-  content: "\ecc2";
-  margin-left: -1em;
-  color: rgb(0, 0, 0);
 }
 .icon-shift:before {
   content: "\ecc3";
@@ -3022,19 +2941,8 @@
 .icon-slash:before {
   content: "\ecd8";
 }
-.icon-slash-circle .path1:before {
+.icon-slash-circle:before {
   content: "\ecd9";
-  color: rgb(68, 68, 68);
-}
-.icon-slash-circle .path2:before {
-  content: "\ecda";
-  margin-left: -1em;
-  color: rgb(0, 0, 0);
-}
-.icon-slash-circle .path3:before {
-  content: "\ecdb";
-  margin-left: -1em;
-  color: rgb(0, 0, 0);
 }
 .icon-slash-circle-fill:before {
   content: "\ecdc";
@@ -3254,33 +3162,11 @@
 .icon-telephone-plus-fill:before {
   content: "\ed22";
 }
-.icon-telephone-x .path1:before {
+.icon-telephone-x:before {
   content: "\ed23";
-  color: rgb(68, 68, 68);
 }
-.icon-telephone-x .path2:before {
-  content: "\ed24";
-  margin-left: -1em;
-  color: rgb(0, 0, 0);
-}
-.icon-telephone-x .path3:before {
-  content: "\ed25";
-  margin-left: -1em;
-  color: rgb(0, 0, 0);
-}
-.icon-telephone-x-fill .path1:before {
+.icon-telephone-x-fill:before {
   content: "\ed26";
-  color: rgb(68, 68, 68);
-}
-.icon-telephone-x-fill .path2:before {
-  content: "\ed27";
-  margin-left: -1em;
-  color: rgb(0, 0, 0);
-}
-.icon-telephone-x-fill .path3:before {
-  content: "\ed28";
-  margin-left: -1em;
-  color: rgb(0, 0, 0);
 }
 .icon-terminal:before {
   content: "\ed29";
@@ -3534,36 +3420,14 @@
 .icon-x-diamond-fill:before {
   content: "\ed7b";
 }
-.icon-x-octagon .path1:before {
+.icon-x-octagon:before {
   content: "\ed7c";
-  color: rgb(68, 68, 68);
-}
-.icon-x-octagon .path2:before {
-  content: "\ed7d";
-  margin-left: -1em;
-  color: rgb(0, 0, 0);
-}
-.icon-x-octagon .path3:before {
-  content: "\ed7e";
-  margin-left: -1em;
-  color: rgb(0, 0, 0);
 }
 .icon-x-octagon-fill:before {
   content: "\ed7f";
 }
-.icon-x-square .path1:before {
+.icon-x-square:before {
   content: "\ed80";
-  color: rgb(68, 68, 68);
-}
-.icon-x-square .path2:before {
-  content: "\ed81";
-  margin-left: -1em;
-  color: rgb(0, 0, 0);
-}
-.icon-x-square .path3:before {
-  content: "\ed82";
-  margin-left: -1em;
-  color: rgb(0, 0, 0);
 }
 .icon-x-square-fill:before {
   content: "\ed83";
@@ -3573,6 +3437,12 @@
 }
 .icon-zblog-appcenter:before {
   content: "\ed85";
+}
+.icon-zblog-circle:before {
+  content: "\e970";
+}
+.icon-zblog-circle-fill:before {
+  content: "\e971";
 }
 .icon-zblog-full-logo:before {
   content: "\ed86";
