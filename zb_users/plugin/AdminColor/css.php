@@ -233,7 +233,6 @@ header div.logo img{
     height: 60px;
     background-position: -5px -5px;
 }
-header div.logo img{background:url("images/sl.png")}
 .pagebar a{border:1px solid white;}
 body[class~=login],body[class~=error],body[class~=short]{background:none;}
 body[class~=login] div.bg,body[class~=error] div.bg,body[class~=short] div.bg {background: #3399cc;}
@@ -243,10 +242,12 @@ body[class~=login] input.button, body[class~=login] input[type="submit"], body[c
 body[class~=login] input[type="text"], body[class~=login] input[type="password"] {border-color: #3399cc;}
 body[class~=login] input.button:hover {background-color: #3a6ea5;}
 ';
-
     if ($GLOBALS['blogversion'] < 162090 && stripos($_SERVER['HTTP_REFERER'], 'login.php')) {
         $c .= 'body{background:none;}';
     }
+	//if ($GLOBALS['blogversion'] < 172360) {
+		$c .= 'header div.logo img{background:url("images/logo.svg")}';
+	//}
 }
 if ($zbp->Config('AdminColor')->TableShadow) {
     $c .= 'table,.pane,.theme,form.search{box-shadow:0 0 0.5em rgba(0,0,0,0.2);}';
