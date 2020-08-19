@@ -59,6 +59,7 @@ label { cursor: pointer; }
 .user { position: absolute; right: 13px; top: 10px; width: 400px; height: 40px; text-align: right; color: #ffffff; }
 .user #avatar { float: right; width: 40px; height: 40px; margin-left: 10px; margin-top: 0px; }
 .username { padding: 0; height: 20px; line-height: 20px; overflow: hidden; }
+.username span { vertical-align: middle; }
 .userbtn { padding: 0; height: 20px; line-height: 20px; }
 .userbtn a { padding: 0; margin-left: 15px; color: #ffffff; height: 20px; line-height: 20px; vertical-align: top; }
 .userbtn a span { vertical-align: middle; }
