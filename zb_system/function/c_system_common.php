@@ -1982,3 +1982,16 @@ function RecHtmlSpecialChars(&$arr)
         }
     }
 }
+
+/**
+ * 原图转为缩略图地址
+ *
+ * @param  string $path 原图片地址
+ * @return string      缩略图地址
+ */
+function ImgToThumbUrl($path){
+    $pos = strripos($path,'.');
+    $start = substr($path,0,$pos);
+    $end = substr($path,$pos);
+    return $start.'_thumb'.$end;
+}
