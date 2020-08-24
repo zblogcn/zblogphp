@@ -6,6 +6,6 @@
 </select>
 {else}
 {foreach $urls as $url}
-<li><a href="{$url.Url}">{$url.Name} ({$url.Count})</a></li>
+<li><a title="{$url.Name}" href="{$url.Url}">{$url.Name} ({$url.Count})</a></li>
 {/foreach}
 {/if}
