@@ -534,7 +534,7 @@ return array(
         '94' => 'You have been on this page for %s hours. To protect you from attacks, you may need to refresh the page.',
         '95' => 'API is disabled!',
         '96' => 'API is not available!',
-        '97' => 'Get information failed',
+        '97' => 'The resource does not exist.',
     ),
 
     'offical_urls' => array(
