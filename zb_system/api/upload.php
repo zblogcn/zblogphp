@@ -76,6 +76,13 @@ function api_upload_delete()
     ApiCheckAuth(true, 'UploadDel');
 
     ApiVerifyCSRF();
+
+    if ($zbp->GetUploadByID((int) GetVars('id', 'GET'))->ID == 0) {
+        return array(
+            'code' => 404,
+            'message' => $GLOBALS['lang']['error']['97'],
+        );
+    }
     if (DelUpload()) {
         return array(
             'message' => $GLOBALS['lang']['msg']['operation_succeed'],

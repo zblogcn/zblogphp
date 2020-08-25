@@ -84,6 +84,13 @@ function api_module_delete()
     ApiCheckAuth(true, 'ModuleDel');
 
     ApiVerifyCSRF();
+
+    if ($zbp->GetModuleByID((int) GetVars('id', 'GET'))->ID == 0) {
+        return array(
+            'code' => 404,
+            'message' => $GLOBALS['lang']['error']['97'],
+        );
+    }
     if (DelModule()) {
         $zbp->BuildModule();
         $zbp->SaveCache();

@@ -114,6 +114,12 @@ function api_post_delete()
 
     ApiVerifyCSRF();
 
+    if ($zbp->GetPostByID((int) GetVars('id'))->ID == 0) {
+        return array(
+            'code' => 404,
+            'message' => $GLOBALS['lang']['error']['97'],
+        );
+    }
     $type = strtolower((string) GetVars('type', 'POST'));
 
     if (!empty($type) && $type == 'page') {

@@ -89,6 +89,12 @@ function api_category_delete()
     ApiCheckAuth(true, 'CategoryDel');
 
     try {
+        if ($zbp->GetCategoryByID((int) GetVars('id'))->ID == 0) {
+            return array(
+                'code' => 404,
+                'message' => $GLOBALS['lang']['error']['97'],
+            );
+        }
         if (!DelCategory()) {
             return array(
                 'message' => $GLOBALS['lang']['msg']['operation_failed'],

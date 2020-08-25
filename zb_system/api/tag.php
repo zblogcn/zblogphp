@@ -92,6 +92,12 @@ function api_tag_delete()
     ApiVerifyCSRF();
     ApiCheckAuth(true, 'TagDel');
 
+    if ($zbp->GetTagByID((int) GetVars('id', 'GET'))->ID == 0) {
+        return array(
+            'code' => 404,
+            'message' => $GLOBALS['lang']['error']['97'],
+        );
+    }
     if (!DelTag()) {
         return array(
             'message' => $GLOBALS['lang']['msg']['operation_failed'],

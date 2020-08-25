@@ -81,6 +81,13 @@ function api_comment_delete()
     ApiCheckAuth(true, 'CommentDel');
 
     ApiVerifyCSRF();
+
+    if ($zbp->GetCommentByID((int) GetVars('id', 'GET'))->ID == 0) {
+        return array(
+            'code' => 404,
+            'message' => $GLOBALS['lang']['error']['97'],
+        );
+    }
     if (DelComment()) {
         $zbp->BuildModule();
         $zbp->SaveCache();

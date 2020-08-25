@@ -152,6 +152,13 @@ function api_member_delete()
     ApiCheckAuth(true, 'MemberDel');
 
     ApiVerifyCSRF();
+
+    if ($zbp->GetMemberByID((int) GetVars('id', 'GET'))->ID == 0) {
+        return array(
+            'code' => 404,
+            'message' => $GLOBALS['lang']['error']['97'],
+        );
+    }
     if (DelMember()) {
         $zbp->BuildModule();
         $zbp->SaveCache();
