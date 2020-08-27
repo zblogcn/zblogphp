@@ -2962,8 +2962,10 @@ class ZBlogPHP
                 $this->tagsbyname[$v->Name] = &$this->tags[$v->ID];
                 $t[$v->Name] = &$this->tags[$v->ID];
             }
-
-            return array_merge($b, $t);
+            foreach ($t as $key => $value) {
+                $b[$key] = $value;
+            }
+            return $b;
         }
     }
 
