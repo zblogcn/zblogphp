@@ -947,12 +947,18 @@ function Setup4()
                 $cts = str_replace(' autoincrement', '', $cts);
                 $zbp->option['ZC_SQLITE_NAME'] = trim(GetVars('dbsqlite_name', 'POST'));
                 $zbp->option['ZC_SQLITE_PRE'] = trim(GetVars('dbsqlite_pre', 'POST'));
+                if (trim($zbp->option['ZC_SQLITE_PRE'] == '')) {
+                    $zbp->option['ZC_SQLITE_PRE'] == 'zbp_';
+                }
                 break;
             case 'sqlite3':
             case 'pdo_sqlite':
                 $cts = file_get_contents($GLOBALS['blogpath'] . 'zb_system/defend/createtable/sqlite.sql');
                 $zbp->option['ZC_SQLITE_NAME'] = trim(GetVars('dbsqlite_name', 'POST'));
                 $zbp->option['ZC_SQLITE_PRE'] = trim(GetVars('dbsqlite_pre', 'POST'));
+                if (trim($zbp->option['ZC_SQLITE_PRE'] == '')) {
+                    $zbp->option['ZC_SQLITE_PRE'] == 'zbp_';
+                }
                 break;
             case 'postgresql':
             case 'pdo_postgresql':
