@@ -276,6 +276,7 @@ class ValidateCode
      */
     protected function drawLine($image, $width, $height, $tcol = null)
     {
+        return ;
         if ($tcol === null) {
             $tcol = imagecolorallocate($image, $this->rand(100, 255), $this->rand(100, 255), $this->rand(100, 255));
         }
@@ -350,7 +351,7 @@ class ValidateCode
         } else {
             $textColor = $this->textColor;
         }
-        $col = imagecolorallocate($image, $textColor[0], $textColor[1], $textColor[2]);
+        @$col = imagecolorallocate($image, $textColor[0], $textColor[1], $textColor[2]);
 
         // Write the letters one by one, with random angle
         for ($i = 0; $i < $length; $i++) {
