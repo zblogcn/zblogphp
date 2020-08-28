@@ -721,13 +721,13 @@ class Template
         if (stristr($t, 'Template Name:')) {
             $t = stristr($t, 'Template Name:');
             $t = str_ireplace('Template Name:', '', $t);
-            $name = strtok($t, ' ');
+            $name = trim(strtok($t, '*'));
         }
         $t = $content;
         if (stristr($t, 'Template Type:')) {
             $t = stristr($t, 'Template Type:');
             $t = str_ireplace('Template Type:', '', $t);
-            $type = strtok($t, ' ');
+            $type = trim(strtok($t, '*'));
         }
 
         if (is_readable($f = $GLOBALS['blogpath'] . 'zb_users/theme/' . $this->theme . '/template.json')) {
