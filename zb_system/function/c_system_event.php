@@ -4040,20 +4040,22 @@ function ApiTokenVerify()
 {
     global $zbp;
 
-    // 在 API 中
-    if (($auth = GetVars('HTTP_AUTHORIZATION', 'SERVER')) && (substr($auth, 0, 7) === 'Bearer ')) {
-        // 获取 Authorization 头
-        $api_token = substr($auth, 7);
-    } else {
-        // 获取（POST 或 GET 中的）请求参数
-        $api_token = GetVars('token');
-    }
+    if (!(is_subclass_of($zbp->user, 'BaseMember') && $zbp->user->Level > 0 && !empty($zbp->user->ID))) {
+        // 在 API 中
+        if (($auth = GetVars('HTTP_AUTHORIZATION', 'SERVER')) && (substr($auth, 0, 7) === 'Bearer ')) {
+            // 获取 Authorization 头
+            $api_token = substr($auth, 7);
+        } else {
+            // 获取（POST 或 GET 中的）请求参数
+            $api_token = GetVars('token');
+        }
 
-    $user = $zbp->VerifyAPIToken($api_token);
+        $user = $zbp->VerifyAPIToken($api_token);
 
-    if ($user != null) {
-        define('ZBP_IN_API_VERIFYBYTOKEN', true);
-        $zbp->user = $user;
+        if ($user != null) {
+            define('ZBP_IN_API_VERIFYBYTOKEN', true);
+            $zbp->user = $user;
+        }
     }
 }
 
