@@ -322,6 +322,7 @@ span.button:hover { box-shadow: 0 0 1px #000; border-radius: 0.3em; padding: 2px
 .widget-title span { display: inline-block; }
 .widget_ishidden_true img.more-action { opacity: 0.40; }
 .widget-title i { margin-left: 5px; margin-right: 5px; color: #64a7da; }
+.widget-title a:hover i { color: #067dd8; }
 .widget-action { float: right; }
 .siderbar-drop { float: right; background: #fefefe; border: 2px solid #eee; margin: 0 5px 10px 15px; }
 .siderbar-sort-list { float: right; width: 262px; min-height: 30px; position: relative; z-index: 0; }
