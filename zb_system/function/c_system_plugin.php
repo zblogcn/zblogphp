@@ -2307,6 +2307,17 @@ DefinePluginFilter('Filter_Plugin_API_Response');
 /*
 '**************************************************<
 '类型:Filter
+'名称:Filter_Plugin_API_Begin
+'参数:
+'说明:API 启动
+'调用:
+'**************************************************>
+ */
+DefinePluginFilter('Filter_Plugin_API_Begin');
+
+/*
+'**************************************************<
+'类型:Filter
 '名称:Filter_Plugin_API_Extend_Mods
 '参数:
 '说明:API 的应用追加模块机制

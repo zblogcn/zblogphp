@@ -18,6 +18,10 @@ if (!$GLOBALS['option']['ZC_API_ENABLE']) {
     ApiResponse(null, null, 503, $GLOBALS['lang']['error']['95']);
 }
 
+foreach ($GLOBALS['hooks']['Filter_Plugin_API_Begin'] as $fpname => &$fpsignal) {
+    $fpname();
+}
+
 $mods = array();
 
 // 载入系统和应用的 mod
