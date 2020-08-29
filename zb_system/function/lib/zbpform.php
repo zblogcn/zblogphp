@@ -42,7 +42,7 @@ class ZbpForm
     public static function zbradio($name, $ischecked = 0)
     {
         $s = '';
-        $s .= "<input name=\"$name\" id=\"$name\" class=\"$name checkbox\" style=\"display:none;\" type=\"text\" value=\"$ischecked\">\r\n";
+        $s .= "<input name=\"$name\" id=\"$name\" class=\"$name checkbox\" type=\"text\" value=\"$ischecked\">\r\n";
         if (self::$setreturn) {
             return $s;
         }
