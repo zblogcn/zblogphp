@@ -807,7 +807,7 @@ function Admin_SiteInfo()
         $r = str_replace('{$system_environment}', GetEnvironment(), $r);
         $app = $zbp->LoadApp('plugin','AppCentre');
         $sv = ZC_VERSION_FULL;
-        if ($app->isloaded == true) {
+        if ($app->isloaded == true && $app->IsUsed()) {
             $sv .= '; AppCentre' . $app->version;
         }
         $r = str_replace('{$zbp->version}', $sv, $r);

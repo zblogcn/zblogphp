@@ -111,7 +111,7 @@ function misc_statistic()
     $r = str_replace('{$zbp->style}', $zbp->style, $r);
     $app = $zbp->LoadApp('plugin','AppCentre');
     $sv = ZC_VERSION_FULL;
-    if ($app->isloaded == true) {
+    if ($app->isloaded == true && $app->IsUsed()) {
         $sv .= '; AppCentre' . $app->version;
     }
     $r = str_replace('{$zbp->version}', $sv, $r);
