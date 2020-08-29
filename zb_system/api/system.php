@@ -12,6 +12,41 @@ if (!defined('ZBP_PATH')) {
  */
 
 /**
+ * 基本信息接口（载入页面后获取的）.
+ *
+ * @return array
+ */
+function api_system_basic_info()
+{
+    global $zbp;
+
+    ApiCheckAuth(false, 'view');
+
+    $info = array(
+        'zbp' => array(
+            'name' => $zbp->name,
+            'subname' => $zbp->subname,
+            'host' => $zbp->host,
+            'version' => $zbp->version,
+            'ajaxurl' => $zbp->ajaxurl,
+            'cookiespath' => $zbp->cookiespath,
+            'managecount' => $zbp->option['ZC_MANAGE_COUNT'],
+            'pagebarcount' => $zbp->option['ZC_PAGEBAR_COUNT'],
+            'searchcount' => $zbp->option['ZC_SEARCH_COUNT'],
+            'displaycount' => $zbp->option['ZC_DISPLAY_COUNT'],
+            'commentdisplaycount' => $zbp->option['ZC_COMMENTS_DISPLAY_COUNT'],
+            'lang' => $zbp->lang
+        ),
+        'is_logged_in' => $zbp->user->ID != 0,
+        'current_member' => $zbp->user,
+    );
+
+    return [
+        'data' => $info,
+    ];
+}
+
+/**
  * 获取系统信息接口.
  *
  * @return array
