@@ -20,7 +20,13 @@ function api_module_get()
 {
     global $zbp;
 
-    ApiCheckAuth(true, 'ModuleMng');
+    ApiCheckAuth(false, 'view');
+
+    if (! $zbp->CheckRights('ModuleMng')) {
+        $remove_props = array('MaxLi', 'Source', 'Metas');
+    } else {
+        $remove_props = array();
+    }
 
     $module = null;
     $modId = (int) GetVars('id');
@@ -32,9 +38,9 @@ function api_module_get()
         $module = $zbp->GetModuleByFileName($modFileName);
     }
 
-    $array = ApiGetObjectArray($module);
-
     if ($module && $module->ID !== null) {
+        $array = ApiGetObjectArray($module, array(), $remove_props);
+
         return array(
             'data' => array('module' => $array),
         );
@@ -115,7 +121,13 @@ function api_module_list()
 {
     global $zbp;
 
-    ApiCheckAuth(true, 'ModuleMng');
+    ApiCheckAuth(false, 'view');
+
+    if (! $zbp->CheckRights('ModuleMng')) {
+        $remove_props = array('MaxLi', 'Source', 'Metas');
+    } else {
+        $remove_props = array();
+    }
 
     $modType = GetVars('type');
     $systemMods = array();
@@ -156,7 +168,7 @@ function api_module_list()
 
     return array(
         'data' => array(
-            'list' => ApiGetObjectArrayList($modules),
+            'list' => ApiGetObjectArrayList($modules, array(), $remove_props),
         ),
     );
 }
@@ -204,17 +216,14 @@ function api_module_list_sidebar()
     if ($sidebarId > 0 && $sidebarId < 10) {
         // 列出指定 id 的侧栏
         $sidebarName = ($sidebarId == 1) ? 'sidebar' : 'sidebar' . $sidebarId;
-        foreach ($zbp->template->$sidebarName as $module) {
-            $data[] = ApiGetObjectArray($module, array(), $remove_props);
-        }
+        $data = ApiGetObjectArrayList($zbp->template->$sidebarName, array(), $remove_props);
     } else {
         // 列出所有侧栏列表
         for ($i = 1; $i <= 9; $i++) {
-            $data['sidebar' . $i] = array();
+            $data['sidebar' . ($i == 1 ? '' : $i)] = array();
             $sidebarName = ($i == 1) ? 'sidebar' : 'sidebar' . $i;
-            foreach ($zbp->template->$sidebarName as $module) {
-                $data['sidebar' . $i][] = ApiGetObjectArray($module, array(), $remove_props);
-            }
+
+            $data['sidebar' . ($i == 1 ? '' : $i)] = ApiGetObjectArrayList($zbp->template->$sidebarName, array(), $remove_props);
         }
     }
 
