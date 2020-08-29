@@ -190,16 +190,22 @@ function api_module_list_sidebar()
 {
     global $zbp;
 
-    ApiCheckAuth(true, 'ModuleMng');
+    ApiCheckAuth(false, 'view');
 
     $sidebarId = (int) GetVars('id');
     $data = array();
+
+    if (! $zbp->CheckRights('ModuleMng')) {
+        $remove_props = array('MaxLi', 'Source', 'Metas');
+    } else {
+        $remove_props = array();
+    }
 
     if ($sidebarId > 0 && $sidebarId < 10) {
         // 列出指定 id 的侧栏
         $sidebarName = ($sidebarId == 1) ? 'sidebar' : 'sidebar' . $sidebarId;
         foreach ($zbp->template->$sidebarName as $module) {
-            $data[] = ApiGetObjectArray($module);
+            $data[] = ApiGetObjectArray($module, array(), $remove_props);
         }
     } else {
         // 列出所有侧栏列表
@@ -207,7 +213,7 @@ function api_module_list_sidebar()
             $data['sidebar' . $i] = array();
             $sidebarName = ($i == 1) ? 'sidebar' : 'sidebar' . $i;
             foreach ($zbp->template->$sidebarName as $module) {
-                $data['sidebar' . $i][] = ApiGetObjectArray($module);
+                $data['sidebar' . $i][] = ApiGetObjectArray($module, array(), $remove_props);
             }
         }
     }
