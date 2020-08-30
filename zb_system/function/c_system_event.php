@@ -4260,7 +4260,7 @@ function ApiGetRequestFilter($limitDefault = 10, $sortableColumns = array())
         $condition['order'] = array($sortableColumns[$sortBy] => 'ASC');
     }
     if (!is_null($condition['order']) && $order == 'DESC') {
-        $condition['order'][1] = $order;
+        $condition['order'][$sortableColumns[$sortBy]] = $order;
     }
 
     if ($perPage) {
