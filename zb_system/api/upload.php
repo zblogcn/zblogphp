@@ -26,7 +26,17 @@ function api_upload_get()
 
     if ($uploadId > 0) {
         $upload = $zbp->GetUploadByID($uploadId);
-        $uploadData = ApiGetObjectArray($upload);
+        $uploadData = ApiGetObjectArray(
+            $upload,
+            array(),
+            array(),
+            ApiGetAndFilterRelationQuery(array(
+                'Author' => array(
+                    'other_props' => array('Url', 'Template', 'Avatar', 'StaticName'),
+                    'remove_props' => array('Guid', 'Password', 'IP')
+                ),
+            ))
+        );
 
         if ($upload && $upload->ID !== null) {
             return array(
@@ -131,10 +141,18 @@ function api_upload_list()
     $limit = $filter['limit'];
     $option = $filter['option'];
 
-    $data = ApiGetObjectArrayList(
+    $data = array(
         array(
             'list' => ApiGetObjectArrayList(
-                $zbp->GetUploadList('*', $where, $order, $limit, $option)
+                $zbp->GetUploadList('*', $where, $order, $limit, $option),
+                array(),
+                array(),
+                ApiGetAndFilterRelationQuery(array(
+                    'Author' => array(
+                        'other_props' => array('Url', 'Template', 'Avatar', 'StaticName'),
+                        'remove_props' => array('Guid', 'Password', 'IP')
+                    ),
+                ))
             ),
             'pagination' => ApiGetPaginationInfo($option),
         )

@@ -27,7 +27,18 @@ function api_comment_get()
 
     if ($commentId > 0) {
         $comment = $zbp->GetCommentByID($commentId);
-        $array = ApiGetObjectArray($comment);
+        $array = ApiGetObjectArray(
+            $comment,
+            array(),
+            array(),
+            ApiGetAndFilterRelationQuery(array(
+                'Post' => array(),
+                'Author' => array(
+                    'other_props' => array('Url', 'Template', 'Avatar', 'StaticName'),
+                    'remove_props' => array('Guid', 'Password', 'IP')
+                ),
+            ))
+        );
 
         if ($comment && $comment->ID != null) {
             return array(
@@ -139,7 +150,15 @@ function api_comment_list()
                     $order,
                     $limit,
                     $option
-                )
+                ),
+                array(),
+                array(),
+                ApiGetAndFilterRelationQuery(array(
+                    'Author' => array(
+                        'other_props' => array('Url', 'Template', 'Avatar', 'StaticName'),
+                        'remove_props' => array('Guid', 'Password', 'IP')
+                    ),
+                ))
             );
             return array(
                 'data' => $listArr,
@@ -148,7 +167,18 @@ function api_comment_list()
     } else {
         // 列出所有评论
         ApiCheckAuth(true, 'CommentMng');
-        $listArr = ApiGetObjectArrayList($zbp->GetCommentList('*', null, $order, $limit, $option));
+        $listArr = ApiGetObjectArrayList(
+            $zbp->GetCommentList('*', null, $order, $limit, $option),
+            array(),
+            array(),
+            ApiGetAndFilterRelationQuery(array(
+                'Post' => array(),
+                'Author' => array(
+                    'other_props' => array('Url', 'Template', 'Avatar', 'StaticName'),
+                    'remove_props' => array('Guid', 'Password', 'IP')
+                ),
+            ))
+        );
     }
 
     $paginationArr = ApiGetPaginationInfo($option);

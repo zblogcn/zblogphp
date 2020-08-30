@@ -4200,19 +4200,29 @@ function ApiCheckAuth($loginRequire = false, $action = 'view')
  * API 获取指定属性的Array
  *
  * @param object $object
- * @param array $other_properties 追加的属性
- * @param array $remove_properties 要删除的属性
+ * @param array $other_props 追加的属性
+ * @param array $remove_props 要删除的属性
+ * @param array $with_relations 要追加的关联对象
  */
-function ApiGetObjectArray($object, $other_properties = array(), $remove_properties = array())
+function ApiGetObjectArray($object, $other_props = array(), $remove_props = array(), $with_relations = array())
 {
     $array = $object->GetData();
     unset($array['Meta']);
     $array['Metas'] = $object->Metas;
-    foreach ($other_properties as $key => $value) {
+    foreach ($other_props as $key => $value) {
         $array[$value] = $object->$value;
     }
-    foreach ($remove_properties as $key => $value) {
+    foreach ($remove_props as $key => $value) {
         unset($array[$value]);
+    }
+    foreach ($with_relations as $relation => $info) {
+        $relation_obj = $object->$relation;
+        $array[$relation] = ApiGetObjectArray(
+            $relation_obj,
+            isset($info['other_props']) ? $info['other_props'] : array(),
+            isset($info['remove_props']) ? $info['remove_props'] : array(),
+            isset($info['with_relations']) ? $info['with_relations'] : array()
+        );
     }
     return $array;
 }
@@ -4221,13 +4231,20 @@ function ApiGetObjectArray($object, $other_properties = array(), $remove_propert
  * API 获取指定属性的Array 列表.
  *
  * @param array $list
- * @param array $other_properties 追加的属性
- * @param array $remove_properties 要删除的属性
+ * @param array $other_props 追加的属性
+ * @param array $remove_props 要删除的属性
+ * @param array $with_relations 要追加的关联对象
  */
-function ApiGetObjectArrayList($list, $other_properties = array(), $remove_properties = array())
+function ApiGetObjectArrayList($list, $other_props = array(), $remove_props = array(), $with_relations = array())
 {
+    global $zbp;
+
+    if (array_key_exists('Author', $with_relations)) {
+        $zbp->LoadMembersInList($list);
+    }
+
     foreach ($list as &$object) {
-        $object = ApiGetObjectArray($object, $other_properties, $remove_properties);
+        $object = ApiGetObjectArray($object, $other_props, $remove_props, $with_relations);
     }
 
     return $list;
@@ -4318,6 +4335,30 @@ function ApiGetPaginationInfo($pagebar = null)
         $fpname($info, $pagebar);
     }
     return $info;
+}
+
+/**
+ * API 获取及过滤关联对象请求.
+ *
+ * @param array $info 传入到 ApiGetObjectArray 的关联信息
+ * @return array
+ */
+function ApiGetAndFilterRelationQuery($info)
+{
+    if (empty(GetVars('with_relations', 'GET'))) {
+        return array();
+    }
+
+    $relations = explode(',', trim(GetVars('with_relations', 'GET')));
+    $ret_relations = array();
+
+    foreach ($relations as $relation) {
+        if (array_key_exists($relation, $info)) {
+            $ret_relations[$relation] = $info[$relation];
+        }
+    }
+
+    return $ret_relations;
 }
 
 /**
