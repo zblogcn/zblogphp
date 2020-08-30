@@ -4345,14 +4345,15 @@ function ApiGetPaginationInfo($pagebar = null)
  */
 function ApiGetAndFilterRelationQuery($info)
 {
-    if (empty(GetVars('with_relations', 'GET'))) {
+    if (empty(GetVars('with_relations'))) {
         return array();
     }
 
-    $relations = explode(',', trim(GetVars('with_relations', 'GET')));
+    $relations = explode(',', trim(GetVars('with_relations')));
     $ret_relations = array();
 
     foreach ($relations as $relation) {
+        $relation = trim($relation);
         if (array_key_exists($relation, $info)) {
             $ret_relations[$relation] = $info[$relation];
         }
