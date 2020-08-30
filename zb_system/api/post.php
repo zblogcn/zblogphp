@@ -43,7 +43,20 @@ function api_post_get()
             }
             // 默认为公开状态的文章/页面
             ApiCheckAuth(false, 'view');
-            $array = ApiGetObjectArray($post);
+            $array = ApiGetObjectArray(
+                $post,
+                array(),
+                array(),
+                ApiGetAndFilterRelationQuery(array(
+                    'Category' => array(
+                        'other_props' => array('Url', 'Symbol', 'Level', 'SymbolName', 'AllCount'),
+                    ),
+                    'Author' => array(
+                        'other_props' => array('Url', 'Template', 'Avatar', 'StaticName'),
+                        'remove_props' => array('Guid', 'Password', 'IP')
+                    ),
+                ))
+            );
 
             return array(
                 'data' => array(
@@ -234,7 +247,20 @@ function api_post_list()
         ApiCheckAuth(true, 'ArticleAll');
     }
 
-    $listArr = ApiGetObjectArrayList($zbp->GetPostList('*', $where, $order, $limit, $option));
+    $listArr = ApiGetObjectArrayList(
+        $zbp->GetPostList('*', $where, $order, $limit, $option),
+        array(),
+        array(),
+        ApiGetAndFilterRelationQuery(array(
+            'Category' => array(
+                'other_props' => array('Url', 'Symbol', 'Level', 'SymbolName', 'AllCount'),
+            ),
+            'Author' => array(
+                'other_props' => array('Url', 'Template', 'Avatar', 'StaticName'),
+                'remove_props' => array('Guid', 'Password', 'IP')
+            ),
+        ))
+    );
     $paginationArr = ApiGetPaginationInfo($option);
 
     return array(
