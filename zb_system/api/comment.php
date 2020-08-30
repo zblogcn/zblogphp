@@ -128,8 +128,8 @@ function api_comment_list()
     $filter = ApiGetRequestFilter(
         $GLOBALS['option']['ZC_COMMENTS_DISPLAY_COUNT'],
         array(
-            'id' => 'comm_ID',
-            'post_time' => 'comm_PostTime'
+            'ID' => 'comm_ID',
+            'PostTime' => 'comm_PostTime'
         )
     );
     $order = $filter['order'];

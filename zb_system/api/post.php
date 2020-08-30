@@ -206,12 +206,12 @@ function api_post_list()
     $filter = ApiGetRequestFilter(
         $GLOBALS['option']['ZC_DISPLAY_COUNT'],
         array(
-            'id' => 'log_ID',
-            'create_time' => 'log_CreateTime',
-            'post_time' => 'log_PostTime',
-            'update_time' => 'log_UpdateTime',
-            'comm_num' => 'log_CommNums',
-            'view_num' => 'log_ViewNums'
+            'ID' => 'log_ID',
+            'CreateTime' => 'log_CreateTime',
+            'PostTime' => 'log_PostTime',
+            'UpdateTime' => 'log_UpdateTime',
+            'CommNums' => 'log_CommNums',
+            'ViewNums' => 'log_ViewNums'
         )
     );
     $order = $filter['order'];

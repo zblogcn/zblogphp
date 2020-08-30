@@ -199,14 +199,14 @@ function api_member_list()
     $filter = ApiGetRequestFilter(
         $GLOBALS['option']['ZC_DISPLAY_COUNT'],
         array(
-            'id' => 'mem_ID',
-            'create_time' => 'mem_CreateTime',
-            'post_time' => 'mem_PostTime',
-            'update_time' => 'mem_UpdateTime',
-            'articles' => 'mem_Articles',
-            'pages' => 'mem_Pages',
-            'comments' => 'mem_Comments',
-            'uploads' => 'mem_Uploads',
+            'ID' => 'mem_ID',
+            'CreateTime' => 'mem_CreateTime',
+            'PostTime' => 'mem_PostTime',
+            'UpdateTime' => 'mem_UpdateTime',
+            'Articles' => 'mem_Articles',
+            'Pages' => 'mem_Pages',
+            'Comments' => 'mem_Comments',
+            'Uploads' => 'mem_Uploads',
         )
     );
     $order = $filter['order'];

@@ -130,11 +130,11 @@ function api_upload_list()
     $filter = ApiGetRequestFilter(
         $GLOBALS['option']['ZC_DISPLAY_COUNT'],
         array(
-            'id' => 'ul_ID',
-            'post_time' => 'ul_PostTime',
-            'name' => 'ul_Name',
-            'source_name' => 'ul_SourceName',
-            'downloads' => 'ul_DownNums'
+            'ID' => 'ul_ID',
+            'PostTime' => 'ul_PostTime',
+            'Name' => 'ul_Name',
+            'SourceName' => 'ul_SourceName',
+            'DownNums' => 'ul_DownNums'
         )
     );
     $order = $filter['order'];
