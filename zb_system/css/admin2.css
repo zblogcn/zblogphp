@@ -290,8 +290,43 @@ span.note { font-size: 0.9em; }
 .totoro .totorotxt { font-size: 12px; }
 #totorobox textarea { background: #ffffff; padding: 10px 0; border: none; }
 
+/* 美化单选框和复选框 */
+@keyframes hover-color{
+	from{border-color:#c0c0c0;}
+	to{border-color:#3a6ea5;}
+}
+.radio,.checkbox,.toggle{position:absolute;display:none;}
+.radio[disabled],.checkbox[disabled]{cursor:not-allowed;}
+.radio + label,.checkbox + label{position:relative;padding-left:25px;cursor:pointer;vertical-align:middle;user-select:none;display:inline-block;}
+.checkbox-width .radio + label,.checkbox-width .checkbox + label{min-width:130px;}
+.radio + label:hover:before,.checkbox + label:hover:before{animation-duration:0.4s;animation-fill-mode:both;animation-name:hover-color;}
+.radio + label:before,.checkbox + label:before{margin:auto 0;position:absolute;top:0;bottom:0;left:0;display:inline-block;width: 18px;height: 18px;content:'';border:1px solid #c0c0c0;border-radius:2px;background:#fff;}
+.radio + label:after,.checkbox + label:after{position:absolute;display:none;content:'';}
+.radio[disabled] + label,.checkbox[disabled] + label{cursor:not-allowed;color:#e4e4e4;}
+.radio[disabled] + label:hover,.radio[disabled] + label:before,.radio[disabled] + label:after,.checkbox[disabled] + label:hover,.checkbox[disabled] + label:before,.checkbox[disabled] + label:after{cursor:not-allowed;}
+.radio[disabled] + label:hover:before,.checkbox[disabled] + label:hover:before{border:1px solid #e4e4e4;animation-name:none;}
+.radio[disabled] + label:before,.checkbox[disabled] + label:before{border-color:#e4e4e4;}
+.radio:checked + label:before,.checkbox:checked + label:before{animation-name:none;}
+.radio:checked + label:after,.checkbox:checked + label:after{display:block;}
+.radio + label:before{border-radius:50%;}
+.radio + label:after{margin:auto 0;top:0;bottom:0;left: 5px;width:10px;height:10px;border-radius:50%;background:#3a6ea5;}
+.radio:checked + label:before{border:1px solid #3a6ea5;}
+.radio:checked[disabled] + label:before{border:1px solid #c9d7f9;}
+.radio:checked[disabled] + label:after{background:#c9d7f9;}
+.checkbox + label:after{margin:auto 0;top:-3px;bottom:0;left:7px;box-sizing:border-box;width:6px;height:12px;transform:rotate(45deg);border-width:2px;border-style:solid;border-color:#fff;border-top:0;border-left:0;}
+.checkbox:checked + label:before{border:1px solid #3a6ea5;background:#3a6ea5;}
+.checkbox:checked[disabled] + label:before{border:1px solid #c9d7f9;background:#c9d7f9;}
+.toggle+label{display:inline-block;position:relative;width:40px;height:16px;max-height:1em;cursor:pointer;-webkit-touch-callout:none;margin-right:0;margin-bottom:0;padding-left:40px;line-height:16px;margin-right:10px;}
+.toggle+label:empty{padding-left:30px;}
+.toggle+label:before{position:absolute;display:inline-block;left:0;content:'';border-style:solid;width:40px;height:22px;border-width:0;border-color:transparent;background:#d8d8d8;border-radius:20px;transition:all .3s;}
+.toggle+label:after{color:#ffffff;position:absolute;content:'';width:20px;height:20px;line-height:20px;top:1px;left:1px;text-align:center;background:#ffffff;box-shadow:0 2px 5px 0 rgba(51,51,51,0.25);border-radius:10px;transition:left .3s,right .3s;}
+.toggle:checked+label:before{background:#3a6ea5;transition:all .3s;}
+.toggle:checked+label:after{left:19px;transition:left .3s,right .3s;background:#ffffff;}
+.toggle:disabled+label{cursor:no-drop}
+.toggle:disabled+label:before{opacity:.3}
+
 /*checkbox*/
-.imgcheck{background:none!important;display:inline-block;position:relative;width:40px;height:16px;max-height:1em;cursor:pointer;-webkit-touch-callout:none;margin-right:0;margin-bottom:0;padding-left:40px;line-height:16px;margin-right:10px;padding-left:30px;}
+.imgcheck{background:none!important;display: inline-block!important;position:relative;width:40px;height:16px;max-height:1em;cursor:pointer;-webkit-touch-callout:none;margin-right:0;margin-bottom:0;padding-left:40px;line-height:16px;margin-right:10px;padding-left:30px;}
 .imgcheck:before{position:absolute;display:inline-block;left:0;content:'';border-style:solid;width:40px;height:22px;border-width:0;border-color:transparent;background:#d8d8d8;border-radius:20px;transition:all .3s;margin-top:-2px;}
 .imgcheck:after{color:#ffffff;position:absolute;content:'';width:20px;height:20px;line-height:20px;top:1px;left:1px;text-align:center;background:#ffffff;box-shadow:0 2px 5px 0 rgba(51,51,51,0.25);border-radius:10px;transition:left .3s,right .3s;margin-top:-2px;}
 .imgcheck-on:before{background:#3a6ea5;transition:all .3s;}
