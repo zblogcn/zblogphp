@@ -4208,7 +4208,11 @@ function ApiGetObjectArray($object, $other_props = array(), $remove_props = arra
 {
     $array = $object->GetData();
     unset($array['Meta']);
-    $array['Metas'] = $object->Metas;
+
+    foreach ($GLOBALS['hooks']['Filter_Plugin_API_Get_Object_Array'] as $fpname => &$fpsignal) {
+        $fpname($object, $array, $other_props, $remove_props, $with_relations);
+    }
+
     foreach ($other_props as $key => $value) {
         $array[$value] = $object->$value;
     }
