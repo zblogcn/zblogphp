@@ -124,7 +124,7 @@ function api_module_list()
     ApiCheckAuth(false, 'view');
 
     if (! $zbp->CheckRights('ModuleMng')) {
-        $remove_props = array('MaxLi', 'Source', 'Metas');
+        $remove_props = array('Metas');
     } else {
         $remove_props = array();
     }
@@ -133,7 +133,7 @@ function api_module_list()
     $systemMods = array();
     $userMods = array();
     $themeMods = array();
-    $fileMods = array();
+    $pluginMods = array();
 
     foreach ($zbp->modules as $module) {
         if ($module->SourceType == 'system') {
@@ -145,7 +145,7 @@ function api_module_list()
                 $themeMods[] = $module;
             }
         } else {
-            $fileMods[] = $module;
+            $pluginMods[] = $module;
         }
     }
 
@@ -159,8 +159,8 @@ function api_module_list()
         case 'theme':
             $modules = $themeMods;
             break;
-        case 'file':
-            $modules = $fileMods;
+        case 'plugin':
+            $modules = $pluginMods;
             break;
         default:
             $modules = $zbp->modules;

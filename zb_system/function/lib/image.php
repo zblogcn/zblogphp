@@ -10,7 +10,7 @@ if (!defined('ZBP_PATH')) {
 class Image
 {
     /**
-     * 图片裁切
+     * 图片缩略
      *
      * @param string $sourcefile    原图片路径(绝对路径/abc.jpg)
      * @param string $destfile      裁切后生成新名称(绝对路径/rename.jpg)
@@ -39,18 +39,24 @@ class Image
         }
         // 按规定比例缩略
         $src_scale = $src_width / $src_height;
-        $des_scale = $forcedwidth / $forcedheight;
-        if ($src_width <= $forcedwidth && $src_height <= $forcedheight) {
-            $des_width = $src_width;
-            $des_height = $src_height;
-        } elseif ($src_scale >= $des_scale) {
-            $des_width = $src_width >= $forcedwidth ? $forcedwidth : $src_width;
-            $des_height = $des_width / $src_scale;
-            $des_height = $des_height >= $forcedheight ? $forcedheight : $des_height;
-        } else {
-            $des_height = $src_height >= $forcedheight ? $forcedheight : $src_height;
-            $des_width = $des_height * $src_scale;
-            $des_width = $des_width >= $forcedwidth ? $forcedwidth : $des_width;
+        //如果裁剪的高为未定义，那么等比例缩小，高自适应
+        if(!$forcedheight){
+            $des_width = $forcedwidth;
+            $des_height = $forcedwidth / $src_scale; 
+        }else{
+            $des_scale = $forcedwidth / $forcedheight;
+            if ($src_width <= $forcedwidth && $src_height <= $forcedheight) {
+                $des_width = $src_width;
+                $des_height = $src_height;
+            } elseif ($src_scale >= $des_scale) {
+                $des_width = $src_width >= $forcedwidth ? $forcedwidth : $src_width;
+                $des_height = $des_width / $src_scale;
+                $des_height = $des_height >= $forcedheight ? $forcedheight : $des_height;
+            } else {
+                $des_height = $src_height >= $forcedheight ? $forcedheight : $src_height;
+                $des_width = $des_height * $src_scale;
+                $des_width = $des_width >= $forcedwidth ? $forcedwidth : $des_width;
+            }
         }
         switch ($imginfo['mime']) {
             case 'image/jpeg':

@@ -180,7 +180,7 @@ function statistic(s){
             }
             setTimeout(function () {
                 $("#statistic i").removeClass("loading-status");
-            }, 200);
+            }, 500);
             $("#updatatime").show();
         },
         success: function(data){

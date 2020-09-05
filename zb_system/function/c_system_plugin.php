@@ -2347,3 +2347,15 @@ DefinePluginFilter('Filter_Plugin_API_Get_Request_Filter');
 '**************************************************>
  */
 DefinePluginFilter('Filter_Plugin_API_Get_Pagination_Info');
+
+
+/*
+'**************************************************<
+'类型:Filter
+'名称:Filter_Plugin_API_Get_Object_Array
+'参数:&$object, &$array, &$other_props, &$remove_props, &$with_relations
+'说明:API 转换Object到Array
+'调用:
+'**************************************************>
+ */
+DefinePluginFilter('Filter_Plugin_API_Get_Object_Array');

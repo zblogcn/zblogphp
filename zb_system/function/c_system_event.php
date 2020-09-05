@@ -1497,43 +1497,52 @@ function PostArticle()
         $_POST['Content'] = preg_replace("/<hr class=\"more\"\s*\/>/i", '<!--more-->', $_POST['Content']);
 
         //缩略图处理
-        $intro = isset($_POST['Intro'])?$_POST['Intro']:'';
-        //获取内容的第一张图片
-        preg_match_all('/<img[^>]*?\s+src="([^\s"]{5,})"[^>]*?>/i', $intro . $_POST['Content'], $imgs);
-        $img = isset($imgs[1][0]) ? $imgs[1][0] : false;
-        if($img){
-            //判断是否为本地图片
-            if(stripos($img,$zbp->host) !== false) {
-                //将图片地址的host干掉
-                $img = str_replace($zbp->host,'',$img);
-                //绝对地址
-                $imgs = $zbp->path.str_replace($zbp->host,'',$img);
-                if(is_file($imgs)){
-                    //缩略图路径
-                    $imgNew = ImgToThumbUrl($imgs);
-                    //缩略并裁剪
-                    if(Image::ClipThumb($imgs,$imgNew,$zbp->option['ZC_ARTICLE_THUMB_WIDTH'],$zbp->option['ZC_ARTICLE_THUMB_HEIGHT'])){
-                        $_POST['Thumb'] = ImgToThumbUrl('{#ZC_BLOG_HOST#}'.$img);
+        if($zbp->option['ZC_ARTICLE_THUMB_SWITCH']){
+            $intro = isset($_POST['Intro'])?$_POST['Intro']:'';
+            //获取内容的第一张图片
+            preg_match_all('/<img[^>]*?\s+src="([^\s"]{5,})"[^>]*?>/i', $intro . $_POST['Content'], $imgs);
+            $img = isset($imgs[1][0]) ? $imgs[1][0] : false;
+            if($img){
+                //判断是否为本地图片
+                if(stripos($img,$zbp->host) !== false) {
+                    //将图片地址的host干掉
+                    $img = str_replace($zbp->host,'',$img);
+                    //绝对地址
+                    $imgs = $zbp->path.str_replace($zbp->host,'',$img);
+                    if(is_file($imgs)){
+                        //缩略图路径
+                        $imgNew = ImgToThumbUrl($imgs);
+                        //缩略并裁剪
+                        if($zbp->option['ZC_ARTICLE_THUMB_TYPE'] == 1){
+                            if(Image::ClipThumb($imgs,$imgNew,$zbp->option['ZC_ARTICLE_THUMB_WIDTH'],$zbp->option['ZC_ARTICLE_THUMB_HEIGHT'])){
+                                $_POST['Thumb'] = ImgToThumbUrl('{#ZC_BLOG_HOST#}'.$img);
+                            }
+                        }else{
+                            if(Image::Thumb($imgs,$imgNew,$zbp->option['ZC_ARTICLE_THUMB_WIDTH'],false)){
+                                $_POST['Thumb'] = ImgToThumbUrl('{#ZC_BLOG_HOST#}'.$img);
+                            }
+                        }
+                        
                     }
-                }
-            }else{
-                $http = Network::Create();
-                $http->open('GET',$img);
-                $http->send();
-                if ($http->status == 200){
-                    $r = $http->responseText;
-                    if($r){
-                        $path = 'zb_users/upload/' . date('Y/m') . '/';
-                        $dir = ZBP_PATH.$path;
-                        //如果设置的上传目录不存在，则创建
-                        if (!file_exists($dir)) @mkdir($dir,0777,true);
-                        $ext = strtolower(substr(strrchr($img, '.'), 1));
-                        $name = date('Ymd').(microtime(true)*10000).'.'.$ext;
-                        $url = $dir.$name;
-                        if(file_put_contents($url,$r)){
-                            $imgNew = ImgToThumbUrl($url);
-                            if(Image::ClipThumb($url,$imgNew,$zbp->option['ZC_ARTICLE_THUMB_WIDTH'],$zbp->option['ZC_ARTICLE_THUMB_HEIGHT'])){
-                                $_POST['Thumb'] = '{#ZC_BLOG_HOST#}'.$path.ImgToThumbUrl($name);
+                }else{
+                    $http = Network::Create();
+                    $http->open('GET',$img);
+                    $http->send();
+                    if ($http->status == 200){
+                        $r = $http->responseText;
+                        if($r){
+                            $path = 'zb_users/upload/' . date('Y/m') . '/';
+                            $dir = ZBP_PATH.$path;
+                            //如果设置的上传目录不存在，则创建
+                            if (!file_exists($dir)) @mkdir($dir,0777,true);
+                            $ext = strtolower(substr(strrchr($img, '.'), 1));
+                            $name = date('Ymd').(microtime(true)*10000).'.'.$ext;
+                            $url = $dir.$name;
+                            if(file_put_contents($url,$r)){
+                                $imgNew = ImgToThumbUrl($url);
+                                if(Image::ClipThumb($url,$imgNew,$zbp->option['ZC_ARTICLE_THUMB_WIDTH'],$zbp->option['ZC_ARTICLE_THUMB_HEIGHT'])){
+                                    $_POST['Thumb'] = '{#ZC_BLOG_HOST#}'.$path.ImgToThumbUrl($name);
+                                }
                             }
                         }
                     }
@@ -3153,6 +3162,7 @@ function SaveSetting()
             || $key == 'ZC_CLOSE_SITE'
             || $key == 'ZC_PERMANENT_DOMAIN_WITH_ADMIN'
             || $key == 'ZC_ADDITIONAL_SECURITY'
+            || $key == 'ZC_ARTICLE_THUMB_SWITCH'
         ) {
             $zbp->option[$key] = (bool) $value;
             continue;
@@ -3164,6 +3174,7 @@ function SaveSetting()
             || $key == 'ZC_PAGEBAR_COUNT'
             || $key == 'ZC_COMMENTS_DISPLAY_COUNT'
             || $key == 'ZC_MANAGE_COUNT'
+            || $key == 'ZC_ARTICLE_THUMB_TYPE'
             || $key == 'ZC_ARTICLE_THUMB_WIDTH'
             || $key == 'ZC_ARTICLE_THUMB_HEIGHT'
         ) {
@@ -4208,7 +4219,11 @@ function ApiGetObjectArray($object, $other_props = array(), $remove_props = arra
 {
     $array = $object->GetData();
     unset($array['Meta']);
-    $array['Metas'] = $object->Metas;
+
+    foreach ($GLOBALS['hooks']['Filter_Plugin_API_Get_Object_Array'] as $fpname => &$fpsignal) {
+        $fpname($object, $array, $other_props, $remove_props, $with_relations);
+    }
+
     foreach ($other_props as $key => $value) {
         $array[$value] = $object->$value;
     }
