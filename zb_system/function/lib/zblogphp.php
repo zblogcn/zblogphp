@@ -1201,7 +1201,7 @@ class ZBlogPHP
     public function Verify()
     {
         $username = trim(GetVars('username', 'COOKIE'));
-        $token = trim(GetVars('token', 'COOKIE'));
+        $token = trim(GetVars('token_' . crc32($this->guid), 'COOKIE'));
         $user = $this->VerifyUserToken($token, $username);
         if (is_object($user)) {
             $this->user = $user;
