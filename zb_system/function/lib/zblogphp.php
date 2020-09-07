@@ -1210,7 +1210,7 @@ class ZBlogPHP
 
         // 在普通 Web 页面中
         $username = trim(GetVars('username', 'COOKIE'));
-        $token = trim(GetVars('token', 'COOKIE'));
+        $token = trim(GetVars('token_' . crc32($this->guid), 'COOKIE'));
         $user = $this->VerifyUserToken($token, $username);
 
         if (is_object($user)) {

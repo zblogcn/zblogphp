@@ -62,7 +62,7 @@ function SetLoginCookie($user, $cookieTime)
     $token = $zbp->GenerateUserToken($user, $cookieTime);
     $secure = HTTP_SCHEME == 'https://';
     setcookie("username", $user->Name, $cookieTime, $zbp->cookiespath, '', $secure, false);
-    setcookie("token", $token, $cookieTime, $zbp->cookiespath, '', $secure, true);
+    setcookie('token_' . crc32($zbp->guid), $token, $cookieTime, $zbp->cookiespath, '', $secure, true);
     setcookie("addinfo" . str_replace('/', '', $zbp->cookiespath), json_encode($addinfo), $cookieTime, $zbp->cookiespath, '', $secure, false);
 
     return true;
@@ -77,7 +77,7 @@ function Logout()
 
     setcookie('username', '', (time() - 3600), $zbp->cookiespath);
     setcookie('password', '', (time() - 3600), $zbp->cookiespath);
-    setcookie('token', '', (time() - 3600), $zbp->cookiespath);
+    setcookie('token_' . crc32($zbp->guid), '', (time() - 3600), $zbp->cookiespath);
     setcookie("addinfo" . str_replace('/', '', $zbp->cookiespath), '', (time() - 3600), $zbp->cookiespath);
 
     foreach ($GLOBALS['hooks']['Filter_Plugin_Logout_Succeed'] as $fpname => &$fpsignal) {
@@ -4058,7 +4058,7 @@ function ApiTokenVerify()
             $api_token = substr($auth, 7);
         } else {
             // 获取（POST 或 GET 中的）请求参数
-            $api_token = GetVars('token');
+            $api_token = GetVars('token_' . crc32($zbp->guid));
         }
 
         $user = $zbp->VerifyAPIToken($api_token);
