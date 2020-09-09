@@ -61,9 +61,9 @@ function SetLoginCookie($user, $cookieTime)
     $addinfo['useralias'] = $user->StaticName;
     $token = $zbp->GenerateUserToken($user, $cookieTime);
     $secure = HTTP_SCHEME == 'https://';
-    setcookie("username", $user->Name, $cookieTime, $zbp->cookiespath, '', $secure, false);
+    setcookie('username_' . crc32($zbp->guid), $user->Name, $cookieTime, $zbp->cookiespath, '', $secure, false);
     setcookie('token_' . crc32($zbp->guid), $token, $cookieTime, $zbp->cookiespath, '', $secure, true);
-    setcookie("addinfo" . str_replace('/', '', $zbp->cookiespath), json_encode($addinfo), $cookieTime, $zbp->cookiespath, '', $secure, false);
+    setcookie('addinfo' . str_replace('/', '', $zbp->cookiespath), json_encode($addinfo), $cookieTime, $zbp->cookiespath, '', $secure, false);
 
     return true;
 }
@@ -75,7 +75,7 @@ function Logout()
 {
     global $zbp;
 
-    setcookie('username', '', (time() - 3600), $zbp->cookiespath);
+    setcookie('username_' . crc32($zbp->guid), '', (time() - 3600), $zbp->cookiespath);
     setcookie('password', '', (time() - 3600), $zbp->cookiespath);
     setcookie('token_' . crc32($zbp->guid), '', (time() - 3600), $zbp->cookiespath);
     setcookie("addinfo" . str_replace('/', '', $zbp->cookiespath), '', (time() - 3600), $zbp->cookiespath);
