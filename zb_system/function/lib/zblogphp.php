@@ -1209,7 +1209,7 @@ class ZBlogPHP
     {
 
         // 在普通 Web 页面中
-        $username = trim(GetVars('username', 'COOKIE'));
+        $username = trim(GetVars('username_' . crc32($this->guid), 'COOKIE'));
         $token = trim(GetVars('token_' . crc32($this->guid), 'COOKIE'));
         $user = $this->VerifyUserToken($token, $username);
 
