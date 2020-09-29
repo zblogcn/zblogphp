@@ -147,7 +147,7 @@ class Category extends Base
             if ($this->ParentID == 0) {
                 return;
             } else {
-                return $zbp->categories[$this->ParentID];
+                return $zbp->categories_all[$this->ParentID];
             }
         }
         if ($name == 'Template') {
@@ -222,8 +222,8 @@ class Category extends Base
     {
         global $zbp;
         if ($this->ID > 0) {
-            unset($zbp->categories[$this->ID]);
-            unset($zbp->categoriesbyorder[$this->ID]);
+            unset($zbp->categories_all[$this->ID]);
+            unset($zbp->categories_allbyorder[$this->ID]);
         }
 
         foreach ($GLOBALS['hooks']['Filter_Plugin_Category_Del'] as $fpname => &$fpsignal) {
@@ -251,10 +251,10 @@ class Category extends Base
         global $zbp;
         if ($object->ParentID == 0) {
             return $deep;
-        } elseif (!isset($zbp->categories[$object->ParentID])) {
+        } elseif (!isset($zbp->categories_all[$object->ParentID])) {
             return 0;
         } else {
-            return $this->GetDeep($zbp->categories[$object->ParentID], ($deep + 1));
+            return $this->GetDeep($zbp->categories_all[$object->ParentID], ($deep + 1));
         }
     }
 
@@ -271,9 +271,9 @@ class Category extends Base
         if ($parentid == 0) {
             return 0;
         }
-        if (isset($zbp->categories[$parentid])) {
-            if ($zbp->categories[$parentid]->ParentID > 0) {
-                return $this->GetRoot($zbp->categories[$parentid]->ParentID);
+        if (isset($zbp->categories_all[$parentid])) {
+            if ($zbp->categories_all[$parentid]->ParentID > 0) {
+                return $this->GetRoot($zbp->categories_all[$parentid]->ParentID);
             }
 
             return $parentid;

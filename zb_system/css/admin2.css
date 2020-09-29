@@ -113,11 +113,10 @@ label { cursor: pointer; }
 #divMain2 { padding: 0px; margin: 0px; }
 .divHeader { height: 1.8em; line-height: 1.8em; font-size: 1.5em; padding: 5px 0 42px 0; }
 .divHeader2 { height: 1.8em; line-height: 1.8em; font-size: 1.5em; padding: 5px 0 42px 0; border-bottom: 5px solid #e0e0e0; margin-bottom:5px; }
-.divHeader i, .divHeader2 i { margin-left: -38px; margin-right: -2px; vertical-align: middle; font-size: 1.35em}
+.divHeader i, .divHeader2 i { margin-left: -38px; margin-right: -2px; vertical-align: middle; font-size: 1.25em}
 .divHeader span, .divHeader2 span { vertical-align: middle; }
 .main>#divMain>div[class^="divHeader"],.main>#divMain2>div[class^="divHeader"]{padding-left:40px;background:url('../image/admin/none.gif') 3px 9px no-repeat;background-size:32px;}
 #divMain2 [class^="icon-"] {font-size: 16px;/* color: #3a6ea5; */}
-
 
 /*表   格*/
 table { border-collapse: collapse; background: #ffffff; line-height: 120%; }
@@ -162,7 +161,7 @@ select { padding: 0.15em 0.25em 0.20em 0.25em; border: 1px solid #ccc; backgroun
 textarea { border: 1px solid #ccc; background-position: bottom; background: #fff; font-size: 1em; }
 input.button,
 input[type="submit"],
-input[type="button"] { color: #ffffff; font-size: 1.1em; height: 29px; padding: 2px 18px 3px 18px; margin: 0 0.5em; background: #3a6ea5; border: 1px solid #046190; cursor: pointer; }
+input[type="button"] { color: #ffffff; font-size: 1.1em; height: 29px; padding: 2px 18px 3px 18px; margin: 0 0.5em 0 0; background: #3a6ea5; border: 1px solid #046190; cursor: pointer; }
 input.button:hover { background: #3399cc; }
 input.button2 { width: auto; }
 input[disabled],
@@ -201,7 +200,7 @@ div.hint p.hint_tips:before { content: "\eaf9"; color: #4e6b9e; }
 
 /*后台*/
 form.search { background: #f0f0f0; padding: 0.5em; -ms-text-size-adjust: 100%; /*用于解决IE10 for WP8字体过大的问题*/ }
-form.search{box-shadow:0 0 0.1em rgba(0,0,0,0.3);padding:1em;position:relative;background:#fff;margin:0.4em 0 0.8em 0;border-radius:0.1em;}
+form.search{box-shadow:0 0 0.1em rgba(0,0,0,0.3);padding:5px 1em;position:relative;background:#fff;margin:0.4em 0 0.8em 0;border-radius:0.1em;}
 hr { width: 100%; height: 1px; border: none; padding: 0; visibility: hidden; }
 form.search select,form.search input[type=text] { height:33px; padding:0 10px; outline:0; vertical-align:top; }
 form.search input[type=file] { outline:0; }
@@ -236,9 +235,10 @@ input#edtTag { margin-top: 5px; padding: 0 10px; width: 50%; height:33px; }
 #editor_txt { width: 100%; height: 300px; }
 
 /*后台主题管理页*/
+#frmTheme::after{ content:""; display:block; clear:both; }
 div.theme { width: 230px; height: 320px; }
 div.theme img { margin-bottom: -3px; }
-div.theme-now { float: left; background: #b0cdee; padding: .6em 1em; margin: 0 1em 1em 0; border:1px solid #8eb5e2; }
+div.theme-now { float: left; background: #c1deff; padding: .6em 1em; margin: 0 1em 1em 0; border:1px solid #8eb5e2; }
 div.theme-other { float: left; background: #f0f0f0; padding: .6em 1em; margin: 0 1em 1em 0; border:1px solid #e2e2e2; }
 div.theme-other:hover { border:1px solid #c3c3c3; box-shadow:0 2px 2px 0 #ddd; }
 div.theme-other a { cursor: pointer; }
@@ -340,9 +340,9 @@ p.hint a:before {content: "\ec18";font-family: 'icomoon'!important; speak: never
 #batch p { padding: 0.3em 0.5em 0.3em 0; font-size: 1.0em; }
 span.button { cursor: pointer; }
 a.button,
-span.button { border-radius: 2px; padding: 2px 3px 2px 3px; line-height: 1.0em; font-size: 1em; }
+span.button { border-radius: 2px; padding: 2px 3px 2px 3px; line-height: 1.0em; font-size: 1em; display:inline-block; }
 a.button:hover,
-span.button:hover { box-shadow: 0 0 1px #000; border-radius: 0.3em; padding: 2px 3px 2px 3px; }
+span.button:hover { box-shadow: 0 0 1px #000; border-radius: 2px; padding: 2px 3px 2px 3px; }
 
 /*侧栏管理*/
 .widget-left { float: left; clear: left; width: 100%; margin-right: -290px; overflow: hidden; }
@@ -385,7 +385,7 @@ span.button:hover { box-shadow: 0 0 1px #000; border-radius: 0.3em; padding: 2px
 .login dd { width: 180px; float: left; }
 
 .tab-content td input[type=text],.tab-content td select { height:33px; padding:5px 10px; }
-.tab-content td textarea { padding:5px 10px; }
+.tab-content td textarea,#Content { padding:5px 10px; }
 .theme-name i.icon-layout-text-sidebar-reverse { color: #3a6ea5; }
 .theme-name a { vertical-align: middle; }
 

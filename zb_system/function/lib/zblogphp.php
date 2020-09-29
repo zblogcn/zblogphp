@@ -131,11 +131,31 @@ class ZBlogPHP
     public $categories = null;
 
     /**
+     * @var Category[] 分类数组ALL
+     */
+    public $categories_all = array();
+
+    /**
+     * @var Category[] 分类数组ALL（已排序）
+     */
+    public $categories_allbyorder = array();
+
+    /**
      * @var Category[] 分类数组（已排序）
      */
     public $categorysbyorder = array();
 
     public $categoriesbyorder = null;
+
+    /**
+     * @var Category[] 按类型分类数组
+     */
+    public $categories_type = array();
+
+    /**
+     * @var Category[] 按类型分类数组（已排序）
+     */
+    public $categories_typebyorder = array();
 
     /**
      * @var Module[] 模块数组
@@ -1480,7 +1500,7 @@ class ZBlogPHP
      *
      * @return array
      */
-    private function LoadCategories_Recursion($deep, $id, &$lv)
+    private function LoadCategories_Recursion($deep, $id, &$lv, $type)
     {
         $subarray = array();
         for ($i = 0; $i < $this->category_recursion_level; $i++) {
@@ -1488,16 +1508,16 @@ class ZBlogPHP
             ${$name} = &$lv[$i];
         }
         $lvdeep = 'lv' . $deep;
-        $this->categoriesbyorder[$id] = &$this->categories[$id];
+        $this->categories_typebyorder[$type][$id] = &$this->categories_all[$id];
         if ($deep < ($this->category_recursion_level - 1)) {
             $deep += 1;
             $lvdeepnext = 'lv' . $deep;
             if (isset(${$lvdeepnext}[$id])) {
                 foreach (${$lvdeepnext}[$id] as $idnow) {
                     $subarray[] = $idnow;
-                    $this->categoriesbyorder[$id]->SubCategories[] = &$this->categories[$idnow];
+                    $this->categories_typebyorder[$type][$id]->SubCategories[] = &$this->categories_all[$idnow];
                     //$this->categoriesbyorder[$id]->ChildrenCategories[] = &$this->categories[$idnow];
-                    $array = $this->LoadCategories_Recursion($deep, $idnow, $lv);
+                    $array = $this->LoadCategories_Recursion($deep, $idnow, $lv, $type);
                     foreach ($array as $key => $value) {
                         $subarray[] = $value;
                     }
@@ -1506,7 +1526,7 @@ class ZBlogPHP
         }
         $subarray = array_unique($subarray);
         foreach ($subarray as $key => $value) {
-            $this->categoriesbyorder[$id]->ChildrenCategories[] = &$this->categories[$value];
+            $this->categories_typebyorder[$type][$id]->ChildrenCategories[] = &$this->categories_all[$value];
         }
         return $subarray;
     }
@@ -1533,20 +1553,42 @@ class ZBlogPHP
         }
 
         foreach ($array as $c) {
-            $this->categories[$c->ID] = $c;
+            $this->categories_all[$c->ID] = $c;
+        }
+        //$this->categories_all = $this->categories;
+
+        foreach ($this->posttype as $key => $value) {
+            $this->categories_type[$key] = array();
+            $this->categories_typebyorder[$key] = array();
+        }
+        foreach ($array as $key => $value) {
+            $this->categories_all[$value->ID] = $value;
+            $this->categories_type[$value->Type][$value->ID]=$value;
         }
 
-        foreach ($this->categories as $id => $c) {
-            $l = 'lv' . $c->Level;
-            ${$l}[$c->ParentID][] = $id;
+        foreach ($this->posttype as $key => $value) {
+            $categories = $this->categories_type[$key];
+            foreach ($categories as $id => $c) {
+                $l = 'lv' . $c->Level;
+                ${$l}[$c->ParentID][] = $id;
+            }
+
+            if (!is_array($lv0[0])) {
+                $lv0[0] = array();
+            }
+
+            foreach ($lv0[0] as $id0) {
+                $this->LoadCategories_Recursion(0, $id0, $lv, $key);
+            }
         }
 
-        if (!is_array($lv0[0])) {
-            $lv0[0] = array();
-        }
+        $this->categories = &$this->categories_type[0];
+        $this->categoriesbyorder = &$this->categories_typebyorder[0];
 
-        foreach ($lv0[0] as $id0) {
-            $this->LoadCategories_Recursion(0, $id0, $lv);
+        foreach ($this->categories_typebyorder as $key => $value) {
+            if(is_array($value)) {
+                $this->categories_allbyorder += $value;
+            }
         }
 
         return true;
@@ -2517,7 +2559,7 @@ class ZBlogPHP
      */
     public function GetCategoryByID($id)
     {
-        return $this->GetSomeThing('categories', 'ID', $id, 'Category');
+        return $this->GetSomeThing('categories_all', 'ID', $id, 'Category');
     }
 
     /**
@@ -2529,7 +2571,7 @@ class ZBlogPHP
      */
     public function GetCategoryByName($name)
     {
-        return $this->GetSomeThing('categories', 'Name', $name, 'Category');
+        return $this->GetSomeThing('categories_all', 'Name', $name, 'Category');
     }
 
     /**
@@ -2542,7 +2584,7 @@ class ZBlogPHP
      */
     public function GetCategoryByAlias($name, $backKey = null)
     {
-        return $this->GetSomeThingByAlias('categories', $name, $backKey, 'Category');
+        return $this->GetSomeThingByAlias('categories_all', $name, $backKey, 'Category');
     }
 
     /**
@@ -2808,9 +2850,9 @@ class ZBlogPHP
     public function GetTagByAlias($name, $backKey = null)
     {
         $ret = $this->GetSomeThingByAlias('tags', $name, $backKey, 'Tag');
-        if ($ret->ID >= 0) {
-            $this->tagsbyname[$ret->ID] = &$this->tags[$ret->ID];
-        }
+        //if ($ret->ID >= 0) {
+            //$this->tagsbyname[$ret->Name] = &$this->tags[$ret->ID];
+        //}
 
         return $ret;
     }
@@ -2833,7 +2875,7 @@ class ZBlogPHP
             return new Tag();
         } else {
             $this->tags[$array[0]->ID] = $array[0];
-            $this->tagsbyname[$array[0]->ID] = &$this->tags[$array[0]->ID];
+            $this->tagsbyname[$array[0]->Name] = &$this->tags[$array[0]->ID];
 
             return $this->tags[$array[0]->ID];
         }
