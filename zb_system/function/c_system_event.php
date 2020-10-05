@@ -4058,7 +4058,7 @@ function ApiTokenVerify()
             $api_token = substr($auth, 7);
         } else {
             // 获取（POST 或 GET 中的）请求参数
-            $api_token = GetVars('token_' . crc32($zbp->guid));
+            $api_token = GetVars('token');
         }
 
         $user = $zbp->VerifyAPIToken($api_token);
