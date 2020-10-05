@@ -4360,11 +4360,13 @@ function ApiGetPaginationInfo($pagebar = null)
  */
 function ApiGetAndFilterRelationQuery($info)
 {
-    if (empty(GetVars('with_relations'))) {
+    $relations_req = trim(GetVars('with_relations'));
+
+    if (empty($relations_req)) {
         return array();
     }
 
-    $relations = explode(',', trim(GetVars('with_relations')));
+    $relations = explode(',', $relations_req);
     $ret_relations = array();
 
     foreach ($relations as $relation) {
