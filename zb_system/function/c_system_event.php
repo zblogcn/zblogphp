@@ -1498,7 +1498,7 @@ function PostArticle()
 
         //缩略图处理
         if($zbp->option['ZC_ARTICLE_THUMB_SWITCH']){
-            $intro = isset($_POST['Intro'])?$_POST['Intro']:'';
+            $intro = isset($_POST['Intro']) ? $_POST['Intro'] : '';
             //获取内容的第一张图片
             preg_match_all('/<img[^>]*?\s+src="([^\s"]{5,})"[^>]*?>/i', $intro . $_POST['Content'], $imgs);
             $img = isset($imgs[1][0]) ? $imgs[1][0] : false;
@@ -1506,9 +1506,9 @@ function PostArticle()
                 //判断是否为本地图片
                 if(stripos($img,$zbp->host) !== false) {
                     //将图片地址的host干掉
-                    $img = str_replace($zbp->host,'',$img);
+                    $img = str_replace($zbp->host, '', $img);
                     //绝对地址
-                    $imgs = $zbp->path.str_replace($zbp->host,'',$img);
+                    $imgs = $zbp->path.str_replace($zbp->host, '', $img);
                     if(is_file($imgs)){
                         //缩略图路径
                         $imgNew = ImgToThumbUrl($imgs);
@@ -1527,6 +1527,7 @@ function PostArticle()
                 }else{
                     $http = Network::Create();
                     $http->open('GET',$img);
+                    $http->setRequestHeader('Referer', $zbp->host);
                     $http->send();
                     if ($http->status == 200){
                         $r = $http->responseText;

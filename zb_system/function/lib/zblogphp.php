@@ -138,7 +138,7 @@ class ZBlogPHP
     /**
      * @var Category[] 分类数组ALL（已排序）
      */
-    public $categories_allbyorder = array();
+    public $categoriesbyorder_all = array();
 
     /**
      * @var Category[] 分类数组（已排序）
@@ -155,7 +155,7 @@ class ZBlogPHP
     /**
      * @var Category[] 按类型分类数组（已排序）
      */
-    public $categories_typebyorder = array();
+    public $categoriesbyorder_type = array();
 
     /**
      * @var Module[] 模块数组
@@ -181,6 +181,26 @@ class ZBlogPHP
      * @var Tag[] 标签数组（以标签名为键）
      */
     public $tagsbyname = array();
+
+    /**
+     * @var array 标签数组 ALL
+     */
+    public $tags_all = array();
+
+    /**
+     * @var array 标签数组 ALL（以标签名为键）
+     */
+    public $tags_allbyname = array();
+
+    /**
+     * @var array 标签数组 By Type
+     */
+    public $tags_type = array();
+
+    /**
+     * @var array 标签数组 By Type（以标签名为键）
+     */
+    public $tagsbyname_type = array();
 
     /**
      * @var Comment[] 评论数组
@@ -1508,14 +1528,14 @@ class ZBlogPHP
             ${$name} = &$lv[$i];
         }
         $lvdeep = 'lv' . $deep;
-        $this->categories_typebyorder[$type][$id] = &$this->categories_all[$id];
+        $this->categoriesbyorder_type[$type][$id] = &$this->categories_all[$id];
         if ($deep < ($this->category_recursion_level - 1)) {
             $deep += 1;
             $lvdeepnext = 'lv' . $deep;
             if (isset(${$lvdeepnext}[$id])) {
                 foreach (${$lvdeepnext}[$id] as $idnow) {
                     $subarray[] = $idnow;
-                    $this->categories_typebyorder[$type][$id]->SubCategories[] = &$this->categories_all[$idnow];
+                    $this->categoriesbyorder_type[$type][$id]->SubCategories[] = &$this->categories_all[$idnow];
                     //$this->categoriesbyorder[$id]->ChildrenCategories[] = &$this->categories[$idnow];
                     $array = $this->LoadCategories_Recursion($deep, $idnow, $lv, $type);
                     foreach ($array as $key => $value) {
@@ -1526,7 +1546,7 @@ class ZBlogPHP
         }
         $subarray = array_unique($subarray);
         foreach ($subarray as $key => $value) {
-            $this->categories_typebyorder[$type][$id]->ChildrenCategories[] = &$this->categories_all[$value];
+            $this->categoriesbyorder_type[$type][$id]->ChildrenCategories[] = &$this->categories_all[$value];
         }
         return $subarray;
     }
@@ -1559,7 +1579,7 @@ class ZBlogPHP
 
         foreach ($this->posttype as $key => $value) {
             $this->categories_type[$key] = array();
-            $this->categories_typebyorder[$key] = array();
+            $this->categoriesbyorder_type[$key] = array();
         }
         foreach ($array as $key => $value) {
             $this->categories_all[$value->ID] = $value;
@@ -1583,11 +1603,11 @@ class ZBlogPHP
         }
 
         $this->categories = &$this->categories_type[0];
-        $this->categoriesbyorder = &$this->categories_typebyorder[0];
+        $this->categoriesbyorder = &$this->categoriesbyorder_type[0];
 
-        foreach ($this->categories_typebyorder as $key => $value) {
+        foreach ($this->categoriesbyorder_type as $key => $value) {
             if(is_array($value)) {
-                $this->categories_allbyorder += $value;
+                $this->categoriesbyorder_all += $value;
             }
         }
 
@@ -1601,13 +1621,34 @@ class ZBlogPHP
      */
     public function LoadTags()
     {
+        $this->tags_type = array();
+        $this->tagsbyname_type = array();
+
         $this->tags = array();
         $this->tagsbyname = array();
+
+        $this->tags_all = array();
+        $this->tagsbyname_all = array();
+
         $array = $this->GetTagList();
+
         foreach ($array as $t) {
-            $this->tags[$t->ID] = $t;
-            $this->tagsbyname[$t->Name] = &$this->tags[$t->ID];
+            $this->tags_all[$t->ID] = $t;
+            $this->tagsbyname_all[$t->Name] = &$this->tags_all[$t->ID];
+            if(!isset($this->tags_type[$t->Type]))
+                $this->tags_type[$t->Type] = array();
+            if(!isset($this->tagsbyname_type[$t->Type]))
+                $this->tagsbyname_type[$t->Type] = array();
+            $this->tags_type[$t->Type][$t->ID] = &$this->tags_all[$t->ID];
+            $this->tagsbyname_type[$t->Type][$t->Name] = &$this->tags_all[$t->ID];
         }
+        if(!isset($this->tags_type[0]))
+            $this->tags_type[0] = array();
+        if(!isset($this->tagsbyname_type[0]))
+            $this->tagsbyname_type[0] = array();
+
+        $this->tags = &$this->tags_type[0];
+        $this->tagsbyname = &$this->tagsbyname_type[0];
 
         return true;
     }
@@ -2890,7 +2931,7 @@ class ZBlogPHP
      */
     public function GetTagByID($id)
     {
-        $ret = $this->GetSomeThing('tags', 'ID', $id, 'Tag');
+        $ret = $this->GetSomeThing('tags_all', 'ID', $id, 'Tag');
         if ($ret->ID > 0) {
             $this->tagsbyname[$ret->ID] = &$this->tags[$ret->ID];
         }
@@ -2933,11 +2974,11 @@ class ZBlogPHP
         $b = array();
         $c = array();
         foreach ($t as $v) {
-            if (!isset($this->tags[$v])) {
+            if (array_key_exists($v, $this->tags_all)  == false) {
                 $a[] = array('tag_ID', $v);
                 $c[] = $v;
             } else {
-                $b[$v] = &$this->tags[$v];
+                $b[$v] = &$this->tags_all[$v];
             }
         }
 
@@ -2948,9 +2989,10 @@ class ZBlogPHP
             //$array=$this->GetTagList('',array(array('array',$a)),'','','');
             $array = $this->GetTagList('', array(array('IN', 'tag_ID', $c)), '', '', '');
             foreach ($array as $v) {
-                $this->tags[$v->ID] = $v;
-                $this->tagsbyname[$v->Name] = &$this->tags[$v->ID];
-                $t[$v->ID] = &$this->tags[$v->ID];
+                $this->tags_all[$v->ID] = $v;
+                $this->tags_type[$v->Type][$v->ID] = &$this->tags_all[$v->ID];
+                $this->tagsbyname_type[$v->Type][$v->Name] = &$this->tags_all[$v->ID];
+                $t[$v->ID] = &$this->tags_all[$v->ID];
             }
 
             return array_merge($b, $t);
@@ -2961,10 +3003,11 @@ class ZBlogPHP
      * 通过类似'aaa,bbb,ccc,ddd'载入tags.
      *
      * @param string $s 标签名字符串，如'aaa,bbb,ccc,ddd
+     * @param int $posttype type
      *
      * @return array
      */
-    public function LoadTagsByNameString($s)
+    public function LoadTagsByNameString($s, $posttype = 0)
     {
         $s = trim($s);
         $s = str_replace(';', ',', $s);
@@ -2987,10 +3030,10 @@ class ZBlogPHP
         $b = array();
         foreach ($t as $value) {
             $v = trim($value);
-            if (isset($this->tagsbyname[$v]) == false) {
+            if (isset($this->tagsbyname_type[$posttype][$v]) == false) {
                 $a[] = array('tag_Name', $v);
             } else {
-                $b[$v] = &$this->tagsbyname[$v];
+                $b[$v] = &$this->tagsbyname_type[$posttype][$v];
             }
         }
 
@@ -2998,11 +3041,12 @@ class ZBlogPHP
             return $b;
         } else {
             $t = array();
-            $array = $this->GetTagList('', array(array('array', $a)), '', '', '');
+            $array = $this->GetTagList('', array(array('=', 'tag_Type', $posttype), array('array', $a)), '', '', '');
             foreach ($array as $v) {
-                $this->tags[$v->ID] = $v;
-                $this->tagsbyname[$v->Name] = &$this->tags[$v->ID];
-                $t[$v->Name] = &$this->tags[$v->ID];
+                $this->tags_all = $v;
+                $this->tags_type[$posttype][$v->ID] = &$this->tags_all[$v->ID];
+                $this->tagsbyname_type[$posttype][$v->Name] = &$this->tags_all[$v->ID];;
+                $t[$v->Name] = &$this->tags_all[$v->ID];;
             }
             foreach ($t as $key => $value) {
                 $b[$key] = $value;

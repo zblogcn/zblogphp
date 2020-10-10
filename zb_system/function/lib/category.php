@@ -223,7 +223,7 @@ class Category extends Base
         global $zbp;
         if ($this->ID > 0) {
             unset($zbp->categories_all[$this->ID]);
-            unset($zbp->categories_allbyorder[$this->ID]);
+            unset($zbp->categoriesbyorder_all[$this->ID]);
         }
 
         foreach ($GLOBALS['hooks']['Filter_Plugin_Category_Del'] as $fpname => &$fpsignal) {

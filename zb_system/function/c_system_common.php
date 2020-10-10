@@ -1990,8 +1990,8 @@ function RecHtmlSpecialChars(&$arr)
  * @return string      缩略图地址
  */
 function ImgToThumbUrl($path){
-    $pos = strripos($path,'.');
-    $start = substr($path,0,$pos);
-    $end = substr($path,$pos);
-    return $start.'_thumb'.$end;
+    $pos = strripos($path, '.');
+    $start = substr($path, 0, $pos);
+    $end = substr($path, $pos);
+    return $start . '_thumb' . $end;
 }
