@@ -455,8 +455,14 @@ class ZBlogPHP
         $this->displaycount = &$this->option['ZC_DISPLAY_COUNT'];
         $this->commentdisplaycount = &$this->option['ZC_COMMENTS_DISPLAY_COUNT'];
 
-        $this->categories = &$this->categorys;
-        $this->categoriesbyorder = &$this->categorysbyorder;
+        $this->categorys = &$this->categories;
+        $this->categorysbyorder = &$this->categoriesbyorder;
+
+        $this->categories = &$this->categories_type[0];
+        $this->categoriesbyorder = &$this->categoriesbyorder_type[0];
+
+        $this->tags = &$this->tags_type[0];
+        $this->tagsbyname = &$this->tagsbyname_type[0];
 
         $this->user = new stdClass();
         foreach ($this->datainfo['Member'] as $key => $value) {
@@ -2890,7 +2896,7 @@ class ZBlogPHP
      */
     public function GetTagByAlias($name, $backKey = null)
     {
-        $ret = $this->GetSomeThingByAlias('tags', $name, $backKey, 'Tag');
+        $ret = $this->GetSomeThingByAlias('tags_all', $name, $backKey, 'Tag');
         //if ($ret->ID >= 0) {
             //$this->tagsbyname[$ret->Name] = &$this->tags[$ret->ID];
         //}

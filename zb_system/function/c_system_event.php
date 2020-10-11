@@ -1792,7 +1792,7 @@ function DelArticle()
  *
  * @return string 返回如'{1}{2}{3}{4}'的字符串
  */
-function PostArticle_CheckTagAndConvertIDtoString($tagnamestring)
+function PostArticle_CheckTagAndConvertIDtoString($tagnamestring, $post_type = 0)
 {
     global $zbp;
     $s = '';
@@ -1821,7 +1821,7 @@ function PostArticle_CheckTagAndConvertIDtoString($tagnamestring)
     $b = array_slice($b, 0, 20);
     $c = array();
 
-    $t = $zbp->LoadTagsByNameString($tagnamestring);
+    $t = $zbp->LoadTagsByNameString($tagnamestring, $post_type);
     foreach ($t as $key => $value) {
         $c[] = $key;
     }
@@ -1847,11 +1847,11 @@ function PostArticle_CheckTagAndConvertIDtoString($tagnamestring)
     }
 
     foreach ($b as $key) {
-        if (!isset($zbp->tagsbyname[$key])) {
+        if (!isset($zbp->tagsbyname_type[$post_type][$key])) {
             continue;
         }
 
-        $s .= '{' . $zbp->tagsbyname[$key]->ID . '}';
+        $s .= '{' . $zbp->tagsbyname_type[$post_type][$key]->ID . '}';
     }
 
     return $s;
