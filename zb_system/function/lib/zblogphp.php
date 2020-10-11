@@ -3043,7 +3043,7 @@ class ZBlogPHP
             $t = array();
             $array = $this->GetTagList('', array(array('=', 'tag_Type', $posttype), array('array', $a)), '', '', '');
             foreach ($array as $v) {
-                $this->tags_all = $v;
+                $this->tags_all[$v->ID] = $v;
                 $this->tags_type[$posttype][$v->ID] = &$this->tags_all[$v->ID];
                 $this->tagsbyname_type[$posttype][$v->Name] = &$this->tags_all[$v->ID];;
                 $t[$v->Name] = &$this->tags_all[$v->ID];;
