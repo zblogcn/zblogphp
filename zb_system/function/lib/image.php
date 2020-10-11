@@ -23,7 +23,7 @@ class Image
     {
         $return = array('filesize' => 0, 'width' => 0, 'height' => 0);
         $destext = strtolower(substr(strrchr($destfile, '.'), 1));
-        if (!in_array($destext, array('gif', 'jpg', 'bmp', 'png'))) {
+        if (!in_array($destext, array('gif', 'jpg', 'bmp', 'png', 'webp'))) {
             return $return;
         }
         $imginfo = getimagesize($sourcefile);
@@ -72,6 +72,9 @@ class Image
                 break;
             case 'image/wbmp':
                 $img_src = imagecreatefromwbmp($sourcefile);
+                break;
+            case 'image/webp':
+                $img_src = imagecreatefromwebp($sourcefile);
                 break;
             default:
                 return $return;
