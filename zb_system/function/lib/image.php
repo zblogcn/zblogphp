@@ -83,7 +83,7 @@ class Image
         imagefill($img_dst, 0, 0, 0xffffff);
         imagecopyresampled($img_dst, $img_src, 0, 0, 0, 0, $des_width, $des_height, $src_width, $src_height);
         $tmppath = ini_get('upload_tmp_dir') . '/';
-        $tmppath == '/' and $tmppath = ZBP_PATH . 'zb_users/tmp';
+        $tmppath == '/' and $tmppath = ZBP_PATH . 'zb_users/cache';
         //如果设置的目录不存在，则创建
         if (!file_exists($tmppath)) {
             @mkdir($tmppath, 0777, true);
@@ -152,7 +152,7 @@ class Image
         imagefill($img_dst, 0, 0, 0xffffff);
         imagecopyresampled($img_dst, $imgcolor, 0, 0, $clipx, $clipy, $imgwidth, $imgheight, $imgwidth, $imgheight);
         $tmppath = ini_get('upload_tmp_dir') . '/';
-        $tmppath == '/' and $tmppath = ZBP_PATH . 'zb_users/tmp';
+        $tmppath == '/' and $tmppath = ZBP_PATH . 'zb_users/cache';
         //如果设置的上传目录不存在，则创建
         if (!file_exists($tmppath)) {
             @mkdir($tmppath, 0777, true);
