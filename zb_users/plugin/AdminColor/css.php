@@ -102,7 +102,7 @@ if ($zbp->Config('AdminColor')->LogoPath) {
 
 $c .= '
 .pane,.theme,form.search{padding:1em;position:relative;background:#fff;margin:1em 0;border-radius:0.1em;}
-div.theme{height:340px;margin:0 2em 2em 0;}
+div.theme{height:auto;margin:0 2em 2em 0;}
 div.theme-other{background:#fff;}
 form.search p{padding:0;}
 td,th{border:none;border-right: 1px solid #efefef;padding:0.6em;}

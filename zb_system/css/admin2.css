@@ -236,13 +236,14 @@ input#edtTag { margin-top: 5px; padding: 0 10px; width: 50%; height:33px; }
 
 /*后台主题管理页*/
 #frmTheme::after{ content:""; display:block; clear:both; }
-div.theme { width: 230px; height: 320px; }
+div.theme { width: 230px; height: auto;}
 div.theme img { margin-bottom: -3px; }
 div.theme-now { float: left; background: #c1deff; padding: .6em 1em; margin: 0 1em 1em 0; border:1px solid #8eb5e2; }
 div.theme-other { float: left; background: #f0f0f0; padding: .6em 1em; margin: 0 1em 1em 0; border:1px solid #e2e2e2; }
 div.theme-other:hover { border:1px solid #c3c3c3; box-shadow:0 2px 2px 0 #ddd; }
 div.theme-other a { cursor: pointer; }
 div.theme-other .theme-name img { opacity: 0.50; }
+div.theme-style {margin-bottom:0.5em;}
 /*div.theme>.theme-name,div.theme>.theme-author,div.theme>.theme-style,div.theme>p{height:2.4em;}*/
 div.theme>.theme-name{overflow: hidden;white-space :nowrap;}
 div.theme-now .betterTip img { box-shadow: 0 0 10px #3a6ea5; }

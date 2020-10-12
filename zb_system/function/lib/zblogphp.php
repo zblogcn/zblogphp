@@ -464,6 +464,11 @@ class ZBlogPHP
         $this->tags = &$this->tags_type[0];
         $this->tagsbyname = &$this->tagsbyname_type[0];
 
+        $this->categories_type[0] = array();
+        $this->categoriesbyorder_type[0] = array();
+        $this->tags_type[0] = array();
+        $this->tagsbyname_type[0] = array();
+
         $this->user = new stdClass();
         foreach ($this->datainfo['Member'] as $key => $value) {
             $this->user->$key = $value[3];
