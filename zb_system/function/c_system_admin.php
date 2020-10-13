@@ -1650,7 +1650,7 @@ function Admin_ThemeMng()
         }
         echo '<a target="_blank" href="' . htmlspecialchars($theme->url) . '" title=""><strong style="display:none;">' . htmlspecialchars($theme->id) . '</strong>';
         echo '<b>' . htmlspecialchars($theme->name) . '</b></a></div>';
-        echo '<div><img src="' . $theme->GetScreenshot() . '" title="' . htmlspecialchars($theme->name) . '" alt="' . htmlspecialchars($theme->name) . '" width="200" height="125" /></div>';
+        echo '<div class="theme-img"><span><img src="' . $theme->GetScreenshot() . '" title="' . htmlspecialchars($theme->name) . '" alt="' . htmlspecialchars($theme->name) . '" width="200" height="125" /></span></div>';
         echo '<div class="theme-author">' . $zbp->lang['msg']['author'] . ': <a target="_blank" href="' . htmlspecialchars($theme->author_url) . '">' . htmlspecialchars($theme->author_name) . '</a></div>';
         echo '<div class="theme-style">';
         echo '<select class="edit" size="1" title="' . $zbp->lang['msg']['style'] . '">';

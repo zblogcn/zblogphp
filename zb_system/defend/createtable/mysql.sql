@@ -17,6 +17,7 @@ CREATE TABLE IF NOT EXISTS %pre%post (
   log_CommNums int(11) NOT NULL DEFAULT '0',
   log_ViewNums int(11) NOT NULL DEFAULT '0',
   log_Template varchar(250) NOT NULL DEFAULT '',
+  log_FirstImg varchar(250) NOT NULL DEFAULT '',
   log_Thumb varchar(250) NOT NULL DEFAULT '',
   log_Meta longtext NOT NULL,
   PRIMARY KEY (log_ID),
