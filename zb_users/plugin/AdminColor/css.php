@@ -186,8 +186,8 @@ padding-right: 10px;
     line-height: 40px;
     text-align: left;
     cursor: pointer;
-    margin-left: 25px;
-    padding-left: 29px;
+    margin-left: 32px;
+
 }
 .divHeader {
     padding: 10px 0 45px 0;

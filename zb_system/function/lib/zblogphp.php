@@ -455,11 +455,11 @@ class ZBlogPHP
         $this->displaycount = &$this->option['ZC_DISPLAY_COUNT'];
         $this->commentdisplaycount = &$this->option['ZC_COMMENTS_DISPLAY_COUNT'];
 
-        $this->categorys = &$this->categories;
-        $this->categorysbyorder = &$this->categoriesbyorder;
-
         $this->categories = &$this->categories_type[0];
         $this->categoriesbyorder = &$this->categoriesbyorder_type[0];
+
+        $this->categorys = &$this->categories;
+        $this->categorysbyorder = &$this->categoriesbyorder;
 
         $this->tags = &$this->tags_type[0];
         $this->tagsbyname = &$this->tagsbyname_type[0];

@@ -194,7 +194,7 @@ class UrlRule
             $url = str_replace('%date%', '(?P<date>[0-9\-]+)', $url);
             if ($type == 'cate') {
                 if (self::$categoryLayer == -1) {
-                    foreach ($zbp->categorys as $c) {
+                    foreach ($zbp->categories as $c) {
                         if ($c->Level > self::$categoryLayer && strpos($c->Alias, '/') !== false) {
                             self::$categoryLayer = $c->Level;
                         }
@@ -396,7 +396,7 @@ class UrlRule
         global $zbp;
 
         if (self::$categoryLayer == -1) {
-            foreach ($zbp->categorys as $c) {
+            foreach ($zbp->categories as $c) {
                 if ($c->Level > self::$categoryLayer && strpos($c->Alias, '/') !== false) {
                     self::$categoryLayer = $c->Level;
                 }

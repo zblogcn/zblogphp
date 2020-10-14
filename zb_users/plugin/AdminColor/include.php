@@ -183,8 +183,9 @@ function admincolor_hideMenu(){
  $("div.left,aside.left").css({"background-color":"#333333"});
  $("div.left,aside.left").animate({"width":"36px"});
  $("div.main,section.main").animate({"padding-left":"46px"});
- $("#leftmenu span").animate({"margin-left":"10px","padding-left":"22px"}); 
- $("#leftmenu span i").animate({"margin-right":"8px","margin-right":"18px"}); 
+ $("#leftmenu span").animate({"margin-left":"10px"}); 
+ $("#leftmenu span i").animate({"margin-right":"8px","margin-right":"18px"});
+ $("#leftmenu span:not(:has(i))").animate({"margin-left":"10px","padding-left":"32px"});
 
  $("#leftmenu #nav_admincolor2 span").animate({"margin-left":"10px","padding-left":"20px","background-positionX":"0px"}); 
  $("body").animate({"background-positionX":"-125px"}); 
@@ -198,8 +199,9 @@ function admincolor_showMenu(){
  $("div.left,aside.left").css({"background-color":"#333333"});
  $("div.left,aside.left").animate({"width":"160px"});
  $("div.main,section.main").animate({"padding-left":"170px"});
- $("#leftmenu span").animate({"margin-left":"25px","padding-left":"29px"});
+ $("#leftmenu span").animate({"margin-left":"32px"});
  $("#leftmenu span i").animate({"margin-right":"18px","margin-right":"8px"}); 
+ $("#leftmenu span:not(:has(i))").animate({"margin-left":"32px","padding-left":"22px"});
 
  $("#leftmenu #nav_admincolor2 span").animate({"padding-left":"60px","background-positionX":"40px"}); 
  $("body").animate({"background-positionX":"+0px"}); 
