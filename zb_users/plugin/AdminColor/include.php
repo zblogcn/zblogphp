@@ -61,13 +61,13 @@ function AdminColor_Css()
         Add_Filter_Plugin('Filter_Plugin_Admin_LeftMenu', 'AdminColor_Add_Button');
         $hm = GetVars('admincolor_hm', 'COOKIE');
         if ($hm == '1') {
-            echo '<style type="text/css">.left{width:36px;background-color:#ededed;}.left #leftmenu span{margin-left:10px;padding-left:22px;}.left #leftmenu span i {margin-right:18px;}div.main,section.main{padding-left:46px;}</style>';
+            echo '<style type="text/css">.left{width:36px;background-color:#ededed;}.left #leftmenu span{margin-left:10px;padding-left:32px;}.left #leftmenu span.bgicon{padding-left:32px;}.left #leftmenu span i {margin-right:18px;}div.main,section.main{padding-left:46px;}</style>';
         }
     } else {
         Add_Filter_Plugin('Filter_Plugin_Admin_LeftMenu', 'AdminColor_Add_Button2');
         $hm = GetVars('admincolor_hm', 'COOKIE');
         if ($hm == '1') {
-            echo '<style type="text/css">.left{width:36px;background-color:#333333;}.left #leftmenu span{margin-left:10px;padding-left:22px;}.left #leftmenu span i {margin-right:18px;}div.main,section.main{padding-left:46px;}body{background-position:-125px center;}.left #leftmenu #nav_admincolor2 span{margin-left:10px;padding-left:20px ;background-position:0px 12px;}</style>';
+            echo '<style type="text/css">.left{width:36px;background-color:#333333;}.left #leftmenu span{margin-left:10px;padding-left:32px;}.left #leftmenu span.bgicon{padding-left:32px;}.left #leftmenu span i {margin-right:18px;}div.main,section.main{padding-left:46px;}body{background-position:-125px center;}.left #leftmenu #nav_admincolor2 span{margin-left:23px;padding-left:20px ;background-position:0px 12px;}</style>';
         }
     }
 }
@@ -131,7 +131,7 @@ function admincolor_hideMenu(){
  $("div.left,aside.left").css({"background-color":"#ededed"});
  $("div.left,aside.left").animate({"width":"36px"});
  $("div.main,section.main").animate({"padding-left":"46px"});
- $("#leftmenu span").animate({"margin-left":"10px","padding-left":"22px"}); 
+ $("#leftmenu span").animate({"margin-left":"10px","padding-left":"32px"}); 
  $("#leftmenu span i").animate({"margin-right":"8px","margin-right":"18px"}); 
 
  SetCookie('admincolor_hm','1',365);
@@ -146,9 +146,9 @@ function admincolor_showMenu(){
  $("div.left,aside.left").css({"background-color":"transparent"});
  $("div.left,aside.left").animate({"width":"140px"});
  $("div.main,section.main").animate({"padding-left":"150px"});
- $("#leftmenu span").animate({"margin-left":"25px","padding-left":"22px"});
+ $("#leftmenu span").animate({"margin-left":"25px","padding-left":"32px"});
  $("#leftmenu span i").animate({"margin-right":"18px","margin-right":"8px"}); 
-
+ $("#leftmenu span.bgicon").animate({"padding-left":"22px"});
  SetCookie('admincolor_hm','',-1); 
  $("#leftmenu a").tooltip({disabled: true});
  //$("#leftmenu a").tooltip( "destroy" );
@@ -185,9 +185,8 @@ function admincolor_hideMenu(){
  $("div.main,section.main").animate({"padding-left":"46px"});
  $("#leftmenu span").animate({"margin-left":"10px"}); 
  $("#leftmenu span i").animate({"margin-right":"8px","margin-right":"18px"});
- $("#leftmenu span:not(:has(i))").animate({"margin-left":"10px","padding-left":"32px"});
-
- $("#leftmenu #nav_admincolor2 span").animate({"margin-left":"10px","padding-left":"20px","background-positionX":"0px"}); 
+ $("#leftmenu span.bgicon").animate({"padding-left":"32px"});
+ $("#leftmenu #nav_admincolor2 span").animate({"margin-left":"23px","padding-left":"20px","background-positionX":"0px"}); 
  $("body").animate({"background-positionX":"-125px"}); 
  SetCookie('admincolor_hm','1',365);
  admincolor_tooptip();
@@ -201,9 +200,8 @@ function admincolor_showMenu(){
  $("div.main,section.main").animate({"padding-left":"170px"});
  $("#leftmenu span").animate({"margin-left":"32px"});
  $("#leftmenu span i").animate({"margin-right":"18px","margin-right":"8px"}); 
- $("#leftmenu span:not(:has(i))").animate({"margin-left":"32px","padding-left":"22px"});
-
- $("#leftmenu #nav_admincolor2 span").animate({"padding-left":"60px","background-positionX":"40px"}); 
+ $("#leftmenu span.bgicon").animate({"padding-left":"22px"});
+ $("#leftmenu #nav_admincolor2 span").animate({"padding-left":"65px","background-positionX":"40px"}); 
  $("body").animate({"background-positionX":"+0px"}); 
  SetCookie('admincolor_hm','',-1); 
  $("#leftmenu a").tooltip({disabled: true});
@@ -240,7 +238,7 @@ function admincolor_hideMenu(){
  $("div.left,aside.left").css({"background-color":"#e3eaf3"});
  $("div.left,aside.left").animate({"width":"36px"});
  $("div.main,section.main").animate({"padding-left":"46px"});
- $("#leftmenu span").animate({"margin-left":"10px","padding-left":"22px"}); 
+ $("#leftmenu span").animate({"margin-left":"10px","padding-left":"32px"}); 
  $("#leftmenu span i").animate({"margin-right":"8px","margin-right":"18px"});  
  SetCookie('admincolor_hm','1',365);
  admincolor_tooptip();
@@ -253,8 +251,9 @@ function admincolor_showMenu(){
  $("div.left,aside.left").css({"background-color":"Transparent"});
  $("div.left,aside.left").animate({"width":"140px"});
  $("div.main,section.main").animate({"padding-left":"150px"});
- $("#leftmenu span").animate({"margin-left":"25px","padding-left":"22px"});
+ $("#leftmenu span").animate({"margin-left":"25px","padding-left":"32px"});
  $("#leftmenu span i").animate({"margin-right":"18px","margin-right":"8px"}); 
+ $("#leftmenu span.bgicon").animate({"padding-left":"22px"});
  SetCookie('admincolor_hm','',-1); 
  $("#leftmenu a").tooltip({disabled: true});
  //$("#leftmenu a").tooltip( "destroy" );

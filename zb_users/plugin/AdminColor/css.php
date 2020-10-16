@@ -96,6 +96,9 @@ if ($zbp->Config('AdminColor')->HeaderPathUse == true || $id == 9) {
     $c .= 'header,.header{background:url(' . $zbp->Config('AdminColor')->HeaderPath . ') no-repeat center center;background-size:cover}' . PHP_EOL;
     $c .= 'div.bg{background:url(' . $zbp->Config('AdminColor')->HeaderPath . ') no-repeat center center;background-size:cover}' . PHP_EOL;
 }
+if ($zbp->Config('AdminColor')->HeaderPathUse == false && $id == 10) {
+    $c .= 'header,.header{background-image:none;}' . PHP_EOL;
+}
 if ($zbp->Config('AdminColor')->LogoPath) {
     $c .= '.logo img{background:url(' . $zbp->Config('AdminColor')->LogoPath . ') no-repeat center center;}';
 }
@@ -209,7 +212,7 @@ height: 40px;
     line-height: 36px;
     text-align: left;
     cursor: pointer;
-    margin-left: 25px;
+    margin-left: 36px;
     padding-left: 60px;
     background-position: 40px 12px;
 }

@@ -272,7 +272,7 @@ function MakeLeftMenu($requireAction, $strName, $strUrl, $strLiId, $strAId, $str
     if ($strIconClass != "") {
         $tmp = "<li id=\"" . $strLiId . "\"><a id=\"" . $strAId . "\" href=\"" . $strUrl . "\" title=\"" . strip_tags($strName) . "\"><span><i class=\"" . $strIconClass . "\"></i>" . $strName . "</span></a></li>";
     } elseif ($strImgUrl != "") {
-        $tmp = "<li id=\"" . $strLiId . "\"><a id=\"" . $strAId . "\" href=\"" . $strUrl . "\" title=\"" . strip_tags($strName) . "\"><span style=\"background-image:url('" . $strImgUrl . "')\">" . $strName . "</span></a></li>";
+        $tmp = "<li id=\"" . $strLiId . "\"><a id=\"" . $strAId . "\" href=\"" . $strUrl . "\" title=\"" . strip_tags($strName) . "\"><span class=\"bgicon\" style=\"background-image:url('" . $strImgUrl . "')\">" . $strName . "</span></a></li>";
     } else {
         $tmp = "<li id=\"" . $strLiId . "\"><a id=\"" . $strAId . "\" href=\"" . $strUrl . "\" title=\"" . strip_tags($strName) . "\"><span><i class=\"icon-window-fill\"></i>" . $strName . "</span></a></li>";
     }
