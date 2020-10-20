@@ -67,7 +67,7 @@ function AdminColor_Css()
         Add_Filter_Plugin('Filter_Plugin_Admin_LeftMenu', 'AdminColor_Add_Button2');
         $hm = GetVars('admincolor_hm', 'COOKIE');
         if ($hm == '1') {
-            echo '<style type="text/css">.left{width:36px;background-color:#333333;}.left #leftmenu span{margin-left:10px;padding-left:32px;}.left #leftmenu span.bgicon{padding-left:32px;}.left #leftmenu span i {margin-right:18px;}div.main,section.main{padding-left:46px;}body{background-position:-125px center;}.left #leftmenu #nav_admincolor2 span{margin-left:23px;padding-left:20px ;background-position:0px 12px;}</style>';
+            echo '<style type="text/css">.left{width:36px;background-color:#333333;}.left #leftmenu span{margin-left:10px;padding-left:32px;}.left #leftmenu span.bgicon{padding-left:32px;}.left #leftmenu span i {margin-right:18px;}div.main,section.main{padding-left:46px;}body{background-position:-124px center;}.left #leftmenu #nav_admincolor2 span{margin-left:23px;padding-left:20px ;background-position:0px 12px;}</style>';
         }
     }
 }
@@ -187,7 +187,7 @@ function admincolor_hideMenu(){
  $("#leftmenu span i").animate({"margin-right":"8px","margin-right":"18px"});
  $("#leftmenu span.bgicon").animate({"padding-left":"32px"});
  $("#leftmenu #nav_admincolor2 span").animate({"margin-left":"23px","padding-left":"20px","background-positionX":"0px"}); 
- $("body").animate({"background-positionX":"-125px"}); 
+ $("body").animate({"background-positionX":"-124px"}); 
  SetCookie('admincolor_hm','1',365);
  admincolor_tooptip();
 }

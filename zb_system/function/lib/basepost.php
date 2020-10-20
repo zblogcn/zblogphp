@@ -68,11 +68,21 @@ class BasePost extends Base
     /**
      * @param string $s
      *
+     * @return type|string
      * @return bool|string
      */
-    public function Time($s = 'Y-m-d H:i:s')
+    public function Time($type = 'PostTime', $s = 'Y-m-d H:i:s')
     {
-        return date($s, (int) $this->PostTime);
+        if (stripos($type, 'Post') !== false) {
+            return date($s, (int) $this->PostTime);
+        } elseif (stripos($type, 'Create') !== false) {
+            return date($s, (int) $this->CreateTime);
+        } elseif (stripos($type, 'Update') !== false) {
+            return date($s, (int) $this->UpdateTime);
+        } else {
+            // 1.7改为2个参数了($type加在第一个前)，为了兼容之前的写法
+            return date($type, (int) $this->PostTime);
+        }
     }
 
     /**

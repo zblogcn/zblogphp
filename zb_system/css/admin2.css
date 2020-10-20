@@ -289,8 +289,8 @@ span.note { font-size: 0.9em; }
 /* 网站设置页 */
 .content-box ul { padding: 10px 0 0 0px; }
 .content-box li { float: left; padding: 0 0 0 0; height: 2em; line-height: 2em; margin: 0; }
-.content-box .content-box-tabs a.current { background: #ededed; padding: 5px 10px; margin: 0 9px 0 0; line-height: 2.2em; height: 2em; color: black; font-weight: bolder; }
-.content-box .content-box-tabs a { border: 0px solid #7190ba; padding: 5px 10px; margin: 0 9px 0 0; line-height: 2.2em; height: 2em; }
+.content-box .content-box-tabs a.current { background: #ededed; padding: 5px 10px; margin: 0 9px 0 0; line-height: 2em; height: 2em; color: black; font-weight: bolder; }
+.content-box .content-box-tabs a { border: 0px solid #7190ba; padding: 5px 10px; margin: 0 9px 0 0; line-height: 2em; height: 2em; }
 .totoro { padding: 10px; }
 .totoro dd { line-height: 28px; margin-bottom: 5px; }
 .totoro .totorotxt { font-size: 12px; }

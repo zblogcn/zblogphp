@@ -134,15 +134,22 @@ if ($id == 10) {
     float:left;
     left:0px;
 }
+header div.logo {
+    border-right: 1px solid #444;
+}
+.header .menu ul li{
+    border-right:1px solid  #444;
+    line-height:60px;
+    height:60px;
+    margin:0;
+}
 .header .menu ul li a {
-    float: left;
-    line-height: 60px;
-    height: 60px;
-    padding: 0px 25px;
+    float: none;
+    padding: 0px 22px;
     font-size:1.2em;
     color: #fff;
     background: none;
-    border-right:1px solid  #3f474f;
+    vertical-align: middle;
 }
 
 .header {
@@ -155,7 +162,7 @@ header, .header {
   .left{
 padding-top:0px;
 float:left;
-height:100%;
+height:auto;
 background-position: -30px -2px;
 width:160px;
 background-color:#333333;
