@@ -810,6 +810,9 @@ function Admin_SiteInfo()
         if ($app->isloaded == true && $app->IsUsed()) {
             $sv .= '; AppCentre' . $app->version;
         }
+        if ($zbp->option['ZC_LAST_VERSION'] < ZC_LAST_VERSION) {
+            $sv .= '; Db' . ZC_LAST_VERSION;
+        }
         $r = str_replace('{$zbp->version}', $sv, $r);
         $r = str_replace('{$theme_version}', '(v' . $zbp->themeapp->version . ')', $r);
         if ($zbp->option['ZC_DEBUG_MODE']) {

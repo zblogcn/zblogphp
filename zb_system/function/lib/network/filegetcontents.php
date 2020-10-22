@@ -123,7 +123,7 @@ class Network__Filegetcontents implements Network__Interface
      */
     public function setTimeOuts($resolveTimeout, $connectTimeout, $sendTimeout, $receiveTimeout)
     {
-    	$this->option['timeout'] = $resolveTimeout;
+        $this->option['timeout'] = $resolveTimeout;
     }
 
     /**
