@@ -622,6 +622,17 @@ DefinePluginFilter('Filter_Plugin_Admin_Header');
 /*
 '**************************************************<
 '类型:Filter
+'名称:Filter_Plugin_Admin_Hint
+'参数:
+'说明:定义后台首页hint接口
+'调用:
+'**************************************************>
+ */
+DefinePluginFilter('Filter_Plugin_Admin_Hint');
+
+/*
+'**************************************************<
+'类型:Filter
 '名称:Filter_Plugin_Admin_Footer
 '参数:
 '说明:定义后台首页footer接口

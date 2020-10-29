@@ -18,3 +18,7 @@
 <section class="main">
 <?php
 $zbp->GetHint();
+
+foreach ($GLOBALS['hooks']['Filter_Plugin_Admin_Hint'] as $fpname => &$fpsignal) {
+    $fpname();
+}

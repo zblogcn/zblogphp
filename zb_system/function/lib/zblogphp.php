@@ -3297,15 +3297,7 @@ class ZBlogPHP
     }
 
     //$signal = good,bad,tips
-    private $hint1 = null;
-
-    private $hint2 = null;
-
-    private $hint3 = null;
-
-    private $hint4 = null;
-
-    private $hint5 = null;
+    private $hints = array();
 
     /**
      * 设置提示消息并存入Cookie.
@@ -3325,21 +3317,10 @@ class ZBlogPHP
             }
         }
         $content = substr($content, 0, 255);
-        if ($this->hint1 == null) {
-            $this->hint1 = $signal . '|' . $content;
-            setcookie("hint_signal1", $signal . '|' . $content, 0, $this->cookiespath);
-        } elseif ($this->hint2 == null) {
-            $this->hint2 = $signal . '|' . $content;
-            setcookie("hint_signal2", $signal . '|' . $content, 0, $this->cookiespath);
-        } elseif ($this->hint3 == null) {
-            $this->hint3 = $signal . '|' . $content;
-            setcookie("hint_signal3", $signal . '|' . $content, 0, $this->cookiespath);
-        } elseif ($this->hint4 == null) {
-            $this->hint4 = $signal . '|' . $content;
-            setcookie("hint_signal4", $signal . '|' . $content, 0, $this->cookiespath);
-        } elseif ($this->hint5 == null) {
-            $this->hint5 = $signal . '|' . $content;
-            setcookie("hint_signal5", $signal . '|' . $content, 0, $this->cookiespath);
+        for ($i = 1; $i <= 10; $i++) {
+            $this->hints[$i] = $signal . '|' . $content;
+            setcookie("hint_signal" . $i, $signal . '|' . $content, 0, $this->cookiespath);
+            break;
         }
     }
 
@@ -3348,16 +3329,15 @@ class ZBlogPHP
      */
     public function GetHint()
     {
-        for ($i = 1; $i <= 5; $i++) {
-            $signal = 'hint' . $i;
-            $signal = $this->$signal;
+        for ($i = 1; $i <= 10; $i++) {
+            $signal = isset($this->hints[$i]) ? $this->hints[$i] : null;
             if ($signal) {
                 $a = explode('|', $signal);
                 $this->ShowHint($a[0], $a[1]);
                 setcookie("hint_signal" . $i, '', (time() - 3600), $this->cookiespath);
             }
         }
-        for ($i = 1; $i <= 5; $i++) {
+        for ($i = 1; $i <= 10; $i++) {
             $signal = GetVars('hint_signal' . $i, 'COOKIE');
             if ($signal) {
                 $a = explode('|', $signal);
