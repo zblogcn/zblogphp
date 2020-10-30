@@ -28,6 +28,8 @@ if (!defined('ZBP_PATH')) {
  * @property string TypeName 文章类型的具体信息
  * @property string StatusName 文章状态的详细信息
  * @property int|string CommNums 评论数量
+ * @property string FirstImg 文章的第一张图片原图
+ * @property string Thumb 文章的第一张图片缩略图
  */
 class BasePost extends Base
 {
@@ -138,8 +140,6 @@ class BasePost extends Base
             case 'Prev':
             case 'Next':
             case 'RelatedList':
-            case 'FirstImg':
-                return;
             case 'Template':
                 if ($value == $zbp->GetPostType_Template($this->Type)) {
                     $value = '';
@@ -325,12 +325,6 @@ class BasePost extends Base
                 return $toptype;
             case 'TypeName':
                 return $zbp->GetPostType_Name($this->Type);
-            case 'FirstImg':
-                if (! $this->Thumb) {
-                    return null;
-                }
-                $pos = strripos($this->Thumb, '_thumb');
-                return substr($this->Thumb, 0, $pos) . substr($this->Thumb, $pos + 6);
             default:
                 foreach ($GLOBALS['hooks']['Filter_Plugin_Post_Get'] as $fpname => &$fpsignal) {
                     $fpreturn = $fpname($this, $name);
