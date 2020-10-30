@@ -3304,8 +3304,9 @@ class ZBlogPHP
      *
      * @param string $signal  提示类型（good|bad|tips）
      * @param string $content 提示内容
+     * @param int $delay 延时时间
      */
-    public function SetHint($signal, $content = '')
+    public function SetHint($signal, $content = '', $delay = 10)
     {
         if ($content == '') {
             if (substr($signal, 0, 4) == 'good') {
@@ -3318,8 +3319,12 @@ class ZBlogPHP
         }
         $content = substr($content, 0, 255);
         for ($i = 1; $i <= 10; $i++) {
-            $this->hints[$i] = $signal . '|' . $content;
-            setcookie("hint_signal" . $i, $signal . '|' . $content, 0, $this->cookiespath);
+            $hint = new stdClass;
+            $hint->signal = $signal;
+            $hint->content = $content;
+            $hint->delay = $delay;
+            $this->hints[$i] = $hint;
+            setcookie("hint_signal" . $i, json_encode($hint), 0, $this->cookiespath);
             break;
         }
     }
@@ -3330,18 +3335,15 @@ class ZBlogPHP
     public function GetHint()
     {
         for ($i = 1; $i <= 10; $i++) {
-            $signal = isset($this->hints[$i]) ? $this->hints[$i] : null;
-            if ($signal) {
-                $a = explode('|', $signal);
-                $this->ShowHint($a[0], $a[1]);
-                setcookie("hint_signal" . $i, '', (time() - 3600), $this->cookiespath);
+            if (isset($this->hints[$i]) && is_object($this->hints[$i])) {
+                $this->ShowHint($this->hints[$i]);
             }
         }
         for ($i = 1; $i <= 10; $i++) {
             $signal = GetVars('hint_signal' . $i, 'COOKIE');
-            if ($signal) {
-                $a = explode('|', $signal);
-                $this->ShowHint($a[0], $a[1]);
+            $hint = json_decode($signal);
+            if (json_last_error() == JSON_ERROR_NONE) {
+                $this->ShowHint($hint);
                 setcookie("hint_signal" . $i, '', (time() - 3600), $this->cookiespath);
             }
         }
@@ -3352,9 +3354,18 @@ class ZBlogPHP
      *
      * @param string $signal  提示类型（good|bad|tips）
      * @param string $content 提示内容
+     * @param int $delay 延时时间
      */
-    public function ShowHint($signal, $content = '')
+    public function ShowHint($signal, $content = '', $delay = 10)
     {
+        //1.7增加$signal为json类型
+        $hint = $signal;
+        if(is_object($hint)){
+            $signal = $hint->signal;
+            $content = $hint->content;
+            $delay = $hint->delay;
+        }
+
         if ($content == '') {
             if (substr($signal, 0, 4) == 'good') {
                 $content = $this->lang['msg']['operation_succeed'];
@@ -3364,7 +3375,8 @@ class ZBlogPHP
                 $content = $this->lang['msg']['operation_failed'];
             }
         }
-        echo "<div class=\"hint\"><p class=\"hint hint_$signal\">$content</p></div>";
+        $delay = $delay * 1000;
+        echo "<div class=\"hint\"><p class=\"hint hint_$signal\" data-delay=\"$delay\">$content</p></div>";
     }
 
     /**

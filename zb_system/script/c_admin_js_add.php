@@ -226,7 +226,7 @@ function AddHeaderFontIcon(icon_class){
 function AutoHideTips(){
     $("p.hint:visible").each(function(i){
         if ( !$(this).hasClass("hint_always") ){
-            $(this).delay(10000).hide(1500,function(){});
+            $(this).delay($(this).attr("data-delay")).hide(1500,function(){});
         }
     });
 }
