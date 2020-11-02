@@ -2244,7 +2244,11 @@ class ZBlogPHP
      */
     public function GetPostByArray($array)
     {
-        return $this->GetListTypeByArray('Post', $array);
+        $posts = $this->GetListTypeByArray('Post', $array);
+        foreach ($posts as $p) {
+            $this->posts[$p->ID] = $p;
+        }
+        return $posts;
     }
 
     /**
