@@ -3323,6 +3323,9 @@ class ZBlogPHP
         }
         $content = substr($content, 0, 255);
         for ($i = 1; $i <= 10; $i++) {
+            if (isset($this->hints[$i])) {
+                continue;
+            }
             $hint = new stdClass;
             $hint->signal = $signal;
             $hint->content = $content;
