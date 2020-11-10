@@ -111,7 +111,7 @@ $(function () {
     }
 
     if($addinfo.chkarticle){
-        if ($cpLogin.length == 1 && $cpVrs.html().indexOf("[") > -1) {
+        if ($cpVrs.length == 1 && $cpVrs.html().indexOf("[") > -1) {
             $cpVrs.html("[<?php echo $zbp->lang['msg']['new_article']; ?>]");
         } else {
             $cpVrs.html("<?php echo $zbp->lang['msg']['new_article']; ?>");
