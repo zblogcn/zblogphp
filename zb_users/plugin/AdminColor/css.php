@@ -66,6 +66,10 @@ $c .= "div #BT_title {background-color: #3399cc;border-color:#3399cc;}" . PHP_EO
 $c .= "a:hover { color:#d60000;}" . PHP_EOL;
 $c .= "#divMain a:hover,#divMain2  a:hover{color:#d60000;}" . PHP_EOL;
 
+$c .= ".imgcheck-on:before {background: #3a6ea5;}" . PHP_EOL;
+$c .= ".radio:checked + label:before {border: 1px solid #3a6ea5;}" . PHP_EOL;
+$c .= ".radio + label:after {background: #3a6ea5;}" . PHP_EOL;
+
 //appcenter
 /*
 $c .= ".tabs { border-bottom-color:#3a6ea5!important;}" . PHP_EOL;
