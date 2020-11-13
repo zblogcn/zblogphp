@@ -835,6 +835,46 @@ class App
     }
 
     /**
+     * 从全局检查 依赖(关闭时) or 拒绝(开启时)
+     * @param $action string (Enable|Disable)
+     * @throws Exception
+     */
+    public function CheckCompatibility_Global($action)
+    {
+        global $zbp;
+        if ($action == 'Enable') {
+            $apps = $zbp->LoadPlugins();
+            $apps[] = $zbp->LoadApp('theme', $zbp->theme);
+            foreach ($apps as $app) {
+                if (!$zbp->CheckApp($app->id)) {
+                    continue;
+                }
+                $conflictList = explode('|', $app->advanced_conflict);
+                foreach ($conflictList as $conflict) {
+                    if ($conflict == $this->id) {
+                        $zbp->ShowError(str_replace('%s', ' <b>' . $app->name . '</b> ', $zbp->lang['error'][85]), __FILE__, __LINE__);
+                    }
+                }
+            }
+        }
+        if ($action == 'Disable') {
+            $apps = $zbp->LoadPlugins();
+            $apps[] = $zbp->LoadApp('theme', $zbp->theme);
+            foreach ($apps as $app) {
+                if (!$zbp->CheckApp($app->id)) {
+                    continue;
+                }
+                $dependList = explode('|', $app->advanced_dependency);
+                foreach ($dependList as $depend) {
+                    if ($depend == $this->id) {
+                        $zbp->ShowError(str_replace('%s', ' <b>' . $app->name . '</b> ', $zbp->lang['error'][84]), __FILE__, __LINE__);
+                    }
+                }
+            }
+        }
+    }
+
+    /**
      * Delete app.
      */
     public function Del()

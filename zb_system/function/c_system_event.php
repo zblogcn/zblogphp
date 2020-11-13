@@ -3018,6 +3018,7 @@ function EnablePlugin($name)
     global $zbp;
 
     $app = $zbp->LoadApp('plugin', $name);
+    $app->CheckCompatibility_Global('Enable');
     $app->CheckCompatibility();
 
     $zbp->option['ZC_USING_PLUGIN_LIST'] = AddNameInString($zbp->option['ZC_USING_PLUGIN_LIST'], $name);
@@ -3048,19 +3049,8 @@ function DisablePlugin($name)
 {
     global $zbp;
 
-    $apps = $zbp->LoadPlugins();
-    $apps[] = $zbp->LoadApp('theme', $zbp->theme);
-    foreach ($apps as $app) {
-        if (!$zbp->CheckApp($app->id)) {
-            continue;
-        }
-        $dependList = explode('|', $app->advanced_dependency);
-        foreach ($dependList as $depend) {
-            if ($depend == $name) {
-                return $app;
-            }
-        }
-    }
+    $app = $zbp->LoadApp('plugin', $name);
+    $app->CheckCompatibility_Global('Disable');
 
     UninstallPlugin($name);
     $zbp->option['ZC_USING_PLUGIN_LIST'] = DelNameInString($zbp->option['ZC_USING_PLUGIN_LIST'], $name);
@@ -3095,10 +3085,15 @@ function SetTheme($theme, $style)
     global $zbp;
 
     $app = $zbp->LoadApp('theme', $theme);
+    $app->CheckCompatibility_Global('Enable');
     $app->CheckCompatibility();
 
     $oldTheme = $zbp->option['ZC_BLOG_THEME'];
     $old = $zbp->LoadApp('theme', $oldTheme);
+    if ($theme != $oldTheme) {
+        $old->CheckCompatibility_Global('Disable');
+    }
+
     if ($theme != $oldTheme && $old->isloaded == true) {
         $old->SaveSideBars();
     }
