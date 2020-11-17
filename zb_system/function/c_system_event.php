@@ -1292,10 +1292,16 @@ function ViewPost($object, $theSecondParam, $enableRewrite = false)
         foreach ($comments as &$comment) {
             $floorid += 1;
             $comment->FloorID = $floorid;
-            $comment->Content = FormatString($comment->Content, '[enter]') . '<label id="AjaxComment' . $comment->ID . '"></label>';
+            $comment->Content = FormatString($comment->Content, '[enter]');
+            if (strpos($zbp->template->templates['comment'], 'id="AjaxComment') === false) {
+                $comment->Content .= '<label id="AjaxComment' . $comment->ID . '"></label>';
+            }
         }
         foreach ($comments2 as &$comment) {
-            $comment->Content = FormatString($comment->Content, '[enter]') . '<label id="AjaxComment' . $comment->ID . '"></label>';
+            $comment->Content = FormatString($comment->Content, '[enter]');
+            if (strpos($zbp->template->templates['comment'], 'id="AjaxComment') === false) {
+                $comment->Content .= '<label id="AjaxComment' . $comment->ID . '"></label>';
+            }
         }
     }
 
@@ -1390,10 +1396,16 @@ function ViewComments($postid, $page)
     foreach ($comments as &$comment) {
         $floorid += 1;
         $comment->FloorID = $floorid;
-        $comment->Content = FormatString($comment->Content, '[enter]') . '<label id="AjaxComment' . $comment->ID . '"></label>';
+        $comment->Content = FormatString($comment->Content, '[enter]');
+        if (strpos($zbp->template->templates['comment'], 'id="AjaxComment') === false) {
+            $comment->Content .= '<label id="AjaxComment' . $comment->ID . '"></label>';
+        }
     }
     foreach ($comments2 as &$comment) {
-        $comment->Content = FormatString($comment->Content, '[enter]') . '<label id="AjaxComment' . $comment->ID . '"></label>';
+        $comment->Content = FormatString($comment->Content, '[enter]');
+        if (strpos($zbp->template->templates['comment'], 'id="AjaxComment') === false) {
+            $comment->Content .= '<label id="AjaxComment' . $comment->ID . '"></label>';
+        }
     }
 
     $zbp->template->SetTags('title', $zbp->title);
@@ -1444,7 +1456,10 @@ function ViewComment($id)
     $post = new Post();
     $post->LoadInfoByID($comment->LogID);
 
-    $comment->Content = FormatString(htmlspecialchars($comment->Content), '[enter]') . '<label id="AjaxComment' . $comment->ID . '"></label>';
+    $comment->Content = FormatString(htmlspecialchars($comment->Content), '[enter]');
+    if (strpos($zbp->template->templates['comment'], 'id="AjaxComment') === false) {
+        $comment->Content .= '<label id="AjaxComment' . $comment->ID . '"></label>';
+    }
 
     $zbp->template->SetTags('title', $zbp->title);
     $zbp->template->SetTags('comment', $comment);

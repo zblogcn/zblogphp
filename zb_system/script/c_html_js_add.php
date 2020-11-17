@@ -103,19 +103,11 @@ $(function () {
 
     if ($addinfo.chkadmin){
         $(".cp-hello").html("<?php echo $zbp->lang['msg']['welcome']; ?> " + $addinfo.useralias + " (" + $addinfo.levelname  + ")");
-        if ($cpLogin.length == 1 && $cpLogin.html().indexOf("[") > -1) {
-            $cpLogin.html("[<?php echo $zbp->lang['msg']['admin']; ?>]");
-        } else {
-            $cpLogin.html("<?php echo $zbp->lang['msg']['admin']; ?>");
-        }
+        $cpLogin.html("<?php echo $zbp->lang['msg']['admin']; ?>");
     }
 
     if($addinfo.chkarticle){
-        if ($cpVrs.length == 1 && $cpVrs.html().indexOf("[") > -1) {
-            $cpVrs.html("[<?php echo $zbp->lang['msg']['new_article']; ?>]");
-        } else {
-            $cpVrs.html("<?php echo $zbp->lang['msg']['new_article']; ?>");
-        }
+        $cpVrs.html("<?php echo $zbp->lang['msg']['new_article']; ?>");
         $cpVrs.attr("href", zbp.options.bloghost + "zb_system/cmd.php?act=ArticleEdt");
     }
 });
