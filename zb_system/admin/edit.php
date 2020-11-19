@@ -581,9 +581,6 @@ require ZBP_PATH . 'zb_system/admin/admin_top.php';
             editor_api.editor.intro.focus = function() {
                 return this.obj.focus()
             };
-            editor_api.editor.intro.barBtn = function() {
-                
-            };
             sContent = editor_api.editor.content.get();
         }
 

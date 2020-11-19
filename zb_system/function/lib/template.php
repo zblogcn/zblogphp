@@ -320,6 +320,8 @@ class Template
         $this->parse_foreach($content);
         // Step 11: 解析for
         $this->parse_for($content);
+        // Step 12: 解析switch
+        $this->parse_switch($content);
         // Step N: 恢复不编译的代码
         $this->parse_back_uncompile_code($content);
 
@@ -533,6 +535,52 @@ class Template
         $code = $matches[2];
 
         return "{php} for($exp) {{/php} $code{php} }  {/php}";
+    }
+    
+    /**
+     * @param $content
+     */
+    protected function parse_switch(&$content)
+    {
+        while (preg_match('/\{switch(.+?)\}(.+?){\/switch}/s', $content)) {
+            $content = preg_replace_callback(
+                '/\{switch(.+?)\}(.+?){\/switch}/s',
+                array($this, 'parse_switch_sub'),
+                $content
+            );
+        }
+    }
+    
+    /**
+     * @param $matches
+     *
+     * @return string
+     */
+    protected function parse_switch_sub($matches)
+    {
+        $exp = $this->replace_dot($matches[1]);
+        
+        $code = $this->parse_switch_case($matches[2]);
+        $code = preg_replace('/^(\s+?){php}/','${1}',$code);
+        
+        return "{php} switch($exp) { $code{php} }  {/php}";
+    }
+    
+    /**
+     * @param $code
+     *
+     * @return string
+     */
+    protected function parse_switch_case($code)
+    {
+        $code = preg_replace('/{break;?}/','{php}break;{/php}',$code);
+        $code = preg_replace('/{default:?}/','{php}default:{/php}',$code);
+        
+        $code = preg_replace_callback('/{case(.+?)}/',function($m){
+            return '{php}case '.rtrim(trim($m[1]),':').':{/php}';
+        },$code);
+        
+        return $code;
     }
 
     /**
