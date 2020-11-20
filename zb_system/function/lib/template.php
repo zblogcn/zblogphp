@@ -576,11 +576,18 @@ class Template
         $code = preg_replace('/{break;?}/','{php}break;{/php}',$code);
         $code = preg_replace('/{default:?}/','{php}default:{/php}',$code);
         
-        $code = preg_replace_callback('/{case(.+?)}/',function($m){
-            return '{php}case '.rtrim(trim($m[1]),':').':{/php}';
-        },$code);
-        
+        $code = preg_replace_callback('/{case(.+?)}/', array($this, 'parse_switch_case_repalce'), $code);
         return $code;
+    }
+
+    /**
+     * @param $matches
+     *
+     * @return string
+     */
+    protected function parse_switch_case_repalce($matches)
+    {
+        return '{php}case '.rtrim(trim($matches[1]),':').':{/php}';
     }
 
     /**
