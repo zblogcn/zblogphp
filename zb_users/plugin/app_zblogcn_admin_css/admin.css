@@ -1,12 +1,7 @@
-html {
-	
-	border-left: #20222A solid 200px;
-}
-
 body {
     background-color: #f1f1f2!important;
 	min-width: 1280px;
-	margin-left: -200px!important;
+	background:url("images/l.svg") repeat-y 0 top;
 }
 
 .ui-tooltip, .arrow_leftmenu:after {
