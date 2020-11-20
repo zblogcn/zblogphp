@@ -74,7 +74,9 @@ class Image
                 $img_src = imagecreatefromwbmp($sourcefile);
                 break;
             case 'image/webp':
-                $img_src = imagecreatefromwebp($sourcefile);
+                if (function_exists('imagecreatefromwebp')) {
+                	$img_src = call_user_func('imagecreatefromwebp', $sourcefile);
+                }
                 break;
             default:
                 return $return;
