@@ -5,7 +5,7 @@
 <url>https://zzs.im/</url>
 <note></note>
 <description></description>
-<path>main.php</path>
+<path></path>
 <include>include.php</include>
 <level>1</level>
 <author>
@@ -21,7 +21,7 @@
 <adapted>172375</adapted>
 <version>1.0</version>
 <pubdate>2020-11-07</pubdate>
-<modified>2020-11-07</modified>
+<modified>2020-11-22</modified>
 <price>0</price>
 <phpver>5.2</phpver>
 <advanced>
