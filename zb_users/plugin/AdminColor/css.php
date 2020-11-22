@@ -116,6 +116,13 @@ td,th{border:none;border-right: 1px solid #efefef;padding:0.6em;}
 table{border-collapse: collapse;background: #ffffff;line-height: 120%;margin:0.5em 0 0.5em 0;border:none;line-height:1.5em;}
 ';
 
+if ($zbp->Config('AdminColor')->TableShadow) {
+    $c .= 'table,.pane,.theme,form.search{box-shadow:0 0 0.5em rgba(0,0,0,0.2);}';
+} else {
+    $c .= 'table,.pane,.theme,form.search{box-shadow:0 0 0.1em rgba(0,0,0,0.3);}';
+}
+
+
 if ($id == 9) {
     $c .= '
 header, .header {background-color:#17365d;}
@@ -259,15 +266,9 @@ body[class~=login] input.button:hover {background-color: #3a6ea5;}
     if ($GLOBALS['blogversion'] < 162090 && stripos($_SERVER['HTTP_REFERER'], 'login.php')) {
         $c .= 'body{background:none;}';
     }
-	//if ($GLOBALS['blogversion'] < 172360) {
-		$c .= 'header div.logo img{background:url("images/logo.svg")}';
-	//}
+	$c .= 'header div.logo img{background:url("images/logo.svg")}';
 }
-if ($zbp->Config('AdminColor')->TableShadow) {
-    $c .= 'table,.pane,.theme,form.search{box-shadow:0 0 0.5em rgba(0,0,0,0.2);}';
-} else {
-    $c .= 'table,.pane,.theme,form.search{box-shadow:0 0 0.1em rgba(0,0,0,0.3);}';
-}
+
 
 $c1 = "#1d4c7d";
 $c2 = "#3a6ea5";
@@ -299,8 +300,10 @@ header('Content-Type: text/css; Charset=utf-8');
 header('Etag: ' . $m);
 
 if (isset($_SERVER["HTTP_IF_NONE_MATCH"]) && $_SERVER["HTTP_IF_NONE_MATCH"] == $m) {
-    SetHttpStatusCode(304);
-    die;
+	if (isset($zbp->option['ZC_JS_304_ENABLE']) && $zbp->option['ZC_JS_304_ENABLE']) {
+    	SetHttpStatusCode(304);
+    	die;
+    }
 }
 
 echo $c;

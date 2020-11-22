@@ -663,7 +663,7 @@ class ZBlogPHP
         $this->searchurl = $this->host . 'search.php';
         $this->ajaxurl = $this->host . 'zb_system/cmd.php?act=ajax&src=';
         $this->xmlrpcurl = $this->host . 'zb_system/xml-rpc/index.php';
-        $this->apiurl = $this->host . 'api.php';
+        $this->apiurl = $this->host . 'zb_system/api.php';
 
         $this->LoadConfigsOnlySystem(false);
 

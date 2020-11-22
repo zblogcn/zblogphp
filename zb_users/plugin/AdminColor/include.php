@@ -107,9 +107,6 @@ function AdminColor_ColorButton()
     $s = '';
 
     for ($i = 0; $i < 9; $i++) {
-        if ($i == 7) {
-            continue;
-        }
         $s .= "&nbsp;&nbsp;<a href='" . $zbp->host . "zb_users/plugin/AdminColor/main.php?setcolor=" . $i . "'><span style='height:16px;width:16px;background:" . $GLOBALS['AdminColor_NormalColor'][$i] . "'><img src='" . $zbp->host . "zb_system/image/admin/none.gif' width='16' height='16' alt='' /></span></a>&nbsp;&nbsp;";
     }
 
@@ -176,61 +173,8 @@ $(document).ready(function(){
 });
 EOD;
 
+
     $js2 = <<<EOD
-function admincolor_hideMenu(){
- $("#aAdminColor2").attr('href','javascript:admincolor_showMenu()');
- $("#aAdminColor2 span i").attr('class','icon-caret-right-fill');
- $("div.left,aside.left").css({"background-color":"#333333"});
- $("div.left,aside.left").animate({"width":"36px"});
- $("div.main,section.main").animate({"padding-left":"46px"});
- $("#leftmenu span").animate({"margin-left":"10px"}); 
- $("#leftmenu span i").animate({"margin-right":"8px","margin-right":"18px"});
- $("#leftmenu span.bgicon").animate({"padding-left":"32px"});
- $("#leftmenu #nav_admincolor2 span").animate({"margin-left":"23px","padding-left":"20px","background-positionX":"0px"}); 
- $("body").animate({"background-positionX":"-124px"}); 
- SetCookie('admincolor_hm','1',365);
- admincolor_tooptip();
-}
-
-function admincolor_showMenu(){
- $("#aAdminColor2").attr('href','javascript:admincolor_hideMenu()');
- $("#aAdminColor2 span i").attr('class','icon-caret-left-fill');
- $("div.left,aside.left").css({"background-color":"#333333"});
- $("div.left,aside.left").animate({"width":"160px"});
- $("div.main,section.main").animate({"padding-left":"170px"});
- $("#leftmenu span").animate({"margin-left":"32px"});
- $("#leftmenu span i").animate({"margin-right":"18px","margin-right":"8px"}); 
- $("#leftmenu span.bgicon").animate({"padding-left":"22px"});
- $("#leftmenu #nav_admincolor2 span").animate({"padding-left":"65px","background-positionX":"40px"}); 
- $("body").animate({"background-positionX":"+0px"}); 
- SetCookie('admincolor_hm','',-1); 
- $("#leftmenu a").tooltip({disabled: true});
- //$("#leftmenu a").tooltip( "destroy" );
-}
-
-function admincolor_tooptip(){
-    $("#leftmenu a").tooltip({
-      disabled:false,
-      position: {
-        my: "left+50 top-33",
-       //my: "left+50 top-33",
-       at: "left bottom",
-        using: function( position, feedback ) {
-          $( this ).css( position );
-          $( "<div>" )
-            .addClass( "arrow_leftmenu" )
-            .appendTo( this );
-        }
-      }
-    });
-}
-
-$(document).ready(function(){
-  if(GetCookie('admincolor_hm')=='1') {admincolor_tooptip();}
-});
-EOD;
-
-    $js3 = <<<EOD
 function admincolor_hideMenu(){
  $("#aAdminColor").attr('href','javascript:admincolor_showMenu()');
  $("#aAdminColor").find('span').html(lang_admincolor_expandmenu);
@@ -281,12 +225,68 @@ $(document).ready(function(){
 });
 EOD;
 
-    if ($zbp->Config('AdminColor')->ColorID == 10) {
-        echo $js2;
-    } elseif ($zbp->Config('AdminColor')->ColorID == 9) {
-        echo $js3;
-    } else {
+
+    $js3 = <<<EOD
+function admincolor_hideMenu(){
+ $("#aAdminColor2").attr('href','javascript:admincolor_showMenu()');
+ $("#aAdminColor2 span i").attr('class','icon-caret-right-fill');
+ $("div.left,aside.left").css({"background-color":"#333333"});
+ $("div.left,aside.left").animate({"width":"36px"});
+ $("div.main,section.main").animate({"padding-left":"46px"});
+ $("#leftmenu span").animate({"margin-left":"10px"}); 
+ $("#leftmenu span i").animate({"margin-right":"8px","margin-right":"18px"});
+ $("#leftmenu span.bgicon").animate({"padding-left":"32px"});
+ $("#leftmenu #nav_admincolor2 span").animate({"margin-left":"23px","padding-left":"20px","background-positionX":"0px"}); 
+ $("body").animate({"background-positionX":"-124px"}); 
+ SetCookie('admincolor_hm','1',365);
+ admincolor_tooptip();
+}
+
+function admincolor_showMenu(){
+ $("#aAdminColor2").attr('href','javascript:admincolor_hideMenu()');
+ $("#aAdminColor2 span i").attr('class','icon-caret-left-fill');
+ $("div.left,aside.left").css({"background-color":"#333333"});
+ $("div.left,aside.left").animate({"width":"160px"});
+ $("div.main,section.main").animate({"padding-left":"170px"});
+ $("#leftmenu span").animate({"margin-left":"32px"});
+ $("#leftmenu span.bgicon").animate({"padding-left":"22px"});
+ $("#leftmenu span i").animate({"margin-right":"18px","margin-right":"8px"}); 
+ $("#leftmenu #nav_admincolor2 span").animate({"padding-left":"65px","background-positionX":"40px"}); 
+ $("body").animate({"background-positionX":"+0px"}); 
+ SetCookie('admincolor_hm','',-1); 
+ $("#leftmenu a").tooltip({disabled: true});
+ //$("#leftmenu a").tooltip( "destroy" );
+}
+
+function admincolor_tooptip(){
+    $("#leftmenu a").tooltip({
+      disabled:false,
+      position: {
+        my: "left+50 top-33",
+       //my: "left+50 top-33",
+       at: "left bottom",
+        using: function( position, feedback ) {
+          $( this ).css( position );
+          $( "<div>" )
+            .addClass( "arrow_leftmenu" )
+            .appendTo( this );
+        }
+      }
+    });
+}
+
+$(document).ready(function(){
+  if(GetCookie('admincolor_hm')=='1') {admincolor_tooptip();}
+});
+EOD;
+
+
+    if ($zbp->Config('AdminColor')->ColorID < 9) {
         echo $js1;
+    } elseif ($zbp->Config('AdminColor')->ColorID < 10) {
+        echo $js2;
+    } else {
+        echo $js3;
     }
 }
 
@@ -333,9 +333,9 @@ $AdminColor_HighColor[6] = '#d31b54';
 $AdminColor_AntiColor[6] = '#2039b7';
 
 $AdminColor_BlodColor[7] = '#2d2606';
-$AdminColor_NormalColor[7] = '#d9b611';
-$AdminColor_LightColor[7] = '#ebd87d';
-$AdminColor_HighColor[7] = '#c4a927';
+$AdminColor_NormalColor[7] = '#d4a30e';
+$AdminColor_LightColor[7] = '#fcd251';
+$AdminColor_HighColor[7] = '#e9b20a';
 $AdminColor_AntiColor[7] = '#d60000';
 
 $AdminColor_BlodColor[8] = '#a60138';
