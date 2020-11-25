@@ -575,18 +575,19 @@ function ViewSearch()
     $zbp->template->SetTags('issearch', true);
 
     //1.6新加设置，可以让搜索变为列表模式运行
+    //1.7强制指定搜索模板为search或是index
     $zbp->template->SetTags('type', 'search'); //1.6统一改为search
-    if (isset($zbp->option['ZC_SEARCH_TYPE']) && $zbp->option['ZC_SEARCH_TYPE'] == 'list') {
-        $zbp->template->SetTags('articles', $results);
-        if ($zbp->template->hasTemplate('search')) {
-            $zbp->template->SetTemplate('search');
-        } else {
-            $zbp->template->SetTemplate('index');
-        }
+    //if (isset($zbp->option['ZC_SEARCH_TYPE']) && $zbp->option['ZC_SEARCH_TYPE'] == 'list') {
+    $zbp->template->SetTags('articles', $results);
+    if ($zbp->template->HasTemplate('search')) {
+        $zbp->template->SetTemplate('search');
     } else {
-        $zbp->template->SetTags('articles', $array);
-        $zbp->template->SetTemplate($article->Template);
+        $zbp->template->SetTemplate('index');
     }
+    //} else {
+        //$zbp->template->SetTags('articles', $array);
+        //$zbp->template->SetTemplate($article->Template);
+    //}
 
     foreach ($GLOBALS['hooks']['Filter_Plugin_ViewSearch_Template'] as $fpname => &$fpsignal) {
         $fpreturn = $fpname($zbp->template);
