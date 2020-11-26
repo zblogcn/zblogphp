@@ -198,7 +198,7 @@ function misc_vrs()
                     <form method="post" action="#">
                         <dl>
                             <dt><?php echo $zbp->lang['msg']['current_member'] . ' : <b>' . $zbp->user->Name; ?></b><br />
-                                <?php echo $zbp->lang['msg']['member_level'] . ' : <b>' . $zbp->user->LevelName; ?></b></dt>
+                                <?php echo $zbp->lang['msg']['member_level'] . ' : <b>' . $zbp->user->LevelName . ($zbp->user->Status > 0 ? '(' . $zbp->lang['user_status_name'][$zbp->user->Status] . ')' : ''); ?></b></dt>
     <?php
     foreach ($GLOBALS['actions'] as $key => $value) {
         if ($GLOBALS['zbp']->CheckRights($key)) {

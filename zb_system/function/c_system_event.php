@@ -3455,6 +3455,25 @@ function Include_Index_Begin()
     }
 }
 
+
+/**
+ * “审核中会员”的前台权限拒绝验证
+ */
+function Include_Forntend_CheckRights($action, $level)
+{
+    global $zbp;
+    if ($zbp->user->Status == ZC_MEMBER_STATUS_AUDITING) {
+        if (!in_array($action, array('login', 'logout', 'misc', 'feed', 'ajax', 'verify', 'NoValidCode', 'MemberEdt', 'MemberPst', 'MemberMng'))) {
+            $GLOBALS['hooks']['Filter_Plugin_Zbp_CheckRights']['Include_Forntend_CheckRights'] = PLUGIN_EXITSIGNAL_RETURN;
+            return false;
+        }
+        if ($zbp->option['ZC_ALLOW_AUDITTING_MEMBER_VISIT_MANAGE'] == false && $action == 'admin') {
+            $GLOBALS['hooks']['Filter_Plugin_Zbp_CheckRights']['Include_Forntend_CheckRights'] = PLUGIN_EXITSIGNAL_RETURN;
+            return false;
+        }
+    }
+}
+
 //###############################################################################################################
 
 /**

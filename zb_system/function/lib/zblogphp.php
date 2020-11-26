@@ -746,9 +746,14 @@ class ZBlogPHP
         Add_Filter_Plugin('Filter_Plugin_Index_Begin', 'Include_Index_Begin');
         Add_Filter_Plugin('Filter_Plugin_Search_Begin', 'Include_Index_Begin');
         Add_Filter_Plugin('Filter_Plugin_Feed_Begin', 'Include_Index_Begin');
+        Add_Filter_Plugin('Filter_Plugin_Zbp_CheckRights', 'Include_Forntend_CheckRights');
 
         foreach ($GLOBALS['hooks']['Filter_Plugin_Zbp_Load'] as $fpname => &$fpsignal) {
             $fpname();
+        }
+
+        if ($this->user->Status == ZC_MEMBER_STATUS_LOCKED) {
+            $this->ShowError(80, __FILE__, __LINE__);
         }
 
         //进后台时已自动检测模板并自动重建了，所以这里只针对开调试后的前台的访问进行
@@ -771,12 +776,8 @@ class ZBlogPHP
      */
     public function LoadManage()
     {
-        if ($this->user->Status == ZC_MEMBER_STATUS_AUDITING) {
+        if (!$this->CheckRights('admin')) {
             $this->ShowError(79, __FILE__, __LINE__);
-        }
-
-        if ($this->user->Status == ZC_MEMBER_STATUS_LOCKED) {
-            $this->ShowError(80, __FILE__, __LINE__);
         }
 
         Add_Filter_Plugin('Filter_Plugin_Admin_PageMng_SubMenu', 'Include_Admin_Addpagesubmenu');

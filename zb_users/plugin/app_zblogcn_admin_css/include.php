@@ -27,7 +27,7 @@ function app_zblogcn_admin_css_left_menu(&$m)
     global $zbp;
 
     // logo
-    array_unshift($m, '<div class="left-logo"><img src="'.$zbp->host.'zb_system/image/admin/logo_white.svg"/></div>');
+    array_unshift($m, '<div class="left-logo"><img src="'.$zbp->host.'zb_users/plugin/app_zblogcn_admin_css/logo_white.svg"/></div>');
 
     // change icons for app.zblogcn.com
     if ($zbp->theme == 'appcentre_server') {

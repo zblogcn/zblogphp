@@ -93,12 +93,22 @@ function blogconfig_exportlist($id)
         $html .= '<td class="tdCenter">';
         if ($show_submit_button) {
             $html .= '<a href="javascript:;" onclick="run2(\'edit\',\'' . $i . '\',\'' . $id . '\')">';
-            $html .= '<img src="../../../../../zb_system/image/admin/ok.png" alt="提交" title="提交" width="16" /></a>';
+            if($GLOBALS['blogversion']>170000){
+                $html .= '<i class="icon-check-circle-fill" style="color:green;" title="提交" ></i>';
+            }else{
+                $html .= '<img src="../../../../../zb_system/image/admin/ok.png" alt="提交" title="提交" width="16" /></a>';
+            }
+
             $html .= '&nbsp;&nbsp;&nbsp;&nbsp;';
         }
         $html .= '<a onclick="if(window.confirm(\'单击“确定”继续。单击“取消”停止。\')){run2(\'del\',\'' . $i . '\',\'' . $id . '\')};"';
         $html .= 'href="javascript:;" onclick="run2(\'del\',\'' . $i . '\',\'' . $id . '\')">';
-        $html .= '<img src="../../../../../zb_system/image/admin/delete.png" alt="删除" title="删除" width="16" /></a></td></tr>';
+        if($GLOBALS['blogversion']>170000){
+            $html .= '<i class="icon-x-circle-fill" style="color:red;" title="删除"></i>';
+        }else{
+            $html .= '<img src="../../../../../zb_system/image/admin/delete.png" alt="删除" title="删除" width="16" /></a></td></tr>';
+        }
+
         $html .= PHP_EOL . PHP_EOL;
         $i++;
     }
