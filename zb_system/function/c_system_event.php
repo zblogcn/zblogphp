@@ -3185,7 +3185,6 @@ function SaveSetting()
             || $key == 'ZC_SYNTAXHIGHLIGHTER_ENABLE'
             || $key == 'ZC_COMMENT_VERIFY_ENABLE'
             || $key == 'ZC_CLOSE_SITE'
-            || $key == 'ZC_PERMANENT_DOMAIN_WITH_ADMIN'
             || $key == 'ZC_ADDITIONAL_SECURITY'
             || $key == 'ZC_ARTICLE_THUMB_SWITCH'
         ) {
@@ -4470,7 +4469,7 @@ function ApiDispatch($mods, $mod, $act)
     ApiResponse(null, null, 404, $GLOBALS['lang']['error']['96']);
 }
 
-function ApiThrottle($name = 'default', $max_reqs, $period = 60)
+function ApiThrottle($name = 'default', $max_reqs = 0, $period = 60)
 {
     global $zbpcache;
 

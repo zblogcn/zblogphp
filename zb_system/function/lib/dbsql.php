@@ -225,7 +225,7 @@ class DbSql
      */
     public function Insert($table, $keyvalue)
     {
-        return $this->get()->insert($this->db)->insert($table)->data($keyvalue)->sql;
+        return $this->get()->insert($table)->data($keyvalue)->sql;
     }
 
     /**
@@ -239,7 +239,7 @@ class DbSql
      */
     public function Delete($table, $where, $option = null)
     {
-        return $this->get()->delete($this->db)->delete($table)->where($where)->option($option)->sql;
+        return $this->get()->delete($table)->where($where)->option($option)->sql;
     }
 
     /**

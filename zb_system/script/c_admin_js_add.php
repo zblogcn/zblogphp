@@ -79,6 +79,8 @@ function ActiveLeftMenu(name){
     var s=$(name).children("span").css("background-image");
     if(s!==undefined){
         s=s.replace("1.png","2.png");
+        s=s.replace("1.svg","2.svg");
+        s=s.replace("1.gif","2.gif");
         $(name).children("span").css("background-image",s);
     }
 
