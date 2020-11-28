@@ -4469,7 +4469,7 @@ function ApiDispatch($mods, $mod, $act)
     ApiResponse(null, null, 404, $GLOBALS['lang']['error']['96']);
 }
 
-function ApiThrottle($name = 'default', $max_reqs = 0, $period = 60)
+function ApiThrottle($name = 'default', $max_reqs = 5, $period = 60)
 {
     global $zbpcache;
 

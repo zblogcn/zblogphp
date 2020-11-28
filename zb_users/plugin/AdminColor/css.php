@@ -4,6 +4,9 @@ require '../../../zb_system/function/c_system_base.php';
 
 $id = (int) $zbp->Config('AdminColor')->ColorID;
 $c = '/*admincolor*/';
+if($zbp->Config('AdminColor')->FontSize >= 12 && $zbp->Config('AdminColor')->FontSize <= 14){
+    $c .= "body{font-size:{$zbp->Config('AdminColor')->FontSize}px}";
+}
 $c .= '
   .ui-tooltip, .arrow_leftmenu:after {
     background: #3a6ea5;
@@ -185,12 +188,14 @@ background-color:#333333;
 color:#fff;
 width: 160px;
 height: 40px;
+padding-right:2em;
 }
 .left #leftmenu li{
 background-color:#333;
 color:#fff;
 width: 160px;
 height: 40px;
+    overflow:hidden;
 }
 .main {
 padding-left: 170px;

@@ -1,5 +1,5 @@
-@font-face{font-family:'icomoon';src:url('icon.ttf?r78m9z') format('truetype');font-weight:normal;font-style:normal;font-display:block;}
-[class^="icon-"],[class*=" icon-"]{font-family:'icomoon'!important;speak:never;font-style:normal;font-weight:normal;font-variant:normal;text-transform:none;vertical-align:middle;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;}
+@font-face{font-family:'zblog';src:url('zblog.ttf?r78m9z') format('truetype');font-weight:normal;font-style:normal;font-display:block;}
+[class^="icon-"],[class*=" icon-"]{font-family:'zblog'!important;speak:never;font-style:normal;font-weight:normal;font-variant:normal;text-transform:none;vertical-align:middle;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;}
 
 .icon-alarm:before {
   content: "\e900";

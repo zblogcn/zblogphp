@@ -79,7 +79,7 @@ label { cursor: pointer; }
 .left { float: left; width: 140px; padding: 0px; overflow: hidden; margin: 0 0 0 0; position: absolute; }
 .left #leftmenu { }
 .left #leftmenu li { float: left; width: 140px; height: 32px; margin-bottom: 5px; background: #ededed; cursor: pointer; }
-.left #leftmenu a { float: left; width: 140px; height: 32px; line-height: 35px; cursor: pointer; }
+.left #leftmenu a { float: left; width: 140px; height: 32px; line-height: 35px; cursor: pointer; padding-right:1em; }
 .left #leftmenu a:hover { color: #000000; background: #b0cdee; }
 .left #leftmenu span { float: left; width: auto; height: 32px; line-height: 32px; text-align: left; cursor: pointer; margin-left: 25px; padding-left: 32px; }
 .left #leftmenu span.bgicon{padding-left: 22px;}
@@ -96,7 +96,7 @@ label { cursor: pointer; }
 
 /*导航图标区*/
 #leftmenu li span { background-repeat: no-repeat; background-position: 100px 8px; }
-#leftmenu li span i { margin-right: 8px; margin-left: -32px; line-height: 32px;height: 32px;vertical-align: middle;}
+#leftmenu li span i { margin-right: 8px; margin-left: -31px; line-height: 32px;height: 32px;vertical-align: middle;}
 
 /*高亮导航图标区*/
 #leftmenu li span { background-repeat: no-repeat; background-position: 0px 8px; }
@@ -192,7 +192,7 @@ textarea#editor_intro { width: 100%; height: 150px; margin: 0; padding: 0.5em 0.
 div.hint { width: 100%; margin: 0 0 0.2em 0; }
 div.hint p { padding: 0.3em 0.5em 0.3em 0.8em; line-height: 1.5em; border:0px solid gray;border-radius:4px}
 div.hint font { color: black; }
-div.hint p:before { font-family: 'icomoon'!important; speak: never; font-style: normal; font-weight: normal; font-variant: normal; text-transform: none; vertical-align: middle; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; margin-right: 8px; }
+div.hint p:before { font-family: 'zblog'!important; speak: never; font-style: normal; font-weight: normal; font-variant: normal; text-transform: none; vertical-align: middle; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; margin-right: 8px; }
 div.hint p.hint_good { border-color:#a8de9e;background:#e9fde5; }
 div.hint p.hint_good:before { content: "\ea62"; color: #277723; }
 div.hint p.hint_bad { border-color:#e1a9a9;background:#fce0e0; }
@@ -341,7 +341,7 @@ span.note { font-size: 0.9em; }
 #batch p { float: left; }
 #batch img { float: left; margin: 7px 5px 0 9px; }
 #batch a, p.hint a{margin-left:6px;}
-p.hint a:before {content: "\ec18";font-family: 'icomoon'!important; speak: never; font-style: normal; font-weight: normal; font-variant: normal; text-transform: none; vertical-align: middle; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; margin-right: 2px; }
+p.hint a:before {content: "\ec18";font-family: 'zblog'!important; speak: never; font-style: normal; font-weight: normal; font-variant: normal; text-transform: none; vertical-align: middle; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; margin-right: 2px; }
 #batch { width: 100%; margin: 0 0 5px 0; background: #dbe3ff; float: left; padding: 0 0 0 0; }
 #batch p { padding: 0.3em 0.5em 0.3em 0; font-size: 1.0em; }
 span.button { cursor: pointer; }

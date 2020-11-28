@@ -1,10 +1,10 @@
 @font-face {
-  font-family: 'icomoon';
-  src:  url('fonts/icomoon.eot?r78m9z');
-  src:  url('fonts/icomoon.eot?r78m9z#iefix') format('embedded-opentype'),
-    url('icon.ttf?r78m9z') format('truetype'),
-    url('fonts/icomoon.woff?r78m9z') format('woff'),
-    url('fonts/icomoon.svg?r78m9z#icomoon') format('svg');
+  font-family: 'zblog';
+  src:  url('fonts/zblog.eot?r78m9z');
+  src:  url('fonts/zblog.eot?r78m9z#iefix') format('embedded-opentype'),
+    url('zblog.ttf?r78m9z') format('truetype'),
+    url('fonts/zblog.woff?r78m9z') format('woff'),
+    url('fonts/zblog.svg?r78m9z#zblog') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -12,7 +12,7 @@
 
 [class^="icon-"], [class*=" icon-"] {
   /* use !important to prevent issues with browser extensions that change fonts */
-  font-family: 'icomoon' !important;
+  font-family: 'zblog' !important;
   speak: never;
   font-style: normal;
   font-weight: normal;
