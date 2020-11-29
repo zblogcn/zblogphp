@@ -901,7 +901,7 @@ function Admin_ArticleMng()
     if (GetVars('istop')) {
         $w[] = array('<>', 'log_Istop', '0');
     }
-    if (GetVars('status') !== '') {
+    if (GetVars('status') !== null && GetVars('status') !== '') {
         $w[] = array('=', 'log_Status', (int) GetVars('status'));
     }
     if (GetVars('category')) {

@@ -72,8 +72,9 @@ label { cursor: pointer; }
 .menu ul li a { float: left; line-height: 30px; height: 30px; padding: 0px 15px; color: #333333; background: #ffffff; }
 .menu ul li a:hover { float: left; line-height: 30px; height: 30px; padding: 0px 15px; color: #ffffff; background: #b0cdee; }
 .menu ul li.on { font-weight: bold; }
-.menu ul li i { margin-right: 5px; }
-.menu ul li span { vertical-align: middle; }
+.menu ul li i { margin-right: 5px;}
+.menu ul li i:before { vertical-align: 5%; }
+.menu ul li span {  }
 
 /*左边导航*/
 .left { float: left; width: 140px; padding: 0px; overflow: hidden; margin: 0 0 0 0; position: absolute; }
