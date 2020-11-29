@@ -8,6 +8,8 @@
  * https://codex.wordpress.org/XML-RPC_MetaWeblog_API
  * http://codex.wordpress.org.cn/XML-RPC_MetaWeblog_API
  */
+define('ZBP_IN_XMLRPC', true);
+
 require '../function/c_system_base.php';
 
 if (isset($_GET['rsd'])) {

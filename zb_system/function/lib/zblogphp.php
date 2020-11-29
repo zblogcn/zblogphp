@@ -291,6 +291,14 @@ class ZBlogPHP
 
     public $ismanage = false; //是否加载管理模式
 
+    public $isapi = false; //是否加载API模式
+
+    public $iscmd = false; //是否加载CMD模式
+
+    public $isajax = false; //是否加载AJAX模式
+
+    public $isxmlrpc = false; //是否加载XML-RPC模式
+
     private $isGzip = false; //是否开启gzip
 
     public $isHttps = false; //是否HTTPS
@@ -669,9 +677,14 @@ class ZBlogPHP
 
         $this->LoadCache();
 
+        !defined('ZBP_IN_API') || $this->isapi = true;
+        !defined('ZBP_IN_CMD') || $this->iscmd = true;
+        !defined('ZBP_IN_AJAX') || $this->isajax = true;
+        !defined('ZBP_IN_XMLRPC') || $this->isxmlrpc = true;
+
         $this->isinitialized = true;
 
-        if (defined('ZBP_IN_API')) {
+        if ($this->isapi) {
             //挂载API错误显示
             Add_Filter_Plugin('Filter_Plugin_Debug_Display', 'ApiDebugDisplay');
             //挂载Token验证
