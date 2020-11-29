@@ -9,6 +9,9 @@ if (!defined('ZBP_PATH')) {
 class Template
 {
 
+    /**
+     * @var string 编译后的模板php执行路径
+     */
     protected $path = null;
 
     protected $entryPage = null;
@@ -78,6 +81,11 @@ class Template
      * @var bool 是否启用标识模板类型
      */
     public $isnamedtype = array();
+
+    /**
+     * @var string 模板目录，方便指定多套模板
+     */
+    public $template_dirname = 'template';
 
     public function __construct()
     {
@@ -733,13 +741,9 @@ class Template
         }
 
         // 读取主题模板
-        //$files = GetFilesInDir($zbp->usersdir . 'theme/' . $theme . '/template/', 'php');
-        //foreach ($files as $sortname => $fullname) {
-        //    $templates[$sortname] = file_get_contents($fullname);
-        //}
         $this->dirs = array();
         $this->files = array();
-        $this->GetAllFileDir($zbp->usersdir . 'theme/' . $theme . '/template/');
+        $this->GetAllFileDir($zbp->usersdir . 'theme/' . $theme . "/{$this->template_dirname}/");
         foreach ($this->dirs as $key => $value) {
             if (substr($this->dirs[$key], -1) != '/') {
                 $this->dirs[$key] .= '/';
@@ -845,7 +849,7 @@ class Template
                     }
                 } elseif (is_readable($dir . $d)) {
                     $s = $dir . $d;
-                    $i = strlen($zbp->usersdir . 'theme/' . $this->theme . '/template/');
+                    $i = strlen($zbp->usersdir . 'theme/' . $this->theme . "/{$this->template_dirname}/");
                     if (substr($s, -4) == '.php') {
                         $s2 = substr($s, ($i - strlen($s)));
                         $s3 = substr($s2, 0, (strlen($s2) - 4));
@@ -857,13 +861,13 @@ class Template
             if ($handle = opendir($dir)) {
                 while (false !== ($file = readdir($handle))) {
                     if ($file != "." && $file != "..") {
-                        $d = str_replace('template//', 'template/', str_replace('\\', '/', $dir . '/' . $file));
+                        $d = str_replace("{$this->template_dirname}//", "/{$this->template_dirname}/", str_replace('\\', '/', $dir . '/' . $file));
                         if (is_dir($dir . '/' . $file)) {
                             $this->dirs[] = $d;
                             $this->GetAllFileDir($d);
                         } elseif (is_readable($d)) {
                             $s = $d;
-                            $i = strlen($zbp->usersdir . 'theme/' . $this->theme . '/template/');
+                            $i = strlen($zbp->usersdir . 'theme/' . $this->theme . "/{$this->template_dirname}/");
                             if (substr($s, -4) == '.php') {
                                 $s2 = substr($s, ($i - strlen($s)));
                                 $s3 = substr($s2, 0, (strlen($s2) - 4));

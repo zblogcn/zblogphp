@@ -160,7 +160,7 @@ header div.logo {
 .header .menu ul li a {
     float: none;
     padding: 0px 22px;
-    font-size:1.2em;
+    font-size:1.1em;
     color: #fff;
     background: none;
     vertical-align: middle;

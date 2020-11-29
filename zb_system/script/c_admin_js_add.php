@@ -214,7 +214,7 @@ function updateinfo(s){
 function AddHeaderIcon(s){
     var element = $("div.divHeader,div.divHeader2").first();
     element.css({"background-image":"url('"+s+"')"});
-    element.html(element.text());
+    element.html('<span>'+element.text()+'</span>');
 }
 
 function AddHeaderFontIcon(icon_class){
