@@ -2512,7 +2512,7 @@ class ZBlogPHP
         if ($id == 0) {
             return;
         }
-        if ($object != null) {
+        if ($object !== null) {
             //$modules非ID为key
             if ($className == "Module") {
                 if ($id > 0) {
