@@ -49,7 +49,7 @@ label { line-height: 30px; float: left; vertical-align: text-bottom; padding: 0 
 .login input[type="checkbox"]+label {width:auto;}
 .login input[type="text"],.login input[type="password"]{ float: left; width: 200px; height: 2.4em; padding: 0.1em 5px; line-height: 2.4em; }
 
-.button { float: right; color: #ffffff; font-size: 14px; width: 70px; height: 32px; background: #3a6ea5; border: 1px solid #3399CC; cursor: pointer; }
+.button { float: right; color: #ffffff; font-size: 1em; width: 70px; height: 32px; background: #3a6ea5; border: 1px solid #3399CC; cursor: pointer; }
 .button:hover { color: #ffffff; background: #3399cc; cursor: pointer; }
 .divHeader { height: auto; font-weight: blod; line-height: 1.5em; font-size: 1.5em; padding: 0 0 10px 0; background: #FFF; text-align: center; }
 

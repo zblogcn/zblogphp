@@ -299,9 +299,11 @@ class ZBlogPHP
 
     public $isxmlrpc = false; //是否加载XML-RPC模式
 
-    private $isGzip = false; //是否开启gzip
+    private $isGzip = false; //是否开启gzip(已废弃)
 
     public $isHttps = false; //是否HTTPS
+
+    public $isdebug = false; //是否Debug Mode
 
     /**
      * @var Template 当前模板
@@ -681,6 +683,7 @@ class ZBlogPHP
         !defined('ZBP_IN_CMD') || $this->iscmd = true;
         !defined('ZBP_IN_AJAX') || $this->isajax = true;
         !defined('ZBP_IN_XMLRPC') || $this->isxmlrpc = true;
+        !$this->option['ZC_DEBUG_MODE'] || $this->isdebug = true;
 
         $this->isinitialized = true;
 

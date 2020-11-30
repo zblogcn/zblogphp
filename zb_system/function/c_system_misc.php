@@ -102,8 +102,6 @@ function misc_statistic()
     $zbp->cache->check_comment_nums = $check_comment_nums;
 
     $zbp->AddBuildModule('statistics', array($all_articles, $all_pages, $all_categories, $all_tags, $all_views, $all_comments));
-    $zbp->BuildModule();
-    $zbp->SaveCache();
 
     $r = str_replace('{#ZC_BLOG_HOST#}', $zbp->host, $r);
     $r = str_replace('{$zbp->user->Name}', $zbp->user->Name, $r);
@@ -121,6 +119,25 @@ function misc_statistic()
     if ($zbp->option['ZC_DEBUG_MODE']) {
         $r = str_replace('<!--debug_mode_note-->', "<tr><td colspan='4' style='text-align: center'>{$zbp->lang['msg']['debugging_warning']}</td></tr>", $r);
     }
+
+    //增加模块内容（因模块模板改变）而刷新的机制
+    try {
+        if ($zbp->option['ZC_DEBUG_MODE']) {
+            $zbp->AddBuildModule('previous');
+            $zbp->AddBuildModule('calendar');
+            $zbp->AddBuildModule('comments');
+            $zbp->AddBuildModule('archives');
+            $zbp->AddBuildModule('tags');
+            $zbp->AddBuildModule('authors');
+            $zbp->AddBuildModule('catalog');
+            $zbp->AddBuildModule('navbar');
+        }
+    } catch (Exception $e) {
+       //echo $e->getMessage();
+    }
+    $zbp->BuildModule();
+    $zbp->SaveCache();
+
     echo $r;
 }
 

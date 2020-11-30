@@ -40,4 +40,6 @@ interface Database__Interface
 
     public function ExistTable($table);
 
+    public function Transaction($command);//command = 'begin','commit','rollback'
+
 }

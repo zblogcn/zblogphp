@@ -99,7 +99,7 @@ $c .= "div.bg input[type=\"text\"], input[type=\"password\"] {border-color:#3a6e
 
 $c .= PHP_EOL . "/*AdminColor*/" . PHP_EOL . "#admin_color{float:left;line-height: 2.5em;font-size: 0.5em;letter-spacing: -0.1em;}";
 
-if ($zbp->Config('AdminColor')->HeaderPathUse == true || $id == 9) {
+if ($zbp->Config('AdminColor')->HeaderPathUse == true) {
     $c .= 'header,.header{background:url(' . $zbp->Config('AdminColor')->HeaderPath . ') no-repeat center center;background-size:cover}' . PHP_EOL;
     $c .= 'div.bg{background:url(' . $zbp->Config('AdminColor')->HeaderPath . ') no-repeat center center;background-size:cover}' . PHP_EOL;
 }

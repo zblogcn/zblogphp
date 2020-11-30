@@ -29,6 +29,11 @@ if (isset($_GET['setcolor'])) {
         $zbp->Config('AdminColor')->LightColor = (string) $GLOBALS['AdminColor_LightColor'][$i];
         $zbp->Config('AdminColor')->HighColor = (string) $GLOBALS['AdminColor_HighColor'][$i];
         $zbp->Config('AdminColor')->AntiColor = (string) $GLOBALS['AdminColor_AntiColor'][$i];
+        if($i == 9) {
+          $zbp->Config('AdminColor')->HeaderPathUse = true;
+        } else {
+          $zbp->Config('AdminColor')->HeaderPathUse = false;
+        }
         $zbp->SaveConfig('AdminColor');
         Redirect($zbp->host . 'zb_users/plugin/AdminColor/main.php');
         die();
