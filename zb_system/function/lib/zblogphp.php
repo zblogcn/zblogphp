@@ -1908,6 +1908,7 @@ class ZBlogPHP
                     }
                 }
             }
+            $this->lang['error']['77'] = str_replace(array('%min', '%max'), array($this->option['ZC_USERNAME_MIN'], $this->option['ZC_USERNAME_MAX']), $this->lang['error']['77']);
             $this->langs = json_decode(json_encode($this->lang));
         } else {
             if ($id != '' && isset($this->lang[$id])) {

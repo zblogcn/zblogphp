@@ -519,7 +519,7 @@ return array(
         '74' => 'Are you still using the old browser version with IE kernel? Please upgrade to IE11! \r\nYou can change to a different browser if you want to.',
         '75' => 'File name can not be empty!',
         '76' => 'Html ID can not be empty!',
-        '77' => 'Username should be between 3 and 20 characters.',
+        '77' => 'Username should be between %min and %max characters.',
         '78' => 'This application requires%s and above version of Z-BlogPHP.',
         '79' => 'User Accounts not Approved',
         '80' => 'User Account Locked',
