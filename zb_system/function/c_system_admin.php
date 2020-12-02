@@ -805,7 +805,7 @@ function Admin_SiteInfo()
         $r = str_replace('{$zbp->theme}', $zbp->theme, $r);
         $r = str_replace('{$zbp->style}', $zbp->style, $r);
         $r = str_replace('{$system_environment}', GetEnvironment(), $r);
-        $app = $zbp->LoadApp('plugin','AppCentre');
+        $app = $zbp->LoadApp('plugin', 'AppCentre');
         $sv = ZC_VERSION_FULL;
         if ($app->isloaded == true && $app->IsUsed()) {
             $sv .= '; AppCentre' . $app->version;

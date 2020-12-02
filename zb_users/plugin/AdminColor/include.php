@@ -68,6 +68,7 @@ function AdminColor_Css()
         $hm = GetVars('admincolor_hm', 'COOKIE');
         if ($hm == '1') {
             echo '<style type="text/css">.left{width:36px;background-color:#333333;}.left #leftmenu span{margin-left:10px;padding-left:32px;}.left #leftmenu span.bgicon{padding-left:32px;}.left #leftmenu span i {margin-right:18px;}div.main,section.main{padding-left:46px;}body{background-position:-124px center;}.left #leftmenu #nav_admincolor2 span{margin-left:23px;padding-left:20px ;background-position:0px 12px;}</style>';
+
         }
     }
 }

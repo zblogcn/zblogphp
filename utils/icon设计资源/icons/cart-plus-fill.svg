@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   inkscape:version="1.0 (4035a4fb49, 2020-05-01)"
+   sodipodi:docname="cart-plus-fill.svg"
+   id="svg835"
+   version="1.1"
+   fill="currentColor"
+   class="bi bi-cart-plus-fill"
+   viewBox="0 0 16 16"
+   height="1em"
+   width="1em">
+  <metadata
+     id="metadata841">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs839" />
+  <sodipodi:namedview
+     inkscape:current-layer="svg835"
+     inkscape:window-maximized="1"
+     inkscape:window-y="-9"
+     inkscape:window-x="-9"
+     inkscape:cy="6.3289817"
+     inkscape:cx="8"
+     inkscape:zoom="47.875"
+     showgrid="false"
+     id="namedview837"
+     inkscape:window-height="1001"
+     inkscape:window-width="1920"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0"
+     guidetolerance="10"
+     gridtolerance="10"
+     objecttolerance="10"
+     borderopacity="1"
+     bordercolor="#666666"
+     pagecolor="#ffffff" />
+  <path
+     d="m 0.5,1 a 0.5,0.5 0 0 0 0,1 H 1.609375 L 2.0117188,3.6074219 3.5097656,11.591797 A 0.5,0.5 0 0 0 4,12 h 1 7 1 a 0.5,0.5 0 0 0 0.490234,-0.408203 l 1.5,-8.0000001 A 0.5,0.5 0 0 0 14.5,3 H 2.890625 L 2.484375,1.3789062 A 0.5,0.5 0 0 0 2,1 Z M 12,12 a 2,2 0 0 0 0,4 2,2 0 0 0 0,-4 z m -7,0 a 2,2 0 0 0 0,4 2,2 0 0 0 0,-4 z M 8.5117188,5 A 0.5,0.5 0 0 1 9,5.5 V 7 h 1.5 a 0.5,0.5 0 0 1 0,1 H 9 v 1.5 a 0.5,0.5 0 0 1 -1,0 V 8 H 6.5 a 0.5,0.5 0 0 1 0,-1 H 8 V 5.5 A 0.5,0.5 0 0 1 8.5117188,5 Z m -3.484375,8 A 1,1 0 0 1 6,14 1,1 0 0 1 4,14 1,1 0 0 1 5.0273438,13 Z m 7.0000002,0 A 1,1 0 0 1 13,14 a 1,1 0 0 1 -2,0 1,1 0 0 1 1.027344,-1 z"
+     style="fill:#000000;fill-opacity:1;fill-rule:evenodd"
+     id="path833" />
+</svg>
