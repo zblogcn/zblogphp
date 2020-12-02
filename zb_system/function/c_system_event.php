@@ -62,7 +62,7 @@ function SetLoginCookie($user, $cookieTime)
     $token = $zbp->GenerateUserToken($user, $cookieTime);
     $secure = HTTP_SCHEME == 'https://';
     setcookie('username_' . crc32($zbp->guid), $user->Name, $cookieTime, $zbp->cookiespath, '', $secure, false);
-    setcookie('token_' . crc32($zbp->guid), $token, $cookieTime, $zbp->cookiespath, '', $secure, true);
+    setcookie('token_' . crc32($zbp->guid), $token, $cookieTime, $zbp->cookiespath, '', $secure, $zbp->option['ZC_COOKIE_TOKEN_HTTPONLY']);
     setcookie('addinfo' . str_replace('/', '', $zbp->cookiespath), json_encode($addinfo), $cookieTime, $zbp->cookiespath, '', $secure, false);
 
     return true;
@@ -575,18 +575,19 @@ function ViewSearch()
     $zbp->template->SetTags('issearch', true);
 
     //1.6新加设置，可以让搜索变为列表模式运行
+    //1.7强制指定搜索模板为search或是index
     $zbp->template->SetTags('type', 'search'); //1.6统一改为search
-    if (isset($zbp->option['ZC_SEARCH_TYPE']) && $zbp->option['ZC_SEARCH_TYPE'] == 'list') {
-        $zbp->template->SetTags('articles', $results);
-        if ($zbp->template->hasTemplate('search')) {
-            $zbp->template->SetTemplate('search');
-        } else {
-            $zbp->template->SetTemplate('index');
-        }
+    //if (isset($zbp->option['ZC_SEARCH_TYPE']) && $zbp->option['ZC_SEARCH_TYPE'] == 'list') {
+    $zbp->template->SetTags('articles', $results);
+    if ($zbp->template->HasTemplate('search')) {
+        $zbp->template->SetTemplate('search');
     } else {
-        $zbp->template->SetTags('articles', $array);
-        $zbp->template->SetTemplate($article->Template);
+        $zbp->template->SetTemplate('index');
     }
+    //} else {
+        //$zbp->template->SetTags('articles', $array);
+        //$zbp->template->SetTemplate($article->Template);
+    //}
 
     foreach ($GLOBALS['hooks']['Filter_Plugin_ViewSearch_Template'] as $fpname => &$fpsignal) {
         $fpreturn = $fpname($zbp->template);
@@ -1292,10 +1293,16 @@ function ViewPost($object, $theSecondParam, $enableRewrite = false)
         foreach ($comments as &$comment) {
             $floorid += 1;
             $comment->FloorID = $floorid;
-            $comment->Content = FormatString($comment->Content, '[enter]') . '<label id="AjaxComment' . $comment->ID . '"></label>';
+            $comment->Content = FormatString($comment->Content, '[enter]');
+            if (strpos($zbp->template->templates['comment'], 'id="AjaxComment') === false) {
+                $comment->Content .= '<label id="AjaxComment' . $comment->ID . '"></label>';
+            }
         }
         foreach ($comments2 as &$comment) {
-            $comment->Content = FormatString($comment->Content, '[enter]') . '<label id="AjaxComment' . $comment->ID . '"></label>';
+            $comment->Content = FormatString($comment->Content, '[enter]');
+            if (strpos($zbp->template->templates['comment'], 'id="AjaxComment') === false) {
+                $comment->Content .= '<label id="AjaxComment' . $comment->ID . '"></label>';
+            }
         }
     }
 
@@ -1390,10 +1397,16 @@ function ViewComments($postid, $page)
     foreach ($comments as &$comment) {
         $floorid += 1;
         $comment->FloorID = $floorid;
-        $comment->Content = FormatString($comment->Content, '[enter]') . '<label id="AjaxComment' . $comment->ID . '"></label>';
+        $comment->Content = FormatString($comment->Content, '[enter]');
+        if (strpos($zbp->template->templates['comment'], 'id="AjaxComment') === false) {
+            $comment->Content .= '<label id="AjaxComment' . $comment->ID . '"></label>';
+        }
     }
     foreach ($comments2 as &$comment) {
-        $comment->Content = FormatString($comment->Content, '[enter]') . '<label id="AjaxComment' . $comment->ID . '"></label>';
+        $comment->Content = FormatString($comment->Content, '[enter]');
+        if (strpos($zbp->template->templates['comment'], 'id="AjaxComment') === false) {
+            $comment->Content .= '<label id="AjaxComment' . $comment->ID . '"></label>';
+        }
     }
 
     $zbp->template->SetTags('title', $zbp->title);
@@ -1444,7 +1457,10 @@ function ViewComment($id)
     $post = new Post();
     $post->LoadInfoByID($comment->LogID);
 
-    $comment->Content = FormatString(htmlspecialchars($comment->Content), '[enter]') . '<label id="AjaxComment' . $comment->ID . '"></label>';
+    $comment->Content = FormatString(htmlspecialchars($comment->Content), '[enter]');
+    if (strpos($zbp->template->templates['comment'], 'id="AjaxComment') === false) {
+        $comment->Content .= '<label id="AjaxComment' . $comment->ID . '"></label>';
+    }
 
     $zbp->template->SetTags('title', $zbp->title);
     $zbp->template->SetTags('comment', $comment);
@@ -1494,43 +1510,108 @@ function PostArticle()
         $_POST['Tag'] = PostArticle_CheckTagAndConvertIDtoString($_POST['Tag']);
     }
     if (isset($_POST['Content'])) {
-        $_POST['Content'] = str_replace('<hr class="more" />', '<!--more-->', $_POST['Content']);
-        $_POST['Content'] = str_replace('<hr class="more"/>', '<!--more-->', $_POST['Content']);
-        if (stripos($_POST['Content'], '<!--more-->') !== false) {
-            if (isset($_POST['Intro'])) {
-                $_POST['Intro'] = GetValueInArray(explode('<!--more-->', $_POST['Content']), 0);
-            }
-        } else {
-            if (isset($_POST['Intro'])) {
-                if (trim($_POST['Intro']) == '' || (stripos($_POST['Intro'], '<!--autointro-->') !== false)) {
-                    if ($zbp->option['ZC_ARTICLE_INTRO_WITH_TEXT'] == true) {
-                        //改纯HTML摘要
-                        $i = (int) $zbp->option['ZC_ARTICLE_EXCERPT_MAX'];
-                        $_POST['Intro'] = FormatString($_POST['Content'], "[nohtml]");
-                        $_POST['Intro'] = SubStrUTF8_Html($_POST['Intro'], $i);
-                    } else {
-                        $i = (int) $zbp->option['ZC_ARTICLE_EXCERPT_MAX'];
-                        if (Zbp_StrLen($_POST['Content']) > $i) {
-                            $i = (int) Zbp_Strpos($_POST['Content'], '>', $i);
+        $_POST['Content'] = preg_replace("/<hr class=\"more\"\s*\/>/i", '<!--more-->', $_POST['Content']);
+        $intro = isset($_POST['Intro']) ? $_POST['Intro'] : '';
+        //获取内容的第一张图片
+        preg_match_all('/<img[^>]*?\s+src="([^\s"]{5,})"[^>]*?>/i', $intro . $_POST['Content'], $imgs);
+        $img = isset($imgs[1][0]) ? $imgs[1][0] : false;
+        //原图
+        if($img) {
+            $_POST['FirstImg'] = str_replace($zbp->host, '', $img);
+            $_POST['FirstImg'] = substr($_POST['FirstImg'], 0,1)=='/' || substr($_POST['FirstImg'], 0,1)=='\\' ? substr($_POST['FirstImg'], 1):$_POST['FirstImg'];
+            $_POST['FirstImg'] = '{#ZC_BLOG_HOST#}'.$_POST['FirstImg'];
+        }
+        //缩略图处理
+        if($img && $zbp->option['ZC_ARTICLE_THUMB_SWITCH']){
+            //先通过$zbp->host判断是否为本地图片
+            if(stripos($img,$zbp->host) !== false) {
+                //将图片地址的host干掉
+                $img = str_replace($zbp->host, '', $img);
+                //绝对地址
+                $imgs = $zbp->path.str_replace($zbp->host, '', $img);
+                if(is_file($imgs)){
+                    //缩略图路径
+                    $imgNew = ImgToThumbUrl($imgs);
+                    //缩略并裁剪
+                    if($zbp->option['ZC_ARTICLE_THUMB_TYPE'] == 1){
+                        if(Image::ClipThumb($imgs,$imgNew,$zbp->option['ZC_ARTICLE_THUMB_WIDTH'],$zbp->option['ZC_ARTICLE_THUMB_HEIGHT'])){
+                            $_POST['Thumb'] = ImgToThumbUrl('{#ZC_BLOG_HOST#}'.$img);
                         }
-                        if ($i == 0) {
-                            $i = (int) Zbp_StrLen($_POST['Content']);
+                    }else{
+                        if(Image::Thumb($imgs,$imgNew,$zbp->option['ZC_ARTICLE_THUMB_WIDTH'],false)){
+                            $_POST['Thumb'] = ImgToThumbUrl('{#ZC_BLOG_HOST#}'.$img);
                         }
-                        if ($i < $zbp->option['ZC_ARTICLE_EXCERPT_MAX']) {
-                            $i = (int) $zbp->option['ZC_ARTICLE_EXCERPT_MAX'];
+                    }
+                    
+                }
+            }else{
+                $path = 'zb_users/upload/' . date('Y/m') . '/';
+                $dir = ZBP_PATH.$path;
+                //如果设置的上传目录不存在，则创建
+                if (!file_exists($dir)) @mkdir($dir,0777,true);
+                $ext = strtolower(substr(strrchr($img, '.'), 1));
+                $name = date('Ymd').(microtime(true)*10000).'.'.$ext;
+                $url = $dir.$name;
+                //网络地址
+                if(preg_match('/^(http|https):\/\//',$img)){
+                    $http = Network::Create();
+                    $http->open('GET',$img);
+                    $http->setRequestHeader('Referer', $zbp->host);
+                    $http->send();
+                    if ($http->status == 200){
+                        $r = $http->responseText;
+                        if($r){
+                            if(file_put_contents($url,$r)){
+                                $imgNew = ImgToThumbUrl($url);
+                                if(Image::ClipThumb($url,$imgNew,$zbp->option['ZC_ARTICLE_THUMB_WIDTH'],$zbp->option['ZC_ARTICLE_THUMB_HEIGHT'])){
+                                    $_POST['Thumb'] = '{#ZC_BLOG_HOST#}'.$path.ImgToThumbUrl($name);
+                                }
+                            }
                         }
-                        $_POST['Intro'] = SubStrUTF8_Html($_POST['Content'], $i);
-                        $_POST['Intro'] = CloseTags($_POST['Intro']);
+                    }
+                }else{
+                    $r = $zbp->path.str_replace('{#ZC_BLOG_HOST#}', '', $_POST['FirstImg']);
+                    $imgNew = ImgToThumbUrl($url);
+                    if(Image::ClipThumb($r,$imgNew,$zbp->option['ZC_ARTICLE_THUMB_WIDTH'],$zbp->option['ZC_ARTICLE_THUMB_HEIGHT'])){
+                        $_POST['Thumb'] = '{#ZC_BLOG_HOST#}'.$path.ImgToThumbUrl($name);
                     }
 
-                    $_POST['Intro'] .= '<!--autointro-->';
+                }
+            }
+        }
+
+        if (isset($_POST['Intro'])) {
+            if (stripos($_POST['Content'], '<!--more-->') !== false) {
+                $_POST['Intro'] = GetValueInArray(explode('<!--more-->', $_POST['Content']), 0);
+            }
+            if (trim($_POST['Intro']) == '' || (stripos($_POST['Intro'], '<!--autointro-->') !== false)) {
+                if ($zbp->option['ZC_ARTICLE_INTRO_WITH_TEXT'] == true) {
+                    //改纯HTML摘要
+                    $i = (int) $zbp->option['ZC_ARTICLE_EXCERPT_MAX'];
+                    $_POST['Intro'] = FormatString($_POST['Content'], "[nohtml]");
+                    $_POST['Intro'] = SubStrUTF8_Html($_POST['Intro'], $i);
                 } else {
-                    if ($zbp->option['ZC_ARTICLE_INTRO_WITH_TEXT'] == true) {
-                        //改纯HTML摘要
-                        $_POST['Intro'] = FormatString($_POST['Intro'], "[nohtml]");
+                    $i = (int) $zbp->option['ZC_ARTICLE_EXCERPT_MAX'];
+                    if (Zbp_StrLen($_POST['Content']) > $i) {
+                        $i = (int) Zbp_Strpos($_POST['Content'], '>', $i);
                     }
+                    if ($i == 0) {
+                        $i = (int) Zbp_StrLen($_POST['Content']);
+                    }
+                    if ($i < $zbp->option['ZC_ARTICLE_EXCERPT_MAX']) {
+                        $i = (int) $zbp->option['ZC_ARTICLE_EXCERPT_MAX'];
+                    }
+                    $_POST['Intro'] = SubStrUTF8_Html($_POST['Content'], $i);
                     $_POST['Intro'] = CloseTags($_POST['Intro']);
                 }
+
+                $_POST['Intro'] .= '<!--autointro-->';
+            } else {
+                if ($zbp->option['ZC_ARTICLE_INTRO_WITH_TEXT'] == true) {
+                    //改纯HTML摘要
+                    $_POST['Intro'] = FormatString($_POST['Intro'], "[nohtml]");
+                }
+                $_POST['Intro'] = CloseTags($_POST['Intro']);
             }
         }
     }
@@ -1687,7 +1768,7 @@ function DelArticle()
 {
     global $zbp;
 
-    $id = (int) GetVars('id', 'GET');
+    $id = (int) GetVars('id');
 
     $article = new Post();
     $article->LoadInfoByID($id);
@@ -1740,7 +1821,7 @@ function DelArticle()
  *
  * @return string 返回如'{1}{2}{3}{4}'的字符串
  */
-function PostArticle_CheckTagAndConvertIDtoString($tagnamestring)
+function PostArticle_CheckTagAndConvertIDtoString($tagnamestring, $post_type = 0)
 {
     global $zbp;
     $s = '';
@@ -1769,7 +1850,7 @@ function PostArticle_CheckTagAndConvertIDtoString($tagnamestring)
     $b = array_slice($b, 0, 20);
     $c = array();
 
-    $t = $zbp->LoadTagsByNameString($tagnamestring);
+    $t = $zbp->LoadTagsByNameString($tagnamestring, $post_type);
     foreach ($t as $key => $value) {
         $c[] = $key;
     }
@@ -1795,11 +1876,11 @@ function PostArticle_CheckTagAndConvertIDtoString($tagnamestring)
     }
 
     foreach ($b as $key) {
-        if (!isset($zbp->tagsbyname[$key])) {
+        if (!isset($zbp->tagsbyname_type[$post_type][$key])) {
             continue;
         }
 
-        $s .= '{' . $zbp->tagsbyname[$key]->ID . '}';
+        $s .= '{' . $zbp->tagsbyname_type[$post_type][$key]->ID . '}';
     }
 
     return $s;
@@ -1924,7 +2005,7 @@ function DelPage()
 {
     global $zbp;
 
-    $id = (int) GetVars('id', 'GET');
+    $id = (int) GetVars('id');
 
     $article = new Post();
     $article->LoadInfoByID($id);
@@ -2197,8 +2278,8 @@ function CheckComment()
 {
     global $zbp;
 
-    $id = (int) GetVars('id', 'GET');
-    $ischecking = (bool) GetVars('ischecking', 'GET');
+    $id = (int) GetVars('id');
+    $ischecking = (bool) GetVars('ischecking');
 
     $cmt = $zbp->GetCommentByID($id);
     $orig_check = (bool) $cmt->IsChecking;
@@ -2410,7 +2491,7 @@ function DelCategory()
 {
     global $zbp;
 
-    $id = (int) GetVars('id', 'GET');
+    $id = (int) GetVars('id');
     $cate = $zbp->GetCategoryByID($id);
     if ($cate->ID > 0) {
         if (count($cate->SubCategories) > 0) {
@@ -2429,9 +2510,11 @@ function DelCategory()
         foreach ($GLOBALS['hooks']['Filter_Plugin_DelCategory_Succeed'] as $fpname => &$fpsignal) {
             $fpname($cate);
         }
+
+        return true;
     }
 
-    return true;
+    return false;
 }
 
 /**
@@ -2652,7 +2735,7 @@ function PostMember()
 
     if (isset($data['Password'])) {
         if ($mem->ID == $zbp->user->ID) {
-            if (!defined('IN_AJAX_PROCESSING') || constant('IN_AJAX_PROCESSING') != true) {
+            if (!defined('ZBP_IN_AJAX') && !defined('ZBP_IN_API')) {
                 Redirect($zbp->host . 'zb_system/cmd.php?act=login');
             }
         }
@@ -2951,6 +3034,7 @@ function EnablePlugin($name)
     global $zbp;
 
     $app = $zbp->LoadApp('plugin', $name);
+    $app->CheckCompatibility_Global('Enable');
     $app->CheckCompatibility();
 
     $zbp->option['ZC_USING_PLUGIN_LIST'] = AddNameInString($zbp->option['ZC_USING_PLUGIN_LIST'], $name);
@@ -2981,19 +3065,8 @@ function DisablePlugin($name)
 {
     global $zbp;
 
-    $apps = $zbp->LoadPlugins();
-    $apps[] = $zbp->LoadApp('theme', $zbp->theme);
-    foreach ($apps as $app) {
-        if (!$zbp->CheckApp($app->id)) {
-            continue;
-        }
-        $dependList = explode('|', $app->advanced_dependency);
-        foreach ($dependList as $depend) {
-            if ($depend == $name) {
-                return $app;
-            }
-        }
-    }
+    $app = $zbp->LoadApp('plugin', $name);
+    $app->CheckCompatibility_Global('Disable');
 
     UninstallPlugin($name);
     $zbp->option['ZC_USING_PLUGIN_LIST'] = DelNameInString($zbp->option['ZC_USING_PLUGIN_LIST'], $name);
@@ -3028,10 +3101,15 @@ function SetTheme($theme, $style)
     global $zbp;
 
     $app = $zbp->LoadApp('theme', $theme);
+    $app->CheckCompatibility_Global('Enable');
     $app->CheckCompatibility();
 
     $oldTheme = $zbp->option['ZC_BLOG_THEME'];
     $old = $zbp->LoadApp('theme', $oldTheme);
+    if ($theme != $oldTheme) {
+        $old->CheckCompatibility_Global('Disable');
+    }
+
     if ($theme != $oldTheme && $old->isloaded == true) {
         $old->SaveSideBars();
     }
@@ -3107,8 +3185,8 @@ function SaveSetting()
             || $key == 'ZC_SYNTAXHIGHLIGHTER_ENABLE'
             || $key == 'ZC_COMMENT_VERIFY_ENABLE'
             || $key == 'ZC_CLOSE_SITE'
-            || $key == 'ZC_PERMANENT_DOMAIN_WITH_ADMIN'
             || $key == 'ZC_ADDITIONAL_SECURITY'
+            || $key == 'ZC_ARTICLE_THUMB_SWITCH'
         ) {
             $zbp->option[$key] = (bool) $value;
             continue;
@@ -3120,6 +3198,9 @@ function SaveSetting()
             || $key == 'ZC_PAGEBAR_COUNT'
             || $key == 'ZC_COMMENTS_DISPLAY_COUNT'
             || $key == 'ZC_MANAGE_COUNT'
+            || $key == 'ZC_ARTICLE_THUMB_TYPE'
+            || $key == 'ZC_ARTICLE_THUMB_WIDTH'
+            || $key == 'ZC_ARTICLE_THUMB_HEIGHT'
         ) {
             $zbp->option[$key] = (int) $value;
             continue;
@@ -3168,7 +3249,7 @@ function SaveSetting()
 
     if ($zbp->option['ZC_PERMANENT_DOMAIN_ENABLE'] == 1) {
         if ($oldHost != $zbp->option['ZC_BLOG_HOST']) {
-            if (!defined('IN_AJAX_PROCESSING') || constant('IN_AJAX_PROCESSING') != true) {
+            if (!defined('ZBP_IN_AJAX') && !defined('ZBP_IN_API')) {
                 Redirect($zbp->option['ZC_BLOG_HOST'] . 'zb_system/cmd.php?act=login');
             }
         }
@@ -3369,6 +3450,25 @@ function Include_Index_Begin()
         header('X-XSS-Protection: 1; mode=block');
         if ($zbp->isHttps) {
             header('Upgrade-Insecure-Requests: 1');
+        }
+    }
+}
+
+
+/**
+ * “审核中会员”的前台权限拒绝验证
+ */
+function Include_Forntend_CheckRights($action, $level)
+{
+    global $zbp;
+    if ($zbp->user->Status == ZC_MEMBER_STATUS_AUDITING) {
+        if (!in_array($action, array('login', 'logout', 'misc', 'feed', 'ajax', 'verify', 'NoValidCode', 'MemberEdt', 'MemberPst', 'MemberMng'))) {
+            $GLOBALS['hooks']['Filter_Plugin_Zbp_CheckRights']['Include_Forntend_CheckRights'] = PLUGIN_EXITSIGNAL_RETURN;
+            return false;
+        }
+        if ($zbp->option['ZC_ALLOW_AUDITTING_MEMBER_VISIT_MANAGE'] == false && $action == 'admin') {
+            $GLOBALS['hooks']['Filter_Plugin_Zbp_CheckRights']['Include_Forntend_CheckRights'] = PLUGIN_EXITSIGNAL_RETURN;
+            return false;
         }
     }
 }
@@ -3983,4 +4083,413 @@ function BuildModule_authors($level = 4)
 function BuildModule_statistics($array = array())
 {
     return ModuleBuilder::Statistics($array);
+}
+
+//###############################################################################################################
+
+/**
+ * API TokenVerify
+ */
+function ApiTokenVerify()
+{
+    global $zbp;
+
+    if (!(is_subclass_of($zbp->user, 'BaseMember') && $zbp->user->Level > 0 && !empty($zbp->user->ID))) {
+        // 在 API 中
+        if (($auth = GetVars('HTTP_AUTHORIZATION', 'SERVER')) && (substr($auth, 0, 7) === 'Bearer ')) {
+            // 获取 Authorization 头
+            $api_token = substr($auth, 7);
+        } else {
+            // 获取（POST 或 GET 中的）请求参数
+            $api_token = GetVars('token');
+        }
+
+        $user = $zbp->VerifyAPIToken($api_token);
+
+        if ($user != null) {
+            define('ZBP_IN_API_VERIFYBYTOKEN', true);
+            $zbp->user = $user;
+        }
+    }
+}
+
+/**
+ * API 报错函数
+ */
+function ApiDebugDisplay($error)
+{
+    ApiResponse(null, $error);
+}
+
+/**
+ * 载入 API Mods.
+ */
+function ApiLoadMods(&$mods)
+{
+    global $zbp;
+
+    foreach ($GLOBALS['hooks']['Filter_Plugin_API_Extend_Mods'] as $fpname => &$fpsignal) {
+        $add_mods = $fpname();
+
+        if (!is_array($add_mods)) {
+            continue;
+        }
+
+        foreach ($add_mods as $mod => $file) {
+            $mod = strtolower($mod);
+            if (array_key_exists($mod, $mods)) {
+                continue;
+            }
+    
+            $mods[$mod] = $file;
+        }
+    }
+
+    // 从 zb_system/api/ 目录中载入 mods
+    foreach (GetFilesInDir(ZBP_PATH . 'zb_system/api/', 'php') as $mod => $file) {
+        $mods[$mod] = $file;
+    }
+}
+
+/**
+ * API 响应.
+ *
+ * @param array|null $data
+ * @param ZBlogException|null $error
+ * @param int $code
+ * @param string|null $message
+ */
+function ApiResponse($data = null, $error = null, $code = 200, $message = null)
+{
+    if (!empty($error)) {
+        $error_info = array(
+            'code' => ZBlogException::$error_id,
+            'type' => $error->type,
+            'message' => $error->message,
+        );
+
+        if ($GLOBALS['option']['ZC_DEBUG_MODE']) {
+            $error_info['message_full'] = $error->messagefull;
+            $error_info['file'] = $error->file;
+            $error_info['line'] = $error->line;
+        }
+
+        if ($code === 200) {
+            $code = 500;
+        }
+        if (empty($message)) {
+            $message = 'System error: ' . $error->message;
+        }
+    }
+
+    $response = array(
+        'code' => $code,
+        'message' => !empty($message) ? $message : 'OK',
+        'data' => $data,
+        'error' => empty($error) ? null : $error_info,
+    );
+
+    // 显示 Runtime 调试信息
+    if (!defined('ZBP_API_IN_TEST') && $GLOBALS['option']['ZC_RUNINFO_DISPLAY']) {
+        $runtime = RunTime(false);
+        $runtime = array_slice($runtime, 0, 3);
+        $response['runtime'] = $runtime;
+    }
+
+    foreach ($GLOBALS['hooks']['Filter_Plugin_API_Response'] as $fpname => &$fpsignal) {
+        $fpname($response);
+    }
+
+    if (! defined('ZBP_API_IN_TEST')) {
+        ob_end_clean();
+        if (!headers_sent()) {
+            header('Content-Type: application/json; charset=utf-8');
+            SetHttpStatusCode($code);
+        }
+    }
+
+    echo JsonEncode($response);
+
+    if (empty($error) && $code !== 200) {
+        // 如果 code 不为 200，又不是系统抛出的错误，再来抛出一个 Exception，适配 phpunit
+        ZBlogException::SuspendErrorHook();
+        throw new Exception($message, $code);
+    }
+
+    die;
+}
+
+/**
+ * API 检测权限.
+ *
+ * @param bool $loginRequire
+ * @param string $action
+ */
+function ApiCheckAuth($loginRequire = false, $action = 'view')
+{
+    // 登录认证
+    if ($loginRequire && !$GLOBALS['zbp']->user->ID) {
+        if (!defined('ZBP_API_IN_TEST') && !headers_sent()) {
+            SetHttpStatusCode(401);
+            header('Status: 401 Unauthorized');
+        }
+
+        ApiResponse(null, null, 401, $GLOBALS['lang']['error']['6']);
+    }
+
+    // 权限认证
+    if (!empty($action) && !$GLOBALS['zbp']->CheckRights($action)) {
+        if (!defined('ZBP_API_IN_TEST') && !headers_sent()) {
+            SetHttpStatusCode(403);
+            header('Status: 403 Forbidden');
+        }
+
+        ApiResponse(null, null, 403, $GLOBALS['lang']['error']['6']);
+    }
+
+    return true;
+}
+
+/**
+ * API 获取指定属性的Array
+ *
+ * @param object $object
+ * @param array $other_props 追加的属性
+ * @param array $remove_props 要删除的属性
+ * @param array $with_relations 要追加的关联对象
+ */
+function ApiGetObjectArray($object, $other_props = array(), $remove_props = array(), $with_relations = array())
+{
+    $array = $object->GetData();
+    unset($array['Meta']);
+
+    foreach ($GLOBALS['hooks']['Filter_Plugin_API_Get_Object_Array'] as $fpname => &$fpsignal) {
+        $fpname($object, $array, $other_props, $remove_props, $with_relations);
+    }
+
+    foreach ($other_props as $key => $value) {
+        $array[$value] = $object->$value;
+    }
+    foreach ($remove_props as $key => $value) {
+        unset($array[$value]);
+    }
+    foreach ($with_relations as $relation => $info) {
+        $relation_obj = $object->$relation;
+        $array[$relation] = ApiGetObjectArray(
+            $relation_obj,
+            isset($info['other_props']) ? $info['other_props'] : array(),
+            isset($info['remove_props']) ? $info['remove_props'] : array(),
+            isset($info['with_relations']) ? $info['with_relations'] : array()
+        );
+    }
+    return $array;
+}
+
+/**
+ * API 获取指定属性的Array 列表.
+ *
+ * @param array $list
+ * @param array $other_props 追加的属性
+ * @param array $remove_props 要删除的属性
+ * @param array $with_relations 要追加的关联对象
+ */
+function ApiGetObjectArrayList($list, $other_props = array(), $remove_props = array(), $with_relations = array())
+{
+    global $zbp;
+
+    if (array_key_exists('Author', $with_relations)) {
+        $zbp->LoadMembersInList($list);
+    }
+
+    foreach ($list as &$object) {
+        $object = ApiGetObjectArray($object, $other_props, $remove_props, $with_relations);
+    }
+
+    return $list;
+}
+
+/**
+ * API 获取约束过滤条件
+ * 将请求中的参数转换为 SQL LIMIT/ORDER 查询条件.
+ *
+ * @param int $limitDefault 默认记录数
+ * @param array $sortableColumns sortby 对应的模块数据表中支持排序的属性
+ * @return array
+ */
+function ApiGetRequestFilter($limitDefault = 10, $sortableColumns = array())
+{
+    $condition = array(
+        'limit' => array(0, $limitDefault),
+        'order' => null,
+        'option' => null,
+    );
+    $sortBy = strtolower((string) GetVars('sortby'));
+    $order = strtoupper((string) GetVars('order'));
+    $limit = (int) GetVars('limit');
+    $offset = (int) GetVars('offset');
+    $pageNow = (int) GetVars('pagenow');
+    $perPage = (int) GetVars('perpage');
+
+    // 排序顺序
+    if (!empty($sortBy) && isset($sortableColumns[$sortBy])) {
+        $condition['order'] = array($sortableColumns[$sortBy] => 'ASC');
+    }
+    if (!is_null($condition['order']) && $order == 'DESC') {
+        $condition['order'][$sortableColumns[$sortBy]] = $order;
+    }
+
+    if ($perPage) {
+        $p = new Pagebar(null, false); // 第一个参数为 null，不需要分页 Url 处理
+        $p->PageNow = (int) $pageNow == 0 ? 1 : (int) $pageNow;
+        $p->PageCount = $perPage;
+        $limit = array(($p->PageNow - 1) * $p->PageCount, $p->PageCount);
+        $op = array('pagebar' => &$p);
+
+        $condition['limit'] = $limit;
+        $condition['option'] = $op;
+    } else {
+        if ($limit > 0) {
+            $limitDefault = $limit;
+            $condition['limit'][1] = $limit;
+        }
+
+        if ($offset > 0) {
+            $condition['limit'][0] = $offset;
+        }
+    }
+
+    foreach ($GLOBALS['hooks']['Filter_Plugin_API_Get_Request_Filter'] as $fpname => &$fpsignal) {
+        $fpname($condition);
+    }
+    return $condition;
+}
+
+/**
+ * 获取分页信息.
+ *
+ * @param PageBar|null $pagebar
+ * @return array
+ */
+function ApiGetPaginationInfo($pagebar = null)
+{
+    if ($pagebar === null) {
+        // 用 stdClass 而不用 array() ，为了为空时 json 显示 {} 而不是 []
+        return new stdClass;
+    }
+
+    $info = array();
+    $pagebar = &$pagebar['pagebar'];
+
+    $info['Count'] = $pagebar->Count;
+    $info['PageCount'] = $pagebar->PageBarCount;
+    $info['PageAll'] = $pagebar->PageAll;
+    $info['PageNow'] = $pagebar->PageNow;
+    $info['PageFirst'] = $pagebar->PageFirst;
+    $info['PageLast'] = $pagebar->PageLast;
+    $info['PagePrevious'] = $pagebar->PagePrevious;
+    $info['PageNext'] = $pagebar->PageNext;
+
+    foreach ($GLOBALS['hooks']['Filter_Plugin_API_Get_Pagination_Info'] as $fpname => &$fpsignal) {
+        $fpname($info, $pagebar);
+    }
+    return $info;
+}
+
+/**
+ * API 获取及过滤关联对象请求.
+ *
+ * @param array $info 传入到 ApiGetObjectArray 的关联信息
+ * @return array
+ */
+function ApiGetAndFilterRelationQuery($info)
+{
+    $relations_req = trim(GetVars('with_relations'));
+
+    if (empty($relations_req)) {
+        return array();
+    }
+
+    $relations = explode(',', $relations_req);
+    $ret_relations = array();
+
+    foreach ($relations as $relation) {
+        $relation = trim($relation);
+        if (array_key_exists($relation, $info)) {
+            $ret_relations[$relation] = $info[$relation];
+        }
+    }
+
+    return $ret_relations;
+}
+
+/**
+ * API 传统登录时的 CSRF 验证.
+ */
+function ApiVerifyCSRF()
+{
+    global $zbp;
+
+    if (! defined('ZBP_IN_API_VERIFYBYTOKEN')) {
+        $csrftoken = GetVars('csrf_token');
+
+        if (! $zbp->VerifyCSRFToken($csrftoken, 'api')) {
+            ApiResponse(null, null, 419, $GLOBALS['lang']['error']['5']);
+        }
+    }
+}
+
+/**
+ * API 派发.
+ *
+ * @param array       $mods
+ * @param string      $mod
+ * @param string|null $act
+ */
+function ApiDispatch($mods, $mod, $act)
+{
+    if (empty($act)) {
+        $act = 'get';
+    }
+
+    if (isset($mods[$mod]) && file_exists($mod_file = $mods[$mod])) {
+        include_once $mod_file;
+        $func = 'api_' . $mod . '_' . $act;
+        if (function_exists($func)) {
+            $result = call_user_func($func);
+    
+            ApiResponse(
+                isset($result['data']) ? $result['data'] : null,
+                isset($result['error']) ? $result['error'] : null,
+                isset($result['code']) ? $result['code'] : 200,
+                isset($result['message']) ? $result['message'] : 'OK'
+            );
+        }
+    }
+    
+    ApiResponse(null, null, 404, $GLOBALS['lang']['error']['96']);
+}
+
+function ApiThrottle($name = 'default', $max_reqs = 5, $period = 60)
+{
+    global $zbpcache;
+
+    if (!isset($zbpcache)) {
+        return;
+    }
+
+    $user_id = md5(GetGuestIP());
+
+    $cache_key = "api-throttle:$name:$user_id";
+    $cached_value = $zbpcache->Get($cache_key);
+    $cached_req = json_decode($cached_value, true);
+    if (!$cached_value || !$cached_req || (time() >= $cached_req['expire_time'])) {
+        $cached_req = array('hits' => 0, 'expire_time' => (time() + $period));
+    }
+
+    if ($cached_req['hits'] >= $max_reqs) {
+        ApiResponse(null, null, 429, 'Too many requests.');
+    }
+
+    $cached_req['hits']++;
+    $zbpcache->Set($cache_key, json_encode($cached_req), $cached_req['expire_time'] - time());
 }

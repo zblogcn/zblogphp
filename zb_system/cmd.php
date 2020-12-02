@@ -6,12 +6,18 @@
  * @author Z-BlogPHP Team
  */
 
-require './function/c_system_base.php';
-$zbp->Load();
-$zbp->action = GetVars('act', 'GET');
-if ($zbp->action == 'ajax' || strcasecmp(GetVars('HTTP_X_REQUESTED_WITH', 'SERVER'), 'XMLHttpRequest') == 0) {
-    define('IN_AJAX_PROCESSING', true);
+// 标记为 CMD 运行模式
+define('ZBP_IN_CMD', true);
+
+if ((isset($_REQUEST['act']) && $_REQUEST['act'] == 'ajax') || (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strcasecmp($_SERVER['HTTP_X_REQUESTED_WITH'], 'XMLHttpRequest') == 0)) {
+    define('ZBP_IN_AJAX', true);
 }
+
+require './function/c_system_base.php';
+
+$action = GetVars('act', 'GET');
+
+$zbp->Load();
 
 if (!$zbp->CheckRights($zbp->action)) {
     $zbp->ShowError(6, __FILE__, __LINE__);
@@ -267,13 +273,7 @@ switch ($zbp->action) {
     case 'PluginDis':
         CheckIsRefererValid();
         $disableResult = DisablePlugin(GetVars('name', 'GET'));
-        if (is_object($disableResult)) {
-            // 本来应该用ShowError的，但是不太方便，算了
-            // 姑且先用SetHint放在这里
-            $hint = $lang['error']['84'];
-            $hint = str_replace('%s', "【$disableResult->name ($disableResult->id)】", $hint);
-            $zbp->SetHint('bad', $hint);
-        } elseif ($disableResult === false) {
+        if ($disableResult == false) {
             $zbp->SetHint('bad');
         } else {
             $zbp->BuildModule();

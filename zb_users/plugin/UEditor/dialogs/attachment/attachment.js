@@ -77,7 +77,7 @@
                     list = onlineFile.getInsertList();
                     break;
             }
-
+            editor.fireEvent("afterUpfile", list);
             editor.execCommand('insertfile', list);
         };
     }

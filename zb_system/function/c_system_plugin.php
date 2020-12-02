@@ -622,6 +622,17 @@ DefinePluginFilter('Filter_Plugin_Admin_Header');
 /*
 '**************************************************<
 '类型:Filter
+'名称:Filter_Plugin_Admin_Hint
+'参数:
+'说明:定义后台首页hint接口
+'调用:
+'**************************************************>
+ */
+DefinePluginFilter('Filter_Plugin_Admin_Hint');
+
+/*
+'**************************************************<
+'类型:Filter
 '名称:Filter_Plugin_Admin_Footer
 '参数:
 '说明:定义后台首页footer接口
@@ -2290,13 +2301,72 @@ DefinePluginFilter('Filter_Plugin_Xmlrpc_Begin');
  */
 DefinePluginFilter('Filter_Plugin_CSP_Backend');
 
+//###############################################################################################################
+//<api里的接口>
+
+/*
+'**************************************************<
+'类型:Filter
+'名称:Filter_Plugin_API_Response
+'参数:&$response
+'说明:API 响应内容处理
+'调用:
+'**************************************************>
+ */
+DefinePluginFilter('Filter_Plugin_API_Response');
+
 /*
 '**************************************************<
 '类型:Filter
 '名称:Filter_Plugin_API_Begin
 '参数:
-'说明:api页的begin接口(1.6.1加入)
+'说明:API 启动
 '调用:
 '**************************************************>
  */
 DefinePluginFilter('Filter_Plugin_API_Begin');
+
+/*
+'**************************************************<
+'类型:Filter
+'名称:Filter_Plugin_API_Extend_Mods
+'参数:
+'说明:API 的应用追加模块机制
+'调用:
+'**************************************************>
+ */
+DefinePluginFilter('Filter_Plugin_API_Extend_Mods');
+
+/*
+'**************************************************<
+'类型:Filter
+'名称:Filter_Plugin_API_Get_Request_Filter
+'参数:&$condition
+'说明:API 获取约束过滤条件
+'调用:
+'**************************************************>
+ */
+DefinePluginFilter('Filter_Plugin_API_Get_Request_Filter');
+
+/*
+'**************************************************<
+'类型:Filter
+'名称:Filter_Plugin_API_Get_Pagination_Info
+'参数:&$info,&$pagebar
+'说明:API 获取分页信息
+'调用:
+'**************************************************>
+ */
+DefinePluginFilter('Filter_Plugin_API_Get_Pagination_Info');
+
+
+/*
+'**************************************************<
+'类型:Filter
+'名称:Filter_Plugin_API_Get_Object_Array
+'参数:&$object, &$array, &$other_props, &$remove_props, &$with_relations
+'说明:API 转换Object到Array
+'调用:
+'**************************************************>
+ */
+DefinePluginFilter('Filter_Plugin_API_Get_Object_Array');

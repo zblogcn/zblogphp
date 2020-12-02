@@ -305,4 +305,15 @@ class Database__PostgreSQL implements Database__Interface
         }
     }
 
+    /**
+     * 事务处理
+     *
+     * @param string $query 指令
+     *
+     * @return bool
+     */
+    public function Transaction($query)
+    {
+        return $this->Query($this->sql->Transaction($query));
+    }
 }

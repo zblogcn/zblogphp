@@ -1,0 +1,442 @@
+body {
+    background-color: #f1f1f2!important;
+	min-width: 1280px;
+	background:url("images/l.svg") repeat-y 0 top;
+}
+
+.ui-tooltip, .arrow_leftmenu:after {
+	background: #0099cd;
+	border: 2px solid white;
+}
+
+.ui-tooltip {
+	color: white;
+	font: bold 14px "Helvetica Neue", Sans-Serif;
+	text-transform: uppercase;
+	box-shadow: 0 0 7px black;
+}
+
+.arrow_leftmenu {
+	width: 12px;
+	height: 30px;
+	overflow: hidden;
+	position: absolute;
+	margin-left: -35px;
+	bottom: -16px;
+	top: 3px;
+	left: 23px;
+	bottom: auto;
+	background-color: transparent;
+}
+
+.arrow_leftmenu:after {
+	content: "";
+	position: absolute;
+	left: 6px;
+	top: 0px;
+	width: 25px;
+	height: 25px;
+	box-shadow: 9px -9px 6px 5px black;
+	-webkit-transform: rotate(45deg);
+	-ms-transform: rotate(45deg);
+	transform: rotate(45deg);
+}
+
+header,.header {
+	background-color: #fff;
+	box-shadow: 0 1px 2px 0 rgba(0,0,0,.05);
+}
+
+input.button,input[type='submit'],input[type='button'] {
+	background-color: #0099cd;
+}
+
+div.theme-now .betterTip img {
+	box-shadow: 0 0 10px #0099cd;
+}
+
+#divMain a,#divMain2 a {
+	color: #262f3e;
+}
+
+.menu ul li a {
+	background-color: rgb(255,255,255,0.85);
+}
+
+.menu ul li.on a {
+	background-color: #fff;
+}
+
+.menu ul li a:hover {
+	background-color: #D9DFE5;
+}
+
+#leftmenu li.on a {
+	background-color: #0099cd!important;
+}
+
+#leftmenu a:hover {
+	background-color: #16181d!important;
+	color: #fff;
+	border-left: #0099cd 4px solid;
+}
+
+#leftmenu a:hover span {
+	margin-left: 36px;
+}
+
+div.theme-now {
+	background-color: #D9DFE5;
+	border-color: #999;
+}
+
+div.theme-other .betterTip img:hover {
+	border-color: #D9DFE5;
+}
+
+.SubMenu a:hover {
+	background-color: #D9DFE5;
+}
+
+.siderbar-header:hover {
+	background-color: #D9DFE5;
+}
+
+#leftmenu .on a,#leftmenu #on a:hover {
+	background: none!important;
+}
+
+input.button,input[type="submit"],input[type="button"] {
+	border-color: #999;
+}
+
+input.button:hover {
+	background-color: #3f3f3f;
+}
+
+div.theme-other .betterTip img:hover {
+	box-shadow: 0 0 10px #3f3f3f;
+}
+
+.SubMenu {
+	border-bottom-color: #3f3f3f;
+}
+
+.SubMenu span.m-now {
+	background-color: #3f3f3f;
+}
+
+div #BT_title {
+	background-color: #3f3f3f;
+	border-color: #999;
+}
+
+a:hover {
+	color: #c0504d;
+}
+
+#divMain {
+	background: #ffffff;
+    padding: 25px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 1px 2px 0 rgba(0,0,0,.05);
+	border-radius: 2px;
+	padding-top: 20px;
+}
+
+#divMain a:hover,#divMain2  a:hover {
+	color: #c0504d;
+}
+
+#divMain .DIVBlogConfignav ul li a:hover {
+	background-color: #3f3f3f!important;
+}
+
+#divMain .DIVBlogConfignav ul li a.clicked {
+	background-color: #D9DFE5!important;
+}
+
+.DIVBlogConfignav {
+	background-color: #ededed!important;
+}
+
+#divMain .DIVBlogConfigtop {
+	background-color: #3f3f3f!important;
+}
+
+#divMain .DIVBlogConfig {
+	background-color: #ededed!important;
+}
+
+div.bg {
+	background: #0099cd;
+}
+
+div.bg input[type="text"], input[type="password"] {
+	border-color: #0099cd
+}
+
+/*AdminColor*/
+#admin_color {
+	float: left;
+	line-height: 2.5em;
+	font-size: 0.5em;
+	letter-spacing: -0.1em;
+}
+
+header,.header {
+	background-image: none;
+}
+
+.pane,.theme,form.search {
+	padding: 1em;
+	position: relative;
+	background: #fff;
+	margin: 1em 0;
+	border-radius: 0.1em;
+}
+
+div.theme {
+	height: auto;
+	margin: 0 2em 2em 0;
+}
+
+div.theme-other {
+	background: #fff;
+}
+
+form.search p {
+	padding: 0;
+}
+
+td,th {
+	border: none;
+	border-right: 1px solid #efefef;
+	padding: 0.6em;
+}
+
+table {
+	border-collapse: collapse;
+	background: #ffffff;
+	line-height: 120%;
+	margin: 0.5em 0 0.5em 0;
+	border: none;
+	line-height: 1.5em;
+}
+
+.header .menu {
+	height: 60px;
+	position: relative;
+	float: left;
+	left: 0px;
+}
+
+header div.logo {
+	border-right: 1px solid #444;
+}
+
+.header .menu ul li {
+	line-height: 60px;
+	height: 60px;
+	margin: 0;
+	margin-right: 5px;
+}
+
+.header .menu ul li:hover, .menu ul li.on {
+	border-top: #444 solid 2px;
+}
+
+.header .menu ul li:hover a, .menu ul li.on a {
+	position: relative;
+    top: -2px;
+}
+
+.header .menu ul li a {
+	float: none;
+	padding: 0px 15px;
+	color: #444;
+	background: none;
+	vertical-align: middle;
+}
+
+.header {
+	height: 60px;
+	margin-bottom: 0px;
+	padding-left: 220px;
+}
+
+.left {
+	padding-top: 10px;
+	float: left;
+	height: 100vh;
+	background-position: -30px -2px;
+	width: 200px;
+    box-shadow: rgba(0, 0, 0, 0.2) 0px 1px 4px 0px;
+	background-color: #20222A;
+	z-index: 100;
+    overflow: hidden;
+    top: 0;
+}
+
+.left #leftmenu a {
+	color: #fff;
+	width: 200px;
+	height: 45px;
+}
+
+.left #leftmenu li {
+	background-color: #16181d;
+	color: #fff;
+	width: 200px;
+	height: 45px;
+	margin-bottom: 0;
+}
+
+.main {
+	padding-left: 220px;
+	padding-right: 20px;
+}
+
+#leftmenu li span {
+	background-repeat: no-repeat;
+	background-position: 0px 12px;
+}
+
+.left #leftmenu span {
+	float: left;
+	width: auto;
+	height: 45px;
+	line-height: 45px;
+	text-align: left;
+	cursor: pointer;
+	margin-left: 40px;
+}
+
+.divHeader {
+	padding: 10px 0 45px 0;
+	background-position: 1px 13px!important;
+}
+
+div.hint {
+	margin-top: 0.5em;
+}
+
+.left #leftmenu #nav_admincolor2 {
+	background-color: #444;
+	color: #fff;
+	width: 160px;
+	height: 45px;
+}
+
+.left #leftmenu #nav_admincolor2 span {
+	float: left;
+	width: auto;
+	height: 36px;
+	line-height: 36px;
+	text-align: left;
+	cursor: pointer;
+	margin-left: 36px;
+	padding-left: 60px;
+	background-position: 40px 12px;
+}
+
+.left #leftmenu #nav_admincolor2 a:hover {
+	background-color: Transparent!important;
+}
+
+.left #leftmenu li span {
+	color: rgba(255,255,255,.7);
+}
+
+.left #leftmenu li span i {
+    transition: ease-in-out 0.3s;
+}
+
+.left #leftmenu li a:hover span, .left #leftmenu li.on a span {
+	color: #ffffff;
+}
+
+body[class~=login] {
+	background: none;
+}
+
+header div.logo {
+	display: none;
+}
+
+header div.logo img {
+	width: 60px;
+	height: 60px;
+	background-position: -5px -5px;
+}
+
+.pagebar a {
+	border: 1px solid white;
+}
+
+body[class~=login],body[class~=error],body[class~=short] {
+	background: none;
+}
+
+body[class~=login] div.bg,body[class~=error] div.bg,body[class~=short] div.bg {
+	background: #3f3f3f;
+}
+
+body[class~=login] input[type="text"], body[class~=login] input[type="password"] {
+	border-color: #999
+}
+
+body[class~=login] input.button, input[type="submit"], input[type="button"] {
+	border-color: #999;
+}
+
+body[class~=login] input.button, body[class~=login] input[type="submit"], body[class~=login] input[type="button"] {
+	background-color: #3f3f3f;
+}
+
+body[class~=login] input[type="text"], body[class~=login] input[type="password"] {
+	border-color: #999;
+}
+
+body[class~=login] input.button:hover {
+	background-color: #0099cd;
+}
+
+header div.logo img {
+	background: url("images/logo.svg")
+}
+
+table,.pane,.theme,form.search {
+	box-shadow: 0 0 0.1em rgba(0,0,0,0.3);
+}
+
+td, th {
+    padding: 0.8em;
+}
+
+.left-logo {
+	text-align: center;
+}
+
+.left-logo img {
+	height: 50px;
+}
+
+.userbtn a {
+    color: #444;
+}
+
+.user {
+	color: #444;
+	padding-right: 10px;
+}
+
+.userbtn .logout:hover, .userbtn .profile:hover {
+    text-shadow: 0px 0px 2px #444444;
+    color: #444444;
+}
+
+p.hint {
+	margin-bottom: -15px;
+}

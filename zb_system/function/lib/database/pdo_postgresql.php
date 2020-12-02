@@ -260,4 +260,24 @@ class Database__PDO_PostgreSQL implements Database__Interface
         }
     }
 
+
+    /**
+     * 事务处理
+     *
+     * @param string $query 指令
+     *
+     * @return bool
+     */
+    public function Transaction($query)
+    {
+        if (strcasecmp($query, 'begin') === 0) {
+            return $this->db->beginTransaction();
+        }
+        if (strcasecmp($query, 'commit') === 0) {
+            return $this->db->commit ();
+        }
+        if (strcasecmp($query, 'rollback ') === 0) {
+            return $this->db->rollBack();
+        }
+    }
 }

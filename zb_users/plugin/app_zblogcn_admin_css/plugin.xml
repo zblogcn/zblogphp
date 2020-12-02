@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<plugin version="php">
+<id>app_zblogcn_admin_css</id>
+<name>Z-Blog 应用中心后台样式</name>
+<url>https://zzs.im/</url>
+<note></note>
+<description></description>
+<path></path>
+<include>include.php</include>
+<level>1</level>
+<author>
+  <name>zhouzishu</name>
+  <email>me@zzs.im</email>
+  <url>https://zzs.im/</url>
+</author>
+<source>
+  <name></name>
+  <email></email>
+  <url></url>
+</source>
+<adapted>172375</adapted>
+<version>1.0</version>
+<pubdate>2020-11-07</pubdate>
+<modified>2020-11-22</modified>
+<price>0</price>
+<phpver>5.2</phpver>
+<advanced>
+  <dependency></dependency>
+  <rewritefunctions></rewritefunctions>
+  <existsfunctions></existsfunctions>
+  <conflict></conflict>
+</advanced>
+<sidebars>
+  <sidebar1></sidebar1>
+  <sidebar2></sidebar2>
+  <sidebar3></sidebar3>
+  <sidebar4></sidebar4>
+  <sidebar5></sidebar5>
+  <sidebar6></sidebar6>
+  <sidebar7></sidebar7>
+  <sidebar8></sidebar8>
+  <sidebar9></sidebar9>
+</sidebars>
+</plugin>

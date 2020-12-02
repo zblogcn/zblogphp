@@ -9,6 +9,9 @@ if (!defined('ZBP_PATH')) {
 class Template
 {
 
+    /**
+     * @var string 编译后的模板php执行路径
+     */
     protected $path = null;
 
     protected $entryPage = null;
@@ -78,6 +81,11 @@ class Template
      * @var bool 是否启用标识模板类型
      */
     public $isnamedtype = array();
+
+    /**
+     * @var string 模板目录，方便指定多套模板
+     */
+    public $template_dirname = 'template';
 
     public function __construct()
     {
@@ -320,6 +328,8 @@ class Template
         $this->parse_foreach($content);
         // Step 11: 解析for
         $this->parse_for($content);
+        // Step 12: 解析switch
+        $this->parse_switch($content);
         // Step N: 恢复不编译的代码
         $this->parse_back_uncompile_code($content);
 
@@ -340,6 +350,9 @@ class Template
      */
     protected function remove_php_blocks(&$content)
     {
+        //为了模板更好看
+        $content = str_replace('{php}<?php', '{php}', $content);
+        $content = str_replace('?>{/php}', '{/php}', $content);
         $content = preg_replace("/\<\?php[\d\D]+?\?\>/si", '', $content);
     }
 
@@ -531,6 +544,59 @@ class Template
 
         return "{php} for($exp) {{/php} $code{php} }  {/php}";
     }
+    
+    /**
+     * @param $content
+     */
+    protected function parse_switch(&$content)
+    {
+        while (preg_match('/\{switch(.+?)\}(.+?){\/switch}/s', $content)) {
+            $content = preg_replace_callback(
+                '/\{switch(.+?)\}(.+?){\/switch}/s',
+                array($this, 'parse_switch_sub'),
+                $content
+            );
+        }
+    }
+    
+    /**
+     * @param $matches
+     *
+     * @return string
+     */
+    protected function parse_switch_sub($matches)
+    {
+        $exp = $this->replace_dot($matches[1]);
+        
+        $code = $this->parse_switch_case($matches[2]);
+        $code = preg_replace('/^(\s+?){php}/','${1}',$code);
+        
+        return "{php} switch($exp) { $code{php} }  {/php}";
+    }
+    
+    /**
+     * @param $code
+     *
+     * @return string
+     */
+    protected function parse_switch_case($code)
+    {
+        $code = preg_replace('/{break;?}/','{php}break;{/php}',$code);
+        $code = preg_replace('/{default:?}/','{php}default:{/php}',$code);
+        
+        $code = preg_replace_callback('/{case(.+?)}/', array($this, 'parse_switch_case_repalce'), $code);
+        return $code;
+    }
+
+    /**
+     * @param $matches
+     *
+     * @return string
+     */
+    protected function parse_switch_case_repalce($matches)
+    {
+        return '{php}case '.rtrim(trim($matches[1]),':').':{/php}';
+    }
 
     /**
      * @param $matches
@@ -675,13 +741,9 @@ class Template
         }
 
         // 读取主题模板
-        //$files = GetFilesInDir($zbp->usersdir . 'theme/' . $theme . '/template/', 'php');
-        //foreach ($files as $sortname => $fullname) {
-        //    $templates[$sortname] = file_get_contents($fullname);
-        //}
         $this->dirs = array();
         $this->files = array();
-        $this->GetAllFileDir($zbp->usersdir . 'theme/' . $theme . '/template/');
+        $this->GetAllFileDir($zbp->usersdir . 'theme/' . $theme . "/{$this->template_dirname}/");
         foreach ($this->dirs as $key => $value) {
             if (substr($this->dirs[$key], -1) != '/') {
                 $this->dirs[$key] .= '/';
@@ -721,13 +783,13 @@ class Template
         if (stristr($t, 'Template Name:')) {
             $t = stristr($t, 'Template Name:');
             $t = str_ireplace('Template Name:', '', $t);
-            $name = strtok($t, ' ');
+            $name = trim(strtok($t, '*'));
         }
         $t = $content;
         if (stristr($t, 'Template Type:')) {
             $t = stristr($t, 'Template Type:');
             $t = str_ireplace('Template Type:', '', $t);
-            $type = strtok($t, ' ');
+            $type = trim(strtok($t, '*'));
         }
 
         if (is_readable($f = $GLOBALS['blogpath'] . 'zb_users/theme/' . $this->theme . '/template.json')) {
@@ -775,6 +837,9 @@ class Template
     private function GetAllFileDir($dir)
     {
         global $zbp;
+        if (!file_exists($dir)) {
+            return ;
+        }
         if (function_exists('scandir')) {
             foreach (scandir($dir) as $d) {
                 if (is_dir($dir . $d)) {
@@ -784,7 +849,7 @@ class Template
                     }
                 } elseif (is_readable($dir . $d)) {
                     $s = $dir . $d;
-                    $i = strlen($zbp->usersdir . 'theme/' . $this->theme . '/template/');
+                    $i = strlen($zbp->usersdir . 'theme/' . $this->theme . "/{$this->template_dirname}/");
                     if (substr($s, -4) == '.php') {
                         $s2 = substr($s, ($i - strlen($s)));
                         $s3 = substr($s2, 0, (strlen($s2) - 4));
@@ -796,13 +861,13 @@ class Template
             if ($handle = opendir($dir)) {
                 while (false !== ($file = readdir($handle))) {
                     if ($file != "." && $file != "..") {
-                        $d = str_replace('template//', 'template/', str_replace('\\', '/', $dir . '/' . $file));
+                        $d = str_replace("{$this->template_dirname}//", "/{$this->template_dirname}/", str_replace('\\', '/', $dir . '/' . $file));
                         if (is_dir($dir . '/' . $file)) {
                             $this->dirs[] = $d;
                             $this->GetAllFileDir($d);
                         } elseif (is_readable($d)) {
                             $s = $d;
-                            $i = strlen($zbp->usersdir . 'theme/' . $this->theme . '/template/');
+                            $i = strlen($zbp->usersdir . 'theme/' . $this->theme . "/{$this->template_dirname}/");
                             if (substr($s, -4) == '.php') {
                                 $s2 = substr($s, ($i - strlen($s)));
                                 $s3 = substr($s2, 0, (strlen($s2) - 4));

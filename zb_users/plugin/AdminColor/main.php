@@ -29,6 +29,11 @@ if (isset($_GET['setcolor'])) {
         $zbp->Config('AdminColor')->LightColor = (string) $GLOBALS['AdminColor_LightColor'][$i];
         $zbp->Config('AdminColor')->HighColor = (string) $GLOBALS['AdminColor_HighColor'][$i];
         $zbp->Config('AdminColor')->AntiColor = (string) $GLOBALS['AdminColor_AntiColor'][$i];
+        if($i == 9) {
+          $zbp->Config('AdminColor')->HeaderPathUse = true;
+        } else {
+          $zbp->Config('AdminColor')->HeaderPathUse = false;
+        }
         $zbp->SaveConfig('AdminColor');
         Redirect($zbp->host . 'zb_users/plugin/AdminColor/main.php');
         die();
@@ -47,6 +52,7 @@ if (GetVars('act') == 'save') {
     $zbp->Config('AdminColor')->SlidingButton = (bool) GetVars("ac_SlidingButton");
     $zbp->Config('AdminColor')->HeaderPathUse = (bool) GetVars("ac_HeaderPathUse");
     $zbp->Config('AdminColor')->TableShadow = (bool) GetVars("ac_TableShadow");
+    $zbp->Config('AdminColor')->FontSize = (int) GetVars("ac_FontSize");
     //if ( $zbp->Config('AdminColor')->ColorID == 10 )
     //    $zbp->Config('AdminColor')->HeaderPathUse = true;
     $zbp->SaveConfig('AdminColor');
@@ -130,6 +136,21 @@ require $blogpath . 'zb_system/admin/admin_top.php';
 <input id="ac_AntiColor" name="ac_AntiColor" type="text" value="<?php echo $zbp->Config('AdminColor')->AntiColor; ?>"size="20"/>
                   </td>
                 </tr>
+                <tr height="32">
+                  <td width="30%" align="left"><p><b>· 后台字体</b></p></td>
+                  <td>
+<?php
+$fontsize_12 = $fontsize_13 = $fontsize_14 = '';
+$fontsize = 'fontsize_' . $zbp->Config('AdminColor')->FontSize;
+$$fontsize = 'checked="checked"';
+?>
+<input class="radio" type="radio" name="ac_FontSize" id="ac_FontSize_12" value="12" <?php echo $fontsize_12;?> />
+<label for="ac_FontSize_12">12px</label>&nbsp;&nbsp;&nbsp;&nbsp;
+<input class="radio" type="radio" name="ac_FontSize" id="ac_FontSize_13" value="13" <?php echo $fontsize_13;?>/>
+<label for="ac_FontSize_13">13px</label>&nbsp;&nbsp;&nbsp;&nbsp;
+<input class="radio" type="radio" name="ac_FontSize" id="ac_FontSize_14" value="14" <?php echo $fontsize_14;?>/>
+<label for="ac_FontSize_14">14px</label>
+                  </td>
                 <tr height="32">
                   <td width="30%" align="left"><p><b>· 开启表格阴影</b></p></td>
                   <td>

@@ -145,7 +145,7 @@ foreach ($zbp->categoriesbyorder as $k => $v) {
             ActiveLeftMenu("aCategoryMng");
         </script>
         <script >
-            AddHeaderIcon("<?php echo $zbp->host . 'zb_system/image/common/category_32.png'; ?>");
+            AddHeaderFontIcon("icon-folder-fill");
         </script>
     </div>
 </div>

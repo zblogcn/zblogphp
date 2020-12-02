@@ -75,6 +75,7 @@ if ($zbp->option['ZC_DATABASE_TYPE'] !== '') {
   <script src="../zb_system/script/jquery-ui.custom.min.js"></script>
   <link rel="stylesheet" href="../zb_system/css/jquery-ui.custom.css" type="text/css" media="screen" />
   <link rel="stylesheet" href="../zb_system/css/admin3.css" type="text/css" media="screen" />
+  <link rel="stylesheet" href="../zb_system/image/icon/icon.css" type="text/css" media="screen" />  
   <title>Z-BlogPHP <?php echo ZC_BLOG_VERSION . ' ' . $zbp->lang['zb_install']['install_program']; ?> </title>
   <?php Include_AddonAdminFont(); ?>
 </head>
@@ -217,7 +218,7 @@ function Setup0()
   <dl>
     <dt></dt>
     <dd id="ddleft">
-      <div id="headerimg"><img src="../zb_system/image/admin/install.png" alt="Z-BlogPHP" />
+      <div id="headerimg"><img src="../zb_system/image/admin/logo.svg" alt="Z-BlogPHP" />
         <strong><?php echo $zbp->lang['zb_install']['install_program']; ?></strong></div>
       <div class="left"><?php echo $zbp->lang['zb_install']['install_progress']; ?>&nbsp;</div>
       <div id="setup0" class="left"></div>
@@ -244,7 +245,7 @@ function Setup1()
   <dl>
     <dt></dt>
     <dd id="ddleft">
-      <div id="headerimg"><img src="../zb_system/image/admin/install.png" alt="Z-BlogPHP" />
+      <div id="headerimg"><img src="../zb_system/image/admin/logo.svg" alt="Z-BlogPHP" />
         <strong><?php echo $zbp->lang['zb_install']['install_program']; ?></strong></div>
       <div class="left"><?php echo $zbp->lang['zb_install']['install_progress']; ?>&nbsp;</div>
       <div id="setup1" class="left"></div>
@@ -300,6 +301,20 @@ Z-BlogPHP官方网址：https://www.zblogcn.com/
 
 (六)本声明未涉及的问题参见国家有关法律法规，当本声明与国家法律法规冲突时，以国家法律法规为准。
 
+    Z-BlogPHP免责申明
+
+(一)ZBLOGCN.COM提供免费开源的建站程序Z-Blog和Z-BlogPHP，不提供网站相关的内容服务，该建站程序之著作权归ZBLOGCN.COM所有。
+
+(二)任何人可以自由使用我们的建站程序建立网站，ZBLOGCN.COM与用户使用我们的建站程序所建立之网站无任何关联，ZBLOGCN.COM对用户及其网站不承担任何责任。
+
+(三)用户下载、安装、使用本建站程序，即表明用户信任ZBLOGCN.COM，ZBLOGCN.COM对任何原因在使用本建站程序时可能对用户自己或他人造成的任何形式的损失和伤害不承担责任。 
+
+(四)任何单位或个人认为使用本建站程序建立的网站可能涉嫌侵犯其合法权益的，应该及时向该网站的所有人反映、交涉、或诉诸法律手段。
+
+(五)使用本建站程序的用户因为违反本声明的规定而触犯中华人民共和国法律的，一切后果自己负责，ZBLOGCN.COM不承担任何责任。
+
+(六)本声明未涉及的问题参见国家有关法律法规，当本声明与国家法律法规冲突时，以国家法律法规为准。
+
   </textarea>
       </div>
       <div id="bottom">
@@ -331,7 +346,7 @@ function Setup2()
   <dl>
     <dt></dt>
     <dd id="ddleft">
-      <div id="headerimg"><img src="../zb_system/image/admin/install.png" alt="Z-BlogPHP" />
+      <div id="headerimg"><img src="../zb_system/image/admin/logo.svg" alt="Z-BlogPHP" />
         <strong><?php echo $zbp->lang['zb_install']['install_program']; ?></strong></div>
       <div class="left"><?php echo $zbp->lang['zb_install']['install_progress']; ?>&nbsp;</div>
       <div id="setup2" class="left"></div>
@@ -629,7 +644,7 @@ function Setup3()
   <dl>
     <dt></dt>
     <dd id="ddleft">
-      <div id="headerimg"><img src="../zb_system/image/admin/install.png" alt="Z-BlogPHP" />
+      <div id="headerimg"><img src="../zb_system/image/admin/logo.svg" alt="Z-BlogPHP" />
         <strong><?php echo $zbp->lang['zb_install']['install_program']; ?></strong></div>
       <div class="left"><?php echo $zbp->lang['zb_install']['install_progress']; ?>&nbsp;</div>
       <div id="setup3" class="left"></div>
@@ -891,7 +906,7 @@ function Setup4()
   <dl>
     <dt></dt>
     <dd id="ddleft">
-      <div id="headerimg"><img src="../zb_system/image/admin/install.png" alt="Z-BlogPHP" />
+      <div id="headerimg"><img src="../zb_system/image/admin/logo.svg" alt="Z-BlogPHP" />
         <strong><?php echo $zbp->lang['zb_install']['install_program']; ?></strong></div>
       <div class="left"><?php echo $zbp->lang['zb_install']['install_progress']; ?>&nbsp;</div>
       <div id="setup4" class="left"></div>

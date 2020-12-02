@@ -420,7 +420,7 @@ class Config implements Iterator
             return true;
         }
 
-        $this->db->Query($this->db->sql->Transaction('begin'));
+        $this->db->Transaction('begin');
 
         //add
         foreach ($add as $key2 => $value2) {
@@ -458,7 +458,7 @@ class Config implements Iterator
             $this->db->Delete($sql);
         }
         //var_dump($add,$del,$mod);die;
-        $this->db->Query($this->db->sql->Transaction('commit'));
+        $this->db->Transaction('commit');
         //存储成功后重置origkvdata
         $this->origkvdata = $this->kvdata;
 

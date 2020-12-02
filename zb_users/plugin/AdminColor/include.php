@@ -61,13 +61,14 @@ function AdminColor_Css()
         Add_Filter_Plugin('Filter_Plugin_Admin_LeftMenu', 'AdminColor_Add_Button');
         $hm = GetVars('admincolor_hm', 'COOKIE');
         if ($hm == '1') {
-            echo '<style type="text/css">.left{width:36px;background-color:#ededed;}.left #leftmenu span{margin-left:10px;padding-left:22px;}.left #leftmenu span i {margin-right:18px;}div.main,section.main{padding-left:46px;}</style>';
+            echo '<style type="text/css">.left{width:36px;background-color:#ededed;}.left #leftmenu span{margin-left:10px;padding-left:32px;}.left #leftmenu span.bgicon{padding-left:32px;}.left #leftmenu span i {margin-right:18px;}div.main,section.main{padding-left:46px;}</style>';
         }
     } else {
         Add_Filter_Plugin('Filter_Plugin_Admin_LeftMenu', 'AdminColor_Add_Button2');
         $hm = GetVars('admincolor_hm', 'COOKIE');
         if ($hm == '1') {
-            echo '<style type="text/css">.left{width:36px;background-color:#333333;}.left #leftmenu span{margin-left:10px;padding-left:22px;}.left #leftmenu span i {margin-right:18px;}div.main,section.main{padding-left:46px;}body{background-position:-125px center;}.left #leftmenu #nav_admincolor2 span{margin-left:10px;padding-left:20px ;background-position:0px 12px;}</style>';
+            echo '<style type="text/css">.left{width:36px;background-color:#333333;}.left #leftmenu span{margin-left:10px;padding-left:32px;}.left #leftmenu span.bgicon{padding-left:32px;}.left #leftmenu span i {margin-right:18px;}div.main,section.main{padding-left:46px;}body{background-position:-124px center;}.left #leftmenu #nav_admincolor2 span{margin-left:23px;padding-left:20px ;background-position:0px 12px;}</style>';
+
         }
     }
 }
@@ -107,9 +108,6 @@ function AdminColor_ColorButton()
     $s = '';
 
     for ($i = 0; $i < 9; $i++) {
-        if ($i == 7) {
-            continue;
-        }
         $s .= "&nbsp;&nbsp;<a href='" . $zbp->host . "zb_users/plugin/AdminColor/main.php?setcolor=" . $i . "'><span style='height:16px;width:16px;background:" . $GLOBALS['AdminColor_NormalColor'][$i] . "'><img src='" . $zbp->host . "zb_system/image/admin/none.gif' width='16' height='16' alt='' /></span></a>&nbsp;&nbsp;";
     }
 
@@ -131,7 +129,7 @@ function admincolor_hideMenu(){
  $("div.left,aside.left").css({"background-color":"#ededed"});
  $("div.left,aside.left").animate({"width":"36px"});
  $("div.main,section.main").animate({"padding-left":"46px"});
- $("#leftmenu span").animate({"margin-left":"10px","padding-left":"22px"}); 
+ $("#leftmenu span").animate({"margin-left":"10px","padding-left":"32px"}); 
  $("#leftmenu span i").animate({"margin-right":"8px","margin-right":"18px"}); 
 
  SetCookie('admincolor_hm','1',365);
@@ -146,9 +144,9 @@ function admincolor_showMenu(){
  $("div.left,aside.left").css({"background-color":"transparent"});
  $("div.left,aside.left").animate({"width":"140px"});
  $("div.main,section.main").animate({"padding-left":"150px"});
- $("#leftmenu span").animate({"margin-left":"25px","padding-left":"22px"});
+ $("#leftmenu span").animate({"margin-left":"25px","padding-left":"32px"});
  $("#leftmenu span i").animate({"margin-right":"18px","margin-right":"8px"}); 
-
+ $("#leftmenu span.bgicon").animate({"padding-left":"22px"});
  SetCookie('admincolor_hm','',-1); 
  $("#leftmenu a").tooltip({disabled: true});
  //$("#leftmenu a").tooltip( "destroy" );
@@ -176,18 +174,71 @@ $(document).ready(function(){
 });
 EOD;
 
+
     $js2 = <<<EOD
+function admincolor_hideMenu(){
+ $("#aAdminColor").attr('href','javascript:admincolor_showMenu()');
+ $("#aAdminColor").find('span').html(lang_admincolor_expandmenu);
+ $("#aAdminColor").attr('title',lang_admincolor_expandmenu2);
+ $("div.left,aside.left").css({"background-color":"#e3eaf3"});
+ $("div.left,aside.left").animate({"width":"36px"});
+ $("div.main,section.main").animate({"padding-left":"46px"});
+ $("#leftmenu span").animate({"margin-left":"10px","padding-left":"32px"}); 
+ $("#leftmenu span i").animate({"margin-right":"8px","margin-right":"18px"});  
+ SetCookie('admincolor_hm','1',365);
+ admincolor_tooptip();
+}
+
+function admincolor_showMenu(){
+ $("#aAdminColor").attr('href','javascript:admincolor_hideMenu()');
+ $("#aAdminColor").find('span').html(lang_admincolor_closemenu);
+ $("#aAdminColor").attr('title',lang_admincolor_closemenu2);
+ $("div.left,aside.left").css({"background-color":"Transparent"});
+ $("div.left,aside.left").animate({"width":"140px"});
+ $("div.main,section.main").animate({"padding-left":"150px"});
+ $("#leftmenu span").animate({"margin-left":"25px","padding-left":"32px"});
+ $("#leftmenu span i").animate({"margin-right":"18px","margin-right":"8px"}); 
+ $("#leftmenu span.bgicon").animate({"padding-left":"22px"});
+ SetCookie('admincolor_hm','',-1); 
+ $("#leftmenu a").tooltip({disabled: true});
+ //$("#leftmenu a").tooltip( "destroy" );
+}
+
+function admincolor_tooptip(){
+    $("#leftmenu a").tooltip({
+      disabled:false,
+      position: {
+        my: "left+50 top-33",
+       //my: "left+50 top-33",
+       at: "left bottom",
+        using: function( position, feedback ) {
+          $( this ).css( position );
+          $( "<div>" )
+            .addClass( "arrow_leftmenu" )
+            .appendTo( this );
+        }
+      }
+    });
+}
+
+$(document).ready(function(){
+  if(GetCookie('admincolor_hm')=='1') {admincolor_tooptip();}
+});
+EOD;
+
+
+    $js3 = <<<EOD
 function admincolor_hideMenu(){
  $("#aAdminColor2").attr('href','javascript:admincolor_showMenu()');
  $("#aAdminColor2 span i").attr('class','icon-caret-right-fill');
  $("div.left,aside.left").css({"background-color":"#333333"});
  $("div.left,aside.left").animate({"width":"36px"});
  $("div.main,section.main").animate({"padding-left":"46px"});
- $("#leftmenu span").animate({"margin-left":"10px","padding-left":"22px"}); 
- $("#leftmenu span i").animate({"margin-right":"8px","margin-right":"18px"}); 
-
- $("#leftmenu #nav_admincolor2 span").animate({"margin-left":"10px","padding-left":"20px","background-positionX":"0px"}); 
- $("body").animate({"background-positionX":"-125px"}); 
+ $("#leftmenu span").animate({"margin-left":"10px"}); 
+ $("#leftmenu span i").animate({"margin-right":"8px","margin-right":"18px"});
+ $("#leftmenu span.bgicon").animate({"padding-left":"32px"});
+ $("#leftmenu #nav_admincolor2 span").animate({"margin-left":"23px","padding-left":"20px","background-positionX":"0px"}); 
+ $("body").animate({"background-positionX":"-124px"}); 
  SetCookie('admincolor_hm','1',365);
  admincolor_tooptip();
 }
@@ -198,10 +249,10 @@ function admincolor_showMenu(){
  $("div.left,aside.left").css({"background-color":"#333333"});
  $("div.left,aside.left").animate({"width":"160px"});
  $("div.main,section.main").animate({"padding-left":"170px"});
- $("#leftmenu span").animate({"margin-left":"25px","padding-left":"29px"});
+ $("#leftmenu span").animate({"margin-left":"32px"});
+ $("#leftmenu span.bgicon").animate({"padding-left":"22px"});
  $("#leftmenu span i").animate({"margin-right":"18px","margin-right":"8px"}); 
-
- $("#leftmenu #nav_admincolor2 span").animate({"padding-left":"60px","background-positionX":"40px"}); 
+ $("#leftmenu #nav_admincolor2 span").animate({"padding-left":"65px","background-positionX":"40px"}); 
  $("body").animate({"background-positionX":"+0px"}); 
  SetCookie('admincolor_hm','',-1); 
  $("#leftmenu a").tooltip({disabled: true});
@@ -230,62 +281,13 @@ $(document).ready(function(){
 });
 EOD;
 
-    $js3 = <<<EOD
-function admincolor_hideMenu(){
- $("#aAdminColor").attr('href','javascript:admincolor_showMenu()');
- $("#aAdminColor").find('span').html(lang_admincolor_expandmenu);
- $("#aAdminColor").attr('title',lang_admincolor_expandmenu2);
- $("div.left,aside.left").css({"background-color":"#e3eaf3"});
- $("div.left,aside.left").animate({"width":"36px"});
- $("div.main,section.main").animate({"padding-left":"46px"});
- $("#leftmenu span").animate({"margin-left":"10px","padding-left":"22px"}); 
- $("#leftmenu span i").animate({"margin-right":"8px","margin-right":"18px"});  
- SetCookie('admincolor_hm','1',365);
- admincolor_tooptip();
-}
 
-function admincolor_showMenu(){
- $("#aAdminColor").attr('href','javascript:admincolor_hideMenu()');
- $("#aAdminColor").find('span').html(lang_admincolor_closemenu);
- $("#aAdminColor").attr('title',lang_admincolor_closemenu2);
- $("div.left,aside.left").css({"background-color":"Transparent"});
- $("div.left,aside.left").animate({"width":"140px"});
- $("div.main,section.main").animate({"padding-left":"150px"});
- $("#leftmenu span").animate({"margin-left":"25px","padding-left":"22px"});
- $("#leftmenu span i").animate({"margin-right":"18px","margin-right":"8px"}); 
- SetCookie('admincolor_hm','',-1); 
- $("#leftmenu a").tooltip({disabled: true});
- //$("#leftmenu a").tooltip( "destroy" );
-}
-
-function admincolor_tooptip(){
-    $("#leftmenu a").tooltip({
-      disabled:false,
-      position: {
-        my: "left+50 top-33",
-       //my: "left+50 top-33",
-       at: "left bottom",
-        using: function( position, feedback ) {
-          $( this ).css( position );
-          $( "<div>" )
-            .addClass( "arrow_leftmenu" )
-            .appendTo( this );
-        }
-      }
-    });
-}
-
-$(document).ready(function(){
-  if(GetCookie('admincolor_hm')=='1') {admincolor_tooptip();}
-});
-EOD;
-
-    if ($zbp->Config('AdminColor')->ColorID == 10) {
-        echo $js2;
-    } elseif ($zbp->Config('AdminColor')->ColorID == 9) {
-        echo $js3;
-    } else {
+    if ($zbp->Config('AdminColor')->ColorID < 9) {
         echo $js1;
+    } elseif ($zbp->Config('AdminColor')->ColorID < 10) {
+        echo $js2;
+    } else {
+        echo $js3;
     }
 }
 
@@ -332,9 +334,9 @@ $AdminColor_HighColor[6] = '#d31b54';
 $AdminColor_AntiColor[6] = '#2039b7';
 
 $AdminColor_BlodColor[7] = '#2d2606';
-$AdminColor_NormalColor[7] = '#d9b611';
-$AdminColor_LightColor[7] = '#ebd87d';
-$AdminColor_HighColor[7] = '#c4a927';
+$AdminColor_NormalColor[7] = '#d4a30e';
+$AdminColor_LightColor[7] = '#fcd251';
+$AdminColor_HighColor[7] = '#e9b20a';
 $AdminColor_AntiColor[7] = '#d60000';
 
 $AdminColor_BlodColor[8] = '#a60138';

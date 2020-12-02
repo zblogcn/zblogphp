@@ -6,7 +6,7 @@
 
 #### 请求
 
-POST `https://example.com/api.php?mod=user&act=login`
+POST `https://example.com/api.php?mod=member&act=login`
 
 - Headers
 
@@ -53,14 +53,15 @@ POST `https://example.com/api.php?mod=user&act=login`
 
   ```json
   {
-    	"code": 200,
+      "code": 200,
     	"message": "OK",
     	"data": {
-        "user_id": 1,
+        "userid": 1,
         "username": "Chris",
         "nickname": "Chris",
         "level": 6
-      }
+      },
+      "error": null
   }
   ```
 
@@ -68,7 +69,7 @@ POST `https://example.com/api.php?mod=user&act=login`
 
   | 键       | 类型   | 示例值                        | 说明               |
   | -------- | ------ | ----------------------------- | ------------------ |
-  | user_id  | int | 1                             | 用户id             |
+  | userid  | int | 1                             | 用户id             |
   | username | string | Chris                         | 响应使用的压缩算法 |
   | nickname | string | Sun, 23 Feb 2020 07:03:41 GMT | 用户昵称/别名      |
   | level    | int | 1                             | 用户级别           |
@@ -79,7 +80,7 @@ POST `https://example.com/api.php?mod=user&act=login`
 
 #### 请求
 
-POST `https://example.com/api.php?mod=user&act=logout`
+POST `https://example.com/api.php?mod=member&act=logout`
 
 - Headers
 
@@ -93,13 +94,13 @@ POST `https://example.com/api.php?mod=user&act=logout`
 
   | 属性    | 类型   | 示例值 | 说明   |
   | ------- | ------ | ------ | ------ |
-  | user_id | int | 1      | 用户id |
+  | userid | int | 1      | 用户id |
 
   示例：
 
   ```json
   {
-    	"user_id": 1
+    	"userid": 1
   }
   ```
 
@@ -123,7 +124,7 @@ POST `https://example.com/api.php?mod=user&act=logout`
 
 #### 请求
 
-POST `https://example.com/api.php?mod=user&act=post`
+POST `https://example.com/api.php?mod=member&act=post`
 
 - Headers
 
@@ -178,15 +179,15 @@ POST `https://example.com/api.php?mod=user&act=post`
 
 #### 请求
 
-GET `https://example.com/api.php?mod=user&act=get&id=123`
+GET `https://example.com/api.php?mod=member&act=get&id=123`
 
-POST `https://example.com/api.php?mod=user&act=get`
+POST `https://example.com/api.php?mod=member&act=get`
 
 或者省略 act：
 
-GET `https://example.com/api.php?mod=user&id=123`
+GET `https://example.com/api.php?mod=member&id=123`
 
-POST `https://example.com/api.php?mod=user`
+POST `https://example.com/api.php?mod=member`
 
 - Headers
 
@@ -202,13 +203,13 @@ POST `https://example.com/api.php?mod=user`
 
   | 属性    | 类型   | 示例值 | 说明   |
   | ------- | ------ | ------ | ------ |
-  | user_id | int | 1      | 用户id |
+  | userid | int | 1      | 用户id |
 
   示例：
 
   ```json
   {
-    	"user_id": 1
+    	"userid": 1
   }
   ```
 
@@ -242,14 +243,15 @@ POST `https://example.com/api.php?mod=user`
 
   ```json	
   {
-    	"code": 200,
+      "code": 200,
     	"message": "OK",
     	"data": {
         	"username": "Chris",
           "password": "123456",
           "emial": "123@example.com",
           ...
-      }
+      },
+      "error": null
   }
   ```
 
@@ -259,7 +261,7 @@ POST `https://example.com/api.php?mod=user`
 
 #### 请求
 
-POST `https://example.com/api.php?mod=user&act=update`
+POST `https://example.com/api.php?mod=member&act=update`
 
 - Headers
 
@@ -273,7 +275,7 @@ POST `https://example.com/api.php?mod=user&act=update`
 
   | 属性     | 类型   | 示例值          | 说明                                                         |
   | -------- | ------ | --------------- | ------------------------------------------------------------ |
-  | user_id  | int | 123             | 用户id                                                       |
+  | userid  | int | 123             | 用户id                                                       |
   | username | string | Chris           | 新用户名                                                     |
   | password | string | 123456          | 新密码                                                       |
   | email    | string | 123@example.com | 新邮箱                                                       |
@@ -288,7 +290,7 @@ POST `https://example.com/api.php?mod=user&act=update`
 
   ```json
   {
-    	"user_id": 123,
+    	"userid": 123,
     	"username": "Chris",
     	"password": "123456",
     	"emial": "123@example.com",
@@ -316,7 +318,7 @@ POST `https://example.com/api.php?mod=user&act=update`
 
 #### 请求
 
-POST `https://example.com/api.php?mod=user&act=delete`
+POST `https://example.com/api.php?mod=member&act=delete`
 
 - Headers
 
@@ -330,13 +332,13 @@ POST `https://example.com/api.php?mod=user&act=delete`
 
   | 属性    | 类型   | 示例值 | 说明   |
   | ------- | ------ | ------ | ------ |
-  | user_id | int | 1      | 用户id |
+  | userid | int | 1      | 用户id |
 
   示例：
 
   ```json
   {
-    	"user_id": 1
+    	"userid": 1
   }
   ```
 
@@ -358,7 +360,7 @@ POST `https://example.com/api.php?mod=user&act=delete`
 
 #### 请求
 
-GET/POST `https://example.com/api.php?mod=user&act=list`
+GET/POST `https://example.com/api.php?mod=member&act=list`
 
 - Headers
 
@@ -370,17 +372,30 @@ GET/POST `https://example.com/api.php?mod=user&act=list`
 
 - Body
 
-  支持
-
   | 属性    | 类型   | 示例值 | 说明   |
   | ------- | ------ | ------ | ------ |
-  | user_id | int | 1      | 用户id |
+  | level | int | 1      | 用户等级 |
+  | status | int | 1      | 用户状态 |
+  
+  支持的过滤器：limit、offset、page、perpage、sortby、order  
+  其中，sortby 支持的字段有：  
+  | URL sortby 参数 | 对应数据表属性 | 说明 |
+  | --- | --- | --- |
+  | id  | mem_ID | id |
+  | create_time | mem_CreateTime | 用户创建时间 |
+  | post_time | mem_PostTime | 用户提交时间 |
+  | update_time | mem_UpdateTime | 用户更新时间 |
+  | articles | mem_Articles | 用户文章数量 |
+  | pages | mem_Pages | 用户页面数量 |
+  | comments | mem_Comments | 用户评论数量 |
+  | uploads | mem_Uploads | 用户附件数量 |
 
   示例：
 
   ```json
   {
-    	"user_id": 1
+    	"level": 1,
+        "status": 1
   }
   ```
 
@@ -402,10 +417,10 @@ GET/POST `https://example.com/api.php?mod=user&act=list`
 
   ```json
   {
-    	"code": 200,
+      "code": 200,
     	"message": "OK",
     	"data": [{
-        	"user_id": 123,
+        	"userid": 123,
         	"username": "Chris",
         	"alias": "Chris",
         	"level": 1,
@@ -413,7 +428,8 @@ GET/POST `https://example.com/api.php?mod=user&act=list`
         	"pages": 233,
         	"comments": 23,
         	"attas": 2
-      }]
+      }],
+      "error": null
   }
   ```
 
@@ -421,7 +437,7 @@ GET/POST `https://example.com/api.php?mod=user&act=list`
 
   | 属性     | 类型   | 示例值 | 说明                                                         |
   | -------- | ------ | ------ | ------------------------------------------------------------ |
-  | user_id  | int | 123    | 用户id                                                       |
+  | userid  | int | 123    | 用户id                                                       |
   | username | string | Chris  | 用户名                                                       |
   | level    | int | 1      | 用户级别，1：管理员，2：网站编辑，3：作者，<br />4：协作者，5：评论者，6：游客 |
   | alias    | string | Chris  | 别名/昵称                                                    |
@@ -436,9 +452,9 @@ GET/POST `https://example.com/api.php?mod=user&act=list`
 
 #### 请求
 
-GET `https://example.com/api.php?mod=user&act=get_auth&id=123`
+GET `https://example.com/api.php?mod=member&act=get_auth&id=123`
 
-POST `https://example.com/api.php?mod=user&act=get_auth`
+POST `https://example.com/api.php?mod=member&act=get_auth`
 
 - Headers
 
@@ -454,13 +470,13 @@ POST `https://example.com/api.php?mod=user&act=get_auth`
 
   | 属性    | 类型   | 示例值 | 说明   |
   | ------- | ------ | ------ | ------ |
-  | user_id | int | 1      | 用户id |
+  | userid | int | 1      | 用户id |
 
   示例：
 
   ```json
   {
-    	"user_id": 1
+    	"userid": 1
   }
   ```
 
@@ -489,7 +505,7 @@ POST `https://example.com/api.php?mod=user&act=get_auth`
 
   ```json
   {
-    	"code": 200,
+      "code": 200,
     	"message": "OK",
     	"data": {
         	"username": "Chris",
@@ -497,7 +513,8 @@ POST `https://example.com/api.php?mod=user&act=get_auth`
         	"login": true,
         	"logout": true,
         	...
-      }
+      },
+      "error": null
   }
   ```
 

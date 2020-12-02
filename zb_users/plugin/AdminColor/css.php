@@ -4,6 +4,9 @@ require '../../../zb_system/function/c_system_base.php';
 
 $id = (int) $zbp->Config('AdminColor')->ColorID;
 $c = '/*admincolor*/';
+if($zbp->Config('AdminColor')->FontSize >= 12 && $zbp->Config('AdminColor')->FontSize <= 14){
+    $c .= "body{font-size:{$zbp->Config('AdminColor')->FontSize}px}";
+}
 $c .= '
   .ui-tooltip, .arrow_leftmenu:after {
     background: #3a6ea5;
@@ -46,7 +49,7 @@ $c .= "div.theme-now .betterTip img{box-shadow: 0 0 10px #3a6ea5;}" . PHP_EOL;
 
 $c .= "#divMain a,#divMain2 a{color:#1d4c7d;}" . PHP_EOL;
 
-$c .= ".menu ul li a{background-color: rgb(255,255,255,0.95);}" . PHP_EOL;
+$c .= ".menu ul li a{background-color: rgb(255,255,255,0.85);}" . PHP_EOL;
 $c .= ".menu ul li.on a {background-color: #fff;}" . PHP_EOL;
 $c .= ".menu ul li a:hover {background-color: #b0cdee;}" . PHP_EOL;
 $c .= "#leftmenu a:hover {background-color: #b0cdee!important;}" . PHP_EOL;
@@ -65,6 +68,10 @@ $c .= "div #BT_title {background-color: #3399cc;border-color:#3399cc;}" . PHP_EO
 
 $c .= "a:hover { color:#d60000;}" . PHP_EOL;
 $c .= "#divMain a:hover,#divMain2  a:hover{color:#d60000;}" . PHP_EOL;
+
+$c .= ".imgcheck-on:before {background: #3a6ea5;}" . PHP_EOL;
+$c .= ".radio:checked + label:before {border: 1px solid #3a6ea5;}" . PHP_EOL;
+$c .= ".radio + label:after {background: #3a6ea5;}" . PHP_EOL;
 
 //appcenter
 /*
@@ -92,9 +99,12 @@ $c .= "div.bg input[type=\"text\"], input[type=\"password\"] {border-color:#3a6e
 
 $c .= PHP_EOL . "/*AdminColor*/" . PHP_EOL . "#admin_color{float:left;line-height: 2.5em;font-size: 0.5em;letter-spacing: -0.1em;}";
 
-if ($zbp->Config('AdminColor')->HeaderPathUse == true || $id == 9) {
+if ($zbp->Config('AdminColor')->HeaderPathUse == true) {
     $c .= 'header,.header{background:url(' . $zbp->Config('AdminColor')->HeaderPath . ') no-repeat center center;background-size:cover}' . PHP_EOL;
     $c .= 'div.bg{background:url(' . $zbp->Config('AdminColor')->HeaderPath . ') no-repeat center center;background-size:cover}' . PHP_EOL;
+}
+if ($zbp->Config('AdminColor')->HeaderPathUse == false && $id == 10) {
+    $c .= 'header,.header{background-image:none;}' . PHP_EOL;
 }
 if ($zbp->Config('AdminColor')->LogoPath) {
     $c .= '.logo img{background:url(' . $zbp->Config('AdminColor')->LogoPath . ') no-repeat center center;}';
@@ -102,12 +112,19 @@ if ($zbp->Config('AdminColor')->LogoPath) {
 
 $c .= '
 .pane,.theme,form.search{padding:1em;position:relative;background:#fff;margin:1em 0;border-radius:0.1em;}
-div.theme{height:340px;margin:0 2em 2em 0;}
+div.theme{height:auto;margin:0 2em 2em 0;}
 div.theme-other{background:#fff;}
 form.search p{padding:0;}
 td,th{border:none;border-right: 1px solid #efefef;padding:0.6em;}
 table{border-collapse: collapse;background: #ffffff;line-height: 120%;margin:0.5em 0 0.5em 0;border:none;line-height:1.5em;}
 ';
+
+if ($zbp->Config('AdminColor')->TableShadow) {
+    $c .= 'table,.pane,.theme,form.search{box-shadow:0 0 0.5em rgba(0,0,0,0.2);}';
+} else {
+    $c .= 'table,.pane,.theme,form.search{box-shadow:0 0 0.1em rgba(0,0,0,0.3);}';
+}
+
 
 if ($id == 9) {
     $c .= '
@@ -131,15 +148,22 @@ if ($id == 10) {
     float:left;
     left:0px;
 }
+header div.logo {
+    border-right: 1px solid #444;
+}
+.header .menu ul li{
+    border-right:1px solid  #444;
+    line-height:60px;
+    height:60px;
+    margin:0;
+}
 .header .menu ul li a {
-    float: left;
-    line-height: 60px;
-    height: 60px;
-    padding: 0px 25px;
-    font-size:1.2em;
+    float: none;
+    padding: 0px 22px;
+    font-size:1.1em;
     color: #fff;
     background: none;
-    border-right:1px solid  #3f474f;
+    vertical-align: middle;
 }
 
 .header {
@@ -152,7 +176,7 @@ header, .header {
   .left{
 padding-top:0px;
 float:left;
-height:100%;
+height:auto;
 background-position: -30px -2px;
 width:160px;
 background-color:#333333;
@@ -164,12 +188,14 @@ background-color:#333333;
 color:#fff;
 width: 160px;
 height: 40px;
+padding-right:2em;
 }
 .left #leftmenu li{
 background-color:#333;
 color:#fff;
 width: 160px;
 height: 40px;
+    overflow:hidden;
 }
 .main {
 padding-left: 170px;
@@ -186,8 +212,8 @@ padding-right: 10px;
     line-height: 40px;
     text-align: left;
     cursor: pointer;
-    margin-left: 25px;
-    padding-left: 29px;
+    margin-left: 32px;
+
 }
 .divHeader {
     padding: 10px 0 45px 0;
@@ -209,7 +235,7 @@ height: 40px;
     line-height: 36px;
     text-align: left;
     cursor: pointer;
-    margin-left: 25px;
+    margin-left: 36px;
     padding-left: 60px;
     background-position: 40px 12px;
 }
@@ -245,15 +271,9 @@ body[class~=login] input.button:hover {background-color: #3a6ea5;}
     if ($GLOBALS['blogversion'] < 162090 && stripos($_SERVER['HTTP_REFERER'], 'login.php')) {
         $c .= 'body{background:none;}';
     }
-	//if ($GLOBALS['blogversion'] < 172360) {
-		$c .= 'header div.logo img{background:url("images/logo.svg")}';
-	//}
+	$c .= 'header div.logo img{background:url("images/logo.svg")}';
 }
-if ($zbp->Config('AdminColor')->TableShadow) {
-    $c .= 'table,.pane,.theme,form.search{box-shadow:0 0 0.5em rgba(0,0,0,0.2);}';
-} else {
-    $c .= 'table,.pane,.theme,form.search{box-shadow:0 0 0.1em rgba(0,0,0,0.3);}';
-}
+
 
 $c1 = "#1d4c7d";
 $c2 = "#3a6ea5";
@@ -285,8 +305,10 @@ header('Content-Type: text/css; Charset=utf-8');
 header('Etag: ' . $m);
 
 if (isset($_SERVER["HTTP_IF_NONE_MATCH"]) && $_SERVER["HTTP_IF_NONE_MATCH"] == $m) {
-    SetHttpStatusCode(304);
-    die;
+	if (isset($zbp->option['ZC_JS_304_ENABLE']) && $zbp->option['ZC_JS_304_ENABLE']) {
+    	SetHttpStatusCode(304);
+    	die;
+    }
 }
 
 echo $c;

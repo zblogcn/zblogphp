@@ -263,7 +263,7 @@ class Base
     /**
      * 根据多个特定的字段和值搜索数据.
      *
-     * @param array $fields 多个字段数组(如 ['AuthorID' => '1', 'CateID' => '1'])
+     * @param array $fields 多个字段数组(如 ['AuthorID' => '1', 'CateID' => '1', 'Meta' => ['area' => '北京','keywords' => 'network']])
      *
      * @return bool
      */
@@ -274,8 +274,18 @@ class Base
         $field_table = $field_table[$this->table];
         $conditions = array();
         foreach ($fields as $field_key => $field_value) {
-            $field_name = $datainfo[$field_table][$field_key][0];
-            $conditions[] = array('=', $field_name, $field_value);
+            if (strcasecmp($field_key, 'meta') === 0 && isset($this->datainfo['Meta'])){
+                foreach ($field_value as $k => $v) {
+                    if (is_numeric($k)){
+                        $conditions[] = array('META_NAME',$this->datainfo['Meta'][0],$v);
+                    }else{
+                        $conditions[] = array('META_NAMEVALUE',$this->datainfo['Meta'][0],$k,$v);
+                    }
+                }
+            }else{
+                $field_name = $datainfo[$field_table][$field_key][0];
+                $conditions[] = array('=', $field_name, $field_value);
+            }
         }
         $sql = $this->db->sql->Select($this->table, array('*'), $conditions, null, 1, null);
         $array = $this->db->Query($sql);

@@ -200,19 +200,29 @@ class Database__PDO_MySQL implements Database__Interface
             trigger_error(implode(' ', $this->db->errorInfo()), E_USER_NOTICE);
         }
         $this->LogsError();
+        Logs($query);
         //fetch || fetchAll
         if (is_object($results)) {
             //if(true==true){
             if (true !== true) {
-                $query = "EXPLAIN " . $query;
-                $results2 = $this->db->query($this->sql->Filter($query));
-                if (is_object($results2)) {
-                    $row = $results2->fetchAll();
-                    logs("\r\n" . $query . "\r\n" . var_export($row, true));
+                try {
+                    $query = "EXPLAIN " . $query;
+                    $results2 = $this->db->query($this->sql->Filter($query));
+                    if (is_object($results2)) {
+                        $row = $results2->fetchAll();
+                        logs("\r\n" . $query . "\r\n" . var_export($row, true));
+                    }
+                } catch (PDOException $e) {
+                    //die ("Error!: " . $e->getMessage() . "<br/>");
                 }
             }
-
-            return $results->fetchAll();
+            $result = null;
+            try {
+                $result = $results->fetchAll();
+            } catch (PDOException $e) {
+                //die ("Error!: " . $e->getMessage() . "<br/>");
+            }
+            return $result;
         } else {
             return array($results);
         }
@@ -307,4 +317,24 @@ class Database__PDO_MySQL implements Database__Interface
         }
     }
 
+
+    /**
+     * 事务处理
+     *
+     * @param string $query 指令
+     *
+     * @return bool
+     */
+    public function Transaction($query)
+    {
+        if (strcasecmp($query, 'begin') === 0) {
+            return $this->db->beginTransaction();
+        }
+        if (strcasecmp($query, 'commit') === 0) {
+            return $this->db->commit ();
+        }
+        if (strcasecmp($query, 'rollback ') === 0) {
+            return $this->db->rollBack();
+        }
+    }
 }

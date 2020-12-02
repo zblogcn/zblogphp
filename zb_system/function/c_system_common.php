@@ -1925,37 +1925,73 @@ function Logs_Dump()
 }
 
 /**
- * API 响应.
+ * 中文与特殊字符友好的 JSON 编码.
  *
- * @param array|null $data
- * @param ZBlogException|null $error
+ * @param array $arr
+ *
+ * @return string
  */
-function ApiResponse($data, $error = null)
+function JsonEncode($arr)
 {
-    if ($error) {
-        $error_info = array(
-            'code' => ZBlogException::$error_id,
-            'type' => $error->type,
-            'message' => $error->message,
+    RecHtmlSpecialChars($arr);
+
+    if (version_compare(PHP_VERSION, '5.4.0', '<')) {
+        return str_ireplace(
+            '\\/',
+            '/',
+            preg_replace_callback(
+                '#\\\u([0-9a-f]{4})#i',
+                'Ucs2Utf8',
+                json_encode($arr)
+            )
         );
-
-        if ($GLOBALS['option']['ZC_DEBUG_MODE']) {
-            $error_info['messagefull'] = $error->messagefull;
-            $error_info['file'] = $error->file;
-            $error_info['line'] = $error->line;
-        }
-
-        $data['error_info'] = $error_info;
+    } else {
+        return json_encode(
+            $arr,
+            (JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES)
+        );
     }
+}
 
-    header('Content-Type:application/json; charset=utf-8');
+/**
+ * UCS-2BE 转 UTF-8，解决 JSON 中文转码问题.
+ *
+ * @param $matchs
+ *
+ * @return false|string
+ */
+function Ucs2Utf8($matchs)
+{
+    return iconv('UCS-2BE', 'UTF-8', pack('H4', $matchs[1]));
+}
 
-    echo json_encode(array(
-        // @todo 状态码
-        'code' => 200,
-        'message' => ($error !== null) ? $error->message : 'OK',
-        'data' => $data,
-    ));
+/**
+ * 递归转义 HTML 实体.
+ *
+ * @param array $arr
+ */
+function RecHtmlSpecialChars(&$arr)
+{
+    if (is_array($arr)) {
+        foreach ($arr as &$value) {
+            if (is_array($value)) {
+                RecHtmlSpecialChars($value);
+            } elseif (is_string($value)) {
+                $value = htmlspecialchars($value);
+            }
+        }
+    }
+}
 
-    die;
+/**
+ * 原图转为缩略图地址
+ *
+ * @param  string $path 原图片地址
+ * @return string      缩略图地址
+ */
+function ImgToThumbUrl($path){
+    $pos = strripos($path, '.');
+    $start = substr($path, 0, $pos);
+    $end = substr($path, $pos);
+    return $start . '_thumb' . $end;
 }

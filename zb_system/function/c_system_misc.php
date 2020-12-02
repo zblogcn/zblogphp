@@ -38,7 +38,9 @@ function misc_statistic()
 {
     global $zbp;
 
-    CheckIsRefererValid();
+    if (!defined('ZBP_IN_API')) {
+        CheckIsRefererValid();
+    }
     if (!$zbp->CheckRights('admin')) {
         echo $zbp->ShowError(6, __FILE__, __LINE__);
         die();
@@ -95,11 +97,11 @@ function misc_statistic()
     $zbp->cache->all_category_nums = $all_categories;
     $zbp->cache->all_view_nums = $all_views;
     $zbp->cache->all_tag_nums = $all_tags;
+    $zbp->cache->all_comment_nums = $all_comments;
+    $zbp->cache->all_member_nums = $all_members;
     $zbp->cache->check_comment_nums = $check_comment_nums;
 
     $zbp->AddBuildModule('statistics', array($all_articles, $all_pages, $all_categories, $all_tags, $all_views, $all_comments));
-    $zbp->BuildModule();
-    $zbp->SaveCache();
 
     $r = str_replace('{#ZC_BLOG_HOST#}', $zbp->host, $r);
     $r = str_replace('{$zbp->user->Name}', $zbp->user->Name, $r);
@@ -107,7 +109,7 @@ function misc_statistic()
     $r = str_replace('{$zbp->style}', $zbp->style, $r);
     $app = $zbp->LoadApp('plugin','AppCentre');
     $sv = ZC_VERSION_FULL;
-    if ($app->isloaded == true) {
+    if ($app->isloaded == true && $app->IsUsed()) {
         $sv .= '; AppCentre' . $app->version;
     }
     $r = str_replace('{$zbp->version}', $sv, $r);
@@ -117,6 +119,25 @@ function misc_statistic()
     if ($zbp->option['ZC_DEBUG_MODE']) {
         $r = str_replace('<!--debug_mode_note-->', "<tr><td colspan='4' style='text-align: center'>{$zbp->lang['msg']['debugging_warning']}</td></tr>", $r);
     }
+
+    //增加模块内容（因模块模板改变）而刷新的机制
+    try {
+        if ($zbp->option['ZC_DEBUG_MODE']) {
+            $zbp->AddBuildModule('previous');
+            $zbp->AddBuildModule('calendar');
+            $zbp->AddBuildModule('comments');
+            $zbp->AddBuildModule('archives');
+            $zbp->AddBuildModule('tags');
+            $zbp->AddBuildModule('authors');
+            $zbp->AddBuildModule('catalog');
+            $zbp->AddBuildModule('navbar');
+        }
+    } catch (Exception $e) {
+       //echo $e->getMessage();
+    }
+    $zbp->BuildModule();
+    $zbp->SaveCache();
+
     echo $r;
 }
 
@@ -194,7 +215,7 @@ function misc_vrs()
                     <form method="post" action="#">
                         <dl>
                             <dt><?php echo $zbp->lang['msg']['current_member'] . ' : <b>' . $zbp->user->Name; ?></b><br />
-                                <?php echo $zbp->lang['msg']['member_level'] . ' : <b>' . $zbp->user->LevelName; ?></b></dt>
+                                <?php echo $zbp->lang['msg']['member_level'] . ' : <b>' . $zbp->user->LevelName . ($zbp->user->Status > 0 ? '(' . $zbp->lang['user_status_name'][$zbp->user->Status] . ')' : ''); ?></b></dt>
     <?php
     foreach ($GLOBALS['actions'] as $key => $value) {
         if ($GLOBALS['zbp']->CheckRights($key)) {

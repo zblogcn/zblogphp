@@ -146,6 +146,12 @@ return array(
     'ZC_ARTICLE_EXCERPT_MAX' => 250,
     'ZC_ARTICLE_INTRO_WITH_TEXT' => true,
 
+    // '缩略图
+    'ZC_ARTICLE_THUMB_SWITCH' => true,
+    'ZC_ARTICLE_THUMB_TYPE' => 1,
+    'ZC_ARTICLE_THUMB_WIDTH' => 300,
+    'ZC_ARTICLE_THUMB_HEIGHT' => 300,
+
     // '侧栏评论最大字数
     'ZC_COMMENT_EXCERPT_MAX' => 20,
 
@@ -193,7 +199,7 @@ return array(
     'ZC_SYNTAXHIGHLIGHTER_ENABLE' => false,
     // '源码编辑高亮
     'ZC_CODEMIRROR_ENABLE' => true,
-
+    'ZC_ALLOW_AUDITTING_MEMBER_VISIT_MANAGE' => false,
     'ZC_GZIP_ENABLE'                 => false,
     'ZC_ADMIN_HTML5_ENABLE'          => true,
     'ZC_LOADMEMBERS_LEVEL'           => 1,
@@ -216,4 +222,5 @@ return array(
     'ZC_USING_CDN_GUESTIP_TYPE'      => 'REMOTE_ADDR',
     'ZC_POST_BATCH_DELETE'           => false,
     'ZC_JS_304_ENABLE'               => true,
+    'ZC_COOKIE_TOKEN_HTTPONLY'       => true,
 );

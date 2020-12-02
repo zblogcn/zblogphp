@@ -551,10 +551,6 @@ class ZBlogException
             }
         }
 
-        if (defined('ZBP_IN_API')) {
-            ApiResponse(null, $error);
-        }
-
         include dirname(__FILE__) . '/../defend/error.php';
         RunTime();
 

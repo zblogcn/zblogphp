@@ -28,6 +28,8 @@ if (!defined('ZBP_PATH')) {
  * @property string TypeName 文章类型的具体信息
  * @property string StatusName 文章状态的详细信息
  * @property int|string CommNums 评论数量
+ * @property string FirstImg 文章的第一张图片原图
+ * @property string Thumb 文章的第一张图片缩略图
  */
 class BasePost extends Base
 {
@@ -68,11 +70,21 @@ class BasePost extends Base
     /**
      * @param string $s
      *
+     * @return type|string
      * @return bool|string
      */
-    public function Time($s = 'Y-m-d H:i:s')
+    public function Time($type = 'PostTime', $s = 'Y-m-d H:i:s')
     {
-        return date($s, (int) $this->PostTime);
+        if (stripos($type, 'Post') !== false) {
+            return date($s, (int) $this->PostTime);
+        } elseif (stripos($type, 'Create') !== false) {
+            return date($s, (int) $this->CreateTime);
+        } elseif (stripos($type, 'Update') !== false) {
+            return date($s, (int) $this->UpdateTime);
+        } else {
+            // 1.7改为2个参数了($type加在第一个前)，为了兼容之前的写法
+            return date($type, (int) $this->PostTime);
+        }
     }
 
     /**
@@ -128,7 +140,6 @@ class BasePost extends Base
             case 'Prev':
             case 'Next':
             case 'RelatedList':
-                return;
             case 'Template':
                 if ($value == $zbp->GetPostType_Template($this->Type)) {
                     $value = '';
