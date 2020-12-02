@@ -21,4 +21,4 @@ jobs:
         githubToken: ${{ secrets.GH_BOT_TOKEN }}
         plaintext: true
     - name: PHPCS check
-      run: ./vendor/bin/phpcs ${{ steps.get_file_changes.outputs.files }} --report=checkstyle
+      run: ./vendor/bin/phpcs "${{ steps.get_file_changes.outputs.files }}" --report=checkstyle
