@@ -17,8 +17,6 @@ if (!defined('ZBP_PATH')) {
 class Module extends Base
 {
 
-    protected $protect_isincludefile = false;
-
     /**
      * 构造函数.
      */
@@ -49,11 +47,6 @@ class Module extends Base
 
             return;
         }
-        if ($name == 'IsIncludeFile') {
-            $this->protect_isincludefile = (bool) $value;
-
-            return;
-        }
         foreach ($GLOBALS['hooks']['Filter_Plugin_Module_Set'] as $fpname => &$fpsignal) {
             $fpname($this, $name, $value);
         }
@@ -75,6 +68,8 @@ class Module extends Base
                 return 'system';
             } elseif ($this->Source == 'user') {
                 return 'user';
+            } elseif (stripos($this->Source, 'themeinclude_') === 0) {
+                return 'themeinclude';
             } elseif ($this->Source == 'theme') {
                 return 'theme';
             } elseif (stripos($this->Source, 'theme_') === 0) {
@@ -95,9 +90,6 @@ class Module extends Base
         }
         if ($name == 'NoRefresh') {
             return (bool) $this->Metas->norefresh;
-        }
-        if ($name == 'IsIncludeFile') {
-            return $this->protect_isincludefile;
         }
         foreach ($GLOBALS['hooks']['Filter_Plugin_Module_Get'] as $fpname => &$fpsignal) {
             $fpreturn = $fpname($this, $name);
@@ -126,7 +118,7 @@ class Module extends Base
                 return $fpreturn;
             }
         }
-        if ($this->IsIncludeFile) {
+        if ($this->SourceType == 'themeinclude') {
             if (empty($this->FileName)) {
                 return true;
             }
@@ -164,7 +156,7 @@ class Module extends Base
             if ($this->ID > 0 && $m->ID == $this->ID) {
                 unset($zbp->modules[$key]);
             }
-            if ($this->IsIncludeFile) {
+            if ($this->SourceType == 'themeinclude') {
                 if ($this->FileName != '' && $m->FileName == $this->FileName) {
                     unset($zbp->modules[$key]);
                 }
@@ -183,7 +175,7 @@ class Module extends Base
                 return $fpreturn;
             }
         }
-        if ($this->IsIncludeFile) {
+        if ($this->SourceType == 'themeinclude') {
             if (empty($this->FileName)) {
                 return true;
             }

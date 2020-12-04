@@ -1354,7 +1354,7 @@ function ViewComments($postid, $page)
     global $zbp;
 
     $post = new Post();
-    $post->LoadInfoByID($postid);
+    $post = $zbp->GetPostByID($postid);
     $page = $page == 0 ? 1 : $page;
     $template = 'comments';
 
@@ -1455,7 +1455,7 @@ function ViewComment($id)
     /* @var Comment $comment */
     $comment = $zbp->GetCommentByID($id);
     $post = new Post();
-    $post->LoadInfoByID($comment->LogID);
+    $post = $zbp->GetPostByID($comment->LogID);
 
     $comment->Content = FormatString(htmlspecialchars($comment->Content), '[enter]');
     if (strpos($zbp->template->templates['comment'], 'id="AjaxComment') === false) {
@@ -1652,7 +1652,7 @@ function PostArticle()
             $_POST['Status'] = ZC_POST_STATUS_AUDITING;
         }
     } else {
-        $article->LoadInfoByID(GetVars('ID', 'POST'));
+        $article = $zbp->GetPostByID(GetVars('ID', 'POST'));
         if (($article->AuthorID != $zbp->user->ID) && (!$zbp->CheckRights('ArticleAll'))) {
             $zbp->ShowError(6, __FILE__, __LINE__);
         }
@@ -1771,7 +1771,7 @@ function DelArticle()
     $id = (int) GetVars('id');
 
     $article = new Post();
-    $article->LoadInfoByID($id);
+    $article = $zbp->GetPostByID($id);
     if ($article->ID > 0) {
         if (!$zbp->CheckRights('ArticleAll') && $article->AuthorID != $zbp->user->ID) {
             $zbp->ShowError(6, __FILE__, __LINE__);
@@ -1937,7 +1937,7 @@ function PostPage()
     if (GetVars('ID', 'POST') == 0) {
         $i = 0;
     } else {
-        $article->LoadInfoByID(GetVars('ID', 'POST'));
+        $article = $zbp->GetPostByID(GetVars('ID', 'POST'));
         if (($article->AuthorID != $zbp->user->ID) && (!$zbp->CheckRights('PageAll'))) {
             $zbp->ShowError(6, __FILE__, __LINE__);
         }
@@ -2008,7 +2008,7 @@ function DelPage()
     $id = (int) GetVars('id');
 
     $article = new Post();
-    $article->LoadInfoByID($id);
+    $article = $zbp->GetPostByID($id);
     if ($article->ID > 0) {
         if (!$zbp->CheckRights('PageAll') && $article->AuthorID != $zbp->user->ID) {
             $zbp->ShowError(6, __FILE__, __LINE__);
@@ -2432,7 +2432,7 @@ function PostCategory()
     if (GetVars('ID', 'POST') == 0) {
         $i = 0;
     } else {
-        $cate->LoadInfoByID(GetVars('ID', 'POST'));
+        $cate = $zbp->GetCategoryByID(GetVars('ID', 'POST'));
     }
 
     foreach ($zbp->datainfo['Category'] as $key => $value) {
@@ -2552,7 +2552,7 @@ function PostTag()
     if (GetVars('ID', 'POST') == 0) {
         $i = 0;
     } else {
-        $tag->LoadInfoByID(GetVars('ID', 'POST'));
+        $tag->GetTagByID(GetVars('ID', 'POST'));
     }
 
     foreach ($zbp->datainfo['Tag'] as $key => $value) {
@@ -2680,7 +2680,7 @@ function PostMember()
             $mem->Guid = GetGuid();
         }
     } else {
-        $mem->LoadInfoByID($data['ID']);
+        $mem = $zbp->GetMemberByID($data['ID']);
     }
 
     foreach ($zbp->datainfo['Member'] as $key => $value) {
@@ -2882,6 +2882,14 @@ function PostModule()
     }
 
     FilterModule($mod);
+
+    //不能新存themeinclude
+    if ($mod->SourceType == 'themeinclude') {
+        $f = $zbp->usersdir . 'theme/' . $zbp->theme . '/include/' . $mod->FileName . '.php';
+        if (!file_exists($f)) {
+            return false;
+        }
+    }
 
     $mod->Save();
 
@@ -3336,7 +3344,7 @@ function Include_BatchPost_Article($type)
     foreach ($arrayid as $key => $value) {
         $id = (int) $value;
         $article = new Post();
-        $article->LoadInfoByID($id);
+        $article = $zbp->GetPostByID($id);
         if ($article->ID > 0) {
             if (!$zbp->CheckRights('ArticleAll') && $article->AuthorID != $zbp->user->ID) {
                 continue;
@@ -3395,7 +3403,7 @@ function Include_BatchPost_Page($type)
     foreach ($arrayid as $key => $value) {
         $id = (int) $value;
         $article = new Post();
-        $article->LoadInfoByID($id);
+        $article = $zbp->GetPostByID($id);
         if ($article->ID > 0) {
             if (!$zbp->CheckRights('PageAll') && $article->AuthorID != $zbp->user->ID) {
                 continue;

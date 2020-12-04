@@ -28,12 +28,12 @@ $modid = null;
 $mod = null;
 
 if (isset($_GET['source'])) {
-    if (GetVars('source', 'GET') == 'theme') {
+    if (GetVars('source', 'GET') == 'themeinclude_' . $zbp->theme) {
         $mod = new Module();
         $mod->Name = GetVars('filename', 'GET');
         $mod->FileName = GetVars('filename', 'GET');
         $mod->HtmlID = GetVars('filename', 'GET');
-        $mod->Source = 'theme';
+        $mod->Source = 'themeinclude_' . $zbp->theme;;
         if ($mod->FileName) {
             $mod->Content = file_get_contents($zbp->usersdir . 'theme/' . $zbp->theme . '/include/' . FormatString($mod->FileName, '[filename]') . '.php');
         }
@@ -75,7 +75,7 @@ if ($mod->Source == 'theme' && $mod->FileName == '') {
     $mod->HtmlID = 'newmodule';
 }
 $ishide = '';
-if ($mod->Source == 'theme') {
+if ($mod->SourceType == 'themeinclude') {
     $ishide = 'style="display:none;"';
 }
 ?>
