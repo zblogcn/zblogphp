@@ -124,7 +124,7 @@ class ZBlogPHP
     public $membersbyname = array();
 
     /**
-     * @var Category[] 分类数组
+     * @var Category[] 分类数组 ($categorys已废弃)
      */
     public $categorys = array();
 
@@ -141,19 +141,19 @@ class ZBlogPHP
     public $categoriesbyorder_all = array();
 
     /**
-     * @var Category[] 分类数组（已排序）
+     * @var Category[] 分类数组（已排序） ($categorysbyorder已废弃)
      */
     public $categorysbyorder = array();
 
     public $categoriesbyorder = null;
 
     /**
-     * @var Category[] 按类型分类数组
+     * @var Category[] 按类型分类的2维数组
      */
     public $categories_type = array();
 
     /**
-     * @var Category[] 按类型分类数组（已排序）
+     * @var Category[] 按类型分类2维数组（已排序）
      */
     public $categoriesbyorder_type = array();
 
@@ -188,17 +188,17 @@ class ZBlogPHP
     public $tags_all = array();
 
     /**
-     * @var array 标签数组 ALL（以标签名为键）
+     * @var array 标签数组 ALL（以标签名为键）(不精确，因为不同type的标签名有会重复，勿用)
      */
     public $tags_allbyname = array();
 
     /**
-     * @var array 标签数组 By Type
+     * @var array 标签数组 By Type 2维数组
      */
     public $tags_type = array();
 
     /**
-     * @var array 标签数组 By Type（以标签名为键）
+     * @var array 标签数组 By Type（以标签名为键）2维数组
      */
     public $tagsbyname_type = array();
 
@@ -484,6 +484,8 @@ class ZBlogPHP
             $this->user->$key = $value[3];
         }
         $this->user->Metas = new Metas();
+
+        $this->BindingCacheObject();
     }
 
     /**
@@ -762,7 +764,7 @@ class ZBlogPHP
         Add_Filter_Plugin('Filter_Plugin_Index_Begin', 'Include_Index_Begin');
         Add_Filter_Plugin('Filter_Plugin_Search_Begin', 'Include_Index_Begin');
         Add_Filter_Plugin('Filter_Plugin_Feed_Begin', 'Include_Index_Begin');
-        Add_Filter_Plugin('Filter_Plugin_Zbp_CheckRights', 'Include_Forntend_CheckRights');
+        Add_Filter_Plugin('Filter_Plugin_Zbp_CheckRights', 'Include_Frontend_CheckRights');
 
         foreach ($GLOBALS['hooks']['Filter_Plugin_Zbp_Load'] as $fpname => &$fpsignal) {
             $fpname();
@@ -885,9 +887,9 @@ class ZBlogPHP
             case 'pdo_mysql':
             default:
                 if ($this->option['ZC_DATABASE_TYPE'] == 'mysql' && version_compare(PHP_VERSION, '7.0.0') >= 0) {
-                    if (extension_loaded('mysqli')){
+                    if (extension_loaded('mysqli')) {
                         $this->option['ZC_DATABASE_TYPE'] = 'mysqli';
-                    }elseif (extension_loaded('pdo_mysql')){
+                    } elseif (extension_loaded('pdo_mysql')) {
                         $this->option['ZC_DATABASE_TYPE'] = 'pdo_mysql';
                     }
                 }
@@ -1606,18 +1608,14 @@ class ZBlogPHP
             return false;
         }
 
-        foreach ($array as $c) {
-            $this->categories_all[$c->ID] = $c;
-        }
-        //$this->categories_all = $this->categories;
-
         foreach ($this->posttype as $key => $value) {
             $this->categories_type[$key] = array();
             $this->categoriesbyorder_type[$key] = array();
         }
         foreach ($array as $key => $value) {
-            $this->categories_all[$value->ID] = $value;
-            $this->categories_type[$value->Type][$value->ID]=$value;
+            //$this->categories_all[$value->ID] = $value;
+            //$this->categories_type[$value->Type][$value->ID] = $value;
+            $this->AddCacheObject($value);
         }
 
         foreach ($this->posttype as $key => $value) {
@@ -1640,7 +1638,7 @@ class ZBlogPHP
         $this->categoriesbyorder = &$this->categoriesbyorder_type[0];
 
         foreach ($this->categoriesbyorder_type as $key => $value) {
-            if(is_array($value)) {
+            if (is_array($value)) {
                 $this->categoriesbyorder_all += $value;
             }
         }
@@ -1662,24 +1660,15 @@ class ZBlogPHP
         $this->tagsbyname = array();
 
         $this->tags_all = array();
-        $this->tagsbyname_all = array();
+        $this->tags_allbyname = array();
 
         $array = $this->GetTagList();
 
         foreach ($array as $t) {
-            $this->tags_all[$t->ID] = $t;
-            $this->tagsbyname_all[$t->Name] = &$this->tags_all[$t->ID];
-            if(!isset($this->tags_type[$t->Type]))
-                $this->tags_type[$t->Type] = array();
-            if(!isset($this->tagsbyname_type[$t->Type]))
-                $this->tagsbyname_type[$t->Type] = array();
-            $this->tags_type[$t->Type][$t->ID] = &$this->tags_all[$t->ID];
-            $this->tagsbyname_type[$t->Type][$t->Name] = &$this->tags_all[$t->ID];
+            $this->AddCacheObject($t);
         }
-        if(!isset($this->tags_type[0]))
-            $this->tags_type[0] = array();
-        if(!isset($this->tagsbyname_type[0]))
-            $this->tagsbyname_type[0] = array();
+        isset($this->tags_type[0]) || $this->tags_type[0] = array();
+        isset($this->tagsbyname_type[0]) || $this->tagsbyname_type[0] = array();
 
         $this->tags = &$this->tags_type[0];
         $this->tagsbyname = &$this->tagsbyname_type[0];
@@ -1900,10 +1889,10 @@ class ZBlogPHP
             if (is_readable($this->path . 'zb_system/defend/en.php')) {
                 $defend_en = include $this->path . 'zb_system/defend/en.php';
                 $nowlang = $languagePtr;
-                $this->lang =  $nowlang + $defend_en;
+                $this->lang = ($nowlang + $defend_en);
                 foreach ($this->lang as $key => $value) {
                     if (is_array($value)) {
-                        $this->lang[$key] = $nowlang[$key] + $defend_en[$key];
+                        $this->lang[$key] = ($nowlang[$key] + $defend_en[$key]);
                     }
                 }
             }
@@ -2501,7 +2490,7 @@ class ZBlogPHP
      */
     private function GetSomeThingByAlias($object, $val, $backAttr = null, $className = null)
     {
-        $ret = $this->GetSomeThing($object, 'Alias', $val);
+        $ret = $this->GetSomeThing($object, 'Alias', $val, $className);
 
         if (!is_null($ret)) {
             return $ret;
@@ -2528,38 +2517,28 @@ class ZBlogPHP
         if ($id == 0) {
             return;
         }
-        if ($object !== null) {
-            //$modules非ID为key
-            if ($className == "Module") {
-                if ($id > 0) {
-                    foreach ($object as $key => $value) {
-                        if ($value->ID == $id) {
-                            return $value;
-                        }
+
+        //$modules非ID为key
+        if ($className == "Module") {
+            if ($id > 0) {
+                foreach ($object as $key => $value) {
+                    if ($value->ID == $id) {
+                        return $value;
                     }
                 }
-                $m = new Module();
-
-                return $m;
             }
+            $m = new Module();
 
-            if (isset($object[$id])) {
-                return $object[$id];
-            } elseif ($className == "Post" || $className == "Comment" || $className == "Tag") {
-                // 文章需要读取，其他的直接返回空对象即可
-                /** @var Base $p */
-                $p = new $className();
-                $p->LoadInfoByID($id);
-                $object[$id] = $p;
+            return $m;
+        }
 
-                return $p;
-            } else {
-                return $this->GetSomeThingByAttr($object, 'ID', $id);
-            }
+        if (array_key_exists($id, $object)) {
+            return $object[$id];
         } else {
-            /** @var Base $p */
             $p = new $className();
-            $p->LoadInfoByID($id);
+            if ($p->LoadInfoByID($id)) {
+                $this->AddCacheObject($p);
+            }
 
             return $p;
         }
@@ -2569,21 +2548,50 @@ class ZBlogPHP
      * 根据属性值得到相应数据.
      *
      * @param Base[] &$object 缓存对象
+     * @param string        $className 对象未找到时，初始化类名
      * @param string $attr    属性名
      * @param mixed  $val     要查找的值
      *
      * @return null
      */
-    private function GetSomeThingByAttr(&$object, $attr, $val)
+    private function GetSomeThingByAttr(&$object, $className, $attr, $val)
     {
-        $val = trim($val);
-        foreach ($object as $key => &$value) {
-            if (is_null($value)) {
-                continue;
+        $cacheObject = null;
+        if (is_array($object)) {
+            $cacheObject = &$object;
+        } elseif ($className != '') {
+            if (!isset($this->cacheobject[$className])) {
+                $this->cacheobject[$className] = array();
             }
-            if ($value->$attr == $val) {
-                return $value;
+            $cacheObject = &$this->cacheobject[$className];
+        }
+
+        //如果是双重属性和值查询
+        if (is_array($attr) && is_array($val)) {
+            $val1 = trim($val[0]);
+            $val2 = trim($val[1]);
+            $attr1 = $attr[0];
+            $attr2 = $attr[1];
+            foreach ($cacheObject as $key => &$value) {
+                if (is_null($value)) {
+                    continue;
+                }
+                if ($value->$attr1 == $val1 && $value->$attr2 == $val2) {
+                    return $value;
+                }
             }
+        } else {
+
+            $val = trim($val);
+            foreach ($cacheObject as $key => &$value) {
+                if (is_null($value)) {
+                    continue;
+                }
+                if ($value->$attr == $val) {
+                    return $value;
+                }
+            }
+
         }
     }
 
@@ -2597,18 +2605,21 @@ class ZBlogPHP
      *
      * @return Base|null
      */
-    public function GetSomeThing($object, $attr, $val, $className = null)
+    public function GetSomeThing($object, $attr, $val, $className)
     {
         $cacheObject = null;
-        if (is_object($object)) {
+        if (is_array($object)) {
             $cacheObject = $object;
-        } elseif ($object != "") {
-            $cacheObject = &$this->$object;
+        } elseif ($className != '') {
+            if (!isset($this->cacheobject[$className])) {
+                $this->cacheobject[$className] = array();
+            }
+            $cacheObject = &$this->cacheobject[$className];
         }
         if ($attr == "ID") {
             $ret = $this->GetSomeThingById($cacheObject, $className, $val);
         } else {
-            $ret = $this->GetSomeThingByAttr($cacheObject, $attr, $val);
+            $ret = $this->GetSomeThingByAttr($cacheObject, $className, $attr, $val);
         }
         if ($ret === null && !is_null($className)) {
             /** @var Base $ret */
@@ -2716,13 +2727,6 @@ class ZBlogPHP
         $ret = $this->GetSomeThing('members', 'ID', $id, 'Member');
         if ($ret->ID == null) {
             $ret->Guid = GetGuid();
-            //如果是部份加载用户
-            if ($this->loadmembers_level != 0) {
-                if ($ret->LoadInfoByID($id) == true) {
-                    $this->members[$ret->ID] = $ret;
-                    $this->membersbyname[$ret->Name] = &$this->members[$ret->ID];
-                }
-            }
         }
 
         return $ret;
@@ -2916,48 +2920,86 @@ class ZBlogPHP
      */
     public function GetUploadByID($id)
     {
-        return $this->GetSomeThing('', 'ID', $id, 'Upload');
+        return $this->GetSomeThing('Upload', 'ID', $id, 'Upload');
     }
 
     /**
-     * 通过tag名获取tag实例.
+     * 通过tag别名获取tag实例.(先走cacheobject再走查数据库)
      *
      * @param string $name
      * @param null   $backKey
      *
      * @return Tag|Base
      */
-    public function GetTagByAlias($name, $backKey = null)
+    public function GetTagByAlias($name, $type = 0)
     {
-        $ret = $this->GetSomeThingByAlias('tags_all', $name, $backKey, 'Tag');
-        //if ($ret->ID >= 0) {
-            //$this->tagsbyname[$ret->Name] = &$this->tags[$ret->ID];
-        //}
+        $ret = $this->GetSomeThingByAttr($this->tags, 'Tag', array('Alias','Type'), array($name, $type));
+        if (is_object($ret) && $ret->ID >= 0) {
+            return $ret;
+        }
 
-        return $ret;
+        $a = array();
+        $a[] = array('=','tag_Alias', $name);
+        $a[] = array('=', 'tag_Type', $type);
+        $array = $this->GetTagList('*', array($a), '', 1, '');
+        if (count($array) == 0) {
+            return new Tag();
+        } else {
+            $this->AddCacheObject($array[0]);
+
+            return $array[0];
+        }
     }
 
     /**
-     * 通过tag名获取tag实例.
+     * 通过tag名获取tag实例.(先走cacheobject再走查数据库)
+     *
+     * @param string $name
+     * @param null   $backKey
+     *
+     * @return Tag|Base
+     */
+    public function GetTagByName($name, $type = 0)
+    {
+        $ret = $this->GetSomeThingByAttr($this->tags, 'Tag', array('Name','Type'), array($name, $type));
+        if (is_object($ret) && $ret->ID >= 0) {
+            return $ret;
+        }
+
+        $a = array();
+        $a[] = array('=', 'tag_Name', $name);
+        $a[] = array('=', 'tag_Type', $type);
+        $array = $this->GetTagList('*', array($a), '', 1, '');
+        if (count($array) == 0) {
+            return new Tag();
+        } else {
+            $this->AddCacheObject($array[0]);
+
+            return $array[0];
+        }
+    }
+
+    /**
+     * 通过tag的别名或是名称获取tag实例.(查数据库非走cacheobject)
      *
      * @param string $name
      *
      * @return Tag|Base
      */
-    public function GetTagByAliasOrName($name)
+    public function GetTagByAliasOrName($name, $type = 0)
     {
         //return $this->GetTagByAlias($name, 'Name');
         $a = array();
         $a[] = array('tag_Alias', $name);
         $a[] = array('tag_Name', $name);
-        $array = $this->GetTagList('*', array(array('array', $a)), '', 1, '');
+        $b = array('=', 'tag_Type', $type);
+        $array = $this->GetTagList('*', array(array('array', $a), $b), '', 1, '');
         if (count($array) == 0) {
             return new Tag();
         } else {
-            $this->tags[$array[0]->ID] = $array[0];
-            $this->tagsbyname[$array[0]->Name] = &$this->tags[$array[0]->ID];
+            $this->AddCacheObject($array[0]);
 
-            return $this->tags[$array[0]->ID];
+            return $array[0];
         }
     }
 
@@ -2972,7 +3014,7 @@ class ZBlogPHP
     {
         $ret = $this->GetSomeThing('tags_all', 'ID', $id, 'Tag');
         if ($ret->ID > 0) {
-            $this->tagsbyname[$ret->ID] = &$this->tags[$ret->ID];
+            $this->AddCacheObject($ret);
         }
 
         return $ret;
@@ -3013,7 +3055,7 @@ class ZBlogPHP
         $b = array();
         $c = array();
         foreach ($t as $v) {
-            if (array_key_exists($v, $this->tags_all)  == false) {
+            if (array_key_exists($v, $this->tags_all) == false) {
                 $a[] = array('tag_ID', $v);
                 $c[] = $v;
             } else {
@@ -3028,10 +3070,7 @@ class ZBlogPHP
             //$array=$this->GetTagList('',array(array('array',$a)),'','','');
             $array = $this->GetTagList('', array(array('IN', 'tag_ID', $c)), '', '', '');
             foreach ($array as $v) {
-                $this->tags_all[$v->ID] = $v;
-                $this->tags_type[$v->Type][$v->ID] = &$this->tags_all[$v->ID];
-                $this->tagsbyname_type[$v->Type][$v->Name] = &$this->tags_all[$v->ID];
-                $t[$v->ID] = &$this->tags_all[$v->ID];
+                $this->AddCacheObject($v);
             }
 
             return array_merge($b, $t);
@@ -3082,10 +3121,7 @@ class ZBlogPHP
             $t = array();
             $array = $this->GetTagList('', array(array('=', 'tag_Type', $posttype), array('array', $a)), '', '', '');
             foreach ($array as $v) {
-                $this->tags_all[$v->ID] = $v;
-                $this->tags_type[$posttype][$v->ID] = &$this->tags_all[$v->ID];
-                $this->tagsbyname_type[$posttype][$v->Name] = &$this->tags_all[$v->ID];;
-                $t[$v->Name] = &$this->tags_all[$v->ID];;
+                $this->AddCacheObject($v);
             }
             foreach ($t as $key => $value) {
                 $b[$key] = $value;
@@ -3391,7 +3427,7 @@ class ZBlogPHP
     {
         //1.7增加$signal为json类型
         $hint = $signal;
-        if(is_object($hint)){
+        if (is_object($hint)) {
             $signal = $hint->signal;
             $content = $hint->content;
             $delay = $hint->delay;
@@ -3406,7 +3442,7 @@ class ZBlogPHP
                 $content = $this->lang['msg']['operation_failed'];
             }
         }
-        $delay = $delay * 1000;
+        $delay = ($delay * 1000);
         echo "<div class=\"hint\"><p class=\"hint hint_$signal\" data-delay=\"$delay\">$content</p></div>";
     }
 
@@ -3639,6 +3675,81 @@ class ZBlogPHP
         }
 
         return false;
+    }
+
+    public $cacheobject = array();
+
+    /**
+     * 绑定zbp之前独立的杂乱的全局对象数组到总缓存对象上.
+     */
+    public function BindingCacheObject()
+    {
+        $cacheobject = &$this->cacheobject;
+        $cacheobject['Member'] = &$this->members;
+        $cacheobject['Category'] = &$this->categories_all;
+        $cacheobject['Tag'] = &$this->tags_all;
+        $cacheobject['Module'] = &$this->modules;
+        $cacheobject['Comment'] = &$this->comments;
+        $cacheobject['Post'] = &$this->posts;
+    }
+
+    /**
+     * 将对象附加到总缓存对象上.
+     */
+    public function AddCacheObject(&$object)
+    {
+        if (is_subclass_of($object, 'Base') == false) {
+            return;
+        }
+        $cacheobject = &$this->cacheobject;
+        if (!isset($cacheobject[get_class($object)])) {
+            $cacheobject[get_class($object)] = array();
+        }
+        if ($object->ID == 0) {
+            return;
+        }
+        if (get_class($object) == 'Tag') {
+            isset($this->tags_type[$object->Type]) || $this->tags_type[$object->Type] = array();
+            isset($this->tagsbyname_type[$object->Type]) || $this->tagsbyname_type[$object->Type] = array();
+            $this->tags_all[$object->ID] = $object;
+            $this->tags_allbyname[$object->Name] = &$this->tags_all[$object->ID];
+            $this->tags_type[$object->Type][$object->ID] = &$this->tags_all[$object->ID];
+            $this->tagsbyname_type[$object->Type][$object->Name] = &$this->tags_all[$object->ID];
+            return true;
+        }
+        if (get_class($object) == 'Category') {
+            $this->categories_all[$object->ID] = $object;
+            isset($this->categories_type[$object->Type]) || $this->categories_type[$object->Type] = array();
+            $this->categories_type[$object->Type][$object->ID] = &$this->categories_all[$object->ID];
+            return true;
+        }
+        $cacheobject[get_class($object)][$object->ID] = $object;
+    }
+
+    /**
+     * 将对象附从总缓存对象上删除掉.
+     */
+    public function RemoveCacheObject(&$object)
+    {
+        if (is_subclass_of($object, 'Base') == false) {
+            return;
+        }
+        $cacheobject = &$this->cacheobject;
+        if (!isset($cacheobject[get_class($object)])) {
+            $cacheobject[get_class($object)] = array();
+        }
+        if ($object->ID == 0) {
+            return;
+        }
+        if (get_class($object) == 'Tag') {
+            unset($this->tags_allbyname[$object->Name]);
+            unset($this->tags_type[$object->Type][$object->ID]);
+            unset($this->tagsbyname_type[$object->Type][$object->Name]);
+        }
+        if (get_class($object) == 'Category') {
+            unset($this->categories_type[$object->Type][$object->ID]);
+        }
+        unset($cacheobject[get_class($object)][$object->ID]);
     }
 
     /**

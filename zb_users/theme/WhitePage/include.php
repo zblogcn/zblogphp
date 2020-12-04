@@ -96,7 +96,7 @@ function WhitePage_CMT()
 function WhitePage_AddMenu(&$m)
 {
     global $zbp;
-    $m[] = MakeTopMenu("root", $zbp->lang['WhitePage']['theme_config'], $zbp->host . "zb_users/theme/WhitePage/main.php", "", "topmenu_WhitePage");
+    $m[] = MakeTopMenu("root", $zbp->lang['WhitePage']['theme_config'], $zbp->host . "zb_users/theme/WhitePage/main.php", "", "topmenu_WhitePage","icon-nut-fill");
 }
 
 function WhitePage_AddJS($echo = true)

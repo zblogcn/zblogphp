@@ -142,6 +142,12 @@ class Comment extends Base
             return $this->GetDeep($this);
         } elseif ($name === 'Post') {
             return $zbp->GetPostByID($this->LogID);
+        } elseif ($name === 'Parent') {
+            if ($this->ParentID == 0) {
+                return;
+            } else {
+                return $zbp->GetCommentByID($this->ParentID);
+            }
         } else {
             foreach ($GLOBALS['hooks']['Filter_Plugin_Comment_Get'] as $fpname => &$fpsignal) {
                 $fpreturn = $fpname($this, $name);

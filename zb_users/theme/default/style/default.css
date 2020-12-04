@@ -466,6 +466,7 @@ div.post-body li p{
 }
 div.post-body ul,div.post-body ol{
     margin-left:3.5em;
+    list-style-position:outside;
 }
 div.post-body code{
     width: 93%;

@@ -216,7 +216,7 @@ class Database__PDO_MySQL implements Database__Interface
                     //die ("Error!: " . $e->getMessage() . "<br/>");
                 }
             }
-            $result = null;
+            $result = array();
             try {
                 $result = $results->fetchAll();
             } catch (PDOException $e) {

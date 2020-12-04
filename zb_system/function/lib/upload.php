@@ -120,6 +120,8 @@ class Upload extends Base
             @move_uploaded_file($tmp, $zbp->usersdir . $this->Dir . $fn);
             return true;
         }
+
+        return true;
     }
 
     /**

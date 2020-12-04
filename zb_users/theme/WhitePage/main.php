@@ -204,7 +204,10 @@ border: 1px solid #aaa; width: 86px;height: 27px;
 <!--#include file="..\..\..\..\zb_system\admin\admin_footer.asp"-->
 <script type="text/javascript">
 ActiveTopMenu("topmenu_WhitePage");
-AddHeaderIcon("<?php echo $zbp->host; ?>zb_system/image/common/themes_32.png");
+if(typeof AddHeaderFontIcon === 'function')
+    AddHeaderFontIcon("icon-nut-fill");
+else
+    AddHeaderIcon("<?php echo $zbp->host; ?>zb_system/image/common/themes_32.png"); 
 $('#bgpicker').colpick({
     layout:'hex',
     submit:0,

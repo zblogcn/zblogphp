@@ -86,7 +86,7 @@ function Include_Admin_UpdateDB()
 
     if ($zbp->version >= ZC_LAST_VERSION && (int) $zbp->option['ZC_LAST_VERSION'] < ZC_LAST_VERSION) {
         if (substr(GetValueInArray(get_included_files(), 0), -9) == 'index.php') {
-            $zbp->SetHint('tips', '<a href="#" onclick="$.get(bloghost+\'zb_system/admin/updatedb.php\', function(data){alert(JSON.parse(data).data);window.location.reload();});">' . @$zbp->langs->msg->update_db . '</a>');
+            $zbp->SetHint('tips', '<a href="#" onclick="$.get(bloghost+\'zb_system/admin/updatedb.php\', function(data){alert(JSON.parse(data).data);window.location.reload();});">' . @$zbp->langs->msg->update_db . '</a>', 10000);
         }
     }
 }
@@ -1254,7 +1254,7 @@ function Admin_CommentMng()
             $tabletds[] = '<td class="td5"></td>';
         }
 
-        $tabletds[] = '<td class="td10"><span class="cmt-note" title="' . $zbp->lang['msg']['email'] . ':' . htmlspecialchars($cmt->Email) . '"><a href="mailto:' . htmlspecialchars($cmt->Email) . '">' . $cmt->Author->Name . '</a></span></td>';
+        $tabletds[] = '<td class="td10"><span class="cmt-note" title="' . $zbp->lang['msg']['email'] . ':' . htmlspecialchars($cmt->Email) . '"><a href="mailto:' . htmlspecialchars($cmt->Email) . '">' . $cmt->Author->StaticName. '</a></span></td>';
         $tabletds[] = '<td><div style="overflow:hidden;max-width:500px;">' .
             (
                 ($article) ? '<a href="' . $article->Url . '" target="_blank"><i class="icon-link-45deg"></i></a> ' : '<a href="javascript:;"><i class="icon-trash"></i></a>') .
@@ -1262,9 +1262,9 @@ function Admin_CommentMng()
         $tabletds[] = '<td class="td5">' . $cmt->LogID . '</td>';
         $tabletds[] = '<td class="td15">' . $cmt->Time() . '</td>';
         $tabletds[] = '<td class="td10 tdCenter">' .
-            '<a onclick="return window.confirm(\'' . str_replace(array('"','\''), '', $zbp->lang['msg']['confirm_operating']) . '\');" href="' . BuildSafeCmdURL('act=CommentDel&amp;id=' . $cmt->ID) . '"><i class="icon-trash"></i></a>' .
+            '<a onclick="return window.confirm(\'' . str_replace(array('"','\''), '', $zbp->lang['msg']['confirm_operating']) . '\');" href="' . BuildSafeCmdURL('act=CommentDel&amp;id=' . $cmt->ID) . '"><i class="icon-trash" title="' . $zbp->lang['msg']['del'] . '"></i></a>' .
             '&nbsp;&nbsp;&nbsp;&nbsp;' .
-            (!GetVars('ischecking', 'GET') ? '<a href="' . BuildSafeCmdURL('act=CommentChk&amp;id=' . $cmt->ID . '&amp;ischecking=' . (int) !GetVars('ischecking', 'GET')) . '"><i class="icon-shield-exclamation"></i></a>' : '<a href="' . BuildSafeCmdURL('act=CommentChk&amp;id=' . $cmt->ID . '&amp;ischecking=' . (int) !GetVars('ischecking', 'GET')) . '"><i class="icon-shield-check"></i></a>') .
+            (!GetVars('ischecking', 'GET') ? '<a href="' . BuildSafeCmdURL('act=CommentChk&amp;id=' . $cmt->ID . '&amp;ischecking=' . (int) !GetVars('ischecking', 'GET')) . '"><i class="icon-shield-fill-x" title="' . $zbp->lang['msg']['audit'] . '"></i></a>' : '<a href="' . BuildSafeCmdURL('act=CommentChk&amp;id=' . $cmt->ID . '&amp;ischecking=' . (int) !GetVars('ischecking', 'GET')) . '"><i class="icon-shield-fill-check" title="' . $zbp->lang['msg']['pass'] . '"></i></a>') .
             '</td>';
         $tabletds[] = '<td class="td5 tdCenter">' . '<input type="checkbox" id="id' . $cmt->ID . '" name="id[]" value="' . $cmt->ID . '"/>' . '</td>';
 

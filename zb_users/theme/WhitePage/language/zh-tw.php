@@ -2,7 +2,7 @@
 
 return array(
     'theme_name'      => 'WhitePage主題',
-    'theme_config'    => 'WhitePage主題配置',
+    'theme_config'    => '主題配置',
     'global_settings' => '整體設置',
     'page_type'       => '頁面類型',
     'text_indent'     => '正文縮進',

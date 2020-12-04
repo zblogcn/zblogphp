@@ -72,7 +72,8 @@ $c .= "#divMain a:hover,#divMain2  a:hover{color:#d60000;}" . PHP_EOL;
 $c .= ".imgcheck-on:before {background: #3a6ea5;}" . PHP_EOL;
 $c .= ".radio:checked + label:before {border: 1px solid #3a6ea5;}" . PHP_EOL;
 $c .= ".radio + label:after {background: #3a6ea5;}" . PHP_EOL;
-
+$c .= ".left #leftmenu span.bgicon{background-size:".$zbp->Config('AdminColor')->FontSize."px;}" . PHP_EOL;
+$c .= "#divMain2 [class^='icon-']{font-size:".($zbp->Config('AdminColor')->FontSize+2)."px;}" . PHP_EOL;
 //appcenter
 /*
 $c .= ".tabs { border-bottom-color:#3a6ea5!important;}" . PHP_EOL;
@@ -235,9 +236,7 @@ height: 40px;
     line-height: 36px;
     text-align: left;
     cursor: pointer;
-    margin-left: 36px;
-    padding-left: 60px;
-    background-position: 40px 12px;
+    margin-left: 60px;
 }
 .left #leftmenu #nav_admincolor2 a:hover { background-color: Transparent!important;}
 .left #leftmenu li span {color:black;filter: invert(0.8);font-weight:bold;}
@@ -272,6 +271,7 @@ body[class~=login] input.button:hover {background-color: #3a6ea5;}
         $c .= 'body{background:none;}';
     }
 	$c .= 'header div.logo img{background:url("images/logo.svg")}';
+    $c .= ".left #leftmenu span.bgicon{background-position:0px 13px;}";
 }
 
 

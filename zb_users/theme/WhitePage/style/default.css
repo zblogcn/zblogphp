@@ -376,6 +376,7 @@ div.post-body .tags-cloud {
 }
 div.post-body ul,div.post-body ol {
 	margin-left:3.5em;
+	list-style-position:outside;
 }
 div.post-body img {
 	max-width:100%;
