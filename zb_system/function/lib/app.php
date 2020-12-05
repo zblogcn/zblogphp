@@ -182,7 +182,7 @@ class App
     /**
      * @var array 禁止打包文件glob
      */
-    public $ignore_files = array('.gitignore', '.DS_Store', 'Thumbs.db', 'composer.lock', 'zbignore.txt');
+    public $ignore_files = array('.gitignore', '.DS_Store', 'Thumbs.db', 'composer.lock', 'zbignore.txt', '*.code-workspace');
 
     /**
      * @var bool 加载xml成功否
