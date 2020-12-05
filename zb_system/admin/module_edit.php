@@ -119,13 +119,11 @@ if ($mod->SourceType == 'themeinclude') {
                 <span class='title'>
                     <?php echo $lang['msg']['type']; ?>:</span>
                 <br />
-                <label>
-                    <input name="Type" type="radio" value="div" <?php echo $mod->Type == 'div' ? 'checked="checked"' : ''; ?> onclick="$('#pMaxLi').css('display','none');" />&nbsp;DIV
-                </label>
+                <input id="Type_DIV" name="Type" type="radio" class="radio" value="div" <?php echo $mod->Type == 'div' ? 'checked="checked"' : ''; ?> onclick="$('#pMaxLi').css('display','none');" />
+                <label for="Type_DIV">DIV</label>
                 &nbsp;&nbsp;&nbsp;&nbsp;
-                <label>
-                    <input type="radio" name="Type" value="ul" <?php echo $mod->Type == 'div' ? '' : 'checked="checked"'; ?> onclick="$('#pMaxLi').css('display','block');" />&nbsp;UL
-                </label>
+                <input id="Type_UL" type="radio" class="radio" name="Type" value="ul" <?php echo $mod->Type == 'div' ? '' : 'checked="checked"'; ?> onclick="$('#pMaxLi').css('display','block');" />
+                <label for="Type_UL">UL</label>
             </p>
             <p id="pMaxLi" style="<?php echo $mod->Type == 'div' ? 'display:none;' : ''; ?>">
                 <span class='title'>
@@ -139,17 +137,14 @@ if ($mod->SourceType == 'themeinclude') {
                     <span class='title'>
                         <?php echo $lang['msg']['style']; ?>:</span>
                     &nbsp;&nbsp;
-                    <label>
-                        <input name="catalog_style" type="radio" value="0" <?php echo $zbp->option['ZC_MODULE_CATALOG_STYLE'] == '0' ? 'checked="checked"' : ''; ?> />&nbsp;
-                        <?php echo $lang['msg']['catalog_style_normal']; ?></label>
+                        <input id="catalog_style_normal" name="catalog_style" type="radio" class="radio" value="0" <?php echo $zbp->option['ZC_MODULE_CATALOG_STYLE'] == '0' ? 'checked="checked"' : ''; ?> />&nbsp;
+                        <label for="catalog_style_normal"><?php echo $lang['msg']['catalog_style_normal']; ?></label>
                     &nbsp;&nbsp;
-                    <label>
-                        <input name="catalog_style" type="radio" value="1" <?php echo $zbp->option['ZC_MODULE_CATALOG_STYLE'] == '1' ? 'checked="checked"' : ''; ?> />&nbsp;
-                        <?php echo $lang['msg']['catalog_style_tree']; ?></label>
+                        <input id="catalog_style_tree" name="catalog_style" type="radio" class="radio" value="1" <?php echo $zbp->option['ZC_MODULE_CATALOG_STYLE'] == '1' ? 'checked="checked"' : ''; ?> />&nbsp;
+                        <label for="catalog_style_tree"><?php echo $lang['msg']['catalog_style_tree']; ?></label>
                     &nbsp;&nbsp;
-                    <label>
-                        <input name="catalog_style" type="radio" value="2" <?php echo $zbp->option['ZC_MODULE_CATALOG_STYLE'] == '2' ? 'checked="checked"' : ''; ?> />&nbsp;
-                        <?php echo $lang['msg']['catalog_style_ul']; ?></label>
+                        <input id="catalog_style_ul" name="catalog_style" type="radio" class="radio" value="2" <?php echo $zbp->option['ZC_MODULE_CATALOG_STYLE'] == '2' ? 'checked="checked"' : ''; ?> />&nbsp;
+                        <label for="catalog_style_ul"><?php echo $lang['msg']['catalog_style_ul']; ?></label>
                     &nbsp;&nbsp;
                 </p>
                 <?php
