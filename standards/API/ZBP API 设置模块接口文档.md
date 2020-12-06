@@ -6,15 +6,15 @@
 
 #### 请求
 
-GET `https://example.com/api.php?mod=setting&act=get`
+GET `https://example.com/zb_system/api.php?mod=setting&act=get`
 
-POST `https://example.com/api.php?mod=setting&act=get`
+POST `https://example.com/zb_system/api.php?mod=setting&act=get`
 
 或者省略 act：
 
-GET `https://example.com/api.php?mod=setting`
+GET `https://example.com/zb_system/api.php?mod=setting`
 
-POST `https://example.com/api.php?mod=setting`
+POST `https://example.com/zb_system/api.php?mod=setting`
 
 - Headers
 
@@ -83,7 +83,7 @@ POST `https://example.com/api.php?mod=setting`
 
 #### 请求
 
-POST `https://example.com/api.php?mod=setting&act=update`
+POST `https://example.com/zb_system/api.php?mod=setting&act=update`
 
 - Headers
 

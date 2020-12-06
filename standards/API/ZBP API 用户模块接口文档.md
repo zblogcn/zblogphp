@@ -6,7 +6,7 @@
 
 #### 请求
 
-POST `https://example.com/api.php?mod=member&act=login`
+POST `https://example.com/zb_system/api.php?mod=member&act=login`
 
 - Headers
 
@@ -80,7 +80,7 @@ POST `https://example.com/api.php?mod=member&act=login`
 
 #### 请求
 
-POST `https://example.com/api.php?mod=member&act=logout`
+POST `https://example.com/zb_system/api.php?mod=member&act=logout`
 
 - Headers
 
@@ -124,7 +124,7 @@ POST `https://example.com/api.php?mod=member&act=logout`
 
 #### 请求
 
-POST `https://example.com/api.php?mod=member&act=post`
+POST `https://example.com/zb_system/api.php?mod=member&act=post`
 
 - Headers
 
@@ -179,15 +179,15 @@ POST `https://example.com/api.php?mod=member&act=post`
 
 #### 请求
 
-GET `https://example.com/api.php?mod=member&act=get&id=123`
+GET `https://example.com/zb_system/api.php?mod=member&act=get&id=123`
 
-POST `https://example.com/api.php?mod=member&act=get`
+POST `https://example.com/zb_system/api.php?mod=member&act=get`
 
 或者省略 act：
 
-GET `https://example.com/api.php?mod=member&id=123`
+GET `https://example.com/zb_system/api.php?mod=member&id=123`
 
-POST `https://example.com/api.php?mod=member`
+POST `https://example.com/zb_system/api.php?mod=member`
 
 - Headers
 
@@ -261,7 +261,7 @@ POST `https://example.com/api.php?mod=member`
 
 #### 请求
 
-POST `https://example.com/api.php?mod=member&act=update`
+POST `https://example.com/zb_system/api.php?mod=member&act=update`
 
 - Headers
 
@@ -318,7 +318,7 @@ POST `https://example.com/api.php?mod=member&act=update`
 
 #### 请求
 
-POST `https://example.com/api.php?mod=member&act=delete`
+POST `https://example.com/zb_system/api.php?mod=member&act=delete`
 
 - Headers
 
@@ -360,7 +360,7 @@ POST `https://example.com/api.php?mod=member&act=delete`
 
 #### 请求
 
-GET/POST `https://example.com/api.php?mod=member&act=list`
+GET/POST `https://example.com/zb_system/api.php?mod=member&act=list`
 
 - Headers
 
@@ -452,9 +452,9 @@ GET/POST `https://example.com/api.php?mod=member&act=list`
 
 #### 请求
 
-GET `https://example.com/api.php?mod=member&act=get_auth&id=123`
+GET `https://example.com/zb_system/api.php?mod=member&act=get_auth&id=123`
 
-POST `https://example.com/api.php?mod=member&act=get_auth`
+POST `https://example.com/zb_system/api.php?mod=member&act=get_auth`
 
 - Headers
 

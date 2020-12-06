@@ -6,7 +6,7 @@
 
 #### 请求
 
-POST `https://example.com/api.php?mod=module&act=post`
+POST `https://example.com/zb_system/api.php?mod=module&act=post`
 
 - Headers
 
@@ -61,9 +61,9 @@ POST `https://example.com/api.php?mod=module&act=post`
 
 #### 请求
 
-GET `https://example.com/api.php?mod=module&act=get&id=name`
+GET `https://example.com/zb_system/api.php?mod=module&act=get&id=name`
 
-POST `https://example.com/api.php?mod=module&act=get`
+POST `https://example.com/zb_system/api.php?mod=module&act=get`
 
 - Headers
 
@@ -137,7 +137,7 @@ POST `https://example.com/api.php?mod=module&act=get`
 
 #### 请求
 
-POST `https://example.com/api.php?mod=module&act=update_module`
+POST `https://example.com/zb_system/api.php?mod=module&act=update_module`
 
 - Headers
 
@@ -193,7 +193,7 @@ POST `https://example.com/api.php?mod=module&act=update_module`
 
 #### 请求
 
-POST `https://example.com/api.php?mod=module&act=delete_module`
+POST `https://example.com/zb_system/api.php?mod=module&act=delete_module`
 
 - Headers
 
@@ -249,9 +249,9 @@ POST `https://example.com/api.php?mod=module&act=delete_module`
 
 #### 请求
 
-GET `https://example.com/api.php?mod=module&act=list&type=<模块代码>`
+GET `https://example.com/zb_system/api.php?mod=module&act=list&type=<模块代码>`
 
-POST `https://example.com/api.php?mod=module&act=list`
+POST `https://example.com/zb_system/api.php?mod=module&act=list`
 
 - Headers
 
@@ -313,7 +313,7 @@ POST `https://example.com/api.php?mod=module&act=list`
 
 #### 请求
 
-POST `https://example.com/api.php?mod=module&act=set_sidebar`
+POST `https://example.com/zb_system/api.php?mod=module&act=set_sidebar`
 
 - Headers
 

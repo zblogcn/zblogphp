@@ -8,7 +8,7 @@
 
 #### 客户端请求
 
-GET `https://example.com/zb_system/api/index.php?mod=member&act=login`
+GET `https://example.com/zb_system/api.php?mod=member&act=login`
 
 - Headers
 

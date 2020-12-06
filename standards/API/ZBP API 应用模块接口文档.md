@@ -11,13 +11,13 @@
 
 #### 请求
 
-GET `https://example.com/api.php?mod=app&act=get&type=plugin&id=UEditor`
+GET `https://example.com/zb_system/api.php?mod=app&act=get&type=plugin&id=UEditor`
 
-POST `https://example.com/api.php?mod=app&act=get`
+POST `https://example.com/zb_system/api.php?mod=app&act=get`
 
 或者省略 act：
 
-GET `https://example.com/api.php?mod=app&id=UEditor&type=plugin&id=UEditor`
+GET `https://example.com/zb_system/api.php?mod=app&id=UEditor&type=plugin&id=UEditor`
 
 - Headers
 
@@ -98,7 +98,7 @@ GET `https://example.com/api.php?mod=app&id=UEditor&type=plugin&id=UEditor`
 
 #### 请求
 
-POST `https://example.com/api.php?mod=app&act=enable_plugin`
+POST `https://example.com/zb_system/api.php?mod=app&act=enable_plugin`
 
 - Headers
 
@@ -161,7 +161,7 @@ POST `https://example.com/api.php?mod=app&act=enable_plugin`
 
 #### 请求
 
-POST `https://example.com/api.php?mod=app&act=disable_plugin`
+POST `https://example.com/zb_system/api.php?mod=app&act=disable_plugin`
 
 - Headers
 
@@ -223,7 +223,7 @@ POST `https://example.com/api.php?mod=app&act=disable_plugin`
 
 #### 请求
 
-POST `https://example.com/api.php?mod=app&act=set_theme`
+POST `https://example.com/zb_system/api.php?mod=app&act=set_theme`
 
 - Headers
 
@@ -290,7 +290,7 @@ POST `https://example.com/api.php?mod=app&act=set_theme`
 
 #### 请求
 
-POST `https://example.com/api.php?mod=app&act=get_apps`
+POST `https://example.com/zb_system/api.php?mod=app&act=get_apps`
 
 - Headers
 

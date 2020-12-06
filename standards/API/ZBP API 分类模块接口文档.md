@@ -6,7 +6,7 @@
 
 #### 请求
 
-POST `https://example.com/api.php?mod=category&act=post`
+POST `https://example.com/zb_system/api.php?mod=category&act=post`
 
 - Headers
 
@@ -61,13 +61,13 @@ POST `https://example.com/api.php?mod=category&act=post`
 
 #### 请求
 
-GET `https://example.com/api.php?mod=category&act=get&id=1`
+GET `https://example.com/zb_system/api.php?mod=category&act=get&id=1`
 
-POST `https://example.com/api.php?mod=category&act=get`
+POST `https://example.com/zb_system/api.php?mod=category&act=get`
 
 或者省略 act：
 
-GET `https://example.com/api.php?mod=category&id=1`
+GET `https://example.com/zb_system/api.php?mod=category&id=1`
 
 - Headers
 
@@ -141,7 +141,7 @@ GET `https://example.com/api.php?mod=category&id=1`
 
 #### 请求
 
-POST `https://example.com/api.php?mod=category&act=update`
+POST `https://example.com/zb_system/api.php?mod=category&act=update`
 
 - Headers
 
@@ -197,7 +197,7 @@ POST `https://example.com/api.php?mod=category&act=update`
 
 #### 请求
 
-POST `https://example.com/api.php?mod=catefory&act=delete`
+POST `https://example.com/zb_system/api.php?mod=catefory&act=delete`
 
 - Headers
 
@@ -241,7 +241,7 @@ POST `https://example.com/api.php?mod=catefory&act=delete`
 
 #### 请求
 
-GET/POST `https://example.com/api.php?mod=category&act=get_categories`
+GET/POST `https://example.com/zb_system/api.php?mod=category&act=get_categories`
 
 - Headers
 

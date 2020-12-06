@@ -2,7 +2,7 @@
 
 ## 请求
 
-POST `https://example.com/api.php`
+POST `https://example.com/zb_system/api.php`
 
 ### Headers
 

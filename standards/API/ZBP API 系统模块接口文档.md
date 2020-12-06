@@ -6,9 +6,9 @@
 
 #### 请求
 
-GET `https://example.com/api.php?mod=system&act=get_info`
+GET `https://example.com/zb_system/api.php?mod=system&act=get_info`
 
-POST `https://example.com/api.php?mod=system&act=get_info`
+POST `https://example.com/zb_system/api.php?mod=system&act=get_info`
 
 - Headers
 
@@ -71,9 +71,9 @@ POST `https://example.com/api.php?mod=system&act=get_info`
 
 #### 请求
 
-GET `https://example.com/api.php?mod=system&act=statistic`
+GET `https://example.com/zb_system/api.php?mod=system&act=statistic`
 
-POST `https://example.com/api.php?mod=system&act=statistic`
+POST `https://example.com/zb_system/api.php?mod=system&act=statistic`
 
 - Headers
 

@@ -6,7 +6,7 @@
 
 #### 请求
 
-POST `https://example.com/api.php?mod=post&act=post`
+POST `https://example.com/zb_system/api.php?mod=post&act=post`
 
 - Headers
 
@@ -71,13 +71,13 @@ POST `https://example.com/api.php?mod=post&act=post`
 
 #### 请求
 
-GET `https://example.com/api.php?mod=post&act=get&id=1`
+GET `https://example.com/zb_system/api.php?mod=post&act=get&id=1`
 
-POST `https://example.com/api.php?mod=post&act=get`
+POST `https://example.com/zb_system/api.php?mod=post&act=get`
 
 或者省略 act：
 
-GET `https://example.com/api.php?mod=post&id=1`
+GET `https://example.com/zb_system/api.php?mod=post&id=1`
 
 - Headers
 
@@ -154,7 +154,7 @@ GET `https://example.com/api.php?mod=post&id=1`
 
 #### 请求
 
-POST `https://example.com/api.php?mod=post&act=delete`
+POST `https://example.com/zb_system/api.php?mod=post&act=delete`
 
 - Headers
 
@@ -200,7 +200,7 @@ POST `https://example.com/api.php?mod=post&act=delete`
 
 #### 请求
 
-GET/POST `https://example.com/api.php?mod=post&act=list`
+GET/POST `https://example.com/zb_system/api.php?mod=post&act=list`
 
 - Headers
 
