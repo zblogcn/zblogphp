@@ -422,9 +422,9 @@ class Base
         }
         array_shift($keyvalue);
 
-        $id_field = reset($this->datainfo);
+        $data_field = reset($this->datainfo);
         $id_name = key($this->datainfo);
-        $id_field = $id_field[0];
+        $id_field = $data_field[0];
 
         if ($this->$id_name == 0) {
             $sql = $this->db->sql->Insert($this->table, $keyvalue);
@@ -464,4 +464,16 @@ class Base
         return (string) json_encode($this->data);
     }
 
+    /**
+     * Clone对象.
+     *
+     * @return object
+     */
+    public function Clone()
+    {
+    	$new = new $this->classname;
+    	$data = $this->GetData();
+    	$new->LoadInfoByDataArray($data);
+    	return $new;
+    }
 }

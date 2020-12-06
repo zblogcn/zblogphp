@@ -233,6 +233,8 @@ class BasePost extends Base
                     }
                 }
                 return $value;
+            case 'CommentPostKey':
+                return $zbp->GetCmtKey($this->ID);
             case 'CommentPostUrl':
                 foreach ($GLOBALS['hooks']['Filter_Plugin_Post_CommentPostUrl'] as $fpname => &$fpsignal) {
                     $fpreturn = $fpname($this);
@@ -242,7 +244,7 @@ class BasePost extends Base
                         return $fpreturn;
                     }
                 }
-                $key = '&amp;key=' . $zbp->GetCmtKey($this->ID);
+                $key = '&amp;key=' . $this->CommentPostKey;
 
                 return $zbp->host . 'zb_system/cmd.php?act=cmt&amp;postid=' . $this->ID . $key;
             case 'ValidCodeUrl':
