@@ -1679,8 +1679,7 @@ class ZBlogPHP
         $this->modulesbyfilename = array();
         $array = $this->GetModuleList();
         foreach ($array as $m) {
-            $this->modules[] = $m;
-            $this->modulesbyfilename[$m->FileName] = $m;
+            $this->AddCacheObject($m);
         }
 
         $dir = $this->usersdir . 'theme/' . $this->theme . '/include/';
@@ -1699,8 +1698,7 @@ class ZBlogPHP
                 }
                 $m->Source = 'themeinclude_' . $this->theme;
                 $m->IsIncludeFile = true;
-                $this->modules[] = $m;
-                $this->modulesbyfilename[$m->FileName] = $m;
+                $this->AddCacheObject($m);
             }
         }
 
@@ -3703,6 +3701,11 @@ class ZBlogPHP
         }
 
         switch (get_class($object)) {
+            case 'Module':
+                $cacheobject[get_class($object)][] = $object;
+                $this->modulesbyfilename[$object->FileName] = $object;
+                return true;
+                break;
             case 'Tag':
                 $cacheobject[get_class($object)][$object->ID] = $object;
                 isset($this->tags_type[$object->Type]) || $this->tags_type[$object->Type] = array();
@@ -3744,6 +3747,16 @@ class ZBlogPHP
         if ($object->ID == 0) {
             return;
         }
+        if (get_class($object) == 'Module') {
+            unset($this->modulesbyfilename[$object->FileName]);
+            foreach ($this->modules as $key => $value) {
+                if ($value->FileName == $object->FileName) {
+                    unset($this->modules[$key]);
+                    break;
+                }
+            }
+            return true;
+        }
         if (get_class($object) == 'Member') {
             unset($this->membersbyname[$object->Name]);
         }
@@ -3755,6 +3768,7 @@ class ZBlogPHP
             unset($this->categories_type[$object->Type][$object->ID]);
         }
         unset($cacheobject[get_class($object)][$object->ID]);
+        return true;
     }
 
     /**
