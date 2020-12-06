@@ -259,6 +259,9 @@ function api_post_list()
                 'other_props' => array('Url', 'Template', 'Avatar', 'StaticName'),
                 'remove_props' => array('Guid', 'Password', 'IP')
             ),
+            'Tags' => array(
+                'other_props' => array('Url', 'Template'),
+            ),
         ))
     );
     $paginationArr = ApiGetPaginationInfo($option);

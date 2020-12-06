@@ -188,11 +188,6 @@ class ZBlogPHP
     public $tags_all = array();
 
     /**
-     * @var array 标签数组 ALL（以标签名为键）(不精确，因为不同type的标签名有会重复，勿用)
-     */
-    public $tags_allbyname = array();
-
-    /**
      * @var array 标签数组 By Type 2维数组
      */
     public $tags_type = array();
@@ -1658,7 +1653,6 @@ class ZBlogPHP
         $this->tagsbyname = array();
 
         $this->tags_all = array();
-        $this->tags_allbyname = array();
 
         $array = $this->GetTagList();
 
@@ -1694,6 +1688,7 @@ class ZBlogPHP
             $files = GetFilesInDir($dir, 'php');
             foreach ($files as $sortname => $fullname) {
                 $m = new Module();
+                $m->ID = 0 - rand(0, 9999);
                 $m->FileName = $sortname;
                 $m->HtmlID = $sortname;
                 $m->Content = file_get_contents($fullname);
@@ -3706,26 +3701,32 @@ class ZBlogPHP
         if ($object->ID == 0) {
             return;
         }
-        if (get_class($object) == 'Member') {
-            $this->members[$object->ID] = $object;
-            $this->membersbyname[$object->Name] = &$this->members[$object->ID];
+
+        switch (get_class($object)) {
+            case 'Tag':
+                $cacheobject[get_class($object)][$object->ID] = $object;
+                isset($this->tags_type[$object->Type]) || $this->tags_type[$object->Type] = array();
+                $this->tags_type[$object->Type][$object->ID] = &$cacheobject[get_class($object)][$object->ID];
+                isset($this->tagsbyname_type[$object->Type]) || $this->tagsbyname_type[$object->Type] = array();
+                $this->tagsbyname_type[$object->Type][$object->Name] = &$cacheobject[get_class($object)][$object->ID];
+                return true;
+                break;
+            case 'Category':
+                $cacheobject[get_class($object)][$object->ID] = $object;
+                isset($this->categories_type[$object->Type]) || $this->categories_type[$object->Type] = array();
+                $this->categories_type[$object->Type][$object->ID] = &$cacheobject[get_class($object)][$object->ID];
+                return true;
+                break;
+            case 'Member':
+                $cacheobject[get_class($object)][$object->ID] = $object;
+                $this->membersbyname[$object->Name] = &$cacheobject[get_class($object)][$object->ID];
+                return true;
+                break;
+            default:
+                $cacheobject[get_class($object)][$object->ID] = $object;
+                break;
         }
-        if (get_class($object) == 'Tag') {
-            isset($this->tags_type[$object->Type]) || $this->tags_type[$object->Type] = array();
-            isset($this->tagsbyname_type[$object->Type]) || $this->tagsbyname_type[$object->Type] = array();
-            $this->tags_all[$object->ID] = $object;
-            $this->tags_allbyname[$object->Name] = &$this->tags_all[$object->ID];
-            $this->tags_type[$object->Type][$object->ID] = &$this->tags_all[$object->ID];
-            $this->tagsbyname_type[$object->Type][$object->Name] = &$this->tags_all[$object->ID];
-            return true;
-        }
-        if (get_class($object) == 'Category') {
-            $this->categories_all[$object->ID] = $object;
-            isset($this->categories_type[$object->Type]) || $this->categories_type[$object->Type] = array();
-            $this->categories_type[$object->Type][$object->ID] = &$this->categories_all[$object->ID];
-            return true;
-        }
-        $cacheobject[get_class($object)][$object->ID] = $object;
+
     }
 
     /**
@@ -3747,7 +3748,6 @@ class ZBlogPHP
             unset($this->membersbyname[$object->Name]);
         }
         if (get_class($object) == 'Tag') {
-            unset($this->tags_allbyname[$object->Name]);
             unset($this->tags_type[$object->Type][$object->ID]);
             unset($this->tagsbyname_type[$object->Type][$object->Name]);
         }

@@ -2423,7 +2423,7 @@ function PostCategory()
 
     $parentid = (int) GetVars('ParentID', 'POST');
     if ($parentid > 0) {
-        if ($zbp->categories[$parentid]->Level > ($zbp->category_recursion_level - 2)) {
+        if ($zbp->categories_all[$parentid]->Level > ($zbp->category_recursion_level - 2)) {
             $_POST['ParentID'] = '0';
         }
     }
@@ -2457,7 +2457,7 @@ function PostCategory()
 
     // 此处用作刷新分类内文章数据使用，不作更改
     if ($cate->ID > 0) {
-        CountCategory($cate);
+        CountCategory($cate, null, $cate->Type);
     }
 
     $cate->Save();
@@ -3772,8 +3772,9 @@ function CountPost(&$article, $plus = null)
  *
  * @param array $array 记录文章ID的数组
  * @param int   $plus  控制是否要进行全表扫描
+ * @param int      $type      post和category的分类Type
  */
-function CountPostArray($array, $plus = null)
+function CountPostArray($array, $plus = null, $type = 0)
 {
     global $zbp;
     $array = array_unique($array);
@@ -3784,7 +3785,7 @@ function CountPostArray($array, $plus = null)
 
         $article = $zbp->GetPostByID($value);
         if ($article->ID > 0) {
-            CountPost($article, $plus);
+            CountPost($article, $plus, $type);
             $article->Save();
         }
     }
@@ -3795,15 +3796,16 @@ function CountPostArray($array, $plus = null)
  *
  * @param Category &$category
  * @param int      $plus      控制是否要进行全表扫描
+ * @param int      $type      post和category的分类Type
  */
-function CountCategory(&$category, $plus = null)
+function CountCategory(&$category, $plus = null, $type = 0)
 {
     global $zbp;
 
     if ($plus === null) {
         $id = $category->ID;
 
-        $s = $zbp->db->sql->Count($zbp->table['Post'], array(array('COUNT', '*', 'num')), array(array('=', 'log_Type', 0), array('=', 'log_Status', 0), array('=', 'log_CateID', $id)));
+        $s = $zbp->db->sql->Count($zbp->table['Post'], array(array('COUNT', '*', 'num')), array(array('=', 'log_Type', $type), array('=', 'log_Status', 0), array('=', 'log_CateID', $id)));
         $num = GetValueInArrayByCurrent($zbp->db->Query($s), 'num');
 
         $category->Count = $num;
@@ -3817,8 +3819,9 @@ function CountCategory(&$category, $plus = null)
  *
  * @param array $array 记录分类ID的数组
  * @param int   $plus  控制是否要进行全表扫描
+ * @param int   $type  post和category的分类Type
  */
-function CountCategoryArray($array, $plus = null)
+function CountCategoryArray($array, $plus = null, $type = 0)
 {
     global $zbp;
     $array = array_unique($array);
@@ -3827,8 +3830,8 @@ function CountCategoryArray($array, $plus = null)
             continue;
         }
 
-        CountCategory($zbp->categories[$value], $plus);
-        $zbp->categories[$value]->Save();
+        CountCategory($zbp->categories_all[$value], $plus, $type);
+        $zbp->categories_all[$value]->Save();
     }
 }
 
@@ -3837,15 +3840,16 @@ function CountCategoryArray($array, $plus = null)
  *
  * @param tag &$tag
  * @param int $plus 控制是否要进行全表扫描
+ * @param int $type post和tag的分类Type
  */
-function CountTag(&$tag, $plus = null)
+function CountTag(&$tag, $plus = null, $type = 0)
 {
     global $zbp;
 
     if ($plus === null) {
         $id = $tag->ID;
 
-        $s = $zbp->db->sql->Count($zbp->table['Post'], array(array('COUNT', '*', 'num')), array(array('LIKE', 'log_Tag', '%{' . $id . '}%')));
+        $s = $zbp->db->sql->Count($zbp->table['Post'], array(array('COUNT', '*', 'num')), array('=', 'log_Type', $type), array(array('LIKE', 'log_Tag', '%{' . $id . '}%')));
         $num = GetValueInArrayByCurrent($zbp->db->Query($s), 'num');
 
         $tag->Count = $num;
@@ -3880,7 +3884,7 @@ function CountTagArrayString($string, $plus = null, $articleid = null)
     }
 
     foreach ($array as &$tag) {
-        CountTag($tag, $plus);
+        CountTag($tag, $plus, $tag->Type);
         $tag->Save();
     }
 
@@ -4278,17 +4282,37 @@ function ApiGetObjectArray($object, $other_props = array(), $remove_props = arra
     foreach ($other_props as $key => $value) {
         $array[$value] = $object->$value;
     }
+    switch (get_class($object)) {
+        case 'Member':
+            $remove_props[] = 'Guid';
+            $remove_props[] = 'Password';
+            $remove_props[] = 'IP';
+            break;
+        default:
+            # code...
+            break;
+    }
+
     foreach ($remove_props as $key => $value) {
         unset($array[$value]);
     }
     foreach ($with_relations as $relation => $info) {
         $relation_obj = $object->$relation;
-        $array[$relation] = ApiGetObjectArray(
-            $relation_obj,
-            isset($info['other_props']) ? $info['other_props'] : array(),
-            isset($info['remove_props']) ? $info['remove_props'] : array(),
-            isset($info['with_relations']) ? $info['with_relations'] : array()
-        );
+        if (is_array($relation_obj)) {
+            $array[$relation] = ApiGetObjectArrayList(
+                $relation_obj,
+                isset($info['other_props']) ? $info['other_props'] : array(),
+                isset($info['remove_props']) ? $info['remove_props'] : array(),
+                isset($info['with_relations']) ? $info['with_relations'] : array()
+            );
+        } else {
+            $array[$relation] = ApiGetObjectArray(
+                $relation_obj,
+                isset($info['other_props']) ? $info['other_props'] : array(),
+                isset($info['remove_props']) ? $info['remove_props'] : array(),
+                isset($info['with_relations']) ? $info['with_relations'] : array()
+            );
+        }
     }
     return $array;
 }

@@ -30,10 +30,11 @@ $mod = null;
 if (isset($_GET['source'])) {
     if (GetVars('source', 'GET') == 'themeinclude_' . $zbp->theme) {
         $mod = new Module();
+        $mod->ID = 0 - rand(0, 9999);
         $mod->Name = GetVars('filename', 'GET');
         $mod->FileName = GetVars('filename', 'GET');
         $mod->HtmlID = GetVars('filename', 'GET');
-        $mod->Source = 'themeinclude_' . $zbp->theme;;
+        $mod->Source = GetVars('source', 'GET');
         if ($mod->FileName) {
             $mod->Content = file_get_contents($zbp->usersdir . 'theme/' . $zbp->theme . '/include/' . FormatString($mod->FileName, '[filename]') . '.php');
         }
