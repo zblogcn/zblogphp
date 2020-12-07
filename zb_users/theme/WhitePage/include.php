@@ -15,6 +15,9 @@ function ActivePlugin_WhitePage()
     } else {
         Add_Filter_Plugin('Filter_Plugin_Html_Js_Add', 'WhitePage_AddJS');
     }
+    if($zbp->HasConfig('WhitePage') && isset($zbp->html_js_hash)){
+        $zbp->html_js_hash .= crc32((string)$zbp->Config('WhitePage'));
+    }
 
     $s = '';
     if ($zbp->Config('WhitePage')->HasKey("custom_bgcolor")) {

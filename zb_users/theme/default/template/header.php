@@ -8,9 +8,9 @@
 	<meta name="renderer" content="webkit">
 	<title>{$name}-{$title}</title>
 	<link rel="stylesheet" rev="stylesheet" href="{$host}zb_users/theme/{$theme}/style/{$style}.css?{$themeinfo['modified']}" type="text/css" media="all"/>
-	<script src="{$host}zb_system/script/jquery-2.2.4.min.js"></script>
-	<script src="{$host}zb_system/script/zblogphp.js"></script>
-	<script src="{$host}zb_system/script/c_html_js_add.php"></script>
+	<script src="{$host}zb_system/script/jquery-2.2.4.min.js?{$version}"></script>
+	<script src="{$host}zb_system/script/zblogphp.js?{$version}"></script>
+	<script src="{$host}zb_system/script/c_html_js_add.php?hash={$html_js_hash}&{$version}"></script>
 	<script src="{$host}zb_users/theme/{$theme}/script/custom.js"></script>
 {$header}
 {if $type=='index'&&$page=='1'}

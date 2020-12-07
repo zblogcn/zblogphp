@@ -16,8 +16,8 @@ unset($post_data['token']);
     <meta name="generator" content="<?php echo $GLOBALS['option']['ZC_BLOG_PRODUCT_FULL']; ?>"/>
     <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
     <title><?php echo $GLOBALS['blogname'] . '-' . $GLOBALS['lang']['msg']['error']; ?></title>
-    <link rel="stylesheet" href="<?php echo $GLOBALS['bloghost']; ?>zb_system/css/admin.css" type="text/css" media="screen"/>
-    <script src="<?php echo $GLOBALS['bloghost']; ?>zb_system/script/common.js"></script>
+    <link rel="stylesheet" href="<?php echo $GLOBALS['bloghost']; ?>zb_system/css/admin.css?<?php echo $GLOBALS['blogversion']; ?>" type="text/css" media="screen"/>
+    <script src="<?php echo $GLOBALS['bloghost']; ?>zb_system/script/common.js?<?php echo $GLOBALS['blogversion']; ?>"></script>
     <?php
     foreach ($GLOBALS['hooks']['Filter_Plugin_Other_Header'] as $fpname => &$fpsignal) {
         $fpname();

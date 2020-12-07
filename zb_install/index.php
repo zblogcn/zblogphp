@@ -69,13 +69,13 @@ if ($zbp->option['ZC_DATABASE_TYPE'] !== '') {
   <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
   <meta name="generator" content="Z-BlogPHP" />
   <meta name="robots" content="noindex,nofollow" />
-  <script src="../zb_system/script/common.js"></script>
-  <script src="../zb_system/script/c_admin_js_add.php"></script>
-  <script src="../zb_system/script/md5.js"></script>
-  <script src="../zb_system/script/jquery-ui.custom.min.js"></script>
-  <link rel="stylesheet" href="../zb_system/css/jquery-ui.custom.css" type="text/css" media="screen" />
-  <link rel="stylesheet" href="../zb_system/css/admin3.css" type="text/css" media="screen" />
-  <link rel="stylesheet" href="../zb_system/image/icon/icon.css" type="text/css" media="screen" />  
+  <script src="../zb_system/script/common.js?<?php echo $blogversion; ?>"></script>
+  <script src="../zb_system/script/c_admin_js_add.php?<?php echo $blogversion; ?>"></script>
+  <script src="../zb_system/script/md5.js?<?php echo $blogversion; ?>"></script>
+  <script src="../zb_system/script/jquery-ui.custom.min.js?<?php echo $blogversion; ?>"></script>
+  <link rel="stylesheet" href="../zb_system/css/jquery-ui.custom.css?<?php echo $blogversion; ?>" type="text/css" media="screen" />
+  <link rel="stylesheet" href="../zb_system/css/admin3.css?<?php echo $blogversion; ?>" type="text/css" media="screen" />
+  <link rel="stylesheet" href="../zb_system/image/icon/icon.css?<?php echo $blogversion; ?>" type="text/css" media="screen" />  
   <title>Z-BlogPHP <?php echo ZC_BLOG_VERSION . ' ' . $zbp->lang['zb_install']['install_program']; ?> </title>
   <?php Include_AddonAdminFont(); ?>
 </head>

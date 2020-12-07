@@ -938,6 +938,8 @@ class Template
         $this->templateTags['searchurl'] = &$zbp->searchurl;
         $this->templateTags['ajaxurl'] = &$zbp->ajaxurl;
         $this->templateTags['issearch'] = false;
+        $this->templateTags['html_js_hash'] = $zbp->html_js_hash;
+        $this->templateTags['admin_js_hash'] = $zbp->admin_js_hash;
         $s = array(
             $option['ZC_SIDEBAR_ORDER'],
             $option['ZC_SIDEBAR2_ORDER'],

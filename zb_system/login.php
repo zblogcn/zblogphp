@@ -21,11 +21,11 @@ if ($zbp->CheckRights('admin')) {
     <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0"/>
     <meta name="generator" content="<?php echo $option['ZC_BLOG_PRODUCT_FULL']; ?>" />
     <meta name="renderer" content="webkit" />
-    <link rel="stylesheet" href="css/admin.css" type="text/css" media="screen" />
-    <script src="script/jquery-2.2.4.min.js"></script>
-    <script src="script/zblogphp.js?v=<?php echo $blogversion; ?>"></script>
-    <script src="script/md5.js"></script>
-    <script src="script/c_admin_js_add.php"></script>
+    <link rel="stylesheet" href="css/admin.css?<?php echo $blogversion; ?>" type="text/css" media="screen" />
+    <script src="script/jquery-2.2.4.min.js?<?php echo $blogversion; ?>"></script>
+    <script src="script/zblogphp.js?<?php echo $blogversion; ?>"></script>
+    <script src="script/md5.js?<?php echo $blogversion; ?>"></script>
+    <script src="script/c_admin_js_add.php?hash=<?php echo $zbp->html_js_hash; ?>&<?php echo $blogversion; ?>"></script>
     <title><?php echo $blogname . '-' . $lang['msg']['login']; ?></title>
 <?php
 foreach ($GLOBALS['hooks']['Filter_Plugin_Login_Header'] as $fpname => &$fpsignal) {

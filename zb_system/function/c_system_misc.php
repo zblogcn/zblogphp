@@ -196,9 +196,9 @@ function misc_vrs()
         ?>
         <meta name="robots" content="none" />
         <meta name="generator" content="<?php echo $GLOBALS['option']['ZC_BLOG_PRODUCT_FULL']; ?>" />
-        <link rel="stylesheet" href="css/admin.css" type="text/css" media="screen" />
-        <script src="script/common.js"></script>
-        <script src="script/c_admin_js_add.php"></script>
+        <link rel="stylesheet" href="css/admin.css?<?php echo $GLOBALS['blogversion']; ?>" type="text/css" media="screen" />
+        <script src="script/common.js?<?php echo $GLOBALS['blogversion']; ?>"></script>
+        <script src="script/c_admin_js_add.php?hash=<?php echo $zbp->html_js_hash; ?>&<?php echo $GLOBALS['blogversion']; ?>"></script>
         <?php
         foreach ($GLOBALS['hooks']['Filter_Plugin_Other_Header'] as $fpname => &$fpsignal) {
             $fpname();
@@ -272,9 +272,9 @@ function misc_phpinfo()
         ?>
         <meta name="robots" content="none" />
         <meta name="generator" content="<?php echo $GLOBALS['option']['ZC_BLOG_PRODUCT_FULL']; ?>" />
-        <link rel="stylesheet" href="css/admin.css" type="text/css" media="screen" />
-        <script src="script/common.js"></script>
-        <script src="script/c_admin_js_add.php"></script>
+        <link rel="stylesheet" href="css/admin.css?<?php echo $GLOBALS['blogversion']; ?>" type="text/css" media="screen" />
+        <script src="script/common.js?<?php echo $GLOBALS['blogversion']; ?>"></script>
+        <script src="script/c_admin_js_add.php?hash=<?php echo $zbp->html_js_hash; ?>&<?php echo $GLOBALS['blogversion']; ?>"></script>
         <?php
         foreach ($GLOBALS['hooks']['Filter_Plugin_Other_Header'] as $fpname => &$fpsignal) {
             $fpname();
