@@ -8,16 +8,16 @@
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    inkscape:version="1.0 (4035a4fb49, 2020-05-01)"
-   sodipodi:docname="download.svg"
-   id="svg3341"
+   sodipodi:docname="emoji-laughing-fill.svg"
+   id="svg4"
    version="1.1"
    fill="currentColor"
-   class="bi bi-download"
+   class="bi bi-emoji-laughing-fill"
    viewBox="0 0 16 16"
    height="1em"
    width="1em">
   <metadata
-     id="metadata3347">
+     id="metadata10">
     <rdf:RDF>
       <cc:Work
          rdf:about="">
@@ -28,17 +28,17 @@
     </rdf:RDF>
   </metadata>
   <defs
-     id="defs3345" />
+     id="defs8" />
   <sodipodi:namedview
-     inkscape:current-layer="svg3341"
+     inkscape:current-layer="svg4"
      inkscape:window-maximized="1"
      inkscape:window-y="-9"
      inkscape:window-x="-9"
-     inkscape:cy="6.8674593"
+     inkscape:cy="8"
      inkscape:cx="8"
-     inkscape:zoom="36.681164"
+     inkscape:zoom="51.875"
      showgrid="false"
-     id="namedview3343"
+     id="namedview6"
      inkscape:window-height="1001"
      inkscape:window-width="1920"
      inkscape:pageshadow="2"
@@ -48,10 +48,9 @@
      objecttolerance="10"
      borderopacity="1"
      bordercolor="#666666"
-     pagecolor="#ffffff"
-     inkscape:document-rotation="0" />
+     pagecolor="#ffffff" />
   <path
-     d="M 5.421875 1.1972656 L 5.421875 6.5859375 L 1.84375 6.5859375 L 8.1152344 12.857422 L 14.386719 6.5859375 L 10.808594 6.5859375 L 10.808594 1.1972656 L 5.421875 1.1972656 z M 1.84375 13.03125 L 1.84375 14.839844 L 14.386719 14.839844 L 14.386719 13.03125 L 1.84375 13.03125 z "
-     style="stroke-width:0.0280602"
-     id="path193" />
+     d="M 8 0 A 8 8 0 0 0 8 16 A 8 8 0 0 0 8 0 z M 6 5 C 6.552 5 7 5.672 7 6.5 C 7 7.001 6.8369375 6.895375 6.5859375 6.734375 C 6.4209375 6.628375 6.218 6.5 6 6.5 C 5.782 6.5 5.5790625 6.629375 5.4140625 6.734375 C 5.1630625 6.895375 5 7 5 6.5 C 5 5.672 5.448 5 6 5 z M 10 5 C 10.552 5 11 5.672 11 6.5 C 11 7 10.836937 6.895375 10.585938 6.734375 C 10.420937 6.629375 10.218 6.5 10 6.5 C 9.782 6.5 9.5790625 6.628375 9.4140625 6.734375 C 9.1630625 6.895375 9 7.001 9 6.5 C 9 5.672 9.448 5 10 5 z M 4.5351562 9 L 11.464844 9 A 1 1 0 0 1 12.330078 9.5 A 1 1 0 0 1 12.330078 10.5 A 4.998 4.998 0 0 1 8 13 A 4.998 4.998 0 0 1 3.6699219 10.5 A 1 1 0 0 1 4.5351562 9 z "
+     style="fill-rule:evenodd"
+     id="path2" />
 </svg>

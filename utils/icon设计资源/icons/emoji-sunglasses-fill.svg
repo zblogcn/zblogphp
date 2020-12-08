@@ -8,16 +8,16 @@
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    inkscape:version="1.0 (4035a4fb49, 2020-05-01)"
-   sodipodi:docname="download.svg"
-   id="svg3341"
+   sodipodi:docname="emoji-sunglasses-fill.svg"
+   id="svg4"
    version="1.1"
    fill="currentColor"
-   class="bi bi-download"
+   class="bi bi-emoji-sunglasses-fill"
    viewBox="0 0 16 16"
    height="1em"
    width="1em">
   <metadata
-     id="metadata3347">
+     id="metadata10">
     <rdf:RDF>
       <cc:Work
          rdf:about="">
@@ -28,17 +28,17 @@
     </rdf:RDF>
   </metadata>
   <defs
-     id="defs3345" />
+     id="defs8" />
   <sodipodi:namedview
-     inkscape:current-layer="svg3341"
+     inkscape:current-layer="svg4"
      inkscape:window-maximized="1"
      inkscape:window-y="-9"
      inkscape:window-x="-9"
-     inkscape:cy="6.8674593"
+     inkscape:cy="8"
      inkscape:cx="8"
-     inkscape:zoom="36.681164"
+     inkscape:zoom="51.875"
      showgrid="false"
-     id="namedview3343"
+     id="namedview6"
      inkscape:window-height="1001"
      inkscape:window-width="1920"
      inkscape:pageshadow="2"
@@ -48,10 +48,9 @@
      objecttolerance="10"
      borderopacity="1"
      bordercolor="#666666"
-     pagecolor="#ffffff"
-     inkscape:document-rotation="0" />
+     pagecolor="#ffffff" />
   <path
-     d="M 5.421875 1.1972656 L 5.421875 6.5859375 L 1.84375 6.5859375 L 8.1152344 12.857422 L 14.386719 6.5859375 L 10.808594 6.5859375 L 10.808594 1.1972656 L 5.421875 1.1972656 z M 1.84375 13.03125 L 1.84375 14.839844 L 14.386719 14.839844 L 14.386719 13.03125 L 1.84375 13.03125 z "
-     style="stroke-width:0.0280602"
-     id="path193" />
+     d="M 8 0 A 8 8 0 0 0 8 16 A 8 8 0 0 0 8 0 z M 3.2792969 4 L 6 4 A 1 1 0 0 1 7 5 L 7 5.1152344 A 4.22 4.22 0 0 1 8 5 C 8.35 5 8.69 5.0392344 9 5.1152344 L 9 5 A 1 1 0 0 1 10 4 L 12.720703 4 A 1 1 0 0 1 13.689453 5.2421875 L 13.378906 6.484375 A 2 2 0 0 1 11.439453 8 L 11 8 A 2 2 0 0 1 9.0058594 6.1601562 A 2.99 2.99 0 0 0 8 6 C 7.607 6 7.2601406 6.0631563 6.9941406 6.1601562 A 2 2 0 0 1 5 8 L 4.5625 8 A 2 2 0 0 1 2.6210938 6.484375 L 2.3105469 5.2421875 A 1 1 0 0 1 3.2792969 4 z M 4.5253906 9.4980469 A 0.5 0.5 0 0 1 4.96875 9.75 A 3.498 3.498 0 0 0 8 11.5 A 3.498 3.498 0 0 0 11.03125 9.75 A 0.5 0.5 0 1 1 11.898438 10.25 A 4.5 4.5 0 0 1 8 12.5 A 4.498 4.498 0 0 1 4.1035156 10.25 A 0.5 0.5 0 0 1 4.5253906 9.4980469 z "
+     style="fill-rule:evenodd"
+     id="path2" />
 </svg>

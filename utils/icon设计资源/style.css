@@ -1,10 +1,6 @@
 @font-face {
-  font-family: 'icomoon';
-  src:  url('fonts/icomoon.eot?wb4ub7');
-  src:  url('fonts/icomoon.eot?wb4ub7#iefix') format('embedded-opentype'),
-    url('fonts/icomoon.ttf?wb4ub7') format('truetype'),
-    url('fonts/icomoon.woff?wb4ub7') format('woff'),
-    url('fonts/icomoon.svg?wb4ub7#icomoon') format('svg');
+  font-family: 'zblog';
+  src:  url('zblog.ttf?3kem2') format('truetype');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -12,7 +8,7 @@
 
 [class^="icon-"], [class*=" icon-"] {
   /* use !important to prevent issues with browser extensions that change fonts */
-  font-family: 'icomoon' !important;
+  font-family: 'zblog' !important;
   speak: never;
   font-style: normal;
   font-weight: normal;
@@ -1487,29 +1483,68 @@
 .icon-emoji-angry:before {
   content: "\eaea";
 }
+.icon-emoji-angry-fill:before {
+  content: "\e99f";
+}
 .icon-emoji-dizzy:before {
   content: "\eaeb";
+}
+.icon-emoji-dizzy-fill:before {
+  content: "\ea83";
 }
 .icon-emoji-expressionless:before {
   content: "\eaec";
 }
+.icon-emoji-expressionless-fill:before {
+  content: "\ea84";
+}
 .icon-emoji-frown:before {
   content: "\eaed";
+}
+.icon-emoji-frown-fill:before {
+  content: "\ea85";
+}
+.icon-emoji-heart-eyes:before {
+  content: "\ec76";
+}
+.icon-emoji-heart-eyes-fill:before {
+  content: "\ec77";
 }
 .icon-emoji-laughing:before {
   content: "\eaee";
 }
+.icon-emoji-laughing-fill:before {
+  content: "\ec87";
+}
 .icon-emoji-neutral:before {
   content: "\eaef";
+}
+.icon-emoji-neutral-fill:before {
+  content: "\ec88";
 }
 .icon-emoji-smile:before {
   content: "\eaf0";
 }
+.icon-emoji-smile-fill:before {
+  content: "\ec8b";
+}
 .icon-emoji-smile-upside-down:before {
   content: "\eaf1";
 }
+.icon-emoji-smile-upside-down-fill:before {
+  content: "\ec8c";
+}
 .icon-emoji-sunglasses:before {
   content: "\eaf2";
+}
+.icon-emoji-sunglasses-fill:before {
+  content: "\ecc1";
+}
+.icon-emoji-wink:before {
+  content: "\ecc2";
+}
+.icon-emoji-wink-fill:before {
+  content: "\ecda";
 }
 .icon-envelope:before {
   content: "\eaf3";
@@ -1589,6 +1624,12 @@
 .icon-file-arrow-up-fill:before {
   content: "\eb0c";
 }
+.icon-file-bar-graph:before {
+  content: "\ecdb";
+}
+.icon-file-bar-graph-fill:before {
+  content: "\ed24";
+}
 .icon-file-binary:before {
   content: "\eb0d";
 }
@@ -1634,6 +1675,12 @@
 .icon-file-earmark-arrow-up-fill:before {
   content: "\eb1b";
 }
+.icon-file-earmark-bar-graph:before {
+  content: "\ed25";
+}
+.icon-file-earmark-bar-graph-fill:before {
+  content: "\ed27";
+}
 .icon-file-earmark-binary:before {
   content: "\eb1c";
 }
@@ -1669,6 +1716,12 @@
 }
 .icon-file-earmark-easel-fill:before {
   content: "\eb27";
+}
+.icon-file-earmark-excel:before {
+  content: "\ed28";
+}
+.icon-file-earmark-excel-fill:before {
+  content: "\ed7d";
 }
 .icon-file-earmark-fill:before {
   content: "\eb28";
@@ -1739,6 +1792,12 @@
 .icon-file-earmark-post-fill:before {
   content: "\eb3e";
 }
+.icon-file-earmark-ppt:before {
+  content: "\ed7e";
+}
+.icon-file-earmark-ppt-fill:before {
+  content: "\ed81";
+}
 .icon-file-earmark-richtext:before {
   content: "\eb3f";
 }
@@ -1768,6 +1827,12 @@
 }
 .icon-file-earmark-text-fill:before {
   content: "\eb48";
+}
+.icon-file-earmark-word:before {
+  content: "\ed82";
+}
+.icon-file-earmark-word-fill:before {
+  content: "\ed8d";
 }
 .icon-file-earmark-x .path1:before {
   content: "\eb49";
@@ -1802,6 +1867,12 @@
 }
 .icon-file-easel-fill:before {
   content: "\eb51";
+}
+.icon-file-excel:before {
+  content: "\ed8e";
+}
+.icon-file-excel-fill:before {
+  content: "\ed8f";
 }
 .icon-file-fill:before {
   content: "\eb52";
@@ -1872,6 +1943,12 @@
 .icon-file-post-fill:before {
   content: "\eb68";
 }
+.icon-file-ppt:before {
+  content: "\ed90";
+}
+.icon-file-ppt-fill:before {
+  content: "\ed91";
+}
 .icon-file-richtext:before {
   content: "\eb69";
 }
@@ -1901,6 +1978,12 @@
 }
 .icon-file-text-fill:before {
   content: "\eb74";
+}
+.icon-file-word:before {
+  content: "\ed92";
+}
+.icon-file-word-fill:before {
+  content: "\ed93";
 }
 .icon-file-x:before {
   content: "\eb75";
@@ -2261,6 +2344,12 @@
 }
 .icon-journal-arrow-up:before {
   content: "\ebea";
+}
+.icon-journal-bookmark:before {
+  content: "\ed94";
+}
+.icon-journal-bookmark-fill:before {
+  content: "\ed95";
 }
 .icon-journal-check:before {
   content: "\ebeb";

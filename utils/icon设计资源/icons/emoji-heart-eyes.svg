@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   inkscape:version="1.0 (4035a4fb49, 2020-05-01)"
+   sodipodi:docname="emoji-heart-eyes.svg"
+   id="svg6"
+   version="1.1"
+   fill="currentColor"
+   class="bi bi-emoji-heart-eyes"
+   viewBox="0 0 16 16"
+   height="1em"
+   width="1em">
+  <metadata
+     id="metadata12">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs10" />
+  <sodipodi:namedview
+     inkscape:current-layer="svg6"
+     inkscape:window-maximized="1"
+     inkscape:window-y="-9"
+     inkscape:window-x="-9"
+     inkscape:cy="8"
+     inkscape:cx="8"
+     inkscape:zoom="51.875"
+     showgrid="false"
+     id="namedview8"
+     inkscape:window-height="1001"
+     inkscape:window-width="1920"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0"
+     guidetolerance="10"
+     gridtolerance="10"
+     objecttolerance="10"
+     borderopacity="1"
+     bordercolor="#666666"
+     pagecolor="#ffffff" />
+  <path
+     d="M 8 0 A 8 8 0 0 0 8 16 A 8 8 0 0 0 8 0 z M 8 1 A 7 7 0 0 1 8 15 A 7 7 0 0 1 8 1 z M 5.6582031 4.0019531 C 5.2935 4.0244219 4.9466094 4.2104063 4.7558594 4.5664062 C 3.3578594 3.7024062 1.2110312 6.404 5.7070312 8 C 8.0080312 5.3345 6.7523125 3.9345469 5.6582031 4.0019531 z M 10.341797 4.0019531 C 9.2480625 3.9345469 7.9927187 5.3345 10.292969 8 C 14.788969 6.404 12.642141 3.7024063 11.244141 4.5664062 C 11.053641 4.2104063 10.706375 4.0244219 10.341797 4.0019531 z M 11.433594 10 A 0.5 0.5 0 0 0 11.314453 10.013672 L 11.310547 10.015625 L 11.292969 10.019531 L 11.226562 10.033203 A 26.58 26.58 0 0 1 10.117188 10.257812 C 9.4251875 10.381812 8.5948437 10.5 7.9648438 10.5 C 7.3348438 10.5 6.5055 10.381813 5.8125 10.257812 C 5.4705 10.196813 5.1700781 10.135844 4.9550781 10.089844 L 4.703125 10.033203 L 4.6367188 10.019531 L 4.6191406 10.013672 L 4.6152344 10.013672 A 0.5 0.5 0 0 0 4.0664062 10.75 A 4.498 4.498 0 0 0 7.9648438 13 A 4.498 4.498 0 0 0 11.863281 10.75 A 0.5 0.5 0 0 0 11.433594 10 z "
+     style="fill-rule:evenodd"
+     id="path2" />
+</svg>

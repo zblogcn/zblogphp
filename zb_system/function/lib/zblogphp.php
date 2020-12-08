@@ -1699,6 +1699,7 @@ class ZBlogPHP
                 $m = new Module();
                 $m->ID = 0 - rand(0, 9999);
                 $m->FileName = $sortname;
+                $m->Name = $sortname;
                 $m->HtmlID = $sortname;
                 $m->Content = file_get_contents($fullname);
                 if (stripos($m->Content, '<li') !== false && stripos($m->Content, '</li>') !== false) {
@@ -1707,7 +1708,6 @@ class ZBlogPHP
                     $m->Type = 'div';
                 }
                 $m->Source = 'themeinclude_' . $this->theme;
-                $m->IsIncludeFile = true;
                 $this->AddCacheObject($m);
             }
         }
@@ -2567,17 +2567,21 @@ class ZBlogPHP
             $cacheObject = &$this->cacheobject[$className];
         }
 
-        //如果是双重属性和值查询
+        //如果是多重属性和值查询
         if (is_array($attr) && is_array($val)) {
             $val1 = trim($val[0]);
             $val2 = trim($val[1]);
+            $val3 = isset($val[2]) ? $val[2] : null;
             $attr1 = $attr[0];
             $attr2 = $attr[1];
+            $attr3 = isset($attr[2]) ? $attr[2] : null;
             foreach ($cacheObject as $key => &$value) {
                 if (is_null($value)) {
                     continue;
                 }
-                if ($value->$attr1 == $val1 && $value->$attr2 == $val2) {
+                if ($attr3 !== null && $value->$attr1 == $val1 && $value->$attr2 == $val2 && $value->$attr3 == $val3) {
+                    return $value;
+                } elseif ($value->$attr1 == $val1 && $value->$attr2 == $val2) {
                     return $value;
                 }
             }
