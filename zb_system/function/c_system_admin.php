@@ -17,7 +17,7 @@ $zbp->ismanage = true;
  */
 function Include_Admin_Addpagesubmenu()
 {
-    echo MakeSubMenu($GLOBALS['lang']['msg']['new_page'], '../cmd.php?act=PageEdt');
+    echo MakeSubMenu($GLOBALS['lang']['msg']['new_page'], '../cmd.php?act=PageEdt', 'm-left', null, null, null, 'icon-file-plus-fill');
 }
 
 /**
@@ -25,7 +25,7 @@ function Include_Admin_Addpagesubmenu()
  */
 function Include_Admin_Addtagsubmenu()
 {
-    echo MakeSubMenu($GLOBALS['lang']['msg']['new_tag'], '../cmd.php?act=TagEdt');
+    echo MakeSubMenu($GLOBALS['lang']['msg']['new_tag'], '../cmd.php?act=TagEdt', 'm-left', null, null, null, 'icon-tag-fill');
 }
 
 /**
@@ -33,7 +33,7 @@ function Include_Admin_Addtagsubmenu()
  */
 function Include_Admin_Addcatesubmenu()
 {
-    echo MakeSubMenu($GLOBALS['lang']['msg']['new_category'], '../cmd.php?act=CategoryEdt');
+    echo MakeSubMenu($GLOBALS['lang']['msg']['new_category'], '../cmd.php?act=CategoryEdt', 'm-left', null, null, null, 'icon-folder-plus');
 }
 
 /**
@@ -43,7 +43,7 @@ function Include_Admin_Addmemsubmenu()
 {
     global $zbp;
     if ($zbp->CheckRights('MemberNew')) {
-        echo MakeSubMenu($GLOBALS['lang']['msg']['new_member'], '../cmd.php?act=MemberNew');
+        echo MakeSubMenu($GLOBALS['lang']['msg']['new_member'], '../cmd.php?act=MemberNew', 'm-left', null, null, null, 'icon-person-plus-fill');
     }
     echo MakeSubMenu($GLOBALS['lang']['msg']['view_rights'], '../cmd.php?act=misc&amp;type=vrs');
 }
@@ -53,7 +53,7 @@ function Include_Admin_Addmemsubmenu()
  */
 function Include_Admin_Addmodsubmenu()
 {
-    echo MakeSubMenu($GLOBALS['lang']['msg']['new_module'], '../cmd.php?act=ModuleEdt');
+    echo MakeSubMenu($GLOBALS['lang']['msg']['new_module'], '../cmd.php?act=ModuleEdt', 'm-left', null, null, null, 'icon-subtract');
     echo MakeSubMenu($GLOBALS['lang']['msg']['module_navbar'], '../cmd.php?act=ModuleEdt&amp;filename=navbar');
     echo MakeSubMenu($GLOBALS['lang']['msg']['module_link'], '../cmd.php?act=ModuleEdt&amp;filename=link');
     echo MakeSubMenu($GLOBALS['lang']['msg']['module_favorite'], '../cmd.php?act=ModuleEdt&amp;filename=favorite');
@@ -73,7 +73,7 @@ function Include_Admin_Addcmtsubmenu()
         } else {
             $n = '';
         }
-        echo MakeSubMenu($GLOBALS['lang']['msg']['check_comment'] . $n, '../cmd.php?act=CommentMng&amp;ischecking=1', 'm-left ' . (GetVars('ischecking') ? 'm-now' : ''));
+        echo MakeSubMenu($GLOBALS['lang']['msg']['check_comment'] . $n, '../cmd.php?act=CommentMng&amp;ischecking=1', 'm-left ' . (GetVars('ischecking') ? 'm-now' : ''), null, null, null, 'icon-shield-shaded');
     }
 }
 
@@ -192,7 +192,7 @@ function ResponseAdmin_TopMenu()
  *
  * @return null|string
  */
-function MakeSubMenu($strName, $strUrl, $strClass = 'm-left', $strTarget = '', $strId = '', $strTitle = '')
+function MakeSubMenu($strName, $strUrl, $strClass = 'm-left', $strTarget = '', $strId = '', $strTitle = '', $strIconClass = '')
 {
     $s = '<a href="' . $strUrl . '" ';
     if ($strTarget) {
@@ -205,7 +205,8 @@ function MakeSubMenu($strName, $strUrl, $strClass = 'm-left', $strTarget = '', $
         $s .= 'title="' . $strTitle . '" ' . 'alt="' . $strTitle . '" ';
     }
     $s .= '>';
-    $s .= '<span class="' . $strClass . '">' . $strName . '</span></a>';
+    $strIconElem = $strIconClass !== "" ? "<i class=\"" . $strIconClass . "\" style=\"vertical-align: unset;\"></i> " : "";
+    $s .= '<span class="' . $strClass . '">' . $strIconElem . $strName . '</span></a>';
 
     return $s;
 }

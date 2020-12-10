@@ -162,7 +162,7 @@ select { padding: 0.15em 0.25em 0.20em 0.25em; border: 1px solid #ccc; backgroun
 textarea { border: 1px solid #ccc; background-position: bottom; background: #fff; font-size: 1em; }
 input.button,
 input[type="submit"],
-input[type="button"] { color: #ffffff; font-size: 1em; height: 29px; padding: 2px 18px 3px 18px; margin: 0 0.5em 0 0; background: #3a6ea5; border: 1px solid #046190; cursor: pointer; }
+input[type="button"] { color: #ffffff; font-size: 1.05em; height: 29px; padding: 2px 18px 3px 18px; margin: 0 0.5em 0 0; background: #3a6ea5; border: 1px solid #046190; cursor: pointer; }
 input.button:hover { background: #3399cc; }
 input.button2 { width: auto; }
 input[disabled],
@@ -225,7 +225,7 @@ form.search .button, form.search .reset { height:33px; }
 #divIntro { padding-bottom: 20px; }
 .editmod { margin: 1em 0; }
 .editmod3 { margin: 0; width: 99%; }
-.editinputname { padding: 0 2px 0 3px; line-height: 1em; font-size: 1.1em; font-weight: bold; display: inline-block; }
+.editinputname { padding: 0 2px 0 3px; line-height: 1em; font-size: 1.05em; font-weight: bold; display: inline-block; }
 div.post_edit input#edtTitle { margin: 5px 0 0 0; padding: 0 10px; line-height: 1.8em; height: 33px; font-size: 1.2em; width: 99%; color: #333; }
 div.post_edit input#edtAlias,
 input#edtTag { margin-top: 5px; padding: 0 10px; width: 50%; height:33px; }

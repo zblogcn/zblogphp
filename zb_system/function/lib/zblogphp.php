@@ -327,6 +327,8 @@ class ZBlogPHP
 
     public $activeapps;
 
+    public $cookie_tooken_httponly = true;
+
     /**
      * @var int 管理页面显示条数
      */

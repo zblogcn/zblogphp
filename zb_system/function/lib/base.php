@@ -465,15 +465,26 @@ class Base
     }
 
     /**
+     *  __clone()
+     *
+     * @return object
+     */
+    public function __clone()
+    {
+        $data = $this->GetData();
+        $this->LoadInfoByDataArray($data);
+    }
+
+    /**
      * Clone对象.
      *
      * @return object
      */
-    public function Clone()
+    public function Cloned()
     {
-    	$new = new $this->classname;
-    	$data = $this->GetData();
-    	$new->LoadInfoByDataArray($data);
-    	return $new;
+        $new = new $this->classname;
+        $data = $this->GetData();
+        $new->LoadInfoByDataArray($data);
+        return $new;
     }
 }

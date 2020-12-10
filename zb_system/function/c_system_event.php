@@ -62,7 +62,7 @@ function SetLoginCookie($user, $cookieTime)
     $token = $zbp->GenerateUserToken($user, $cookieTime);
     $secure = HTTP_SCHEME == 'https://';
     setcookie('username_' . crc32($zbp->guid), $user->Name, $cookieTime, $zbp->cookiespath, '', $secure, false);
-    setcookie('token_' . crc32($zbp->guid), $token, $cookieTime, $zbp->cookiespath, '', $secure, $zbp->option['ZC_COOKIE_TOKEN_HTTPONLY']);
+    setcookie('token_' . crc32($zbp->guid), $token, $cookieTime, $zbp->cookiespath, '', $secure, $zbp->cookie_tooken_httponly);
     setcookie('addinfo' . str_replace('/', '', $zbp->cookiespath), json_encode($addinfo), $cookieTime, $zbp->cookiespath, '', $secure, false);
 
     return true;
