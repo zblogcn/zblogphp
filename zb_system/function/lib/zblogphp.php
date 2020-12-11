@@ -1570,18 +1570,38 @@ class ZBlogPHP
             if (isset(${$lvdeepnext}[$id])) {
                 foreach (${$lvdeepnext}[$id] as $idnow) {
                     $subarray[] = $idnow;
-                    $this->categoriesbyorder_type[$type][$id]->SubCategories[] = &$this->categories_all[$idnow];
+
+                    $b = false;
+                    foreach ($this->categoriesbyorder_type[$type][$id]->SubCategories as $key2 => $value2) {
+                        if ($value2->ID == $idnow) {
+                            $b = true;
+                            break;
+                        }
+                    }
+                    if ($b == false) {
+                        $this->categoriesbyorder_type[$type][$id]->SubCategories[] = &$this->categories_all[$idnow];
+                    }
                     //$this->categoriesbyorder[$id]->ChildrenCategories[] = &$this->categories[$idnow];
                     $array = $this->LoadCategories_Recursion($deep, $idnow, $lv, $type);
                     foreach ($array as $key => $value) {
                         $subarray[] = $value;
                     }
+
                 }
             }
         }
         $subarray = array_unique($subarray);
         foreach ($subarray as $key => $value) {
-            $this->categoriesbyorder_type[$type][$id]->ChildrenCategories[] = &$this->categories_all[$value];
+            $b = false;
+            foreach ($this->categoriesbyorder_type[$type][$id]->ChildrenCategories as $key2 => $value2) {
+                if ($value2->ID == $value) {
+                    $b = true;
+                    break;
+                }
+            }
+            if ($b == false) {
+                $this->categoriesbyorder_type[$type][$id]->ChildrenCategories[] = &$this->categories_all[$value];
+            }
         }
         return $subarray;
     }

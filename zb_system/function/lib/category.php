@@ -38,6 +38,7 @@ class Category extends Base
     public $SubCategorys = null; // 拼写错误，保持兼容
 
     public $ChildrenCategories = array(); //子孙分类
+    //private $priChildrenCategories = null; //私有的子孙分类
 
     /**
      * 构造函数.
@@ -173,6 +174,12 @@ class Category extends Base
             }
             return $i;
         }
+        /*if ($name == 'ChildrenCategories') {
+            if ($this->priChildrenCategories === null) {
+                $this->priChildrenCategories = $this->GetSubCategories($this);
+            }
+            return $this->priChildrenCategories;
+        }*/
         foreach ($GLOBALS['hooks']['Filter_Plugin_Category_Get'] as $fpname => &$fpsignal) {
             $fpreturn = $fpname($this, $name);
             if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
@@ -282,4 +289,22 @@ class Category extends Base
         }
     }
 
+/*   *
+     * 得到子孙分类.
+     *
+     * @param int 分类ID
+     *
+     * @return obj Category
+     
+    private function GetSubCategories($obj)
+    {
+        $a = array();
+        if (count($this->SubCategories) > 0) {
+            foreach ($this->SubCategories as $key => $value) {
+                $a += $value->GetSubCategories($value);
+            }
+        }
+        return $a;
+    }
+*/
 }
