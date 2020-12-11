@@ -136,24 +136,19 @@ class ZBlogPHP
     public $categories_all = array();
 
     /**
-     * @var Category[] 分类数组ALL（已排序）
-     */
-    public $categoriesbyorder_all = array();
-
-    /**
-     * @var Category[] 分类数组（已排序） ($categorysbyorder已废弃)
+     * @var Category[] 分类数组（已排序） ($categorysbyorder已废弃)  categories引用
      */
     public $categorysbyorder = array();
 
     public $categoriesbyorder = null;
 
     /**
-     * @var Category[] 按类型分类的2维数组
+     * @var Category[] 按类型分类的2维数组 
      */
     public $categories_type = array();
 
     /**
-     * @var Category[] 按类型分类2维数组（已排序）
+     * @var Category[] 按类型分类2维数组（已排序）categories_type引用
      */
     public $categoriesbyorder_type = array();
 
@@ -472,17 +467,15 @@ class ZBlogPHP
         $this->displaycount = &$this->option['ZC_DISPLAY_COUNT'];
         $this->commentdisplaycount = &$this->option['ZC_COMMENTS_DISPLAY_COUNT'];
 
-        $this->categories = &$this->categories_type[0];
+        $this->categoriesbyorder_type[0] = array();
         $this->categoriesbyorder = &$this->categoriesbyorder_type[0];
-
+        $this->categories = &$this->categoriesbyorder;
         $this->categorys = &$this->categories;
         $this->categorysbyorder = &$this->categoriesbyorder;
 
         $this->tags = &$this->tags_type[0];
         $this->tagsbyname = &$this->tagsbyname_type[0];
 
-        $this->categories_type[0] = array();
-        $this->categoriesbyorder_type[0] = array();
         $this->tags_type[0] = array();
         $this->tagsbyname_type[0] = array();
 
@@ -1292,8 +1285,8 @@ class ZBlogPHP
     public function Verify()
     {
         // 在普通 Web 页面中
-        $username = trim(GetVars('username_' . crc32($this->guid), 'COOKIE'));
-        $token = trim(GetVars('token_' . crc32($this->guid), 'COOKIE'));
+        $username = trim(GetVars('username_' . hash("crc32b", $this->guid), 'COOKIE'));
+        $token = trim(GetVars('token_' . hash("crc32b", $this->guid), 'COOKIE'));
         $user = $this->VerifyUserToken($token, $username);
 
         if (is_object($user)) {
@@ -1613,12 +1606,13 @@ class ZBlogPHP
      */
     public function LoadCategories()
     {
-        $this->categories = array();
-        $this->categoriesbyorder = array();
         $this->categories_all = array();
-        $this->categoriesbyorder_all = array();
-        $this->categories_type = array();
+
+        $this->categoriesbyorder = array();
+        $this->categories = &$this->categoriesbyorder;
+
         $this->categoriesbyorder_type = array();
+        $this->categories_type = array();
 
         $lv = array();
         for ($i = 0; $i < $this->category_recursion_level; $i++) {
@@ -1656,14 +1650,9 @@ class ZBlogPHP
             }
         }
 
-        $this->categories = &$this->categories_type[0];
+        $this->categories_type = &$this->categoriesbyorder_type;
         $this->categoriesbyorder = &$this->categoriesbyorder_type[0];
-
-        foreach ($this->categoriesbyorder_type as $key => $value) {
-            if (is_array($value)) {
-                $this->categoriesbyorder_all += $value;
-            }
-        }
+        $this->categories = &$this->categoriesbyorder;
 
         return true;
     }
@@ -1710,7 +1699,6 @@ class ZBlogPHP
             $files = GetFilesInDir($dir, 'php');
             foreach ($files as $sortname => $fullname) {
                 $m = new Module();
-                $m->ID = 0 - rand(0, 9999);
                 $m->FileName = $sortname;
                 $m->Name = $sortname;
                 $m->HtmlID = $sortname;
@@ -1721,6 +1709,7 @@ class ZBlogPHP
                     $m->Type = 'div';
                 }
                 $m->Source = 'themeinclude_' . $this->theme;
+                $m->ID = 0 - (int)crc32($m->Source . $m->FileName);
                 $this->AddCacheObject($m);
             }
         }
@@ -2530,7 +2519,7 @@ class ZBlogPHP
      */
     private function GetSomeThingById(&$object, $className, $id)
     {
-        if ($id == 0) {
+        if (empty($id)) {
             return;
         }
 
@@ -3690,35 +3679,28 @@ class ZBlogPHP
         if (!isset($cacheobject[get_class($object)])) {
             $cacheobject[get_class($object)] = array();
         }
-        if ($object->ID == 0) {
+        if (empty($object->ID)) {
             return;
         }
 
+        $cacheobject[get_class($object)][$object->ID] = $object;
+
         switch (get_class($object)) {
             case 'Module':
-                $cacheobject[get_class($object)][$object->ID] = $object;
                 $this->modulesbyfilename[$object->FileName] = &$cacheobject[get_class($object)][$object->ID];
                 break;
             case 'Tag':
-                $cacheobject[get_class($object)][$object->ID] = $object;
                 //isset($this->tags_type[$object->Type]) || $this->tags_type[$object->Type] = array();
                 $this->tags_type[$object->Type][$object->ID] = &$cacheobject[get_class($object)][$object->ID];
                 //isset($this->tagsbyname_type[$object->Type]) || $this->tagsbyname_type[$object->Type] = array();
                 $this->tagsbyname_type[$object->Type][$object->Name] = &$cacheobject[get_class($object)][$object->ID];
                 break;
             case 'Category':
-                $cacheobject[get_class($object)][$object->ID] = $object;
                 //isset($this->categories_type[$object->Type]) || $this->categories_type[$object->Type] = array();
                 $this->categories_type[$object->Type][$object->ID] = &$cacheobject[get_class($object)][$object->ID];
-                //isset($this->categoriesbyorder_type[$object->Type]) || $this->categoriesbyorder_type[$object->Type] = array();
-                //$this->categoriesbyorder_type[$object->Type][$object->ID] = &$cacheobject[get_class($object)][$object->ID];
                 break;
             case 'Member':
-                $cacheobject[get_class($object)][$object->ID] = $object;
                 $this->membersbyname[$object->Name] = &$cacheobject[get_class($object)][$object->ID];
-                break;
-            default:
-                $cacheobject[get_class($object)][$object->ID] = $object;
                 break;
         }
         return true;
@@ -3736,38 +3718,27 @@ class ZBlogPHP
         if (!isset($cacheobject[get_class($object)])) {
             $cacheobject[get_class($object)] = array();
         }
-        if ($object->ID == 0) {
+        if (empty($object->ID)) {
             return;
         }
 
         switch (get_class($object)) {
             case 'Module':
                 unset($this->modulesbyfilename[$object->FileName]);
-                foreach ($this->modules as $key => $value) {
-                    if ($value->ID == $object->ID) {
-                        unset($this->modules[$key]);
-                        break;
-                    }
-                }
                 break;
             case 'Member':
                 unset($this->membersbyname[$object->Name]);
-                unset($cacheobject[get_class($object)][$object->ID]);
                 break;
             case 'Tag':
                 unset($this->tags_type[$object->Type][$object->ID]);
                 unset($this->tagsbyname_type[$object->Type][$object->Name]);
-                unset($cacheobject[get_class($object)][$object->ID]);
                 break;
             case 'Category':
                 unset($this->categories_type[$object->Type][$object->ID]);
-                unset($this->categoriesbyorder_type[$object->Type][$object->ID]);
-                unset($this->categoriesbyorder_all[$object->ID]);
-                unset($cacheobject[get_class($object)][$object->ID]);
                 break;
-            default:
-                unset($cacheobject[get_class($object)][$object->ID]);
         }
+        unset($cacheobject[get_class($object)][$object->ID]);
+
         return true;
     }
 

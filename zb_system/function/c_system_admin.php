@@ -586,13 +586,9 @@ function CreateModuleDiv($m, $button = true)
     echo '<div class="widget-title"><i class="icon-layout-wtf module-icon"></i>' . (($m->SourceType != 'themeinclude') ? $m->Name : $m->FileName) . '';
 
     if ($button) {
-        if ($m->SourceType != 'themeinclude') {
-            echo '<span class="widget-action"><a href="../cmd.php?act=ModuleEdt&amp;id=' . $m->ID . '"><i class="icon-pencil-square"></i></a>';
-        } else {
-            echo '<span class="widget-action"><a href="../cmd.php?act=ModuleEdt&amp;source=themeinclude_' . $zbp->theme . '&amp;filename=' . $m->FileName . '"><i class="icon-pencil-square"></i></a>';
-            echo '&nbsp;<a onclick="return window.confirm(\'' . str_replace(array('"','\''), '', $zbp->lang['msg']['confirm_operating']) . '\');" href="' . BuildSafeCmdURL('act=ModuleDel&amp;source=theme&amp;filename=' . $m->FileName) . '"><i class="icon-trash"></i></a>';
-        }
-        if ($m->SourceType == 'user') {
+        echo '<span class="widget-action"><a href="../cmd.php?act=ModuleEdt&amp;id=' . $m->ID . '"><i class="icon-pencil-square"></i></a>';
+
+        if ($m->SourceType == 'user' || $m->SourceType == 'themeinclude') {
             echo '&nbsp;<a onclick="return window.confirm(\'' . str_replace(array('"','\''), '', $zbp->lang['msg']['confirm_operating']) . '\');" href="' . BuildSafeCmdURL('act=ModuleDel&amp;id=' . $m->ID) . '"><i class="icon-trash"></i></a>';
         }
         echo '</span>';

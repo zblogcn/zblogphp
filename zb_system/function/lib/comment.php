@@ -188,9 +188,6 @@ class Comment extends Base
     public function Del()
     {
         global $zbp;
-        if ($this->ID > 0) {
-            unset($zbp->comments[$this->ID]);
-        }
 
         foreach ($GLOBALS['hooks']['Filter_Plugin_Comment_Del'] as $fpname => &$fpsignal) {
             $fpreturn = $fpname($this);
@@ -200,6 +197,8 @@ class Comment extends Base
                 return $fpreturn;
             }
         }
+
+        $zbp->RemoveCacheObject($this);
 
         return parent::Del();
     }

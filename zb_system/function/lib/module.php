@@ -132,7 +132,7 @@ class Module extends Base
             @file_put_contents($f, $c);
 
             if ($this->ID == 0) {
-                $this->ID = 0 - rand(0, 9999);
+                $this->ID = 0 - (int)crc32($this->Source . $this->FileName);
             }
             return true;
         }
@@ -155,21 +155,6 @@ class Module extends Base
     public function Del()
     {
         global $zbp;
-        foreach ($zbp->modules as $key => $m) {
-            if ($this->ID > 0 && $m->ID == $this->ID) {
-                unset($zbp->modules[$key]);
-            }
-            if ($this->SourceType == 'themeinclude') {
-                if ($this->FileName != '' && $m->FileName == $this->FileName) {
-                    unset($zbp->modules[$key]);
-                }
-            }
-        }
-        foreach ($zbp->modulesbyfilename as $key => $m) {
-            if ($this->FileName != '' && $m->FileName == $this->FileName) {
-                unset($zbp->modulesbyfilename[$this->FileName]);
-            }
-        }
 
         foreach ($GLOBALS['hooks']['Filter_Plugin_Module_Del'] as $fpname => &$fpsignal) {
             $fpsignal = PLUGIN_EXITSIGNAL_NONE;
@@ -178,6 +163,9 @@ class Module extends Base
                 return $fpreturn;
             }
         }
+
+		$zbp->RemoveCacheObject($this);
+
         if ($this->SourceType == 'themeinclude') {
             if (empty($this->FileName)) {
                 return true;

@@ -227,4 +227,25 @@ class Upload extends Base
         return parent::__get($name);
     }
 
+    /**
+     * @return bool
+     */
+    public function Del()
+    {
+        global $zbp;
+
+        foreach ($GLOBALS['hooks']['Filter_Plugin_Upload_Del'] as $fpname => &$fpsignal) {
+            $fpreturn = $fpname($this);
+            if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
+                $fpsignal = PLUGIN_EXITSIGNAL_NONE;
+
+                return $fpreturn;
+            }
+        }
+
+        $zbp->RemoveCacheObject($this);
+
+        return parent::Del();
+    }
+
 }

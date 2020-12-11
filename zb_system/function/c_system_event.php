@@ -61,8 +61,8 @@ function SetLoginCookie($user, $cookieTime)
     $addinfo['useralias'] = $user->StaticName;
     $token = $zbp->GenerateUserToken($user, $cookieTime);
     $secure = HTTP_SCHEME == 'https://';
-    setcookie('username_' . crc32($zbp->guid), $user->Name, $cookieTime, $zbp->cookiespath, '', $secure, false);
-    setcookie('token_' . crc32($zbp->guid), $token, $cookieTime, $zbp->cookiespath, '', $secure, $zbp->cookie_tooken_httponly);
+    setcookie('username_' . hash("crc32b", $zbp->guid), $user->Name, $cookieTime, $zbp->cookiespath, '', $secure, false);
+    setcookie('token_' . hash("crc32b", $zbp->guid), $token, $cookieTime, $zbp->cookiespath, '', $secure, $zbp->cookie_tooken_httponly);
     setcookie('addinfo' . str_replace('/', '', $zbp->cookiespath), json_encode($addinfo), $cookieTime, $zbp->cookiespath, '', $secure, false);
 
     return true;
@@ -2839,7 +2839,7 @@ function PostModule()
     }
 
     if (!GetVars('FileName', 'POST')) {
-        $_POST['FileName'] = 'mod' . rand(1000, 2000);
+        $_POST['FileName'] = 'mod' . rand(1000, 9999);
     } else {
         $_POST['FileName'] = strtolower($_POST['FileName']);
     }

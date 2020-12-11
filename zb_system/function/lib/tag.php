@@ -137,12 +137,6 @@ class Tag extends Base
     public function Del()
     {
         global $zbp;
-        if ($this->ID > 0) {
-            unset($zbp->tags[$this->ID]);
-        }
-        if ($this->Name != '') {
-            unset($zbp->tagsbyname[$this->Name]);
-        }
 
         foreach ($GLOBALS['hooks']['Filter_Plugin_Tag_Del'] as $fpname => &$fpsignal) {
             $fpreturn = $fpname($this);
@@ -152,6 +146,8 @@ class Tag extends Base
                 return $fpreturn;
             }
         }
+
+        $zbp->RemoveCacheObject($this);
 
         return parent::Del();
     }

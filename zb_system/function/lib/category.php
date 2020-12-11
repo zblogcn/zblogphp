@@ -228,10 +228,6 @@ class Category extends Base
     public function Del()
     {
         global $zbp;
-        if ($this->ID > 0) {
-            unset($zbp->categories_all[$this->ID]);
-            unset($zbp->categoriesbyorder_all[$this->ID]);
-        }
 
         foreach ($GLOBALS['hooks']['Filter_Plugin_Category_Del'] as $fpname => &$fpsignal) {
             $fpreturn = $fpname($this);
@@ -241,6 +237,8 @@ class Category extends Base
                 return $fpreturn;
             }
         }
+
+        $zbp->RemoveCacheObject($this);
 
         return parent::Del();
     }

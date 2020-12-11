@@ -374,9 +374,6 @@ class BasePost extends Base
     public function Del()
     {
         global $zbp;
-        if ($this->ID > 0) {
-            unset($zbp->posts[$this->ID]);
-        }
 
         foreach ($GLOBALS['hooks']['Filter_Plugin_Post_Del'] as $fpname => &$fpsignal) {
             $fpreturn = $fpname($this);
@@ -386,6 +383,8 @@ class BasePost extends Base
                 return $fpreturn;
             }
         }
+
+        $zbp->RemoveCacheObject($this);
 
         return parent::Del();
     }

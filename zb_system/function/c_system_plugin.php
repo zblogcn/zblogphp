@@ -2102,6 +2102,17 @@ DefinePluginFilter('Filter_Plugin_Upload_SaveBase64File');
 /*
 '**************************************************<
 '类型:Filter
+'名称:Filter_Plugin_Upload_Del
+'参数:$this
+'说明:Upload类的Del方法接口
+'调用:
+'**************************************************>
+ */
+DefinePluginFilter('Filter_Plugin_Upload_Del');
+
+/*
+'**************************************************<
+'类型:Filter
 '名称:Filter_Plugin_Upload_DelFile
 '参数:$this
 '说明:Upload类的DelFile方法接口
