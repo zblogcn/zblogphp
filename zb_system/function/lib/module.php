@@ -131,6 +131,9 @@ class Module extends Base
             }
             @file_put_contents($f, $c);
 
+            if ($this->ID == 0) {
+                $this->ID = 0 - rand(0, 9999);
+            }
             return true;
         }
 

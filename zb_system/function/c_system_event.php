@@ -1689,6 +1689,7 @@ function PostArticle()
     FilterPost($article);
 
     $article->Save();
+    $zbp->AddCacheObject($article);
 
     //更新统计信息
     $pre_arrayTag = $zbp->LoadTagsByIDString($pre_tag);
@@ -1825,9 +1826,7 @@ function PostArticle_CheckTagAndConvertIDtoString($tagnamestring, $post_type = 0
 {
     global $zbp;
     $s = '';
-    $tagnamestring = str_replace(';', ',', $tagnamestring);
-    $tagnamestring = str_replace('，', ',', $tagnamestring);
-    $tagnamestring = str_replace('、', ',', $tagnamestring);
+    $tagnamestring = str_replace(array(';', '，', '、'), ',', $tagnamestring);
     $tagnamestring = strip_tags($tagnamestring);
     $tagnamestring = trim($tagnamestring);
     if ($tagnamestring == '') {
@@ -1854,6 +1853,7 @@ function PostArticle_CheckTagAndConvertIDtoString($tagnamestring, $post_type = 0
     foreach ($t as $key => $value) {
         $c[] = $key;
     }
+
     $d = array_diff($b, $c);
     if ($zbp->CheckRights('TagNew')) {
         foreach ($d as $key) {
@@ -2144,6 +2144,8 @@ function PostComment()
     }
 
     $cmt->Save();
+    $zbp->AddCacheObject($cmt);
+
     if ($cmt->IsChecking) {
         CountCommentNums(0, +1);
         $zbp->ShowError(53, __FILE__, __LINE__);
@@ -2159,8 +2161,6 @@ function PostComment()
     }
 
     $zbp->AddBuildModule('comments');
-
-    $zbp->comments[$cmt->ID] = $cmt;
 
     if ($isAjax) {
         ViewComment($cmt->ID);
@@ -2552,7 +2552,7 @@ function PostTag()
     if (GetVars('ID', 'POST') == 0) {
         $i = 0;
     } else {
-        $tag->GetTagByID(GetVars('ID', 'POST'));
+        $tag = $zbp->GetTagByID(GetVars('ID', 'POST'));
     }
 
     foreach ($zbp->datainfo['Tag'] as $key => $value) {
@@ -2577,6 +2577,7 @@ function PostTag()
     }
 
     $tag->Save();
+    $zbp->AddCacheObject($tag);
 
     if (GetVars('AddNavbar', 'POST') == 0) {
         $zbp->DelItemToNavbar('tag', $tag->ID);
@@ -2726,6 +2727,7 @@ function PostMember()
     }
 
     $mem->Save();
+    $zbp->AddCacheObject($mem);
 
     foreach ($GLOBALS['hooks']['Filter_Plugin_PostMember_Succeed'] as $fpname => &$fpsignal) {
         $fpname($mem);
@@ -2892,6 +2894,7 @@ function PostModule()
     }
 
     $mod->Save();
+    $zbp->AddCacheObject($mod);
 
     if ((int) GetVars('ID', 'POST') > 0) {
         $zbp->AddBuildModule($mod->FileName);
@@ -2996,6 +2999,7 @@ function PostUpload()
 
                 $upload->SaveFile($_FILES[$key]['tmp_name']);
                 $upload->Save();
+                $zbp->AddCacheObject($upload);
             }
         }
     }

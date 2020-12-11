@@ -51,7 +51,7 @@ if (!$zbp->CheckRights('ArticlePub')) {
 }
 
 if (isset($_GET['id'])) {
-    $article->LoadInfoByID((int) GetVars('id', 'GET'));
+    $article = $zbp->GetPostByID((int) GetVars('id', 'GET'));
 }
 
 if ($ispage) {

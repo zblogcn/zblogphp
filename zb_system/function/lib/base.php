@@ -43,6 +43,12 @@ class Base
     protected $classname = '';
 
     /**
+     * @var string ID名
+     */
+    protected $idname = '';
+
+
+    /**
      * @param string $table     数据表
      * @param array  $datainfo  数据表结构信息
      * @param string $classname
@@ -59,6 +65,9 @@ class Base
 
         $this->table = &$table;
         $this->datainfo = &$datainfo;
+        reset($this->datainfo);
+        $this->idname = key($this->datainfo);
+
         if (function_exists('get_called_class')) {
             $this->classname = get_called_class();
         } elseif (is_string($classname)) {
@@ -422,9 +431,8 @@ class Base
         }
         array_shift($keyvalue);
 
-        $data_field = reset($this->datainfo);
-        $id_name = key($this->datainfo);
-        $id_field = $data_field[0];
+        $id_name = $this->idname;
+        $id_field = $this->datainfo[$id_name][0];
 
         if ($this->$id_name == 0) {
             $sql = $this->db->sql->Insert($this->table, $keyvalue);
@@ -445,9 +453,8 @@ class Base
      */
     public function Del()
     {
-        $id_field = reset($this->datainfo);
-        $id_name = key($this->datainfo);
-        $id_field = $id_field[0];
+        $id_name = $this->idname;
+        $id_field = $this->datainfo[$id_name][0];
         $sql = $this->db->sql->Delete($this->table, array(array('=', $id_field, $this->$id_name)));
         $this->db->Delete($sql);
 
@@ -486,5 +493,15 @@ class Base
         $data = $this->GetData();
         $new->LoadInfoByDataArray($data);
         return $new;
+    }
+
+    /**
+     * Get ID Name.
+     *
+     * @return object
+     */
+    public function GetIdName()
+    {
+        return $this->idname;
     }
 }

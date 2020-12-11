@@ -1513,9 +1513,6 @@ class ZBlogPHP
         $this->members = array();
         $this->membersbyname = array();
         $array = $this->GetMemberList(null, $where);
-        foreach ($array as $m) {
-            $this->AddCacheObject($m);
-        }
 
         return true;
     }
@@ -1549,9 +1546,6 @@ class ZBlogPHP
         }
 
         $array = $this->GetMemberList(null, array(array('IN', 'mem_ID', $mem_ids_need_load)));
-        foreach ($array as $m) {
-            $this->AddCacheObject($m);
-        }
 
         return true;
     }
@@ -1601,6 +1595,10 @@ class ZBlogPHP
     {
         $this->categories = array();
         $this->categoriesbyorder = array();
+        $this->categories_all = array();
+        $this->categoriesbyorder_all = array();
+        $this->categories_type = array();
+        $this->categoriesbyorder_type = array();
 
         $lv = array();
         for ($i = 0; $i < $this->category_recursion_level; $i++) {
@@ -1614,13 +1612,12 @@ class ZBlogPHP
         }
 
         foreach ($this->posttype as $key => $value) {
-            $this->categories_type[$key] = array();
-            $this->categoriesbyorder_type[$key] = array();
-        }
-        foreach ($array as $key => $value) {
-            //$this->categories_all[$value->ID] = $value;
-            //$this->categories_type[$value->Type][$value->ID] = $value;
-            $this->AddCacheObject($value);
+            if (!isset($this->categories_type[$key])) {
+                $this->categories_type[$key] = array();
+            }
+            if (!isset($this->categoriesbyorder_type[$key])) {
+                $this->categoriesbyorder_type[$key] = array();
+            }
         }
 
         foreach ($this->posttype as $key => $value) {
@@ -1668,9 +1665,6 @@ class ZBlogPHP
 
         $array = $this->GetTagList();
 
-        foreach ($array as $t) {
-            $this->AddCacheObject($t);
-        }
         isset($this->tags_type[0]) || $this->tags_type[0] = array();
         isset($this->tagsbyname_type[0]) || $this->tagsbyname_type[0] = array();
 
@@ -1690,9 +1684,6 @@ class ZBlogPHP
         $this->modules = array();
         $this->modulesbyfilename = array();
         $array = $this->GetModuleList();
-        foreach ($array as $m) {
-            $this->AddCacheObject($m);
-        }
 
         $dir = $this->usersdir . 'theme/' . $this->theme . '/include/';
         if (file_exists($dir)) {
@@ -2091,6 +2082,10 @@ class ZBlogPHP
         foreach ($array as $a) {
             $l = new Base($table, $datainfo);
             $l->LoadInfoByAssoc($a);
+            $id = $l->GetIdName();
+            if ($this->CheckCacheObject($type, $l->$id) == false) {
+                $this->AddCacheObject($l);
+            }
             $list[] = $l;
         }
 
@@ -2128,6 +2123,10 @@ class ZBlogPHP
         foreach ($array as $a) {
             $l = new Base($table, $datainfo);
             $l->LoadInfoByAssoc($a);
+            $id = $l->GetIdName();
+            if ($this->CheckCacheObject($type, $l->$id) == false) {
+                $this->AddCacheObject($l);
+            }
             $list[] = $l;
         }
 
@@ -2157,6 +2156,11 @@ class ZBlogPHP
             /** @var Base $l */
             $l = new $type();
             $l->LoadInfoByAssoc($a);
+            $id = $l->GetIdName();
+            if ($this->CheckCacheObject($type, $l->$id) == false) {
+                $this->AddCacheObject($l);
+            }
+            
             $list[] = $l;
         }
 
@@ -2219,6 +2223,10 @@ class ZBlogPHP
             /** @var Base $l */
             $l = new $type();
             $l->LoadInfoByAssoc($a);
+            $id = $l->GetIdName();
+            if ($this->CheckCacheObject($type, $l->$id) == false) {
+                $this->AddCacheObject($l);
+            }
             $list[] = $l;
         }
 
@@ -2244,9 +2252,6 @@ class ZBlogPHP
 
         /** @var Post[] $array */
         $array = $this->GetListType('Post', $sql);
-        foreach ($array as $a) {
-            $this->posts[$a->ID] = $a;
-        }
 
         return $array;
     }
@@ -2261,9 +2266,7 @@ class ZBlogPHP
     public function GetPostByArray($array)
     {
         $posts = $this->GetListTypeByArray('Post', $array);
-        foreach ($posts as $p) {
-            $this->posts[$p->ID] = $p;
-        }
+
         return $posts;
     }
 
@@ -2296,10 +2299,6 @@ class ZBlogPHP
 
         /** @var Post[] $array */
         $array = $this->GetListType('Post', $sql);
-
-        foreach ($array as $a) {
-            $this->posts[$a->ID] = $a;
-        }
 
         if ($readtags) {
             $tagstring = '';
@@ -2338,9 +2337,6 @@ class ZBlogPHP
 
         /** @var Post[] $array */
         $array = $this->GetListType('Post', $sql);
-        foreach ($array as $a) {
-            $this->posts[$a->ID] = $a;
-        }
 
         return $array;
     }
@@ -2364,9 +2360,6 @@ class ZBlogPHP
 
         /** @var Comment[] $array */
         $array = $this->GetListType('Comment', $sql);
-        foreach ($array as $comment) {
-            $this->comments[$comment->ID] = $comment;
-        }
 
         return $array;
     }
@@ -2523,11 +2516,9 @@ class ZBlogPHP
 
         //$modules非ID为key
         if ($className == "Module") {
-            if ($id > 0) {
-                foreach ($object as $key => $value) {
-                    if ($value->ID == $id) {
-                        return $value;
-                    }
+            foreach ($object as $key => $value) {
+                if ($value->ID == $id) {
+                    return $value;
                 }
             }
             $m = new Module();
@@ -2771,12 +2762,6 @@ class ZBlogPHP
         $am = $this->GetListType('Member', $sql);
         if (count($am) > 0) {
             $m = $am[0];
-            if (!isset($this->members[$m->ID])) {
-                $this->members[$m->ID] = $m;
-            }
-            if (!isset($this->membersbyname[$m->Name])) {
-                $this->membersbyname[$m->Name] = &$this->members[$m->ID];
-            }
 
             return $m;
         }
@@ -2819,12 +2804,6 @@ class ZBlogPHP
         $am = $this->GetListType('Member', $sql);
         if (count($am) > 0) {
             $m = $am[0];
-            if (!isset($this->members[$m->ID])) {
-                $this->members[$m->ID] = $m;
-            }
-            if (!isset($this->membersbyname[$m->Name])) {
-                $this->membersbyname[$m->Name] = &$this->members[$m->ID];
-            }
 
             return $m;
         }
@@ -2851,12 +2830,6 @@ class ZBlogPHP
         $am = $this->GetListType('Member', $sql);
         if (count($am) > 0) {
             $m = $am[0];
-            if (!isset($this->members[$m->ID])) {
-                $this->members[$m->ID] = $m;
-            }
-            if (!isset($this->membersbyname[$m->Name])) {
-                $this->membersbyname[$m->Name] = &$this->members[$m->ID];
-            }
 
             return $m;
         }
@@ -2952,8 +2925,6 @@ class ZBlogPHP
         if (count($array) == 0) {
             return new Tag();
         } else {
-            $this->AddCacheObject($array[0]);
-
             return $array[0];
         }
     }
@@ -2980,8 +2951,6 @@ class ZBlogPHP
         if (count($array) == 0) {
             return new Tag();
         } else {
-            $this->AddCacheObject($array[0]);
-
             return $array[0];
         }
     }
@@ -3004,8 +2973,6 @@ class ZBlogPHP
         if (count($array) == 0) {
             return new Tag();
         } else {
-            $this->AddCacheObject($array[0]);
-
             return $array[0];
         }
     }
@@ -3020,9 +2987,6 @@ class ZBlogPHP
     public function GetTagByID($id)
     {
         $ret = $this->GetSomeThing('tags_all', 'ID', $id, 'Tag');
-        if ($ret->ID > 0) {
-            $this->AddCacheObject($ret);
-        }
 
         return $ret;
     }
@@ -3042,8 +3006,7 @@ class ZBlogPHP
         }
 
         $s = str_replace('}{', '|', $s);
-        $s = str_replace('{', '', $s);
-        $s = str_replace('}', '', $s);
+        $s = str_replace(array('{', '}'), '', $s);
         $a = explode('|', $s);
         $b = array();
         foreach ($a as &$value) {
@@ -3077,7 +3040,7 @@ class ZBlogPHP
             //$array=$this->GetTagList('',array(array('array',$a)),'','','');
             $array = $this->GetTagList('', array(array('IN', 'tag_ID', $c)), '', '', '');
             foreach ($array as $v) {
-                $this->AddCacheObject($v);
+                $t[$v->ID] = &$this->tags[$v->ID];
             }
 
             return array_merge($b, $t);
@@ -3095,9 +3058,7 @@ class ZBlogPHP
     public function LoadTagsByNameString($s, $posttype = 0)
     {
         $s = trim($s);
-        $s = str_replace(';', ',', $s);
-        $s = str_replace('，', ',', $s);
-        $s = str_replace('、', ',', $s);
+        $s = str_replace(array(';', '，', '、'), ',', $s);
         $s = trim($s);
         $s = strip_tags($s);
         if ($s === '' || $s === ',') {
@@ -3128,12 +3089,9 @@ class ZBlogPHP
             $t = array();
             $array = $this->GetTagList('', array(array('=', 'tag_Type', $posttype), array('array', $a)), '', '', '');
             foreach ($array as $v) {
-                $this->AddCacheObject($v);
+                $t[$v->Name] = &$this->tags[$v->ID];
             }
-            foreach ($t as $key => $value) {
-                $b[$key] = $value;
-            }
-            return $b;
+            return $t;
         }
     }
 
@@ -3718,34 +3676,32 @@ class ZBlogPHP
 
         switch (get_class($object)) {
             case 'Module':
-                $cacheobject[get_class($object)][] = $object;
-                $this->modulesbyfilename[$object->FileName] = $object;
-                return true;
+                $cacheobject[get_class($object)][$object->ID] = $object;
+                $this->modulesbyfilename[$object->FileName] = &$cacheobject[get_class($object)][$object->ID];
                 break;
             case 'Tag':
                 $cacheobject[get_class($object)][$object->ID] = $object;
-                isset($this->tags_type[$object->Type]) || $this->tags_type[$object->Type] = array();
+                //isset($this->tags_type[$object->Type]) || $this->tags_type[$object->Type] = array();
                 $this->tags_type[$object->Type][$object->ID] = &$cacheobject[get_class($object)][$object->ID];
-                isset($this->tagsbyname_type[$object->Type]) || $this->tagsbyname_type[$object->Type] = array();
+                //isset($this->tagsbyname_type[$object->Type]) || $this->tagsbyname_type[$object->Type] = array();
                 $this->tagsbyname_type[$object->Type][$object->Name] = &$cacheobject[get_class($object)][$object->ID];
-                return true;
                 break;
             case 'Category':
                 $cacheobject[get_class($object)][$object->ID] = $object;
-                isset($this->categories_type[$object->Type]) || $this->categories_type[$object->Type] = array();
+                //isset($this->categories_type[$object->Type]) || $this->categories_type[$object->Type] = array();
                 $this->categories_type[$object->Type][$object->ID] = &$cacheobject[get_class($object)][$object->ID];
-                return true;
+                //isset($this->categoriesbyorder_type[$object->Type]) || $this->categoriesbyorder_type[$object->Type] = array();
+                //$this->categoriesbyorder_type[$object->Type][$object->ID] = &$cacheobject[get_class($object)][$object->ID];
                 break;
             case 'Member':
                 $cacheobject[get_class($object)][$object->ID] = $object;
                 $this->membersbyname[$object->Name] = &$cacheobject[get_class($object)][$object->ID];
-                return true;
                 break;
             default:
                 $cacheobject[get_class($object)][$object->ID] = $object;
                 break;
         }
-
+        return true;
     }
 
     /**
@@ -3763,28 +3719,49 @@ class ZBlogPHP
         if ($object->ID == 0) {
             return;
         }
-        if (get_class($object) == 'Module') {
-            unset($this->modulesbyfilename[$object->FileName]);
-            foreach ($this->modules as $key => $value) {
-                if ($value->FileName == $object->FileName) {
-                    unset($this->modules[$key]);
-                    break;
+
+        switch (get_class($object)) {
+            case 'Module':
+                unset($this->modulesbyfilename[$object->FileName]);
+                foreach ($this->modules as $key => $value) {
+                    if ($value->ID == $object->ID) {
+                        unset($this->modules[$key]);
+                        break;
+                    }
                 }
-            }
-            return true;
+                break;
+            case 'Member':
+                unset($this->membersbyname[$object->Name]);
+                unset($cacheobject[get_class($object)][$object->ID]);
+                break;
+            case 'Tag':
+                unset($this->tags_type[$object->Type][$object->ID]);
+                unset($this->tagsbyname_type[$object->Type][$object->Name]);
+                unset($cacheobject[get_class($object)][$object->ID]);
+                break;
+            case 'Category':
+                unset($this->categories_type[$object->Type][$object->ID]);
+                unset($this->categoriesbyorder_type[$object->Type][$object->ID]);
+                unset($this->categoriesbyorder_all[$object->ID]);
+                unset($cacheobject[get_class($object)][$object->ID]);
+                break;
+            default:
+                unset($cacheobject[get_class($object)][$object->ID]);
         }
-        if (get_class($object) == 'Member') {
-            unset($this->membersbyname[$object->Name]);
-        }
-        if (get_class($object) == 'Tag') {
-            unset($this->tags_type[$object->Type][$object->ID]);
-            unset($this->tagsbyname_type[$object->Type][$object->Name]);
-        }
-        if (get_class($object) == 'Category') {
-            unset($this->categories_type[$object->Type][$object->ID]);
-        }
-        unset($cacheobject[get_class($object)][$object->ID]);
         return true;
+    }
+
+    /**
+     * 查询对象的ID的值是否存在于总缓存对象上.
+     */
+    public function CheckCacheObject($classname, $idvalue)
+    {
+        $cacheobject = &$this->cacheobject;
+        if (!isset($cacheobject[$classname])) {
+            $cacheobject[$classname] = array();
+        }
+
+        return array_key_exists($idvalue, $cacheobject[$classname]);
     }
 
     /**
