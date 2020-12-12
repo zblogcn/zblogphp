@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<plugin version="php">
+<id>ScheduledTasks</id>
+<name>计划任务</name>
+<url></url>
+<note></note>
+<description></description>
+<path>main.php</path>
+<include>include.php</include>
+<level>1</level>
+<author>
+  <name>zhouzishu</name>
+  <email></email>
+  <url>https://zzs.im/</url>
+</author>
+<source>
+  <name></name>
+  <email></email>
+  <url></url>
+</source>
+<adapted>170000</adapted>
+<version>1.0</version>
+<pubdate>2020-12-07</pubdate>
+<modified>2020-12-07</modified>
+<price>0</price>
+<advanced>
+  <dependency></dependency>
+  <rewritefunctions></rewritefunctions>
+  <conflict></conflict>
+</advanced>
+<sidebars>
+  <sidebar1></sidebar1>
+  <sidebar2></sidebar2>
+  <sidebar3></sidebar3>
+  <sidebar4></sidebar4>
+  <sidebar5></sidebar5>
+</sidebars>
+</plugin>
