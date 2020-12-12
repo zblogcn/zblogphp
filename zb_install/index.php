@@ -831,8 +831,8 @@ function Setup3()
             <?php
             //add four themes
             $themes2 = array(
-                'Zit'       => 'style',
                 'tpure'     => 'style',
+                'Zit'       => 'style',
                 'default'   => 'default',
                 'WhitePage' => 'default',
             );
@@ -1490,6 +1490,10 @@ function SaveConfig()
     $app->SaveSideBars();
 
     $app = $zbp->LoadApp('theme', 'tpure');
+    $app->LoadSideBars();
+    $app->SaveSideBars();
+
+    $app = $zbp->LoadApp('theme', 'WhitePage');
     $app->LoadSideBars();
     $app->SaveSideBars();
 

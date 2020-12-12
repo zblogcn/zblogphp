@@ -485,7 +485,7 @@ class ZBlogPHP
         }
         $this->user->Metas = new Metas();
 
-        $this->BindingCacheObject();
+        $this->BindingCache();
     }
 
     /**
@@ -1710,7 +1710,7 @@ class ZBlogPHP
                 }
                 $m->Source = 'themeinclude_' . $this->theme;
                 $m->ID = 0 - (int)crc32($m->Source . $m->FileName);
-                $this->AddCacheObject($m);
+                $this->AddCache($m);
             }
         }
 
@@ -2092,8 +2092,8 @@ class ZBlogPHP
             $l = new Base($table, $datainfo);
             $l->LoadInfoByAssoc($a);
             $id = $l->GetIdName();
-            if ($this->CheckCacheObject($type, $l->$id) == false) {
-                $this->AddCacheObject($l);
+            if ($this->CheckCache($type, $l->$id) == false) {
+                $this->AddCache($l);
             }
             $list[] = $l;
         }
@@ -2133,8 +2133,8 @@ class ZBlogPHP
             $l = new Base($table, $datainfo);
             $l->LoadInfoByAssoc($a);
             $id = $l->GetIdName();
-            if ($this->CheckCacheObject($type, $l->$id) == false) {
-                $this->AddCacheObject($l);
+            if ($this->CheckCache($type, $l->$id) == false) {
+                $this->AddCache($l);
             }
             $list[] = $l;
         }
@@ -2166,8 +2166,8 @@ class ZBlogPHP
             $l = new $type();
             $l->LoadInfoByAssoc($a);
             $id = $l->GetIdName();
-            if ($this->CheckCacheObject($type, $l->$id) == false) {
-                $this->AddCacheObject($l);
+            if ($this->CheckCache($type, $l->$id) == false) {
+                $this->AddCache($l);
             }
             
             $list[] = $l;
@@ -2233,8 +2233,8 @@ class ZBlogPHP
             $l = new $type();
             $l->LoadInfoByAssoc($a);
             $id = $l->GetIdName();
-            if ($this->CheckCacheObject($type, $l->$id) == false) {
-                $this->AddCacheObject($l);
+            if ($this->CheckCache($type, $l->$id) == false) {
+                $this->AddCache($l);
             }
             $list[] = $l;
         }
@@ -2540,7 +2540,7 @@ class ZBlogPHP
         } else {
             $p = new $className();
             if ($p->LoadInfoByID($id)) {
-                $this->AddCacheObject($p);
+                $this->AddCache($p);
             }
 
             return $p;
@@ -3656,7 +3656,7 @@ class ZBlogPHP
     /**
      * 绑定zbp之前独立的杂乱的全局对象数组到总缓存对象上.
      */
-    public function BindingCacheObject()
+    public function BindingCache()
     {
         $cacheobject = &$this->cacheobject;
         $cacheobject['Member'] = &$this->members;
@@ -3670,7 +3670,7 @@ class ZBlogPHP
     /**
      * 将对象附加到总缓存对象上.
      */
-    public function AddCacheObject(&$object)
+    public function AddCache(&$object)
     {
         if (is_subclass_of($object, 'Base') == false) {
             return;
@@ -3709,7 +3709,7 @@ class ZBlogPHP
     /**
      * 将对象附从总缓存对象上删除掉.
      */
-    public function RemoveCacheObject(&$object)
+    public function RemoveCache(&$object)
     {
         if (is_subclass_of($object, 'Base') == false) {
             return;
@@ -3745,7 +3745,7 @@ class ZBlogPHP
     /**
      * 查询对象的ID的值是否存在于总缓存对象上.
      */
-    public function CheckCacheObject($classname, $idvalue)
+    public function CheckCache($classname, $idvalue)
     {
         $cacheobject = &$this->cacheobject;
         if (!isset($cacheobject[$classname])) {

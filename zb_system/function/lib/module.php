@@ -164,7 +164,7 @@ class Module extends Base
             }
         }
 
-		$zbp->RemoveCacheObject($this);
+		$zbp->RemoveCache($this);
 
         if ($this->SourceType == 'themeinclude') {
             if (empty($this->FileName)) {

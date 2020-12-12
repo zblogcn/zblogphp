@@ -384,7 +384,7 @@ class BasePost extends Base
             }
         }
 
-        $zbp->RemoveCacheObject($this);
+        $zbp->RemoveCache($this);
 
         return parent::Del();
     }

@@ -1689,7 +1689,7 @@ function PostArticle()
     FilterPost($article);
 
     $article->Save();
-    $zbp->AddCacheObject($article);
+    $zbp->AddCache($article);
 
     //更新统计信息
     $pre_arrayTag = $zbp->LoadTagsByIDString($pre_tag);
@@ -2144,7 +2144,7 @@ function PostComment()
     }
 
     $cmt->Save();
-    $zbp->AddCacheObject($cmt);
+    $zbp->AddCache($cmt);
 
     if ($cmt->IsChecking) {
         CountCommentNums(0, +1);
@@ -2577,7 +2577,7 @@ function PostTag()
     }
 
     $tag->Save();
-    $zbp->AddCacheObject($tag);
+    $zbp->AddCache($tag);
 
     if (GetVars('AddNavbar', 'POST') == 0) {
         $zbp->DelItemToNavbar('tag', $tag->ID);
@@ -2727,7 +2727,7 @@ function PostMember()
     }
 
     $mem->Save();
-    $zbp->AddCacheObject($mem);
+    $zbp->AddCache($mem);
 
     foreach ($GLOBALS['hooks']['Filter_Plugin_PostMember_Succeed'] as $fpname => &$fpsignal) {
         $fpname($mem);
@@ -2894,7 +2894,7 @@ function PostModule()
     }
 
     $mod->Save();
-    $zbp->AddCacheObject($mod);
+    $zbp->AddCache($mod);
 
     if ((int) GetVars('ID', 'POST') > 0) {
         $zbp->AddBuildModule($mod->FileName);
@@ -2999,7 +2999,7 @@ function PostUpload()
 
                 $upload->SaveFile($_FILES[$key]['tmp_name']);
                 $upload->Save();
-                $zbp->AddCacheObject($upload);
+                $zbp->AddCache($upload);
             }
         }
     }
