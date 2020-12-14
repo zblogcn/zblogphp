@@ -659,9 +659,13 @@ class ZBlogPHP
         }
 
         $parsedHost = parse_url($this->host);
-        $this->fullcurrenturl = $parsedHost['scheme'] . '://' . $parsedHost['host'];
-        if (isset($parsedHost['port'])) {
-            $this->fullcurrenturl .= ':' . $parsedHost['port'];
+        if (isset($parsedHost['scheme']) && isset($parsedHost['host'])) {
+            $this->fullcurrenturl = $parsedHost['scheme'] . '://' . $parsedHost['host'];
+            if (isset($parsedHost['port'])) {
+                $this->fullcurrenturl .= ':' . $parsedHost['port'];
+            }
+        } else {
+            $this->fullcurrenturl = '';
         }
         $this->fullcurrenturl .= $this->currenturl;
 

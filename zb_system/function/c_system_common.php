@@ -472,7 +472,7 @@ function GetDbName()
 /**
  * 获取当前网站地址
  *
- * @param string $blogpath     网站域名
+ * @param string $blogpath     网站物理实际路径
  * @param string &$cookiesPath 返回cookie作用域值，要传引入
  *
  * @return string 返回网站完整地址，如http://localhost/zbp/
@@ -480,9 +480,20 @@ function GetDbName()
 function GetCurrentHost($blogpath, &$cookiesPath)
 {
     $host = HTTP_SCHEME;
-
-    $host .= $_SERVER['HTTP_HOST'];
-
+        $cookiesPath = '/';
+        return '/';
+    if (isset($_SERVER['HTTP_HOST'])) {
+        $host .= $_SERVER['HTTP_HOST'];
+    } elseif (isset($_SERVER["SERVER_NAME"])) {
+        $host .= $_SERVER["SERVER_NAME"];
+        if ($_SERVER["SERVER_PORT"] == '443' || $_SERVER["SERVER_PORT"] == '80') {
+            $host .= ':' . $_SERVER["SERVER_PORT"];
+        }
+    } else {
+        $cookiesPath = '/';
+        return '/';
+    }
+    
     if (isset($_SERVER['SCRIPT_NAME']) && $_SERVER['SCRIPT_NAME']) {
         $x = $_SERVER['SCRIPT_NAME'];
         $y = $blogpath;
@@ -500,26 +511,28 @@ function GetCurrentHost($blogpath, &$cookiesPath)
         }
     }
 
-    $x = $_SERVER['SCRIPT_NAME'];
-    $y = $blogpath;
-    if (isset($_SERVER["CONTEXT_DOCUMENT_ROOT"]) && isset($_SERVER["CONTEXT_PREFIX"])) {
-        if ($_SERVER["CONTEXT_DOCUMENT_ROOT"] && $_SERVER["CONTEXT_PREFIX"]) {
-            $y = $_SERVER["CONTEXT_DOCUMENT_ROOT"] . $_SERVER["CONTEXT_PREFIX"] . '/';
+    if (isset($_SERVER['SCRIPT_NAME'])) {
+        $x = $_SERVER['SCRIPT_NAME'];
+        $y = $blogpath;
+        if (isset($_SERVER["CONTEXT_DOCUMENT_ROOT"]) && isset($_SERVER["CONTEXT_PREFIX"])) {
+            if ($_SERVER["CONTEXT_DOCUMENT_ROOT"] && $_SERVER["CONTEXT_PREFIX"]) {
+                $y = $_SERVER["CONTEXT_DOCUMENT_ROOT"] . $_SERVER["CONTEXT_PREFIX"] . '/';
+            }
         }
+
+        $z = '';
+        for ($i = strlen($x); $i > 0; $i--) {
+            $z = substr($x, 0, $i);
+            if (strtolower(substr($y, (strlen($y) - $i))) == strtolower($z)) {
+                break;
+            }
+        }
+        $cookiesPath = $z;
+        return $host . $z;
     }
 
-    $z = '';
-
-    for ($i = strlen($x); $i > 0; $i--) {
-        $z = substr($x, 0, $i);
-        if (strtolower(substr($y, (strlen($y) - $i))) == strtolower($z)) {
-            break;
-        }
-    }
-
-    $cookiesPath = $z;
-
-    return $host . $z;
+    $cookiesPath = '/';
+    return $host . $cookiesPath;
 }
 
 /**
