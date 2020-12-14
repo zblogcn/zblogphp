@@ -480,8 +480,7 @@ function GetDbName()
 function GetCurrentHost($blogpath, &$cookiesPath)
 {
     $host = HTTP_SCHEME;
-        $cookiesPath = '/';
-        return '/';
+
     if (isset($_SERVER['HTTP_HOST'])) {
         $host .= $_SERVER['HTTP_HOST'];
     } elseif (isset($_SERVER["SERVER_NAME"])) {
