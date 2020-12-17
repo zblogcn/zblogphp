@@ -420,7 +420,7 @@ class Base
             } elseif ($value[1] == 'double') {
                 $keyvalue[$value[0]] = (float) $this->data[$key];
             } elseif ($value[1] == 'string' || $value[1] == 'char') {
-                if ($key == 'Meta') {
+                if ($key == 'Meta' || $bloghost == '/') {
                     $keyvalue[$value[0]] = $this->data[$key];
                 } else {
                     $keyvalue[$value[0]] = str_replace($bloghost, '{#ZC_BLOG_HOST#}', $this->data[$key]);

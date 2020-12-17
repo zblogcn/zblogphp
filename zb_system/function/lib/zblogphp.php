@@ -277,6 +277,8 @@ class ZBlogPHP
 
     private $isload = false; //是否载入
 
+    private $ispreload = false; //是否预加载
+
     private $issession = false; //是否使用session
 
     public $ismanage = false; //是否加载管理模式
@@ -425,7 +427,7 @@ class ZBlogPHP
     {
         global $option, $lang, $langs, $blogpath, $bloghost, $cookiespath, $usersdir, $table,
             $datainfo, $actions, $action, $blogversion, $blogtitle, $blogname, $blogsubname,
-            $blogtheme, $blogstyle, $currenturl, $activedapps, $posttype;
+            $blogtheme, $blogstyle, $currenturl, $activedapps, $posttype, $fullcurrenturl;
 
         if (ZBP_HOOKERROR) {
             ZBlogException::SetErrorHook();
@@ -448,6 +450,7 @@ class ZBlogPHP
         $this->actions = &$actions;
         $this->posttype = &$posttype;
         $this->currenturl = &$currenturl;
+        $this->fullcurrenturl = &$fullcurrenturl;
 
         $this->action = &$action;
         $this->activedapps = &$activedapps;
@@ -473,11 +476,10 @@ class ZBlogPHP
         $this->categorys = &$this->categories;
         $this->categorysbyorder = &$this->categoriesbyorder;
 
-        $this->tags = &$this->tags_type[0];
-        $this->tagsbyname = &$this->tagsbyname_type[0];
-
         $this->tags_type[0] = array();
         $this->tagsbyname_type[0] = array();
+        $this->tags = &$this->tags_type[0];
+        $this->tagsbyname = &$this->tagsbyname_type[0];
 
         $this->user = new stdClass();
         foreach ($this->datainfo['Member'] as $key => $value) {
@@ -589,8 +591,8 @@ class ZBlogPHP
         $this->LoadConfigsOnlySystem(true);
         $this->LoadOption();
 
-        $this->RegPostType(0, 'article', $this->option['ZC_ARTICLE_REGEX'], $this->option['ZC_POST_DEFAULT_TEMPLATE'], 0, 0);
-        $this->RegPostType(1, 'page', $this->option['ZC_PAGE_REGEX'], $this->option['ZC_POST_DEFAULT_TEMPLATE'], null, null);
+        $this->RegPostType(0, 'article', $this->option['ZC_ARTICLE_REGEX'], $this->option['ZC_POST_DEFAULT_TEMPLATE']);
+        $this->RegPostType(1, 'page', $this->option['ZC_PAGE_REGEX'], $this->option['ZC_POST_DEFAULT_TEMPLATE']);
 
         if ($this->option['ZC_BLOG_LANGUAGEPACK'] === 'SimpChinese') {
             $this->option['ZC_BLOG_LANGUAGEPACK'] = 'zh-cn';
@@ -669,9 +671,14 @@ class ZBlogPHP
         }
         $this->fullcurrenturl .= $this->currenturl;
 
-        if (substr($this->host, 0, 8) == 'https://') {
-            $this->isHttps = true;
+        if (stripos($this->host, 'http') === 0) {
+            if (stripos($this->host, 'https://') === 0) {
+                $this->isHttps = true;
+            }
+        } else {
+            $this->isHttps = (HTTP_SCHEME === 'https://');
         }
+        //var_dump($this->isHttps);die;
 
         $this->verifyCodeUrl = $this->host . 'zb_system/script/c_validcode.php';
         $this->validcodeurl = &$this->verifyCodeUrl;
@@ -703,6 +710,28 @@ class ZBlogPHP
         return true;
     }
 
+
+    /**
+     * 在Initialize和加载所有插件include之后，在Load之前的过程，被Base调用，1.7里新加的
+     *
+     * @throws Exception
+     *
+     * @return bool
+     */
+    public function PreLoad()
+    {
+        if (!$this->isinitialized && $this->ispreload) {
+            return false;
+        }
+
+        foreach ($GLOBALS['hooks']['Filter_Plugin_Zbp_PreLoad'] as $fpname => &$fpsignal) {
+            $fpreturn = $fpname();
+        }
+
+        $this->ispreload = true;
+        return true;
+    }
+
     /**
      * 从数据库里读取信息，启动整个ZBP.
      *
@@ -712,22 +741,18 @@ class ZBlogPHP
      */
     public function Load()
     {
-        foreach ($GLOBALS['hooks']['Filter_Plugin_Zbp_Load_Pre'] as $fpname => &$fpsignal) {
-            $fpreturn = $fpname();
-            if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
-                $fpsignal = PLUGIN_EXITSIGNAL_NONE;
-
-                return $fpreturn;
-            }
-        }
-
-        if (!$this->isinitialized) {
+        if (!$this->isinitialized && $this->ispreload && $this->isload) {
             return false;
         }
 
-        if ($this->isload) {
-            return false;
-        }
+        //此处接口应该在下一版本移除
+        //foreach ($GLOBALS['hooks']['Filter_Plugin_Zbp_Load_Pre'] as $fpname => &$fpsignal) {
+        //    $fpreturn = $fpname();
+        //    if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
+        //        $fpsignal = PLUGIN_EXITSIGNAL_NONE;
+        //        return $fpreturn;
+        //    }
+        //}
 
         if (!headers_sent()) {
             header('Content-type: text/html; charset=utf-8');
@@ -787,7 +812,6 @@ class ZBlogPHP
         $this->ConvertTableAndDatainfo();
 
         $this->isload = true;
-
         return true;
     }
 
@@ -3531,8 +3555,8 @@ class ZBlogPHP
      * @param $name
      * @param string $urlRule      默认是取Page类型的Url Rule
      * @param string $template     默认模板名page
-     * @param string $categoryType 当前文章类的分类Type
-     * @param string $tagType      当前文章类的标签Type
+     * @param string $categoryType 当前文章类的分类Type //已废弃 直接等于$typeId
+     * @param string $tagType      当前文章类的标签Type //已废弃 直接等于$typeId
      *
      * @throws Exception
      */
@@ -3549,7 +3573,17 @@ class ZBlogPHP
                 $this->ShowError(87, __FILE__, __LINE__);
             }
         }
-        $this->posttype[$typeId] = array($name, $urlRule, $template, $categoryType, $tagType);
+        $this->posttype[$typeId] = array($name, $urlRule, $template, $typeId, $typeId);
+
+        if (!isset($this->tags_type[$typeId])) {
+            $this->tags_type[$typeId] = array();
+        }
+        if (!isset($this->tagsbyname_type[$typeId])) {
+            $this->tagsbyname_type[$typeId] = array();
+        }
+        if (!isset($this->categoriesbyorder_type[$typeId])) {
+            $this->categoriesbyorder_type[$typeId] = array();
+        }
     }
 
     /**
@@ -3753,7 +3787,7 @@ class ZBlogPHP
     {
         $cacheobject = &$this->cacheobject;
         if (!isset($cacheobject[$classname])) {
-            $cacheobject[$classname] = array();
+            return false;
         }
 
         return array_key_exists($idvalue, $cacheobject[$classname]);

@@ -103,8 +103,16 @@ function Include_Admin_CheckHttp304OK()
     if (!$zbp->CheckRights('root')) {
         return;
     }
-    if (GetVars('http304ok', 'COOKIE') !== '1') {
-        echo '<script>$(function () { $.ajax({type: "GET",url: "' . $zbp->host . 'zb_system/cmd.php?act=checkhttp304ok",success: function(msg){zbp.cookie.set(\'http304ok\',\'0\',365);},statusCode: {500: function() {zbp.cookie.set(\'http304ok\',\'1\',365);}}}); });</script>';
+    //原因是不能输出304状态的，发现输出500状态也是错的，所以检测500用于304上
+    if (GetVars('http304ok', 'COOKIE') !== '1' && GetVars('http304ok', 'COOKIE') !== '0') {
+        echo '<script>
+         var exp = new Date();
+         exp.setTime(exp.getTime() + 365*24*3600*1000);
+         $(function () {  $.ajax({type: "GET",url: "' . $zbp->host . 'zb_system/cmd.php?act=checkhttp304ok",success: function(msg){ 
+            document.cookie="http304ok=0; path=' . $zbp->cookiespath . '" + "; expires=" + exp.toGMTString();
+         },statusCode: {500: function() {
+            document.cookie="http304ok=1; path=' . $zbp->cookiespath . '" + "; expires=" + exp.toGMTString();
+         }}}); }); </script>';
     }
     if (GetVars('http304ok', 'COOKIE') === '0') {
         if ($zbp->option['ZC_JS_304_ENABLE'] == true) {
@@ -205,7 +213,7 @@ function MakeSubMenu($strName, $strUrl, $strClass = 'm-left', $strTarget = '', $
         $s .= 'title="' . $strTitle . '" ' . 'alt="' . $strTitle . '" ';
     }
     $s .= '>';
-    $strIconElem = $strIconClass !== "" ? "<i class=\"" . $strIconClass . "\" style=\"vertical-align: unset;\"></i> " : "";
+    $strIconElem = $strIconClass !== "" ? "<i class=\"" . $strIconClass . "\" style=\"line-height: 1em;\"></i> " : "";
     $s .= '<span class="' . $strClass . '">' . $strIconElem . $strName . '</span></a>';
 
     return $s;

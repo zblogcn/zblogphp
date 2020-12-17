@@ -105,14 +105,14 @@ define('ZC_POST_TYPE_ALBUM', 8); // 相册
  */
 $GLOBALS['posttype'] = array(
     array('article', '', '', 0, 0),
-    array('page', '', '', null, null),
-    array('tweet', '', '', null, null),
-    array('discussion', '', '', null, null),
-    array('link', '', '', null, null),
-    array('music', '', '', null, null),
-    array('video', '', '', null, null),
-    array('photo', '', '', null, null),
-    array('album', '', '', null, null),
+    array('page', '', '', 1, 1),
+    array('tweet', '', '', 2, 2),
+    array('discussion', '', '', 3, 3),
+    array('link', '', '', 4, 4),
+    array('music', '', '', 5, 5),
+    array('video', '', '', 6, 6),
+    array('photo', '', '', 7, 7),
+    array('album', '', '', 8, 8),
 );
 
 /*
@@ -441,6 +441,7 @@ $GLOBALS['action'] = '';
  * 当前请求路径
  */
 $GLOBALS['currenturl'] = GetRequestUri();
+$GLOBALS['fullcurrenturl'] = '';
 /*
  * 语言包
  */
@@ -522,3 +523,6 @@ if (ZBP_SAFEMODE === false) {
 }
 
 unset($file_base, $aps, $fn, $ap, $op_users, $opk, $opv);
+
+//1.7新加入的
+$GLOBALS['zbp']->PreLoad();

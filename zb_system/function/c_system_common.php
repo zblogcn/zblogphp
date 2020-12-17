@@ -485,7 +485,7 @@ function GetCurrentHost($blogpath, &$cookiesPath)
         $host .= $_SERVER['HTTP_HOST'];
     } elseif (isset($_SERVER["SERVER_NAME"])) {
         $host .= $_SERVER["SERVER_NAME"];
-        if ($_SERVER["SERVER_PORT"] == '443' || $_SERVER["SERVER_PORT"] == '80') {
+        if (!($_SERVER["SERVER_PORT"] == '443' || $_SERVER["SERVER_PORT"] == '80')) {
             $host .= ':' . $_SERVER["SERVER_PORT"];
         }
     } else {

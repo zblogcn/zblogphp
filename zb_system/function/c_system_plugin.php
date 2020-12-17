@@ -375,6 +375,17 @@ DefinePluginFilter('Filter_Plugin_Zbp_BuildModule');
 /*
 '**************************************************<
 '类型:Filter
+'名称:Filter_Plugin_Zbp_PreLoad
+'参数:
+'说明:Zbp类的预加载接口
+'调用:
+'**************************************************>
+ */
+DefinePluginFilter('Filter_Plugin_Zbp_PreLoad');
+
+/*
+'**************************************************<
+'类型:Filter
 '名称:Filter_Plugin_Zbp_Load
 '参数:
 '说明:Zbp类的加载接口
