@@ -239,7 +239,7 @@ function Debug_Shutdown_Handler()
  */
 function Debug_DoNothing()
 {
-    return false;
+    return true;
 }
 
 /**
