@@ -78,7 +78,7 @@ function ScheduledTasks_Polling(){
             if ($tasks['suspend'] == false) {
                 if (time() > $tasks['begintime']) {
                     if ($tasks['endtime'] > time()) {
-                        if (time() > $tasks['lasttime'] + $tasks['interval']) {
+                        if (time() >= $tasks['lasttime'] + $tasks['interval'] - round(1 + $tasks['interval']*0.01)) {//减1%时间应对网络波动
                             //var_dump($tasks['id']);
                             $result = ScheduledTasks_Execute($tasks['id']);
                             return $tasks['id'] . ':' . $result;
