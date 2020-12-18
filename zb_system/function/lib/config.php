@@ -16,30 +16,31 @@ class Config implements Iterator
 
     public function rewind()
     {
-        foreach ($this->kvdata as $key => $value) {
-            $this->array[] = $key;
-        }
+        //foreach ($this->kvdata as $key => $value) {
+        //    $this->array[] = $key;
+        //}
+        $this->array = array_keys($this->kvdata);
         $this->position = 0;
     }
 
     public function current()
     {
-        return $this->array[$this->position];
+        return $this->kvdata[$this->array[$this->position]];
     }
 
     public function key()
     {
-        return $this->position;
+        return $this->array[$this->position];
     }
 
     public function next()
     {
-        $this->position++;
+        ++$this->position;
     }
 
     public function valid()
     {
-        return isset($this->array[$this->position]);
+        return array_key_exists($this->position, $this->array);
     }
 
     /**
@@ -123,6 +124,14 @@ class Config implements Iterator
         }
 
         return $this->kvdata[$name];
+    }
+
+    /**
+     * @param $name
+     */
+    public function __isset($name)
+    {
+        return array_key_exists($name, $this->kvdata);
     }
 
     /**
