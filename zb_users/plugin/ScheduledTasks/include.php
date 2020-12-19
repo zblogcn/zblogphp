@@ -107,6 +107,9 @@ function test_abc(){
 //ScheduledTasks_Execute('test_abc');
 
 function ScheduledTasks_Polling(){
+    // Load functions
+    ScheduledTasks_Load_Function();
+
     //先对key<=>interval数组进行自然排序，从大到小
     $alltasks = ScheduledTasks_GetTasksAll();
     $aryinterval = array();
@@ -133,6 +136,9 @@ function ScheduledTasks_Polling(){
 
 function ScheduledTasks_RegTasks(array $array){
     global $zbp, $scheduled_task_functions;
+
+    // Load functions
+    ScheduledTasks_Load_Function();
 
     $tasks = array();
     $tasks['id'] = mb_substr(str_replace(' ', '', GetValueInArray($array, 'id')), 0, 50);
