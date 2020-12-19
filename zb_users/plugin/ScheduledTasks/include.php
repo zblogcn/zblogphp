@@ -45,8 +45,12 @@ $zbp->cache('ScheduledTasks')->task_id = array(ZblogTask结构);
 
 */
 
-//注册插件
+// 注册插件
 RegisterPlugin("ScheduledTasks", "ActivePlugin_ScheduledTasks");
+
+// 任务函数 function_name => name(description)
+$scheduled_task_functions = array();
+$scheduled_task_functions_loaded = false;
 
 function ActivePlugin_ScheduledTasks()
 {
@@ -57,6 +61,40 @@ function ScheduledTasks_AddMenu(&$m)
 {
     global $zbp;
     $m['nav_ScheduledTasks'] = MakeLeftMenu("root", '计划任务', $zbp->host . "zb_users/plugin/ScheduledTasks/main.php", "nav_ScheduledTasks", "aScheduledTasks", null, "icon-hourglass-split");
+}
+
+function ScheduledTasks_Load_Function()
+{
+    global $scheduled_task_functions_loaded, $scheduled_task_functions;
+
+    if ($scheduled_task_functions_loaded === true) {
+        return;
+    }
+
+    // 载入系统默认的 functions
+    // ...
+
+    foreach ($GLOBALS['hooks']['Filter_Plugin_ScheduledTasks_Reg_Function'] as $fpname => &$fpsignal) {
+        $add_funcs = $fpname();
+
+        if (!is_array($add_funcs)) {
+            continue;
+        }
+
+        foreach ($add_funcs as $func => $name) {
+            if (array_key_exists($func, $scheduled_task_functions)) {
+                continue;
+            }
+            if (! function_exists($func)) {
+                continue;
+            }
+    
+            $scheduled_task_functions[$func] = $name;
+        }
+    }
+
+    $scheduled_task_functions_loaded = true;
+    return true;
 }
 
 function test_abc(){
@@ -82,24 +120,20 @@ function ScheduledTasks_Polling(){
     }
 
     foreach ($newtasks as $key => $tasks) {
-        if ($tasks['operate'] == false) {
-            if ($tasks['suspend'] == false) {
-                if (time() > $tasks['begintime']) {
-                    if ($tasks['endtime'] > time()) {
-                        if (time() >= $tasks['lasttime'] + $tasks['interval'] - round(1 + $tasks['interval']*0.01)) {//减1%时间应对网络波动
-                            //var_dump($tasks['id']);
-                            $result = ScheduledTasks_Execute($tasks['id']);
-                            return $tasks['id'] . ':' . $result;
-                        }
-                    }
-                }
-            }
+        if ($tasks['operate'] == false &&
+            $tasks['suspend'] == false &&
+            time() > $tasks['begintime'] &&
+            $tasks['endtime'] > time() &&
+            time() >= $tasks['lasttime'] + $tasks['interval'] - round(1 + $tasks['interval']*0.01)) { //减1%时间应对网络波动 
+                $result = ScheduledTasks_Execute($tasks['id']);
+                return $tasks['id'] . ':' . $result;
         }
     }
 }
 
 function ScheduledTasks_RegTasks(array $array){
-    global $zbp;
+    global $zbp, $scheduled_task_functions;
+
     $tasks = array();
     $tasks['id'] = mb_substr(str_replace(' ', '', GetValueInArray($array, 'id')), 0, 50);
     $tasks['name'] = (string)GetValueInArray($array, 'name');
@@ -113,6 +147,10 @@ function ScheduledTasks_RegTasks(array $array){
     $tasks['operate'] = false;
     if(empty($tasks['id'])){
         $zbp->ShowError('id不能为空');
+    }
+
+    if (! in_array($tasks['function'], $scheduled_task_functions)) {
+        $zbp->ShowError('该函数未注册');
     }
 
     $key = 'Tasks_' . $tasks['id'];
@@ -214,7 +252,8 @@ function ScheduledTasks_Execute($id){
     return $result;
 }
 
-function ScheduledTasks_Command($function, $interval = 3600, $begintime = 0, $endtime = 2147483647){
+// 快速注册任务
+function ScheduledTasks_Reg($function, $interval = 3600, $begintime = 0, $endtime = 2147483647){
     global $zbp;
     $tasks = array();
     $function = trim($function);
