@@ -48,7 +48,15 @@ $zbp->cache('ScheduledTasks')->task_id = array(ZblogTask结构);
 //注册插件
 RegisterPlugin("ScheduledTasks", "ActivePlugin_ScheduledTasks");
 
-function ActivePlugin_ScheduledTasks(){
+function ActivePlugin_ScheduledTasks()
+{
+    Add_Filter_Plugin('Filter_Plugin_Admin_LeftMenu', 'ScheduledTasks_AddMenu');
+}
+
+function ScheduledTasks_AddMenu(&$m)
+{
+    global $zbp;
+    $m['nav_ScheduledTasks'] = MakeLeftMenu("root", '计划任务', $zbp->host . "zb_users/plugin/ScheduledTasks/main.php", "nav_ScheduledTasks", "aScheduledTasks", null, "icon-hourglass-split");
 }
 
 function test_abc(){
