@@ -316,13 +316,15 @@ class App
     }
 
     /**
-     * 获取应用Logo图片地址
+     * 获取应用Logo图片地址(优先Logo)
      *
      * @return string
      */
     public function GetLogo()
     {
         if ($this->type == 'plugin') {
+            return $this->app_url . 'logo.png';
+        } elseif (is_readable($this->app_path . 'logo.png')) {
             return $this->app_url . 'logo.png';
         } else {
             return $this->app_url . 'screenshot.png';
