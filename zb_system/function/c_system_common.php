@@ -557,7 +557,89 @@ function GetHttpContent($url)
 }
 
 /**
- * 获取目录下文件夹列表.
+ * 获取目录下文件夹列表(递归).
+ *
+ * @param string $dir 目录
+ *
+ * @return array 文件夹列表(递归函数返回的是路径的全称，和非递归返回的有区别)
+ */
+function GetDirsInDir_Recursive($dir)
+{
+    $dirs = array();
+
+    if (!file_exists($dir)) {
+        return array();
+    }
+    if (!is_dir($dir)) {
+        return array();
+    }
+    $dir = str_replace('\\', '/', $dir);
+    if (substr($dir, -1) !== '/') {
+        $dir .= '/';
+    }
+
+    if (function_exists('scandir')) {
+        foreach (scandir($dir, 0) as $d) {
+            if (is_dir($dir . $d)) {
+                if (($d != '.') && ($d != '..')) {
+                	$array = GetDirsInDir($dir . $d);
+                	if(count($array)>0){
+                		foreach ($array as $key => $value) {
+                			$dirs[] = $dir . $d . '/' . $value;
+
+                		}
+                	}
+                    $dirs[] = $dir . $d;
+                }
+            }
+        }
+    } else {
+        $handle = opendir($dir);
+        if ($handle) {
+            while (false !== ($file = readdir($handle))) {
+                if ($file != "." && $file != "..") {
+                    if (is_dir($dir . $file)) {
+                		$array = GetDirsInDir($dir . $file);
+	                	if(count($array)>0){
+	                		foreach ($array as $key => $value) {
+	                			$dirs[] = $dir . $file . '/' . $value;
+
+	                		}
+	                	}
+                        $dirs[] = $dir . $file;
+                    }
+                }
+            }
+            closedir($handle);
+        }
+    }
+
+    return $dirs;
+}
+
+/**
+ * 获取目录下指定类型文件列表(递归)..
+ *
+ * @param string $dir  目录
+ * @param string $type 文件类型，以｜分隔
+ *
+ * @return array 文件列表
+ */
+function GetFilesInDir_Recursive($dir, $type)
+{
+	$dirs = GetDirsInDir_Recursive($dir);
+	$files = array();
+	foreach ($dirs as $key => $d) {
+		$f = GetFilesInDir($d, $type);
+		foreach ($f as $key => $value) {
+			$files[] = $value;
+		}
+	}
+	return $files;
+}
+
+/**
+ * 获取当前目录下文件夹列表.
  *
  * @param string $dir 目录
  *
@@ -608,7 +690,7 @@ function GetDirsInDir($dir)
 }
 
 /**
- * 获取目录下指定类型文件列表.
+ * 获取当前目录下指定类型文件列表.
  *
  * @param string $dir  目录
  * @param string $type 文件类型，以｜分隔
@@ -628,7 +710,7 @@ function GetFilesInDir($dir, $type)
 
     if (function_exists('scandir')) {
         foreach (scandir($dir) as $f) {
-            if (is_file($dir . $f)) {
+            if ($f != "." && $f != ".." && is_file($dir . $f)) {
                 foreach (explode("|", $type) as $t) {
                     $t = '.' . $t;
                     $i = strlen($t);
