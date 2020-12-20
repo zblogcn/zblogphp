@@ -842,18 +842,20 @@ class Template
         }
         if (function_exists('scandir')) {
             foreach (scandir($dir) as $d) {
-                if (is_dir($dir . $d)) {
-                    if ((substr($d, 0, 1) != '.')) {
-                        $this->dirs[] = $dir . $d . '/';
-                        $this->GetAllFileDir($dir . $d . '/');
-                    }
-                } elseif (is_readable($dir . $d)) {
-                    $s = $dir . $d;
-                    $i = strlen($zbp->usersdir . 'theme/' . $this->theme . "/{$this->template_dirname}/");
-                    if (substr($s, -4) == '.php') {
-                        $s2 = substr($s, ($i - strlen($s)));
-                        $s3 = substr($s2, 0, (strlen($s2) - 4));
-                        $this->files[$s3] = file_get_contents($s); //$dir . $d;
+                if ($d != "." && $d != "..") {
+                    if (is_dir($dir . $d)) {
+                        if ((substr($d, 0, 1) != '.')) {
+                            $this->dirs[] = $dir . $d . '/';
+                            $this->GetAllFileDir($dir . $d . '/');
+                        }
+                    } elseif (is_readable($dir . $d)) {
+                        $s = $dir . $d;
+                        $i = strlen($zbp->usersdir . 'theme/' . $this->theme . "/{$this->template_dirname}/");
+                        if (substr($s, -4) == '.php') {
+                            $s2 = substr($s, ($i - strlen($s)));
+                            $s3 = substr($s2, 0, (strlen($s2) - 4));
+                            $this->files[$s3] = file_get_contents($s); //$dir . $d;
+                        }
                     }
                 }
             }
@@ -861,7 +863,7 @@ class Template
             if ($handle = opendir($dir)) {
                 while (false !== ($file = readdir($handle))) {
                     if ($file != "." && $file != "..") {
-                        $d = str_replace("{$this->template_dirname}//", "/{$this->template_dirname}/", str_replace('\\', '/', $dir . '/' . $file));
+                        $d = str_replace("{$this->template_dirname}//", "{$this->template_dirname}/", str_replace('\\', '/', $dir . '/' . $file));
                         if (is_dir($dir . '/' . $file)) {
                             $this->dirs[] = $d;
                             $this->GetAllFileDir($d);
