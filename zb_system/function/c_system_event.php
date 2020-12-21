@@ -2423,7 +2423,7 @@ function PostCategory()
 
     $parentid = (int) GetVars('ParentID', 'POST');
     if ($parentid > 0) {
-        if ($zbp->categories_all[$parentid]->Level > ($zbp->category_recursion_level - 2)) {
+        if (isset($zbp->categories_all[$parentid]) && $zbp->categories_all[$parentid]->Level > ($zbp->category_recursion_level - 2)) {
             $_POST['ParentID'] = '0';
         }
     }
@@ -3836,9 +3836,10 @@ function CountCategoryArray($array, $plus = null, $type = 0)
         if ($value == 0) {
             continue;
         }
-
-        CountCategory($zbp->categories_all[$value], $plus, $type);
-        $zbp->categories_all[$value]->Save();
+        if (isset($zbp->categories_all[$value])) {
+            CountCategory($zbp->categories_all[$value], $plus, $type);
+            $zbp->categories_all[$value]->Save();
+        }
     }
 }
 
