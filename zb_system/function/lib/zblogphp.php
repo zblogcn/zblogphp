@@ -362,12 +362,17 @@ class ZBlogPHP
     public $themeapp = null;
 
     /**
-     * @var 分类递归层数
+     * @var 分类最大递归层数
      */
     public $category_recursion_level = 5;
 
     /**
-     * @var 评论递归层数
+     * @var 分类实际递归层数
+     */
+    public $category_recursion_real_deep = 0;
+
+    /**
+     * @var 评论最大递归层数
      */
     public $comment_recursion_level = 4;
 
@@ -1578,6 +1583,9 @@ class ZBlogPHP
      */
     private function LoadCategories_Recursion($deep, $id, &$lv, $type)
     {
+        if ($deep + 1 >= $this->category_recursion_real_deep) {
+            $this->category_recursion_real_deep = $deep + 1;
+        }
         $subarray = array();
         for ($i = 0; $i < $this->category_recursion_level; $i++) {
             $name = 'lv' . $i;
@@ -1591,7 +1599,6 @@ class ZBlogPHP
             if (isset(${$lvdeepnext}[$id])) {
                 foreach (${$lvdeepnext}[$id] as $idnow) {
                     $subarray[] = $idnow;
-
                     $b = false;
                     foreach ($this->categoriesbyorder_type[$type][$id]->SubCategories as $key2 => $value2) {
                         if ($value2->ID == $idnow) {
@@ -1607,7 +1614,6 @@ class ZBlogPHP
                     foreach ($array as $key => $value) {
                         $subarray[] = $value;
                     }
-
                 }
             }
         }

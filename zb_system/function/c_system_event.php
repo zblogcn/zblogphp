@@ -3668,6 +3668,9 @@ function FilterTag(&$tag)
     $tag->Name = strip_tags($tag->Name);
     $tag->Name = trim($tag->Name);
     $tag->Alias = FormatString($tag->Alias, '[normalname]');
+    $tag->Alias = str_replace('.', '', $tag->Alias);
+    $tag->Alias = str_replace(' ', '', $tag->Alias);
+    $tag->Alias = str_replace('_', '', $tag->Alias);
     $tag->Alias = trim($tag->Alias);
 }
 

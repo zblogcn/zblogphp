@@ -39,7 +39,7 @@ input[type="text"],input[type="password"] { border: 1px solid #3a6ea5; }
 input[type="checkbox"] { margin: 8px 0 0 0; padding: 0; }
 label { line-height: 30px; float: left; vertical-align: text-bottom; padding: 0 5px 0 5px; }
 
-.login { width: 600px; height: 100px; margin: 0 auto; padding-left: 0px; }
+.login { width: 600px; min-height: 100px; margin: 0 auto; padding-left: 0px; }
 .login dl { height: 50px;clear:both; }
 .login dd { width: 300px; float: left; margin-bottom:20px;}
 .login dd.floatright {float: right;}

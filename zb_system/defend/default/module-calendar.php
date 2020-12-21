@@ -15,20 +15,8 @@
     $weeks = array_chunk(array_pad($numberOfDays, -1 * $days - --$dayOfWeek, 0), 7);
     {/php}
     {foreach $weeks as $key => $week}
-        <tr>
-        {foreach $week as $k => $day}
-            <td>
-            {if isset($arraydate[$day])}
-                <a href="{$arraydate[$day]['Url']}" title="{$arraydate[$day]['Date']} ({$arraydate[$day]['Count']})" target="_blank">{$day}</a>
-            {elseif $day}
-                {$day}
-            {/if}
-            </td>
-        {/foreach}
-        {if $key == max(array_keys($weeks)) && $k < 6}
-            {str_pad('',(7 - count($week)) * 9,"<td></td>")}
-        {/if}
-        </tr>
+<tr>{foreach $week as $k => $day}<td>{if isset($arraydate[$day])}<a href="{$arraydate[$day]['Url']}" title="{$arraydate[$day]['Date']} ({$arraydate[$day]['Count']})" target="_blank">{$day}</a>{elseif $day}{$day}{/if}</td>{/foreach}
+{if $key == max(array_keys($weeks)) && $k < 6}{str_pad('',(7 - count($week)) * 9,"<td></td>")}{/if}</tr>
     {/foreach}
 	</tbody>
 </table>

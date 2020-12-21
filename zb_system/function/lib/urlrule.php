@@ -193,30 +193,15 @@ class UrlRule
             $url = str_replace('%id%', '(?P<id>[0-9]+)', $url);
             $url = str_replace('%date%', '(?P<date>[0-9\-]+)', $url);
             if ($type == 'cate') {
-                if (self::$categoryLayer == -1) {
-                    foreach ($zbp->categories as $c) {
-                        if ($c->Level > self::$categoryLayer && strpos($c->Alias, '/') !== false) {
-                            self::$categoryLayer = $c->Level;
-                        }
-                    }
-                    if (self::$categoryLayer == -1) {
-                        self::$categoryLayer = 0;
+                self::$categoryLayer = $zbp->category_recursion_real_deep;
+                $carray = array();
+                for ($i = 1; $i <= self::$categoryLayer; $i++) { 
+                    $carray[$i] = '[^\./_]*';
+                    for ($j=1; $j <= $i-1; $j++) { 
+                        $carray[$i] = '[^\./_]*/' . $carray[$i];
                     }
                 }
-                switch (self::$categoryLayer) {
-                    case 3:
-                        $fullcategory = '[^\./_]*|[^\./_]*/[^\./_]*|[^\./_]*/[^\./_]*/[^\./_]*|[^\./_]+/[^\./_]*/[^\./_]*/[^\./_]*';
-                        break;
-                    case 2:
-                        $fullcategory = '[^\./_]*|[^\./_]*/[^\./_]*|[^\./_]*/[^\./_]*/[^\./_]*';
-                        break;
-                    case 1:
-                        $fullcategory = '[^\./_]*|[^\./_]*/[^\./_]*';
-                        break;
-                    default:
-                        $fullcategory = '[^\./_]*';
-                        break;
-                }
+                $fullcategory = implode('|', $carray);
                 $url = str_replace('%alias%', '(?P<alias>(' . $fullcategory . ')+?)', $url);
             } else {
                 $url = str_replace('%alias%', '(?P<alias>[^\./_]+?)', $url);
@@ -395,30 +380,15 @@ class UrlRule
     {
         global $zbp;
 
-        if (self::$categoryLayer == -1) {
-            foreach ($zbp->categories as $c) {
-                if ($c->Level > self::$categoryLayer && strpos($c->Alias, '/') !== false) {
-                    self::$categoryLayer = $c->Level;
-                }
-            }
-            if (self::$categoryLayer == -1) {
-                self::$categoryLayer = 0;
+        self::$categoryLayer = $zbp->category_recursion_real_deep;
+        $carray = array();
+        for ($i = 1; $i <= self::$categoryLayer; $i++) { 
+            $carray[$i] = '[^\./_]*';
+            for ($j=1; $j <= $i-1; $j++) { 
+                $carray[$i] = '[^\./_]*/' . $carray[$i];
             }
         }
-        switch (self::$categoryLayer) {
-            case 3:
-                $fullcategory = '[^\./_]*|[^\./_]*/[^\./_]*|[^\./_]*/[^\./_]*/[^\./_]*|[^\./_]+/[^\./_]*/[^\./_]*/[^\./_]*';
-                break;
-            case 2:
-                $fullcategory = '[^\./_]*|[^\./_]*/[^\./_]*|[^\./_]*/[^\./_]*/[^\./_]*';
-                break;
-            case 1:
-                $fullcategory = '[^\./_]*|[^\./_]*/[^\./_]*';
-                break;
-            default:
-                $fullcategory = '[^\./_]*';
-                break;
-        }
+        $fullcategory = implode('|', $carray);
 
         $s = $url;
         $s = str_replace('%page%', '%poaogoe%', $s);
