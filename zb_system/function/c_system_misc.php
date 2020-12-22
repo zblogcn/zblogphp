@@ -588,18 +588,27 @@ function misc_ping()
 function misc_updatedapp()
 {
     global $zbp;
+
+    header('Content-Type: application/x-javascript; Charset=utf-8');
+    
     if (!$zbp->CheckRights('admin')) {
         echo $zbp->ShowError(6, __FILE__, __LINE__);
         die();
     }
     if ($zbp->cache->success_updated_app !== '') {
-        $fn = $zbp->cache->success_updated_app . '_Updated';
-        if (function_exists($fn)) {
-            $fn();
-        }
 
         $zbp->cache->success_updated_app = '';
         $zbp->SaveCache();
+
+        $fn = 'UpdatePlugin_' . $zbp->cache->success_updated_app;
+        if (function_exists($fn)) {
+            $fn();
+        } else {
+            $fn = $zbp->cache->success_updated_app . '_Updated';
+            if (function_exists($fn)) {
+                $fn();
+            }
+        }
         die;
     }
 }

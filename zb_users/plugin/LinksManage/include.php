@@ -69,6 +69,13 @@ function LinksManage_Head()
 {
   echo "<link rel=\"stylesheet\" href=\"" . LinksManage_Path("style", "host") . "\">";
   echo "<script src=\"" . LinksManage_Path("script", "host") . "\"></script>";
+  $action = GetVars('act', 'GET');
+  if ($action === "ThemeMng" && GetVars('install', 'GET') !== null) {
+    $files = explode('|', LinksManage_Path("bakfile"));
+    foreach ($files as $file) {
+      LinksManage_BuildMod($file);
+    }
+  }
 }
 function LinksManage_AddMenu()
 {
@@ -98,11 +105,22 @@ function LinksManage_AddItem2Mod($item, $fileName)
   $mod->Content = LinksManage_GenModCon($items, $fileName);
   $mod->Save();
 }
+function LinksManage_BuildMod($fileName)
+{
+  global $zbp;
+  $mod = $zbp->GetModuleByFileName($fileName);
+  $items = (array) json_decode($mod->Metas->LM_json);
+  if (empty($items)) {
+    return;
+  }
+  $mod->Content = LinksManage_GenModCon($items, $fileName);
+  $mod->Save();
+}
 function LinksManage_GenModCon($items, $fileName)
 {
   global $zbp;
   $outTpl = "lm-module-defend";
-  if (isset($zbp->template->templates["lm-module-{$fileName}"])) {
+  if ($zbp->template->HasTemplate("lm-module-{$fileName}")) {
     $outTpl = "lm-module-{$fileName}";
   }
   $content = "";
