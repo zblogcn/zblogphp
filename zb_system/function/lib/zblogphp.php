@@ -2126,7 +2126,7 @@ class ZBlogPHP
             $l = new Base($table, $datainfo);
             $l->LoadInfoByAssoc($a);
             $id = $l->GetIdName();
-            if ($this->CheckCache($type, $l->$id) == false) {
+            if ($this->CheckCache('Base', $l->$id) == false) {
                 $this->AddCache($l);
             }
             $list[] = $l;
@@ -2167,7 +2167,7 @@ class ZBlogPHP
             $l = new Base($table, $datainfo);
             $l->LoadInfoByAssoc($a);
             $id = $l->GetIdName();
-            if ($this->CheckCache($type, $l->$id) == false) {
+            if ($this->CheckCache('Base', $l->$id) == false) {
                 $this->AddCache($l);
             }
             $list[] = $l;
@@ -3716,7 +3716,7 @@ class ZBlogPHP
      */
     public function AddCache(&$object)
     {
-        if (is_subclass_of($object, 'Base') == false) {
+        if (is_a($object, 'Base') == false) {
             return;
         }
         $cacheobject = &$this->cacheobject;
@@ -3755,7 +3755,7 @@ class ZBlogPHP
      */
     public function RemoveCache(&$object)
     {
-        if (is_subclass_of($object, 'Base') == false) {
+        if (is_a($object, 'Base') == false) {
             return;
         }
         $cacheobject = &$this->cacheobject;
