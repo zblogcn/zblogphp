@@ -114,6 +114,11 @@ class ZBlogPHP
     public $apiurl = null;
 
     /**
+     * @var string
+     */
+    public $cmdurl = null;
+
+    /**
      * @var Member[] 用户数组
      */
     public $members = array();
@@ -689,7 +694,8 @@ class ZBlogPHP
         $this->validcodeurl = &$this->verifyCodeUrl;
         $this->feedurl = $this->host . 'feed.php';
         $this->searchurl = $this->host . 'search.php';
-        $this->ajaxurl = $this->host . 'zb_system/cmd.php?act=ajax&src=';
+        $this->cmdurl = $this->host . 'zb_system/cmd.php';
+        $this->ajaxurl = $this->cmdurl . '?act=ajax&src=';
         $this->xmlrpcurl = $this->host . 'zb_system/xml-rpc/index.php';
         $this->apiurl = $this->host . 'zb_system/api.php';
 
