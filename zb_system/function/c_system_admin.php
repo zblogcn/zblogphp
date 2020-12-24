@@ -1112,7 +1112,9 @@ function Admin_CategoryMng()
 {
     global $zbp;
 
-    echo '<div class="divHeader">' . $zbp->lang['msg']['category_manage'] . '</div>';
+    $type = (int)GetVars('type');
+    $typetitle = $type > 0 ? (ucfirst($zbp->GetPostType_Name($type)) . '-') : '';
+    echo '<div class="divHeader">' . $typetitle . $zbp->lang['msg']['category_manage'] . '</div>';
     echo '<div class="SubMenu">';
     foreach ($GLOBALS['hooks']['Filter_Plugin_Admin_CategoryMng_SubMenu'] as $fpname => &$fpsignal) {
         $fpname();
@@ -1132,7 +1134,10 @@ function Admin_CategoryMng()
     $tableths[] = '<th></th>';
     $tableths[] = '</tr>';
 
-    foreach ($zbp->categoriesbyorder as $category) {
+
+    Array_Isset($zbp->categoriesbyorder_type, $type, array());
+
+    foreach ($zbp->categoriesbyorder_type[$type] as $category) {
         $tabletds = array(); //table string
         $tabletds[] = '<tr>';
         $tabletds[] = '<td class="td5">' . $category->ID . '</td>';
@@ -1525,7 +1530,10 @@ function Admin_TagMng()
 {
     global $zbp;
 
-    echo '<div class="divHeader">' . $zbp->lang['msg']['tag_manage'] . '</div>';
+    $type = (int)GetVars('type');
+    $typetitle = $type > 0 ? (ucfirst($zbp->GetPostType_Name($type)) . '-') : '';
+
+    echo '<div class="divHeader">' . $typetitle . $zbp->lang['msg']['tag_manage'] . '</div>';
     echo '<div class="SubMenu">';
     foreach ($GLOBALS['hooks']['Filter_Plugin_Admin_TagMng_SubMenu'] as $fpname => &$fpsignal) {
         $fpname();
@@ -1552,6 +1560,7 @@ function Admin_TagMng()
     if (GetVars('search')) {
         $w[] = array('search', 'tag_Name', 'tag_Alias', 'tag_Intro', GetVars('search'));
     }
+    $w[] = array('=', 'tag_Type', $type);
 
     $array = $zbp->GetTagList(
         '',

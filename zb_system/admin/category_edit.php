@@ -32,6 +32,9 @@ if (isset($_GET['id'])) {
 }
 
 $cate = $zbp->GetCategoryByID($cateid);
+if ($cate->ID == 0) {
+    $cate->Type = (int) GetVars('type', 'GET');
+}
 
 $p = null;
 
@@ -68,6 +71,7 @@ foreach ($zbp->categoriesbyorder as $k => $v) {
     <div id="divMain2" class="edit category_edit">
         <form id="edit" name="edit" method="post" action="#">
             <input id="edtID" name="ID" type="hidden" value="<?php echo $cate->ID; ?>" />
+            <input id="edtType" name="Type" type="hidden" value="<?php echo $cate->Type; ?>" />
             <p>
                 <span class="title">
                     <?php echo $lang['msg']['name']; ?>:</span>

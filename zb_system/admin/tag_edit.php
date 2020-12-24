@@ -32,6 +32,9 @@ if (isset($_GET['id'])) {
 }
 
 $tag = $zbp->GetTagByID($tagid);
+if ($tag->ID == 0) {
+    $tag->Type = (int) GetVars('type', 'GET');
+}
 ?>
 <div id="divMain">
     <div class="divHeader2">
@@ -48,6 +51,11 @@ $tag = $zbp->GetTagByID($tagid);
             <input id="edtID" name="ID" type="hidden" value="
             <?php
             echo $tag->ID;
+            ?>
+            " />
+            <input id="edtType" name="Type" type="hidden" value="
+            <?php
+            echo $tag->Type;
             ?>
             " />
             <p>

@@ -2078,6 +2078,16 @@ function RecHtmlSpecialChars(&$arr)
 }
 
 /**
+ * 判断数组是否已经有$key了，如果没有就set一次$default
+ */
+function Array_Isset(&$array, $key, $default){
+    if (!array_key_exists($key, $array)) {
+        $array[$key] = $default;
+    }
+    return true;
+}
+
+/**
  * 原图转为缩略图地址
  *
  * @param  string $path 原图片地址

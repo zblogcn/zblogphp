@@ -540,6 +540,7 @@ return array(
         '95' => 'API is disabled!',
         '96' => 'API is not available!',
         '97' => 'The resource does not exist.',
+        '98' => 'Duplicate label name',
     ),
 
     'offical_urls' => array(

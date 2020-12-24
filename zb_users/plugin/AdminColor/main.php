@@ -93,7 +93,7 @@ require $blogpath . 'zb_system/admin/admin_top.php';
                 </tr>
                 <tr height="32">
                   <td width="30%" align="left"><p><br/><b>· 替换Logo路径</b><br/>
-                      <span class="note">&nbsp;&nbsp; Logo 为 200x70的PNG图片。</span></p></td>
+                      <span class="note">&nbsp;&nbsp; 默认Logo 为 200x70的图片。</span></p></td>
                   <td>
 <input id="ac_LogoPath" name="ac_LogoPath" type="text" value="<?php echo $zbp->Config('AdminColor')->LogoPath; ?>"  size="50"/><br/>
                   </td>

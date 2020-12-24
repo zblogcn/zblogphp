@@ -2576,6 +2576,16 @@ function PostTag()
         CountTag($tag);
     }
 
+    //检查Name重名(用GetTagList不用GetTagByName)
+    $array = $zbp->GetTagList('*', array(array('=', 'tag_Name', $tag->Name), array('=', 'tag_Type', $tag->Type)), '', 1, '');
+    $checkTag = new Tag();
+    if (count($array) > 0) {
+        $checkTag = $array[0];
+    }
+    if (($tag->ID == 0 && $checkTag->ID > 0) || ($tag->ID > 0 && $checkTag->ID > 0 && $checkTag->ID != $tag->ID)){
+        $zbp->ShowError(98, __FILE__, __LINE__);
+    }
+
     $tag->Save();
     $zbp->AddCache($tag);
 

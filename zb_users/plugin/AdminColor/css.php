@@ -213,10 +213,6 @@ padding-right: 10px;
     margin-left: 32px;
 
 }
-.divHeader {
-    padding: 10px 0 45px 0;
-    background-position:1px 13px!important;
-}
 div.hint {margin-top:0.5em;}
 
 .left #leftmenu #nav_admincolor2 {

@@ -1654,12 +1654,6 @@ class ZBlogPHP
         $this->categoriesbyorder_type = array();
         $this->categories_type = array();
 
-        $lv = array();
-        for ($i = 0; $i < $this->category_recursion_level; $i++) {
-            $name = 'lv' . $i;
-            ${$name} = array();
-            $lv[$i] = &${$name};
-        }
         $array = $this->GetCategoryList(null, null, array('cate_Order' => 'ASC'), null, null);
         if (count($array) == 0) {
             return false;
@@ -1675,13 +1669,20 @@ class ZBlogPHP
         }
 
         foreach ($this->posttype as $key => $value) {
+            $lv = array();
+            for ($i = 0; $i < $this->category_recursion_level; $i++) {
+                $name = 'lv' . $i;
+                ${$name} = array();
+                $lv[$i] = &${$name};
+            }
             $categories = $this->categories_type[$key];
+
             foreach ($categories as $id => $c) {
                 $l = 'lv' . $c->Level;
                 ${$l}[$c->ParentID][] = $id;
             }
 
-            if (!is_array($lv0[0])) {
+            if (!isset($lv0[0])) {
                 $lv0[0] = array();
             }
 
@@ -2628,7 +2629,6 @@ class ZBlogPHP
                 }
             }
         } else {
-
             $val = trim($val);
             foreach ($cacheObject as $key => &$value) {
                 if (is_null($value)) {
@@ -3722,7 +3722,7 @@ class ZBlogPHP
      */
     public function AddCache(&$object)
     {
-        if (is_a($object, 'Base') == false) {
+        if (is_subclass_of($object, 'Base') == false && get_class($object) != 'Base') {
             return;
         }
         $cacheobject = &$this->cacheobject;
@@ -3761,7 +3761,7 @@ class ZBlogPHP
      */
     public function RemoveCache(&$object)
     {
-        if (is_a($object, 'Base') == false) {
+        if (is_subclass_of($object, 'Base') == false && get_class($object) != 'Base') {
             return;
         }
         $cacheobject = &$this->cacheobject;
