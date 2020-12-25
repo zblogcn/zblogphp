@@ -17,7 +17,10 @@ if (!$zbp->CheckRights($action)) {
     die();
 }
 
-$blogtitle = $lang['msg']['category_edit'];
+$type = (int)GetVars('type');
+$typetitle = $type > 0 ? (ucfirst($zbp->GetPostType_Name($type)) . '-') : '';
+
+$blogtitle = $typetitle . $lang['msg']['category_edit'];
 
 require ZBP_PATH . 'zb_system/admin/admin_header.php';
 require ZBP_PATH . 'zb_system/admin/admin_top.php';
@@ -60,7 +63,7 @@ foreach ($zbp->categoriesbyorder as $k => $v) {
 ?>
 <div id="divMain">
     <div class="divHeader2">
-        <?php echo $lang['msg']['category_edit']; ?></div>
+        <?php echo $typetitle . $lang['msg']['category_edit']; ?></div>
     <div class="SubMenu">
         <?php
         foreach ($GLOBALS['hooks']['Filter_Plugin_Category_Edit_SubMenu'] as $fpname => &$fpsignal) {

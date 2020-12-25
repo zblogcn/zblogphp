@@ -25,7 +25,9 @@ function Include_Admin_Addpagesubmenu()
  */
 function Include_Admin_Addtagsubmenu()
 {
-    echo MakeSubMenu($GLOBALS['lang']['msg']['new_tag'], '../cmd.php?act=TagEdt', 'm-left', null, null, null, 'icon-tag-fill');
+    $type = (int)GetVars('type');
+    $typeurl = $type > 0 ? ('&type=' . $type) : '';
+    echo MakeSubMenu($GLOBALS['lang']['msg']['new_tag'], '../cmd.php?act=TagEdt' . $typeurl, 'm-left', null, null, null, 'icon-tag-fill');
 }
 
 /**
@@ -33,7 +35,9 @@ function Include_Admin_Addtagsubmenu()
  */
 function Include_Admin_Addcatesubmenu()
 {
-    echo MakeSubMenu($GLOBALS['lang']['msg']['new_category'], '../cmd.php?act=CategoryEdt', 'm-left', null, null, null, 'icon-folder-plus');
+    $type = (int)GetVars('type');
+    $typeurl = $type > 0 ? ('&type=' . $type) : '';
+    echo MakeSubMenu($GLOBALS['lang']['msg']['new_category'], '../cmd.php?act=CategoryEdt' . $typeurl, 'm-left', null, null, null, 'icon-folder-plus');
 }
 
 /**

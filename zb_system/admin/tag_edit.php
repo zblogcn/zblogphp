@@ -17,7 +17,10 @@ if (!$zbp->CheckRights($action)) {
     die();
 }
 
-$blogtitle = $lang['msg']['tag_edit'];
+$type = (int)GetVars('type');
+$typetitle = $type > 0 ? (ucfirst($zbp->GetPostType_Name($type)) . '-') : '';
+
+$blogtitle = $typetitle . $lang['msg']['tag_edit'];
 
 require ZBP_PATH . 'zb_system/admin/admin_header.php';
 require ZBP_PATH . 'zb_system/admin/admin_top.php';
@@ -38,7 +41,7 @@ if ($tag->ID == 0) {
 ?>
 <div id="divMain">
     <div class="divHeader2">
-        <?php echo $lang['msg']['tag_edit']; ?></div>
+        <?php echo $typetitle . $lang['msg']['tag_edit']; ?></div>
     <div class="SubMenu">
         <?php
         foreach ($GLOBALS['hooks']['Filter_Plugin_Tag_Edit_SubMenu'] as $fpname => &$fpsignal) {

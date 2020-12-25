@@ -499,10 +499,15 @@ $GLOBALS['zbp']->Initialize();
 if (ZBP_SAFEMODE === false) {
     if (is_readable($file_base = $GLOBALS['usersdir'] . 'theme/' . $GLOBALS['blogtheme'] . '/theme.xml')) {
         $GLOBALS['activedapps'][] = $GLOBALS['blogtheme'];
-    }
 
-    if (is_readable($file_base = $GLOBALS['usersdir'] . 'theme/' . $GLOBALS['blogtheme'] . '/include.php')) {
-        include $file_base;
+        // 读主题版本信息
+        $GLOBALS['zbp']->themeapp = $GLOBALS['zbp']->LoadApp('theme', $GLOBALS['blogtheme']);
+        $GLOBALS['zbp']->themeinfo = $GLOBALS['zbp']->themeapp->GetInfoArray();
+
+        if ($GLOBALS['zbp']->themeapp->isloaded && is_readable($file_base = $GLOBALS['usersdir'] . 'theme/' . $GLOBALS['blogtheme'] . '/include.php')) {
+            include $file_base;
+        }
+
     }
 
     $aps = $GLOBALS['zbp']->GetPreActivePlugin();

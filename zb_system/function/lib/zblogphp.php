@@ -579,6 +579,10 @@ class ZBlogPHP
      */
     public function Initialize()
     {
+        if ($this->isinitialized) {
+            return false;
+        }
+
         $oldZone = $this->option['ZC_TIME_ZONE_NAME'];
         date_default_timezone_set($oldZone);
 
@@ -731,13 +735,22 @@ class ZBlogPHP
      */
     public function PreLoad()
     {
-        if (!$this->isinitialized && $this->ispreload) {
+        if (!$this->isinitialized || $this->ispreload) {
             return false;
         }
 
         foreach ($GLOBALS['hooks']['Filter_Plugin_Zbp_PreLoad'] as $fpname => &$fpsignal) {
             $fpreturn = $fpname();
         }
+
+        //此处接口应该在下一版本移除
+        //foreach ($GLOBALS['hooks']['Filter_Plugin_Zbp_Load_Pre'] as $fpname => &$fpsignal) {
+        //    $fpreturn = $fpname();
+        //    if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
+        //        $fpsignal = PLUGIN_EXITSIGNAL_NONE;
+        //        return $fpreturn;
+        //    }
+        //}
 
         $this->ispreload = true;
         return true;
@@ -752,18 +765,9 @@ class ZBlogPHP
      */
     public function Load()
     {
-        if (!$this->isinitialized && $this->ispreload && $this->isload) {
+        if (!$this->isinitialized || !$this->ispreload || $this->isload) {
             return false;
         }
-
-        //此处接口应该在下一版本移除
-        //foreach ($GLOBALS['hooks']['Filter_Plugin_Zbp_Load_Pre'] as $fpname => &$fpsignal) {
-        //    $fpreturn = $fpname();
-        //    if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
-        //        $fpsignal = PLUGIN_EXITSIGNAL_NONE;
-        //        return $fpreturn;
-        //    }
-        //}
 
         if (!headers_sent()) {
             header('Content-type: text/html; charset=utf-8');
@@ -785,10 +789,6 @@ class ZBlogPHP
 
         //创建模板类
         $this->template = $this->PrepareTemplate();
-
-        // 读主题版本信息
-        $this->themeapp = $this->LoadApp('theme', $this->theme);
-        $this->themeinfo = $this->themeapp->GetInfoArray();
 
         if ($this->ismanage) {
             $this->LoadManage();
