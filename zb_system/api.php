@@ -30,7 +30,13 @@ ApiLoadMods($mods);
 $mod = strtolower(GetVars('mod', 'GET'));
 $act = strtolower(GetVars('act', 'GET'));
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && (! ($mod === 'member' && $act === 'login'))) {
+ApiLoadPostData();
+
+if (
+    $_SERVER['REQUEST_METHOD'] === 'POST' && 
+    (! ($mod === 'member' && $act === 'login')) &&
+    (! ($mod === 'comment' && $act === 'post'))
+) {
     ApiVerifyCSRF();
 }
 

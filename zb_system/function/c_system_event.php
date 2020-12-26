@@ -4495,6 +4495,17 @@ function ApiVerifyCSRF()
 }
 
 /**
+ * API 载入 POST 数据（前端 JSON）.
+ */
+function ApiLoadPostData()
+{
+    $input = file_get_contents('php://input');
+    if ($input && ($data = json_decode($input, true)) && is_array ($data)) {
+        $_POST = array_merge ($data, $_POST);
+    }
+}
+
+/**
  * API 派发.
  *
  * @param array       $mods
