@@ -2077,15 +2077,21 @@ function PostComment()
         }
     }
 
+    $post_name = isset($_POST['name']) ? GetVars('name', 'POST') : GetVars('Name', 'POST');
+    $post_replyid = isset($_POST['replyid']) ? GetVars('replyid', 'POST') : GetVars('ReplyID', 'POST');
+    $post_email = isset($_POST['email']) ? GetVars('email', 'POST') : GetVars('Email', 'POST');
+    $post_homepage = isset($_POST['homepage']) ? GetVars('homepage', 'POST') : GetVars('HomePage', 'POST');
+    $post_content = isset($_POST['content']) ? GetVars('content', 'POST') : GetVars('Content', 'POST');
+
     //判断是不是有同名的用户
-    $m = $zbp->GetMemberByName($_POST['name']);
+    $m = $zbp->GetMemberByName($post_name);
     if ($m->ID > 0) {
         if ($m->ID != $zbp->user->ID) {
             $zbp->ShowError(31, __FILE__, __LINE__);
         }
     }
 
-    $replyid = (int) GetVars('replyid', 'POST');
+    $replyid = (int) $post_replyid;
 
     if ($replyid == 0) {
         $_POST['RootID'] = 0;
@@ -2100,17 +2106,17 @@ function PostComment()
     }
 
     $_POST['AuthorID'] = $zbp->user->ID;
-    $_POST['Name'] = GetVars('name', 'POST');
-    if ($zbp->user->ID > 0) {
-        $_POST['Name'] = $zbp->user->Name;
-    }
-
-    $_POST['Email'] = GetVars('email', 'POST');
-    $_POST['HomePage'] = GetVars('homepage', 'POST');
-    $_POST['Content'] = GetVars('content', 'POST');
+    $_POST['Name'] = $post_name;
+    $_POST['Email'] = $post_email;
+    $_POST['HomePage'] = $post_homepage;
+    $_POST['Content'] = $post_content;
     $_POST['PostTime'] = time();
     $_POST['IP'] = GetGuestIP();
     $_POST['Agent'] = GetGuestAgent();
+
+    if ($zbp->user->ID > 0) {
+        $_POST['Name'] = $zbp->user->Name;
+    }
 
     $cmt = new Comment();
 
