@@ -122,14 +122,16 @@ function ScheduledTasks_Polling(){
         $newtasks[$key] = $alltasks[$key];
     }
 
-    foreach ($newtasks as $key => $tasks) {
-        if ($tasks['operate'] == false &&
-            $tasks['suspend'] == false &&
-            time() > $tasks['begintime'] &&
-            $tasks['endtime'] > time() &&
-            time() >= $tasks['lasttime'] + $tasks['interval'] - round(1 + $tasks['interval']*0.01)) { //减1%时间应对网络波动 
-                $result = ScheduledTasks_Execute($tasks['id']);
-                return $tasks['id'] . ':' . $result;
+    $results = array();
+
+    foreach ($newtasks as $key => $task) {
+        if ($task['operate'] == false &&
+            $task['suspend'] == false &&
+            time() > $task['begintime'] &&
+            $task['endtime'] > time() &&
+            time() >= $task['lasttime'] + $task['interval'] - round(1 + $task['interval']*0.01)) { //减1%时间应对网络波动 
+                $result_data = ScheduledTasks_Execute($task['id']);
+                $results[$task['id']] = $result_data;
         }
     }
 }
