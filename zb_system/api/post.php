@@ -45,7 +45,7 @@ function api_post_get()
             ApiCheckAuth(false, 'view');
             $array = ApiGetObjectArray(
                 $post,
-                array(),
+                array('Url','TagsCount','TagsName','CommentPostKey','ValidCodeUrl'),
                 array(),
                 ApiGetAndFilterRelationQuery(array(
                     'Category' => array(
