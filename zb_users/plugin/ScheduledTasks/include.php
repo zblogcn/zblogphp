@@ -48,6 +48,9 @@ $zbp->cache('ScheduledTasks')->task_id = array(ZblogTask结构);
 // 注册插件
 RegisterPlugin("ScheduledTasks", "ActivePlugin_ScheduledTasks");
 
+// 定义接口
+DefinePluginFilter('Filter_Plugin_ScheduledTasks_Reg_Function');
+
 // 任务函数 function_name => name(description)
 $scheduled_task_functions = array();
 $scheduled_task_functions_loaded = false;
@@ -134,6 +137,8 @@ function ScheduledTasks_Polling(){
                 $results[$task['id']] = $result_data;
         }
     }
+
+    return $results;
 }
 
 function ScheduledTasks_RegTasks(array $array){
