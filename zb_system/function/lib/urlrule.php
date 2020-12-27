@@ -44,6 +44,14 @@ class UrlRule
     /**
      * @return string
      */
+    public function GetPreUrl()
+    {
+        return $this->PreUrl;
+    }
+
+    /**
+     * @return string
+     */
     private function Make_Preg()
     {
         global $zbp;
