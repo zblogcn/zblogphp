@@ -746,16 +746,9 @@ class Template
         $this->dirs = array();
         $this->files = array();
         $this->GetAllFileDir($zbp->usersdir . 'theme/' . $theme . "/{$this->template_dirname}/");
-        foreach ($this->dirs as $key => $value) {
-            $this->dirs[$key] = str_replace('\\', '/', $this->dirs[$key]);
-            if (substr($this->dirs[$key], -1) != '/') {
-                $this->dirs[$key] .= '/';
-            }
-        }
 
         foreach ($this->files as $key => $value) {
-            $this->files[$key] = str_replace('\\', '/', $this->files[$key]);
-            $templates[$key] = $this->files[$key];
+            $templates[$key] = $value;
         }
 
         for ($i = 2; $i < 10; $i++) {
@@ -844,13 +837,14 @@ class Template
         if (!file_exists($dir)) {
             return ;
         }
-        if (function_exists('scandir')) {
+        if (!function_exists('scandir')) {
             foreach (scandir($dir) as $d) {
                 if ($d != "." && $d != "..") {
                     if (is_dir($dir . $d)) {
                         if ((substr($d, 0, 1) != '.')) {
-                            $this->dirs[] = $dir . $d . '/';
-                            $this->GetAllFileDir($dir . $d . '/');
+                            $fd = str_replace('\\', '/', $dir . $d . '/');
+                            $this->dirs[] = $fd;
+                            $this->GetAllFileDir($fd);
                         }
                     } elseif (is_readable($dir . $d)) {
                         $s = $dir . $d;
@@ -858,6 +852,7 @@ class Template
                         if (substr($s, -4) == '.php') {
                             $s2 = substr($s, ($i - strlen($s)));
                             $s3 = substr($s2, 0, (strlen($s2) - 4));
+                            $s3 = str_replace('\\', '/', $s3);
                             $this->files[$s3] = file_get_contents($s); //$dir . $d;
                         }
                     }
@@ -869,7 +864,8 @@ class Template
                     if ($file != "." && $file != "..") {
                         $d = str_replace("{$this->template_dirname}//", "{$this->template_dirname}/", str_replace('\\', '/', $dir . '/' . $file));
                         if (is_dir($dir . '/' . $file)) {
-                            $this->dirs[] = $d;
+                            $d = str_replace('\\', '/', $d);
+                            $this->dirs[] = substr($d, -1) == '/' ? $d : ($d . '/');
                             $this->GetAllFileDir($d);
                         } elseif (is_readable($d)) {
                             $s = $d;
@@ -877,6 +873,7 @@ class Template
                             if (substr($s, -4) == '.php') {
                                 $s2 = substr($s, ($i - strlen($s)));
                                 $s3 = substr($s2, 0, (strlen($s2) - 4));
+                                $s3 = str_replace('\\', '/', $s3);
                                 $this->files[$s3] = file_get_contents($s); //$dir . $d;
                             }
                         }
