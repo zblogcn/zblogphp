@@ -2363,7 +2363,7 @@ function BatchComment()
         if (is_int($value)) {
             $childArray[$key] = $zbp->GetCommentByID($value);
         }
-        if (is_subclass_of($childArray[$key], 'Base') != false || $childArray[$key]->ID == 0) {
+        if (is_subclass_of($childArray[$key], 'Base') == false || $childArray[$key]->ID == 0) {
             unset($childArray[$key]);
         }
     }
