@@ -77,6 +77,21 @@ class ZBlogPHP
     public $usersdir = null;
 
     /**
+     * @var string Cache目录
+     */
+    public $cachedir = null;
+
+    /**
+     * @var string Logs目录
+     */
+    public $logsdir = null;
+
+    /**
+     * @var string Data目录
+     */
+    public $datadir = null;
+
+    /**
      * @var string 验证码地址
      */
     public $verifyCodeUrl = null;
@@ -435,8 +450,8 @@ class ZBlogPHP
      */
     public function __construct()
     {
-        global $option, $lang, $langs, $blogpath, $bloghost, $cookiespath, $usersdir, $table,
-            $datainfo, $actions, $action, $blogversion, $blogtitle, $blogname, $blogsubname,
+        global $option, $lang, $langs, $blogpath, $bloghost, $cookiespath, $usersdir, $cachedir, $logsdir, $datadir,
+            $table, $datainfo, $actions, $action, $blogversion, $blogtitle, $blogname, $blogsubname,
             $blogtheme, $blogstyle, $currenturl, $activedapps, $posttype, $fullcurrenturl;
 
         if (ZBP_HOOKERROR) {
@@ -452,6 +467,9 @@ class ZBlogPHP
         $this->host = &$bloghost; //此值在后边初始化时可能会变化!
         $this->cookiespath = &$cookiespath;
         $this->usersdir = &$usersdir;
+        $this->cachedir = &$cachedir;
+        $this->logsdir = &$logsdir;
+        $this->datadir = &$datadir;
 
         $this->table = &$table;
         $this->datainfo = &$datainfo;
@@ -815,7 +833,7 @@ class ZBlogPHP
         }
 
         //进后台时已自动检测模板并自动重建了，所以这里只针对开调试后的前台的访问进行
-        if ($this->option['ZC_DEBUG_MODE'] && $this->ismanage == false) {
+        if ($this->option['ZC_DEBUG_MODE'] || $this->ismanage) {
             $this->CheckTemplate();
         }
 
@@ -845,8 +863,6 @@ class ZBlogPHP
         Add_Filter_Plugin('Filter_Plugin_Admin_CommentMng_SubMenu', 'Include_Admin_Addcmtsubmenu');
         Add_Filter_Plugin('Filter_Plugin_Zbp_LoadManage', 'Include_Admin_UpdateDB');
         Add_Filter_Plugin('Filter_Plugin_Admin_End', 'Include_Admin_CheckHttp304OK');
-
-        $this->CheckTemplate();
 
         if (isset($GLOBALS['zbpvers'])) {
             $GLOBALS['zbpvers'][$GLOBALS['blogversion']] = ZC_VERSION_DISPLAY . ' Build ' . $GLOBALS['blogversion'];
@@ -896,7 +912,7 @@ class ZBlogPHP
             case 'pdo_sqlite':
                 $this->db = self::InitializeDB($this->option['ZC_DATABASE_TYPE']);
                 if ($this->db->Open(
-                    array($this->usersdir . 'data/' . $this->option['ZC_SQLITE_NAME'],
+                    array($this->datadir . '' . $this->option['ZC_SQLITE_NAME'],
                         $this->option['ZC_SQLITE_PRE'],
                     )
                 ) == false
@@ -1162,7 +1178,7 @@ class ZBlogPHP
      */
     public function SaveCache()
     {
-        //$s=$this->usersdir . 'cache/' . $this->guid . '.cache';
+        //$s=$this->cachedir . '' . $this->guid . '.cache';
         //$c=serialize($this->cache);
         //@file_put_contents($s, $c);
         //$this->configs['cache']=$this->cache;
@@ -1990,8 +2006,10 @@ class ZBlogPHP
             $fpname($template->templateTags);
         }
 
-        $template->SetPath($this->usersdir . 'cache/compiled/' . $theme . '/');
+        $template->SetPath($this->cachedir . 'compiled/' . $theme . '/');
         $template->theme = $theme;
+
+        $template->LoadTemplates();
 
         return $template;
     }

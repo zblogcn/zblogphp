@@ -456,6 +456,19 @@ $GLOBALS['blogpath'] = ZBP_PATH;
  */
 $GLOBALS['usersdir'] = ZBP_PATH . 'zb_users/';
 /*
+ * CACHE路径
+ */
+$GLOBALS['cachedir'] = $GLOBALS['usersdir'] . 'cache/';
+/*
+ * LOGS路径
+ */
+$GLOBALS['logsdir'] = $GLOBALS['usersdir'] . 'logs/';
+/*
+ * DATA路径
+ */
+$GLOBALS['datadir'] = $GLOBALS['usersdir'] . 'data/';
+
+/*
  * 已激活插件列表
  */
 $GLOBALS['activedapps'] = array();

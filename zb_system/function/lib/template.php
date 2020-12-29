@@ -186,8 +186,10 @@ class Template
      */
     public function CompileFiles()
     {
+        global $zbp;
+
         foreach ($this->dirs as $key => $value) {
-            $value = str_ireplace('/theme/' . $this->theme . '/template', '/cache/compiled/' . $this->theme, $value);
+            $value = str_ireplace($zbp->usersdir . 'theme/' . $this->theme . '/template', $zbp->cachedir . 'compiled/' . $this->theme, $value);
             if (!file_exists($value)) {
                 mkdir($value, 0755, true);
             }
@@ -217,14 +219,14 @@ class Template
                 }
             }
             foreach ($this->files as $key => $value) {
-                $s = $zbp->path . 'zb_users/cache/compiled/' . $this->theme . '/' . $key . '.php';
+                $s = $zbp->cachedir . 'compiled/' . $this->theme . '/' . $key . '.php';
                 if (file_exists($s)) {
                     @unlink($s);
                 }
             }
             $this->dirs = array_reverse($this->dirs);
             foreach ($this->dirs as $key => $value) {
-                $s = str_replace('/theme/' . $this->theme . '/template', '/cache/compiled/' . $this->theme, $value);
+                $s = str_replace($zbp->usersdir . 'theme/' . $this->theme . '/template', $zbp->cachedir . 'compiled/' . $this->theme, $value);
                 if (file_exists($s)) {
                     foreach (GetFilesInDir($s, 'php') as $t) {
                         if (file_exists($t)) {
@@ -745,13 +747,15 @@ class Template
         $this->files = array();
         $this->GetAllFileDir($zbp->usersdir . 'theme/' . $theme . "/{$this->template_dirname}/");
         foreach ($this->dirs as $key => $value) {
+            $this->dirs[$key] = str_replace('\\', '/', $this->dirs[$key]);
             if (substr($this->dirs[$key], -1) != '/') {
                 $this->dirs[$key] .= '/';
             }
         }
 
         foreach ($this->files as $key => $value) {
-            $templates[$key] = $value;
+            $this->files[$key] = str_replace('\\', '/', $this->files[$key]);
+            $templates[$key] = $this->files[$key];
         }
 
         for ($i = 2; $i < 10; $i++) {

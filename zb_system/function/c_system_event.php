@@ -2359,6 +2359,14 @@ function BatchComment()
 
     // Unique child array
     $childArray = array_unique($childArray);
+    foreach ($childArray as $key => $value) {
+        if (is_int($value)) {
+            $childArray[$key] = $zbp->GetCommentByID($value);
+        }
+        if (is_subclass_of($childArray[$key], 'Base') != false || $childArray[$key]->ID == 0) {
+            unset($childArray[$key]);
+        }
+    }
 
     if ($type == 'all_del') {
         foreach ($childArray as $i => $cmt) {

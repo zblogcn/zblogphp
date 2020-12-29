@@ -891,7 +891,7 @@ class App
     public function DelCompiled()
     {
         global $zbp;
-        rrmdir($zbp->usersdir . 'cache/compiled/' . $this->id);
+        rrmdir($zbp->cachedir . 'compiled/' . $this->id);
     }
 
     /**

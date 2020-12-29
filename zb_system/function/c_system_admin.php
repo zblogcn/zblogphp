@@ -711,18 +711,20 @@ function CreateOptionsOfLang($default)
     $files = GetFilesInDir($dir, 'php');
     $tz = array();
     foreach ($files as $f) {
-        $n = basename($f, '.php');
-        //fix 1.3 to 1.4 warning
-        if ('SimpChinese' == $n) {
-            continue;
-        }
+        if (substr($f, 0, 1) !== '.' && substr($f, 0, 1) !== '_') {
+            $n = basename($f, '.php');
+            //fix 1.3 to 1.4 warning
+            if ('SimpChinese' == $n) {
+                continue;
+            }
 
-        if ('TradChinese' == $n) {
-            continue;
-        }
+            if ('TradChinese' == $n) {
+                continue;
+            }
 
-        $t = include $f;
-        $tz[$n] = $t['lang_name'] . ' (' . $n . ')';
+            $t = include $f;
+            $tz[$n] = $t['lang_name'] . ' (' . $n . ')';
+        }
     }
 
     foreach ($GLOBALS['hooks']['Filter_Plugin_OutputOptionItemsOfCommon'] as $fpname => &$fpsignal) {

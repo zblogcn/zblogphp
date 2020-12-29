@@ -174,15 +174,15 @@ function Logs($logString, $isError = false)
     }
     if ($zbp->guid) {
         if ($isError) {
-            $f = $zbp->usersdir . 'logs/' . $zbp->guid . '-error' . date("Ymd") . '.txt';
+            $f = $zbp->logsdir . '' . $zbp->guid . '-error' . date("Ymd") . '.txt';
         } else {
-            $f = $zbp->usersdir . 'logs/' . $zbp->guid . '-log' . date("Ymd") . '.txt';
+            $f = $zbp->logsdir . '' . $zbp->guid . '-log' . date("Ymd") . '.txt';
         }
     } else {
         if ($isError) {
-            $f = $zbp->usersdir . 'logs/' . md5($zbp->path) . '-error.txt';
+            $f = $zbp->logsdir . '' . md5($zbp->path) . '-error.txt';
         } else {
-            $f = $zbp->usersdir . 'logs/' . md5($zbp->path) . '.txt';
+            $f = $zbp->logsdir . '' . md5($zbp->path) . '.txt';
         }
     }
     ZBlogException::SuspendErrorHook();
