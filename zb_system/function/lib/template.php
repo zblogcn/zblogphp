@@ -837,7 +837,7 @@ class Template
         if (!file_exists($dir)) {
             return ;
         }
-        if (!function_exists('scandir')) {
+        if (function_exists('scandir')) {
             foreach (scandir($dir) as $d) {
                 if ($d != "." && $d != "..") {
                     if (is_dir($dir . $d)) {
