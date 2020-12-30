@@ -2007,25 +2007,25 @@ class ZBlogPHP
      */
     public function PrepareTemplate($theme = null, $template_dirname = 'template')
     {
-        if (is_null($theme)) {
+        if (is_null($theme) || empty($theme)) {
             $theme = &$this->theme;
         }
 
         $template = new Template();
         $template->MakeTemplateTags();
 
-        //下边增加了接口后，此处接口有些多余！
+        //老接口，只改templateTags的
         foreach ($GLOBALS['hooks']['Filter_Plugin_Zbp_MakeTemplatetags'] as $fpname => &$fpsignal) {
             $fpname($template->templateTags);
         }
 
+        //此处增加接口可以在Load时，对$theme, $template_dirname参数可以进行修改
+        foreach ($GLOBALS['hooks']['Filter_Plugin_Zbp_PrepareTemplate'] as $fpname => &$fpsignal) {
+            $fpname($theme, $template_dirname);
+        }
+
         $template->theme = $theme;
         $template->template_dirname = $template_dirname;
-
-        //此处增加接口可以在Load时，对主题模板的实例可以进行修改
-        foreach ($GLOBALS['hooks']['Filter_Plugin_Zbp_PrepareTemplate'] as $fpname => &$fpsignal) {
-            $fpname($template);
-        }
 
         $template->SetPath();
 
@@ -2035,11 +2035,43 @@ class ZBlogPHP
     }
 
     /**
+     * 针对有同一主题下有多套模板的解析
+     * 直接在接口中直接调用$zbp->BuildTemplateMore进行重新编译其它模板
+     * @return bool
+     */
+    public function BuildTemplate()
+    {
+        $this->BuildTemplate_Once();
+
+        foreach ($GLOBALS['hooks']['Filter_Plugin_Zbp_BuildTemplate_End'] as $fpname => &$fpsignal) {
+            $fpname($this->template);
+        }
+
+        return true;
+    }
+
+    /**
+     * 快捷重新编译指定主题模板目录名的模板
+     * 
+     * @return bool
+     */
+    public function BuildTemplateMore($theme = null, $template_dirname = 'template')
+    {
+        if (is_null($theme) || empty($theme)) {
+            $theme = &$this->theme;
+        }
+        $this->template->theme = $theme;
+        $this->template->template_dirname = $template_dirname;
+        $this->template->SetPath();
+        return $this->BuildTemplate_Once();
+    }
+
+    /**
      * 模板解析.
      *
      * @return bool
      */
-    public function BuildTemplate()
+    private function BuildTemplate_Once()
     {
         $this->template->LoadTemplates();
 

@@ -924,6 +924,9 @@ class Template
         unset($option['ZC_PGSQL_SERVER']);
         unset($option['ZC_DATABASE_TYPE']);
 
+        //添加template_dirname进zbp->themeinfo
+        $zbp->themeinfo['template_dirname'] = &$this->template_dirname;
+
         $this->templateTags['zbp'] = &$zbp;
         $this->templateTags['user'] = &$zbp->user;
         $this->templateTags['option'] = &$option;
