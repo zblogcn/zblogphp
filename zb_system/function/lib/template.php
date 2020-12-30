@@ -96,6 +96,14 @@ class Template
      */
     public function SetPath($path)
     {
+        $template_dirname = $this->template_dirname;
+        $path = str_replace('\\', '/', $path);
+        if (substr($path, -1) != '/') {
+            $path = $path . '/';
+        }
+        if (!($template_dirname == '' || $template_dirname == 'template')) {
+            $path = substr($path, 0, strlen($path) - 1) . '___' . $template_dirname . '/';
+        }
         $this->path = $path;
     }
 
@@ -189,7 +197,7 @@ class Template
         global $zbp;
 
         foreach ($this->dirs as $key => $value) {
-            $value = str_ireplace($zbp->usersdir . 'theme/' . $this->theme . '/template', $zbp->cachedir . 'compiled/' . $this->theme, $value);
+            $value = str_ireplace($zbp->usersdir . 'theme/' . $this->theme . '/template/', $this->path, $value);
             if (!file_exists($value)) {
                 mkdir($value, 0755, true);
             }
@@ -219,14 +227,14 @@ class Template
                 }
             }
             foreach ($this->files as $key => $value) {
-                $s = $zbp->cachedir . 'compiled/' . $this->theme . '/' . $key . '.php';
+                $s = $this->path . $key . '.php';
                 if (file_exists($s)) {
                     @unlink($s);
                 }
             }
             $this->dirs = array_reverse($this->dirs);
             foreach ($this->dirs as $key => $value) {
-                $s = str_replace($zbp->usersdir . 'theme/' . $this->theme . '/template', $zbp->cachedir . 'compiled/' . $this->theme, $value);
+                $s = str_replace($zbp->usersdir . 'theme/' . $this->theme . '/template/', $this->path, $value);
                 if (file_exists($s)) {
                     foreach (GetFilesInDir($s, 'php') as $t) {
                         if (file_exists($t)) {

@@ -2007,14 +2007,15 @@ class ZBlogPHP
             $fpname($template->templateTags);
         }
 
-        $template->SetPath($this->cachedir . 'compiled/' . $theme . '/');
         $template->theme = $theme;
         $template->template_dirname = $template_dirname;
 
         //此处增加接口可以在Load时，对主题模板的实例可以进行修改
         foreach ($GLOBALS['hooks']['Filter_Plugin_Zbp_PrepareTemplate'] as $fpname => &$fpsignal) {
-            $fpname($template, $theme, $template_dirname);
+            $fpname($template);
         }
+
+        $template->SetPath($this->cachedir . 'compiled/' . $template->theme . '/');
 
         $template->LoadTemplates();
 
