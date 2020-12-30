@@ -92,15 +92,25 @@ class Template
     }
 
     /**
+     * 设置路径
+     * 1.7改为可以为空，为空就是按系统设置去设path
+     *
      * @param $path
      */
-    public function SetPath($path)
+    public function SetPath($path = null)
     {
+        global $zbp;
         $template_dirname = $this->template_dirname;
+
+        if ($path == null) {
+            $path = $zbp->cachedir . 'compiled/' . $this->theme . '/';
+        }
+
         $path = str_replace('\\', '/', $path);
         if (substr($path, -1) != '/') {
             $path = $path . '/';
         }
+        //针对不同的模板目录创建不同的编译目录
         if (!($template_dirname == '' || $template_dirname == 'template')) {
             $path = substr($path, 0, strlen($path) - 1) . '___' . $template_dirname . '/';
         }
@@ -745,7 +755,7 @@ class Template
         $templates_Type = array();
 
         // 读取预置模板
-        $files = GetFilesInDir($zbp->path . 'zb_system/defend/default/', 'php');
+        $files = GetFilesInDir($zbp->systemdir . 'defend/default/', 'php');
         foreach ($files as $sortname => $fullname) {
             $templates[$sortname] = file_get_contents($fullname);
         }

@@ -456,6 +456,14 @@ $GLOBALS['blogpath'] = ZBP_PATH;
  */
 $GLOBALS['usersdir'] = ZBP_PATH . 'zb_users/';
 /*
+ * System路径
+ */
+$GLOBALS['systemdir'] = ZBP_PATH . 'zb_system/';
+/*
+ * Admin路径
+ */
+$GLOBALS['admindir'] = $GLOBALS['systemdir'] . 'admin/';
+/*
  * CACHE路径
  */
 $GLOBALS['cachedir'] = $GLOBALS['usersdir'] . 'cache/';

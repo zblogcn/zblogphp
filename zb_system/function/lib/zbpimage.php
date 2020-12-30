@@ -7,7 +7,7 @@ if (!defined('ZBP_PATH')) {
 /**
  * 图片类.
  */
-class Image
+class ZbpImage
 {
     /**
      * 图片缩略
@@ -17,7 +17,7 @@ class Image
      * @param int $forcedwidth      生成的宽度
      * @param int $forcedheight     生成的高度
      * return array array('filesize'=>0, 'width'=>0, 'height'=>0)
-     * Image::Thumb('xxx.jpg', 'xxx_thumb.jpg', 200, 200);
+     * ZbpImage::Thumb('xxx.jpg', 'xxx_thumb.jpg', 200, 200);
      */
     public static function Thumb($sourcefile, $destfile, $forcedwidth = 300, $forcedheight = 300)
     {
@@ -121,7 +121,7 @@ class Image
      * @param int $clipy            被裁切图片的Y坐标
      * @param int $clipwidth        被裁区域的宽度
      * @param int $clipheight       被裁区域的高度
-     * Image::Clip('xxx/x.jpg', 'xxx/newx.jpg', 10, 40, 150, 150)
+     * ZbpImage::Clip('xxx/x.jpg', 'xxx/newx.jpg', 10, 40, 150, 150)
      */
     public static function Clip($sourcefile, $destfile, $clipx, $clipy, $clipwidth, $clipheight)
     {

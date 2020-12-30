@@ -1534,11 +1534,11 @@ function PostArticle()
                     $imgNew = ImgToThumbUrl($imgs);
                     //缩略并裁剪
                     if($zbp->option['ZC_ARTICLE_THUMB_TYPE'] == 1){
-                        if(Image::ClipThumb($imgs,$imgNew,$zbp->option['ZC_ARTICLE_THUMB_WIDTH'],$zbp->option['ZC_ARTICLE_THUMB_HEIGHT'])){
+                        if(ZbpImage::ClipThumb($imgs,$imgNew,$zbp->option['ZC_ARTICLE_THUMB_WIDTH'],$zbp->option['ZC_ARTICLE_THUMB_HEIGHT'])){
                             $_POST['Thumb'] = ImgToThumbUrl('{#ZC_BLOG_HOST#}'.$img);
                         }
                     }else{
-                        if(Image::Thumb($imgs,$imgNew,$zbp->option['ZC_ARTICLE_THUMB_WIDTH'],false)){
+                        if(ZbpImage::Thumb($imgs,$imgNew,$zbp->option['ZC_ARTICLE_THUMB_WIDTH'],false)){
                             $_POST['Thumb'] = ImgToThumbUrl('{#ZC_BLOG_HOST#}'.$img);
                         }
                     }
@@ -1563,7 +1563,7 @@ function PostArticle()
                         if($r){
                             if(file_put_contents($url,$r)){
                                 $imgNew = ImgToThumbUrl($url);
-                                if(Image::ClipThumb($url,$imgNew,$zbp->option['ZC_ARTICLE_THUMB_WIDTH'],$zbp->option['ZC_ARTICLE_THUMB_HEIGHT'])){
+                                if(ZbpImage::ClipThumb($url,$imgNew,$zbp->option['ZC_ARTICLE_THUMB_WIDTH'],$zbp->option['ZC_ARTICLE_THUMB_HEIGHT'])){
                                     $_POST['Thumb'] = '{#ZC_BLOG_HOST#}'.$path.ImgToThumbUrl($name);
                                 }
                             }
@@ -1572,7 +1572,7 @@ function PostArticle()
                 }else{
                     $r = $zbp->path.str_replace('{#ZC_BLOG_HOST#}', '', $_POST['FirstImg']);
                     $imgNew = ImgToThumbUrl($url);
-                    if(Image::ClipThumb($r,$imgNew,$zbp->option['ZC_ARTICLE_THUMB_WIDTH'],$zbp->option['ZC_ARTICLE_THUMB_HEIGHT'])){
+                    if(ZbpImage::ClipThumb($r,$imgNew,$zbp->option['ZC_ARTICLE_THUMB_WIDTH'],$zbp->option['ZC_ARTICLE_THUMB_HEIGHT'])){
                         $_POST['Thumb'] = '{#ZC_BLOG_HOST#}'.$path.ImgToThumbUrl($name);
                     }
 

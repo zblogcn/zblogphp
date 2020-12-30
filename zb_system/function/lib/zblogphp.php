@@ -72,6 +72,16 @@ class ZBlogPHP
     public $fullcurrenturl = null;
 
     /**
+     * @var string System目录
+     */
+    public $systemdir = null;
+
+    /**
+     * @var string Admin目录
+     */
+    public $admindir = null;
+
+    /**
      * @var string 用户目录
      */
     public $usersdir = null;
@@ -452,7 +462,7 @@ class ZBlogPHP
     {
         global $option, $lang, $langs, $blogpath, $bloghost, $cookiespath, $usersdir, $cachedir, $logsdir, $datadir,
             $table, $datainfo, $actions, $action, $blogversion, $blogtitle, $blogname, $blogsubname,
-            $blogtheme, $blogstyle, $currenturl, $activedapps, $posttype, $fullcurrenturl;
+            $blogtheme, $blogstyle, $currenturl, $activedapps, $posttype, $fullcurrenturl, $systemdir, $admindir;
 
         if (ZBP_HOOKERROR) {
             ZBlogException::SetErrorHook();
@@ -470,6 +480,8 @@ class ZBlogPHP
         $this->cachedir = &$cachedir;
         $this->logsdir = &$logsdir;
         $this->datadir = &$datadir;
+        $this->systemdir = &$systemdir;
+        $this->admindir = &$admindir;
 
         $this->table = &$table;
         $this->datainfo = &$datainfo;
@@ -1946,8 +1958,8 @@ class ZBlogPHP
         $languagePtr = include $languagePath;
         $this->langpacklist[] = array($type, $id, $language);
         if ($type == 'system') {
-            if (is_readable($this->path . 'zb_system/defend/en.php')) {
-                $defend_en = include $this->path . 'zb_system/defend/en.php';
+            if (is_readable($this->systemdir . 'defend/en.php')) {
+                $defend_en = include $this->systemdir . 'defend/en.php';
                 $nowlang = $languagePtr;
                 $this->lang = ($nowlang + $defend_en);
                 foreach ($this->lang as $key => $value) {
@@ -2015,7 +2027,7 @@ class ZBlogPHP
             $fpname($template);
         }
 
-        $template->SetPath($this->cachedir . 'compiled/' . $template->theme . '/');
+        $template->SetPath();
 
         $template->LoadTemplates();
 
