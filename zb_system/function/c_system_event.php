@@ -2034,6 +2034,18 @@ function DelPage()
     return true;
 }
 
+/**
+ * 批量删除Post.
+ *
+ * @param $type
+ */
+function BatchPost($type)
+{
+    foreach ($GLOBALS['hooks']['Filter_Plugin_BatchPost'] as $fpname => &$fpsignal) {
+        $fpreturn = $fpname($type);
+    }
+}
+
 //###############################################################################################################
 
 /**
@@ -2345,28 +2357,30 @@ function BatchComment()
         $array = array($array);
     }
 
+    $childArray = $zbp->GetCommentByArray($array);
+
     // Search Child Comments
     /* @var Comment[] $childArray */
-    $childArray = array();
-    foreach ($array as $i => $id) {
-        $cmt = $zbp->GetCommentByID($id);
-        if ($cmt->ID == 0) {
-            continue;
-        }
-        $childArray[] = $cmt;
-        GetSubComments($cmt->ID, $childArray);
-    }
+    //$childArray = array();
+    //foreach ($array as $i => $id) {
+    //    $cmt = $zbp->GetCommentByID($id);
+    //    if ($cmt->ID == 0) {
+    //        continue;
+    //    }
+    //    $childArray[] = $cmt;
+    //    GetSubComments($cmt->ID, $childArray);
+    //}
 
     // Unique child array
-    $childArray = array_unique($childArray);
-    foreach ($childArray as $key => $value) {
-        if (is_int($value)) {
-            $childArray[$key] = $zbp->GetCommentByID($value);
-        }
-        if (is_subclass_of($childArray[$key], 'Base') == false || $childArray[$key]->ID == 0) {
-            unset($childArray[$key]);
-        }
-    }
+    //$childArray = array_unique($childArray);
+    //foreach ($childArray as $key => $value) {
+    //    if (is_int($value)) {
+    //        $childArray[$key] = $zbp->GetCommentByID($value);
+    //    }
+    //    if (is_subclass_of($childArray[$key], 'Base') == false || $childArray[$key]->ID == 0) {
+    //        unset($childArray[$key]);
+    //    }
+    //}
 
     if ($type == 'all_del') {
         foreach ($childArray as $i => $cmt) {
@@ -3289,18 +3303,6 @@ function SaveSetting()
                 Redirect($zbp->option['ZC_BLOG_HOST'] . 'zb_system/cmd.php?act=login');
             }
         }
-    }
-}
-
-/**
- * 批量删除Post.
- *
- * @param $type
- */
-function BatchPost($type)
-{
-    foreach ($GLOBALS['hooks']['Filter_Plugin_BatchPost'] as $fpname => &$fpsignal) {
-        $fpreturn = $fpname($type);
     }
 }
 

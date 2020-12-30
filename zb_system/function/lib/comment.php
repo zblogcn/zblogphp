@@ -130,6 +130,7 @@ class Comment extends Base
 
             return $m;
         } elseif ($name === 'Comments') {
+            //此方法并不是从数据库中读取数据而是从缓存中读取，所以可能不准确
             $array = array();
             foreach ($zbp->comments as $comment) {
                 if ($comment->ParentID == $this->ID) {

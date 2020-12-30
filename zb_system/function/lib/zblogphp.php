@@ -2011,7 +2011,7 @@ class ZBlogPHP
         $template->theme = $theme;
         $template->template_dirname = $template_dirname;
 
-        //此处增加接口可以在Load时，对主题模板类可以进行修改
+        //此处增加接口可以在Load时，对主题模板的实例可以进行修改
         foreach ($GLOBALS['hooks']['Filter_Plugin_Zbp_PrepareTemplate'] as $fpname => &$fpsignal) {
             $fpname($template, $theme, $template_dirname);
         }
@@ -2332,20 +2332,6 @@ class ZBlogPHP
     }
 
     /**
-     * 通过ID数组获取文章实例.
-     *
-     * @param mixed[] $array
-     *
-     * @return Post[]|Base[] Posts
-     */
-    public function GetPostByArray($array)
-    {
-        $posts = $this->GetListTypeByArray('Post', $array);
-
-        return $posts;
-    }
-
-    /**
      * @param mixed $select
      * @param mixed $where
      * @param mixed $order
@@ -2537,6 +2523,80 @@ class ZBlogPHP
         }
 
         return $this->GetListType('Upload', $sql);
+    }
+
+    /**
+     * 通过ID数组获取文章实例.
+     *
+     * @param mixed[] $array
+     *
+     * @return Post[]|Base[] Posts
+     */
+    public function GetPostByArray($array)
+    {
+        $posts = $this->GetListTypeByArray('Post', $array);
+
+        return $posts;
+    }
+
+    /**
+     * 通过ID数组获取评论实例.
+     */
+    public function GetCommentByArray($array)
+    {
+        $posts = $this->GetListTypeByArray('Comment', $array);
+
+        return $posts;
+    }
+
+    /**
+     * 通过ID数组获取Member实例.
+     */
+    public function GetMemberByArray($array)
+    {
+        $posts = $this->GetListTypeByArray('Member', $array);
+
+        return $posts;
+    }
+
+    /**
+     * 通过ID数组获取Category实例.
+     */
+    public function GetCategoryByArray($array)
+    {
+        $posts = $this->GetListTypeByArray('Category', $array);
+
+        return $posts;
+    }
+
+    /**
+     * 通过ID数组获取Tag实例.
+     */
+    public function GetTagByArray($array)
+    {
+        $posts = $this->GetListTypeByArray('Tag', $array);
+
+        return $posts;
+    }
+
+    /**
+     * 通过ID数组获取Module实例.
+     */
+    public function GetModuleByArray($array)
+    {
+        $posts = $this->GetListTypeByArray('Module', $array);
+
+        return $posts;
+    }
+
+    /**
+     * 通过ID数组获取Upload实例.
+     */
+    public function GetUploadByArray($array)
+    {
+        $posts = $this->GetListTypeByArray('Upload', $array);
+
+        return $posts;
     }
 
     /**
