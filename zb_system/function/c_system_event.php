@@ -90,43 +90,109 @@ function Logout()
 /**
  * 获取文章.
  *
- * @param mixed $idorname    文章id 或 名称、别名
+ * @param mixed $idorname    文章id 或 名称、别名 (1.7支持复杂的array参数,$count为array时后面的参数可以不设)
  * @param array $option |null
  *
  * @return Post
  */
 function GetPost($idorname, $option = null)
 {
+    //新版本的使用说明请看
+    //https://wiki.zblogcn.com/doku.php?id=zblogphp:development:functions:getpost
     global $zbp;
     $post = null;
+    $id = null;
+    $title = null;
+    $alias = null;
+    $titleoralias = null;
+
+    if (is_array($idorname)) {
+        $args = $idorname;
+        if (array_key_exists('idorname', $args)) {
+            $idorname = $args['idorname'];
+        } else {
+            $idorname = null;
+        }
+        if (array_key_exists('id', $args)) {
+            $id = $args['id'];
+            unset($args['id']);
+        }
+        if (array_key_exists('title', $args)) {
+            $title = $args['title'];
+            unset($args['title']);
+        }
+        if (array_key_exists('alias', $args)) {
+            $alias = $args['alias'];
+            unset($args['alias']);
+        }
+        if (array_key_exists('titleoralias', $args)) {
+            $titleoralias = $args['titleoralias'];
+            unset($args['titleoralias']);
+        }
+        if (array_key_exists('option', $args)) {
+            $option = $args['option'];
+            unset($args['option']);
+        }
+        if (!is_array($option)) {
+            $option = array();
+        }
+        $option = array_merge($args, $option);
+        unset($args);
+    }
 
     if (!is_array($option)) {
         $option = array();
     }
-
-    if (!isset($option['only_article'])) {
+    if (!array_key_exists('post_type', $option)) {
+        $option['post_type'] = null;
+    }
+    if (!array_key_exists('post_status', $option)) {
+        $option['post_status'] = 0;
+    }
+    if (!array_key_exists('only_article', $option)) {
         $option['only_article'] = false;
     }
-
-    if (!isset($option['only_page'])) {
+    if (!array_key_exists('only_page', $option)) {
         $option['only_page'] = false;
     }
 
-    if (is_string($idorname)) {
+    $w = array();
+    if ($option['post_type'] !== null) {
+        $w[] = array('=', 'log_Type', (int) $option['post_type']);
+    } elseif ($option['only_article'] == true) {
+        $w[] = array('=', 'log_Type', '0');
+    } elseif ($option['only_page'] == true) {
+        $w[] = array('=', 'log_Type', '1');
+    }
+
+    if ($option['post_status'] !== null) {
+        $w[] = array('=', 'log_Status', (int) $option['post_status']);
+    }
+
+    $option2 = $option;
+    unset($option2['post_type'], $option2['post_status'], $option2['only_article'], $option2['only_page']);
+
+    if (is_null($id) === false) {
+        $w[] = array('=', 'log_ID', (int) $id);
+    }elseif (is_null($title) === false) {
+        $w[] = array('=', 'log_Title', $title);
+    }elseif (is_null($alias) === false) {
+        $w[] = array('=', 'log_Alias', $alias);
+    }elseif (is_null($titleoralias) === false) {
+        $w[] = array('array', array(array('log_Alias', $titleoralias), array('log_Title', $titleoralias)));
+    }elseif (is_string($idorname)) {
         $w[] = array('array', array(array('log_Alias', $idorname), array('log_Title', $idorname)));
-        if ($option['only_article'] == true) {
-            $w[] = array('=', 'log_Type', '0');
-        } elseif ($option['only_page'] == true) {
-            $w[] = array('=', 'log_Type', '1');
-        }
-        $articles = $zbp->GetPostList('*', $w, null, 1, $option);
-        if (count($articles) == 0) {
-            $post = new Post();
-        } else {
-            $post = $articles[0];
-        }
     } elseif (is_int($idorname)) {
-        $post = $zbp->GetPostByID($idorname);
+        $w[] = array('=', 'log_ID', (int) $idorname);
+    } else {
+        $w[] = array('=', 'log_ID', '');
+    }
+
+    $articles = $zbp->GetPostList('*', $w, null, 1, $option2);
+    if (count($articles) == 0) {
+        $post = new Post();
+    } else {
+        $post = $articles[0];
     }
 
     foreach ($GLOBALS['hooks']['Filter_Plugin_GetPost_Result'] as $fpname => &$fpsignal) {
@@ -137,9 +203,9 @@ function GetPost($idorname, $option = null)
 }
 
 /**
- * 获取文章列表.
+ * 获取文章列表. 
  *
- * @param int  $count  数量
+ * @param int  $count  数量 (1.7支持复杂的array参数,$count为array时后面的参数可以不设)
  * @param null $cate   分类ID
  * @param null $auth   用户ID
  * @param null $date   日期
@@ -151,48 +217,111 @@ function GetPost($idorname, $option = null)
  */
 function GetList($count = 10, $cate = null, $auth = null, $date = null, $tags = null, $search = null, $option = null)
 {
+    //新版本的使用说明请看
+    //https://wiki.zblogcn.com/doku.php?id=zblogphp:development:functions:getlist
     global $zbp;
-    $list = array();
+    $args = array();
+    if (is_array($count)) {
+        $args = $count;
+        if (array_key_exists('count', $args)) {
+            $count = (int) $args['count'];
+            unset($args['count']);
+        } else {
+            $count = 10;
+        }
+        if (array_key_exists('category', $args)) {
+            $cate = $args['category'];
+            unset($args['category']);
+        }
+        if (array_key_exists('cate', $args)) {
+            $cate = $args['cate'];
+            unset($args['cate']);
+        }
+        if (array_key_exists('author', $args)) {
+            $auth = $args['author'];
+            unset($args['author']);
+        }
+        if (array_key_exists('auth', $args)) {
+            $auth = $args['auth'];
+            unset($args['auth']);
+        }
+        if (array_key_exists('date', $args)) {
+            $date = $args['date'];
+            unset($args['date']);
+        }
+        if (array_key_exists('tags', $args)) {
+            $tags = $args['tags'];
+            unset($args['tags']);
+        }
+        if (array_key_exists('search', $args)) {
+            $search = $args['search'];
+            unset($args['search']);
+        }
+        if (array_key_exists('option', $args)) {
+            $option = $args['option'];
+            unset($args['option']);
+        }
+        if (!is_array($option)) {
+            $option = array();
+        }
+        $option = array_merge($args, $option);  
+        unset($args); 
+    }
 
     if (!is_array($option)) {
         $option = array();
     }
-
-    if (!isset($option['only_ontop'])) {
+    if (!array_key_exists('post_type', $option)) {
+        $option['post_type'] = null;
+    }
+    if (!array_key_exists('post_status', $option)) {
+        $option['post_status'] = null;
+    }
+    if (!array_key_exists('only_ontop', $option)) {
         $option['only_ontop'] = false;
     }
-
-    if (!isset($option['only_not_ontop'])) {
+    if (!array_key_exists('only_not_ontop', $option)) {
         $option['only_not_ontop'] = false;
     }
-
-    if (!isset($option['has_subcate'])) {
+    if (!array_key_exists('has_subcate', $option)) {
         $option['has_subcate'] = false;
     }
-
-    if (!isset($option['is_related'])) {
+    if (!array_key_exists('is_related', $option)) {
         $option['is_related'] = false;
     }
-
     if ($option['is_related']) {
         $at = $zbp->GetPostByID($option['is_related']);
         $tags = $at->Tags;
         if (!$tags) {
             return array();
         }
-
         $count = ($count + 1);
     }
 
+    $option2 = $option;
+    unset($option2['post_type'], $option2['post_status'], $option2['only_ontop'], $option2['only_not_ontop']);
+    unset($option2['has_subcate'], $option2['is_related'], $option2['order_by_metas']);
+
+    $list = array();
+    $post_type = null;
     $w = array();
+
+    if ($option['post_type'] !== null) {
+        $post_type = (int) $option['post_type'];
+    }else{
+        $post_type = 0;
+    }
+    $w[] = array('=', 'log_Type', $post_type);
+
+    if ($option['post_status'] !== null) {
+        $w[] = array('=', 'log_Status', (int) $option['post_status']);
+    }
 
     if ($option['only_ontop'] == true) {
         $w[] = array('>', 'log_IsTop', 0);
     } elseif ($option['only_not_ontop'] == true) {
         $w[] = array('=', 'log_IsTop', 0);
     }
-
-    $w[] = array('=', 'log_Status', 0);
 
     if (!is_null($cate)) {
         $category = new Category();
@@ -204,8 +333,8 @@ function GetList($count = 10, $cate = null, $auth = null, $date = null, $tags = 
             } else {
                 $arysubcate = array();
                 $arysubcate[] = array('log_CateID', $category->ID);
-                if (isset($zbp->categories[$category->ID])) {
-                    foreach ($zbp->categories[$category->ID]->ChildrenCategories as $subcate) {
+                if (isset($zbp->categories_all[$category->ID])) {
+                    foreach ($zbp->categories_all[$category->ID]->ChildrenCategories as $subcate) {
                         $arysubcate[] = array('log_CateID', $subcate->ID);
                     }
                 }
@@ -250,7 +379,7 @@ function GetList($count = 10, $cate = null, $auth = null, $date = null, $tags = 
             if (is_int($tags)) {
                 $tag = $zbp->GetTagByID($tags);
             } else {
-                $tag = $zbp->GetTagByAliasOrName($tags);
+                $tag = $zbp->GetTagByAliasOrName($tags, $post_type);
             }
             if ($tag->ID > 0) {
                 $w[] = array('LIKE', 'log_Tag', '%{' . $tag->ID . '}%');
@@ -273,10 +402,10 @@ function GetList($count = 10, $cate = null, $auth = null, $date = null, $tags = 
     $order = array('log_PostTime' => 'DESC');
 
     foreach ($GLOBALS['hooks']['Filter_Plugin_LargeData_GetList'] as $fpname => &$fpsignal) {
-        $fpreturn = $fpname($select, $w, $order, $count, $option);
+        $fpreturn = $fpname($select, $w, $order, $count, $option2);
     }
 
-    $list = $zbp->GetArticleList($select, $w, $order, $count, $option, false);
+    $list = $zbp->GetPostList($select, $w, $order, $count, $option2);
 
     if ($option['is_related']) {
         foreach ($list as $k => $a) {
