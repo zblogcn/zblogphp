@@ -206,7 +206,7 @@ class SQL__MySQL extends SQL__Global
             $datainfo = $GLOBALS['datainfo'][$key];
             $d = reset($datainfo);
             $id = $d[0];
-            $this->where[] = "{$id} >= (SELECT FLOOR( RAND() * ((SELECT MAX({$id}) FROM `{$table}`)-(SELECT MIN({$id}) FROM `{$table}`)) + (SELECT MIN({$id}) FROM `{$table}`)))";
+            $this->where[] = "{$id} >= (SELECT FLOOR( RAND() * ((SELECT MAX({$id}) FROM `{$table}`)-(SELECT MIN({$id}) FROM `{$table}`) + 1) + (SELECT MIN({$id}) FROM `{$table}`)))";
         }
     }
 
@@ -214,6 +214,7 @@ class SQL__MySQL extends SQL__Global
     {
         $sql = &$this->pri_sql;
         $table = $this->table[0];
+
         if (in_array($table, $GLOBALS['table'])) {
             $sql[] = ' LIMIT ' . implode('', $this->extend['RANDOM']);
         } else {

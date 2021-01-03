@@ -3736,7 +3736,7 @@ class ZBlogPHP
     public function GetPostType_Name($typeid)
     {
         if (isset($this->posttype[$typeid])) {
-            return $this->posttype[$typeid][0];
+            return strtolower($this->posttype[$typeid][0]);
         }
 
         return '';

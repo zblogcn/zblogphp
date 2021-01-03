@@ -239,6 +239,13 @@ class ClassSQLGlobalTest extends PHPUnit\Framework\TestCase
                 ->sql
         );
         $this->assertEquals(
+            'SELECT * FROM  zbp_post  WHERE  (log_ID NOT IN (1, 2, 3)) ',
+            self::$db
+                ->select("zbp_post")
+                ->where(array('NOT IN', 'log_ID', '1, 2, 3'))
+                ->sql
+        );
+        $this->assertEquals(
             'SELECT * FROM  zbp_post  WHERE (log_Meta LIKE \'%s:10:\"meta_Value\";%\')',
             self::$db
                 ->select("zbp_post")

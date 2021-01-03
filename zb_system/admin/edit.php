@@ -39,11 +39,9 @@ $article = new Post();
 $article->AuthorID = $zbp->user->ID;
 
 $ispage = false;
-$typename = 'article';
 if ($action == 'PageEdt') {
     $ispage = true;
     $article->Type = ZC_POST_TYPE_PAGE;
-    $typename = 'page';
 }
 
 if (!$zbp->CheckRights('ArticlePub')) {
@@ -273,7 +271,7 @@ require ZBP_PATH . 'zb_system/admin/admin_top.php';
                                     <?php echo $lang['msg']['template']; ?>
                                 </label>
                                 <select style="width:180px;" class="edit" size="1" name="Template" id="cmbTemplate" onChange="cmbTemplate.value=this.options[this.selectedIndex].value">
-                                    <?php echo OutputOptionItemsOfTemplate($article->Template, array('index', '404', 'module', 'search', 'lm-'), array('single', $typename)); ?>
+                                    <?php echo OutputOptionItemsOfTemplate($article->Template, array('index', '404', 'module', 'search', 'lm-'), array('single', $zbp->GetPostType_Name($article->Type))); ?>
                                 </select>
                             </div>
                             <!-- )template -->

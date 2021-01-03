@@ -80,7 +80,7 @@ class Template
     /**
      * @var bool 是否启用标识模板类型
      */
-    public $isnamedtype = array();
+    public $isuse_nameandtype = false;
 
     /**
      * @var string 模板目录，方便指定多套模板
@@ -757,7 +757,13 @@ class Template
         // 读取预置模板
         $files = GetFilesInDir($zbp->systemdir . 'defend/default/', 'php');
         foreach ($files as $sortname => $fullname) {
-            $templates[$sortname] = file_get_contents($fullname);
+            $s = file_get_contents($fullname);
+            if (substr($s, 0, 2) == '{*' && strstr($s, '*}') !== false) {
+                $s = strstr($s, '*}');
+                $s = substr($s, 2);
+            }
+            $templates[$sortname] = $s;
+            $s = null;
         }
 
         // 读取主题模板
@@ -825,11 +831,12 @@ class Template
         }
         $name = trim($name);
         $type = trim($type);
+        $type = str_replace(array(',', '，', ';', '；', '、'), '|', $type);
         if ($type != null) {
-            $this->isnamedtype = true;
+            $this->isuse_nameandtype = true;
         }
         if ($filename == 'index' && $type == null) {
-            $type = 'list';
+            $type = 'list|index';
         }
         if ($filename == 'single' && $type == null) {
             $type = 'single';

@@ -611,7 +611,7 @@ class SQL__Global
 
                 return $whereData;
             }
-        } elseif ($eq == 'BETWEEN') {
+        } elseif ($eq == 'BETWEEN' || $eq == 'NOT BETWEEN') {
             $whereData = " ($value[1] BETWEEN '$value[2]' AND '$value[3]') ";
         } elseif ($eq == 'SEARCH') { //SEARCH模式搜索字符自动两边加%
             $searchCount = count($value);
@@ -669,14 +669,12 @@ class SQL__Global
                     return $whereData;
                 } else {
                     $whereData = " (1 = 1) ";
+                    return $whereData;
                 }
-
-                return $whereData;
             }
 
             if (count($value[2]) == 0) {
                 $whereData = " (1 = 1) ";
-
                 return $whereData;
             }
 

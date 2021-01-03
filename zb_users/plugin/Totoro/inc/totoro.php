@@ -70,8 +70,10 @@ class Totoro_Class
             foreach ($matches[0] as $value) {
                 $value = preg_quote($value);
                 if ($value != '' && preg_match("/" . $black_list . "/si", $content) == 0) {
-                    $black_list .= '|' . $value;
-                    $zbp->SetHint('good', '新黑词被加入：' . $value);
+                    if (strpos($zbp->host, $value) === false) {
+                        $black_list .= '|' . $value;
+                        $zbp->SetHint('good', '新黑词被加入：' . $value);
+                    }
                 }
             }
 
@@ -186,6 +188,9 @@ class Totoro_Class
 
     public function check_ip($ip)
     {
+        if(filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6) !== false){
+            return false;
+        }
         $ip = ip2long($ip);
         $ip_str = explode('|', $this->config_array['BLACK_LIST']['IPFILTER_LIST']['VALUE']);
         for ($i = 0; $i < count($ip_str); $i++) {

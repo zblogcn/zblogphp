@@ -392,12 +392,37 @@ function OutputOptionItemsOfTemplate($default, $refuse_file_filter = array(), $a
         $type = $zbp->template->templates_Type[$key];
         $typeArray = explode('|', $type);
 
-        if ($default == $key) {
-            $s2 = ($name !== '') ? ' (' . $name . ')' : $name;
-            $tz[$key] = '[' . $zbp->lang['msg']['current_template'] . '] ' . $key . $s2;
-        } else {
-            $s2 = ($name !== '') ? ' (' . $name . ')' : $name;
-            $tz[$key] = $key . $s2;
+        if (strtolower($type) == 'none') {
+            continue;
+        }
+
+        //判断主题是否对模板进行了Template Type标注
+        if ($zbp->template->isuse_nameandtype == true) {//用$accept_type去检查$typeArray，为真$c就是true就可以放入列表
+            $c = false;
+            foreach ($accept_type as $k1 => $v1) {
+                foreach ($typeArray as $k2 => $v2) {
+                    if (strtolower(trim($v1)) == strtolower(trim($v2))) {
+                        $c = true;
+                    }
+                }
+            }
+            if ($c) {
+                if ($default == $key) {
+                    $s2 = ($name !== '') ? ' (' . $name . ')' : $name;
+                    $tz[$key] = '[' . $zbp->lang['msg']['current_template'] . '] ' . $key . $s2;
+                } else {
+                    $s2 = ($name !== '') ? ' (' . $name . ')' : $name;
+                    $tz[$key] = $key . $s2;
+                }
+            }
+        } else { //没有标注就用传统方法
+            if ($default == $key) {
+                $s2 = ($name !== '') ? ' (' . $name . ')' : $name;
+                $tz[$key] = '[' . $zbp->lang['msg']['current_template'] . '] ' . $key . $s2;
+            } else {
+                $s2 = ($name !== '') ? ' (' . $name . ')' : $name;
+                $tz[$key] = $key . $s2;
+            }
         }
     }
 
