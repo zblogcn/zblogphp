@@ -87,6 +87,21 @@ class ZBlogPHP
     public $usersdir = null;
 
     /**
+     * @var string System Url
+     */
+    public $systemurl = null;
+
+    /**
+     * @var string Admin Url
+     */
+    public $adminurl = null;
+
+    /**
+     * @var string 用户Url
+     */
+    public $usersurl = null;
+
+    /**
      * @var string Cache目录
      */
     public $cachedir = null;
@@ -460,9 +475,10 @@ class ZBlogPHP
      */
     public function __construct()
     {
-        global $option, $lang, $langs, $blogpath, $bloghost, $cookiespath, $usersdir, $cachedir, $logsdir, $datadir,
+        global $option, $lang, $langs, $blogpath, $bloghost, $cookiespath,  $cachedir, $logsdir, $datadir,
             $table, $datainfo, $actions, $action, $blogversion, $blogtitle, $blogname, $blogsubname,
-            $blogtheme, $blogstyle, $currenturl, $activedapps, $posttype, $fullcurrenturl, $systemdir, $admindir;
+            $blogtheme, $blogstyle, $currenturl, $activedapps, $posttype, $fullcurrenturl,
+            $usersdir, $systemdir, $admindir, $usersurl, $systemurl, $adminurl;
 
         if (ZBP_HOOKERROR) {
             ZBlogException::SetErrorHook();
@@ -473,8 +489,11 @@ class ZBlogPHP
         $this->option = &$option;
         $this->lang = &$lang;
         $this->langs = &$langs;
+
         $this->path = &$blogpath;
         $this->host = &$bloghost; //此值在后边初始化时可能会变化!
+        $this->currenturl = &$currenturl;
+        $this->fullcurrenturl = &$fullcurrenturl;
         $this->cookiespath = &$cookiespath;
         $this->usersdir = &$usersdir;
         $this->cachedir = &$cachedir;
@@ -482,6 +501,9 @@ class ZBlogPHP
         $this->datadir = &$datadir;
         $this->systemdir = &$systemdir;
         $this->admindir = &$admindir;
+        $this->usersurl = &$usersurl;
+        $this->systemurl = &$systemurl;
+        $this->adminurl = &$adminurl;
 
         $this->table = &$table;
         $this->datainfo = &$datainfo;
@@ -489,8 +511,6 @@ class ZBlogPHP
         $this->d = &$this->datainfo;
         $this->actions = &$actions;
         $this->posttype = &$posttype;
-        $this->currenturl = &$currenturl;
-        $this->fullcurrenturl = &$fullcurrenturl;
 
         $this->action = &$action;
         $this->activedapps = &$activedapps;

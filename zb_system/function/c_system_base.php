@@ -503,6 +503,9 @@ $GLOBALS['blogtheme'] = &$GLOBALS['option']['ZC_BLOG_THEME'];
 $GLOBALS['blogstyle'] = &$GLOBALS['option']['ZC_BLOG_CSS'];
 $GLOBALS['cookiespath'] = null;
 $GLOBALS['bloghost'] = GetCurrentHost($GLOBALS['blogpath'], $GLOBALS['cookiespath']);
+$GLOBALS['usersurl'] = $GLOBALS['bloghost'] . 'zb_users/';
+$GLOBALS['systemurl'] = $GLOBALS['bloghost'] . 'zb_system/';
+$GLOBALS['adminurl'] = $GLOBALS['bloghost'] . 'zb_system/admin/';
 
 /*
  * 系统实例化

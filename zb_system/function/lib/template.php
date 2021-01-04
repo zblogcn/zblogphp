@@ -944,6 +944,8 @@ class Template
         $this->templateTags['categories'] = &$zbp->categories;
         $this->templateTags['categorysbyorder'] = &$zbp->categoriesbyorder;
         $this->templateTags['categoriesbyorder'] = &$zbp->categoriesbyorder;
+		$this->templateTags['categories_all'] = &$zbp->categories_all;
+		$this->templateTags['categoriesbyorder_type'] = &$zbp->categoriesbyorder_type;
         $this->templateTags['modules'] = &$zbp->modulesbyfilename;
         $this->templateTags['title'] = htmlspecialchars($zbp->title);
         $this->templateTags['host'] = &$zbp->host;
@@ -952,6 +954,7 @@ class Template
         $this->templateTags['name'] = htmlspecialchars($zbp->name);
         $this->templateTags['subname'] = htmlspecialchars($zbp->subname);
         $this->templateTags['theme'] = &$zbp->theme;
+        $this->templateTags['themeapp'] = &$zbp->themeapp;
         $this->templateTags['themeinfo'] = &$zbp->themeinfo;
         $this->templateTags['style'] = &$zbp->style;
         $this->templateTags['language'] = $zbp->option['ZC_BLOG_LANGUAGE'];

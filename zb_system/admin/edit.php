@@ -246,7 +246,7 @@ require ZBP_PATH . 'zb_system/admin/admin_top.php';
                                         <?php echo $lang['msg']['category']; ?>
                                     </label>
                                     <select style="width:180px;" class="edit" size="1" name="CateID" id="cmbCateID">
-                                        <?php echo OutputOptionItemsOfCategories($article->CateID); ?>
+                                        <?php echo OutputOptionItemsOfCategories($article->CateID, $article->Type); ?>
                                     </select>
                                 </div>
                                 <?php

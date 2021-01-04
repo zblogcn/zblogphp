@@ -43,7 +43,7 @@ $p = null;
 
 $p .= '<option value="0">' . $lang['msg']['none'] . '</option>';
 
-foreach ($zbp->categoriesbyorder as $k => $v) {
+foreach ($zbp->categoriesbyorder_type[$cate->Type] as $k => $v) {
     if ($v->ID == $cate->ID) {
         continue;
     }

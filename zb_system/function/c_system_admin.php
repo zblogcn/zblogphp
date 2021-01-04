@@ -330,17 +330,17 @@ function OutputOptionItemsOfCommon($default, $array, $name = 'Common')
  *
  * @return null|string
  */
-function OutputOptionItemsOfCategories($default)
+function OutputOptionItemsOfCategories($default, $type = 0)
 {
     global $zbp;
 
     $s = null;
     $tz = array();
-    foreach ($zbp->categoriesbyorder as $id => $cate) {
+    foreach ($zbp->categoriesbyorder_type[$type] as $id => $cate) {
         $tz[$cate->ID] = $cate->SymbolName;
     }
     foreach ($GLOBALS['hooks']['Filter_Plugin_OutputOptionItemsOfCategories'] as $fpname => &$fpsignal) {
-        $fpreturn = $fpname($default, $tz);
+        $fpreturn = $fpname($default, $tz, $type);
         if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
             $fpsignal = PLUGIN_EXITSIGNAL_NONE;
             return $fpreturn;
