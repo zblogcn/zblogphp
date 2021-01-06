@@ -1,4 +1,4 @@
-{* Template Name:公共头部 *}
+{* Template Name:公共头部 * Template Type:none *}
 <!DOCTYPE html>
 <html xml:lang="{$lang['lang_bcp47']}" lang="{$lang['lang_bcp47']}">
 <head>

@@ -1,4 +1,4 @@
-{* Template Name:文章页单页 *}
+{* Template Name:文章页单页 * Template Type:single *}
 {template:header}
 <body class="single {$type}">
 <div id="divAll">

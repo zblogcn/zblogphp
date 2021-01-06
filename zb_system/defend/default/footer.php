@@ -1,4 +1,4 @@
-{* Template Name:公共底部 *}
+{* Template Name:公共底部 * Template Type:none *}
 		<div id="divBottom">
 			<h4 id="BlogPowerBy">Powered By {$zblogphphtml}</h4>
 			<h3 id="BlogCopyRight">{$copyright}</h3>
