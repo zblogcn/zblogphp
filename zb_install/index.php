@@ -180,7 +180,7 @@ switch ($zblogstep) {
       };
       var passwordRegExp = /^[A-Za-z0-9`~!@#\$%\^&\*\-_\?]+$/u;
       if (
-        !(password.length >= 8 && password.length <= 20) ||
+        !(password.length >= <?php echo $zbp->option['ZC_PASSWORD_MIN']; ?> && password.length <= <?php echo $zbp->option['ZC_PASSWORD_MAX']; ?>) ||
         passwordRegExp.test(password) == false
       ) {
         alert("<?php echo $zbp->lang['error']['54']; ?>");
