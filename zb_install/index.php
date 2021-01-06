@@ -178,7 +178,11 @@ switch ($zblogstep) {
         alert("<?php echo $zbp->lang['zb_install']['adminpassword_need']; ?>");
         return false;
       };
-      if (password.search("^[A-Za-z0-9`~!@#\$%\^&\*\-_]{8,}$") == -1) {
+      var passwordRegExp = /^[A-Za-z0-9`~!@#\$%\^&\*\-_\?]+$/u;
+      if (
+        !(password.length >= 8 && password.length <= 20) ||
+        passwordRegExp.test(password) == false
+      ) {
         alert("<?php echo $zbp->lang['error']['54']; ?>");
         return false;
       };
