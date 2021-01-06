@@ -49,7 +49,7 @@ function Include_Admin_Addmemsubmenu()
     if ($zbp->CheckRights('MemberNew')) {
         echo MakeSubMenu($GLOBALS['lang']['msg']['new_member'], '../cmd.php?act=MemberNew', 'm-left', null, null, null, 'icon-person-plus-fill');
     }
-    echo MakeSubMenu($GLOBALS['lang']['msg']['view_rights'], '../cmd.php?act=misc&amp;type=vrs');
+    echo MakeSubMenu($GLOBALS['lang']['msg']['view_rights'], '../cmd.php?act=misc&amp;type=vrs', 'm-left', null, null, null, 'icon-person-check-fill');
 }
 
 /**
@@ -857,7 +857,7 @@ function Admin_SiteInfo()
 
     echo '<table class="tableFull tableBorder table_striped table_hover" id="tbUpdateInfo"><tr><th><i class="icon-newspaper"></i>&nbsp;' . $zbp->lang['msg']['latest_news'];
     if ($zbp->CheckRights('root')) {
-        echo '&nbsp;<a href="javascript:updateinfo(\'' . BuildSafeCmdURL('act=misc&type=updateinfo') . '\');"><i class="icon-arrow-repeat" style="font-size:small;" alt="' . $zbp->lang['msg']['refresh'] . '" title="' . $zbp->lang['msg']['refresh'] . '"></i><small>' . $zbp->lang['msg']['refresh'] . '</small></a>';
+        echo '&nbsp;<a href="javascript:updateinfo(\'' . BuildSafeCmdURL('act=misc&type=updateinfo') . '\');"><i class="icon-arrow-repeat" style="font-size:small; margin-right: 3px;" alt="' . $zbp->lang['msg']['refresh'] . '" title="' . $zbp->lang['msg']['refresh'] . '"></i><small>' . $zbp->lang['msg']['refresh'] . '</small></a>';
     }
     echo ' </th></tr>';
 
