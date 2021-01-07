@@ -91,6 +91,10 @@ class Module extends Base
         if ($name == 'NoRefresh') {
             return (bool) $this->Metas->norefresh;
         }
+        if ($name == 'ContentWithoutId') {
+            $s = preg_replace("/(id=\"[^\s]*\"|id='[^\s]*')/i", "", $this->Content);
+            return $s;
+        }
         foreach ($GLOBALS['hooks']['Filter_Plugin_Module_Get'] as $fpname => &$fpsignal) {
             $fpreturn = $fpname($this, $name);
             if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
