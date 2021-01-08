@@ -3170,7 +3170,7 @@ function PostUpload()
         $fpname($upload);
     }
 
-    return $upload
+    return $upload;
 }
 
 /**
