@@ -61,10 +61,13 @@ function api_upload_post()
     ApiCheckAuth(true, 'UploadPst');
 
     try {
-        PostUpload();
+        $upload = PostUpload();
+
+        $array = ApiGetObjectArray($upload);
 
         return array(
             'message' => $GLOBALS['lang']['msg']['operation_succeed'],
+            'data' => array('upload' => $array),
         );
     } catch (Exception $e) {
         return array(

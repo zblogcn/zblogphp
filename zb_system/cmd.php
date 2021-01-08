@@ -208,9 +208,17 @@ switch ($zbp->action) {
         break;
     case 'MemberPst':
         CheckIsRefererValid();
-        PostMember();
+        $mem = PostMember();
         $zbp->BuildModule();
         $zbp->SaveCache();
+        //判断及提前跳转
+        if (isset($_POST['Password'])) {
+            if ($mem->ID == $zbp->user->ID) {
+                if (!defined('ZBP_IN_AJAX') && !defined('ZBP_IN_API')) {
+                    Redirect($zbp->host . 'zb_system/cmd.php?act=login');
+                }
+            }
+        }
         $zbp->SetHint('good');
         Redirect('cmd.php?act=MemberMng');
         break;
@@ -342,9 +350,18 @@ switch ($zbp->action) {
         break;
     case 'SettingSav':
         CheckIsRefererValid();
+        $oldHost = $zbp->option['ZC_BLOG_HOST'];
         SaveSetting();
         $zbp->BuildModule();
         $zbp->SaveCache();
+        //判断及提前跳转
+        if ($zbp->option['ZC_PERMANENT_DOMAIN_ENABLE'] == true) {
+            if ($oldHost != $zbp->option['ZC_BLOG_HOST']) {
+                if (!defined('ZBP_IN_AJAX') && !defined('ZBP_IN_API')) {
+                    Redirect($zbp->option['ZC_BLOG_HOST'] . 'zb_system/cmd.php?act=login');
+                }
+            }
+        }
         $zbp->SetHint('good');
         Redirect('cmd.php?act=SettingMng');
         break;

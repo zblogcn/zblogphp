@@ -1593,6 +1593,17 @@ DefinePluginFilter('Filter_Plugin_PostModule_Succeed');
 /*
 '**************************************************<
 '类型:Filter
+'名称:Filter_Plugin_PostUpload_Succeed
+'参数:&$upload
+'说明:附件上传成功的接口
+'调用:
+'**************************************************>
+ */
+DefinePluginFilter('Filter_Plugin_PostUpload_Succeed');
+
+/*
+'**************************************************<
+'类型:Filter
 '名称:Filter_Plugin_DelMember_Succeed
 '参数:&$mem
 '说明:会员删除成功的接口

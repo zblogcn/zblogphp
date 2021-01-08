@@ -87,11 +87,19 @@ function api_member_post()
     ApiCheckAuth(true, 'MemberPst');
 
     try {
-        PostMember();
+        $member = PostMember();
         $zbp->BuildModule();
         $zbp->SaveCache();
+
         return array(
             'message' => $GLOBALS['lang']['msg']['operation_succeed'],
+            'data' => array(
+                'member' => ApiGetObjectArray(
+                    $member,
+                    array('Url', 'Template', 'Avatar', 'StaticName'),
+                    array('Guid', 'Password', 'IP')
+                ),
+            ),
         );
     } catch (Exception $e) {
         return array(

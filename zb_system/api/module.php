@@ -63,19 +63,23 @@ function api_module_post()
 
     ApiCheckAuth(true, 'ModulePst');
 
-    if (PostModule()) {
+    try {
+        $module = PostModule();
         $zbp->BuildModule();
         $zbp->SaveCache();
 
+        $array = ApiGetObjectArray($module, array('SourceType', 'NoRefresh', 'ContentWithoutId'));
+
         return array(
             'message' => $GLOBALS['lang']['msg']['operation_succeed'],
+            'data' => array('module' => $array),
+        );
+    } catch (Exception $e) {
+        return array(
+            'code' => 500,
+            'message' => $GLOBALS['lang']['msg']['operation_failed'] . ' ' . $e->getMessage(),
         );
     }
-
-    return array(
-        'code' => 500,
-        'message' => $GLOBALS['lang']['msg']['operation_failed'],
-    );
 }
 
 /**

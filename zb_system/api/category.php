@@ -61,9 +61,16 @@ function api_category_post()
     ApiCheckAuth(true, 'CategoryPst');
 
     try {
-        PostCategory();
+        $category = PostCategory();
         $zbp->BuildModule();
         $zbp->SaveCache();
+
+        $array = ApiGetObjectArray($category, array('Url', 'Symbol', 'Level', 'SymbolName', 'AllCount'));
+
+        return array(
+            'message' => $GLOBALS['lang']['msg']['operation_succeed'],
+            'data' => array('category' => $array),
+        );
     } catch (Exception $e) {
         return array(
             'code' => 500,

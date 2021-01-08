@@ -65,9 +65,27 @@ function api_comment_post()
     ApiCheckAuth(false, 'cmt');
 
     try {
-        PostComment();
+        $comment = PostComment();
         $zbp->BuildModule();
         $zbp->SaveCache();
+
+        $array = ApiGetObjectArray(
+            $comment,
+            array(),
+            array(),
+            ApiGetAndFilterRelationQuery(array(
+                'Author' => array(
+                    'other_props' => array('Url', 'Template', 'Avatar', 'StaticName'),
+                    'remove_props' => array('Guid', 'Password', 'IP')
+                ),
+            ))
+        );
+
+        return array(
+            'message' => $GLOBALS['lang']['msg']['operation_succeed'],
+            'data' => array('comment' => $array),
+        );
+
     } catch (Exception $e) {
         return array(
             'code' => 500,

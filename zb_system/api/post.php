@@ -87,22 +87,68 @@ function api_post_post()
         // 新增/修改页面
         ApiCheckAuth(true, 'PagePst');
         try {
-            PostPage();
+            $post = PostPage();
             $zbp->BuildModule();
             $zbp->SaveCache();
+
+            $array = ApiGetObjectArray(
+                $post,
+                array('Url','TagsCount','TagsName','CommentPostKey','ValidCodeUrl'),
+                array(),
+                ApiGetAndFilterRelationQuery(array(
+                    'Category' => array(
+                        'other_props' => array('Url', 'Symbol', 'Level', 'SymbolName', 'AllCount'),
+                    ),
+                    'Author' => array(
+                        'other_props' => array('Url', 'Template', 'Avatar', 'StaticName'),
+                        'remove_props' => array('Guid', 'Password', 'IP')
+                    ),
+                ))
+            );
+
+            return array(
+                'message' => $GLOBALS['lang']['msg']['operation_succeed'],
+                'data' => array(
+                    'post' => $array,
+                ),
+            );
+
         } catch (Exception $e) {
             return array(
                 'code' => 500,
                 'message' => $GLOBALS['lang']['msg']['operation_failed'] . ' ' . $e->getMessage(),
             );
         }
-    } else {
+    } elseif ($postType == 0) {
         // 默认为新增/修改文章
         ApiCheckAuth(true, 'ArticlePst');
         try {
-            PostArticle();
+            $post = PostArticle();
             $zbp->BuildModule();
             $zbp->SaveCache();
+
+            $array = ApiGetObjectArray(
+                $post,
+                array('Url','TagsCount','TagsName','CommentPostKey','ValidCodeUrl'),
+                array(),
+                ApiGetAndFilterRelationQuery(array(
+                    'Category' => array(
+                        'other_props' => array('Url', 'Symbol', 'Level', 'SymbolName', 'AllCount'),
+                    ),
+                    'Author' => array(
+                        'other_props' => array('Url', 'Template', 'Avatar', 'StaticName'),
+                        'remove_props' => array('Guid', 'Password', 'IP')
+                    ),
+                ))
+            );
+
+            return array(
+                'message' => $GLOBALS['lang']['msg']['operation_succeed'],
+                'data' => array(
+                    'post' => $array,
+                ),
+            );
+
         } catch (Exception $e) {
             return array(
                 'code' => 500,

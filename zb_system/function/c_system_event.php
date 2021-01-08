@@ -1884,7 +1884,7 @@ function PostArticle()
         $fpname($article);
     }
 
-    return true;
+    return $article;
 }
 
 /**
@@ -2120,7 +2120,7 @@ function PostPage()
         $fpname($article);
     }
 
-    return true;
+    return $article;
 }
 
 /**
@@ -2329,7 +2329,7 @@ function PostComment()
         $fpname($cmt);
     }
 
-    return true;
+    return $cmt;
 }
 
 /**
@@ -2634,7 +2634,7 @@ function PostCategory()
         $fpname($cate);
     }
 
-    return true;
+    return $cate;
 }
 
 /**
@@ -2760,7 +2760,7 @@ function PostTag()
         $fpname($tag);
     }
 
-    return true;
+    return $tag;
 }
 
 /**
@@ -2896,21 +2896,13 @@ function PostMember()
     $mem->Save();
     $zbp->AddCache($mem);
 
+    $zbp->AddBuildModule('authors');
+
     foreach ($GLOBALS['hooks']['Filter_Plugin_PostMember_Succeed'] as $fpname => &$fpsignal) {
         $fpname($mem);
     }
 
-    $zbp->AddBuildModule('authors');
-
-    if (isset($data['Password'])) {
-        if ($mem->ID == $zbp->user->ID) {
-            if (!defined('ZBP_IN_AJAX') && !defined('ZBP_IN_API')) {
-                Redirect($zbp->host . 'zb_system/cmd.php?act=login');
-            }
-        }
-    }
-
-    return true;
+    return $mem;
 }
 
 /**
@@ -3071,7 +3063,7 @@ function PostModule()
         $fpname($mod);
     }
 
-    return true;
+    return $mod;
 }
 
 /**
@@ -3173,6 +3165,12 @@ function PostUpload()
     if (isset($upload)) {
         CountMemberArray(array($upload->AuthorID), array(0, 0, 0, +1));
     }
+
+    foreach ($GLOBALS['hooks']['Filter_Plugin_PostUpload_Succeed'] as $fpname => &$fpsignal) {
+        $fpname($upload);
+    }
+
+    return $upload
 }
 
 /**
@@ -3347,9 +3345,6 @@ function SaveSetting()
 {
     global $zbp;
 
-    $oldZC_PERMANENT_DOMAIN_ENABLE = $zbp->option['ZC_PERMANENT_DOMAIN_ENABLE'];
-    $oldHost = $zbp->option['ZC_BLOG_HOST'];
-
     foreach ($_POST as $key => $value) {
         if (substr($key, 0, 2) !== 'ZC') {
             continue;
@@ -3426,13 +3421,7 @@ function SaveSetting()
     $zbp->option['ZC_BLOG_PRODUCT'] = 'Z-BlogPHP';
     $zbp->SaveOption();
 
-    if ($zbp->option['ZC_PERMANENT_DOMAIN_ENABLE'] == 1) {
-        if ($oldHost != $zbp->option['ZC_BLOG_HOST']) {
-            if (!defined('ZBP_IN_AJAX') && !defined('ZBP_IN_API')) {
-                Redirect($zbp->option['ZC_BLOG_HOST'] . 'zb_system/cmd.php?act=login');
-            }
-        }
-    }
+    return true;
 }
 
 //###############################################################################################################

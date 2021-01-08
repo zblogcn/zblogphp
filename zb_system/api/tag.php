@@ -61,13 +61,16 @@ function api_tag_post()
     ApiCheckAuth(true, 'TagPst');
 
     try {
-        if (!PostTag()) {
-            return array(
-                'message' => $GLOBALS['lang']['msg']['operation_failed'],
-            );
-        }
+        $tag = PostTag()
         $zbp->BuildModule();
         $zbp->SaveCache();
+
+        $array = ApiGetObjectArray($tag, array('Url'));
+
+        return array(
+            'message' => $GLOBALS['lang']['msg']['operation_succeed'],
+            'data' => array('tag' => $array),
+        );
     } catch (Exception $e) {
         return array(
             'code' => 500,
