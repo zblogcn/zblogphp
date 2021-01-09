@@ -20,6 +20,13 @@ function api_post_get()
 {
     $postId = (int) GetVars('id');
 
+    $relation_info = array(
+        'Author' => array(
+            'other_props' => array('Url', 'Template', 'Avatar', 'StaticName'),
+            'remove_props' => array('Guid', 'Password', 'IP')
+        ),
+    );
+
     if ($postId > 0) {
         $post = new Post();
         // 判断 id 是否有效
@@ -40,6 +47,9 @@ function api_post_get()
                     // 草稿文章
                     ApiCheckAuth(true, 'ArticleEdt');
                 }
+                $relation_info['Category'] =  array(
+                    'other_props' => array('Url', 'Symbol', 'Level', 'SymbolName', 'AllCount'),
+                );
             }
             // 默认为公开状态的文章/页面
             ApiCheckAuth(false, 'view');
@@ -47,15 +57,7 @@ function api_post_get()
                 $post,
                 array('Url','TagsCount','TagsName','CommentPostKey','ValidCodeUrl'),
                 array(),
-                ApiGetAndFilterRelationQuery(array(
-                    'Category' => array(
-                        'other_props' => array('Url', 'Symbol', 'Level', 'SymbolName', 'AllCount'),
-                    ),
-                    'Author' => array(
-                        'other_props' => array('Url', 'Template', 'Avatar', 'StaticName'),
-                        'remove_props' => array('Guid', 'Password', 'IP')
-                    ),
-                ))
+                ApiGetAndFilterRelationQuery($relation_info)
             );
 
             return array(
@@ -96,9 +98,6 @@ function api_post_post()
                 array('Url','TagsCount','TagsName','CommentPostKey','ValidCodeUrl'),
                 array(),
                 ApiGetAndFilterRelationQuery(array(
-                    'Category' => array(
-                        'other_props' => array('Url', 'Symbol', 'Level', 'SymbolName', 'AllCount'),
-                    ),
                     'Author' => array(
                         'other_props' => array('Url', 'Template', 'Avatar', 'StaticName'),
                         'remove_props' => array('Guid', 'Password', 'IP')
