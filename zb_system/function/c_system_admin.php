@@ -25,7 +25,7 @@ function Include_Admin_Addpagesubmenu()
  */
 function Include_Admin_Addtagsubmenu()
 {
-    $type = (int)GetVars('type');
+    $type = (int) GetVars('type');
     $typeurl = $type > 0 ? ('&type=' . $type) : '';
     echo MakeSubMenu($GLOBALS['lang']['msg']['new_tag'], '../cmd.php?act=TagEdt' . $typeurl, 'm-left', null, null, null, 'icon-tag-fill');
 }
@@ -35,7 +35,7 @@ function Include_Admin_Addtagsubmenu()
  */
 function Include_Admin_Addcatesubmenu()
 {
-    $type = (int)GetVars('type');
+    $type = (int) GetVars('type');
     $typeurl = $type > 0 ? ('&type=' . $type) : '';
     echo MakeSubMenu($GLOBALS['lang']['msg']['new_category'], '../cmd.php?act=CategoryEdt' . $typeurl, 'm-left', null, null, null, 'icon-folder-plus');
 }
@@ -1143,7 +1143,7 @@ function Admin_CategoryMng()
 {
     global $zbp;
 
-    $type = (int)GetVars('type');
+    $type = (int) GetVars('type');
     $typetitle = $type > 0 ? (ucfirst($zbp->GetPostType_Name($type)) . '-') : '';
     echo '<div class="divHeader">' . $typetitle . $zbp->lang['msg']['category_manage'] . '</div>';
     echo '<div class="SubMenu">';
@@ -1291,7 +1291,7 @@ function Admin_CommentMng()
             $tabletds[] = '<td class="td5"></td>';
         }
 
-        $tabletds[] = '<td class="td10"><span class="cmt-note" title="' . $zbp->lang['msg']['email'] . ':' . htmlspecialchars($cmt->Email) . '"><a href="mailto:' . htmlspecialchars($cmt->Email) . '">' . $cmt->Author->StaticName. '</a></span></td>';
+        $tabletds[] = '<td class="td10"><span class="cmt-note" title="' . $zbp->lang['msg']['email'] . ':' . htmlspecialchars($cmt->Email) . '"><a href="mailto:' . htmlspecialchars($cmt->Email) . '">' . $cmt->Author->StaticName . '</a></span></td>';
         $tabletds[] = '<td><div style="overflow:hidden;max-width:500px;">' .
             (
                 ($article) ? '<a href="' . $article->Url . '" target="_blank"><i class="icon-link-45deg"></i></a> ' : '<a href="javascript:;"><i class="icon-trash"></i></a>') .
@@ -1561,7 +1561,7 @@ function Admin_TagMng()
 {
     global $zbp;
 
-    $type = (int)GetVars('type');
+    $type = (int) GetVars('type');
     $typetitle = $type > 0 ? (ucfirst($zbp->GetPostType_Name($type)) . '-') : '';
 
     echo '<div class="divHeader">' . $typetitle . $zbp->lang['msg']['tag_manage'] . '</div>';
@@ -1689,7 +1689,6 @@ function Admin_ThemeMng()
         if ($theme->IsUsed() && $theme->path && !in_array('AppCentre', $zbp->GetPreActivePlugin())) {
             echo '<a href="' . $theme->GetManageUrl() . '" title="' . $zbp->lang['msg']['manage'] . '"><i class="icon-tools"></i></a>&nbsp;&nbsp;';
         } else {
-            /** @todo ICON */
             echo '<i class="icon-layout-text-sidebar-reverse"></i>&nbsp;&nbsp;';
         }
         echo '<a target="_blank" href="' . htmlspecialchars($theme->url) . '" title=""><strong style="display:none;">' . htmlspecialchars($theme->id) . '</strong>';
@@ -2159,7 +2158,7 @@ function Admin_SettingMng()
                     if (!($zbp->option['ZC_PERMANENT_DOMAIN_SHOW'] == false && $zbp->option['ZC_PERMANENT_DOMAIN_ENABLE'] == false)) {
                         echo '<span class="note">' . $zbp->lang['msg']['blog_host_add'] . '</span>';
                     }
-                    echo'</p></td><td><p><input id="ZC_BLOG_HOST" name="ZC_BLOG_HOST" style="width:600px;" type="text" value="' . $decodedBlogHost . '" ' . ($zbp->option['ZC_PERMANENT_DOMAIN_ENABLE'] ? '' : 'readonly="readonly" ') . 'oninput="disableSubmit($(this).val())" />&nbsp;&nbsp;';
+                    echo '</p></td><td><p><input id="ZC_BLOG_HOST" name="ZC_BLOG_HOST" style="width:600px;" type="text" value="' . $decodedBlogHost . '" ' . ($zbp->option['ZC_PERMANENT_DOMAIN_ENABLE'] ? '' : 'readonly="readonly" ') . 'oninput="disableSubmit($(this).val())" />&nbsp;&nbsp;';
                     if (!($zbp->option['ZC_PERMANENT_DOMAIN_SHOW'] == false && $zbp->option['ZC_PERMANENT_DOMAIN_ENABLE'] == false)) {
                         echo '<span class="js-tip"></span>';
                         echo '<p><label onclick="$(\'#ZC_BLOG_HOST\').prop(\'readonly\', $(\'#ZC_PERMANENT_DOMAIN_ENABLE\').val()==0?true:false);   if($(\'#ZC_PERMANENT_DOMAIN_ENABLE\').val()==0){enableSubmit();$(this).parent().next().hide();$(\'.js-tip\').html(\'\');}else {disableSubmit();$(this).parent().next().show();}"><input type="text" id="ZC_PERMANENT_DOMAIN_ENABLE" name="ZC_PERMANENT_DOMAIN_ENABLE" class="checkbox" value="' . $zbp->option['ZC_PERMANENT_DOMAIN_ENABLE'] . '"/></label>' . $zbp->lang['msg']['permanent_domain'] . '<span style="display:none;"></span></p>';
@@ -2267,7 +2266,7 @@ function changeDomain(newurl){
 
                     echo '<tr><td><p><b>' . $zbp->lang['msg']['thumb_switch'] . '</b></p></td><td><p><input id="ZC_ARTICLE_THUMB_SWITCH" name="ZC_ARTICLE_THUMB_SWITCH" type="text" value="' . $zbp->option['ZC_ARTICLE_THUMB_SWITCH'] . '" class="checkbox"/></p></td></tr>';
 
-                    echo '<tr><td><p><b>' . $zbp->lang['msg']['thumb_type'] . '</b></p></td><td><p><input id="ZC_ARTICLE_THUMB_CLIP" class="radio" type="radio" name="ZC_ARTICLE_THUMB_TYPE" value="1" '.($zbp->option['ZC_ARTICLE_THUMB_TYPE']==1?'checked="checked"':'').'/><label for="ZC_ARTICLE_THUMB_CLIP">' . $zbp->lang['msg']['thumb_clip'] . '</label><input class="radio" type="radio" name="ZC_ARTICLE_THUMB_TYPE" id="ZC_ARTICLE_THUMB_SCALE" value="2" '.($zbp->option['ZC_ARTICLE_THUMB_TYPE']==2?'checked="checked"':'').'/> <label for="ZC_ARTICLE_THUMB_SCALE" style="margin-left:20px;">' . $zbp->lang['msg']['thumb_scale'] . '</label></p><p>'. $zbp->lang['msg']['thumb_tip'] .'</p></td></tr>';
+                    echo '<tr><td><p><b>' . $zbp->lang['msg']['thumb_type'] . '</b></p></td><td><p><input id="ZC_ARTICLE_THUMB_CLIP" class="radio" type="radio" name="ZC_ARTICLE_THUMB_TYPE" value="1" ' . ($zbp->option['ZC_ARTICLE_THUMB_TYPE'] == 1 ? 'checked="checked"' : '') . '/><label for="ZC_ARTICLE_THUMB_CLIP">' . $zbp->lang['msg']['thumb_clip'] . '</label><input class="radio" type="radio" name="ZC_ARTICLE_THUMB_TYPE" id="ZC_ARTICLE_THUMB_SCALE" value="2" ' . ($zbp->option['ZC_ARTICLE_THUMB_TYPE'] == 2 ? 'checked="checked"' : '') . '/> <label for="ZC_ARTICLE_THUMB_SCALE" style="margin-left:20px;">' . $zbp->lang['msg']['thumb_scale'] . '</label></p><p>' . $zbp->lang['msg']['thumb_tip'] . '</p></td></tr>';
 
                     echo '<tr><td><p><b>' . $zbp->lang['msg']['thumb_width'] . '</b></p></td><td><p><input id="ZC_ARTICLE_THUMB_WIDTH" name="ZC_ARTICLE_THUMB_WIDTH" style="width:600px;" type="text" value="' . $zbp->option['ZC_ARTICLE_THUMB_WIDTH'] . '" /></p></td></tr>';
                     echo '<tr><td><p><b>' . $zbp->lang['msg']['thumb_height'] . '</b></p></td><td><p><input id="ZC_ARTICLE_THUMB_HEIGHT" name="ZC_ARTICLE_THUMB_HEIGHT" style="width:600px;" type="text" value="' . $zbp->option['ZC_ARTICLE_THUMB_HEIGHT'] . '" /></p></td></tr>';

@@ -174,13 +174,13 @@ function GetPost($idorname, $option = null)
 
     if (is_null($id) === false) {
         $w[] = array('=', 'log_ID', (int) $id);
-    }elseif (is_null($title) === false) {
+    } elseif (is_null($title) === false) {
         $w[] = array('=', 'log_Title', $title);
-    }elseif (is_null($alias) === false) {
+    } elseif (is_null($alias) === false) {
         $w[] = array('=', 'log_Alias', $alias);
-    }elseif (is_null($titleoralias) === false) {
+    } elseif (is_null($titleoralias) === false) {
         $w[] = array('array', array(array('log_Alias', $titleoralias), array('log_Title', $titleoralias)));
-    }elseif (is_string($idorname)) {
+    } elseif (is_string($idorname)) {
         $w[] = array('array', array(array('log_Alias', $idorname), array('log_Title', $idorname)));
     } elseif (is_int($idorname)) {
         $w[] = array('=', 'log_ID', (int) $idorname);
@@ -203,7 +203,7 @@ function GetPost($idorname, $option = null)
 }
 
 /**
- * 获取文章列表. 
+ * 获取文章列表.
  *
  * @param int  $count  数量 (1.7支持复杂的array参数,$count为array时后面的参数可以不设)
  * @param null $cate   分类ID
@@ -264,8 +264,8 @@ function GetList($count = 10, $cate = null, $auth = null, $date = null, $tags = 
         if (!is_array($option)) {
             $option = array();
         }
-        $option = array_merge($args, $option);  
-        unset($args); 
+        $option = array_merge($args, $option);
+        unset($args);
     }
 
     if (!is_array($option)) {
@@ -308,7 +308,7 @@ function GetList($count = 10, $cate = null, $auth = null, $date = null, $tags = 
 
     if ($option['post_type'] !== null) {
         $post_type = (int) $option['post_type'];
-    }else{
+    } else {
         $post_type = 0;
     }
     $w[] = array('=', 'log_Type', $post_type);
@@ -1610,6 +1610,133 @@ function ViewComment($id)
 //###############################################################################################################
 
 /**
+ * 通用的提交Post表对象数据.
+ *
+ * @api Filter_Plugin_PostPost_Core
+ * @api Filter_Plugin_PostPost_Succeed
+ *
+ * @throws Exception
+ *
+ * @return Post
+ */
+function PostPost()
+{
+    global $zbp;
+    if (!isset($_POST['ID'])) {
+        return false;
+    }
+
+    if (isset($_POST['PostTime'])) {
+        $_POST['PostTime'] = strtotime($_POST['PostTime']);
+    }
+
+    if (!isset($_POST['AuthorID'])) {
+        $_POST['AuthorID'] = $zbp->user->ID;
+    } else {
+        if (($_POST['AuthorID'] != $zbp->user->ID) && (!$zbp->CheckRights('PageAll'))) {
+            $_POST['AuthorID'] = $zbp->user->ID;
+        }
+    }
+
+    if (isset($_POST['Alias'])) {
+        $_POST['Alias'] = FormatString($_POST['Alias'], '[noscript]');
+    }
+
+    if (isset($_POST['Type'])) {
+        $_POST['Type'] = (int) $_POST['Type'];
+    } else {
+        $_POST['Type'] = 0;
+    }
+
+    if (isset($_POST['Tag'])) {
+        $_POST['Tag'] = FormatString($_POST['Tag'], '[noscript]');
+        $_POST['Tag'] = PostArticle_CheckTagAndConvertIDtoString($_POST['Tag'], $_POST['Type']);
+    }
+
+    $post = new Post();
+
+    if (GetVars('ID', 'POST') == 0) {
+        $i = 0;
+    } else {
+        $post = $zbp->GetPostByID(GetVars('ID', 'POST'));
+    }
+
+    foreach ($zbp->datainfo['Post'] as $key => $value) {
+        if ($key == 'ID' || $key == 'Meta') {
+            continue;
+        }
+        if (isset($_POST[$key])) {
+            $post->$key = GetVars($key, 'POST');
+        }
+    }
+
+    FilterMeta($post);
+    $article->UpdateTime = time();
+
+    foreach ($GLOBALS['hooks']['Filter_Plugin_PostPost_Core'] as $fpname => &$fpsignal) {
+        $fpname($post);
+    }
+
+    FilterPost($post);
+
+    $post->Save();
+
+    if ($zbp->option['ZC_LARGE_DATA'] == false) {
+        CountPostArray(array($post->ID));
+    }
+
+    $zbp->AddBuildModule('comments');
+
+    if (GetVars('AddNavbar', 'POST') == 0) {
+        $zbp->DelItemToNavbar('page', $post->ID);
+    }
+
+    if (GetVars('AddNavbar', 'POST') == 1) {
+        $zbp->AddItemToNavbar('page', $post->ID, $post->Title, $post->Url);
+    }
+
+    foreach ($GLOBALS['hooks']['Filter_Plugin_PostPost_Succeed'] as $fpname => &$fpsignal) {
+        $fpname($post);
+    }
+
+    return $post;
+}
+
+/**
+ * 通用的删除Post表对象数据.
+ *
+ * @api Filter_Plugin_DelPost_Core
+ * @api Filter_Plugin_DelPost_Succeed
+ * @throws Exception
+ *
+ * @return bool
+ */
+function DelPost()
+{
+    global $zbp;
+
+    $id = (int) GetVars('id');
+
+    $post = $zbp->GetPostByID($id);
+
+    if ($post->ID > 0) {
+        foreach ($GLOBALS['hooks']['Filter_Plugin_DelPost_Core'] as $fpname => &$fpsignal) {
+            $fpname($post);
+        }
+
+        $post->Del();
+
+        $zbp->DelItemToNavbar($zbp->GetPostType_Name($post->Type), $post->ID);
+
+        foreach ($GLOBALS['hooks']['Filter_Plugin_DelPost_Succeed'] as $fpname => &$fpsignal) {
+            $fpname($post);
+        }
+    }
+
+    return true;
+}
+
+/**
  * 提交文章数据.
  *
  * @api Filter_Plugin_PostArticle_Core
@@ -1636,7 +1763,7 @@ function PostArticle()
 
     if (isset($_POST['Tag'])) {
         $_POST['Tag'] = FormatString($_POST['Tag'], '[noscript]');
-        $_POST['Tag'] = PostArticle_CheckTagAndConvertIDtoString($_POST['Tag']);
+        $_POST['Tag'] = PostArticle_CheckTagAndConvertIDtoString($_POST['Tag'], 0);
     }
     if (isset($_POST['Content'])) {
         $_POST['Content'] = preg_replace("/<hr class=\"more\"\s*\/>/i", '<!--more-->', $_POST['Content']);
@@ -1645,66 +1772,66 @@ function PostArticle()
         preg_match_all('/<img[^>]*?\s+src="([^\s"]{5,})"[^>]*?>/i', $intro . $_POST['Content'], $imgs);
         $img = isset($imgs[1][0]) ? $imgs[1][0] : false;
         //原图
-        if($img) {
+        if ($img) {
             $_POST['FirstImg'] = str_replace($zbp->host, '', $img);
-            $_POST['FirstImg'] = substr($_POST['FirstImg'], 0,1)=='/' || substr($_POST['FirstImg'], 0,1)=='\\' ? substr($_POST['FirstImg'], 1):$_POST['FirstImg'];
-            $_POST['FirstImg'] = '{#ZC_BLOG_HOST#}'.$_POST['FirstImg'];
+            $_POST['FirstImg'] = substr($_POST['FirstImg'], 0, 1) == '/' || substr($_POST['FirstImg'], 0, 1) == '\\' ? substr($_POST['FirstImg'], 1) : $_POST['FirstImg'];
+            $_POST['FirstImg'] = '{#ZC_BLOG_HOST#}' . $_POST['FirstImg'];
         }
         //缩略图处理
-        if($img && $zbp->option['ZC_ARTICLE_THUMB_SWITCH']){
+        if ($img && $zbp->option['ZC_ARTICLE_THUMB_SWITCH']) {
             //先通过$zbp->host判断是否为本地图片
-            if(stripos($img,$zbp->host) !== false) {
+            if (stripos($img, $zbp->host) !== false) {
                 //将图片地址的host干掉
                 $img = str_replace($zbp->host, '', $img);
                 //绝对地址
-                $imgs = $zbp->path.str_replace($zbp->host, '', $img);
-                if(is_file($imgs)){
+                $imgs = $zbp->path . str_replace($zbp->host, '', $img);
+                if (is_file($imgs)) {
                     //缩略图路径
                     $imgNew = ImgToThumbUrl($imgs);
                     //缩略并裁剪
-                    if($zbp->option['ZC_ARTICLE_THUMB_TYPE'] == 1){
-                        if(ZbpImage::ClipThumb($imgs,$imgNew,$zbp->option['ZC_ARTICLE_THUMB_WIDTH'],$zbp->option['ZC_ARTICLE_THUMB_HEIGHT'])){
-                            $_POST['Thumb'] = ImgToThumbUrl('{#ZC_BLOG_HOST#}'.$img);
+                    if ($zbp->option['ZC_ARTICLE_THUMB_TYPE'] == 1) {
+                        if (ZbpImage::ClipThumb($imgs, $imgNew, $zbp->option['ZC_ARTICLE_THUMB_WIDTH'], $zbp->option['ZC_ARTICLE_THUMB_HEIGHT'])) {
+                            $_POST['Thumb'] = ImgToThumbUrl('{#ZC_BLOG_HOST#}' . $img);
                         }
-                    }else{
-                        if(ZbpImage::Thumb($imgs,$imgNew,$zbp->option['ZC_ARTICLE_THUMB_WIDTH'],false)){
-                            $_POST['Thumb'] = ImgToThumbUrl('{#ZC_BLOG_HOST#}'.$img);
+                    } else {
+                        if (ZbpImage::Thumb($imgs, $imgNew, $zbp->option['ZC_ARTICLE_THUMB_WIDTH'], false)) {
+                            $_POST['Thumb'] = ImgToThumbUrl('{#ZC_BLOG_HOST#}' . $img);
                         }
                     }
-                    
                 }
-            }else{
+            } else {
                 $path = 'zb_users/upload/' . date('Y/m') . '/';
-                $dir = ZBP_PATH.$path;
+                $dir = ZBP_PATH . $path;
                 //如果设置的上传目录不存在，则创建
-                if (!file_exists($dir)) @mkdir($dir,0777,true);
+                if (!file_exists($dir)) {
+                    @mkdir($dir, 0777, true);
+                }
                 $ext = strtolower(substr(strrchr($img, '.'), 1));
-                $name = date('Ymd').(microtime(true)*10000).'.'.$ext;
-                $url = $dir.$name;
+                $name = date('Ymd') . (microtime(true) * 10000) . '.' . $ext;
+                $url = $dir . $name;
                 //网络地址
-                if(preg_match('/^(http|https):\/\//',$img)){
+                if (preg_match('/^(http|https):\/\//', $img)) {
                     $http = Network::Create();
-                    $http->open('GET',$img);
+                    $http->open('GET', $img);
                     $http->setRequestHeader('Referer', $zbp->host);
                     $http->send();
-                    if ($http->status == 200){
+                    if ($http->status == 200) {
                         $r = $http->responseText;
-                        if($r){
-                            if(file_put_contents($url,$r)){
+                        if ($r) {
+                            if (file_put_contents($url, $r)) {
                                 $imgNew = ImgToThumbUrl($url);
-                                if(ZbpImage::ClipThumb($url,$imgNew,$zbp->option['ZC_ARTICLE_THUMB_WIDTH'],$zbp->option['ZC_ARTICLE_THUMB_HEIGHT'])){
-                                    $_POST['Thumb'] = '{#ZC_BLOG_HOST#}'.$path.ImgToThumbUrl($name);
+                                if (ZbpImage::ClipThumb($url, $imgNew, $zbp->option['ZC_ARTICLE_THUMB_WIDTH'], $zbp->option['ZC_ARTICLE_THUMB_HEIGHT'])) {
+                                    $_POST['Thumb'] = '{#ZC_BLOG_HOST#}' . $path . ImgToThumbUrl($name);
                                 }
                             }
                         }
                     }
-                }else{
-                    $r = $zbp->path.str_replace('{#ZC_BLOG_HOST#}', '', $_POST['FirstImg']);
+                } else {
+                    $r = $zbp->path . str_replace('{#ZC_BLOG_HOST#}', '', $_POST['FirstImg']);
                     $imgNew = ImgToThumbUrl($url);
-                    if(ZbpImage::ClipThumb($r,$imgNew,$zbp->option['ZC_ARTICLE_THUMB_WIDTH'],$zbp->option['ZC_ARTICLE_THUMB_HEIGHT'])){
-                        $_POST['Thumb'] = '{#ZC_BLOG_HOST#}'.$path.ImgToThumbUrl($name);
+                    if (ZbpImage::ClipThumb($r, $imgNew, $zbp->option['ZC_ARTICLE_THUMB_WIDTH'], $zbp->option['ZC_ARTICLE_THUMB_HEIGHT'])) {
+                        $_POST['Thumb'] = '{#ZC_BLOG_HOST#}' . $path . ImgToThumbUrl($name);
                     }
-
                 }
             }
         }
@@ -1988,6 +2115,7 @@ function PostArticle_CheckTagAndConvertIDtoString($tagnamestring, $post_type = 0
         foreach ($d as $key) {
             $tag = new Tag();
             $tag->Name = $key;
+            $tag->Type = $post_type;
 
             foreach ($GLOBALS['hooks']['Filter_Plugin_PostTag_Core'] as $fpname => &$fpsignal) {
                 $fpname($tag);
@@ -1995,8 +2123,8 @@ function PostArticle_CheckTagAndConvertIDtoString($tagnamestring, $post_type = 0
 
             FilterTag($tag);
             $tag->Save();
-            $zbp->tags[$tag->ID] = $tag;
-            $zbp->tagsbyname[$tag->Name] = &$zbp->tags[$tag->ID];
+            $zbp->AddCache($tag);
+            $zbp->AddBuildModule('tags');
 
             foreach ($GLOBALS['hooks']['Filter_Plugin_PostTag_Succeed'] as $fpname => &$fpsignal) {
                 $fpname($tag);
@@ -2086,6 +2214,8 @@ function PostPage()
     $article->Type = ZC_POST_TYPE_PAGE;
 
     FilterMeta($article);
+
+    $article->UpdateTime = time();
 
     foreach ($GLOBALS['hooks']['Filter_Plugin_PostPage_Core'] as $fpname => &$fpsignal) {
         $fpname($article);
@@ -2739,7 +2869,7 @@ function PostTag()
     if (count($array) > 0) {
         $checkTag = $array[0];
     }
-    if (($tag->ID == 0 && $checkTag->ID > 0) || ($tag->ID > 0 && $checkTag->ID > 0 && $checkTag->ID != $tag->ID)){
+    if (($tag->ID == 0 && $checkTag->ID > 0) || ($tag->ID > 0 && $checkTag->ID > 0 && $checkTag->ID != $tag->ID)) {
         $zbp->ShowError(98, __FILE__, __LINE__);
     }
 
@@ -3610,7 +3740,6 @@ function Include_Index_Begin()
         }
     }
 }
-
 
 /**
  * “审核中会员”的前台权限拒绝验证
@@ -4629,8 +4758,8 @@ function ApiVerifyCSRF()
 function ApiLoadPostData()
 {
     $input = file_get_contents('php://input');
-    if ($input && ($data = json_decode($input, true)) && is_array ($data)) {
-        $_POST = array_merge ($data, $_POST);
+    if ($input && ($data = json_decode($input, true)) && is_array($data)) {
+        $_POST = array_merge($data, $_POST);
     }
 }
 
@@ -4687,7 +4816,7 @@ function ApiThrottle($name = 'default', $max_reqs = 5, $period = 60)
     }
 
     $cached_req['hits']++;
-    $zbpcache->Set($cache_key, json_encode($cached_req), $cached_req['expire_time'] - time());
+    $zbpcache->Set($cache_key, json_encode($cached_req), ($cached_req['expire_time'] - time()));
 }
 
 /**

@@ -1681,6 +1681,50 @@ DefinePluginFilter('Filter_Plugin_DelModule_Succeed');
 /*
 '**************************************************<
 '类型:Filter
+'名称:Filter_Plugin_PostPost_Core
+'参数:&$post
+'说明:Post类对象的通用编辑的核心接口(1.7.0加入)
+'调用:
+'**************************************************>
+ */
+DefinePluginFilter('Filter_Plugin_PostArticle_Core');
+
+/*
+'**************************************************<
+'类型:Filter
+'名称:Filter_Plugin_DelPost_Core
+'参数:&$post
+'说明:Post类对象的通用删除核心接口(1.7.0加入)
+'调用:
+'**************************************************>
+ */
+DefinePluginFilter('Filter_Plugin_DelPost_Core');
+
+/*
+'**************************************************<
+'类型:Filter
+'名称:Filter_Plugin_PostPost_Succeed
+'参数:&$post
+'说明:Post类对象的通用编辑的成功接口(1.7.0加入)
+'调用:
+'**************************************************>
+ */
+DefinePluginFilter('Filter_Plugin_PostArticle_Succeed');
+
+/*
+'**************************************************<
+'类型:Filter
+'名称:Filter_Plugin_DelPost_Succeed
+'参数:&$post
+'说明:Post类对象的通用删除成功接口(1.7.0加入)
+'调用:
+'**************************************************>
+ */
+DefinePluginFilter('Filter_Plugin_DelPost_Succeed');
+
+/*
+'**************************************************<
+'类型:Filter
 '名称:Filter_Plugin_EnablePlugin
 '参数:&name
 '说明:EnablePlugin(1.6.0加入)

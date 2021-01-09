@@ -107,7 +107,7 @@ function misc_statistic()
     $r = str_replace('{$zbp->user->Name}', $zbp->user->Name, $r);
     $r = str_replace('{$zbp->theme}', $zbp->theme, $r);
     $r = str_replace('{$zbp->style}', $zbp->style, $r);
-    $app = $zbp->LoadApp('plugin','AppCentre');
+    $app = $zbp->LoadApp('plugin', 'AppCentre');
     $sv = ZC_VERSION_FULL;
     if ($app->isloaded == true && $app->IsUsed()) {
         $sv .= '; AppCentre' . $app->version;
@@ -133,7 +133,7 @@ function misc_statistic()
             $zbp->AddBuildModule('navbar');
         }
     } catch (Exception $e) {
-       //echo $e->getMessage();
+        $e->getMessage();
     }
     $zbp->BuildModule();
     $zbp->SaveCache();
@@ -596,7 +596,6 @@ function misc_updatedapp()
         die();
     }
     if ($zbp->cache->success_updated_app !== '') {
-
         $zbp->cache->success_updated_app = '';
         $zbp->SaveCache();
 
