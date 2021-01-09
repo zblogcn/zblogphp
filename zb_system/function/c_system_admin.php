@@ -1689,7 +1689,6 @@ function Admin_ThemeMng()
         if ($theme->IsUsed() && $theme->path && !in_array('AppCentre', $zbp->GetPreActivePlugin())) {
             echo '<a href="' . $theme->GetManageUrl() . '" title="' . $zbp->lang['msg']['manage'] . '"><i class="icon-tools"></i></a>&nbsp;&nbsp;';
         } else {
-            /** @todo ICON */
             echo '<i class="icon-layout-text-sidebar-reverse"></i>&nbsp;&nbsp;';
         }
         echo '<a target="_blank" href="' . htmlspecialchars($theme->url) . '" title=""><strong style="display:none;">' . htmlspecialchars($theme->id) . '</strong>';
