@@ -104,15 +104,15 @@ define('ZC_POST_TYPE_ALBUM', 8); // 相册
  * @param  id=>{name,url,template,classname}
  */
 $GLOBALS['posttype'] = array(
-    array('article', '', '', 'Post'), //0
-    array('page', '', '', 'Post'), //1
-    array('tweet', '', '', 'Post'), //2
-    array('discussion', '', '', 'Post'), //3
-    array('link', '', '', 'Post'), //4
-    array('music', '', '', 'Post'), //5
-    array('video', '', '', 'Post'), //6
-    array('photo', '', '', 'Post'), //7
-    array('album', '', '', 'Post'), //8
+    array('name' => 'article', 'urlrule' => '', 'template' => '', 'classname' => 'Post'), //0
+    array('name' => 'page', 'urlrule' => '', 'template' => '', 'classname' => 'Post'), //1
+    array('name' => 'tweet', 'urlrule' => '', 'template' => '', 'classname' => 'Post'), //2
+    array('name' => 'discussion', 'urlrule' => '', 'template' => '', 'classname' => 'Post'), //3
+    array('name' => 'link', 'urlrule' => '', 'template' => '', 'classname' => 'Post'), //4
+    array('name' => 'music', 'urlrule' => '', 'template' => '', 'classname' => 'Post'), //5
+    array('name' => 'video', 'urlrule' => '', 'template' => '', 'classname' => 'Post'), //6
+    array('name' => 'photo', 'urlrule' => '', 'template' => '', 'classname' => 'Post'), //7
+    array('name' => 'album', 'urlrule' => '', 'template' => '', 'classname' => 'Post'), //8
 );
 
 /*
@@ -168,14 +168,17 @@ $GLOBALS['actions'] = array(
     'ajax'   => 6,
     'view'   => 6,
 
+    'ArticleNew' => 4,
     'ArticleEdt' => 4,
     'ArticlePst' => 4,
     'ArticleDel' => 4,
     'ArticlePub' => 3,
 
+    'PageNew' => 2,
     'PageEdt' => 2,
     'PagePst' => 2,
     'PageDel' => 2,
+    'PagePub' => 2,
 
     'CategoryEdt' => 2,
     'CategoryPst' => 2,
@@ -187,15 +190,15 @@ $GLOBALS['actions'] = array(
     'CommentChk' => 5,
     'CommentBat' => 5,
 
+    'MemberNew' => 1,
     'MemberEdt' => 5,
     'MemberPst' => 5,
     'MemberDel' => 1,
-    'MemberNew' => 1,
 
+    'TagNew' => 2,
     'TagEdt' => 2,
     'TagPst' => 2,
     'TagDel' => 2,
-    'TagNew' => 2,
 
     'PluginEnb' => 1,
     'PluginDis' => 1,

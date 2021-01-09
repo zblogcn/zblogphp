@@ -48,8 +48,21 @@ if (!$zbp->CheckRights('ArticlePub')) {
     $article->Status = ZC_POST_STATUS_AUDITING;
 }
 
-if (isset($_GET['id'])) {
+if (isset($_GET['id']) && (int) $_GET['id'] != 0) {
     $article = $zbp->GetPostByID((int) GetVars('id', 'GET'));
+} else {
+    // new Post
+    $new_action = 'ArticleNew';
+    if ($action == 'ArticleEdt') {
+        $new_action = 'ArticleNew';
+    }
+    if ($action == 'PageEdt') {
+        $new_action = 'PageNew';
+    }
+    if (!$zbp->CheckRights($new_action)) {
+        $zbp->ShowError(6, __FILE__, __LINE__);
+        die();
+    }
 }
 
 if ($ispage) {

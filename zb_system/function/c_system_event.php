@@ -1626,6 +1626,12 @@ function PostPost()
         return false;
     }
 
+    if (isset($_POST['Type'])) {
+        $_POST['Type'] = (int) $_POST['Type'];
+    } else {
+        $_POST['Type'] = 0;
+    }
+
     if (isset($_POST['PostTime'])) {
         $_POST['PostTime'] = strtotime($_POST['PostTime']);
     }
@@ -1633,19 +1639,15 @@ function PostPost()
     if (!isset($_POST['AuthorID'])) {
         $_POST['AuthorID'] = $zbp->user->ID;
     } else {
-        if (($_POST['AuthorID'] != $zbp->user->ID) && (!$zbp->CheckRights('PageAll'))) {
+        $actions = $zbp->GetPostType_Actions($_POST['Type']);
+        if (($_POST['AuthorID'] != $zbp->user->ID) && (!$zbp->CheckRights($actions['all']))) {
             $_POST['AuthorID'] = $zbp->user->ID;
         }
+        unset($actions);
     }
 
     if (isset($_POST['Alias'])) {
         $_POST['Alias'] = FormatString($_POST['Alias'], '[noscript]');
-    }
-
-    if (isset($_POST['Type'])) {
-        $_POST['Type'] = (int) $_POST['Type'];
-    } else {
-        $_POST['Type'] = 0;
     }
 
     if (isset($_POST['Tag'])) {
@@ -1657,8 +1659,17 @@ function PostPost()
 
     if (GetVars('ID', 'POST') == 0) {
         $i = 0;
+        if (!$zbp->CheckRights($post->Type_Actions['public'])) {
+            $_POST['Status'] = ZC_POST_STATUS_AUDITING;
+        }
     } else {
         $post = $zbp->GetPostByID(GetVars('ID', 'POST'));
+        if ((!$zbp->CheckRights($post->Type_Actions['public'])) && ($post->Status == ZC_POST_STATUS_AUDITING)) {
+            $_POST['Status'] = ZC_POST_STATUS_AUDITING;
+        }
+        if (($post->AuthorID != $zbp->user->ID) && (!$zbp->CheckRights($post->Type_Actions['all']))) {
+            $zbp->ShowError(6, __FILE__, __LINE__);
+        }
     }
 
     foreach ($zbp->datainfo['Post'] as $key => $value) {
@@ -1720,6 +1731,10 @@ function DelPost()
     $post = $zbp->GetPostByID($id);
 
     if ($post->ID > 0) {
+        if (!$zbp->CheckRights($post->Type_Actions['all']) && $post->AuthorID != $zbp->user->ID) {
+            $zbp->ShowError(6, __FILE__, __LINE__);
+        }
+        
         foreach ($GLOBALS['hooks']['Filter_Plugin_DelPost_Core'] as $fpname => &$fpsignal) {
             $fpname($post);
         }
@@ -2193,8 +2208,14 @@ function PostPage()
     $orig_id = 0;
     if (GetVars('ID', 'POST') == 0) {
         $i = 0;
+        if (!$zbp->CheckRights('PagePub')) {
+            $_POST['Status'] = ZC_POST_STATUS_AUDITING;
+        }
     } else {
         $article = $zbp->GetPostByID(GetVars('ID', 'POST'));
+        if ((!$zbp->CheckRights('PagePub')) && ($article->Status == ZC_POST_STATUS_AUDITING)) {
+            $_POST['Status'] = ZC_POST_STATUS_AUDITING;
+        }
         if (($article->AuthorID != $zbp->user->ID) && (!$zbp->CheckRights('PageAll'))) {
             $zbp->ShowError(6, __FILE__, __LINE__);
         }
@@ -4498,7 +4519,12 @@ function ApiResponse($data = null, $error = null, $code = 200, $message = null)
         ob_end_clean();
         if (!headers_sent()) {
             header('Content-Type: application/json; charset=utf-8');
-            SetHttpStatusCode($code);
+            //SetHttpStatusCode($code);
+            if ($code >= 400 && $code <= 599 && $code != 500) {
+                SetHttpStatusCode(200);
+            } else {
+                SetHttpStatusCode($code);
+            }
         }
     }
 

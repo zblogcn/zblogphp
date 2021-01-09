@@ -326,7 +326,16 @@ class BasePost extends Base
 
                 return $toptype;
             case 'TypeName':
+            case 'Type_Name':
                 return $zbp->GetPostType_Name($this->Type);
+            case 'Type_Template':
+                return $zbp->GetPostType_Template($this->Type);
+            case 'Type_UrlRule':
+                return $zbp->GetPostType_UrlRule($this->Type);
+            case 'Type_ClassName':
+                return $zbp->GetPostType_ClassName($this->Type);
+            case 'Type_Actions':
+                return $zbp->GetPostType_Actions($this->Type);
             default:
                 foreach ($GLOBALS['hooks']['Filter_Plugin_Post_Get'] as $fpname => &$fpsignal) {
                     $fpreturn = $fpname($this, $name);

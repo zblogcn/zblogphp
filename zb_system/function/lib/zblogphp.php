@@ -655,8 +655,9 @@ class ZBlogPHP
         $this->LoadConfigsOnlySystem(true);
         $this->LoadOption();
 
-        $this->RegPostType(0, 'article', $this->option['ZC_ARTICLE_REGEX'], $this->option['ZC_POST_DEFAULT_TEMPLATE']);
-        $this->RegPostType(1, 'page', $this->option['ZC_PAGE_REGEX'], $this->option['ZC_POST_DEFAULT_TEMPLATE']);
+        $page_actions = array('new' => 'PageNew', 'edit' => 'PageEdt', 'del' => 'PageDel', 'post' => 'PagePst', 'publish' => 'PagePub', 'manage' => 'PageMng', 'all' => 'PageAll');
+        $this->RegPostType(0, 'article', $this->option['ZC_ARTICLE_REGEX'], $this->option['ZC_POST_DEFAULT_TEMPLATE'], 'Post');
+        $this->RegPostType(1, 'page', $this->option['ZC_PAGE_REGEX'], $this->option['ZC_POST_DEFAULT_TEMPLATE'], 'Post', $page_actions);
 
         if ($this->option['ZC_BLOG_LANGUAGEPACK'] === 'SimpChinese') {
             $this->option['ZC_BLOG_LANGUAGEPACK'] = 'zh-cn';
@@ -3716,16 +3717,17 @@ class ZBlogPHP
      * @param string $urlRule      默认是取Page类型的Url Rule
      * @param string $template     默认模板名page
      * @param string $className    默认类名
+     * @param string $actions     默认Actions 应是array()
      *
      * @throws Exception
      */
-    public function RegPostType($typeId, $name, $urlRule = '', $template = 'single', $className = 'Post')
+    public function RegPostType($typeId, $name, $urlRule = '', $template = 'single', $className = 'Post', $actions = null)
     {
         /* 这两个参数在1.7里已经废弃
         * @param string $categoryType 当前文章类的分类Type //已废弃
         * @param string $tagType      当前文章类的标签Type //已废弃
         */
-        if ($urlRule == '') {
+        if (empty($urlRule)) {
             $urlRule = $this->option['ZC_PAGE_REGEX'];
         }
 
@@ -3736,7 +3738,15 @@ class ZBlogPHP
                 $this->ShowError(87, __FILE__, __LINE__);
             }
         }
-        $this->posttype[$typeId] = array($name, $urlRule, $template, $className);
+        $this->posttype[$typeId] = array('name' => $name, 'urlrule' => $urlRule, 'template' => $template, 'classname' => $className);
+
+        $post_actions = array('new' => 'ArticleNew', 'edit' => 'ArticleEdt', 'del' => 'ArticleDel', 'post' => 'ArticlePst', 'publish' => 'ArticlePub', 'manage' => 'ArticleMng', 'all' => 'ArticleAll');
+
+        if (empty($actions) || is_array($actions) == false) {
+            $this->posttype[$typeId]['actions'] = $post_actions;
+        } else {
+            $this->posttype[$typeId]['actions'] = $actions;
+        }
 
         if (!isset($this->tags_type[$typeId])) {
             $this->tags_type[$typeId] = array();
@@ -3756,8 +3766,8 @@ class ZBlogPHP
      */
     public function GetPostType_Name($typeid)
     {
-        if (isset($this->posttype[$typeid])) {
-            return strtolower($this->posttype[$typeid][0]);
+        if (isset($this->posttype[$typeid]['name'])) {
+            return strtolower($this->posttype[$typeid]['name']);
         }
 
         return '';
@@ -3765,8 +3775,8 @@ class ZBlogPHP
 
     public function GetPostType_UrlRule($typeid)
     {
-        if (isset($this->posttype[$typeid])) {
-            return $this->posttype[$typeid][1];
+        if (isset($this->posttype[$typeid]['urlrule'])) {
+            return $this->posttype[$typeid]['urlrule'];
         }
 
         return $this->option['ZC_PAGE_REGEX'];
@@ -3774,8 +3784,8 @@ class ZBlogPHP
 
     public function GetPostType_Template($typeid)
     {
-        if (isset($this->posttype[$typeid])) {
-            return $this->posttype[$typeid][2];
+        if (isset($this->posttype[$typeid]['template']) && empty($this->posttype[$typeid]['template']) == false) {
+            return $this->posttype[$typeid]['template'];
         }
 
         return 'single';
@@ -3783,11 +3793,23 @@ class ZBlogPHP
 
     public function GetPostType_ClassName($typeid)
     {
-        if (isset($this->posttype[$typeid])) {
-            return $this->posttype[$typeid][3];
+        if (isset($this->posttype[$typeid]['classname']) && empty($this->posttype[$typeid]['classname']) == false) {
+            return $this->posttype[$typeid]['classname'];
         }
 
         return 'Post';
+    }
+
+    public function GetPostType_Actions($typeid)
+    {
+        if (isset($this->posttype[$typeid]['actions'])) {
+            $actions = $this->posttype[$typeid]['actions'];
+        }
+        if (is_array($actions) && empty($actions) == false) {
+            return $actions;
+        }
+
+        return $this->posttype[0]['ations'];
     }
 
     /**
