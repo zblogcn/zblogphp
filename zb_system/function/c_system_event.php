@@ -1671,7 +1671,7 @@ function PostPost()
     }
 
     FilterMeta($post);
-    $article->UpdateTime = time();
+    $post->UpdateTime = time();
 
     foreach ($GLOBALS['hooks']['Filter_Plugin_PostPost_Core'] as $fpname => &$fpsignal) {
         $fpname($post);
@@ -4821,11 +4821,11 @@ function ApiThrottle($name = 'default', $max_reqs = 5, $period = 60)
 
 /**
  * API 地址生成.
- * 
+ *
  * @param string $mod
  * @param string $act
  * @param array  $query
- * 
+ *
  * @return string
  */
 function ApiUrlGenerate($mod, $act = 'get', $query = array())
@@ -4841,5 +4841,5 @@ function ApiUrlGenerate($mod, $act = 'get', $query = array())
         $query_string = '';
     }
 
-    return $zbp->host . 'zb_system/api.php?mod='. $mod . '&act=' . $act . $query_string;
+    return $zbp->host . 'zb_system/api.php?mod=' . $mod . '&act=' . $act . $query_string;
 }
