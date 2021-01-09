@@ -61,7 +61,7 @@ function api_tag_post()
     ApiCheckAuth(true, 'TagPst');
 
     try {
-        $tag = PostTag()
+        $tag = PostTag();
         $zbp->BuildModule();
         $zbp->SaveCache();
 
