@@ -4689,3 +4689,28 @@ function ApiThrottle($name = 'default', $max_reqs = 5, $period = 60)
     $cached_req['hits']++;
     $zbpcache->Set($cache_key, json_encode($cached_req), $cached_req['expire_time'] - time());
 }
+
+/**
+ * API 地址生成.
+ * 
+ * @param string $mod
+ * @param string $act
+ * @param array  $query
+ * 
+ * @return string
+ */
+function ApiUrlGenerate($mod, $act = 'get', $query = array())
+{
+    global $zbp;
+
+    $mod = strtolower($mod);
+    $act = strtolower($act);
+
+    if (count($query) > 0) {
+        $query_string = '&' . http_build_query($query);
+    } else {
+        $query_string = '';
+    }
+
+    return $zbp->host . 'zb_system/api.php?mod='. $mod . '&act=' . $act . $query_string;
+}
