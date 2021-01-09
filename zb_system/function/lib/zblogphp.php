@@ -188,7 +188,7 @@ class ZBlogPHP
     public $categoriesbyorder = null;
 
     /**
-     * @var Category[] 按类型分类的2维数组 
+     * @var Category[] 按类型分类的2维数组
      */
     public $categories_type = array();
 
@@ -774,7 +774,6 @@ class ZBlogPHP
 
         return true;
     }
-
 
     /**
      * 在Initialize和加载所有插件include之后，在Load之前的过程，被Base调用，1.7里新加的
@@ -1637,8 +1636,8 @@ class ZBlogPHP
      */
     private function LoadCategories_Recursion($deep, $id, &$lv, $type)
     {
-        if ($deep + 1 >= $this->category_recursion_real_deep) {
-            $this->category_recursion_real_deep = $deep + 1;
+        if (($deep + 1) >= $this->category_recursion_real_deep) {
+            $this->category_recursion_real_deep = ($deep + 1);
         }
         $subarray = array();
         for ($i = 0; $i < $this->category_recursion_level; $i++) {
@@ -1798,7 +1797,7 @@ class ZBlogPHP
                     $m->Type = 'div';
                 }
                 $m->Source = 'themeinclude_' . $this->theme;
-                $m->ID = 0 - (int)crc32($m->Source . $m->FileName);
+                $m->ID = (0 - (int) crc32($m->Source . $m->FileName));
                 $this->AddCache($m);
             }
         }
@@ -2072,7 +2071,7 @@ class ZBlogPHP
 
     /**
      * 快捷重新编译指定主题模板目录名的模板
-     * 
+     *
      * @return bool
      */
     public function BuildTemplateMore($theme = null, $template_dirname = 'template')
@@ -2715,16 +2714,16 @@ class ZBlogPHP
         }
 
         //$modules非ID为key
-        if ($className == "Module") {
-            foreach ($object as $key => $value) {
-                if ($value->ID == $id) {
-                    return $value;
-                }
-            }
-            $m = new Module();
+        //if ($className == "Module") {
+        //    foreach ($object as $key => $value) {
+        //        if ($value->ID == $id) {
+        //            return $value;
+        //        }
+        //    }
+        //    $m = new Module();
 
-            return $m;
-        }
+        //    return $m;
+        //}
 
         if (array_key_exists($id, $object)) {
             return $object[$id];
@@ -2788,7 +2787,6 @@ class ZBlogPHP
                     return $value;
                 }
             }
-
         }
     }
 
@@ -3717,13 +3715,16 @@ class ZBlogPHP
      * @param $name
      * @param string $urlRule      默认是取Page类型的Url Rule
      * @param string $template     默认模板名page
-     * @param string $categoryType 当前文章类的分类Type //已废弃 直接等于$typeId
-     * @param string $tagType      当前文章类的标签Type //已废弃 直接等于$typeId
+     * @param string $className    默认类名
      *
      * @throws Exception
      */
-    public function RegPostType($typeId, $name, $urlRule = '', $template = 'single', $categoryType = null, $tagType = null)
+    public function RegPostType($typeId, $name, $urlRule = '', $template = 'single', $className = 'Post')
     {
+        /* 这两个参数在1.7里已经废弃
+        * @param string $categoryType 当前文章类的分类Type //已废弃
+        * @param string $tagType      当前文章类的标签Type //已废弃
+        */
         if ($urlRule == '') {
             $urlRule = $this->option['ZC_PAGE_REGEX'];
         }
@@ -3735,7 +3736,7 @@ class ZBlogPHP
                 $this->ShowError(87, __FILE__, __LINE__);
             }
         }
-        $this->posttype[$typeId] = array($name, $urlRule, $template, $typeId, $typeId);
+        $this->posttype[$typeId] = array($name, $urlRule, $template, $className);
 
         if (!isset($this->tags_type[$typeId])) {
             $this->tags_type[$typeId] = array();
@@ -3780,18 +3781,13 @@ class ZBlogPHP
         return 'single';
     }
 
-    public function GetPostType_CategoryType($typeid)
+    public function GetPostType_ClassName($typeid)
     {
         if (isset($this->posttype[$typeid])) {
             return $this->posttype[$typeid][3];
         }
-    }
 
-    public function GetPostType_TagType($typeid)
-    {
-        if (isset($this->posttype[$typeid])) {
-            return $this->posttype[$typeid][4];
-        }
+        return 'Post';
     }
 
     /**

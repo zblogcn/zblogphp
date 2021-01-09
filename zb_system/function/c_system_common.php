@@ -582,13 +582,12 @@ function GetDirsInDir_Recursive($dir)
         foreach (scandir($dir, 0) as $d) {
             if (is_dir($dir . $d)) {
                 if (($d != '.') && ($d != '..')) {
-                	$array = GetDirsInDir($dir . $d);
-                	if(count($array)>0){
-                		foreach ($array as $key => $value) {
-                			$dirs[] = $dir . $d . '/' . $value;
-
-                		}
-                	}
+                    $array = GetDirsInDir($dir . $d);
+                    if (count($array) > 0) {
+                        foreach ($array as $key => $value) {
+                            $dirs[] = $dir . $d . '/' . $value;
+                        }
+                    }
                     $dirs[] = $dir . $d;
                 }
             }
@@ -599,13 +598,12 @@ function GetDirsInDir_Recursive($dir)
             while (false !== ($file = readdir($handle))) {
                 if ($file != "." && $file != "..") {
                     if (is_dir($dir . $file)) {
-                		$array = GetDirsInDir($dir . $file);
-	                	if(count($array)>0){
-	                		foreach ($array as $key => $value) {
-	                			$dirs[] = $dir . $file . '/' . $value;
-
-	                		}
-	                	}
+                        $array = GetDirsInDir($dir . $file);
+                        if (count($array) > 0) {
+                            foreach ($array as $key => $value) {
+                                $dirs[] = $dir . $file . '/' . $value;
+                            }
+                        }
                         $dirs[] = $dir . $file;
                     }
                 }
@@ -627,15 +625,15 @@ function GetDirsInDir_Recursive($dir)
  */
 function GetFilesInDir_Recursive($dir, $type)
 {
-	$dirs = GetDirsInDir_Recursive($dir);
-	$files = array();
-	foreach ($dirs as $key => $d) {
-		$f = GetFilesInDir($d, $type);
-		foreach ($f as $key => $value) {
-			$files[] = $value;
-		}
-	}
-	return $files;
+    $dirs = GetDirsInDir_Recursive($dir);
+    $files = array();
+    foreach ($dirs as $key => $d) {
+        $f = GetFilesInDir($d, $type);
+        foreach ($f as $key => $value) {
+            $files[] = $value;
+        }
+    }
+    return $files;
 }
 
 /**
@@ -2040,10 +2038,7 @@ function JsonEncode($arr)
             )
         );
     } else {
-        return json_encode(
-            $arr,
-            (JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES)
-        );
+        return call_user_func('json_encode', $arr, (JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
     }
 }
 
@@ -2080,7 +2075,8 @@ function RecHtmlSpecialChars(&$arr)
 /**
  * 判断数组是否已经有$key了，如果没有就set一次$default
  */
-function Array_Isset(&$array, $key, $default){
+function Array_Isset(&$array, $key, $default)
+{
     if (!array_key_exists($key, $array)) {
         $array[$key] = $default;
     }
@@ -2093,7 +2089,8 @@ function Array_Isset(&$array, $key, $default){
  * @param  string $path 原图片地址
  * @return string      缩略图地址
  */
-function ImgToThumbUrl($path){
+function ImgToThumbUrl($path)
+{
     $pos = strripos($path, '.');
     $start = substr($path, 0, $pos);
     $end = substr($path, $pos);

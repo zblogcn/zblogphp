@@ -101,18 +101,18 @@ define('ZC_POST_TYPE_ALBUM', 8); // 相册
 
 /*
  * 定义类型序列
- * @param  id=>{name,url,template}
+ * @param  id=>{name,url,template,classname}
  */
 $GLOBALS['posttype'] = array(
-    array('article', '', '', 0, 0),
-    array('page', '', '', 1, 1),
-    array('tweet', '', '', 2, 2),
-    array('discussion', '', '', 3, 3),
-    array('link', '', '', 4, 4),
-    array('music', '', '', 5, 5),
-    array('video', '', '', 6, 6),
-    array('photo', '', '', 7, 7),
-    array('album', '', '', 8, 8),
+    array('article', '', '', 'Post'), //0
+    array('page', '', '', 'Post'), //1
+    array('tweet', '', '', 'Post'), //2
+    array('discussion', '', '', 'Post'), //3
+    array('link', '', '', 'Post'), //4
+    array('music', '', '', 'Post'), //5
+    array('video', '', '', 'Post'), //6
+    array('photo', '', '', 'Post'), //7
+    array('album', '', '', 'Post'), //8
 );
 
 /*
@@ -531,7 +531,6 @@ if (ZBP_SAFEMODE === false) {
         if ($GLOBALS['zbp']->themeapp->isloaded && is_readable($file_base = $GLOBALS['usersdir'] . 'theme/' . $GLOBALS['blogtheme'] . '/include.php')) {
             include $file_base;
         }
-
     }
 
     $aps = $GLOBALS['zbp']->GetPreActivePlugin();
