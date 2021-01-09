@@ -1617,7 +1617,7 @@ function ViewComment($id)
  *
  * @throws Exception
  *
- * @return bool
+ * @return Post
  */
 function PostArticle()
 {
@@ -2035,7 +2035,7 @@ function DelArticle_Comments($id)
  *
  * @throws Exception
  *
- * @return bool
+ * @return Article
  */
 function PostPage()
 {
@@ -2182,7 +2182,7 @@ function BatchPost($type)
  *
  * @throws Exception
  *
- * @return bool
+ * @return Comment
  */
 function PostComment()
 {
@@ -2565,7 +2565,7 @@ function BatchComment()
 /**
  * 提交分类数据.
  *
- * @return bool
+ * @return Category
  */
 function PostCategory()
 {
@@ -2692,7 +2692,7 @@ function DelCategory_Articles($id)
 /**
  * 提交标签数据.
  *
- * @return bool
+ * @return Tag
  */
 function PostTag()
 {
@@ -2793,7 +2793,7 @@ function DelTag()
  *
  * @throws Exception
  *
- * @return bool
+ * @return Member
  */
 function PostMember()
 {
@@ -2973,7 +2973,7 @@ function DelMember_AllData($id)
 /**
  * 提交模块数据.
  *
- * @return bool
+ * @return Module
  */
 function PostModule()
 {
@@ -3114,6 +3114,7 @@ function DelModule()
  * 附件上传.
  *
  * @throws Exception
+ * @return Upload
  */
 function PostUpload()
 {

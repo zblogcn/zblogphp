@@ -212,12 +212,13 @@ switch ($zbp->action) {
         $zbp->BuildModule();
         $zbp->SaveCache();
         //判断及提前跳转
-        if (isset($_POST['Password'])) {
-            if ($mem->ID == $zbp->user->ID) {
-                if (!defined('ZBP_IN_AJAX') && !defined('ZBP_IN_API')) {
-                    Redirect($zbp->host . 'zb_system/cmd.php?act=login');
-                }
-            }
+        if (
+            isset($_POST['Password']) &&
+            $mem->ID == $zbp->user->ID &&
+            !defined('ZBP_IN_AJAX') &&
+            !defined('ZBP_IN_API')
+        ) {
+            Redirect($zbp->host . 'zb_system/cmd.php?act=login');
         }
         $zbp->SetHint('good');
         Redirect('cmd.php?act=MemberMng');
