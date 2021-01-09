@@ -18,6 +18,8 @@ if (!defined('ZBP_PATH')) {
  */
 function api_post_get()
 {
+    global $zbp;
+
     $postId = (int) GetVars('id');
 
     $relation_info = array(
@@ -26,33 +28,28 @@ function api_post_get()
             'remove_props' => array('Guid', 'Password', 'IP')
         ),
     );
+    $relation_info['Category'] = array(
+        'other_props' => array('Url', 'Symbol', 'Level', 'SymbolName', 'AllCount'),
+    );
+    $relation_info['Tags'] = array(
+        'other_props' => array('Url'),
+    );
 
     if ($postId > 0) {
         $post = new Post();
         // 判断 id 是否有效
         if ($post->LoadInfoByID($postId)) {
-            // 判断是文章还是页面
-            if ($post->Type) {
-                // 页面
-                if ($post->Status > 0) {
-                    // 非公开页面（草稿或审核状态）
-                    ApiCheckAuth(true, 'PageEdt');
-                }
-            } else {
-                // 文章
-                if ($post->Status === 2) {
-                    // 待审核文章
-                    ApiCheckAuth(true, 'ArticlePub');
-                } elseif ($post->Status === 1) {
-                    // 草稿文章
-                    ApiCheckAuth(true, 'ArticleEdt');
-                }
-                $relation_info['Category'] =  array(
-                    'other_props' => array('Url', 'Symbol', 'Level', 'SymbolName', 'AllCount'),
-                );
+
+            //if ($post->Type != ZC_POST_TYPE_PAGE) {
+            //}
+            if ($post->Status != ZC_POST_STATUS_PUBLIC && $post->AuthorID != $zbp->user->ID) {
+                // 不是本人的非公开页面（草稿或审核状态）
+                ApiCheckAuth(true, $post->Type_Actions['all']);
             }
             // 默认为公开状态的文章/页面
-            ApiCheckAuth(false, 'view');
+            if ($post->Status == ZC_POST_STATUS_PUBLIC) {
+                ApiCheckAuth(false, $post->Type_Actions['view']);
+            }
             $array = ApiGetObjectArray(
                 $post,
                 array('Url','TagsCount','TagsName','CommentPostKey','ValidCodeUrl'),
@@ -111,7 +108,6 @@ function api_post_post()
                     'post' => $array,
                 ),
             );
-
         } catch (Exception $e) {
             return array(
                 'code' => 500,
@@ -147,7 +143,6 @@ function api_post_post()
                     'post' => $array,
                 ),
             );
-
         } catch (Exception $e) {
             return array(
                 'code' => 500,

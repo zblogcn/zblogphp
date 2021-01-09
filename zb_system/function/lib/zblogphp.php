@@ -655,7 +655,7 @@ class ZBlogPHP
         $this->LoadConfigsOnlySystem(true);
         $this->LoadOption();
 
-        $page_actions = array('new' => 'PageNew', 'edit' => 'PageEdt', 'del' => 'PageDel', 'post' => 'PagePst', 'publish' => 'PagePub', 'manage' => 'PageMng', 'all' => 'PageAll');
+        $page_actions = array('new' => 'PageNew', 'edit' => 'PageEdt', 'del' => 'PageDel', 'post' => 'PagePst', 'publish' => 'PagePub', 'manage' => 'PageMng', 'all' => 'PageAll', 'view' => 'view');
         $this->RegPostType(0, 'article', $this->option['ZC_ARTICLE_REGEX'], $this->option['ZC_POST_DEFAULT_TEMPLATE'], 'Post');
         $this->RegPostType(1, 'page', $this->option['ZC_PAGE_REGEX'], $this->option['ZC_POST_DEFAULT_TEMPLATE'], 'Post', $page_actions);
 
@@ -3740,7 +3740,7 @@ class ZBlogPHP
         }
         $this->posttype[$typeId] = array('name' => $name, 'urlrule' => $urlRule, 'template' => $template, 'classname' => $className);
 
-        $post_actions = array('new' => 'ArticleNew', 'edit' => 'ArticleEdt', 'del' => 'ArticleDel', 'post' => 'ArticlePst', 'publish' => 'ArticlePub', 'manage' => 'ArticleMng', 'all' => 'ArticleAll');
+        $post_actions = array('new' => 'ArticleNew', 'edit' => 'ArticleEdt', 'del' => 'ArticleDel', 'post' => 'ArticlePst', 'publish' => 'ArticlePub', 'manage' => 'ArticleMng', 'all' => 'ArticleAll', 'view' => 'view');
 
         if (empty($actions) || is_array($actions) == false) {
             $this->posttype[$typeId]['actions'] = $post_actions;
