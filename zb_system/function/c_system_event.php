@@ -4519,11 +4519,10 @@ function ApiResponse($data = null, $error = null, $code = 200, $message = null)
         ob_end_clean();
         if (!headers_sent()) {
             header('Content-Type: application/json; charset=utf-8');
-            //SetHttpStatusCode($code);
-            if ($code >= 400 && $code <= 599 && $code != 500) {
-                SetHttpStatusCode(200);
+            if (!empty($error)) {
+                SetHttpStatusCode(500);
             } else {
-                SetHttpStatusCode($code);
+                SetHttpStatusCode(200);
             }
         }
     }
