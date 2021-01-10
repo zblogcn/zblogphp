@@ -25,6 +25,11 @@ class PageBar
     public $PageCount = 0;
 
     /**
+     * @var int 每页数量（new）
+     */
+    public $PagePre = 0;
+
+    /**
      * @var int 总页数
      */
     public $PageAll = 0;
@@ -102,6 +107,7 @@ class PageBar
         $this->Buttons = &$this->buttons;
         $this->PrevButton = &$this->prevbutton;
         $this->NextButton = &$this->nextbutton;
+        $this->PagePre = &$this->PageCount;
     }
 
     /**

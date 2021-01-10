@@ -4587,21 +4587,11 @@ function ApiCheckAuth($loginRequire = false, $action = 'view')
 {
     // 登录认证
     if ($loginRequire && !$GLOBALS['zbp']->user->ID) {
-        if (!defined('ZBP_API_IN_TEST') && !headers_sent()) {
-            SetHttpStatusCode(401);
-            header('Status: 401 Unauthorized');
-        }
-
         ApiResponse(null, null, 401, $GLOBALS['lang']['error']['6']);
     }
 
     // 权限认证
     if (!empty($action) && !$GLOBALS['zbp']->CheckRights($action)) {
-        if (!defined('ZBP_API_IN_TEST') && !headers_sent()) {
-            SetHttpStatusCode(403);
-            header('Status: 403 Forbidden');
-        }
-
         ApiResponse(null, null, 403, $GLOBALS['lang']['error']['6']);
     }
 
@@ -4707,6 +4697,9 @@ function ApiGetRequestFilter($limitDefault = 10, $sortableColumns = array())
     $offset = (int) GetVars('offset');
     $pageNow = (int) GetVars('pagenow');
     $perPage = (int) GetVars('perpage');
+    if ($perPage === 0) {
+        $perPage = $limitDefault;
+    }
 
     // 排序顺序
     if (!empty($sortBy) && isset($sortableColumns[$sortBy])) {
@@ -4725,15 +4718,6 @@ function ApiGetRequestFilter($limitDefault = 10, $sortableColumns = array())
 
         $condition['limit'] = $limit;
         $condition['option'] = $op;
-    } else {
-        if ($limit > 0) {
-            $limitDefault = $limit;
-            $condition['limit'][1] = $limit;
-        }
-
-        if ($offset > 0) {
-            $condition['limit'][0] = $offset;
-        }
     }
 
     foreach ($GLOBALS['hooks']['Filter_Plugin_API_Get_Request_Filter'] as $fpname => &$fpsignal) {
@@ -4759,7 +4743,9 @@ function ApiGetPaginationInfo($option = null)
     $pagebar = &$option['pagebar'];
 
     $info['Count'] = $pagebar->Count;
-    $info['PageCount'] = $pagebar->PageBarCount;
+    //$info['PageBarCount'] = $pagebar->PageBarCount;
+    $info['PageCount'] = $pagebar->PageCount;
+    $info['PagePre'] = $pagebar->PagePre;
     $info['PageAll'] = $pagebar->PageAll;
     $info['PageNow'] = $pagebar->PageNow;
     $info['PageFirst'] = $pagebar->PageFirst;
