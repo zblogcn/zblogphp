@@ -4707,18 +4707,18 @@ function ApiGetRequestFilter($limitDefault = 10, $sortableColumns = array())
 /**
  * 获取分页信息.
  *
- * @param PageBar|null $pagebar
+ * @param array|null $option
  * @return array
  */
-function ApiGetPaginationInfo($pagebar = null)
+function ApiGetPaginationInfo($option = null)
 {
-    if ($pagebar === null) {
+    if ($option === null) {
         // 用 stdClass 而不用 array() ，为了为空时 json 显示 {} 而不是 []
         return new stdClass;
     }
 
     $info = array();
-    $pagebar = &$pagebar['pagebar'];
+    $pagebar = &$option['pagebar'];
 
     $info['Count'] = $pagebar->Count;
     $info['PageCount'] = $pagebar->PageBarCount;
