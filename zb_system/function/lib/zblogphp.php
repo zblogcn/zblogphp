@@ -3721,7 +3721,7 @@ class ZBlogPHP
      *
      * @throws Exception
      */
-    public function RegPostType($typeId, $name, $urlRule = '', $template = 'single', $className = 'Post', $actions = null)
+    public function RegPostType($typeId, $name, $urlRule = '', $template = 'single', $className = 'Post', $actions = array())
     {
         /* 这两个参数在1.7里已经废弃
         * @param string $categoryType 当前文章类的分类Type //已废弃
@@ -3743,10 +3743,15 @@ class ZBlogPHP
         $post_actions = array('new' => 'ArticleNew', 'edit' => 'ArticleEdt', 'del' => 'ArticleDel', 'post' => 'ArticlePst', 'publish' => 'ArticlePub', 'manage' => 'ArticleMng', 'all' => 'ArticleAll', 'view' => 'view');
 
         if (empty($actions) || is_array($actions) == false) {
-            $this->posttype[$typeId]['actions'] = $post_actions;
-        } else {
-            $this->posttype[$typeId]['actions'] = $actions;
+            $actions = $post_actions;
         }
+
+        foreach ($post_actions as $key => $value) {
+            if (!isset($actions[$key])) {
+                $actions[$key] = $value;
+            }
+        }
+        $this->posttype[$typeId]['actions'] = $actions;
 
         if (!isset($this->tags_type[$typeId])) {
             $this->tags_type[$typeId] = array();
@@ -3784,7 +3789,7 @@ class ZBlogPHP
 
     public function GetPostType_Template($typeid)
     {
-        if (isset($this->posttype[$typeid]['template']) && empty($this->posttype[$typeid]['template']) == false) {
+        if (isset($this->posttype[$typeid]['template']) && !empty($this->posttype[$typeid]['template'])) {
             return $this->posttype[$typeid]['template'];
         }
 
@@ -3793,7 +3798,7 @@ class ZBlogPHP
 
     public function GetPostType_ClassName($typeid)
     {
-        if (isset($this->posttype[$typeid]['classname']) && empty($this->posttype[$typeid]['classname']) == false) {
+        if (isset($this->posttype[$typeid]['classname']) && !empty($this->posttype[$typeid]['classname'])) {
             return $this->posttype[$typeid]['classname'];
         }
 
@@ -3802,14 +3807,21 @@ class ZBlogPHP
 
     public function GetPostType_Actions($typeid)
     {
+        $actions = array();
         if (isset($this->posttype[$typeid]['actions'])) {
             $actions = $this->posttype[$typeid]['actions'];
         }
+        $post_actions = $this->posttype[0]['actions'];
         if (is_array($actions) && empty($actions) == false) {
+            foreach ($post_actions as $key => $value) {
+                if (!isset($actions[$key])) {
+                    $actions[$key] = $value;
+                }
+            }
             return $actions;
         }
 
-        return $this->posttype[0]['ations'];
+        return $post_actions;
     }
 
     /**

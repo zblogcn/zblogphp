@@ -1656,14 +1656,24 @@ function PostPost()
     }
 
     $post = new Post();
+    $post->Type = $_POST['Type'];
 
     if (GetVars('ID', 'POST') == 0) {
         $i = 0;
+        if (!$zbp->CheckRights($post->Type_Actions['new'])) {
+            $zbp->ShowError(6, __FILE__, __LINE__);
+        }
         if (!$zbp->CheckRights($post->Type_Actions['public'])) {
             $_POST['Status'] = ZC_POST_STATUS_AUDITING;
         }
     } else {
         $post = $zbp->GetPostByID(GetVars('ID', 'POST'));
+        if ($post->ID == 0) {
+            $zbp->ShowError(9, __FILE__, __LINE__);
+        }
+        if (!$zbp->CheckRights($post->Type_Actions['edit'])) {
+            $zbp->ShowError(6, __FILE__, __LINE__);
+        }
         if ((!$zbp->CheckRights($post->Type_Actions['public'])) && ($post->Status == ZC_POST_STATUS_AUDITING)) {
             $_POST['Status'] = ZC_POST_STATUS_AUDITING;
         }
@@ -1731,6 +1741,10 @@ function DelPost()
     $post = $zbp->GetPostByID($id);
 
     if ($post->ID > 0) {
+        if (!$zbp->CheckRights($post->Type_Actions['del'])) {
+            $zbp->ShowError(6, __FILE__, __LINE__);
+        }
+
         if (!$zbp->CheckRights($post->Type_Actions['all']) && $post->AuthorID != $zbp->user->ID) {
             $zbp->ShowError(6, __FILE__, __LINE__);
         }
@@ -1919,11 +1933,20 @@ function PostArticle()
     $orig_id = 0;
 
     if (GetVars('ID', 'POST') == 0) {
+        if (!$zbp->CheckRights('ArticleNew')) {
+            $zbp->ShowError(6, __FILE__, __LINE__);
+        }
         if (!$zbp->CheckRights('ArticlePub')) {
             $_POST['Status'] = ZC_POST_STATUS_AUDITING;
         }
     } else {
         $article = $zbp->GetPostByID(GetVars('ID', 'POST'));
+        if ($article->ID == 0) {
+            $zbp->ShowError(9, __FILE__, __LINE__);
+        }
+        if (!$zbp->CheckRights('ArticleEdt')) {
+            $zbp->ShowError(6, __FILE__, __LINE__);
+        }
         if (($article->AuthorID != $zbp->user->ID) && (!$zbp->CheckRights('ArticleAll'))) {
             $zbp->ShowError(6, __FILE__, __LINE__);
         }
@@ -2045,6 +2068,10 @@ function DelArticle()
     $article = new Post();
     $article = $zbp->GetPostByID($id);
     if ($article->ID > 0) {
+        if (!$zbp->CheckRights('ArticleDel')) {
+            $zbp->ShowError(6, __FILE__, __LINE__);
+        }
+
         if (!$zbp->CheckRights('ArticleAll') && $article->AuthorID != $zbp->user->ID) {
             $zbp->ShowError(6, __FILE__, __LINE__);
         }
@@ -2207,12 +2234,20 @@ function PostPage()
     $pre_author = null;
     $orig_id = 0;
     if (GetVars('ID', 'POST') == 0) {
-        $i = 0;
+        if (!$zbp->CheckRights('PageNew')) {
+            $zbp->ShowError(6, __FILE__, __LINE__);
+        }
         if (!$zbp->CheckRights('PagePub')) {
             $_POST['Status'] = ZC_POST_STATUS_AUDITING;
         }
     } else {
         $article = $zbp->GetPostByID(GetVars('ID', 'POST'));
+        if ($article->ID == 0) {
+            $zbp->ShowError(9, __FILE__, __LINE__);
+        }
+        if (!$zbp->CheckRights('PageEdt')) {
+            $zbp->ShowError(6, __FILE__, __LINE__);
+        }
         if ((!$zbp->CheckRights('PagePub')) && ($article->Status == ZC_POST_STATUS_AUDITING)) {
             $_POST['Status'] = ZC_POST_STATUS_AUDITING;
         }
@@ -2290,6 +2325,10 @@ function DelPage()
     $article = new Post();
     $article = $zbp->GetPostByID($id);
     if ($article->ID > 0) {
+        if (!$zbp->CheckRights('PageDel')) {
+            $zbp->ShowError(6, __FILE__, __LINE__);
+        }
+
         if (!$zbp->CheckRights('PageAll') && $article->AuthorID != $zbp->user->ID) {
             $zbp->ShowError(6, __FILE__, __LINE__);
         }
@@ -4515,7 +4554,7 @@ function ApiResponse($data = null, $error = null, $code = 200, $message = null)
         $fpname($response);
     }
 
-    if (! defined('ZBP_API_IN_TEST')) {
+    if (!defined('ZBP_API_IN_TEST')) {
         ob_end_clean();
         if (!headers_sent()) {
             header('Content-Type: application/json; charset=utf-8');

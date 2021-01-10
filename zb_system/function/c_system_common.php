@@ -157,15 +157,28 @@ function AutoloadClass($className)
  * 记录日志.
  *
  * @param string $logString
- * @param bool   $isError
+ * @param string $level INFO|ERROR|WARNING|FATAL|DEBUG|TRACE
+ * @param string $source system or plugin ID
  *
  * @return bool
  */
-function Logs($logString, $isError = false)
+function Logs($logString, $level = 'INFO', $source = 'system')
 {
     global $zbp;
+    $time = date('Y-m-d') . ' ' . date('H:i:s') . ' ' . substr(microtime(), 1, 9) . ' ' . date('P');
+    $isError = false;
+    if ($level === true) {
+        $level = 'ERROR';
+    } elseif ($level === false) {
+        $level = 'INFO';
+    }
+    $level = strtoupper($level);
+    if ($level == 'WARNING' || $level == 'ERROR' || $level == 'FATAL') {
+        $isError = true;
+    }
+
     foreach ($GLOBALS['hooks']['Filter_Plugin_Logs'] as $fpname => &$fpsignal) {
-        $fpreturn = $fpname($logString, $isError);
+        $fpreturn = $fpname($logString, $level, $source, $time);
         if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
             $fpsignal = PLUGIN_EXITSIGNAL_NONE;
 
@@ -188,8 +201,8 @@ function Logs($logString, $isError = false)
     ZBlogException::SuspendErrorHook();
     $handle = @fopen($f, 'a+');
     if ($handle) {
-        $t = date('Y-m-d') . ' ' . date('H:i:s') . ' ' . substr(microtime(), 1, 9) . ' ' . date('P');
-        @fwrite($handle, '[' . $t . ']' . "\r\n" . $logString . "\r\n");
+        $t = $time;
+        @fwrite($handle, '[' . $t . ']' . "\r\n" . $level . "\r\n" . $source . "\r\n" . $logString . "\r\n");
         @fclose($handle);
     }
     ZBlogException::ResumeErrorHook();

@@ -260,7 +260,6 @@ class Database__PDO_PostgreSQL implements Database__Interface
         }
     }
 
-
     /**
      * 事务处理
      *
@@ -274,10 +273,11 @@ class Database__PDO_PostgreSQL implements Database__Interface
             return $this->db->beginTransaction();
         }
         if (strcasecmp($query, 'commit') === 0) {
-            return $this->db->commit ();
+            return $this->db->commit();
         }
         if (strcasecmp($query, 'rollback ') === 0) {
             return $this->db->rollBack();
         }
     }
+
 }

@@ -47,7 +47,6 @@ class Base
      */
     protected $idname = '';
 
-
     /**
      * @param string $table     数据表
      * @param array  $datainfo  数据表结构信息
@@ -283,15 +282,15 @@ class Base
         $field_table = $field_table[$this->table];
         $conditions = array();
         foreach ($fields as $field_key => $field_value) {
-            if (strcasecmp($field_key, 'meta') === 0 && isset($this->datainfo['Meta'])){
+            if (strcasecmp($field_key, 'meta') === 0 && isset($this->datainfo['Meta'])) {
                 foreach ($field_value as $k => $v) {
-                    if (is_numeric($k)){
+                    if (is_numeric($k)) {
                         $conditions[] = array('META_NAME',$this->datainfo['Meta'][0],$v);
-                    }else{
+                    } else {
                         $conditions[] = array('META_NAMEVALUE',$this->datainfo['Meta'][0],$k,$v);
                     }
                 }
-            }else{
+            } else {
                 $field_name = $datainfo[$field_table][$field_key][0];
                 $conditions[] = array('=', $field_name, $field_value);
             }
@@ -478,8 +477,7 @@ class Base
      */
     public function __clone()
     {
-        $data = $this->GetData();
-        $this->LoadInfoByDataArray($data);
+        $this->LoadInfoByDataArray($this->data);
     }
 
     /**
@@ -487,11 +485,13 @@ class Base
      *
      * @return object
      */
-    public function Cloned()
+    public function Cloned($classname = null)
     {
-        $new = new $this->classname;
-        $data = $this->GetData();
-        $new->LoadInfoByDataArray($data);
+        if (empty($classname)) {
+            $classname = $this->classname;
+        }
+        $new = new $classname;
+        $new->LoadInfoByDataArray($this->data);
         return $new;
     }
 
@@ -504,4 +504,5 @@ class Base
     {
         return $this->idname;
     }
+
 }

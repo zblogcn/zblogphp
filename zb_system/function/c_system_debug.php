@@ -141,7 +141,7 @@ function Debug_Error_Handler($errno, $errstr, $errfile, $errline)
     $_SERVER['_error_count'] = ($_SERVER['_error_count'] + 1);
 
     if (ZBlogException::$islogerror == true) {
-        Logs(var_export(array('Error', $errno, $errstr, $errfile, $errline), true), true);
+        Logs(var_export(array('Error', $errno, $errstr, $errfile, $errline), true), 'ERROR');
     }
 
     //@符号的错误抑制功能的实现
@@ -188,7 +188,7 @@ function Debug_Exception_Handler($exception)
                 ),
                 true
             ),
-            true
+            'ERROR'
         );
     }
 
@@ -219,7 +219,7 @@ function Debug_Shutdown_Handler()
         $_SERVER['_error_count'] = ($_SERVER['_error_count'] + 1);
 
         if (ZBlogException::$islogerror) {
-            Logs(var_export(array('Shutdown', $error['type'], $error['message'], $error['file'], $error['line']), true), true);
+            Logs(var_export(array('Shutdown', $error['type'], $error['message'], $error['file'], $error['line']), true), 'FATAL');
         }
 
         if (Debug_IgnoreError($error['type'])) {
@@ -475,7 +475,7 @@ class ZBlogException
      */
     public static function Trace($s)
     {
-        Logs($s);
+        Logs($s, 'TRACE');
     }
 
     /**

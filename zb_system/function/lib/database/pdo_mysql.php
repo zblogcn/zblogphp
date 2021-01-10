@@ -200,7 +200,7 @@ class Database__PDO_MySQL implements Database__Interface
             trigger_error(implode(' ', $this->db->errorInfo()), E_USER_NOTICE);
         }
         $this->LogsError();
-        Logs($query);
+        //Logs($query);
         //fetch || fetchAll
         if (is_object($results)) {
             //if(true==true){
@@ -213,6 +213,7 @@ class Database__PDO_MySQL implements Database__Interface
                         logs("\r\n" . $query . "\r\n" . var_export($row, true));
                     }
                 } catch (PDOException $e) {
+                    $i = 0;
                     //die ("Error!: " . $e->getMessage() . "<br/>");
                 }
             }
@@ -220,6 +221,7 @@ class Database__PDO_MySQL implements Database__Interface
             try {
                 $result = $results->fetchAll();
             } catch (PDOException $e) {
+                $i = 0;
                 //die ("Error!: " . $e->getMessage() . "<br/>");
             }
             return $result;
@@ -317,7 +319,6 @@ class Database__PDO_MySQL implements Database__Interface
         }
     }
 
-
     /**
      * 事务处理
      *
@@ -331,10 +332,11 @@ class Database__PDO_MySQL implements Database__Interface
             return $this->db->beginTransaction();
         }
         if (strcasecmp($query, 'commit') === 0) {
-            return $this->db->commit ();
+            return $this->db->commit();
         }
         if (strcasecmp($query, 'rollback ') === 0) {
             return $this->db->rollBack();
         }
     }
+
 }

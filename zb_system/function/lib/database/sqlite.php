@@ -237,4 +237,5 @@ class Database__SQLite implements Database__Interface
     {
         return $this->Query($this->sql->Transaction($query));
     }
+
 }

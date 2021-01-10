@@ -316,4 +316,5 @@ class Database__PostgreSQL implements Database__Interface
     {
         return $this->Query($this->sql->Transaction($query));
     }
+
 }
