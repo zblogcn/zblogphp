@@ -29,7 +29,12 @@ class UrlRule
     /**
      * @var bool
      */
-    public $IsIndex = false; //指示是否为首页的规则
+    public $isIndex = false; //指示是否为首页的规则
+
+    /**
+     * @var bool
+     */
+    public $forcePage = false;//强制显示page参数
 
     public static $categoryLayer = '-1';
 
@@ -58,8 +63,10 @@ class UrlRule
 
         $this->Rules['{%host%}'] = $zbp->host;
         if (isset($this->Rules['{%page%}'])) {
-            if ($this->Rules['{%page%}'] == '1' || $this->Rules['{%page%}'] == '0') {
-                $this->Rules['{%page%}'] = '';
+            if ($this->forcePage == false) {
+                if ($this->Rules['{%page%}'] == '1' || $this->Rules['{%page%}'] == '0') {
+                    $this->Rules['{%page%}'] = '';
+                }
             }
         }
         $s = $this->PreUrl;
@@ -84,14 +91,16 @@ class UrlRule
         $s = $this->PreUrl;
 
         if (isset($this->Rules['{%page%}'])) {
-            if ($this->Rules['{%page%}'] == '1' || $this->Rules['{%page%}'] == '0') {
-                $this->Rules['{%page%}'] = '';
+            if ($this->forcePage == false) {
+                if ($this->Rules['{%page%}'] == '1' || $this->Rules['{%page%}'] == '0') {
+                    $this->Rules['{%page%}'] = '';
+                }
             }
         } else {
             $this->Rules['{%page%}'] = '';
         }
         if ($this->Rules['{%page%}'] == '') {
-            if ($this->IsIndex == true) {
+            if ($this->isIndex == true) {
                 //if (substr_count($s, '{%page%}') == 1 && substr_count($s, '{') == 2 && substr_count($s, '&') == 0) {
                 $s = $zbp->host;
             }

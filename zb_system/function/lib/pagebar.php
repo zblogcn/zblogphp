@@ -15,6 +15,16 @@ class PageBar
     public $Count = null;
 
     /**
+     * @var int|null 内容总数
+     */
+    public $AllCount = null;
+
+    /**
+     * @var int 当前页Count数量
+     */
+    public $CurrentCount = 0;
+
+    /**
      * @var int Pagebar长度数量
      */
     public $PageBarCount = 0;
@@ -27,7 +37,7 @@ class PageBar
     /**
      * @var int 每页数量（new）
      */
-    public $PagePre = 0;
+    public $PrePageCount = 0;
 
     /**
      * @var int 总页数
@@ -38,6 +48,11 @@ class PageBar
      * @var int 当前页
      */
     public $PageNow = 0;
+
+    /**
+     * @var int 当前页
+     */
+    public $PageCurrent = 0;
 
     /**
      * @var int 起始页
@@ -95,19 +110,27 @@ class PageBar
     public $NextButton = null;
 
     /**
+     * @var boolean
+     */
+    public $isFullLink = false;
+
+    /**
      * @param $url
      * @param bool $makeReplace
      * @param bool $isIndex
      */
-    public function __construct($url, $makeReplace = true, $isIndex = false)
+    public function __construct($url, $makeReplace = true, $isIndex = false, $forcePage = false)
     {
         $this->UrlRule = new UrlRule($url);
         $this->UrlRule->MakeReplace = $makeReplace;
-        $this->UrlRule->IsIndex = $isIndex;
+        $this->UrlRule->isIndex = $isIndex;
+        $this->UrlRule->forcePage = $forcePage;
         $this->Buttons = &$this->buttons;
         $this->PrevButton = &$this->prevbutton;
         $this->NextButton = &$this->nextbutton;
-        $this->PagePre = &$this->PageCount;
+        $this->PrePageCount = &$this->PageCount;
+        $this->AllCount = &$this->Count;
+        $this->PageCurrent = &$this->PageNow;
     }
 
     /**

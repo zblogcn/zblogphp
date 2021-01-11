@@ -72,6 +72,7 @@ function api_system_get_info()
         'views' => (int) $zbp->cache->all_view_nums,
         'members' => (int) $zbp->cache->all_member_nums,
         'theme' => $zbp->theme,
+        'style' => $zbp->style,
         'xml_rpc' => $zbp->xmlrpcurl,
     );
 

@@ -217,7 +217,7 @@ function api_post_list()
             $where[] = array('BETWEEN', 'log_PostTime', $time, strtotime('+1 month', $time));
         }
     }
-
+//Logs_Dump($zbp->user->ID);
     $where[] = array('=', 'log_Type', $type);
     // 权限验证
     if (!empty($mng)) {
@@ -248,10 +248,6 @@ function api_post_list()
     $order = $filter['order'];
     $limit = $filter['limit'];
     $option = $filter['option'];
-
-
-
-Logs_Dump($filter);
 
     $listArr = ApiGetObjectArrayList(
         $zbp->GetPostList('*', $where, $order, $limit, $option),

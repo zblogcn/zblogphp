@@ -770,14 +770,14 @@ class ZBlogPHP
             //挂载API错误显示
             Add_Filter_Plugin('Filter_Plugin_Debug_Display', 'ApiDebugDisplay');
             //挂载Token验证
-            Add_Filter_Plugin('Filter_Plugin_Zbp_Load_Pre', 'ApiTokenVerify');
+            Add_Filter_Plugin('Filter_Plugin_Zbp_PreLoad', 'ApiTokenVerify');
         }
 
         return true;
     }
 
     /**
-     * 在Initialize和加载所有插件include之后，在Load之前的过程，被Base调用，1.7里新加的
+     * 在Initialize和加载所有插件include之后，在Load之前的过程，被c_system_base调用，1.7里新加的
      *
      * @throws Exception
      *
@@ -793,14 +793,10 @@ class ZBlogPHP
             $fpreturn = $fpname();
         }
 
-        //此处接口应该在下一版本移除
-        //foreach ($GLOBALS['hooks']['Filter_Plugin_Zbp_Load_Pre'] as $fpname => &$fpsignal) {
-        //    $fpreturn = $fpname();
-        //    if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
-        //        $fpsignal = PLUGIN_EXITSIGNAL_NONE;
-        //        return $fpreturn;
-        //    }
-        //}
+        //此处接口应该在下一版本移除，请不要再使用了！！！
+        foreach ($GLOBALS['hooks']['Filter_Plugin_Zbp_Load_Pre'] as $fpname => &$fpsignal) {
+            $fpreturn = $fpname();
+        }
 
         $this->ispreload = true;
         return true;
@@ -2292,6 +2288,7 @@ class ZBlogPHP
         if (!isset($array)) {
             return array();
         }
+
         foreach ($array as $a) {
             /** @var Base $l */
             $l = new $type();
@@ -2391,7 +2388,10 @@ class ZBlogPHP
         }
 
         /** @var Post[] $array */
-        $array = $this->GetListType('Post', $sql);
+        $array = $this->GetListType('Post', $sql, $option);
+        if (isset($option['pagebar']) && is_object($option['pagebar'])) {
+            $option['pagebar']->CurrentCount = count($array);
+        }
 
         return $array;
     }
@@ -2424,7 +2424,10 @@ class ZBlogPHP
 
 
         /** @var Post[] $array */
-        $array = $this->GetListType('Post', $sql);
+        $array = $this->GetListType('Post', $sql, $option);
+        if (isset($option['pagebar']) && is_object($option['pagebar'])) {
+            $option['pagebar']->CurrentCount = count($array);
+        }
 
         if ($readtags) {
             $tagstring = '';
@@ -2463,6 +2466,9 @@ class ZBlogPHP
 
         /** @var Post[] $array */
         $array = $this->GetListType('Post', $sql);
+        if (isset($option['pagebar']) && is_object($option['pagebar'])) {
+            $option['pagebar']->CurrentCount = count($array);
+        }
 
         return $array;
     }
@@ -2486,6 +2492,9 @@ class ZBlogPHP
 
         /** @var Comment[] $array */
         $array = $this->GetListType('Comment', $sql);
+        if (isset($option['pagebar']) && is_object($option['pagebar'])) {
+            $option['pagebar']->CurrentCount = count($array);
+        }
 
         return $array;
     }
@@ -2507,7 +2516,12 @@ class ZBlogPHP
             $sql = $this->db->sql->Select($this->table['Member'], $select, $where, $order, $limit, $option);
         }
 
-        return $this->GetListType('Member', $sql);
+        $array = $this->GetListType('Member', $sql);
+        if (isset($option['pagebar']) && is_object($option['pagebar'])) {
+            $option['pagebar']->CurrentCount = count($array);
+        }
+
+        return $array;
     }
 
     /**
@@ -2527,7 +2541,12 @@ class ZBlogPHP
             $sql = $this->db->sql->Select($this->table['Tag'], $select, $where, $order, $limit, $option);
         }
 
-        return $this->GetListType('Tag', $sql);
+        $array = $this->GetListType('Tag', $sql);
+        if (isset($option['pagebar']) && is_object($option['pagebar'])) {
+            $option['pagebar']->CurrentCount = count($array);
+        }
+
+        return $array;
     }
 
     /**
@@ -2547,7 +2566,12 @@ class ZBlogPHP
             $sql = $this->db->sql->Select($this->table['Category'], $select, $where, $order, $limit, $option);
         }
 
-        return $this->GetListType('Category', $sql);
+        $array = $this->GetListType('Category', $sql);
+        if (isset($option['pagebar']) && is_object($option['pagebar'])) {
+            $option['pagebar']->CurrentCount = count($array);
+        }
+
+        return $array;
     }
 
     /**
@@ -2567,7 +2591,12 @@ class ZBlogPHP
             $sql = $this->db->sql->Select($this->table['Module'], $select, $where, $order, $limit, $option);
         }
 
-        return $this->GetListType('Module', $sql);
+        $array = $this->GetListType('Module', $sql);
+        if (isset($option['pagebar']) && is_object($option['pagebar'])) {
+            $option['pagebar']->CurrentCount = count($array);
+        }
+
+        return $array;
     }
 
     /**
@@ -2587,7 +2616,12 @@ class ZBlogPHP
             $sql = $this->db->sql->Select($this->table['Upload'], $select, $where, $order, $limit, $option);
         }
 
-        return $this->GetListType('Upload', $sql);
+        $array = $this->GetListType('Upload', $sql);
+        if (isset($option['pagebar']) && is_object($option['pagebar'])) {
+            $option['pagebar']->CurrentCount = count($array);
+        }
+
+        return $array;
     }
 
     /**
