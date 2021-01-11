@@ -124,16 +124,41 @@ function api_tag_list()
 {
     global $zbp;
 
-    ApiCheckAuth(true, 'view');
+    $mng = strtolower((string) GetVars('manage')); //&manage=1
+    $type = (int) GetVars('type');
+
+    $where = array();
+    $where[] = array('=', 'tag_Type', $type);
+
+    // 权限验证
+    //检查管理模式权限
+    ApiCheckAuth(true, 'TagMng');
+    ApiCheckAuth(true, 'TagAll');
+    $limitCount = $zbp->option['ZC_MANAGE_COUNT'];
+
+
+    $filter = ApiGetRequestFilter(
+        $limitCount,
+        array(
+            'ID' => 'tag_ID',
+            'Order' => 'tag_Order',
+            'Count' => 'tag_Count',
+        )
+    );
+    $order = $filter['order'];
+    $limit = $filter['limit'];
+    $option = $filter['option'];
 
     $listArr = ApiGetObjectArrayList(
-        $zbp->GetTagList(),
+        $zbp->GetTagList('*', $where, $order, $limit, $option),
         array('Url', 'Template')
     );
+    $paginationArr = ApiGetPaginationInfo($option);
 
     return array(
         'data' => array(
             'list' => $listArr,
+            'pagination' => $paginationArr,
         ),
     );
 }

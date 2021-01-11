@@ -212,9 +212,9 @@ class UrlRule
             if ($type == 'cate') {
                 self::$categoryLayer = $zbp->category_recursion_real_deep;
                 $carray = array();
-                for ($i = 1; $i <= self::$categoryLayer; $i++) { 
+                for ($i = 1; $i <= self::$categoryLayer; $i++) {
                     $carray[$i] = '[^\./_]*';
-                    for ($j=1; $j <= $i-1; $j++) { 
+                    for ($j = 1; $j <= ($i - 1); $j++) {
                         $carray[$i] = '[^\./_]*/' . $carray[$i];
                     }
                 }
@@ -399,9 +399,9 @@ class UrlRule
 
         self::$categoryLayer = $zbp->category_recursion_real_deep;
         $carray = array();
-        for ($i = 1; $i <= self::$categoryLayer; $i++) { 
+        for ($i = 1; $i <= self::$categoryLayer; $i++) {
             $carray[$i] = '[^\./_]*';
-            for ($j=1; $j <= $i-1; $j++) { 
+            for ($j = 1; $j <= ($i - 1); $j++) {
                 $carray[$i] = '[^\./_]*/' . $carray[$i];
             }
         }
