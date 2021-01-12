@@ -153,7 +153,7 @@ function api_tag_list()
         $zbp->GetTagList('*', $where, $order, $limit, $option),
         array('Url', 'Template')
     );
-    $paginationArr = ApiGetPaginationInfo($option);
+    $paginationArr = ApiGetPagebarInfo($option);
 
     return array(
         'data' => array(

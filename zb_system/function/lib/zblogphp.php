@@ -188,7 +188,7 @@ class ZBlogPHP
     public $categoriesbyorder = null;
 
     /**
-     * @var Category[] 按类型分类的2维数组
+     * @var Category[] 按类型分类的2维数组 //本身无意义了，现引用自$categoriesbyorder_type
      */
     public $categories_type = array();
 
@@ -656,8 +656,13 @@ class ZBlogPHP
         $this->LoadOption();
 
         $page_actions = array('new' => 'PageNew', 'edit' => 'PageEdt', 'del' => 'PageDel', 'post' => 'PagePst', 'publish' => 'PagePub', 'manage' => 'PageMng', 'all' => 'PageAll', 'view' => 'view');
-        $this->RegPostType(0, 'article', $this->option['ZC_ARTICLE_REGEX'], $this->option['ZC_POST_DEFAULT_TEMPLATE'], 'Post');
-        $this->RegPostType(1, 'page', $this->option['ZC_PAGE_REGEX'], $this->option['ZC_POST_DEFAULT_TEMPLATE'], 'Post', $page_actions);
+        $page_templates = array('template' => $this->option['ZC_POST_DEFAULT_TEMPLATE'], 'category_template' => $this->option['ZC_INDEX_DEFAULT_TEMPLATE'], 'tag_template' => $this->option['ZC_INDEX_DEFAULT_TEMPLATE']);
+        $page_urlregexs = array('urlrule' => $this->option['ZC_PAGE_REGEX'], 'list_index_urlrule' => $this->option['ZC_INDEX_REGEX'], 'list_category_urlrule' => $this->option['ZC_CATEGORY_REGEX'], 'list_tag_urlrule' => $this->option['ZC_TAGS_REGEX'], 'list_author_urlrule' => $this->option['ZC_AUTHOR_REGEX'], 'list_date_urlrule' => $this->option['ZC_DATE_REGEX']);
+        $article_urlregexs = $page_urlregexs;
+        $article_urlregexs['urlrule'] = $this->option['ZC_ARTICLE_REGEX'];
+
+        $this->RegPostType(0, 'article', $article_urlregexs, $page_templates, 'Post');
+        $this->RegPostType(1, 'page', $page_urlregexs, $page_templates, 'Post', $page_actions);
 
         if ($this->option['ZC_BLOG_LANGUAGEPACK'] === 'SimpChinese') {
             $this->option['ZC_BLOG_LANGUAGEPACK'] = 'zh-cn';
@@ -3253,29 +3258,26 @@ class ZBlogPHP
             return array();
         }
 
-        $a = array();
-        $b = array();
         $c = array();
+        $d = array();
         foreach ($t as $v) {
             if (array_key_exists($v, $this->tags_all) == false) {
-                $a[] = array('tag_ID', $v);
                 $c[] = $v;
             } else {
-                $b[$v] = &$this->tags_all[$v];
+                $d[$v] = &$this->tags_all[$v];
             }
         }
 
-        if (count($a) === 0) {
-            return $b;
+        if (count($c) === 0) {
+            return $d;
         } else {
             $t = array();
-            //$array=$this->GetTagList('',array(array('array',$a)),'','','');
             $array = $this->GetTagList('', array(array('IN', 'tag_ID', $c)), '', '', '');
             foreach ($array as $v) {
-                $t[$v->ID] = &$this->tags[$v->ID];
+                $t[$v->ID] = &$this->tags_all[$v->ID];
             }
 
-            return array_merge($b, $t);
+            return array_merge($d, $t);
         }
     }
 
@@ -3321,7 +3323,7 @@ class ZBlogPHP
             $t = array();
             $array = $this->GetTagList('', array(array('=', 'tag_Type', $posttype), array('array', $a)), '', '', '');
             foreach ($array as $v) {
-                $t[$v->Name] = &$this->tags[$v->ID];
+                $t[$v->Name] = &$this->tagsbyname_type[$posttype][$v->ID];
             }
             return $t;
         }
@@ -3748,21 +3750,32 @@ class ZBlogPHP
      *
      * @param $typeId
      * @param $name
-     * @param string $urlRule      默认是取Page类型的Url Rule
-     * @param string $template     默认模板名page
+     * @param string $urlRule      默认是array() 为Url Rule组合的数组
+     * @param string $template     默认模板名是array() 为一个组合数组
      * @param string $className    默认类名
      * @param string $actions     默认Actions 应是array()
      *
      * @throws Exception
      */
-    public function RegPostType($typeId, $name, $urlRule = '', $template = 'single', $className = 'Post', $actions = array())
+    public function RegPostType($typeId, $name, $urlRule = array(), $template = array(), $className = 'Post', $actions = array())
     {
         /* 这两个参数在1.7里已经废弃
         * @param string $categoryType 当前文章类的分类Type //已废弃
         * @param string $tagType      当前文章类的标签Type //已废弃
         */
-        if (empty($urlRule)) {
-            $urlRule = $this->option['ZC_PAGE_REGEX'];
+        $urs = array();
+        $urs['urlrule'] = $this->option['ZC_PAGE_REGEX'];
+        $urs['list_index_urlrule'] = $this->option['ZC_INDEX_REGEX'];
+        $urs['list_category_urlrule'] = $this->option['ZC_CATEGORY_REGEX'];
+        $urs['list_tag_urlrule'] = $this->option['ZC_TAGS_REGEX'];
+        $urs['list_author_urlrule'] = $this->option['ZC_AUTHOR_REGEX'];
+        $urs['list_date_urlrule'] = $this->option['ZC_DATE_REGEX'];
+        if (!is_array($urlRule)) {
+            if ($urlRule != '') {
+                $urs['urlrule'] = $urlRule;
+            }
+        } else {
+            $urs = array_merge($urs, $urlRule);
         }
 
         $typeId = (int) $typeId;
@@ -3772,7 +3785,21 @@ class ZBlogPHP
                 $this->ShowError(87, __FILE__, __LINE__);
             }
         }
-        $this->posttype[$typeId] = array('name' => $name, 'urlrule' => $urlRule, 'template' => $template, 'classname' => $className);
+        $tps = array();
+        $tps['template'] = $this->option['ZC_POST_DEFAULT_TEMPLATE'];
+        $tps['category_template'] = $this->option['ZC_INDEX_DEFAULT_TEMPLATE'];
+        $tps['tag_template'] = $this->option['ZC_INDEX_DEFAULT_TEMPLATE'];
+
+        if (!is_array($template)) {
+            if ($template != '') {
+                $tps['template'] = $template;
+            }
+        } else {
+            $tps = array_merge($tps, $template);
+        }
+
+        $this->posttype[$typeId] = array('name' => $name, 'urlrule' => $urlRule, 'classname' => $className);
+        $this->posttype[$typeId] = array_merge($this->posttype[$typeId], $tps, $urs);
 
         $post_actions = array('new' => 'ArticleNew', 'edit' => 'ArticleEdt', 'del' => 'ArticleDel', 'post' => 'ArticlePst', 'publish' => 'ArticlePub', 'manage' => 'ArticleMng', 'all' => 'ArticleAll', 'view' => 'view');
 
@@ -3803,59 +3830,97 @@ class ZBlogPHP
      *
      * @return string
      */
-    public function GetPostType_Name($typeid)
+    public function GetPostType($key, $typeid)
     {
-        if (isset($this->posttype[$typeid]['name'])) {
-            return strtolower($this->posttype[$typeid]['name']);
+        if ($key == null || empty($key)) {
+            return $this->posttype[$typeid];
         }
-
-        return '';
-    }
-
-    public function GetPostType_UrlRule($typeid)
-    {
-        if (isset($this->posttype[$typeid]['urlrule'])) {
-            return $this->posttype[$typeid]['urlrule'];
-        }
-
-        return $this->option['ZC_PAGE_REGEX'];
-    }
-
-    public function GetPostType_Template($typeid)
-    {
-        if (isset($this->posttype[$typeid]['template']) && !empty($this->posttype[$typeid]['template'])) {
-            return $this->posttype[$typeid]['template'];
-        }
-
-        return 'single';
-    }
-
-    public function GetPostType_ClassName($typeid)
-    {
-        if (isset($this->posttype[$typeid]['classname']) && !empty($this->posttype[$typeid]['classname'])) {
-            return $this->posttype[$typeid]['classname'];
-        }
-
-        return 'Post';
-    }
-
-    public function GetPostType_Actions($typeid)
-    {
-        $actions = array();
-        if (isset($this->posttype[$typeid]['actions'])) {
-            $actions = $this->posttype[$typeid]['actions'];
-        }
-        $post_actions = $this->posttype[0]['actions'];
-        if (is_array($actions) && empty($actions) == false) {
-            foreach ($post_actions as $key => $value) {
-                if (!isset($actions[$key])) {
-                    $actions[$key] = $value;
-                }
+        if ('name' == $key) {
+            if (isset($this->posttype[$typeid]['name'])) {
+                return strtolower($this->posttype[$typeid]['name']);
             }
-            return $actions;
-        }
 
-        return $post_actions;
+            return '';
+        } elseif ('urlrule' == $key) {
+            if (isset($this->posttype[$typeid]['urlrule'])) {
+                return $this->posttype[$typeid]['urlrule'];
+            }
+
+            return $this->option['ZC_PAGE_REGEX'];
+        } elseif ('list_index_urlrule' == $key) {
+            if (isset($this->posttype[$typeid]['list_index_urlrule'])) {
+                return $this->posttype[$typeid]['list_index_urlrule'];
+            }
+
+            return $this->option['ZC_INDEX_REGEX'];
+        } elseif ('list_category_urlrule' == $key) {
+            if (isset($this->posttype[$typeid]['list_category_urlrule'])) {
+                return $this->posttype[$typeid]['list_category_urlrule'];
+            }
+
+            return $this->option['ZC_CATEGORY_REGEX'];
+        } elseif ('list_tag_urlrule' == $key) {
+            if (isset($this->posttype[$typeid]['list_tag_urlrule'])) {
+                return $this->posttype[$typeid]['list_tag_urlrule'];
+            }
+
+            return $this->option['ZC_TAGS_REGEX'];
+        } elseif ('list_author_urlrule' == $key) {
+            if (isset($this->posttype[$typeid]['list_author_urlrule'])) {
+                return $this->posttype[$typeid]['list_author_urlrule'];
+            }
+
+            return $this->option['ZC_AUTHOR_REGEX'];
+        } elseif ('list_date_urlrule' == $key) {
+            if (isset($this->posttype[$typeid]['list_date_urlrule'])) {
+                return $this->posttype[$typeid]['list_date_urlrule'];
+            }
+
+            return $this->option['ZC_DATE_REGEX'];
+        } elseif ('template' == $key) {
+            if (isset($this->posttype[$typeid]['template']) && !empty($this->posttype[$typeid]['template'])) {
+                return $this->posttype[$typeid]['template'];
+            }
+
+            return $this->option['ZC_POST_DEFAULT_TEMPLATE'];
+        } elseif ('category_template' == $key) {
+            if (isset($this->posttype[$typeid]['category_template']) && !empty($this->posttype[$typeid]['category_template'])) {
+                return $this->posttype[$typeid]['category_template'];
+            }
+
+            return $this->option['ZC_INDEX_DEFAULT_TEMPLATE'];
+        } elseif ('tag_template' == $key) {
+            if (isset($this->posttype[$typeid]['tag_template']) && !empty($this->posttype[$typeid]['tag_template'])) {
+                return $this->posttype[$typeid]['tag_template'];
+            }
+
+            return $this->option['ZC_INDEX_DEFAULT_TEMPLATE'];
+        } elseif ('classname' == $key) {
+            if (isset($this->posttype[$typeid]['classname']) && !empty($this->posttype[$typeid]['classname'])) {
+                return $this->posttype[$typeid]['classname'];
+            }
+
+            return 'Post';
+        } elseif ('classname' == $key) {
+            $actions = array();
+            if (isset($this->posttype[$typeid]['actions'])) {
+                $actions = $this->posttype[$typeid]['actions'];
+            }
+            $post_actions = $this->posttype[0]['actions'];
+            if (is_array($actions) && empty($actions) == false) {
+                foreach ($post_actions as $key => $value) {
+                    if (!isset($actions[$key])) {
+                        $actions[$key] = $value;
+                    }
+                }
+                return $actions;
+            }
+            return $post_actions;
+        } else {
+            if (isset($this->posttype[$typeid][$key]) && !empty($this->posttype[$typeid][$key])) {
+                return $this->posttype[$typeid][$key];
+            }
+        }
     }
 
     /**

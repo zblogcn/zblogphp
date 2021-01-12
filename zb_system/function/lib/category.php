@@ -84,7 +84,7 @@ class Category extends Base
         if (in_array($name, array('Url', 'Symbol', 'Level', 'SymbolName', 'Parent'))) {
             return;
         } elseif ($name == 'Template') {
-            if ($value == $zbp->option['ZC_INDEX_DEFAULT_TEMPLATE']) {
+            if ($value == $zbp->GetPostType('category_template', $this->Type)) {
                 $value = '';
             }
             $this->data[$name] = $value;
@@ -92,7 +92,7 @@ class Category extends Base
             return;
         }
         if ($name == 'LogTemplate') {
-            if ($value == $zbp->option['ZC_POST_DEFAULT_TEMPLATE']) {
+            if ($value == $zbp->GetPostType('template', $this->Type)) {
                 $value = '';
             }
             $this->data[$name] = $value;
@@ -154,7 +154,7 @@ class Category extends Base
         if ($name == 'Template') {
             $value = $this->data[$name];
             if ($value == '') {
-                $value = $zbp->option['ZC_INDEX_DEFAULT_TEMPLATE'];
+                $value = $zbp->GetPostType('category_template', $this->Type);
             }
 
             return $value;
@@ -162,7 +162,7 @@ class Category extends Base
         if ($name == 'LogTemplate') {
             $value = $this->data[$name];
             if ($value == '') {
-                $value = $zbp->option['ZC_POST_DEFAULT_TEMPLATE'];
+                $value = $zbp->GetPostType('template', $this->Type);
             }
 
             return $value;
@@ -200,11 +200,11 @@ class Category extends Base
     public function Save()
     {
         global $zbp;
-        if ($this->Template == $zbp->option['ZC_INDEX_DEFAULT_TEMPLATE']) {
+        if ($this->Template == $zbp->GetPostType('category_template', $this->Type)) {
             $this->data['Template'] = '';
         }
 
-        if ($this->LogTemplate == $zbp->option['ZC_POST_DEFAULT_TEMPLATE']) {
+        if ($this->LogTemplate == $zbp->GetPostType('template', $this->Type)) {
             $this->data['LogTemplate'] = '';
         }
 
@@ -293,7 +293,7 @@ class Category extends Base
      * @param int 分类ID
      *
      * @return obj Category
-     
+
     private function GetSubCategories($obj)
     {
         $a = array();

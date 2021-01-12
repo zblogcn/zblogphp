@@ -1255,6 +1255,7 @@ function ViewList($page, $cate, $auth, $date, $tags, $isrewrite = false)
         $pagebar = null;
     }
 
+    $zbp->template->SetTags('posttype', ZC_POST_TYPE_ARTICLE);
     $zbp->template->SetTags('pagebar', $pagebar);
     $zbp->template->SetTags('type', $type);
     $zbp->template->SetTags('page', $page);
@@ -1345,7 +1346,7 @@ function ViewPost($object, $theSecondParam, $enableRewrite = false)
         exit;
     }
 
-    if (!($zbp->CheckRights('ArticleAll') && $zbp->CheckRights('PageAll'))) {
+    if (empty($zbp->user->ID)) {
         $w[] = array('=', 'log_Status', 0);
     }
 
@@ -1358,20 +1359,21 @@ function ViewPost($object, $theSecondParam, $enableRewrite = false)
         if ($enableRewrite == true) {
             return false;
         }
-
         $zbp->ShowError(2, __FILE__, __LINE__);
     }
 
     $article = $articles[0];
+
+    if ($article->Status != 0 && !$zbp->CheckRights($article->TypeActions['all']) && ($article->AuthorID != $zbp->user->ID)) {
+        $zbp->ShowError(2, __FILE__, __LINE__);
+    }
 
     if ($enableRewrite && !(stripos(urldecode($article->Url), $object[0]) !== false)) {
         $zbp->ShowError(2, __FILE__, __LINE__);
         exit;
     }
 
-    if ($article->Type == 0) {
-        $zbp->LoadTagsByIDString($article->Tag);
-    }
+    $zbp->LoadTagsByIDString($article->Tag);
 
     if (isset($zbp->option['ZC_VIEWNUMS_TURNOFF']) && $zbp->option['ZC_VIEWNUMS_TURNOFF'] == false) {
         $article->ViewNums += 1;
@@ -1437,6 +1439,7 @@ function ViewPost($object, $theSecondParam, $enableRewrite = false)
 
     $zbp->LoadMembersInList($comments);
 
+    $zbp->template->SetTags('posttype', $article->Type);
     $zbp->template->SetTags('title', ($article->Status == 0 ? '' : '[' . $zbp->lang['post_status_name'][$article->Status] . ']') . $article->Title);
     $zbp->template->SetTags('article', $article);
     $zbp->template->SetTags('type', $article->TypeName);
@@ -1639,7 +1642,7 @@ function PostPost()
     if (!isset($_POST['AuthorID'])) {
         $_POST['AuthorID'] = $zbp->user->ID;
     } else {
-        $actions = $zbp->GetPostType_Actions($_POST['Type']);
+        $actions = $zbp->GetPostType('actions', $_POST['Type']);
         if (($_POST['AuthorID'] != $zbp->user->ID) && (!$zbp->CheckRights($actions['all']))) {
             $_POST['AuthorID'] = $zbp->user->ID;
         }
@@ -1660,10 +1663,10 @@ function PostPost()
 
     if (GetVars('ID', 'POST') == 0) {
         $i = 0;
-        if (!$zbp->CheckRights($post->Type_Actions['new'])) {
+        if (!$zbp->CheckRights($post->TypeActions['new'])) {
             $zbp->ShowError(6, __FILE__, __LINE__);
         }
-        if (!$zbp->CheckRights($post->Type_Actions['public'])) {
+        if (!$zbp->CheckRights($post->TypeActions['public'])) {
             $_POST['Status'] = ZC_POST_STATUS_AUDITING;
         }
     } else {
@@ -1671,13 +1674,13 @@ function PostPost()
         if ($post->ID == 0) {
             $zbp->ShowError(9, __FILE__, __LINE__);
         }
-        if (!$zbp->CheckRights($post->Type_Actions['edit'])) {
+        if (!$zbp->CheckRights($post->TypeActions['edit'])) {
             $zbp->ShowError(6, __FILE__, __LINE__);
         }
-        if ((!$zbp->CheckRights($post->Type_Actions['public'])) && ($post->Status == ZC_POST_STATUS_AUDITING)) {
+        if ((!$zbp->CheckRights($post->TypeActions['public'])) && ($post->Status == ZC_POST_STATUS_AUDITING)) {
             $_POST['Status'] = ZC_POST_STATUS_AUDITING;
         }
-        if (($post->AuthorID != $zbp->user->ID) && (!$zbp->CheckRights($post->Type_Actions['all']))) {
+        if (($post->AuthorID != $zbp->user->ID) && (!$zbp->CheckRights($post->TypeActions['all']))) {
             $zbp->ShowError(6, __FILE__, __LINE__);
         }
     }
@@ -1741,11 +1744,11 @@ function DelPost()
     $post = $zbp->GetPostByID($id);
 
     if ($post->ID > 0) {
-        if (!$zbp->CheckRights($post->Type_Actions['del'])) {
+        if (!$zbp->CheckRights($post->TypeActions['del'])) {
             $zbp->ShowError(6, __FILE__, __LINE__);
         }
 
-        if (!$zbp->CheckRights($post->Type_Actions['all']) && $post->AuthorID != $zbp->user->ID) {
+        if (!$zbp->CheckRights($post->TypeActions['all']) && $post->AuthorID != $zbp->user->ID) {
             $zbp->ShowError(6, __FILE__, __LINE__);
         }
         
@@ -1755,7 +1758,7 @@ function DelPost()
 
         $post->Del();
 
-        $zbp->DelItemToNavbar($zbp->GetPostType_Name($post->Type), $post->ID);
+        $zbp->DelItemToNavbar($zbp->GetPostType('name', $post->Type), $post->ID);
 
         foreach ($GLOBALS['hooks']['Filter_Plugin_DelPost_Succeed'] as $fpname => &$fpsignal) {
             $fpname($post);

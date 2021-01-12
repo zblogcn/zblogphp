@@ -148,9 +148,12 @@ function misc_showtags()
 {
     global $zbp;
 
+    $type = (int) GetVars('type');
+    $actions = $zbp->GetPostType('actions', $type);
+
     $zbp->csrfExpiration = 48;
     CheckIsRefererValid();
-    if (!$zbp->CheckRights('ArticleEdt')) {
+    if (!$zbp->CheckRights($actions['new']) || !$zbp->CheckRights($actions['edit'])) {
         Http404();
         die();
     }
@@ -159,7 +162,7 @@ function misc_showtags()
     header('Cache-Control: private');
     echo '$("#ajaxtags").html("';
 
-    $array = $zbp->GetTagList(null, null, array('tag_Count' => 'DESC', 'tag_ID' => 'ASC'), array(100), null);
+    $array = $zbp->GetTagList(null, array('=', 'tag_Type', $type), array('tag_Count' => 'DESC', 'tag_ID' => 'ASC'), array(100), null);
     if (count($array) > 0) {
         $t = array();
         foreach ($array as $tag) {

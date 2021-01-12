@@ -92,7 +92,7 @@ class Tag extends Base
         if ($name == 'Template') {
             $value = $this->data[$name];
             if ($value == '') {
-                $value = $zbp->option['ZC_INDEX_DEFAULT_TEMPLATE'];
+                $value = $zbp->GetPostType('tag_template', $this->Type);
             }
 
             return $value;
@@ -115,7 +115,7 @@ class Tag extends Base
     public function Save()
     {
         global $zbp;
-        if ($this->Template == $zbp->option['ZC_INDEX_DEFAULT_TEMPLATE']) {
+        if ($this->Template == $zbp->GetPostType('tag_template', $this->Type)) {
             $this->data['Template'] = '';
         }
 

@@ -43,11 +43,11 @@ function api_post_get()
             //}
             if ($post->Status != ZC_POST_STATUS_PUBLIC && $post->AuthorID != $zbp->user->ID) {
                 // 不是本人的非公开页面（草稿或审核状态）
-                ApiCheckAuth(true, $post->Type_Actions['all']);
+                ApiCheckAuth(true, $post->TypeActions['all']);
             }
             if ($post->Status == ZC_POST_STATUS_PUBLIC) {
                 // 默认为公开状态的文章/页面
-                ApiCheckAuth(false, $post->Type_Actions['view']);
+                ApiCheckAuth(false, $post->TypeActions['view']);
             }
             $array = ApiGetObjectArray(
                 $post,
@@ -80,7 +80,7 @@ function api_post_post()
     global $zbp;
 
     $postType = (int) GetVars('Type', 'POST');
-    $actions = $zbp->GetPostType_Actions($postType);
+    $actions = $zbp->GetPostType('actions', $postType);
 
     ApiCheckAuth(true, $actions['post']);
 
@@ -155,7 +155,7 @@ function api_post_delete()
     $type = $post->Type;
 
     // 默认为删除文章
-    ApiCheckAuth(true, $post->Type_Actions['del']);
+    ApiCheckAuth(true, $post->TypeActions['del']);
     try {
         if ($type == ZC_POST_TYPE_ARTICLE) {
             // 默认为删除文章
@@ -196,7 +196,7 @@ function api_post_list()
     $date = GetVars('date');
     $mng = strtolower((string) GetVars('manage')); //&manage=1
     $type = (int) GetVars('type');
-    $actions = $zbp->GetPostType_Actions($type);
+    $actions = $zbp->GetPostType('actions', $type);
 
     // 组织查询条件
     $where = array();

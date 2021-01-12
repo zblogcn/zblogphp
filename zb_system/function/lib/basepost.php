@@ -141,7 +141,7 @@ class BasePost extends Base
             case 'Next':
             case 'RelatedList':
             case 'Template':
-                if ($value == $zbp->GetPostType_Template($this->Type)) {
+                if ($value == $zbp->GetPostType('template', $this->Type)) {
                     $value = '';
                 }
                 $this->data[$name] = $value;
@@ -192,7 +192,7 @@ class BasePost extends Base
                         return $fpreturn;
                     }
                 }
-                $u = new UrlRule($zbp->GetPostType_UrlRule($this->Type));
+                $u = new UrlRule($zbp->GetPostType('urlrule', $this->Type));
                 $u->Rules['{%id%}'] = $this->ID;
                 if ($this->Alias) {
                     $u->Rules['{%alias%}'] = $this->Alias;
@@ -229,7 +229,7 @@ class BasePost extends Base
                 if ($value == '') {
                     $value = GetValueInArray($this->Category->GetData(), 'LogTemplate');
                     if ($value == '') {
-                        $value = $zbp->GetPostType_Template($this->Type);
+                        $value = $zbp->GetPostType('template', $this->Type);
                     }
                 }
                 return $value;
@@ -326,16 +326,9 @@ class BasePost extends Base
 
                 return $toptype;
             case 'TypeName':
-            case 'Type_Name':
-                return $zbp->GetPostType_Name($this->Type);
-            case 'Type_Template':
-                return $zbp->GetPostType_Template($this->Type);
-            case 'Type_UrlRule':
-                return $zbp->GetPostType_UrlRule($this->Type);
-            case 'Type_ClassName':
-                return $zbp->GetPostType_ClassName($this->Type);
-            case 'Type_Actions':
-                return $zbp->GetPostType_Actions($this->Type);
+                return $zbp->GetPostType('name', $this->Type);
+            case 'TypeActions':
+                return $zbp->GetPostType('actions', $this->Type);
             default:
                 foreach ($GLOBALS['hooks']['Filter_Plugin_Post_Get'] as $fpname => &$fpsignal) {
                     $fpreturn = $fpname($this, $name);
@@ -361,7 +354,7 @@ class BasePost extends Base
                 $this->data['Template'] = '';
             }
         }
-        if ($this->Template == $zbp->GetPostType_Template($this->Type)) {
+        if ($this->Template == $this->GetType('template')) {
             $this->data['Template'] = '';
         }
 
@@ -396,6 +389,15 @@ class BasePost extends Base
         $zbp->RemoveCache($this);
 
         return parent::Del();
+    }
+
+    /**
+     * @return any
+     */
+    public function GetType($key)
+    {
+        global $zbp;
+        return $zbp->GetPostType($key, $this->Type);
     }
 
 }

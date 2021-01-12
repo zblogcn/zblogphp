@@ -157,7 +157,7 @@ function api_upload_list()
                     ),
                 ))
             ),
-            'pagination' => ApiGetPaginationInfo($option),
+            'pagination' => ApiGetPagebarInfo($option),
         )
     );
 
