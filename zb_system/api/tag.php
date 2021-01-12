@@ -158,7 +158,7 @@ function api_tag_list()
     return array(
         'data' => array(
             'list' => $listArr,
-            'pagination' => $paginationArr,
+            'pagebar' => $paginationArr,
         ),
     );
 }

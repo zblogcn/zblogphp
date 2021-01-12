@@ -1200,7 +1200,7 @@ function ViewList($page, $cate, $auth, $date, $tags, $isrewrite = false)
             }
         }
 
-        if ($type == 'category') {
+        if ($type == 'category' && $page == 1) {
             foreach ($articles_top_notorder as $articles_top_notorder_post) {
                 if ($articles_top_notorder_post->TopType == 'category' && $articles_top_notorder_post->CateID == $category->ID) {
                     $articles_top[] = $articles_top_notorder_post;
@@ -1246,11 +1246,11 @@ function ViewList($page, $cate, $auth, $date, $tags, $isrewrite = false)
         $zbp->ShowError(2, __FILE__, __LINE__);
     }
 
-    $zbp->LoadMembersInList($articles_top);
+    $articles = array_merge($articles_top, $articles);
     $zbp->LoadMembersInList($articles);
 
     $zbp->template->SetTags('title', $zbp->title);
-    $zbp->template->SetTags('articles', array_merge($articles_top, $articles));
+    $zbp->template->SetTags('articles', $articles);
     if ($pagebar->PageAll == 0) {
         $pagebar = null;
     }
@@ -4732,7 +4732,7 @@ function ApiGetRequestFilter($limitDefault = 10, $sortableColumns = array())
  * @param array|null $option
  * @return array
  */
-function ApiGetPaginationInfo($option = null)
+function ApiGetPagebarInfo($option = null)
 {
     if ($option === null) {
         // 用 stdClass 而不用 array() ，为了为空时 json 显示 {} 而不是 []

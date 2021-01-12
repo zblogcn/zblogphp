@@ -506,7 +506,14 @@ require ZBP_PATH . 'zb_system/admin/admin_top.php';
             });
             $('#ulTag').slideDown("fast");
             if (tag_loaded === false) {
-                $.getScript('<?php echo BuildSafeCmdURL('act=misc&type=showtags'); ?>');
+                var tag=','+$('#edtTag').val()+',';
+                $.getScript('<?php echo BuildSafeCmdURL('act=misc&type=showtags'); ?>',function(){
+                    $('#ajaxtags a').each(function(){
+                        if (tag.indexOf($(this).text()) != -1){
+                            $(this).addClass('selected');
+                        }
+                    });
+                });
                 tag_loaded = true;
             }
             return false;
@@ -525,11 +532,9 @@ require ZBP_PATH . 'zb_system/admin/admin_top.php';
         }
 
         function DelKey(i) {
-            var strKey = $('#edtTag').val();
-            var strNow = "{" + i + "}"
-            if (strKey.indexOf(strNow) != -1) {
-                strKey = strKey.substring(0, strKey.indexOf(strNow)) + strKey.substring(strKey.indexOf(strNow) + strNow.length, strKey.length)
-            }
+            var strKey = $('#edtTag').val().replace(/[;，、\s]/,',');
+            strKey = ','+strKey+',';
+            strKey = strKey.replace(','+i+',',',').replace(/^,(.*?),$/,'$1');
             $('#edtTag').val(strKey);
         }
 

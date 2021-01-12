@@ -226,7 +226,7 @@ function api_member_list()
             'list' => ApiGetObjectArrayList(
                 $zbp->GetMemberList('*', $where, $order, $limit, $option)
             ),
-            'pagination' => ApiGetPaginationInfo($option),
+            'pagebar' => ApiGetPagebarInfo($option),
         ),
     );
 }

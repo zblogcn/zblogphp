@@ -199,12 +199,12 @@ function api_comment_list()
         );
     }
 
-    $paginationArr = ApiGetPaginationInfo($option);
+    $paginationArr = ApiGetPagebarInfo($option);
 
     return array(
         'data' => array(
             'list' => $listArr,
-            'pagination' => $paginationArr,
+            'pagebar' => $paginationArr,
         ),
     );
 }
