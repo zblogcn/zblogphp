@@ -737,7 +737,7 @@ function ViewSearch()
 function ViewAuto($inpurl)
 {
     global $zbp;
-//var_dump($inpurl);
+
     $url = GetValueInArray(explode('?', $inpurl), '0');
 
     if ($zbp->cookiespath === substr($url, 0, strlen($zbp->cookiespath))) {
@@ -759,6 +759,7 @@ function ViewAuto($inpurl)
         foreach ($zbp->routes['active'] as $key => $route) {
             if (($url == $route['urlid'] . '') || ($url == $route['urlid'] . '/') || ($url == $route['urlid'] . '/index.php')) {
                 $b = false;
+                //检查GET参数是否存在
                 if (!empty($route['get'])) {
                     foreach ($route['get'] as $key => $value) {
                         if (isset($_GET[$value])) {
@@ -769,10 +770,20 @@ function ViewAuto($inpurl)
                 } else {
                     $b = true;
                 }
+                //检查GET参数是否有不需要的存在
+                if (!empty($route['not_get'])) {
+                    foreach ($route['not_get'] as $key => $value) {
+                        if (isset($_GET[$value])) {
+                            $b = false;
+                            break;
+                        }
+                    }
+                }
+                //如果条件符合就组合参数数组并调用函数
                 if ($b) {
-                    $array = array('posttype' => $route['posttype']);
+                    $array = array();
                     foreach ($route['parameters'] as $key => $value) {
-                        $array[$value] = GetVars($value, 'GET');
+                        $array[$value] = GetVars($value, 'GET', (isset($route[$value]) ? $route[$value] : null));
                     }
                     $result = call_user_func($route['function'], $array);
                     if ($result == true) {
@@ -946,11 +957,9 @@ function ViewList($page = null, $cate = null, $auth = null, $date = null, $tags 
     }
 
     foreach ($GLOBALS['hooks']['Filter_Plugin_ViewList_Begin'] as $fpname => &$fpsignal) {
-        //$fpargs = func_get_args();
         $args = array($page, $cate, $auth, $date, $tags, $isrewrite , $posttype);
         $fpargs = array_slice($fpargs, count($args));
         $fpargs = array_merge($args, $fpargs);
-
         $fpreturn = call_user_func_array($fpname, $fpargs);
         if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
             $fpsignal = PLUGIN_EXITSIGNAL_NONE;
@@ -1326,32 +1335,34 @@ function ViewList($page = null, $cate = null, $auth = null, $date = null, $tags 
  *
  * @param array|int|string $object         文章ID/ ID/别名对象
  * @param string           $theSecondParam （如果有的话）文章别名
- * @param bool             $enableRewrite  是否启用urlrewrite
+ * @param bool             $isrewrite  是否启用urlrewrite
  *
  * @throws Exception
  *
  * @return string
  */
-function ViewPost($object = null, $theSecondParam = null, $enableRewrite = false, $posttype = 0)
+function ViewPost($object = null, $theSecondParam = null, $isrewrite = false, $posttype = 0)
 {
     global $zbp;
 
+    $fpargs = func_get_args();
     if (is_array($object)) {
         $id = GetValueInArray($object, 'id', null);
         $alias = GetValueInArray($object, 'alias', null);
+        $isrewrite = GetValueInArray($object, 'isrewrite', false);
         $posttype = GetValueInArray($object, 'posttype', 0);
     } else {
         $id = $object;
         $alias = $theSecondParam;
-        $object = array('id' => $object);
-        $object[0] = $id;
-        $object['id'] = $id;
     }
+    $object = array('id' => $id);
+    $object[0] = $id;
+    $object['id'] = $id;
 
     foreach ($GLOBALS['hooks']['Filter_Plugin_ViewPost_Begin'] as $fpname => &$fpsignal) {
-        $fpargs = array($object, $theSecondParam, $enableRewrite, $posttype);
-        $fpargs[0] = $id;
-        $fpargs[1] = $alias;
+        $args = array($id, $alias, $isrewrite, $posttype);
+        $fpargs = array_slice($fpargs, count($args));
+        $fpargs = array_merge($args, $fpargs);
         $fpreturn = call_user_func_array($fpname, $fpargs);
         if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
             $fpsignal = PLUGIN_EXITSIGNAL_NONE;
@@ -1365,6 +1376,8 @@ function ViewPost($object = null, $theSecondParam = null, $enableRewrite = false
     $order = null;
     $limit = 1;
     $option = null;
+
+    $w[] = array('=', 'log_Type', $posttype);
 
     if ($id !== null) {
         if (function_exists('ctype_digit') && !ctype_digit((string) $id)) {
@@ -1393,7 +1406,7 @@ function ViewPost($object = null, $theSecondParam = null, $enableRewrite = false
 
     $articles = $zbp->GetPostList($select, $w, $order, $limit, $option);
     if (count($articles) == 0) {
-        if ($enableRewrite == true) {
+        if ($isrewrite == true) {
             return false;
         }
         $zbp->ShowError(2, __FILE__, __LINE__);
@@ -1416,7 +1429,7 @@ function ViewPost($object = null, $theSecondParam = null, $enableRewrite = false
         $zbp->ShowError(2, __FILE__, __LINE__);
     }
 
-    if ($enableRewrite && !(stripos(urldecode($article->Url), $object[0]) !== false)) {
+    if ($isrewrite && !(stripos(urldecode($article->Url), $object[0]) !== false)) {
         $zbp->ShowError(2, __FILE__, __LINE__);
         exit;
     }

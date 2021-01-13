@@ -667,12 +667,12 @@ class ZBlogPHP
 
         //注册Article的路由和Page的路由
         $this->RegRoute(array('type' => 'default', 'name' => 'default_post_article', 'function' => 'ViewList', 'posttype' => 0));
-        $this->RegRoute(array('type' => 'active', 'name' => 'post_article_list', 'function' => 'ViewList', 'posttype' => 0, 'urlid' => '', 'get' => array('page', 'cate', 'auth', 'tags', 'date'), 'parameters' => array('page', 'cate', 'auth', 'tags', 'date')));
-        $this->RegRoute(array('type' => 'active', 'name' => 'post_article_list_null', 'function' => 'ViewList', 'posttype' => 0, 'urlid' => '', 'get' => array(), 'parameters' => array()));
-        $this->RegRoute(array('type' => 'active', 'name' => 'post_article_single', 'function' => 'ViewPost', 'posttype' => 0, 'urlid' => '', 'get' => array('id', 'alias'), 'parameters' => array('id', 'alias')));
-        $this->RegRoute(array('type' => 'active', 'name' => 'post_page_single', 'function' => 'ViewPost', 'posttype' => 1, 'urlid' => '', 'get' => array('id', 'alias'), 'parameters' => array('id', 'alias')));
-        //$this->RegRoute(array('type' => 'active', 'name' => 'post_page_list', 'function' => 'ViewList', 'posttype' => 1, 'urlid' => 'page', 'get' => array('page', 'cate', 'auth', 'tags', 'date'), 'parameters' => array('page', 'cate', 'auth', 'tags', 'date')));
-        //$this->RegRoute(array('type' => 'active', 'name' => 'post_page_list_null', 'function' => 'ViewList', 'posttype' => 1, 'urlid' => 'page', 'get' => array(), 'parameters' => array()));
+        $this->RegRoute(array('type' => 'active', 'name' => 'post_article_single', 'function' => 'ViewPost', 'posttype' => 0, 'urlid' => '', 'get' => array('id', 'alias'), 'not_get' => array('cate', 'auth', 'tags', 'date'), 'parameters' => array('id', 'alias', 'isrewrite', 'posttype'), 'isrewrite' => true));
+        $this->RegRoute(array('type' => 'active', 'name' => 'post_page_single', 'function' => 'ViewPost', 'posttype' => 1, 'urlid' => '', 'get' => array('id', 'alias'), 'not_get' => array('cate', 'auth', 'tags', 'date'), 'parameters' => array('id', 'alias', 'isrewrite', 'posttype'), 'isrewrite' => true));
+        $this->RegRoute(array('type' => 'active', 'name' => 'post_article_list', 'function' => 'ViewList', 'posttype' => 0, 'urlid' => '', 'get' => array('page', 'cate', 'auth', 'tags', 'date'), 'not_get' => array('id', 'alias'), 'parameters' => array('page', 'cate', 'auth', 'tags', 'date', 'isrewrite', 'posttype'), 'isrewrite' => true));
+        $this->RegRoute(array('type' => 'active', 'name' => 'post_article_list_null', 'function' => 'ViewList', 'posttype' => 0, 'urlid' => '', 'get' => array(), 'not_get' => array('id', 'alias'), 'parameters' => array('isrewrite', 'posttype'), 'isrewrite' => true));
+        //$this->RegRoute(array('type' => 'active', 'name' => 'post_page_list', 'function' => 'ViewList', 'posttype' => 1, 'urlid' => 'page', 'get' => array('page', 'cate', 'auth', 'tags', 'date'), 'parameters' => array('page', 'cate', 'auth', 'tags', 'date'), 'isrewrite' => true));
+        //$this->RegRoute(array('type' => 'active', 'name' => 'post_page_list_null', 'function' => 'ViewList', 'posttype' => 1, 'urlid' => 'page', 'get' => array(), 'parameters' => array(), 'isrewrite' => true));
 
         if ($this->option['ZC_BLOG_LANGUAGEPACK'] === 'SimpChinese') {
             $this->option['ZC_BLOG_LANGUAGEPACK'] = 'zh-cn';

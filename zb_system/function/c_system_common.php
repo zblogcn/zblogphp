@@ -442,19 +442,19 @@ function GetGuid()
  *
  * @return mixed|null
  */
-function GetVars($name, $type = 'REQUEST')
+function GetVars($name, $type = 'REQUEST', $default = null)
 {
     $array = &$GLOBALS[strtoupper("_$type")];
 
     if (isset($array[$name])) {
         return $array[$name];
     } else {
-        return null;
+        return $default;
     }
 }
 
 /**
- * 获取参数值（可设置默认返回值）.
+ * 获取参数值（可设置默认返回值）.本函数在1.7已经废弃了，改用GetVars！
  *
  * @param string $name    数组key名
  * @param string $type    默认为REQUEST
@@ -466,12 +466,13 @@ function GetVars($name, $type = 'REQUEST')
  */
 function GetVarsByDefault($name, $type = 'REQUEST', $default = null)
 {
-    $g = GetVars($name, $type);
-    if ($g == null || $g == '') {
+    $array = &$GLOBALS[strtoupper("_$type")];
+
+    if (isset($array[$name])) {
+        return $array[$name];
+    } else {
         return $default;
     }
-
-    return $g;
 }
 
 /**
