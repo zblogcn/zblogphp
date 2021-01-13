@@ -149,7 +149,7 @@ function misc_showtags()
     global $zbp;
 
     $type = (int) GetVars('type');
-    $actions = $zbp->GetPostType('actions', $type);
+    $actions = $zbp->GetPostType($type, 'actions');
 
     $zbp->csrfExpiration = 48;
     CheckIsRefererValid();

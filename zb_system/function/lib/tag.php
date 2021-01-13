@@ -83,7 +83,7 @@ class Tag extends Base
                 }
             }
             $backAttr = $zbp->option['ZC_ALIAS_BACK_ATTR'];
-            $u = new UrlRule($zbp->option['ZC_TAGS_REGEX']);
+            $u = new UrlRule($zbp->GetPostType($this->Type, 'list_tag_urlrule'));
             $u->Rules['{%id%}'] = $this->ID;
             $u->Rules['{%alias%}'] = rawurlencode($this->Alias == '' ? $this->$backAttr : $this->Alias);
 
@@ -92,7 +92,7 @@ class Tag extends Base
         if ($name == 'Template') {
             $value = $this->data[$name];
             if ($value == '') {
-                $value = $zbp->GetPostType('tag_template', $this->Type);
+                $value = $zbp->GetPostType($this->Type, 'tag_template');
             }
 
             return $value;
@@ -115,7 +115,7 @@ class Tag extends Base
     public function Save()
     {
         global $zbp;
-        if ($this->Template == $zbp->GetPostType('tag_template', $this->Type)) {
+        if ($this->Template == $zbp->GetPostType($this->Type, 'tag_template')) {
             $this->data['Template'] = '';
         }
 

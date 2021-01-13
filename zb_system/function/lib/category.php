@@ -84,7 +84,7 @@ class Category extends Base
         if (in_array($name, array('Url', 'Symbol', 'Level', 'SymbolName', 'Parent'))) {
             return;
         } elseif ($name == 'Template') {
-            if ($value == $zbp->GetPostType('category_template', $this->Type)) {
+            if ($value == $zbp->GetPostType($this->Type, 'category_template')) {
                 $value = '';
             }
             $this->data[$name] = $value;
@@ -92,7 +92,7 @@ class Category extends Base
             return;
         }
         if ($name == 'LogTemplate') {
-            if ($value == $zbp->GetPostType('template', $this->Type)) {
+            if ($value == $zbp->GetPostType($this->Type, 'template')) {
                 $value = '';
             }
             $this->data[$name] = $value;
@@ -123,7 +123,7 @@ class Category extends Base
                 }
             }
             $backAttr = $zbp->option['ZC_ALIAS_BACK_ATTR'];
-            $u = new UrlRule($zbp->option['ZC_CATEGORY_REGEX']);
+            $u = new UrlRule($zbp->GetPostType($this->Type, 'list_category_urlrule'));
             $u->Rules['{%id%}'] = $this->ID;
             $u->Rules['{%alias%}'] = $this->Alias == '' ? $this->$backAttr : $this->Alias;
 
@@ -154,7 +154,7 @@ class Category extends Base
         if ($name == 'Template') {
             $value = $this->data[$name];
             if ($value == '') {
-                $value = $zbp->GetPostType('category_template', $this->Type);
+                $value = $zbp->GetPostType($this->Type, 'category_template');
             }
 
             return $value;
@@ -162,7 +162,7 @@ class Category extends Base
         if ($name == 'LogTemplate') {
             $value = $this->data[$name];
             if ($value == '') {
-                $value = $zbp->GetPostType('template', $this->Type);
+                $value = $zbp->GetPostType($this->Type, 'template');
             }
 
             return $value;
@@ -200,11 +200,11 @@ class Category extends Base
     public function Save()
     {
         global $zbp;
-        if ($this->Template == $zbp->GetPostType('category_template', $this->Type)) {
+        if ($this->Template == $zbp->GetPostType($this->Type, 'category_template')) {
             $this->data['Template'] = '';
         }
 
-        if ($this->LogTemplate == $zbp->GetPostType('template', $this->Type)) {
+        if ($this->LogTemplate == $zbp->GetPostType($this->Type, 'template')) {
             $this->data['LogTemplate'] = '';
         }
 

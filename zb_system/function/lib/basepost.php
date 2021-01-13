@@ -141,7 +141,7 @@ class BasePost extends Base
             case 'Next':
             case 'RelatedList':
             case 'Template':
-                if ($value == $zbp->GetPostType('template', $this->Type)) {
+                if ($value == $zbp->GetPostType($this->Type, 'template')) {
                     $value = '';
                 }
                 $this->data[$name] = $value;
@@ -192,7 +192,7 @@ class BasePost extends Base
                         return $fpreturn;
                     }
                 }
-                $u = new UrlRule($zbp->GetPostType('urlrule', $this->Type));
+                $u = new UrlRule($zbp->GetPostType($this->Type, 'urlrule'));
                 $u->Rules['{%id%}'] = $this->ID;
                 if ($this->Alias) {
                     $u->Rules['{%alias%}'] = $this->Alias;
@@ -229,7 +229,7 @@ class BasePost extends Base
                 if ($value == '') {
                     $value = GetValueInArray($this->Category->GetData(), 'LogTemplate');
                     if ($value == '') {
-                        $value = $zbp->GetPostType('template', $this->Type);
+                        $value = $zbp->GetPostType($this->Type, 'template');
                     }
                 }
                 return $value;
@@ -326,9 +326,9 @@ class BasePost extends Base
 
                 return $toptype;
             case 'TypeName':
-                return $zbp->GetPostType('name', $this->Type);
+                return $zbp->GetPostType($this->Type, 'name');
             case 'TypeActions':
-                return $zbp->GetPostType('actions', $this->Type);
+                return $zbp->GetPostType($this->Type, 'actions');
             default:
                 foreach ($GLOBALS['hooks']['Filter_Plugin_Post_Get'] as $fpname => &$fpsignal) {
                     $fpreturn = $fpname($this, $name);
@@ -397,7 +397,7 @@ class BasePost extends Base
     public function GetType($key)
     {
         global $zbp;
-        return $zbp->GetPostType($key, $this->Type);
+        return $zbp->GetPostType($this->Type, $key);
     }
 
 }

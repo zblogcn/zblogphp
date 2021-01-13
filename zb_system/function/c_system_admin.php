@@ -1144,7 +1144,7 @@ function Admin_CategoryMng()
     global $zbp;
 
     $type = (int) GetVars('type');
-    $typetitle = $type > 0 ? (ucfirst($zbp->GetPostType('name', $type)) . '-') : '';
+    $typetitle = $type > 0 ? (ucfirst($zbp->GetPostType($type, 'name')) . '-') : '';
     echo '<div class="divHeader">' . $typetitle . $zbp->lang['msg']['category_manage'] . '</div>';
     echo '<div class="SubMenu">';
     foreach ($GLOBALS['hooks']['Filter_Plugin_Admin_CategoryMng_SubMenu'] as $fpname => &$fpsignal) {
@@ -1562,7 +1562,7 @@ function Admin_TagMng()
     global $zbp;
 
     $type = (int) GetVars('type');
-    $typetitle = $type > 0 ? (ucfirst($zbp->GetPostType('name', $type)) . '-') : '';
+    $typetitle = $type > 0 ? (ucfirst($zbp->GetPostType($type, 'name')) . '-') : '';
 
     echo '<div class="divHeader">' . $typetitle . $zbp->lang['msg']['tag_manage'] . '</div>';
     echo '<div class="SubMenu">';

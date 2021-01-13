@@ -18,7 +18,7 @@ if (!$zbp->CheckRights($action)) {
 }
 
 $type = (int)GetVars('type');
-$typetitle = $type > 0 ? (ucfirst($zbp->GetPostType('name', $type)) . '-') : '';
+$typetitle = $type > 0 ? (ucfirst($zbp->GetPostType($type, 'name')) . '-') : '';
 
 $blogtitle = $typetitle . $lang['msg']['tag_edit'];
 

@@ -247,20 +247,18 @@ function ScheduledTasks_Execute($id){
         $tasks['lastresult'] = '';
         $function = $tasks['function'];
 
+        ZBlogException::SuspendErrorHook();
         if (function_exists($function)) {
-
-            ZBlogException::SuspendErrorHook();
-
             $result = call_user_func($function);
             $tasks['lastresult'] = (string)$result;
-
-            ZBlogException::ResumeErrorHook();
         }
 
         $tasks['lasttime'] = time();
         $tasks['operate'] = false;
         $zbp->Config('ScheduledTasks')->$key = $tasks;
         $zbp->Config('ScheduledTasks')->Save();
+
+        ZBlogException::ResumeErrorHook();
     }
     return $result;
 }

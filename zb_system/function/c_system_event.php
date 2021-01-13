@@ -899,18 +899,6 @@ function ViewAuto($inpurl)
         }
     }
 
-    if (isset($zbp->option['ZC_COMPATIBLE_ASP_URL']) && ($zbp->option['ZC_COMPATIBLE_ASP_URL'] == true)) {
-        if (isset($_GET['id']) || isset($_GET['alias'])) {
-            ViewPost(GetVars('id', 'GET'), GetVars('alias', 'GET'));
-
-            return;
-        } elseif (isset($_GET['page']) || isset($_GET['cate']) || isset($_GET['auth']) || isset($_GET['date']) || isset($_GET['tags'])) {
-            ViewList(GetVars('page', 'GET'), GetVars('cate', 'GET'), GetVars('auth', 'GET'), GetVars('date', 'GET'), GetVars('tags', 'GET'));
-
-            return;
-        }
-    }
-
     $zbp->ShowError(2, __FILE__, __LINE__);
 
     return false;
@@ -1642,7 +1630,7 @@ function PostPost()
     if (!isset($_POST['AuthorID'])) {
         $_POST['AuthorID'] = $zbp->user->ID;
     } else {
-        $actions = $zbp->GetPostType('actions', $_POST['Type']);
+        $actions = $zbp->GetPostType($_POST['Type'], 'actions');
         if (($_POST['AuthorID'] != $zbp->user->ID) && (!$zbp->CheckRights($actions['all']))) {
             $_POST['AuthorID'] = $zbp->user->ID;
         }
@@ -1758,7 +1746,7 @@ function DelPost()
 
         $post->Del();
 
-        $zbp->DelItemToNavbar($zbp->GetPostType('name', $post->Type), $post->ID);
+        $zbp->DelItemToNavbar($zbp->GetPostType($post->Type, 'name'), $post->ID);
 
         foreach ($GLOBALS['hooks']['Filter_Plugin_DelPost_Succeed'] as $fpname => &$fpsignal) {
             $fpname($post);

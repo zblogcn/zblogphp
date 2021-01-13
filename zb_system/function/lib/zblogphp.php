@@ -655,14 +655,15 @@ class ZBlogPHP
         $this->LoadConfigsOnlySystem(true);
         $this->LoadOption();
 
+        //给article和page注册类型准备数据
         $page_actions = array('new' => 'PageNew', 'edit' => 'PageEdt', 'del' => 'PageDel', 'post' => 'PagePst', 'publish' => 'PagePub', 'manage' => 'PageMng', 'all' => 'PageAll', 'view' => 'view');
         $page_templates = array('template' => $this->option['ZC_POST_DEFAULT_TEMPLATE'], 'category_template' => $this->option['ZC_INDEX_DEFAULT_TEMPLATE'], 'tag_template' => $this->option['ZC_INDEX_DEFAULT_TEMPLATE']);
-        $page_urlregexs = array('urlrule' => $this->option['ZC_PAGE_REGEX'], 'list_index_urlrule' => $this->option['ZC_INDEX_REGEX'], 'list_category_urlrule' => $this->option['ZC_CATEGORY_REGEX'], 'list_tag_urlrule' => $this->option['ZC_TAGS_REGEX'], 'list_author_urlrule' => $this->option['ZC_AUTHOR_REGEX'], 'list_date_urlrule' => $this->option['ZC_DATE_REGEX']);
-        $article_urlregexs = $page_urlregexs;
-        $article_urlregexs['urlrule'] = $this->option['ZC_ARTICLE_REGEX'];
+        $page_urlrules = array('urlrule' => $this->option['ZC_PAGE_REGEX'], 'list_index_urlrule' => $this->option['ZC_INDEX_REGEX'], 'list_category_urlrule' => $this->option['ZC_CATEGORY_REGEX'], 'list_tag_urlrule' => $this->option['ZC_TAGS_REGEX'], 'list_author_urlrule' => $this->option['ZC_AUTHOR_REGEX'], 'list_date_urlrule' => $this->option['ZC_DATE_REGEX']);
+        $article_urlrules = $page_urlrules;
+        $article_urlrules['urlrule'] = $this->option['ZC_ARTICLE_REGEX'];
 
-        $this->RegPostType(0, 'article', $article_urlregexs, $page_templates, 'Post');
-        $this->RegPostType(1, 'page', $page_urlregexs, $page_templates, 'Post', $page_actions);
+        $this->RegPostType(0, 'article', $article_urlrules, $page_templates, 'Post');
+        $this->RegPostType(1, 'page', $page_urlrules, $page_templates, 'Post', $page_actions);
 
         if ($this->option['ZC_BLOG_LANGUAGEPACK'] === 'SimpChinese') {
             $this->option['ZC_BLOG_LANGUAGEPACK'] = 'zh-cn';
@@ -3798,7 +3799,7 @@ class ZBlogPHP
             $tps = array_merge($tps, $template);
         }
 
-        $this->posttype[$typeId] = array('name' => $name, 'urlrule' => $urlRule, 'classname' => $className);
+        $this->posttype[$typeId] = array('name' => $name, 'classname' => $className);
         $this->posttype[$typeId] = array_merge($this->posttype[$typeId], $tps, $urs);
 
         $post_actions = array('new' => 'ArticleNew', 'edit' => 'ArticleEdt', 'del' => 'ArticleDel', 'post' => 'ArticlePst', 'publish' => 'ArticlePub', 'manage' => 'ArticleMng', 'all' => 'ArticleAll', 'view' => 'view');
@@ -3826,11 +3827,15 @@ class ZBlogPHP
     }
 
     /**
+     * 获取PostType信息(如果是修改的话请直接编辑$zbp->posttype)
+     *
+     * @param $key
+     *
      * @param $typeid
      *
      * @return string
      */
-    public function GetPostType($key, $typeid)
+    public function GetPostType($typeid, $key)
     {
         if ($key == null || empty($key)) {
             return $this->posttype[$typeid];

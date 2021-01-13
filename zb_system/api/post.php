@@ -80,7 +80,7 @@ function api_post_post()
     global $zbp;
 
     $postType = (int) GetVars('Type', 'POST');
-    $actions = $zbp->GetPostType('actions', $postType);
+    $actions = $zbp->GetPostType($postType, 'actions');
 
     ApiCheckAuth(true, $actions['post']);
 
@@ -196,7 +196,7 @@ function api_post_list()
     $date = GetVars('date');
     $mng = strtolower((string) GetVars('manage')); //&manage=1
     $type = (int) GetVars('type');
-    $actions = $zbp->GetPostType('actions', $type);
+    $actions = $zbp->GetPostType($type, 'actions');
 
     // 组织查询条件
     $where = array();

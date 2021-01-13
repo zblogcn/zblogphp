@@ -18,7 +18,7 @@ if (!$zbp->CheckRights($action)) {
 }
 
 $type = (int)GetVars('type');
-$typetitle = $type > 0 ? (ucfirst($zbp->GetPostType('name', $type)) . '-') : '';
+$typetitle = $type > 0 ? (ucfirst($zbp->GetPostType($type, 'name')) . '-') : '';
 
 $blogtitle = $typetitle . $lang['msg']['category_edit'];
 
@@ -111,7 +111,7 @@ foreach ($zbp->categoriesbyorder_type[$cate->Type] as $k => $v) {
                     <?php echo $lang['msg']['category_aritles_default_template']; ?>:</span>
                 <br />
                 <select class="edit" size="1" name="LogTemplate" id="cmbLogTemplate">
-                    <?php echo OutputOptionItemsOfTemplate($cate->LogTemplate, array('index', '404', 'search', 'module', 'lm-'), array('single', $zbp->GetPostType('name', $cate->Type))); ?></select>
+                    <?php echo OutputOptionItemsOfTemplate($cate->LogTemplate, array('index', '404', 'search', 'module', 'lm-'), array('single', $zbp->GetPostType($cate->Type, 'name'))); ?></select>
             </p>
             <p>
                 <span class='title'>
