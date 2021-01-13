@@ -464,18 +464,8 @@ function ViewIndex()
 {
     global $zbp, $action;
 
-    if (IS_IIS && isset($_GET['rewrite']) && isset($_GET['full_uri'])) {
-        //对iis + rewrite进行修正
-        $uri_array = parse_url($_GET['full_uri']);
-        if (isset($uri_array['query'])) {
-            parse_str($uri_array['query'], $uri_query);
-            $_GET = array_merge($_GET, $uri_query);
-            $_REQUEST = array_merge($_REQUEST, $uri_query);
-        }
-        unset($uri_array, $uri_query);
-    }
-
     $url = $zbp->currenturl;
+
     foreach ($GLOBALS['hooks']['Filter_Plugin_ViewIndex_Begin'] as $fpname => &$fpsignal) {
         $fpreturn = $fpname($url);
         if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
@@ -492,21 +482,10 @@ function ViewIndex()
         case 'search':
             ViewSearch();
             break;
+        case 'view':
         case '':
         default:
-            if ($url == $zbp->cookiespath || $url == $zbp->cookiespath . 'index.php') {
-                ViewList(null, null, null, null, null);
-            } elseif (($zbp->option['ZC_STATIC_MODE'] == 'ACTIVE' || isset($_GET['rewrite']))
-                && (isset($_GET['id']) || isset($_GET['alias']))
-            ) {
-                ViewPost(GetVars('id', 'GET'), GetVars('alias', 'GET'));
-            } elseif (($zbp->option['ZC_STATIC_MODE'] == 'ACTIVE' || isset($_GET['rewrite']))
-                && (isset($_GET['page']) || isset($_GET['cate']) || isset($_GET['auth']) || isset($_GET['date']) || isset($_GET['tags']))
-            ) {
-                ViewList(GetVars('page', 'GET'), GetVars('cate', 'GET'), GetVars('auth', 'GET'), GetVars('date', 'GET'), GetVars('tags', 'GET'));
-            } else {
-                ViewAuto($url);
-            }
+            ViewAuto($url);
     }
 
     return false;
@@ -539,6 +518,15 @@ function ViewFeed()
 
     $w = array(array('=', 'log_Status', 0));
 
+    $postype = (int) GetVars('type', 'GET');
+    $w = array(array('=', 'log_Type', $postype));
+    $actions = $zbp->GetPostType($postype, 'actions');
+
+    if (!$zbp->CheckRights($actions['view'])) {
+        Http404();
+        die;
+    }
+
     if (GetVars('cate', 'GET') != null) {
         $w[] = array('=', 'log_CateID', (int) GetVars('cate', 'GET'));
     } elseif (GetVars('auth', 'GET') != null) {
@@ -558,7 +546,7 @@ function ViewFeed()
         $fpname($w);
     }
 
-    $articles = $zbp->GetArticleList(
+    $articles = $zbp->GetPostList(
         '*',
         $w,
         array('log_PostTime' => 'DESC'),
@@ -749,7 +737,7 @@ function ViewSearch()
 function ViewAuto($inpurl)
 {
     global $zbp;
-
+//var_dump($inpurl);
     $url = GetValueInArray(explode('?', $inpurl), '0');
 
     if ($zbp->cookiespath === substr($url, 0, strlen($zbp->cookiespath))) {
@@ -765,24 +753,35 @@ function ViewAuto($inpurl)
         }
     }
 
-    if (IS_IIS && isset($_GET['rewrite'])) {
-        //iis+httpd.ini下如果存在真实文件
-        $realurl = $zbp->path . urldecode($url);
-        if (is_readable($realurl) && is_file($realurl) && !preg_match('/\.php$/', $realurl)) {
-            die(file_get_contents($realurl));
-        }
-        unset($realurl);
-    }
-
     $url = urldecode($url);
 
-    if ($url == '' || $url == '/' || $url == 'index.php') {
-        ViewList(null, null, null, null, null);
-
-        return;
-    }
-
-    if ($zbp->option['ZC_STATIC_MODE'] == 'REWRITE') {
+    if ($zbp->option['ZC_STATIC_MODE'] == 'ACTIVE') {
+        foreach ($zbp->routes['active'] as $key => $route) {
+            if (($url == $route['urlid'] . '') || ($url == $route['urlid'] . '/') || ($url == $route['urlid'] . '/index.php')) {
+                $b = false;
+                if (!empty($route['get'])) {
+                    foreach ($route['get'] as $key => $value) {
+                        if (isset($_GET[$value])) {
+                            $b = true;
+                            break;
+                        }
+                    }
+                } else {
+                    $b = true;
+                }
+                if ($b) {
+                    $array = array('posttype' => $route['posttype']);
+                    foreach ($route['parameters'] as $key => $value) {
+                        $array[$value] = GetVars($value, 'GET');
+                    }
+                    $result = call_user_func($route['function'], $array);
+                    if ($result == true) {
+                        return;
+                    }
+                }
+            }
+        }
+    } elseif ($zbp->option['ZC_STATIC_MODE'] == 'REWRITE') {
         $r = UrlRule::OutputUrlRegEx($zbp->option['ZC_INDEX_REGEX'], 'index');
         $m = array();
         if (preg_match($r, $url, $m) == 1) {
@@ -899,6 +898,15 @@ function ViewAuto($inpurl)
         }
     }
 
+    if ($url == '' || $url == '/' || $url == 'index.php') {
+        foreach ($zbp->routes['default'] as $key => $route) {
+            call_user_func($route['function']);
+            break;
+        }
+
+        return;
+    }
+
     $zbp->ShowError(2, __FILE__, __LINE__);
 
     return false;
@@ -921,12 +929,28 @@ function ViewAuto($inpurl)
  *
  * @return string
  */
-function ViewList($page, $cate, $auth, $date, $tags, $isrewrite = false)
+function ViewList($page = null, $cate = null, $auth = null, $date = null, $tags = null, $isrewrite = false, $posttype = 0)
 {
     global $zbp;
 
+    //修正以后使用首个参数使用array
+    $fpargs = func_get_args();
+    if (is_array($page)) {
+        $cate = GetValueInArray($page, 'cate', null);
+        $auth = GetValueInArray($page, 'auth', null);
+        $date = GetValueInArray($page, 'date', null);
+        $tags = GetValueInArray($page, 'tags', null);
+        $isrewrite = GetValueInArray($page, 'isrewrite', false);
+        $posttype = GetValueInArray($page, 'posttype', 0);
+        $page = GetValueInArray($page, 'page', null);
+    }
+
     foreach ($GLOBALS['hooks']['Filter_Plugin_ViewList_Begin'] as $fpname => &$fpsignal) {
-        $fpargs = func_get_args();
+        //$fpargs = func_get_args();
+        $args = array($page, $cate, $auth, $date, $tags, $isrewrite , $posttype);
+        $fpargs = array_slice($fpargs, count($args));
+        $fpargs = array_merge($args, $fpargs);
+
         $fpreturn = call_user_func_array($fpname, $fpargs);
         if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
             $fpsignal = PLUGIN_EXITSIGNAL_NONE;
@@ -958,7 +982,7 @@ function ViewList($page, $cate, $auth, $date, $tags, $isrewrite = false)
     $tag = null;
 
     $w = array();
-    //$w[] = array('=', 'log_IsTop', 0);
+    $w[] = array('=', 'log_Type', $posttype);
     $w[] = array('=', 'log_Status', 0);
 
     $page = (int) $page == 0 ? 1 : (int) $page;
@@ -969,8 +993,10 @@ function ViewList($page, $cate, $auth, $date, $tags, $isrewrite = false)
     switch ($type) {
             //#######################################################################################################
         case 'index':
-            $pagebar = new Pagebar($zbp->option['ZC_INDEX_REGEX'], true, true);
-            $pagebar->Count = $zbp->cache->normal_article_nums;
+            $pagebar = new Pagebar($zbp->GetPostType($posttype, 'list_index_urlrule'), true, true);
+            if (0 == $posttype) {
+                $pagebar->Count = $zbp->cache->normal_article_nums;
+            }
             $template = $zbp->option['ZC_INDEX_DEFAULT_TEMPLATE'];
             if ($page == 1) {
                 $zbp->title = $zbp->subname;
@@ -980,7 +1006,7 @@ function ViewList($page, $cate, $auth, $date, $tags, $isrewrite = false)
             break;
             //#######################################################################################################
         case 'category':
-            $pagebar = new Pagebar($zbp->option['ZC_CATEGORY_REGEX']);
+            $pagebar = new Pagebar($zbp->GetPostType($posttype, 'list_category_urlrule'));
             $category = new Category();
 
             if (!is_array($cate)) {
@@ -996,7 +1022,7 @@ function ViewList($page, $cate, $auth, $date, $tags, $isrewrite = false)
             if (isset($cate['id'])) {
                 $category = $zbp->GetCategoryByID($cate['id']);
             } else {
-                $category = $zbp->GetCategoryByAlias($cate['alias']);
+                $category = $zbp->GetCategoryByAlias($cate['alias'], $posttype);
             }
 
             if ($category->ID == '') {
@@ -1032,7 +1058,7 @@ function ViewList($page, $cate, $auth, $date, $tags, $isrewrite = false)
             break;
             //#######################################################################################################
         case 'author':
-            $pagebar = new Pagebar($zbp->option['ZC_AUTHOR_REGEX']);
+            $pagebar = new Pagebar($zbp->GetPostType($posttype, 'list_author_urlrule'));
             $author = new Member();
 
             if (!is_array($auth)) {
@@ -1073,7 +1099,7 @@ function ViewList($page, $cate, $auth, $date, $tags, $isrewrite = false)
             break;
             //#######################################################################################################
         case 'date':
-            $pagebar = new Pagebar($zbp->option['ZC_DATE_REGEX']);
+            $pagebar = new Pagebar($zbp->GetPostType($posttype, 'list_date_urlrule'));
 
             if (!is_array($date)) {
                 $datetime = $date;
@@ -1121,7 +1147,7 @@ function ViewList($page, $cate, $auth, $date, $tags, $isrewrite = false)
             break;
             //#######################################################################################################
         case 'tag':
-            $pagebar = new Pagebar($zbp->option['ZC_TAGS_REGEX']);
+            $pagebar = new Pagebar($zbp->GetPostType($posttype, 'list_tag_urlrule'));
             $tag = new Tag();
 
             if (!is_array($tags)) {
@@ -1137,7 +1163,7 @@ function ViewList($page, $cate, $auth, $date, $tags, $isrewrite = false)
             if (isset($tags['id'])) {
                 $tag = $zbp->GetTagByID($tags['id']);
             } else {
-                $tag = $zbp->GetTagByAliasOrName($tags['alias']);
+                $tag = $zbp->GetTagByAliasOrName($tags['alias'], $posttype);
             }
 
             if ($tag->ID == 0) {
@@ -1206,13 +1232,13 @@ function ViewList($page, $cate, $auth, $date, $tags, $isrewrite = false)
         $fpreturn = $fpname($select, $w, $order, $limit, $option, $type);
     }
 
-    $articles = $zbp->GetArticleList(
+
+    $articles = $zbp->GetPostList(
         $select,
         $w,
         $order,
         $limit,
-        $option,
-        true
+        $option
     );
 
     //处理原置顶文章回到正常时的属性先改为0
@@ -1234,7 +1260,29 @@ function ViewList($page, $cate, $auth, $date, $tags, $isrewrite = false)
         $zbp->ShowError(2, __FILE__, __LINE__);
     }
 
+    foreach ($articles_top as $key => $value) {
+        if ($value->Type != $posttype) {
+            unset($articles_top[$key]);
+        }
+    }
+
     $articles = array_merge($articles_top, $articles);
+
+    $tagstring = null;
+    foreach ($articles as $key => $article) {
+        $tagstring .= $article->Tag;
+    }
+    $zbp->LoadTagsByIDString($tagstring);
+
+    foreach ($articles as $key => &$article) {
+        $classname = $zbp->GetPostType($posttype, 'classname');
+        if (strcasecmp(get_class($article), $classname) != 0) {
+            $newarticle = $article->Cloned($classname);
+            $article = $newarticle;
+            $zbp->AddPostCache($article);
+        }
+    }
+
     $zbp->LoadMembersInList($articles);
 
     $zbp->template->SetTags('title', $zbp->title);
@@ -1243,7 +1291,7 @@ function ViewList($page, $cate, $auth, $date, $tags, $isrewrite = false)
         $pagebar = null;
     }
 
-    $zbp->template->SetTags('posttype', ZC_POST_TYPE_ARTICLE);
+    $zbp->template->SetTags('posttype', $posttype);
     $zbp->template->SetTags('pagebar', $pagebar);
     $zbp->template->SetTags('type', $type);
     $zbp->template->SetTags('page', $page);
@@ -1284,13 +1332,14 @@ function ViewList($page, $cate, $auth, $date, $tags, $isrewrite = false)
  *
  * @return string
  */
-function ViewPost($object, $theSecondParam, $enableRewrite = false)
+function ViewPost($object = null, $theSecondParam = null, $enableRewrite = false, $posttype = 0)
 {
     global $zbp;
 
     if (is_array($object)) {
-        $id = isset($object['id']) ? $object['id'] : null;
-        $alias = isset($object['alias']) ? $object['alias'] : null;
+        $id = GetValueInArray($object, 'id', null);
+        $alias = GetValueInArray($object, 'alias', null);
+        $posttype = GetValueInArray($object, 'posttype', 0);
     } else {
         $id = $object;
         $alias = $theSecondParam;
@@ -1300,7 +1349,7 @@ function ViewPost($object, $theSecondParam, $enableRewrite = false)
     }
 
     foreach ($GLOBALS['hooks']['Filter_Plugin_ViewPost_Begin'] as $fpname => &$fpsignal) {
-        $fpargs = array($object, $theSecondParam, $enableRewrite);
+        $fpargs = array($object, $theSecondParam, $enableRewrite, $posttype);
         $fpargs[0] = $id;
         $fpargs[1] = $alias;
         $fpreturn = call_user_func_array($fpname, $fpargs);
@@ -1351,6 +1400,17 @@ function ViewPost($object, $theSecondParam, $enableRewrite = false)
     }
 
     $article = $articles[0];
+
+    if ($posttype != $article->Type) {
+        return false;
+    } else {
+        $classname = $zbp->GetPostType($posttype, 'classname');
+        if (strcasecmp(get_class($article), $classname) != 0) {
+            $newarticle = $article->Cloned($classname);
+            $article = $newarticle;
+            $zbp->AddPostCache($article);
+        }
+    }
 
     if ($article->Status != 0 && !$zbp->CheckRights($article->TypeActions['all']) && ($article->AuthorID != $zbp->user->ID)) {
         $zbp->ShowError(2, __FILE__, __LINE__);

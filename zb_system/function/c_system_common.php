@@ -360,11 +360,13 @@ function plugin_dir_path($file)
  *
  * @return mixed
  */
-function GetValueInArray($array, $name)
+function GetValueInArray($array, $name, $default = null)
 {
     if (is_array($array)) {
         if (array_key_exists($name, $array)) {
             return $array[$name];
+        } else {
+            return $default;
         }
     }
 }

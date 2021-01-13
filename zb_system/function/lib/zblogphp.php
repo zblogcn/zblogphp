@@ -665,6 +665,15 @@ class ZBlogPHP
         $this->RegPostType(0, 'article', $article_urlrules, $page_templates, 'Post');
         $this->RegPostType(1, 'page', $page_urlrules, $page_templates, 'Post', $page_actions);
 
+        //注册Article的路由和Page的路由
+        $this->RegRoute(array('type' => 'default', 'name' => 'default_post_article', 'function' => 'ViewList', 'posttype' => 0));
+        $this->RegRoute(array('type' => 'active', 'name' => 'post_article_list', 'function' => 'ViewList', 'posttype' => 0, 'urlid' => '', 'get' => array('page', 'cate', 'auth', 'tags', 'date'), 'parameters' => array('page', 'cate', 'auth', 'tags', 'date')));
+        $this->RegRoute(array('type' => 'active', 'name' => 'post_article_list_null', 'function' => 'ViewList', 'posttype' => 0, 'urlid' => '', 'get' => array(), 'parameters' => array()));
+        $this->RegRoute(array('type' => 'active', 'name' => 'post_article_single', 'function' => 'ViewPost', 'posttype' => 0, 'urlid' => '', 'get' => array('id', 'alias'), 'parameters' => array('id', 'alias')));
+        $this->RegRoute(array('type' => 'active', 'name' => 'post_page_single', 'function' => 'ViewPost', 'posttype' => 1, 'urlid' => '', 'get' => array('id', 'alias'), 'parameters' => array('id', 'alias')));
+        //$this->RegRoute(array('type' => 'active', 'name' => 'post_page_list', 'function' => 'ViewList', 'posttype' => 1, 'urlid' => 'page', 'get' => array('page', 'cate', 'auth', 'tags', 'date'), 'parameters' => array('page', 'cate', 'auth', 'tags', 'date')));
+        //$this->RegRoute(array('type' => 'active', 'name' => 'post_page_list_null', 'function' => 'ViewList', 'posttype' => 1, 'urlid' => 'page', 'get' => array(), 'parameters' => array()));
+
         if ($this->option['ZC_BLOG_LANGUAGEPACK'] === 'SimpChinese') {
             $this->option['ZC_BLOG_LANGUAGEPACK'] = 'zh-cn';
         }
@@ -2896,9 +2905,18 @@ class ZBlogPHP
      *
      * @return Category|Base
      */
-    public function GetCategoryByName($name)
+    public function GetCategoryByName($name, $type = 0)
     {
-        return $this->GetSomeThing('categories_all', 'Name', $name, 'Category');
+        if ($type === null) {
+            $categorys = &$this->categories_all;
+        } else {
+            $categorys = &$this->categoriesbyorder_type[$type];
+        }
+        foreach ($categorys as $key => $c) {
+            if ($name == $c->Name) {
+                return $c;
+            }
+        }
     }
 
     /**
@@ -2909,9 +2927,18 @@ class ZBlogPHP
      *
      * @return Category|Base
      */
-    public function GetCategoryByAlias($name, $backKey = null)
+    public function GetCategoryByAlias($name, $type = 0)
     {
-        return $this->GetSomeThingByAlias('categories_all', $name, $backKey, 'Category');
+        if ($type === null) {
+            $categorys = &$this->categories_all;
+        } else {
+            $categorys = &$this->categoriesbyorder_type[$type];
+        }
+        foreach ($categorys as $key => $c) {
+            if ($name == $c->Alias) {
+                return $c;
+            }
+        }
     }
 
     /**
@@ -2921,9 +2948,18 @@ class ZBlogPHP
      *
      * @return Category
      */
-    public function GetCategoryByAliasOrName($name)
+    public function GetCategoryByAliasOrName($name, $type = 0)
     {
-        return $this->GetCategoryByAlias($name, 'Name');
+        if ($type === null) {
+            $categorys = &$this->categories_all;
+        } else {
+            $categorys = &$this->categoriesbyorder_type[$type];
+        }
+        foreach ($categorys as $key => $c) {
+            if ($name == $c->Alias || $name == $c->Name) {
+                return $c;
+            }
+        }
     }
 
     /**
@@ -3957,6 +3993,25 @@ class ZBlogPHP
         return $name;
     }
 
+    //默认路由url数组
+    public $routes = array('default' => array(), 'active' => array(), 'rewrite' => array());
+
+    /**
+     * 注册路由.
+     *
+     * @param $name
+     *
+     * @return mixed
+     */
+    public function RegRoute($array)
+    {
+        $routes = &$this->routes[$array['type']];
+        foreach ($array as $key => $value) {
+            $routes[$array['name']][$key] = $value;
+        }
+        //$routes[$array['name']] = array('function' => $array['function']);
+    }
+
     //举例：backend-ui,,,
     protected $protect_exclusive = array();
 
@@ -4074,6 +4129,30 @@ class ZBlogPHP
         unset($cacheobject[get_class($object)][$object->ID]);
 
         return true;
+    }
+
+    /**
+     * 将Post类对象附加到Post缓存对象上.
+     */
+    public function AddPostCache(&$object)
+    {
+        if (is_subclass_of($object, 'BasePost') == false) {
+            return;
+        }
+        $cacheobject = &$this->cacheobject;
+        $cacheobject['Post'][$object->ID] = $object;
+    }
+
+    /**
+     * 将Post类对象附从Post缓存对象上删除掉.
+     */
+    public function RemovePostCache(&$object)
+    {
+        if (is_subclass_of($object, 'BasePost') == false) {
+            return;
+        }
+        $cacheobject = &$this->cacheobject;
+        unset($cacheobject['Post'][$object->ID]);
     }
 
     /**
