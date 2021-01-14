@@ -75,9 +75,9 @@ function Logout()
 {
     global $zbp;
 
-    setcookie('username_' . crc32($zbp->guid), '', (time() - 3600), $zbp->cookiespath);
+    setcookie('username_' . hash("crc32b", $zbp->guid), '', (time() - 3600), $zbp->cookiespath);
+    setcookie('token_' . hash("crc32b", $zbp->guid), '', (time() - 3600), $zbp->cookiespath);
     setcookie('password', '', (time() - 3600), $zbp->cookiespath);
-    setcookie('token_' . crc32($zbp->guid), '', (time() - 3600), $zbp->cookiespath);
     setcookie("addinfo" . str_replace('/', '', $zbp->cookiespath), '', (time() - 3600), $zbp->cookiespath);
 
     foreach ($GLOBALS['hooks']['Filter_Plugin_Logout_Succeed'] as $fpname => &$fpsignal) {
@@ -488,7 +488,7 @@ function ViewIndex()
             ViewAuto($url);
     }
 
-    return false;
+    return true;
 }
 
 /**
@@ -518,7 +518,7 @@ function ViewFeed()
 
     $w = array(array('=', 'log_Status', 0));
 
-    $postype = (int) GetVars('type', 'GET');
+    $postype = (int) GetVars('posttype', 'GET', 0);
     $w = array(array('=', 'log_Type', $postype));
     $actions = $zbp->GetPostType($postype, 'actions');
 
@@ -752,6 +752,7 @@ function ViewAuto($inpurl)
 
     $url = urldecode($url);
 
+    //无GET参数时，首先进入默认路由
     if (($url == '' || $url == '/' || $url == 'index.php') && empty($_GET)) {
         foreach ($zbp->routes['default'] as $key => $route) {
             $array = array();
@@ -813,111 +814,35 @@ function ViewAuto($inpurl)
                 }
             }
         }
-    } elseif ($zbp->option['ZC_STATIC_MODE'] == 'REWRITE') {
-        $r = UrlRule::OutputUrlRegEx($zbp->option['ZC_INDEX_REGEX'], 'index');
-        $m = array();
-        if (preg_match($r, $url, $m) == 1) {
-            ViewList($m['page'], null, null, null, null, true);
+    }
 
-            return;
-        }
+    if ($zbp->option['ZC_STATIC_MODE'] == 'REWRITE') {
+        foreach ($zbp->routes['rewrite'] as $key => $route) {
+            $hasPage = (GetValueInArray($route, 'haspage', false) == true) ? array(0 => false, 1 => true) : array(0 => false);
 
-        $r = UrlRule::OutputUrlRegEx($zbp->option['ZC_DATE_REGEX'], 'date', false);
-        $m = array();
-        if (preg_match($r, $url, $m) == 1) {
-            isset($m['page']) ? null : $m['page'] = 0;
-            $result = ViewList($m['page'], null, null, $m, null, true);
-            if ($result == true) {
-                return;
+            foreach ($hasPage as $hasPage_key => $hasPage_value) {
+                $r = UrlRule::OutputUrlRegEx($route['urlrule'], $route['urlrule_type'], $hasPage_value);
+                $m = array();
+                //var_dump($route['urlrule'], $r, $url);
+                if (($r == '' && $r == $url) || ($r <> '' && preg_match($r, $url, $m) == 1)) {
+                    $array = $m;
+                    //var_dump($hasPage_value, $route['urlrule'], $r, $url, $m);die;
+                    if (isset($route['must_parameters']) && is_array($route['must_parameters'])) {
+                        foreach ($route['must_parameters'] as $key => $value) {
+                            if (isset($route[$value])) {
+                                $array[$value] = $route[$value];
+                            }
+                        }
+                    }
+                    //var_dump($r, $array);
+                    $result = call_user_func($route['function'], $array);
+                    if ($result == false) {
+                        $zbp->ShowError(2, __FILE__, __LINE__);
+                    }
+
+                    return;
+                }
             }
-        }
-
-        $r = UrlRule::OutputUrlRegEx($zbp->option['ZC_DATE_REGEX'], 'date', true);
-        $m = array();
-        if (preg_match($r, $url, $m) == 1) {
-            $result = ViewList($m['page'], null, null, $m, null, true);
-            if ($result == true) {
-                return;
-            }
-        }
-
-        $r = UrlRule::OutputUrlRegEx($zbp->option['ZC_AUTHOR_REGEX'], 'auth', false);
-        $m = array();
-        if (preg_match($r, $url, $m) == 1) {
-            isset($m['page']) ? null : $m['page'] = 0;
-            $result = ViewList($m['page'], null, $m, null, null, true);
-            if ($result == true) {
-                return;
-            }
-        }
-
-        $r = UrlRule::OutputUrlRegEx($zbp->option['ZC_AUTHOR_REGEX'], 'auth', true);
-        $m = array();
-        if (preg_match($r, $url, $m) == 1) {
-            $result = ViewList($m['page'], null, $m, null, null, true);
-            if ($result == true) {
-                return;
-            }
-        }
-
-        $r = UrlRule::OutputUrlRegEx($zbp->option['ZC_TAGS_REGEX'], 'tags', false);
-        $m = array();
-        if (preg_match($r, $url, $m) == 1) {
-            isset($m['page']) ? null : $m['page'] = 0;
-            $result = ViewList($m['page'], null, null, null, $m, true);
-            if ($result == true) {
-                return;
-            }
-        }
-
-        $r = UrlRule::OutputUrlRegEx($zbp->option['ZC_TAGS_REGEX'], 'tags', true);
-        $m = array();
-        if (preg_match($r, $url, $m) == 1) {
-            $result = ViewList($m['page'], null, null, null, $m, true);
-            if ($result == true) {
-                return;
-            }
-        }
-
-        $r = UrlRule::OutputUrlRegEx($zbp->option['ZC_CATEGORY_REGEX'], 'cate', false);
-        $m = array();
-        if (preg_match($r, $url, $m) == 1) {
-            isset($m['page']) ? null : $m['page'] = 0;
-            $result = ViewList($m['page'], $m, null, null, null, true);
-            if ($result == true) {
-                return;
-            }
-        }
-
-        $r = UrlRule::OutputUrlRegEx($zbp->option['ZC_CATEGORY_REGEX'], 'cate', true);
-        $m = array();
-        if (preg_match($r, $url, $m) == 1) {
-            $result = ViewList($m['page'], $m, null, null, null, true);
-            if ($result == true) {
-                return;
-            }
-        }
-
-        $r = UrlRule::OutputUrlRegEx($zbp->option['ZC_ARTICLE_REGEX'], 'article');
-        $m = array();
-        if (preg_match($r, $url, $m) == 1) {
-            $result = ViewPost($m, null, true);
-            if ($result == false) {
-                $zbp->ShowError(2, __FILE__, __LINE__);
-            }
-
-            return;
-        }
-
-        $r = UrlRule::OutputUrlRegEx($zbp->option['ZC_PAGE_REGEX'], 'page');
-        $m = array();
-        if (preg_match($r, $url, $m) == 1) {
-            $result = ViewPost($m, null, true);
-            if ($result == false) {
-                $zbp->ShowError(2, __FILE__, __LINE__);
-            }
-
-            return;
         }
     }
 
@@ -930,6 +855,7 @@ function ViewAuto($inpurl)
         }
     }
 
+    //都不能匹配时，再进入一次默认路由
     if ($url == '' || $url == '/' || $url == 'index.php') {
         foreach ($zbp->routes['default'] as $key => $route) {
             $array = array();
@@ -953,12 +879,13 @@ function ViewAuto($inpurl)
 /**
  * 显示列表页面.
  *
- * @param int   $page
+ * @param int   $page (1.7起做为主要array型参数，后续的都作废了)
  * @param mixed $cate
  * @param mixed $auth
  * @param mixed $date
  * @param mixed $tags      tags列表
  * @param bool  $isrewrite 是否启用urlrewrite
+ * @param bool  $posttype   Posd表的类型
  *
  * @api Filter_Plugin_ViewList_Begin
  * @api Filter_Plugin_ViewList_Template
@@ -971,9 +898,9 @@ function ViewList($page = null, $cate = null, $auth = null, $date = null, $tags 
 {
     global $zbp;
 
-    //修正以后使用首个参数使用array
-    $fpargs = func_get_args();
+    //修正首个参数使用array而不传入后续参数的情况
     if (is_array($page)) {
+        $fpargs = ($page);
         $cate = GetValueInArray($page, 'cate', null);
         $auth = GetValueInArray($page, 'auth', null);
         $date = GetValueInArray($page, 'date', null);
@@ -981,12 +908,11 @@ function ViewList($page = null, $cate = null, $auth = null, $date = null, $tags 
         $isrewrite = GetValueInArray($page, 'isrewrite', false);
         $posttype = GetValueInArray($page, 'posttype', 0);
         $page = GetValueInArray($page, 'page', null);
+    } else {
+        $fpargs = call_user_func('func_get_args');
     }
 
     foreach ($GLOBALS['hooks']['Filter_Plugin_ViewList_Begin'] as $fpname => &$fpsignal) {
-        $args = array($page, $cate, $auth, $date, $tags, $isrewrite , $posttype);
-        $fpargs = array_slice($fpargs, count($args));
-        $fpargs = array_merge($args, $fpargs);
         $fpreturn = call_user_func_array($fpname, $fpargs);
         if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
             $fpsignal = PLUGIN_EXITSIGNAL_NONE;
@@ -1314,6 +1240,8 @@ function ViewList($page = null, $cate = null, $auth = null, $date = null, $tags 
     $zbp->template->SetTags('author', $author);
     $zbp->template->SetTags('category', $category);
 
+    $zbp->template->SetTags('args', $fpargs);
+
     if ($zbp->template->hasTemplate($template)) {
         $zbp->template->SetTemplate($template);
     } else {
@@ -1337,36 +1265,35 @@ function ViewList($page = null, $cate = null, $auth = null, $date = null, $tags 
 /**
  * 显示文章.
  *
- * @param array|int|string $object         文章ID/ ID/别名对象
- * @param string           $theSecondParam （如果有的话）文章别名
+ * @param array|int|string $id         文章ID/ ID/别名对象 (1.7起做为主要array型参数，后续的都作废了)
+ * @param string           $alias     （如果有的话）文章别名
  * @param bool             $isrewrite  是否启用urlrewrite
+ * @param bool             $posttype   Posd表的类型
  *
  * @throws Exception
  *
  * @return string
  */
-function ViewPost($object = null, $theSecondParam = null, $isrewrite = false, $posttype = 0)
+function ViewPost($id = null, $alias = null, $isrewrite = false, $posttype = 0)
 {
     global $zbp;
 
-    $fpargs = func_get_args();
-    if (is_array($object)) {
-        $id = GetValueInArray($object, 'id', null);
-        $alias = GetValueInArray($object, 'alias', null);
-        $isrewrite = GetValueInArray($object, 'isrewrite', false);
-        $posttype = GetValueInArray($object, 'posttype', 0);
+    //修正首个参数使用array而不传入后续参数的情况
+    $object = array();
+    if (is_array($id)) {
+        $fpargs = array($id);
+        $alias = GetValueInArray($id, 'alias', null);
+        $isrewrite = GetValueInArray($id, 'isrewrite', false);
+        $posttype = GetValueInArray($id, 'posttype', 0);
+        $object = $id;
+        $id = GetValueInArray($id, 'id', null);
     } else {
-        $id = $object;
-        $alias = $theSecondParam;
+        $id = $id;
+        $alias = $alias;
+        $fpargs = call_user_func('func_get_args');
     }
-    $object = array('id' => $id);
-    $object[0] = $id;
-    $object['id'] = $id;
 
     foreach ($GLOBALS['hooks']['Filter_Plugin_ViewPost_Begin'] as $fpname => &$fpsignal) {
-        $args = array($id, $alias, $isrewrite, $posttype);
-        $fpargs = array_slice($fpargs, count($args));
-        $fpargs = array_merge($args, $fpargs);
         $fpreturn = call_user_func_array($fpname, $fpargs);
         if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
             $fpsignal = PLUGIN_EXITSIGNAL_NONE;
@@ -1433,7 +1360,7 @@ function ViewPost($object = null, $theSecondParam = null, $isrewrite = false, $p
         $zbp->ShowError(2, __FILE__, __LINE__);
     }
 
-    if ($isrewrite && !(stripos(urldecode($article->Url), $object[0]) !== false)) {
+    if ($isrewrite && isset($object[0]) && !isset($object['page']) && !(stripos(urldecode($article->Url), $object[0]) !== false)) {
         $zbp->ShowError(2, __FILE__, __LINE__);
     }
 
@@ -1514,6 +1441,8 @@ function ViewPost($object = null, $theSecondParam = null, $isrewrite = false, $p
 
     $zbp->template->SetTags('pagebar', $pagebar);
     $zbp->template->SetTags('comments', $comments);
+
+    $zbp->template->SetTags('args', $fpargs);
 
     if ($zbp->template->hasTemplate($article->Template)) {
         $zbp->template->SetTemplate($article->Template);
@@ -2875,8 +2804,8 @@ function PostCategory()
     }
 
     $cate->Save();
+    $zbp->AddCache($cate);
 
-    $zbp->LoadCategories();
     $zbp->AddBuildModule('catalog');
 
     if (GetVars('AddNavbar', 'POST') == 0) {

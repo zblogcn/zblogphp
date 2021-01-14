@@ -72,7 +72,7 @@ class ModuleBuilder
      *
      *
      */
-    public static function Catalog()
+    public static function Catalog($type = 0)
     {
         global $zbp;
 
@@ -81,7 +81,7 @@ class ModuleBuilder
 
         $tags['style'] = $zbp->option['ZC_MODULE_CATALOG_STYLE'];
         $tags['maxLi'] = $zbp->modulesbyfilename['catalog']->MaxLi;
-        $tags['catalogs'] = $zbp->categoriesbyorder;
+        $tags['catalogs'] = $zbp->categoriesbyorder_type[$type];
 
         $template->SetTagsAll($tags);
         $ret = $template->Output('module-catalog');
@@ -392,7 +392,7 @@ class ModuleBuilder
      *
      * @return string 模块内容
      */
-    public static function TagList()
+    public static function TagList($type = 0)
     {
         global $zbp;
         $template = $zbp->template;
@@ -404,7 +404,7 @@ class ModuleBuilder
             $i = 25;
         }
 
-        $array = $zbp->GetTagList('*', '', array('tag_Count' => 'DESC'), $i, null);
+        $array = $zbp->GetTagList('*', array(array('=', 'tag_Type', $type)), array('tag_Count' => 'DESC'), $i, null);
         $array2 = array();
         foreach ($array as $tag) {
             $array2[$tag->ID] = $tag;

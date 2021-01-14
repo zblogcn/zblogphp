@@ -372,19 +372,19 @@ function GetValueInArray($array, $name, $default = null)
 }
 
 /**
- * 获取数组中的当前元素数据.
+ * 获取数组中的当前元素(还是数组)的数据.
  *
  * @param string $array 数组名
  * @param string $name  下标key
  *
  * @return mixed
  */
-function GetValueInArrayByCurrent($array, $name)
+function GetValueInArrayByCurrent($array, $name, $default = null)
 {
     if (is_array($array)) {
         $array = current($array);
 
-        return GetValueInArray($array, $name);
+        return GetValueInArray($array, $name, $default);
     }
 }
 
