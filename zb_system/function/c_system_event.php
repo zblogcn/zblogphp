@@ -646,7 +646,7 @@ function ViewSearch()
         $w,
         $order,
         array(($pagebar->PageNow - 1) * $pagebar->PageCount, $pagebar->PageCount),
-        array('pagebar' => $pagebar),
+        array('pagebar' => $pagebar)
     );
 
     $results = array();

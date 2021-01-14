@@ -431,6 +431,9 @@ class ZBlogPHP
      */
     public $admin_js_hash = '';
 
+    //默认路由url数组
+    public $routes = array();
+
     const OPTION_RESERVE_KEYS = 'ZC_DATABASE_TYPE|ZC_SQLITE_NAME|ZC_SQLITE_PRE|ZC_MYSQL_SERVER|ZC_MYSQL_USERNAME|ZC_MYSQL_PASSWORD|ZC_MYSQL_NAME|ZC_MYSQL_CHARSET|ZC_MYSQL_COLLATE|ZC_MYSQL_PRE|ZC_MYSQL_ENGINE|ZC_MYSQL_PORT|ZC_MYSQL_PERSISTENT|ZC_MYSQL_PORT|ZC_PGSQL_SERVER|ZC_PGSQL_USERNAME|ZC_PGSQL_PASSWORD|ZC_PGSQL_NAME|ZC_PGSQL_CHARSET|ZC_PGSQL_PRE|ZC_PGSQL_PORT|ZC_PGSQL_PERSISTENT|ZC_CLOSE_WHOLE_SITE|ZC_PERMANENT_DOMAIN_FORCED_URL|ZC_PERMANENT_DOMAIN_WHOLE_DISABLE';
 
     /**
@@ -476,7 +479,7 @@ class ZBlogPHP
     public function __construct()
     {
         global $option, $lang, $langs, $blogpath, $bloghost, $cookiespath,  $cachedir, $logsdir, $datadir,
-            $table, $datainfo, $actions, $action, $blogversion, $blogtitle, $blogname, $blogsubname,
+            $table, $datainfo, $actions, $action, $blogversion, $blogtitle, $blogname, $blogsubname, $routes,
             $blogtheme, $blogstyle, $currenturl, $activedapps, $posttype, $fullcurrenturl,
             $usersdir, $systemdir, $admindir, $usersurl, $systemurl, $adminurl;
 
@@ -489,6 +492,7 @@ class ZBlogPHP
         $this->option = &$option;
         $this->lang = &$lang;
         $this->langs = &$langs;
+        $this->routes = &$routes;
 
         $this->path = &$blogpath;
         $this->host = &$bloghost; //此值在后边初始化时可能会变化!
@@ -770,14 +774,14 @@ class ZBlogPHP
         }
         //var_dump($this->isHttps);die;
 
-        $this->verifyCodeUrl = $this->host . 'zb_system/script/c_validcode.php';
+        $this->verifyCodeUrl = $this->systemurl . 'script/c_validcode.php';
         $this->validcodeurl = &$this->verifyCodeUrl;
         $this->feedurl = $this->host . 'feed.php';
         $this->searchurl = $this->host . 'search.php';
-        $this->cmdurl = $this->host . 'zb_system/cmd.php';
+        $this->cmdurl = $this->systemurl . 'cmd.php';
         $this->ajaxurl = $this->cmdurl . '?act=ajax&src=';
-        $this->xmlrpcurl = $this->host . 'zb_system/xml-rpc/index.php';
-        $this->apiurl = $this->host . 'zb_system/api.php';
+        $this->xmlrpcurl = $this->systemurl . 'xml-rpc/index.php';
+        $this->apiurl = $this->systemurl . 'api.php';
 
         $this->LoadConfigsOnlySystem(false);
 
@@ -3817,7 +3821,7 @@ class ZBlogPHP
         $urs['list_tag_urlrule'] = $this->option['ZC_TAGS_REGEX'];
         $urs['list_author_urlrule'] = $this->option['ZC_AUTHOR_REGEX'];
         $urs['list_date_urlrule'] = $this->option['ZC_DATE_REGEX'];
-        $urs['search_urlrule'] = $this->option['ZC_SEARCH_REGEX'];        
+        $urs['search_urlrule'] = $this->option['ZC_SEARCH_REGEX'];
         if (!is_array($urlRule)) {
             if ($urlRule != '') {
                 $urs['urlrule'] = $urlRule;
@@ -3966,7 +3970,7 @@ class ZBlogPHP
                 return $this->posttype[$typeid]['search_template'];
             }
 
-            return $this->option['ZC_SEARCH_DEFAULT_TEMPLATE'];            
+            return $this->option['ZC_SEARCH_DEFAULT_TEMPLATE'];
         } elseif ('classname' == $key) {
             if (isset($this->posttype[$typeid]['classname']) && !empty($this->posttype[$typeid]['classname'])) {
                 return $this->posttype[$typeid]['classname'];
@@ -4024,23 +4028,24 @@ class ZBlogPHP
         return $name;
     }
 
-    //默认路由url数组
-    public $routes = array('default' => array(), 'active' => array(), 'rewrite' => array());
-
     /**
-     * 注册路由.
+     * 注册路由函数
      *
-     * @param $name
+     * @param $array 数据数组(详细结构在初始化中有说明)
+     * @param $prepend 插队在前边
      *
      * @return mixed
      */
-    public function RegRoute($array)
+    public function RegRoute($array, $prepend = false)
     {
         $routes = &$this->routes[$array['type']];
-        foreach ($array as $key => $value) {
-            $routes[$array['name']][$key] = $value;
+        if ($prepend == false) {
+            $routes[$array['name']] = $array;
+        } else {
+            unset($routes[$array['name']]);
+            $routes = array_merge(array($array['name'] => $array), $routes);
         }
-        //$routes[$array['name']] = array('function' => $array['function']);
+        return true;
     }
 
     //举例：backend-ui,,,
