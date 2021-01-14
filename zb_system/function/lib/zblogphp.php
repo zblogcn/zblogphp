@@ -656,9 +656,12 @@ class ZBlogPHP
         $this->LoadOption();
 
         //给article和page注册类型准备数据
-        $page_actions = array('new' => 'PageNew', 'edit' => 'PageEdt', 'del' => 'PageDel', 'post' => 'PagePst', 'publish' => 'PagePub', 'manage' => 'PageMng', 'all' => 'PageAll', 'view' => 'view');
-        $page_templates = array('template' => $this->option['ZC_POST_DEFAULT_TEMPLATE'], 'category_template' => $this->option['ZC_INDEX_DEFAULT_TEMPLATE'], 'tag_template' => $this->option['ZC_INDEX_DEFAULT_TEMPLATE']);
-        $page_urlrules = array('urlrule' => $this->option['ZC_PAGE_REGEX'], 'list_index_urlrule' => $this->option['ZC_INDEX_REGEX'], 'list_category_urlrule' => $this->option['ZC_CATEGORY_REGEX'], 'list_tag_urlrule' => $this->option['ZC_TAGS_REGEX'], 'list_author_urlrule' => $this->option['ZC_AUTHOR_REGEX'], 'list_date_urlrule' => $this->option['ZC_DATE_REGEX']);
+        //  权限名称分别是 新建 编辑 删除 提交 公开发布 管理 全部管理 查看 搜索
+        $page_actions = array('new' => 'PageNew', 'edit' => 'PageEdt', 'del' => 'PageDel', 'post' => 'PagePst', 'publish' => 'PagePub', 'manage' => 'PageMng', 'all' => 'PageAll', 'view' => 'view', 'search' => 'search');
+        //  自己的模板 对应分类的模板 对应Tag的模板 列表的模板(含日期列表) 搜索页的模板
+        $page_templates = array('template' => $this->option['ZC_POST_DEFAULT_TEMPLATE'], 'category_template' => $this->option['ZC_INDEX_DEFAULT_TEMPLATE'], 'tag_template' => $this->option['ZC_INDEX_DEFAULT_TEMPLATE'], 'list_template' => $this->option['ZC_INDEX_DEFAULT_TEMPLATE'], 'search_template' => $this->option['ZC_SEARCH_DEFAULT_TEMPLATE']);
+        //  自身规则 列表规则 分类列表规则 Tag列表规则 作者列表规则 日期列表规则 搜索列表规则
+        $page_urlrules = array('urlrule' => $this->option['ZC_PAGE_REGEX'], 'list_index_urlrule' => $this->option['ZC_INDEX_REGEX'], 'list_category_urlrule' => $this->option['ZC_CATEGORY_REGEX'], 'list_tag_urlrule' => $this->option['ZC_TAGS_REGEX'], 'list_author_urlrule' => $this->option['ZC_AUTHOR_REGEX'], 'list_date_urlrule' => $this->option['ZC_DATE_REGEX'], 'search_urlrule' => $this->option['ZC_SEARCH_REGEX']);
         $article_urlrules = $page_urlrules;
         $article_urlrules['urlrule'] = $this->option['ZC_ARTICLE_REGEX'];
 
@@ -666,13 +669,20 @@ class ZBlogPHP
         $this->RegPostType(1, 'page', $page_urlrules, $page_templates, 'Post', $page_actions);
 
         //注册Article的路由和Page的路由
-        $this->RegRoute(array('type' => 'default', 'name' => 'default_post_article', 'function' => 'ViewList', 'posttype' => 0));
-        $this->RegRoute(array('type' => 'active', 'name' => 'post_article_single', 'function' => 'ViewPost', 'posttype' => 0, 'urlid' => '', 'get' => array('id', 'alias'), 'not_get' => array('cate', 'auth', 'tags', 'date'), 'parameters' => array('id', 'alias', 'isrewrite', 'posttype'), 'isrewrite' => true));
-        $this->RegRoute(array('type' => 'active', 'name' => 'post_page_single', 'function' => 'ViewPost', 'posttype' => 1, 'urlid' => '', 'get' => array('id', 'alias'), 'not_get' => array('cate', 'auth', 'tags', 'date'), 'parameters' => array('id', 'alias', 'isrewrite', 'posttype'), 'isrewrite' => true));
-        $this->RegRoute(array('type' => 'active', 'name' => 'post_article_list', 'function' => 'ViewList', 'posttype' => 0, 'urlid' => '', 'get' => array('page', 'cate', 'auth', 'tags', 'date'), 'not_get' => array('id', 'alias'), 'parameters' => array('page', 'cate', 'auth', 'tags', 'date', 'isrewrite', 'posttype'), 'isrewrite' => true));
-        $this->RegRoute(array('type' => 'active', 'name' => 'post_article_list_null', 'function' => 'ViewList', 'posttype' => 0, 'urlid' => '', 'get' => array(), 'not_get' => array('id', 'alias'), 'parameters' => array('isrewrite', 'posttype'), 'isrewrite' => true));
-        //$this->RegRoute(array('type' => 'active', 'name' => 'post_page_list', 'function' => 'ViewList', 'posttype' => 1, 'urlid' => 'page', 'get' => array('page', 'cate', 'auth', 'tags', 'date'), 'parameters' => array('page', 'cate', 'auth', 'tags', 'date'), 'isrewrite' => true));
-        //$this->RegRoute(array('type' => 'active', 'name' => 'post_page_list_null', 'function' => 'ViewList', 'posttype' => 1, 'urlid' => 'page', 'get' => array(), 'parameters' => array(), 'isrewrite' => true));
+
+        //  添加默认路由 文章页列表(无参数)路由
+        $this->RegRoute(array('type' => 'default', 'name' => 'post_article_list_default', 'function' => 'ViewList', 'posttype' => 0, 'isrewrite' => true, 'urlid' => '', 'get' => array(), 'not_get' => array(), 'parameters' => array(), 'must_parameters' => array('isrewrite', 'posttype')));
+        //  添加文章页单页路由
+        $this->RegRoute(array('type' => 'active', 'name' => 'post_article_single', 'function' => 'ViewPost', 'posttype' => 0, 'isrewrite' => true, 'urlid' => '', 'get' => array('id', 'alias'), 'not_get' => array('cate', 'auth', 'tags', 'date'), 'parameters' => array('id', 'alias'), 'must_parameters' => array('isrewrite', 'posttype')));
+        //  添加页面页单页路由
+        $this->RegRoute(array('type' => 'active', 'name' => 'post_page_single', 'function' => 'ViewPost', 'posttype' => 1, 'isrewrite' => true, 'urlid' => '', 'get' => array('id', 'alias'), 'not_get' => array('cate', 'auth', 'tags', 'date'), 'parameters' => array('id', 'alias'), 'must_parameters' => array('isrewrite', 'posttype')));
+        //  添加文章页列表(带参数)路由
+        $this->RegRoute(array('type' => 'active', 'name' => 'post_article_list', 'function' => 'ViewList', 'posttype' => 0, 'isrewrite' => true, 'urlid' => '', 'get' => array('page', 'cate', 'auth', 'tags', 'date'), 'not_get' => array('id', 'alias'), 'parameters' => array('page', 'cate', 'auth', 'tags', 'date'), 'must_parameters' => array('isrewrite', 'posttype')));
+
+        //  添加页面页列表(带参数)路由
+        //$this->RegRoute(array('type' => 'active', 'name' => 'post_page_list', 'function' => 'ViewList', 'posttype' => 1, 'isrewrite' => true, 'urlid' => 'page', 'get' => array('page', 'cate', 'auth', 'tags', 'date'), 'not_get' => array('id', 'alias'), 'parameters' => array('page', 'cate', 'auth', 'tags', 'date'), 'must_parameters' => array('isrewrite', 'posttype')));
+        //  添加页面页列表(无参数)路由
+        //$this->RegRoute(array('type' => 'active', 'name' => 'post_page_list_default', 'function' => 'ViewList', 'posttype' => 1, 'isrewrite' => true, 'urlid' => 'page', 'get' => array(), 'not_get' => array('id', 'alias'), 'parameters' => array(), 'must_parameters' => array('isrewrite', 'posttype')));
 
         if ($this->option['ZC_BLOG_LANGUAGEPACK'] === 'SimpChinese') {
             $this->option['ZC_BLOG_LANGUAGEPACK'] = 'zh-cn';
@@ -3807,6 +3817,7 @@ class ZBlogPHP
         $urs['list_tag_urlrule'] = $this->option['ZC_TAGS_REGEX'];
         $urs['list_author_urlrule'] = $this->option['ZC_AUTHOR_REGEX'];
         $urs['list_date_urlrule'] = $this->option['ZC_DATE_REGEX'];
+        $urs['search_urlrule'] = $this->option['ZC_SEARCH_REGEX'];        
         if (!is_array($urlRule)) {
             if ($urlRule != '') {
                 $urs['urlrule'] = $urlRule;
@@ -3826,6 +3837,8 @@ class ZBlogPHP
         $tps['template'] = $this->option['ZC_POST_DEFAULT_TEMPLATE'];
         $tps['category_template'] = $this->option['ZC_INDEX_DEFAULT_TEMPLATE'];
         $tps['tag_template'] = $this->option['ZC_INDEX_DEFAULT_TEMPLATE'];
+        $tps['list_template'] = $this->option['ZC_INDEX_DEFAULT_TEMPLATE'];
+        $tps['search_template'] = $this->option['ZC_SEARCH_DEFAULT_TEMPLATE'];
 
         if (!is_array($template)) {
             if ($template != '') {
@@ -3838,7 +3851,7 @@ class ZBlogPHP
         $this->posttype[$typeId] = array('name' => $name, 'classname' => $className);
         $this->posttype[$typeId] = array_merge($this->posttype[$typeId], $tps, $urs);
 
-        $post_actions = array('new' => 'ArticleNew', 'edit' => 'ArticleEdt', 'del' => 'ArticleDel', 'post' => 'ArticlePst', 'publish' => 'ArticlePub', 'manage' => 'ArticleMng', 'all' => 'ArticleAll', 'view' => 'view');
+        $post_actions = array('new' => 'ArticleNew', 'edit' => 'ArticleEdt', 'del' => 'ArticleDel', 'post' => 'ArticlePst', 'publish' => 'ArticlePub', 'manage' => 'ArticleMng', 'all' => 'ArticleAll', 'view' => 'view', 'search' => 'search');
 
         if (empty($actions) || is_array($actions) == false) {
             $actions = $post_actions;
@@ -3918,6 +3931,12 @@ class ZBlogPHP
             }
 
             return $this->option['ZC_DATE_REGEX'];
+        } elseif ('search_urlrule' == $key) {
+            if (isset($this->posttype[$typeid]['search_urlrule'])) {
+                return $this->posttype[$typeid]['search_urlrule'];
+            }
+
+            return $this->option['ZC_SEARCH_REGEX'];
         } elseif ('template' == $key) {
             if (isset($this->posttype[$typeid]['template']) && !empty($this->posttype[$typeid]['template'])) {
                 return $this->posttype[$typeid]['template'];
@@ -3936,6 +3955,18 @@ class ZBlogPHP
             }
 
             return $this->option['ZC_INDEX_DEFAULT_TEMPLATE'];
+        } elseif ('list_template' == $key) {
+            if (isset($this->posttype[$typeid]['list_template']) && !empty($this->posttype[$typeid]['list_template'])) {
+                return $this->posttype[$typeid]['list_template'];
+            }
+
+            return $this->option['ZC_INDEX_DEFAULT_TEMPLATE'];
+        } elseif ('search_template' == $key) {
+            if (isset($this->posttype[$typeid]['search_template']) && !empty($this->posttype[$typeid]['search_template'])) {
+                return $this->posttype[$typeid]['search_template'];
+            }
+
+            return $this->option['ZC_SEARCH_DEFAULT_TEMPLATE'];            
         } elseif ('classname' == $key) {
             if (isset($this->posttype[$typeid]['classname']) && !empty($this->posttype[$typeid]['classname'])) {
                 return $this->posttype[$typeid]['classname'];
@@ -3958,7 +3989,7 @@ class ZBlogPHP
             }
             return $post_actions;
         } else {
-            if (isset($this->posttype[$typeid][$key]) && !empty($this->posttype[$typeid][$key])) {
+            if (isset($this->posttype[$typeid][$key])) {
                 return $this->posttype[$typeid][$key];
             }
         }

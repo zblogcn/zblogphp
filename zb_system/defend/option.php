@@ -178,11 +178,11 @@ return array(
 
     'ZC_SEARCH_COUNT' => 20,
     'ZC_SEARCH_REGEX' => '{%host%}search.php?q={%q%}&page={%page%}',
-    'ZC_SEARCH_TYPE'  => 'list', // 1.6.0  single|list
 
-    //首页，分类页，文章页，页面页的默认模板
+    //列表页，POST页，搜索页的默认模板
     'ZC_INDEX_DEFAULT_TEMPLATE' => 'index',
     'ZC_POST_DEFAULT_TEMPLATE'  => 'single',
+    'ZC_SEARCH_DEFAULT_TEMPLATE'  => 'search',
 
     'ZC_SIDEBAR_ORDER'  => 'calendar|controlpanel|catalog|searchpanel|comments|archives|favorite|link|misc',
     'ZC_SIDEBAR2_ORDER' => '',

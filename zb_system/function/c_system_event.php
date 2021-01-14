@@ -597,33 +597,35 @@ function ViewSearch()
         }
     }
 
-    if (!$zbp->CheckRights($GLOBALS['action'])) {
-        Redirect('./');
-    }
-
     $q = trim(htmlspecialchars(GetVars('q', 'GET')));
     $page = GetVars('page', 'GET');
     $page = (int) $page == 0 ? 1 : (int) $page;
+    $posttype = (int) GetVars('posttype', 'GET');
+
+    $actions = $zbp->GetPostType($posttype, 'actions');
+    if (!$zbp->CheckRights($actions['search'])) {
+        Redirect('./');
+    }
 
     $article = new Post();
     $article->ID = 0;
     $article->Title = $zbp->langs->msg->search . '&nbsp;&quot;<span>' . $q . '</span>&quot;';
     $article->IsLock = true;
-    $article->Type = ZC_POST_TYPE_PAGE;
+    $article->Type = $posttype;
 
     if ($zbp->template->hasTemplate('search')) {
         $article->Template = 'search';
     }
 
     $w = array();
-    $w[] = array('=', 'log_Type', '0');
+    $w[] = array('=', 'log_Type', $posttype);
     if ($q) {
         $w[] = array('search', 'log_Content', 'log_Intro', 'log_Title', $q);
     } else {
-        Redirect('./');
+        $w[] = array('=', 'log_ID', 0);
     }
 
-    if (!($zbp->CheckRights('ArticleAll') && $zbp->CheckRights('PageAll'))) {
+    if (!($zbp->CheckRights($article->TypeActions['all']))) {
         $w[] = array('=', 'log_Status', 0);
     }
     $order = array('log_PostTime' => 'DESC');
@@ -639,13 +641,12 @@ function ViewSearch()
         $fpname($q, $page, $w, $pagebar, $order);
     }
 
-    $array = $zbp->GetArticleList(
+    $array = $zbp->GetPostList(
         '',
         $w,
         $order,
         array(($pagebar->PageNow - 1) * $pagebar->PageCount, $pagebar->PageCount),
         array('pagebar' => $pagebar),
-        false
     );
 
     $results = array();
@@ -682,7 +683,7 @@ function ViewSearch()
         $results[] = $r;
     }
 
-    $zbp->header .= '<meta name="robots" content="noindex,follow" />' . "\r\n";
+    $zbp->header .= '    <meta name="robots" content="noindex,nofollow,noarchive" />' . "\r\n";
     $zbp->template->SetTags('title', str_replace(array('<span>', '</span>'), '', $article->Title));
     $zbp->template->SetTags('article', $article);
     $zbp->template->SetTags('search', $q);
@@ -690,21 +691,17 @@ function ViewSearch()
     $zbp->template->SetTags('pagebar', $pagebar);
     $zbp->template->SetTags('comments', array());
     $zbp->template->SetTags('issearch', true);
+    $zbp->template->SetTags('posttype', $posttype);
 
     //1.6新加设置，可以让搜索变为列表模式运行
-    //1.7强制指定搜索模板为search或是index
     $zbp->template->SetTags('type', 'search'); //1.6统一改为search
-    //if (isset($zbp->option['ZC_SEARCH_TYPE']) && $zbp->option['ZC_SEARCH_TYPE'] == 'list') {
+    //1.7强制指定搜索模板为优先为search或是index
     $zbp->template->SetTags('articles', $results);
-    if ($zbp->template->HasTemplate('search')) {
-        $zbp->template->SetTemplate('search');
+    if ($zbp->template->HasTemplate($zbp->GetPostType($posttype, 'search_template'))) {
+        $zbp->template->SetTemplate($zbp->GetPostType($posttype, 'search_template'));
     } else {
-        $zbp->template->SetTemplate('index');
+        $zbp->template->SetTemplate($zbp->GetPostType($posttype, 'list_template'));
     }
-    //} else {
-        //$zbp->template->SetTags('articles', $array);
-        //$zbp->template->SetTemplate($article->Template);
-    //}
 
     foreach ($GLOBALS['hooks']['Filter_Plugin_ViewSearch_Template'] as $fpname => &$fpsignal) {
         $fpreturn = $fpname($zbp->template);
@@ -755,6 +752,21 @@ function ViewAuto($inpurl)
 
     $url = urldecode($url);
 
+    if (($url == '' || $url == '/' || $url == 'index.php') && empty($_GET)) {
+        foreach ($zbp->routes['default'] as $key => $route) {
+            $array = array();
+            if (isset($route['must_parameters']) && is_array($route['must_parameters'])) {
+                foreach ($route['must_parameters'] as $key => $value) {
+                    if (isset($route[$value])) {
+                        $array[$value] = $route[$value];
+                    }
+                }
+            }
+            call_user_func($route['function'], $array);
+            return;
+        }
+    }
+
     if ($zbp->option['ZC_STATIC_MODE'] == 'ACTIVE') {
         foreach ($zbp->routes['active'] as $key => $route) {
             if (($url == $route['urlid'] . '') || ($url == $route['urlid'] . '/') || ($url == $route['urlid'] . '/index.php')) {
@@ -782,8 +794,17 @@ function ViewAuto($inpurl)
                 //如果条件符合就组合参数数组并调用函数
                 if ($b) {
                     $array = array();
-                    foreach ($route['parameters'] as $key => $value) {
-                        $array[$value] = GetVars($value, 'GET', (isset($route[$value]) ? $route[$value] : null));
+                    if (isset($route['parameters']) && is_array($route['parameters'])) {
+                        foreach ($route['parameters'] as $key => $value) {
+                            $array[$value] = GetVars($value, 'GET');
+                        }
+                    }
+                    if (isset($route['must_parameters']) && is_array($route['must_parameters'])) {
+                        foreach ($route['must_parameters'] as $key => $value) {
+                            if (isset($route[$value])) {
+                                $array[$value] = $route[$value];
+                            }
+                        }
                     }
                     $result = call_user_func($route['function'], $array);
                     if ($result == true) {
@@ -911,11 +932,17 @@ function ViewAuto($inpurl)
 
     if ($url == '' || $url == '/' || $url == 'index.php') {
         foreach ($zbp->routes['default'] as $key => $route) {
-            call_user_func($route['function']);
-            break;
+            $array = array();
+            if (isset($route['must_parameters']) && is_array($route['must_parameters'])) {
+                foreach ($route['must_parameters'] as $key => $value) {
+                    if (isset($route[$value])) {
+                        $array[$value] = $route[$value];
+                    }
+                }
+            }
+            call_user_func($route['function'], $array);
+            return;
         }
-
-        return;
     }
 
     $zbp->ShowError(2, __FILE__, __LINE__);
@@ -993,6 +1020,7 @@ function ViewList($page = null, $cate = null, $auth = null, $date = null, $tags 
     $w = array();
     $w[] = array('=', 'log_Type', $posttype);
     $w[] = array('=', 'log_Status', 0);
+    $w[] = array('=', 'log_IsTop', 0);
 
     $page = (int) $page == 0 ? 1 : (int) $page;
 
@@ -1006,7 +1034,7 @@ function ViewList($page = null, $cate = null, $auth = null, $date = null, $tags 
             if (0 == $posttype) {
                 $pagebar->Count = $zbp->cache->normal_article_nums;
             }
-            $template = $zbp->option['ZC_INDEX_DEFAULT_TEMPLATE'];
+            $template = $zbp->GetPostType($posttype, 'list_template');
             if ($page == 1) {
                 $zbp->title = $zbp->subname;
             } else {
@@ -1142,7 +1170,7 @@ function ViewList($page = null, $cate = null, $auth = null, $date = null, $tags 
 
             $zbp->modulesbyfilename['calendar']->Content = ModuleBuilder::Calendar(date('Y', $datetime) . '-' . date('n', $datetime));
 
-            $template = $zbp->option['ZC_INDEX_DEFAULT_TEMPLATE'];
+            $template = $zbp->GetPostType($posttype, 'list_template');
 
             if (preg_match($dateregex_ymd, $datetime_txt) != 0) {
                 $w[] = array('BETWEEN', 'log_PostTime', $datetime, strtotime('+1 day', $datetime));
@@ -1208,13 +1236,12 @@ function ViewList($page = null, $cate = null, $auth = null, $date = null, $tags 
     }
 
     if ($zbp->option['ZC_LISTONTOP_TURNOFF'] == false) {
-        $articles_top_notorder = $zbp->GetTopPost(ZC_POST_TYPE_ARTICLE);
+        $articles_top_notorder = $zbp->GetTopPost($posttype);
         foreach ($articles_top_notorder as $articles_top_notorder_post) {
             if ($articles_top_notorder_post->TopType == 'global') {
                 $articles_top[] = $articles_top_notorder_post;
             }
         }
-
         if ($type == 'index' && $page == 1) {
             foreach ($articles_top_notorder as $articles_top_notorder_post) {
                 if ($articles_top_notorder_post->TopType == 'index') {
@@ -1222,7 +1249,6 @@ function ViewList($page = null, $cate = null, $auth = null, $date = null, $tags 
                 }
             }
         }
-
         if ($type == 'category' && $page == 1) {
             foreach ($articles_top_notorder as $articles_top_notorder_post) {
                 if ($articles_top_notorder_post->TopType == 'category' && $articles_top_notorder_post->CateID == $category->ID) {
@@ -1241,7 +1267,6 @@ function ViewList($page = null, $cate = null, $auth = null, $date = null, $tags 
         $fpreturn = $fpname($select, $w, $order, $limit, $option, $type);
     }
 
-
     $articles = $zbp->GetPostList(
         $select,
         $w,
@@ -1250,29 +1275,8 @@ function ViewList($page = null, $cate = null, $auth = null, $date = null, $tags 
         $option
     );
 
-    //处理原置顶文章回到正常时的属性先改为0
-    foreach ($articles as $key3 => $value3) {
-        if ($value3->IsTop > 0) {
-            $value3->IsTop = 0;
-        }
-    }
-    foreach ($articles_top as $key1 => $value1) {
-        foreach ($articles as $key2 => $value2) {
-            if ($value1->ID == $value2->ID) {
-                unset($articles[$key2]);
-                break;
-            }
-        }
-    }
-
     if (count($articles) <= 0 && $page > 1) {
         $zbp->ShowError(2, __FILE__, __LINE__);
-    }
-
-    foreach ($articles_top as $key => $value) {
-        if ($value->Type != $posttype) {
-            unset($articles_top[$key]);
-        }
     }
 
     $articles = array_merge($articles_top, $articles);
@@ -1431,7 +1435,6 @@ function ViewPost($object = null, $theSecondParam = null, $isrewrite = false, $p
 
     if ($isrewrite && !(stripos(urldecode($article->Url), $object[0]) !== false)) {
         $zbp->ShowError(2, __FILE__, __LINE__);
-        exit;
     }
 
     $zbp->LoadTagsByIDString($article->Tag);
@@ -1515,7 +1518,7 @@ function ViewPost($object = null, $theSecondParam = null, $isrewrite = false, $p
     if ($zbp->template->hasTemplate($article->Template)) {
         $zbp->template->SetTemplate($article->Template);
     } else {
-        $zbp->template->SetTemplate('single');
+        $zbp->template->SetTemplate($zbp->option['ZC_POST_DEFAULT_TEMPLATE']);
     }
 
     foreach ($GLOBALS['hooks']['Filter_Plugin_ViewPost_Template'] as $fpname => &$fpsignal) {
@@ -4141,7 +4144,7 @@ function CountNormalArticleNums($plus = null)
     global $zbp;
 
     if ($plus === null) {
-        $s = $zbp->db->sql->Count($zbp->table['Post'], array(array('COUNT', '*', 'num')), array(array('=', 'log_Type', 0), array('=', 'log_Status', 0)));
+        $s = $zbp->db->sql->Count($zbp->table['Post'], array(array('COUNT', '*', 'num')), array(array('=', 'log_Type', 0), array('=', 'log_IsTop', 0), array('=', 'log_Status', 0)));
         $num = GetValueInArrayByCurrent($zbp->db->Query($s), 'num');
 
         $zbp->cache->normal_article_nums = $num;
