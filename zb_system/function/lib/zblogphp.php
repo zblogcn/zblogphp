@@ -659,53 +659,6 @@ class ZBlogPHP
         $this->LoadConfigsOnlySystem(true);
         $this->LoadOption();
 
-        //给article和page注册类型准备数据
-        //  权限名称分别是 新建 编辑 删除 提交 公开发布 管理 全部管理 查看 搜索
-        $page_actions = array('new' => 'PageNew', 'edit' => 'PageEdt', 'del' => 'PageDel', 'post' => 'PagePst', 'publish' => 'PagePub', 'manage' => 'PageMng', 'all' => 'PageAll', 'view' => 'view', 'search' => 'search');
-        //  自己的模板 对应分类的模板 对应Tag的模板 列表的模板(含日期列表) 搜索页的模板
-        $page_templates = array('template' => $this->option['ZC_POST_DEFAULT_TEMPLATE'], 'category_template' => $this->option['ZC_INDEX_DEFAULT_TEMPLATE'], 'tag_template' => $this->option['ZC_INDEX_DEFAULT_TEMPLATE'], 'list_template' => $this->option['ZC_INDEX_DEFAULT_TEMPLATE'], 'search_template' => $this->option['ZC_SEARCH_DEFAULT_TEMPLATE']);
-        //  自身规则 列表规则 分类列表规则 Tag列表规则 作者列表规则 日期列表规则 搜索列表规则
-        $page_urlrules = array('urlrule' => $this->option['ZC_PAGE_REGEX'], 'list_index_urlrule' => $this->option['ZC_INDEX_REGEX'], 'list_category_urlrule' => $this->option['ZC_CATEGORY_REGEX'], 'list_tag_urlrule' => $this->option['ZC_TAGS_REGEX'], 'list_author_urlrule' => $this->option['ZC_AUTHOR_REGEX'], 'list_date_urlrule' => $this->option['ZC_DATE_REGEX'], 'search_urlrule' => $this->option['ZC_SEARCH_REGEX']);
-        $article_urlrules = $page_urlrules;
-        $article_urlrules['urlrule'] = $this->option['ZC_ARTICLE_REGEX'];
-
-        $this->RegPostType(0, 'article', $article_urlrules, $page_templates, 'Post');
-        $this->RegPostType(1, 'page', $page_urlrules, $page_templates, 'Post', $page_actions);
-
-        //注册Article的路由和Page的路由
-
-        //  添加 默认路由 文章页列表(无参数)路由
-        $this->RegRoute(array('type' => 'default', 'name' => 'post_article_list_default', 'function' => 'ViewList', 'posttype' => 0, 'isrewrite' => true, 'urlid' => '', 'get' => array(), 'not_get' => array(), 'parameters' => array(), 'must_parameters' => array('isrewrite', 'posttype')));
-        //  添加 文章页单页 动态路由
-        $this->RegRoute(array('type' => 'active', 'name' => 'post_article_single', 'function' => 'ViewPost', 'posttype' => 0, 'isrewrite' => true, 'urlid' => '', 'get' => array('id', 'alias'), 'not_get' => array('cate', 'auth', 'tags', 'date'), 'parameters' => array('id', 'alias'), 'must_parameters' => array('isrewrite', 'posttype')));
-        //  添加 页面页单页 动态路由
-        $this->RegRoute(array('type' => 'active', 'name' => 'post_page_single', 'function' => 'ViewPost', 'posttype' => 1, 'isrewrite' => true, 'urlid' => '', 'get' => array('id', 'alias'), 'not_get' => array('cate', 'auth', 'tags', 'date'), 'parameters' => array('id', 'alias'), 'must_parameters' => array('isrewrite', 'posttype')));
-        //  添加 文章页列表(带参数) 动态路由
-        $this->RegRoute(array('type' => 'active', 'name' => 'post_article_list', 'function' => 'ViewList', 'posttype' => 0, 'isrewrite' => true, 'urlid' => '', 'get' => array('page', 'cate', 'auth', 'tags', 'date'), 'not_get' => array('id', 'alias'), 'parameters' => array('page', 'cate', 'auth', 'tags', 'date'), 'must_parameters' => array('isrewrite', 'posttype')));
-
-        //  添加 页面页列表(带参数) 动态路由
-        //$this->RegRoute(array('type' => 'active', 'name' => 'post_page_list', 'function' => 'ViewList', 'posttype' => 1, 'isrewrite' => true, 'urlid' => 'page', 'get' => array('page', 'cate', 'auth', 'tags', 'date'), 'not_get' => array('id', 'alias'), 'parameters' => array('page', 'cate', 'auth', 'tags', 'date'), 'must_parameters' => array('isrewrite', 'posttype')));
-        //  添加 页面页列表(无参数) 动态路由
-        //$this->RegRoute(array('type' => 'active', 'name' => 'post_page_list_default', 'function' => 'ViewList', 'posttype' => 1, 'isrewrite' => true, 'urlid' => 'page', 'get' => array(), 'not_get' => array('id', 'alias'), 'parameters' => array(), 'must_parameters' => array('isrewrite', 'posttype')));
-
-        //  添加 文章页单页 伪静路由
-        $this->RegRoute(array('type' => 'rewrite', 'name' => 'post_article_single', 'function' => 'ViewPost', 'posttype' => 0, 'isrewrite' => true, 'urlrule' => $this->GetPostType(0, 'urlrule'), 'urlrule_type' => 'article', 'parameters' => array(), 'must_parameters' => array('isrewrite', 'posttype'), 'haspage' => false));
-
-        //  添加 文章index列表 伪静路由
-        $this->RegRoute(array('type' => 'rewrite', 'name' => 'post_article_list_index', 'function' => 'ViewList', 'posttype' => 0, 'isrewrite' => true, 'urlrule' => $this->GetPostType(0, 'list_index_urlrule'), 'urlrule_type' => 'list', 'parameters' => array(), 'must_parameters' => array('isrewrite', 'posttype'), 'haspage' => true));
-        //  添加 文章date列表 伪静路由
-        $this->RegRoute(array('type' => 'rewrite', 'name' => 'post_article_list_date', 'function' => 'ViewList', 'posttype' => 0, 'isrewrite' => true, 'urlrule' => $this->GetPostType(0, 'list_date_urlrule'), 'urlrule_type' => 'date', 'parameters' => array(), 'must_parameters' => array('isrewrite', 'posttype'), 'haspage' => true));
-        //  添加 文章category列表 伪静路由
-        $this->RegRoute(array('type' => 'rewrite', 'name' => 'post_article_list_category', 'function' => 'ViewList', 'posttype' => 0, 'isrewrite' => true, 'urlrule' => $this->GetPostType(0, 'list_category_urlrule'), 'urlrule_type' => 'cate', 'parameters' => array(), 'must_parameters' => array('isrewrite', 'posttype'), 'haspage' => true));
-        //  添加 文章tag列表 伪静路由
-        $this->RegRoute(array('type' => 'rewrite', 'name' => 'post_article_list_tag', 'function' => 'ViewList', 'posttype' => 0, 'isrewrite' => true, 'urlrule' => $this->GetPostType(0, 'list_tag_urlrule'), 'urlrule_type' => 'tags', 'parameters' => array(), 'must_parameters' => array('isrewrite', 'posttype'), 'haspage' => true));
-        //  添加 文章author列表 伪静路由
-        $this->RegRoute(array('type' => 'rewrite', 'name' => 'post_article_list_author', 'function' => 'ViewList', 'posttype' => 0, 'isrewrite' => true, 'urlrule' => $this->GetPostType(0, 'list_author_urlrule'), 'urlrule_type' => 'auth', 'parameters' => array(), 'must_parameters' => array('isrewrite', 'posttype'), 'haspage' => true));
-
-        //  添加 页面页单页 伪静路由
-        $this->RegRoute(array('type' => 'rewrite', 'name' => 'post_page_single', 'function' => 'ViewPost', 'posttype' => 1, 'isrewrite' => true, 'urlrule' => $this->GetPostType(1, 'urlrule'), 'urlrule_type' => 'article', 'parameters' => array(), 'must_parameters' => array('isrewrite', 'posttype'), 'haspage' => false));
-
-
         if ($this->option['ZC_BLOG_LANGUAGEPACK'] === 'SimpChinese') {
             $this->option['ZC_BLOG_LANGUAGEPACK'] = 'zh-cn';
         }
@@ -810,6 +763,59 @@ class ZBlogPHP
         !defined('ZBP_IN_AJAX') || $this->isajax = true;
         !defined('ZBP_IN_XMLRPC') || $this->isxmlrpc = true;
         !$this->option['ZC_DEBUG_MODE'] || $this->isdebug = true;
+
+        //为Article和Page注册类型准备数据
+        //  权限名称分别是 新建 编辑 删除 提交 公开发布 管理 全部管理 查看 搜索
+        $page_actions = array('new' => 'PageNew', 'edit' => 'PageEdt', 'del' => 'PageDel', 'post' => 'PagePst', 'publish' => 'PagePub', 'manage' => 'PageMng', 'all' => 'PageAll', 'view' => 'view', 'search' => 'search');
+        //  自己的模板 对应分类的模板 对应Tag的模板 列表的模板(含日期列表) 搜索页的模板
+        $page_templates = array('template' => $this->option['ZC_POST_DEFAULT_TEMPLATE'], 'category_template' => $this->option['ZC_INDEX_DEFAULT_TEMPLATE'], 'tag_template' => $this->option['ZC_INDEX_DEFAULT_TEMPLATE'], 'list_template' => $this->option['ZC_INDEX_DEFAULT_TEMPLATE'], 'search_template' => $this->option['ZC_SEARCH_DEFAULT_TEMPLATE']);
+        //  自身规则 列表规则 分类列表规则 Tag列表规则 作者列表规则 日期列表规则 搜索列表规则
+        $page_urlrules = array('urlrule' => $this->option['ZC_PAGE_REGEX'], 'list_index_urlrule' => $this->option['ZC_INDEX_REGEX'], 'list_category_urlrule' => $this->option['ZC_CATEGORY_REGEX'], 'list_tag_urlrule' => $this->option['ZC_TAGS_REGEX'], 'list_author_urlrule' => $this->option['ZC_AUTHOR_REGEX'], 'list_date_urlrule' => $this->option['ZC_DATE_REGEX'], 'search_urlrule' => $this->option['ZC_SEARCH_REGEX']);
+        $article_urlrules = $page_urlrules;
+        $article_urlrules['urlrule'] = $this->option['ZC_ARTICLE_REGEX'];
+
+        //注册Article和Page
+        $this->RegPostType(0, 'article', $article_urlrules, $page_templates, 'Post');
+        $this->RegPostType(1, 'page', $page_urlrules, $page_templates, 'Post', $page_actions);
+
+        //注册Article的路由和Page的路由
+
+        // 默认路由
+        //  添加 默认路由 = 文章页列表(无参数)路由
+        $this->RegRoute(array('type' => 'default', 'name' => 'post_article_list_default', 'function' => 'ViewList', 'posttype' => 0, 'isrewrite' => true, 'urlid' => '', 'get' => array(), 'not_get' => array(), 'parameters' => array(), 'must_parameters' => array('isrewrite', 'posttype'), 'not_get' => array('page', 'cate', 'auth', 'tags', 'date', 'id', 'alias')));
+
+        // 动态路由
+        //  添加 文章页单页 动态路由
+        $this->RegRoute(array('type' => 'active', 'name' => 'post_article_single', 'function' => 'ViewPost', 'posttype' => 0, 'isrewrite' => true, 'urlid' => '', 'get' => array('id', 'alias'), 'not_get' => array('cate', 'auth', 'tags', 'date'), 'parameters' => array('id', 'alias'), 'must_parameters' => array('isrewrite', 'posttype')));
+        //  添加 页面页单页 动态路由
+        $this->RegRoute(array('type' => 'active', 'name' => 'post_page_single', 'function' => 'ViewPost', 'posttype' => 1, 'isrewrite' => true, 'urlid' => '', 'get' => array('id', 'alias'), 'not_get' => array('cate', 'auth', 'tags', 'date'), 'parameters' => array('id', 'alias'), 'must_parameters' => array('isrewrite', 'posttype')));
+        //  添加 文章页列表(带参数) 动态路由
+        $this->RegRoute(array('type' => 'active', 'name' => 'post_article_list', 'function' => 'ViewList', 'posttype' => 0, 'isrewrite' => true, 'urlid' => '', 'get' => array('page', 'cate', 'auth', 'tags', 'date'), 'not_get' => array('id', 'alias'), 'parameters' => array('page', 'cate', 'auth', 'tags', 'date'), 'must_parameters' => array('isrewrite', 'posttype')));
+
+        //  添加 页面页列表(带参数) 动态路由
+        //$this->RegRoute(array('type' => 'active', 'name' => 'post_page_list', 'function' => 'ViewList', 'posttype' => 1, 'isrewrite' => true, 'urlid' => 'page', 'get' => array('page', 'cate', 'auth', 'tags', 'date'), 'not_get' => array('id', 'alias'), 'parameters' => array('page', 'cate', 'auth', 'tags', 'date'), 'must_parameters' => array('isrewrite', 'posttype')));
+        //  添加 页面页列表(无参数) 动态路由
+        //$this->RegRoute(array('type' => 'active', 'name' => 'post_page_list_default', 'function' => 'ViewList', 'posttype' => 1, 'isrewrite' => true, 'urlid' => 'page', 'get' => array(), 'not_get' => array('id', 'alias'), 'parameters' => array(), 'must_parameters' => array('isrewrite', 'posttype')));
+
+        if ($this->option['ZC_STATIC_MODE'] == 'REWRITE') {
+            // 伪静路由
+            //  添加 文章页单页 伪静路由
+            $this->RegRoute(array('type' => 'rewrite', 'name' => 'post_article_single', 'function' => 'ViewPost', 'posttype' => 0, 'isrewrite' => true, 'urlrule' => $this->GetPostType(0, 'urlrule'), 'urlrule_type' => 'article', 'parameters' => array(), 'must_parameters' => array('isrewrite', 'posttype'), 'haspage' => false));
+
+            //  添加 文章index列表 伪静路由
+            $this->RegRoute(array('type' => 'rewrite', 'name' => 'post_article_list_index', 'function' => 'ViewList', 'posttype' => 0, 'isrewrite' => true, 'urlrule' => $this->GetPostType(0, 'list_index_urlrule'), 'urlrule_type' => 'list', 'parameters' => array(), 'must_parameters' => array('isrewrite', 'posttype'), 'haspage' => true, 'not_get' => array('page', 'cate', 'auth', 'tags', 'date', 'id', 'alias')));
+            //  添加 文章date列表 伪静路由
+            $this->RegRoute(array('type' => 'rewrite', 'name' => 'post_article_list_date', 'function' => 'ViewList', 'posttype' => 0, 'isrewrite' => true, 'urlrule' => $this->GetPostType(0, 'list_date_urlrule'), 'urlrule_type' => 'date', 'parameters' => array(), 'must_parameters' => array('isrewrite', 'posttype'), 'haspage' => true));
+            //  添加 文章category列表 伪静路由
+            $this->RegRoute(array('type' => 'rewrite', 'name' => 'post_article_list_category', 'function' => 'ViewList', 'posttype' => 0, 'isrewrite' => true, 'urlrule' => $this->GetPostType(0, 'list_category_urlrule'), 'urlrule_type' => 'cate', 'parameters' => array(), 'must_parameters' => array('isrewrite', 'posttype'), 'haspage' => true));
+            //  添加 文章tag列表 伪静路由
+            $this->RegRoute(array('type' => 'rewrite', 'name' => 'post_article_list_tag', 'function' => 'ViewList', 'posttype' => 0, 'isrewrite' => true, 'urlrule' => $this->GetPostType(0, 'list_tag_urlrule'), 'urlrule_type' => 'tags', 'parameters' => array(), 'must_parameters' => array('isrewrite', 'posttype'), 'haspage' => true));
+            //  添加 文章author列表 伪静路由
+            $this->RegRoute(array('type' => 'rewrite', 'name' => 'post_article_list_author', 'function' => 'ViewList', 'posttype' => 0, 'isrewrite' => true, 'urlrule' => $this->GetPostType(0, 'list_author_urlrule'), 'urlrule_type' => 'auth', 'parameters' => array(), 'must_parameters' => array('isrewrite', 'posttype'), 'haspage' => true));
+
+            //  添加 页面页单页 伪静路由
+            $this->RegRoute(array('type' => 'rewrite', 'name' => 'post_page_single', 'function' => 'ViewPost', 'posttype' => 1, 'isrewrite' => true, 'urlrule' => $this->GetPostType(1, 'urlrule'), 'urlrule_type' => 'article', 'parameters' => array(), 'must_parameters' => array('isrewrite', 'posttype'), 'haspage' => false));
+        }
 
         $this->isinitialized = true;
 
