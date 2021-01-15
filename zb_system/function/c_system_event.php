@@ -597,14 +597,18 @@ function ViewSearch()
         }
     }
 
+    $canceldisplay = false;
     $q = trim(htmlspecialchars(GetVars('q', 'GET')));
     $page = GetVars('page', 'GET');
     $page = (int) $page == 0 ? 1 : (int) $page;
     $posttype = (int) GetVars('posttype', 'GET');
 
+    $w = array();
+    $w[] = array('=', 'log_Type', $posttype);
+
     $actions = $zbp->GetPostType($posttype, 'actions');
     if (!$zbp->CheckRights($actions['search'])) {
-        Redirect('./');
+        $w[] = array('=', 'log_ID', 0);
     }
 
     $article = new Post();
@@ -617,8 +621,6 @@ function ViewSearch()
         $article->Template = 'search';
     }
 
-    $w = array();
-    $w[] = array('=', 'log_Type', $posttype);
     if ($q) {
         $w[] = array('search', 'log_Content', 'log_Intro', 'log_Title', $q);
     } else {
@@ -692,7 +694,11 @@ function ViewSearch()
     $zbp->template->SetTags('comments', array());
     $zbp->template->SetTags('issearch', true);
     $zbp->template->SetTags('posttype', $posttype);
-    $zbp->template->SetTags('url', $pagebar->buttons[$pagebar->PageNow]);
+    if (is_object($pagebar) && isset($pagebar->buttons[$pagebar->PageNow])) {
+        $zbp->template->SetTags('url', $pagebar->buttons[$pagebar->PageNow]);
+    } else {
+        $zbp->template->SetTags('url', $zbp->host);
+    }
 
     //1.6新加设置，可以让搜索变为列表模式运行
     $zbp->template->SetTags('type', 'search'); //1.6统一改为search
@@ -713,7 +719,9 @@ function ViewSearch()
         }
     }
 
-    $zbp->template->Display();
+    if ($canceldisplay == false) {
+        $zbp->template->Display();
+    }
 
     return true;
 }
@@ -723,10 +731,10 @@ function ViewSearch()
 /**
  * ViewAuto的辅助函数
  */
-function ViewAuto_Check_Get_And_Not_Get($get, $notget)
+function ViewAuto_Check_Get_And_Not_Get_And_Must_Get($get, $notget, $mustget)
 {
     $b = false;
-    //检查GET参数是否存在
+    //检查GET参数是否存在(最少一个或多个存在) OR
     if (!empty($get)) {
         foreach ($get as $key => $value) {
             if (isset($_GET[$value])) {
@@ -737,13 +745,27 @@ function ViewAuto_Check_Get_And_Not_Get($get, $notget)
     } else {
         $b = true;
     }
-    //检查GET参数是否有不需要的存在
+    //检查GET参数是否有不需要的存在(全部不能存在) NOT
     if (!empty($notget)) {
         foreach ($notget as $key => $value) {
             if (isset($_GET[$value])) {
                 $b = false;
                 break;
             }
+        }
+    }
+    //检查GET参数是否有必须的存在(全部必存在) AND
+    if (!empty($mustget)) {
+        $c = array();
+        foreach ($mustget as $key => $value) {
+            if (isset($_GET[$value])) {
+                $c[] = true;
+            } else {
+                $c[] = false;
+            }
+        }
+        if (in_array(false, $c, true) == true) {
+            $b = false;
         }
     }
     return $b;
@@ -785,9 +807,9 @@ function ViewAuto($inpurl)
     //无GET参数时，首先进入默认路由
     if (($url == '' || $url == '/' || $url == 'index.php') && empty($_GET)) {
         foreach ($zbp->routes['default'] as $key => $route) {
-            $b = ViewAuto_Check_Get_And_Not_Get(GetValueInArray($route, 'get', array()), GetValueInArray($route, 'not_get', array()));
+            $b = ViewAuto_Check_Get_And_Not_Get_And_Must_Get(array(), array(), array());
             if ($b) {
-                $array = array();
+                $array = array('route' => $route);
                 if (isset($route['must_parameters']) && is_array($route['must_parameters'])) {
                     foreach ($route['must_parameters'] as $key => $value) {
                         if (isset($route[$value])) {
@@ -801,13 +823,15 @@ function ViewAuto($inpurl)
         }
     }
 
+    //匹配动态路由（在伪静下也匹配但不输出内容只做跳转用）
     if ($zbp->option['ZC_STATIC_MODE'] == 'ACTIVE' || $zbp->option['ZC_STATIC_MODE'] == 'REWRITE') {
         foreach ($zbp->routes['active'] as $key => $route) {
-            if (($url == $route['urlid'] . '') || ($url == $route['urlid'] . '/') || ($url == $route['urlid'] . '/index.php')) {
-                $b = ViewAuto_Check_Get_And_Not_Get($route['get'], $route['not_get']);
+            $urlid = GetValueInArray($route, 'urlid', ''); //urlid的作用是给某个post类型指定一个独立的目录提供访问，不必都挤在根目录下
+            if (($url == $urlid . '') || ($url == $urlid . '/') || ($url == $urlid . '/index.php')) {
+                $b = ViewAuto_Check_Get_And_Not_Get_And_Must_Get(GetValueInArray($route, 'get', array()), GetValueInArray($route, 'not_get', array()), GetValueInArray($route, 'must_get', array()));
                 //如果条件符合就组合参数数组并调用函数
                 if ($b) {
-                    $array = array();
+                    $array = array('route' => $route);
                     if (isset($route['parameters']) && is_array($route['parameters'])) {
                         foreach ($route['parameters'] as $key => $value) {
                             $array[$value] = GetVars($value, 'GET');
@@ -819,6 +843,11 @@ function ViewAuto($inpurl)
                                 $array[$value] = $route[$value];
                             }
                         }
+                    }
+                    if ($zbp->option['ZC_STATIC_MODE'] == 'REWRITE') {
+                        //伪静下传用参数
+                        $array['isrewrite'] = true;
+                        $array['canceldisplay'] = true;
                     }
                     $result = call_user_func($route['function'], $array);
                     if ($result == true) {
@@ -838,13 +867,23 @@ function ViewAuto($inpurl)
             //$hasPage 为真就执行2次，为假为执行1次
             $hasPage = (GetValueInArray($route, 'haspage', false) == true) ? array(0 => false, 1 => true) : array(0 => false);
             foreach ($hasPage as $hasPage_key => $hasPage_value) {
-                $b = ViewAuto_Check_Get_And_Not_Get(GetValueInArray($route, 'get', array()), GetValueInArray($route, 'not_get', array()));
-                $r = UrlRule::OutputUrlRegEx($route['urlrule'], $route['urlrule_type'], $hasPage_value);
+                $b = ViewAuto_Check_Get_And_Not_Get_And_Must_Get(GetValueInArray($route, 'get', array()), GetValueInArray($route, 'not_get', array()), GetValueInArray($route, 'must_get', array()));
+
+                //如果直接指定了$route['urlrule_regex']，就不调用UrlRule::OutputUrlRegEx，直接preg_match，那就不执行$hasPage_value = true的情况
+                if (isset($route['urlrule_regex']) && trim($route['urlrule_regex']) != '') {
+                    $r = $route['urlrule_regex'];
+                    if ($hasPage_value == true) {
+                        continue;
+                    }
+                } else {
+                    $r = UrlRule::OutputUrlRegEx($route['urlrule'], $route['urlrule_type'], $hasPage_value);
+                }
+
                 $m = array();
-                //var_dump($route['urlrule'], $r, $url);
                 //如果条件符合就组合参数数组并调用函数
                 if ($b && (($r == '' && $r == $url) || ($r <> '' && preg_match($r, $url, $m) == 1))) {
-                    $array = $m;
+                    $array = array('route' => $route);
+                    $array = array_merge($array, $m);
                     //var_dump($hasPage_value, $route['urlrule'], $r, $url, $m);die;
                     if (isset($route['parameters']) && is_array($route['parameters'])) {
                         foreach ($route['parameters'] as $key => $value) {
@@ -869,21 +908,12 @@ function ViewAuto($inpurl)
         }
     }
 
-    foreach ($GLOBALS['hooks']['Filter_Plugin_ViewAuto_End'] as $fpname => &$fpsignal) {
-        $fpreturn = $fpname($url);
-        if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
-            $fpsignal = PLUGIN_EXITSIGNAL_NONE;
-
-            return $fpreturn;
-        }
-    }
-
     //都不能匹配时，再进入一次默认路由
     if ($url == '' || $url == '/' || $url == 'index.php') {
         foreach ($zbp->routes['default'] as $key => $route) {
-            $b = ViewAuto_Check_Get_And_Not_Get(GetValueInArray($route, 'get', array()), GetValueInArray($route, 'not_get', array()));
+            $b = ViewAuto_Check_Get_And_Not_Get_And_Must_Get(GetValueInArray($route, 'get', array()), GetValueInArray($route, 'not_get', array()), GetValueInArray($route, 'must_get', array()));
             if ($b) {
-                $array = array();
+                $array = array('route' => $route);
                 if (isset($route['parameters']) && is_array($route['parameters'])) {
                     foreach ($route['parameters'] as $key => $value) {
                         $array[$value] = GetVars($value, 'GET');
@@ -902,6 +932,15 @@ function ViewAuto($inpurl)
         }
     }
 
+    foreach ($GLOBALS['hooks']['Filter_Plugin_ViewAuto_End'] as $fpname => &$fpsignal) {
+        $fpreturn = $fpname($url);
+        if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
+            $fpsignal = PLUGIN_EXITSIGNAL_NONE;
+
+            return $fpreturn;
+        }
+    }
+
     $zbp->ShowError(2, __FILE__, __LINE__);
 
     return false;
@@ -915,8 +954,8 @@ function ViewAuto($inpurl)
  * @param mixed $auth
  * @param mixed $date
  * @param mixed $tags      tags列表
- * @param bool  $isrewrite 是否启用urlrewrite
- * @param bool  $posttype   Posd表的类型
+ * @param bool  $canceldisplay 是否取消内容输出
+ * @param bool  $posttype   Post表的类型
  *
  * @api Filter_Plugin_ViewList_Begin
  * @api Filter_Plugin_ViewList_Template
@@ -925,22 +964,25 @@ function ViewAuto($inpurl)
  *
  * @return string
  */
-function ViewList($page = null, $cate = null, $auth = null, $date = null, $tags = null, $isrewrite = false, $posttype = 0)
+function ViewList($page = null, $cate = null, $auth = null, $date = null, $tags = null, $canceldisplay = false, $posttype = 0)
 {
     global $zbp;
 
     //修正首个参数使用array而不传入后续参数的情况
     if (is_array($page)) {
-        $fpargs = ($page);
+        $fpargs = $page;
         $cate = GetValueInArray($page, 'cate', null);
         $auth = GetValueInArray($page, 'auth', null);
         $date = GetValueInArray($page, 'date', null);
         $tags = GetValueInArray($page, 'tags', null);
-        $isrewrite = GetValueInArray($page, 'isrewrite', false);
+        $canceldisplay = GetValueInArray($page, 'canceldisplay', false);
         $posttype = GetValueInArray($page, 'posttype', 0);
+        $isrewrite = isset($page[0]) ? true : false;
+        $isrewrite = GetValueInArray($page, 'isrewrite', $isrewrite);
         $page = GetValueInArray($page, 'page', null);
     } else {
         $fpargs = call_user_func('func_get_args');
+        $isrewrite = false;
     }
 
     foreach ($GLOBALS['hooks']['Filter_Plugin_ViewList_Begin'] as $fpname => &$fpsignal) {
@@ -1272,7 +1314,11 @@ function ViewList($page = null, $cate = null, $auth = null, $date = null, $tags 
     $zbp->template->SetTags('category', $category);
 
     $zbp->template->SetTags('args', $fpargs);
-    $zbp->template->SetTags('url', $pagebar->buttons[$pagebar->PageNow]);
+    if (is_object($pagebar) && isset($pagebar->buttons[$pagebar->PageNow])) {
+        $zbp->template->SetTags('url', $pagebar->buttons[$pagebar->PageNow]);
+    } else {
+        $zbp->template->SetTags('url', $zbp->host);
+    }
 
     if ($zbp->template->hasTemplate($template)) {
         $zbp->template->SetTemplate($template);
@@ -1289,7 +1335,9 @@ function ViewList($page = null, $cate = null, $auth = null, $date = null, $tags 
         }
     }
 
-    $zbp->template->Display();
+    if ($canceldisplay == false) {
+        $zbp->template->Display();
+    }
 
     return true;
 }
@@ -1299,14 +1347,14 @@ function ViewList($page = null, $cate = null, $auth = null, $date = null, $tags 
  *
  * @param array|int|string $id         文章ID/ ID/别名对象 (1.7起做为主要array型参数，后续的都作废了)
  * @param string           $alias     （如果有的话）文章别名
- * @param bool             $isrewrite  是否启用urlrewrite
- * @param bool             $posttype   Posd表的类型
+ * @param bool             $canceldisplay  取消Display输出
+ * @param bool             $posttype   Post表的类型
  *
  * @throws Exception
  *
  * @return string
  */
-function ViewPost($id = null, $alias = null, $isrewrite = false, $posttype = 0)
+function ViewPost($id = null, $alias = null, $canceldisplay = false, $posttype = 0)
 {
     global $zbp;
 
@@ -1315,14 +1363,17 @@ function ViewPost($id = null, $alias = null, $isrewrite = false, $posttype = 0)
     if (is_array($id)) {
         $fpargs = array($id);
         $alias = GetValueInArray($id, 'alias', null);
-        $isrewrite = GetValueInArray($id, 'isrewrite', false);
+        $canceldisplay = GetValueInArray($id, 'canceldisplay', false);
         $posttype = GetValueInArray($id, 'posttype', 0);
         $object = $id;
+        $isrewrite = isset($object[0]) ? true : false;
+        $isrewrite = GetValueInArray($id, 'isrewrite', $isrewrite);
         $id = GetValueInArray($id, 'id', null);
     } else {
         $id = $id;
         $alias = $alias;
         $fpargs = call_user_func('func_get_args');
+        $isrewite = false;
     }
 
     foreach ($GLOBALS['hooks']['Filter_Plugin_ViewPost_Begin'] as $fpname => &$fpsignal) {
@@ -1492,7 +1543,9 @@ function ViewPost($id = null, $alias = null, $isrewrite = false, $posttype = 0)
         }
     }
 
-    $zbp->template->Display();
+    if ($canceldisplay == false) {
+        $zbp->template->Display();
+    }
 
     return true;
 }
@@ -3082,6 +3135,7 @@ function PostMember()
     // 然后，读入密码
     // 密码需要单独处理，因为拿不到用户Guid
     if (isset($data['Password'])) {
+        $data['Password'] = trim($data['Password']);
         if ($data['Password'] != '') {
             if (strlen($data['Password']) < $zbp->option['ZC_PASSWORD_MIN'] || strlen($data['Password']) > $zbp->option['ZC_PASSWORD_MAX']) {
                 $zbp->ShowError(54, __FILE__, __LINE__);
