@@ -59,7 +59,7 @@ $replace_array = array(
     '\'not_get\' =' => "//必须排除的\$_GET参数(可以为空数组)\r\n" . '\'not_get\' =',
     '\'must_get\' =' => "//必须包含的\$_GET参数(可以为空数组)\r\n" . '\'get\' =',
     '\'parameters\' =' => "//传给函数的参数(从\$_GET获取值)\r\n" . '\'parameters\' =',
-    '\'must_parameters\' =' => "//固定传的函数参数(从本条路由规则的值中获取)\r\n" . '\'must_parameters\' =',
+    '\'must_parameters\' =' => "//固定传的函数参数(先从\$_GET取值再从本条路由规则中取值并覆盖)\r\n" . '\'must_parameters\' =',
     '\'urlrule\' =' => "//伪静路由的原始规则\r\n" . '\'urlrule\' =',
     '\'urlrule_type\' =' => "//让UrlRule类翻译原始规则的参数\r\n" . '\'urlrule_type\' =',
     '\'urlrule_regex\' =' => "//如果指定了urlrule_regex就忽略编译原始规则\r\n" . '\'urlrule_regex\' =',
