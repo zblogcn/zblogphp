@@ -151,6 +151,13 @@ class Category extends Base
                 return $zbp->categories_all[$this->ParentID];
             }
         }
+        if ($name == 'Root') {
+            if ($this->RootID == 0) {
+                return;
+            } else {
+                return $zbp->categories_all[$this->RootID];
+            }
+        }
         if ($name == 'Template') {
             $value = $this->data[$name];
             if ($value == '') {

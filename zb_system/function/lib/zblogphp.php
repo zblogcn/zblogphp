@@ -814,7 +814,12 @@ class ZBlogPHP
             $this->RegRoute(array('type' => 'rewrite', 'name' => 'rewrite_post_article_list_author', 'function' => 'ViewList', 'posttype' => 0, 'urlrule' => $this->GetPostType(0, 'list_author_urlrule'), 'urlrule_type' => 'auth', 'parameters' => array(), 'must_parameters' => array('posttype'), 'haspage' => true));
 
             //  添加 页面页单页 伪静路由
-            $this->RegRoute(array('type' => 'rewrite', 'name' => 'rewrite_post_page_single', 'function' => 'ViewPost', 'posttype' => 1, 'urlrule' => $this->GetPostType(1, 'urlrule'), 'urlrule_type' => 'article', 'parameters' => array(), 'must_parameters' => array('posttype'), 'haspage' => false));
+            $this->RegRoute(array('type' => 'rewrite', 'name' => 'rewrite_post_page_single', 'function' => 'ViewPost', 'posttype' => 1, 'urlrule' => $this->GetPostType(1, 'urlrule'), 'urlrule_type' => 'page', 'parameters' => array(), 'must_parameters' => array('posttype'), 'haspage' => false));
+
+
+            //  这是一个例子： 文章搜索的伪静路由的实现 1设定原始规则 2注册伪静路由
+            //$this->posttype[0]['search_urlrule'] = '{%host%}search/{%search%}_{%page%}.html';
+            //$this->RegRoute(array('type' => 'rewrite', 'name' => 'rewrite_post_article_search', 'function' => 'ViewSearch', 'posttype' => 0, 'urlrule' => $this->GetPostType(0, 'search_urlrule'), 'urlrule_type' => 'search', 'parameters' => array(), 'must_parameters' => array('posttype'), 'haspage' => true));
         }
 
         $this->isinitialized = true;

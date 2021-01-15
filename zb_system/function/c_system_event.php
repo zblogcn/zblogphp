@@ -577,6 +577,8 @@ function ViewFeed()
 /**
  * 展示搜索结果.
  *
+ * @param array $args 数组参数
+ *
  * @api Filter_Plugin_ViewSearch_Begin
  * @api Filter_Plugin_ViewPost_Template
  *
@@ -584,12 +586,31 @@ function ViewFeed()
  *
  * @return mixed
  */
-function ViewSearch()
+function ViewSearch($args = null)
 {
     global $zbp;
 
+    $q = GetVars('q', 'GET');
+    $page = GetVars('page', 'GET');
+
+    if (is_array($args)) {
+        $fpargs = $args;
+        $canceldisplay = GetValueInArray($args, 'canceldisplay', false);
+        $posttype = GetValueInArray($args, 'posttype', 0);
+        $q = GetValueInArray($args, 'search', '');
+        $page = GetValueInArray($args, 'page', 0);
+        $isrewrite = isset($args[0]) ? true : false;
+        $isrewrite = GetValueInArray($args, 'isrewrite', $isrewrite);
+    } else {
+        $canceldisplay = false;
+        $posttype = 0;
+        $fpargs = call_user_func('func_get_args');
+    }
+    $q = trim(htmlspecialchars($q));
+    $page = (int) $page == 0 ? 1 : (int) $page;
+
     foreach ($GLOBALS['hooks']['Filter_Plugin_ViewSearch_Begin'] as $fpname => &$fpsignal) {
-        $fpreturn = $fpname();
+        $fpreturn = $fpname($fpargs);
         if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
             $fpsignal = PLUGIN_EXITSIGNAL_NONE;
 
@@ -597,15 +618,10 @@ function ViewSearch()
         }
     }
 
-    $canceldisplay = false;
-    $q = trim(htmlspecialchars(GetVars('q', 'GET')));
-    $page = GetVars('page', 'GET');
-    $page = (int) $page == 0 ? 1 : (int) $page;
-    $posttype = (int) GetVars('posttype', 'GET');
-
     $w = array();
     $w[] = array('=', 'log_Type', $posttype);
 
+    //没有权限就搜索空的
     $actions = $zbp->GetPostType($posttype, 'actions');
     if (!$zbp->CheckRights($actions['search'])) {
         $w[] = array('=', 'log_ID', 0);
@@ -632,12 +648,13 @@ function ViewSearch()
     }
     $order = array('log_PostTime' => 'DESC');
 
-    $pagebar = new Pagebar($zbp->option['ZC_SEARCH_REGEX'], true);
+    $pagebar = new Pagebar($zbp->GetPostType($posttype, 'search_urlrule'), true);
     $pagebar->PageCount = $zbp->searchcount;
     $pagebar->PageNow = $page;
     $pagebar->PageBarCount = $zbp->pagebarcount;
     $pagebar->UrlRule->Rules['{%page%}'] = $page;
     $pagebar->UrlRule->Rules['{%q%}'] = rawurlencode($q);
+    $pagebar->UrlRule->Rules['{%search%}'] = rawurlencode($q);
 
     foreach ($GLOBALS['hooks']['Filter_Plugin_ViewSearch_Core'] as $fpname => &$fpsignal) {
         $fpname($q, $page, $w, $pagebar, $order);
@@ -658,7 +675,7 @@ function ViewSearch()
         $r->LoadInfoByDataArray($a->GetData());
         $article->Content .= '<p><a href="' . $a->Url . '">' . str_replace($q, '<strong>' . $q . '</strong>', $a->Title) . '</a><br/>';
         $s = strip_tags($a->Intro) . ' ' . strip_tags($a->Content);
-        $i = Zbp_Strpos($s, $q, 0);
+        $i = Zbp_Stripos($s, $q, 0);
         if ($i !== false) {
             if ($i > 50) {
                 $t = SubStrUTF8_Start($s, ($i - 50), 100);
@@ -688,6 +705,7 @@ function ViewSearch()
     $zbp->header .= '    <meta name="robots" content="noindex,nofollow,noarchive" />' . "\r\n";
     $zbp->template->SetTags('title', str_replace(array('<span>', '</span>'), '', $article->Title));
     $zbp->template->SetTags('article', $article);
+    $zbp->template->SetTags('articles', $results);
     $zbp->template->SetTags('search', $q);
     $zbp->template->SetTags('page', $page);
     $zbp->template->SetTags('pagebar', $pagebar);
@@ -700,10 +718,9 @@ function ViewSearch()
         $zbp->template->SetTags('url', $zbp->host);
     }
 
-    //1.6新加设置，可以让搜索变为列表模式运行
-    $zbp->template->SetTags('type', 'search'); //1.6统一改为search
+    //1.6统一改为search模式
+    $zbp->template->SetTags('type', 'search');
     //1.7强制指定搜索模板为优先为search或是index
-    $zbp->template->SetTags('articles', $results);
     if ($zbp->template->HasTemplate($zbp->GetPostType($posttype, 'search_template'))) {
         $zbp->template->SetTemplate($zbp->GetPostType($posttype, 'search_template'));
     } else {
@@ -889,7 +906,7 @@ function ViewAuto($inpurl)
             if ($b && (($r == '' && $r == $url) || ($r <> '' && preg_match($r, $url, $m) == 1))) {
                 $array = array('route' => $route);
                 $array = array_merge($array, $m);
-                //var_dump($hasPage_value, $route['urlrule'], $r, $url, $m);die;
+                //var_dump($hasPage_value, $route['urlrule'], $r, $url, $m);//die;
                 if (isset($route['parameters']) && is_array($route['parameters'])) {
                     foreach ($route['parameters'] as $key => $value) {
                         $array[$value] = GetVars($value, 'GET');

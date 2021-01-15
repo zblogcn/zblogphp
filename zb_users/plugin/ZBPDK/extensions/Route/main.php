@@ -54,7 +54,7 @@ $replace_array = array(
     '\'name\' =' => "//路由名称(同类型下不可重复，否则会覆盖)\r\n" . '\'name\' =',
     '\'function\' =' => "//路由调用的函数\r\n" . '\'function\' =',
     '\'posttype\' =' => "//Post类型(文章为0，页面为1，以此类推)\r\n" . '\'posttype\' =',
-    '\'urlid\' =' => "//urlid一般没用处也没有指定(只在active模式下有用处)，如指定的话，\r\n可以让不同Post类型在不同的urlid目录下被访问到而不是全挤在根目录下接受访问\r\n" . '\'urlid\' =',
+    '\'urlid\' =' => "//urlid一般没用处也没有指定(只在active模式下有用处)，如指定的话，\r\n//可以让不同Post类型在不同的urlid目录下被访问到而不是全挤在根目录下接受访问\r\n" . '\'urlid\' =',
     '\'get\' =' => "//只要有一个就可以匹配到本规则的\$_GET参数(可以为空数组即不指定参数)\r\n" . '\'get\' =',
     '\'not_get\' =' => "//必须排除的\$_GET参数(可以为空数组)\r\n" . '\'not_get\' =',
     '\'must_get\' =' => "//必须包含的\$_GET参数(可以为空数组)\r\n" . '\'get\' =',
@@ -67,7 +67,7 @@ $replace_array = array(
 );
 
 foreach ($defined_route as $route_type => $route_note) {
-    echo '<table class="tableFull tableBorder table_striped table_hover" id="tbdefault"><tbody><tr><th>'.$route_note.'</th></tr>';
+    echo '<table class="tableFull tableBorder table_striped table_hover"><tbody><tr><th>'.$route_note.'</th></tr>';
     foreach ($zbp->routes[$route_type] as $key => $value) {
         echo '<tr><td title="点击查看详细信息" style="cursor:pointer;" onclick="$(this).find(\'div\').toggle();">'.$value['name'].' => ' . $value['function'] . '(';
         $s = '';
@@ -93,21 +93,6 @@ foreach ($defined_route as $route_type => $route_note) {
   </div>
 </div>
 <script type="text/javascript">
-$(document).ready(function() {
-    $('#list').html(write_list('filter'));
-    $("#form1").bind("submit",function(){
-        $("#result").html("Waiting...");
-        $.post(
-            "main.php?act=interface",
-            {"interface":$("#interface").val()},
-            function(data)
-            {
-                $("#result").html(data);
-                bmx2table();
-            }
-        );
-    })
-});
 
 ActiveTopMenu('zbpdk');
 AddHeaderIcon("<?php echo $bloghost . 'zb_users/plugin/ZBPDK/logo.png'; ?>");
