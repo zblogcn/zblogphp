@@ -812,6 +812,9 @@ function ViewAuto($inpurl)
                 $array = array('route' => $route);
                 if (isset($route['must_parameters']) && is_array($route['must_parameters'])) {
                     foreach ($route['must_parameters'] as $key => $value) {
+                        if (isset($_GET[$value])) {
+                            $array[$value] = $_GET[$value];
+                        }
                         if (isset($route[$value])) {
                             $array[$value] = $route[$value];
                         }
@@ -838,6 +841,9 @@ function ViewAuto($inpurl)
                 }
                 if (isset($route['must_parameters']) && is_array($route['must_parameters'])) {
                     foreach ($route['must_parameters'] as $key => $value) {
+                        if (isset($_GET[$value])) {
+                            $array[$value] = $_GET[$value];
+                        }
                         if (isset($route[$value])) {
                             $array[$value] = $route[$value];
                         }
@@ -891,6 +897,9 @@ function ViewAuto($inpurl)
                 }
                 if (isset($route['must_parameters']) && is_array($route['must_parameters'])) {
                     foreach ($route['must_parameters'] as $key => $value) {
+                        if (isset($_GET[$value])) {
+                            $array[$value] = $_GET[$value];
+                        }
                         if (isset($route[$value])) {
                             $array[$value] = $route[$value];
                         }
@@ -920,6 +929,9 @@ function ViewAuto($inpurl)
                 }
                 if (isset($route['must_parameters']) && is_array($route['must_parameters'])) {
                     foreach ($route['must_parameters'] as $key => $value) {
+                        if (isset($_GET[$value])) {
+                            $array[$value] = $_GET[$value];
+                        }
                         if (isset($route[$value])) {
                             $array[$value] = $route[$value];
                         }
