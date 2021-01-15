@@ -824,89 +824,88 @@ function ViewAuto($inpurl)
     }
 
     //匹配动态路由（在伪静下也匹配但不输出内容只做跳转用）
-    if ($zbp->option['ZC_STATIC_MODE'] == 'ACTIVE' || $zbp->option['ZC_STATIC_MODE'] == 'REWRITE') {
-        foreach ($zbp->routes['active'] as $key => $route) {
-            $urlid = GetValueInArray($route, 'urlid', ''); //urlid的作用是给某个post类型指定一个独立的目录提供访问，不必都挤在根目录下
-            if (($url == $urlid . '') || ($url == $urlid . '/') || ($url == $urlid . '/index.php')) {
-                $b = ViewAuto_Check_Get_And_Not_Get_And_Must_Get(GetValueInArray($route, 'get', array()), GetValueInArray($route, 'not_get', array()), GetValueInArray($route, 'must_get', array()));
-                //如果条件符合就组合参数数组并调用函数
-                if ($b) {
-                    $array = array('route' => $route);
-                    if (isset($route['parameters']) && is_array($route['parameters'])) {
-                        foreach ($route['parameters'] as $key => $value) {
-                            $array[$value] = GetVars($value, 'GET');
+    foreach ($zbp->routes['active'] as $key => $route) {
+        $urlid = GetValueInArray($route, 'urlid', ''); //urlid的作用是给某个post类型指定一个独立的目录提供访问，不必都挤在根目录下
+        if (($url == $urlid . '') || ($url == $urlid . '/') || ($url == $urlid . '/index.php')) {
+            $b = ViewAuto_Check_Get_And_Not_Get_And_Must_Get(GetValueInArray($route, 'get', array()), GetValueInArray($route, 'not_get', array()), GetValueInArray($route, 'must_get', array()));
+            //如果条件符合就组合参数数组并调用函数
+            if ($b) {
+                $array = array('route' => $route);
+                if (isset($route['parameters']) && is_array($route['parameters'])) {
+                    foreach ($route['parameters'] as $key => $value) {
+                        $array[$value] = GetVars($value, 'GET');
+                    }
+                }
+                if (isset($route['must_parameters']) && is_array($route['must_parameters'])) {
+                    foreach ($route['must_parameters'] as $key => $value) {
+                        if (isset($route[$value])) {
+                            $array[$value] = $route[$value];
                         }
                     }
-                    if (isset($route['must_parameters']) && is_array($route['must_parameters'])) {
-                        foreach ($route['must_parameters'] as $key => $value) {
-                            if (isset($route[$value])) {
-                                $array[$value] = $route[$value];
-                            }
-                        }
-                    }
+                }
+                if ($zbp->option['ZC_STATIC_MODE'] == 'REWRITE') {
+                    //伪静下传用参数
+                    $array['isrewrite'] = true;
+                    $array['canceldisplay'] = true;
+                }
+                $result = call_user_func($route['function'], $array);
+                if ($result == true) {
+                    $template = &$zbp->template;
                     if ($zbp->option['ZC_STATIC_MODE'] == 'REWRITE') {
-                        //伪静下传用参数
-                        $array['isrewrite'] = true;
-                        $array['canceldisplay'] = true;
+                        Redirect($template->GetTags('url'));
                     }
-                    $result = call_user_func($route['function'], $array);
-                    if ($result == true) {
-                        $template = &$zbp->template;
-                        if ($zbp->option['ZC_STATIC_MODE'] == 'REWRITE') {
-                            Redirect($template->GetTags('url'));
-                        }
-                        return;
-                    }
-                }
-            }
-        }
-    }
-
-    if ($zbp->option['ZC_STATIC_MODE'] == 'REWRITE') {
-        foreach ($zbp->routes['rewrite'] as $key => $route) {
-            //$hasPage 为真就执行2次，为假为执行1次
-            $hasPage = (GetValueInArray($route, 'haspage', false) == true) ? array(0 => false, 1 => true) : array(0 => false);
-            foreach ($hasPage as $hasPage_key => $hasPage_value) {
-                $b = ViewAuto_Check_Get_And_Not_Get_And_Must_Get(GetValueInArray($route, 'get', array()), GetValueInArray($route, 'not_get', array()), GetValueInArray($route, 'must_get', array()));
-
-                //如果直接指定了$route['urlrule_regex']，就不调用UrlRule::OutputUrlRegEx，直接preg_match，那就不执行$hasPage_value = true的情况
-                if (isset($route['urlrule_regex']) && trim($route['urlrule_regex']) != '') {
-                    $r = $route['urlrule_regex'];
-                    if ($hasPage_value == true) {
-                        continue;
-                    }
-                } else {
-                    $r = UrlRule::OutputUrlRegEx($route['urlrule'], $route['urlrule_type'], $hasPage_value);
-                }
-
-                $m = array();
-                //如果条件符合就组合参数数组并调用函数
-                if ($b && (($r == '' && $r == $url) || ($r <> '' && preg_match($r, $url, $m) == 1))) {
-                    $array = array('route' => $route);
-                    $array = array_merge($array, $m);
-                    //var_dump($hasPage_value, $route['urlrule'], $r, $url, $m);die;
-                    if (isset($route['parameters']) && is_array($route['parameters'])) {
-                        foreach ($route['parameters'] as $key => $value) {
-                            $array[$value] = GetVars($value, 'GET');
-                        }
-                    }
-                    if (isset($route['must_parameters']) && is_array($route['must_parameters'])) {
-                        foreach ($route['must_parameters'] as $key => $value) {
-                            if (isset($route[$value])) {
-                                $array[$value] = $route[$value];
-                            }
-                        }
-                    }
-                    $result = call_user_func($route['function'], $array);
-                    if ($result == false) {
-                        $zbp->ShowError(2, __FILE__, __LINE__);
-                    }
-
                     return;
                 }
             }
         }
     }
+
+
+    //匹配伪静路由
+    foreach ($zbp->routes['rewrite'] as $key => $route) {
+        //$hasPage 为真就执行2次，为假为执行1次
+        $hasPage = (GetValueInArray($route, 'haspage', false) == true) ? array(0 => false, 1 => true) : array(0 => false);
+        foreach ($hasPage as $hasPage_key => $hasPage_value) {
+            $b = ViewAuto_Check_Get_And_Not_Get_And_Must_Get(GetValueInArray($route, 'get', array()), GetValueInArray($route, 'not_get', array()), GetValueInArray($route, 'must_get', array()));
+
+            //如果直接指定了$route['urlrule_regex']，就不调用UrlRule::OutputUrlRegEx，直接preg_match，那就不执行$hasPage_value = true的情况
+            if (isset($route['urlrule_regex']) && trim($route['urlrule_regex']) != '') {
+                $r = $route['urlrule_regex'];
+                if ($hasPage_value == true) {
+                    continue;
+                }
+            } else {
+                $r = UrlRule::OutputUrlRegEx($route['urlrule'], $route['urlrule_type'], $hasPage_value);
+            }
+
+            $m = array();
+            //如果条件符合就组合参数数组并调用函数
+            if ($b && (($r == '' && $r == $url) || ($r <> '' && preg_match($r, $url, $m) == 1))) {
+                $array = array('route' => $route);
+                $array = array_merge($array, $m);
+                //var_dump($hasPage_value, $route['urlrule'], $r, $url, $m);die;
+                if (isset($route['parameters']) && is_array($route['parameters'])) {
+                    foreach ($route['parameters'] as $key => $value) {
+                        $array[$value] = GetVars($value, 'GET');
+                    }
+                }
+                if (isset($route['must_parameters']) && is_array($route['must_parameters'])) {
+                    foreach ($route['must_parameters'] as $key => $value) {
+                        if (isset($route[$value])) {
+                            $array[$value] = $route[$value];
+                        }
+                    }
+                }
+                $result = call_user_func($route['function'], $array);
+                if ($result == false) {
+                    $zbp->ShowError(2, __FILE__, __LINE__);
+                }
+
+                return;
+            }
+        }
+    }
+
 
     //都不能匹配时，再进入一次默认路由
     if ($url == '' || $url == '/' || $url == 'index.php') {
