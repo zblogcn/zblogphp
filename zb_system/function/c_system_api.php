@@ -1,0 +1,467 @@
+<?php
+/**
+ * API相关函数.
+ */
+
+if (!defined('ZBP_PATH')) {
+    exit('Access denied');
+}
+
+
+//###############################################################################################################
+
+/**
+ * API TokenVerify
+ */
+function ApiTokenVerify()
+{
+    global $zbp;
+
+    if (!(is_subclass_of($zbp->user, 'BaseMember') && $zbp->user->Level > 0 && !empty($zbp->user->ID))) {
+        // 在 API 中
+        if (($auth = GetVars('HTTP_AUTHORIZATION', 'SERVER')) && (substr($auth, 0, 7) === 'Bearer ')) {
+            // 获取 Authorization 头
+            $api_token = substr($auth, 7);
+        } else {
+            // 获取（POST 或 GET 中的）请求参数
+            $api_token = GetVars('token');
+        }
+
+        $user = $zbp->VerifyAPIToken($api_token);
+
+        if ($user != null) {
+            define('ZBP_IN_API_VERIFYBYTOKEN', true);
+            $zbp->user = $user;
+        }
+    }
+}
+
+/**
+ * API 报错函数
+ */
+function ApiDebugDisplay($error)
+{
+    ApiResponse(null, $error);
+}
+
+/**
+ * 载入 API Mods.
+ */
+function ApiLoadMods(&$mods)
+{
+    global $zbp;
+
+    foreach ($GLOBALS['hooks']['Filter_Plugin_API_Extend_Mods'] as $fpname => &$fpsignal) {
+        $add_mods = $fpname();
+
+        if (!is_array($add_mods)) {
+            continue;
+        }
+
+        foreach ($add_mods as $mod => $file) {
+            $mod = strtolower($mod);
+            if (array_key_exists($mod, $mods)) {
+                continue;
+            }
+    
+            $mods[$mod] = $file;
+        }
+    }
+
+    // 从 zb_system/api/ 目录中载入 mods
+    foreach (GetFilesInDir(ZBP_PATH . 'zb_system/api/', 'php') as $mod => $file) {
+        $mods[$mod] = $file;
+    }
+}
+
+/**
+ * API 响应.
+ *
+ * @param array|null $data
+ * @param ZBlogException|null $error
+ * @param int $code
+ * @param string|null $message
+ */
+function ApiResponse($data = null, $error = null, $code = 200, $message = null)
+{
+    if (!empty($error)) {
+        $error_info = array(
+            'code' => ZBlogException::$error_id,
+            'type' => $error->type,
+            'message' => $error->message,
+        );
+
+        if ($GLOBALS['option']['ZC_DEBUG_MODE']) {
+            $error_info['message_full'] = $error->messagefull;
+            $error_info['file'] = $error->file;
+            $error_info['line'] = $error->line;
+        }
+
+        if ($code === 200) {
+            $code = 500;
+        }
+        if (empty($message)) {
+            $message = 'System error: ' . $error->message;
+        }
+    }
+
+    $response = array(
+        'code' => $code,
+        'message' => !empty($message) ? $message : 'OK',
+        'data' => $data,
+        'error' => empty($error) ? null : $error_info,
+    );
+
+    // 显示 Runtime 调试信息
+    if (!defined('ZBP_API_IN_TEST') && $GLOBALS['option']['ZC_RUNINFO_DISPLAY']) {
+        $runtime = RunTime(false);
+        $runtime = array_slice($runtime, 0, 3);
+        $response['runtime'] = $runtime;
+    }
+
+    foreach ($GLOBALS['hooks']['Filter_Plugin_API_Response'] as $fpname => &$fpsignal) {
+        $fpname($response);
+    }
+
+    if (!defined('ZBP_API_IN_TEST')) {
+        ob_end_clean();
+        if (!headers_sent()) {
+            header('Content-Type: application/json; charset=utf-8');
+            if (!empty($error)) {
+                SetHttpStatusCode(500);
+            } else {
+                SetHttpStatusCode(200);
+            }
+        }
+    }
+
+    echo JsonEncode($response);
+
+    if (empty($error) && $code !== 200) {
+        // 如果 code 不为 200，又不是系统抛出的错误，再来抛出一个 Exception，适配 phpunit
+        ZBlogException::SuspendErrorHook();
+        throw new Exception($message, $code);
+    }
+
+    die;
+}
+
+/**
+ * API 检测权限.
+ *
+ * @param bool $loginRequire
+ * @param string $action
+ */
+function ApiCheckAuth($loginRequire = false, $action = 'view')
+{
+    // 登录认证
+    if ($loginRequire && !$GLOBALS['zbp']->user->ID) {
+        ApiResponse(null, null, 401, $GLOBALS['lang']['error']['6']);
+    }
+
+    // 权限认证
+    if (!empty($action) && !$GLOBALS['zbp']->CheckRights($action)) {
+        ApiResponse(null, null, 403, $GLOBALS['lang']['error']['6']);
+    }
+
+    return true;
+}
+
+/**
+ * API 获取指定属性的Array
+ *
+ * @param object $object
+ * @param array $other_props 追加的属性
+ * @param array $remove_props 要删除的属性
+ * @param array $with_relations 要追加的关联对象
+ */
+function ApiGetObjectArray($object, $other_props = array(), $remove_props = array(), $with_relations = array())
+{
+    $array = $object->GetData();
+    unset($array['Meta']);
+
+    foreach ($GLOBALS['hooks']['Filter_Plugin_API_Get_Object_Array'] as $fpname => &$fpsignal) {
+        $fpname($object, $array, $other_props, $remove_props, $with_relations);
+    }
+
+    foreach ($other_props as $key => $value) {
+        $array[$value] = $object->$value;
+    }
+    switch (get_class($object)) {
+        case 'Member':
+            $remove_props[] = 'Guid';
+            $remove_props[] = 'Password';
+            $remove_props[] = 'IP';
+            break;
+        default:
+            # code...
+            break;
+    }
+
+    foreach ($remove_props as $key => $value) {
+        unset($array[$value]);
+    }
+    foreach ($with_relations as $relation => $info) {
+        $relation_obj = $object->$relation;
+        if (is_array($relation_obj)) {
+            $array[$relation] = ApiGetObjectArrayList(
+                $relation_obj,
+                isset($info['other_props']) ? $info['other_props'] : array(),
+                isset($info['remove_props']) ? $info['remove_props'] : array(),
+                isset($info['with_relations']) ? $info['with_relations'] : array()
+            );
+        } else {
+            $array[$relation] = ApiGetObjectArray(
+                $relation_obj,
+                isset($info['other_props']) ? $info['other_props'] : array(),
+                isset($info['remove_props']) ? $info['remove_props'] : array(),
+                isset($info['with_relations']) ? $info['with_relations'] : array()
+            );
+        }
+    }
+    return $array;
+}
+
+/**
+ * API 获取指定属性的Array 列表.
+ *
+ * @param array $list
+ * @param array $other_props 追加的属性
+ * @param array $remove_props 要删除的属性
+ * @param array $with_relations 要追加的关联对象
+ */
+function ApiGetObjectArrayList($list, $other_props = array(), $remove_props = array(), $with_relations = array())
+{
+    global $zbp;
+
+    if (array_key_exists('Author', $with_relations)) {
+        $zbp->LoadMembersInList($list);
+    }
+
+    foreach ($list as &$object) {
+        $object = ApiGetObjectArray($object, $other_props, $remove_props, $with_relations);
+    }
+
+    return $list;
+}
+
+/**
+ * API 获取约束过滤条件
+ * 将请求中的参数转换为 SQL LIMIT/ORDER 查询条件.
+ *
+ * @param int $limitDefault 默认记录数
+ * @param array $sortableColumns sortby 对应的模块数据表中支持排序的属性
+ * @return array
+ */
+function ApiGetRequestFilter($limitDefault = 10, $sortableColumns = array())
+{
+    $condition = array(
+        'limit' => array(0, $limitDefault),
+        'order' => null,
+        'option' => null,
+    );
+    $sortBy = strtolower((string) GetVars('sortby'));
+    $order = strtoupper((string) GetVars('order'));
+    $limit = (int) GetVars('limit');
+    $offset = (int) GetVars('offset');
+    $pageNow = (int) GetVars('pagenow');
+    $perPage = (int) GetVars('perpage');
+    if ($perPage === 0) {
+        $perPage = $limitDefault;
+    }
+
+    // 排序顺序
+    if (!empty($sortBy) && isset($sortableColumns[$sortBy])) {
+        $condition['order'] = array($sortableColumns[$sortBy] => 'ASC');
+    }
+    if (!is_null($condition['order']) && $order == 'DESC') {
+        $condition['order'][$sortableColumns[$sortBy]] = $order;
+    }
+
+    if ($perPage) {
+        $p = new Pagebar(null, false); // 第一个参数为 null，不需要分页 Url 处理
+        $p->PageNow = (int) $pageNow == 0 ? 1 : (int) $pageNow;
+        $p->PageCount = $perPage;
+        $limit = array(($p->PageNow - 1) * $p->PageCount, $p->PageCount);
+        $op = array('pagebar' => &$p);
+
+        $condition['limit'] = $limit;
+        $condition['option'] = $op;
+    }
+
+    foreach ($GLOBALS['hooks']['Filter_Plugin_API_Get_Request_Filter'] as $fpname => &$fpsignal) {
+        $fpname($condition);
+    }
+    return $condition;
+}
+
+/**
+ * 获取分页信息.
+ *
+ * @param array|null $option
+ * @return array
+ */
+function ApiGetPagebarInfo($option = null)
+{
+    if ($option === null) {
+        // 用 stdClass 而不用 array() ，为了为空时 json 显示 {} 而不是 []
+        return new stdClass;
+    }
+
+    $info = array();
+    $pagebar = &$option['pagebar'];
+
+    //$info['Count'] = $pagebar->Count;
+    $info['AllCount'] = $pagebar->AllCount;
+    $info['CurrentCount'] = $pagebar->CurrentCount;
+    //$info['PageBarCount'] = $pagebar->PageBarCount;
+    //$info['PageCount'] = $pagebar->PageCount;
+    $info['PrePageCount'] = $pagebar->PrePageCount;
+    $info['PageAll'] = $pagebar->PageAll;
+    $info['PageNow'] = $pagebar->PageNow;
+    $info['PageCurrent'] = $pagebar->PageCurrent;
+    $info['PageFirst'] = $pagebar->PageFirst;
+    $info['PageLast'] = $pagebar->PageLast;
+    $info['PagePrevious'] = $pagebar->PagePrevious;
+    $info['PageNext'] = $pagebar->PageNext;
+
+    foreach ($GLOBALS['hooks']['Filter_Plugin_API_Get_Pagination_Info'] as $fpname => &$fpsignal) {
+        $fpname($info, $pagebar);
+    }
+    return $info;
+}
+
+/**
+ * API 获取及过滤关联对象请求.
+ *
+ * @param array $info 传入到 ApiGetObjectArray 的关联信息
+ * @return array
+ */
+function ApiGetAndFilterRelationQuery($info)
+{
+    $relations_req = trim(GetVars('with_relations'));
+
+    if (empty($relations_req)) {
+        return array();
+    }
+
+    $relations = explode(',', $relations_req);
+    $ret_relations = array();
+
+    foreach ($relations as $relation) {
+        $relation = trim($relation);
+        if (array_key_exists($relation, $info)) {
+            $ret_relations[$relation] = $info[$relation];
+        }
+    }
+
+    return $ret_relations;
+}
+
+/**
+ * API 传统登录时的 CSRF 验证.
+ */
+function ApiVerifyCSRF()
+{
+    global $zbp;
+
+    if (! defined('ZBP_IN_API_VERIFYBYTOKEN')) {
+        $csrftoken = GetVars('csrf_token');
+
+        if (! $zbp->VerifyCSRFToken($csrftoken, 'api')) {
+            ApiResponse(null, null, 419, $GLOBALS['lang']['error']['5']);
+        }
+    }
+}
+
+/**
+ * API 载入 POST 数据（前端 JSON）.
+ */
+function ApiLoadPostData()
+{
+    $input = file_get_contents('php://input');
+    if ($input && ($data = json_decode($input, true)) && is_array($data)) {
+        $_POST = array_merge($data, $_POST);
+    }
+}
+
+/**
+ * API 派发.
+ *
+ * @param array       $mods
+ * @param string      $mod
+ * @param string|null $act
+ */
+function ApiDispatch($mods, $mod, $act)
+{
+    if (empty($act)) {
+        $act = 'get';
+    }
+
+    if (isset($mods[$mod]) && file_exists($mod_file = $mods[$mod])) {
+        include_once $mod_file;
+        $func = 'api_' . $mod . '_' . $act;
+        if (function_exists($func)) {
+            $result = call_user_func($func);
+    
+            ApiResponse(
+                isset($result['data']) ? $result['data'] : null,
+                isset($result['error']) ? $result['error'] : null,
+                isset($result['code']) ? $result['code'] : 200,
+                isset($result['message']) ? $result['message'] : 'OK'
+            );
+        }
+    }
+    
+    ApiResponse(null, null, 404, $GLOBALS['lang']['error']['96']);
+}
+
+function ApiThrottle($name = 'default', $max_reqs = 5, $period = 60)
+{
+    global $zbpcache;
+
+    if (!isset($zbpcache)) {
+        return;
+    }
+
+    $user_id = md5(GetGuestIP());
+
+    $cache_key = "api-throttle:$name:$user_id";
+    $cached_value = $zbpcache->Get($cache_key);
+    $cached_req = json_decode($cached_value, true);
+    if (!$cached_value || !$cached_req || (time() >= $cached_req['expire_time'])) {
+        $cached_req = array('hits' => 0, 'expire_time' => (time() + $period));
+    }
+
+    if ($cached_req['hits'] >= $max_reqs) {
+        ApiResponse(null, null, 429, 'Too many requests.');
+    }
+
+    $cached_req['hits']++;
+    $zbpcache->Set($cache_key, json_encode($cached_req), ($cached_req['expire_time'] - time()));
+}
+
+/**
+ * API 地址生成.
+ *
+ * @param string $mod
+ * @param string $act
+ * @param array  $query
+ *
+ * @return string
+ */
+function ApiUrlGenerate($mod, $act = 'get', $query = array())
+{
+    global $zbp;
+
+    $mod = strtolower($mod);
+    $act = strtolower($act);
+
+    if (count($query) > 0) {
+        $query_string = '&' . http_build_query($query);
+    } else {
+        $query_string = '';
+    }
+
+    return $zbp->host . 'zb_system/api.php?mod=' . $mod . '&act=' . $act . $query_string;
+}
