@@ -14,7 +14,6 @@ interval: 间隔 （以秒为单位）
 lasttime: 最后一次执行的时间 （新任务为空）
 lastresult: 最后一次执行的结果 （新任务为空）
 suspend：挂起（boolean）暂停该计划
-operate:正在执行中(boolean) 为了防止多次刷新执行同一个任务
 }
 
 任务队列
@@ -128,8 +127,7 @@ function ScheduledTasks_Polling(){
     $results = array();
 
     foreach ($newtasks as $key => $task) {
-        if ($task['operate'] == false &&
-            $task['suspend'] == false &&
+        if ($task['suspend'] == false &&
             time() > $task['begintime'] &&
             $task['endtime'] > time() &&
             time() >= $task['lasttime'] + $task['interval'] - round(1 + $task['interval']*0.01)) { //减1%时间应对网络波动 
@@ -157,7 +155,6 @@ function ScheduledTasks_RegTasks(array $array){
     $tasks['lasttime'] = (int)GetValueInArray($array, 'lasttime');
     $tasks['lastresult'] = (string)GetValueInArray($array, 'lastresult');
     $tasks['suspend'] = (bool)GetValueInArray($array, 'suspend');
-    $tasks['operate'] = false;
     if(empty($tasks['id'])){
         $zbp->ShowError('id不能为空');
     }
@@ -193,7 +190,6 @@ function ScheduledTasks_RegTasks(array $array){
             $tasks['interval'] = (int)GetValueInArray($array, 'interval');
         if(isset($array['suspend']))
             $tasks['suspend'] = (bool)GetValueInArray($array, 'suspend');
-        $tasks['operate'] = false;
         $zbp->Config('ScheduledTasks')->$key = $tasks;
         $zbp->Config('ScheduledTasks')->Save();
     }
@@ -239,22 +235,16 @@ function ScheduledTasks_Execute($id){
     $tasks = ScheduledTasks_GetTasks($id);
     $result = null;
     if(is_array($tasks)){
-        //set operate true
-        $tasks['operate'] = true;
-        $zbp->Config('ScheduledTasks')->$key = $tasks;
-        $zbp->Config('ScheduledTasks')->Save();
-
         $tasks['lastresult'] = '';
         $function = $tasks['function'];
 
         ZBlogException::SuspendErrorHook();
         if (function_exists($function)) {
             $result = call_user_func($function);
-            $tasks['lastresult'] = (string)$result;
+            $tasks['lastresult'] = (string) $result;
         }
 
         $tasks['lasttime'] = time();
-        $tasks['operate'] = false;
         $zbp->Config('ScheduledTasks')->$key = $tasks;
         $zbp->Config('ScheduledTasks')->Save();
 

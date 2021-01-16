@@ -434,6 +434,9 @@ class ZBlogPHP
     //默认路由url数组
     public $routes = array();
 
+    //总缓存对象
+    public $cacheobject = array();
+
     const OPTION_RESERVE_KEYS = 'ZC_DATABASE_TYPE|ZC_SQLITE_NAME|ZC_SQLITE_PRE|ZC_MYSQL_SERVER|ZC_MYSQL_USERNAME|ZC_MYSQL_PASSWORD|ZC_MYSQL_NAME|ZC_MYSQL_CHARSET|ZC_MYSQL_COLLATE|ZC_MYSQL_PRE|ZC_MYSQL_ENGINE|ZC_MYSQL_PORT|ZC_MYSQL_PERSISTENT|ZC_MYSQL_PORT|ZC_PGSQL_SERVER|ZC_PGSQL_USERNAME|ZC_PGSQL_PASSWORD|ZC_PGSQL_NAME|ZC_PGSQL_CHARSET|ZC_PGSQL_PRE|ZC_PGSQL_PORT|ZC_PGSQL_PERSISTENT|ZC_CLOSE_WHOLE_SITE|ZC_PERMANENT_DOMAIN_FORCED_URL|ZC_PERMANENT_DOMAIN_WHOLE_DISABLE';
 
     /**
@@ -3801,31 +3804,6 @@ class ZBlogPHP
     }
 
     /**
-     * 检测当前url，如果不符合设置就跳转到固定域名的链接.
-     */
-    public function RedirectPermanentDomain()
-    {
-        $domain_disable = GetValueInArray($this->option, 'ZC_PERMANENT_DOMAIN_WHOLE_DISABLE');
-        if ($domain_disable == true) {
-            return;
-        }
-
-        $forced = GetValueInArray($this->option, 'ZC_PERMANENT_DOMAIN_FORCED_URL');
-        if ($this->option['ZC_PERMANENT_DOMAIN_ENABLE'] == false && $forced == '') {
-            return;
-        }
-
-        $host = str_replace(array('https://', 'http://'), array('', ''), GetCurrentHost(ZBP_PATH, $null));
-        $host2 = str_replace(array('https://', 'http://'), array('', ''), $this->host);
-
-        if ($host != $host2) {
-            $u = GetRequestUri();
-            $u = $this->host . substr($u, 1);
-            Redirect301($u);
-        }
-    }
-
-    /**
      * 注册PostType.
      *
      * @param $typeId
@@ -4050,11 +4028,7 @@ class ZBlogPHP
      */
     public function GetActionDescription($name)
     {
-        if (isset($this->lang['actions'][$name])) {
-            return $this->lang['actions'][$name];
-        }
-
-        return $name;
+        return GetValueInArray($this->lang['actions'], $name, $name);
     }
 
     /**
@@ -4074,6 +4048,21 @@ class ZBlogPHP
             unset($routes[$array['name']]);
             $routes = array_merge(array($array['name'] => $array), $routes);
         }
+        return true;
+    }
+
+    /**
+     * 删除路由函数
+     *
+     * @param $type 路由类型
+     * @param $name 名称
+     *
+     * @return mixed
+     */
+    public function RemoveRoute($type, $name)
+    {
+        $routes = &$this->routes[$type];
+        unset($routes[$name]);
         return true;
     }
 
@@ -4104,8 +4093,6 @@ class ZBlogPHP
 
         return false;
     }
-
-    public $cacheobject = array();
 
     /**
      * 绑定zbp之前独立的杂乱的全局对象数组到总缓存对象上.
@@ -4236,6 +4223,31 @@ class ZBlogPHP
     /**
      * 以下部分为已废弃，但考虑到兼容性保留的代码**************************************************************.
      */
+
+    /**
+     * 检测当前url，如果不符合设置就跳转到固定域名的链接.
+     */
+    public function RedirectPermanentDomain()
+    {
+        $domain_disable = GetValueInArray($this->option, 'ZC_PERMANENT_DOMAIN_WHOLE_DISABLE');
+        if ($domain_disable == true) {
+            return;
+        }
+
+        $forced = GetValueInArray($this->option, 'ZC_PERMANENT_DOMAIN_FORCED_URL');
+        if ($this->option['ZC_PERMANENT_DOMAIN_ENABLE'] == false && $forced == '') {
+            return;
+        }
+
+        $host = str_replace(array('https://', 'http://'), array('', ''), GetCurrentHost(ZBP_PATH, $null));
+        $host2 = str_replace(array('https://', 'http://'), array('', ''), $this->host);
+
+        if ($host != $host2) {
+            $u = GetRequestUri();
+            $u = $this->host . substr($u, 1);
+            Redirect301($u);
+        }
+    }
 
     /**
      * 检查并开启Gzip压缩.

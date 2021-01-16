@@ -69,7 +69,7 @@ $replace_array = array(
 foreach ($defined_route as $route_type => $route_note) {
     echo '<table class="tableFull tableBorder table_striped table_hover"><tbody><tr><th>'.$route_note.'</th></tr>';
     foreach ($zbp->routes[$route_type] as $key => $value) {
-        echo '<tr><td title="点击查看详细信息" style="cursor:pointer;" onclick="$(this).find(\'div\').toggle();">'.$value['name'].' => ' . $value['function'] . '(';
+        echo '<tr><td title="点击查看详细信息" style="cursor:pointer;" onclick="$(this).find(\'div\').toggle();">['.$zbp->posttype[$value['posttype']]['name'].'] '.$value['name'].' => ' . $value['function'] . '(';
         $s = '';
         foreach ($value['parameters'] as $key2 => $value2) {
             $s .=  '$'. $value2 . ', ';

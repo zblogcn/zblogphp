@@ -174,6 +174,7 @@ class UrlRule
             $post_type_name[] = $value['name'];
         }
 
+        $orginUrl = $url;
         $s = $url;
         $s = str_replace('%page%', '%poaogoe%', $s);
         $url = str_replace('{%host%}', '^', $url);
@@ -252,10 +253,9 @@ class UrlRule
         } else {
             if ($type == 'list') {
                 if (isset($matches[0])) {
-                    $t = $matches[0];
-                    $s2 = str_replace('{%host%}', '^', $s);
-                    $s2 = str_replace('.', '\\.', $s2);
-                    $i = strpos($s2, $t);
+                    $s = str_replace('{%host%}', '^', $orginUrl);
+                    $s = str_replace('.', '\\.', $s);
+                    $i = strpos($s, $matches[0]);
                     $url = substr($url, 0, $i);
                 } else {
                     $url = str_replace('%poaogoe%', '', $url);
