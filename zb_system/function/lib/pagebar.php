@@ -10,7 +10,7 @@ class PageBar
 {
 
     /**
-     * @var int|null 内容总数
+     * @var int|null 内容总数(改为AllCount)
      */
     public $Count = null;
 
@@ -30,12 +30,12 @@ class PageBar
     public $PageBarCount = 0;
 
     /**
-     * @var int 每页数量
+     * @var int 每页数量（改为PrePageCount）
      */
     public $PageCount = 0;
 
     /**
-     * @var int 每页数量（new）
+     * @var int 每页数量
      */
     public $PrePageCount = 0;
 
@@ -45,7 +45,7 @@ class PageBar
     public $PageAll = 0;
 
     /**
-     * @var int 当前页
+     * @var int 当前页(改为PageCurrent)
      */
     public $PageNow = 0;
 
@@ -110,21 +110,20 @@ class PageBar
     public $NextButton = null;
 
     /**
-     * @var boolean
+     * @var boolean 是否全部输出为带链接的button
      */
     public $isFullLink = false;
 
     /**
      * @param $url
      * @param bool $makeReplace
-     * @param bool $isIndex
+     * @param bool $forceDisplayPage = false
      */
-    public function __construct($url, $makeReplace = true, $isIndex = false, $forcePage = false)
+    public function __construct($urlrule, $makeReplace = true, $forceDisplayPage = false)
     {
-        $this->UrlRule = new UrlRule($url);
+        $this->UrlRule = new UrlRule($urlrule);
         $this->UrlRule->MakeReplace = $makeReplace;
-        $this->UrlRule->isIndex = $isIndex;
-        $this->UrlRule->forcePage = $forcePage;
+        $this->UrlRule->forceDisplayPage = $forceDisplayPage;
         $this->Buttons = &$this->buttons;
         $this->PrevButton = &$this->prevbutton;
         $this->NextButton = &$this->nextbutton;

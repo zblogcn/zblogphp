@@ -22,19 +22,14 @@ class UrlRule
     private $PreUrl = '';
 
     /**
-     * @var bool
+     * @var bool MakeReplace(变量名义意不明，以后要换)为真就进行Make_Rewrite_Replace 为假为进行Make_Active_Replace
      */
     public $MakeReplace = true;
 
     /**
      * @var bool
      */
-    public $isIndex = false; //指示是否为首页的规则
-
-    /**
-     * @var bool
-     */
-    public $forcePage = false;//强制显示page参数
+    public $forceDisplayPage = false;//强制显示page参数
 
     public static $categoryLayer = '-1';
 
@@ -57,13 +52,13 @@ class UrlRule
     /**
      * @return string
      */
-    private function Make_Preg()
+    private function Make_Active_Replace()
     {
         global $zbp;
 
         $this->Rules['{%host%}'] = $zbp->host;
         if (isset($this->Rules['{%page%}'])) {
-            if ($this->forcePage == false) {
+            if ($this->forceDisplayPage == false) {
                 if ($this->Rules['{%page%}'] == '1' || $this->Rules['{%page%}'] == '0') {
                     $this->Rules['{%page%}'] = '';
                 }
@@ -85,13 +80,13 @@ class UrlRule
     /**
      * @return string
      */
-    private function Make_Replace()
+    private function Make_Rewrite_Replace()
     {
         global $zbp;
         $s = $this->PreUrl;
 
         if (isset($this->Rules['{%page%}'])) {
-            if ($this->forcePage == false) {
+            if ($this->forceDisplayPage == false) {
                 if ($this->Rules['{%page%}'] == '1' || $this->Rules['{%page%}'] == '0') {
                     $this->Rules['{%page%}'] = '';
                 }
@@ -100,10 +95,6 @@ class UrlRule
             $this->Rules['{%page%}'] = '';
         }
         if ($this->Rules['{%page%}'] == '') {
-            if ($this->isIndex == true) {
-                //if (substr_count($s, '{%page%}') == 1 && substr_count($s, '{') == 2 && substr_count($s, '&') == 0) {
-                $s = $zbp->host;
-            }
             if (stripos($s, '_{%page%}') !== false) {
                 $s = str_replace('_{%page%}', '{%page%}', $s);
             } elseif (stripos($s, '/{%page%}') !== false) {
@@ -121,9 +112,6 @@ class UrlRule
                     }
                 }
             }
-            //if (substr($this->PreUrl, -10) != '_{%page%}/' && substr($s, -9) == '{%page%}/') {
-            //    $s = substr($s, 0, strlen($s) - 1);
-            //}
         }
 
         $this->Rules['{%host%}'] = $zbp->host;
@@ -151,10 +139,119 @@ class UrlRule
     public function Make()
     {
         if ($this->MakeReplace) {
-            return $this->Make_Replace();
+            return $this->Make_Rewrite_Replace();
         } else {
-            return $this->Make_Preg();
+            return $this->Make_Active_Replace();
         }
+    }
+
+    /**
+     * 处理Route参数
+     *
+     * @param $array
+     *
+     * @return array
+     */
+    public static function ProcessParameters($parameters)
+    {
+        $args = array();
+        foreach ($parameters as $key2 => $value2) {
+            if (is_integer($key2)) {
+                $args[$value2] = $value2;
+            } else {
+                $args[$key2] = $value2;
+            }
+        }
+        $newargs = array();
+        foreach ($args as $key => $value) {
+            if (is_array($value)) {
+                foreach ($value as $key2 => $value2) {
+                    if (is_integer($key2)) {
+                        $newargs[] = array('name' => $key, 'match' => $value2, 'regex' => '');
+                    } else {
+                        $newargs[] = array('name' => $key, 'match' => $key2, 'regex' => $value2);
+                    }
+                }
+            } else {
+                $newargs[] = array('name' => $key, 'match'  => $value, 'regex' => '');
+            }
+        }
+
+        foreach ($newargs as $key => &$value) {
+            if ($value['match'] == 'id' && $value['regex'] == '') {
+                $value['regex'] = '[0-9]+';
+            }
+            if ($value['match'] == 'alias' && $value['regex'] == '') {
+                $value['regex'] = '[^\./_]+?';
+            }
+            if ($value['match'] == 'category' && $value['regex'] == '') {
+                $value['regex'] = '(([^\./_]*/?)<:1,' . self::$categoryLayer . ':>))';
+            }
+            if ($value['match'] == 'author' && $value['regex'] == '') {
+                $value['regex'] = '[^\./_]+';
+            }
+            if ($value['match'] == 'year' && $value['regex'] == '') {
+                $value['regex'] = '[0-9]<:4:>';
+            }
+            if ($value['match'] == 'month' && $value['regex'] == '') {
+                $value['regex'] = '[0-9]<:1,2:>';
+            }
+            if ($value['match'] == 'day' && $value['regex'] == '') {
+                $value['regex'] = '[0-9]<:1,2:>';
+            }
+            if ($value['match'] == 'page' && $value['regex'] == '') {
+                $value['regex'] = '[0-9]+';
+            }
+        }
+        return $newargs;
+    }
+
+    /**
+     * @param $route
+     * @param $haspage boolean
+     *
+     * @return string
+     */
+    public static function OutputUrlRegEx_Route($route, $haspage = false)
+    {
+        global $zbp;
+        self::$categoryLayer = $GLOBALS['zbp']->category_recursion_real_deep;
+
+        $newargs = self::ProcessParameters($route['parameters']);
+        $orginUrl = $url = $route['urlrule'];
+
+        $arrayReplace = array('{%host%}' => '^', '.' => '\\.', '{%page%}' => '{%poaogoe%}', '/' => '\\/');
+        foreach ($arrayReplace as $key => $value) {
+            $url = str_replace($key, $value, $url);
+        }
+        preg_match('/(?<=\})[^\{\}]+(?=\{%poaogoe%\})/i', $url, $matches);
+        if (isset($matches[0])) {
+            if ($haspage) {
+                $url = preg_replace('/(?<=\})[^\{\}]+(?=\{%poaogoe%\})/i', '(?:' . $matches[0] . ')', $url, 1);
+                $url = str_replace('(?:_){%poaogoe%}', '', $url);
+            } else {
+                if (stripos($url, '_{%poaogoe%}') !== false) {
+                    $url = str_replace('_{%poaogoe%}', '{%poaogoe%}', $url);
+                } elseif (stripos($url, '/{%poaogoe%}') !== false) {
+                    $url = str_replace('/{%poaogoe%}', '{%poaogoe%}', $url);
+                } elseif (stripos($url, '-{%poaogoe%}') !== false) {
+                    $url = str_replace('-{%poaogoe%}', '{%poaogoe%}', $url);
+                } else {
+                    $url = preg_replace('/(?<=\})[^\{\}]+(?=\{%poaogoe%\})/i', '', $url, 1);
+                }
+            }
+        }
+        $url = str_replace('{%poaogoe%}', '{%page%}', $url);
+
+        foreach ($newargs as $key => $value) {
+            $url = str_replace('{%' . $value['match'] . '%}', '(?P<' . $value['name'] . '>' . $value['regex'] . ')', $url);
+        }
+
+        $url = $url . '$';
+        if ($url == '^$') {
+            return '';
+        }
+        return '/(?J)' . $url . '/';
     }
 
     /**
@@ -167,6 +264,10 @@ class UrlRule
     public static function OutputUrlRegEx($url, $type, $haspage = false)
     {
         global $zbp;
+
+        if (is_array($url)) {
+            return self::OutputUrlRegEx_Route($url);
+        }
 
         self::$categoryLayer = $GLOBALS['zbp']->category_recursion_real_deep;
         $post_type_name = array('post');

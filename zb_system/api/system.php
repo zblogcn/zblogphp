@@ -120,11 +120,11 @@ function api_system_get_info()
  *
  * @return array
  */
-function api_system_msic_statistic()
+function api_system_misc_statistic()
 {
     ApiVerifyCSRF();
     ApiCheckAuth(true, 'root');
-    ApiCheckAuth(true, 'msic');
+    ApiCheckAuth(true, 'misc');
 
     include ZBP_PATH . 'zb_system/function/c_system_misc.php';
     ob_clean();
@@ -147,6 +147,7 @@ function api_system_misc_showtags()
 
     $type = (int) GetVars('type');
     $actions = $zbp->GetPostType($type, 'actions');
+    ApiCheckAuth(true, 'misc');
 
     if (!$zbp->CheckRights($actions['new']) || !$zbp->CheckRights($actions['edit'])) {
     	$zbp->ShowError(6);
