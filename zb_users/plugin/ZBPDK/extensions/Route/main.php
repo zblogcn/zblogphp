@@ -61,9 +61,7 @@ $replace_array = array(
     '\'parameters\' =' => "//从伪静规则匹配到的数组中取值传给call的参数(示例为array('cate'=>'id', 'page'=>'page') or array('post'=>array('id','alias'), 'page'=>'page') )\r\n" . '\'parameters\' =',
     '\'parameters_get\' =' => "//从\$_GET获取值传给call的参数()\r\n" . '\'parameters_get\' =',
     '\'parameters_with\' =' => "//固定传的call参数(先从\$_GET取值再从本条路由规则中取值并覆盖)\r\n" . '\'parameters_with\' =',
-    '\'urlrule\' =' => "//伪静路由的原始规则\r\n" . '\'urlrule\' =',
-    '\'urlrule_regex\' =' => "//如果指定了urlrule_regex就忽略编译原始规则\r\n" . '\'urlrule_regex\' =',
-    '\'haspage\' =' => "//指示urlrule原始规则中含有page参数，这样伪静路由会执2次，一次有page一次没有page的匹配(指定了urlrule_regex无效)\r\n" . '\'haspage\' =',
+    '\'urlrule\' =' => "//伪静路由的原始规则(必须)\r\n" . '\'urlrule\' =',
 );
 
 foreach ($defined_route as $route_type => $route_note) {

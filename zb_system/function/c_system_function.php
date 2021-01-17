@@ -219,7 +219,7 @@ function GetList($count = 10, $cate = null, $auth = null, $date = null, $tags = 
         $option['post_type'] = null;
     }
     if (!array_key_exists('post_status', $option)) {
-        $option['post_status'] = null;
+        $option['post_status'] = 0;
     }
     if (!array_key_exists('only_ontop', $option)) {
         $option['only_ontop'] = false;

@@ -192,7 +192,12 @@ class BasePost extends Base
                         return $fpreturn;
                     }
                 }
-                $u = new UrlRule($zbp->GetPostType($this->Type, 'urlrule'));
+                $routes = $zbp->GetPostType($this->Type, 'routes');
+                if (isset($routes['post_' . $this->TypeName . '_single'])) {
+                    $u = new UrlRule($routes['post_' . $this->TypeName . '_single']);
+                } else {
+                    $u = new UrlRule($zbp->GetPostType($this->Type, 'single_urlrule'));
+                }
                 $u->Rules['{%id%}'] = $this->ID;
                 if ($this->Alias) {
                     $u->Rules['{%alias%}'] = $this->Alias;

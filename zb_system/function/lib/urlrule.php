@@ -21,6 +21,8 @@ class UrlRule
 
     private $PreUrl = '';
 
+    private $Route = array();
+
     /**
      * @var bool MakeReplace(变量名义意不明，以后要换)为真就进行Make_Rewrite_Replace 为假为进行Make_Active_Replace
      */
@@ -38,7 +40,16 @@ class UrlRule
      */
     public function __construct($url)
     {
-        $this->PreUrl = $url;
+        if (is_array($url)) {
+            $this->Route = $url;
+            if (isset($url['urlrule_regex']) && $url['urlrule_regex'] != '') {
+                $this->PreUrl = $url['urlrule_regex'];
+            } else {
+                $this->PreUrl = $url['urlrule'];
+            }
+        } else {
+            $this->PreUrl = $url;
+        }
     }
 
     /**
@@ -95,33 +106,32 @@ class UrlRule
             $this->Rules['{%page%}'] = '';
         }
         if ($this->Rules['{%page%}'] == '') {
-            if (stripos($s, '_{%page%}') !== false) {
-                $s = str_replace('_{%page%}', '{%page%}', $s);
-            } elseif (stripos($s, '/{%page%}') !== false) {
-                $s = str_replace('/{%page%}', '{%page%}', $s);
-            } elseif (stripos($s, '-{%page%}') !== false) {
-                $s = str_replace('-{%page%}', '{%page%}', $s);
+            preg_match('/(?<=\})[^\{\}%&]+(?=\{%page%\})/i', $s, $matches);
+            if (isset($matches[0])) {
+                $s = str_replace($matches[0], '', $s);
             } else {
-                preg_match('/(?<=\})[^\{\}%\/&]+(?=\{%page%\})/i', $s, $matches);
+                preg_match('/(?<=&)[^\{\}%&]+(?=\{%page%\})/i', $s, $matches);
                 if (isset($matches[0])) {
                     $s = str_replace($matches[0], '', $s);
-                } else {
-                    preg_match('/(?<=&)[^\{\}%\/&]+(?=\{%page%\})/i', $s, $matches);
-                    if (isset($matches[0])) {
-                        $s = str_replace($matches[0], '', $s);
-                    }
                 }
             }
         }
 
-        $this->Rules['{%host%}'] = $zbp->host;
+        $prefix = GetValueInArray($this->Route, 'prefix', '');
+        if ($prefix != '') {
+            $prefix .= '/';
+        }
+        $this->Rules['{%host%}'] = $zbp->host . $prefix;
         foreach ($this->Rules as $key => $value) {
             if (!is_array($value)) {
                 $s = str_replace($key, $value, $s);
             }
         }
 
-        if (substr($this->PreUrl, -1) != '/' && substr($s, -1) == '/' && $s != $zbp->host) {
+        if (substr($this->PreUrl, -1) != '/' && substr($s, -1) == '/') {
+            $s = substr($s, 0, (strlen($s) - 1));
+        }
+        if (substr($s, -2) == '//') {
             $s = substr($s, 0, (strlen($s) - 1));
         }
         if (substr($s, -1) == '&') {
@@ -152,8 +162,12 @@ class UrlRule
      *
      * @return array
      */
-    public static function ProcessParameters($parameters)
+    public static function ProcessParameters($route)
     {
+        $newargs = array();
+        
+        $parameters = $route['parameters'];
+
         $args = array();
         foreach ($parameters as $key2 => $value2) {
             if (is_integer($key2)) {
@@ -162,7 +176,6 @@ class UrlRule
                 $args[$key2] = $value2;
             }
         }
-        $newargs = array();
         foreach ($args as $key => $value) {
             if (is_array($value)) {
                 foreach ($value as $key2 => $value2) {
@@ -174,6 +187,25 @@ class UrlRule
                 }
             } else {
                 $newargs[] = array('name' => $key, 'match'  => $value, 'regex' => '');
+            }
+        }
+
+        if (!empty($route) && is_array($route)) {
+            $s = $route['urlrule'];
+            $s = str_replace('{%host%}', '', $s);
+            $marray = array();
+            if (preg_match_all('/%[^\{]+%/', $s, $m) > 1) {
+                foreach ($m as $key => $value) {
+                    if (is_array($value)) {
+                        foreach ($value as $k1 => $v1) {
+                            $marray[] = $v1;
+                        }
+                    }
+                }
+            }
+            foreach ($marray as $key => $value) {
+                $value = str_replace('%', '', $value);
+                $newargs[] = array('name' => $value, 'match' => $value, 'regex' => '');
             }
         }
 
@@ -191,16 +223,19 @@ class UrlRule
                 $value['regex'] = '[^\./_]+';
             }
             if ($value['match'] == 'year' && $value['regex'] == '') {
-                $value['regex'] = '[0-9]<:4:>';
+                $value['regex'] = '[0-9]{4}';
             }
             if ($value['match'] == 'month' && $value['regex'] == '') {
-                $value['regex'] = '[0-9]<:1,2:>';
+                $value['regex'] = '[0-9]{1,2}';
             }
             if ($value['match'] == 'day' && $value['regex'] == '') {
-                $value['regex'] = '[0-9]<:1,2:>';
+                $value['regex'] = '[0-9]{1,2}';
             }
             if ($value['match'] == 'page' && $value['regex'] == '') {
                 $value['regex'] = '[0-9]+';
+            }
+            if ($value['match'] == 'date' && $value['regex'] == '') {
+                $value['regex'] = '[0-9\-]+';
             }
         }
         return $newargs;
@@ -208,60 +243,58 @@ class UrlRule
 
     /**
      * @param $route
-     * @param $haspage boolean
+     * @param $showFristPage boolean
      *
      * @return string
      */
-    public static function OutputUrlRegEx_Route($route, $haspage = false)
+    public static function OutputUrlRegEx_Route($route, $showFristPage = false)
     {
         global $zbp;
         self::$categoryLayer = $GLOBALS['zbp']->category_recursion_real_deep;
 
-        $newargs = self::ProcessParameters($route['parameters']);
+        $newargs = self::ProcessParameters($route);
         $orginUrl = $url = $route['urlrule'];
 
-        $arrayReplace = array('{%host%}' => '^', '.' => '\\.', '{%page%}' => '{%poaogoe%}', '/' => '\\/');
-        foreach ($arrayReplace as $key => $value) {
-            $url = str_replace($key, $value, $url);
-        }
-        preg_match('/(?<=\})[^\{\}]+(?=\{%poaogoe%\})/i', $url, $matches);
-        if (isset($matches[0])) {
-            if ($haspage) {
-                $url = preg_replace('/(?<=\})[^\{\}]+(?=\{%poaogoe%\})/i', '(?:' . $matches[0] . ')', $url, 1);
-                $url = str_replace('(?:_){%poaogoe%}', '', $url);
-            } else {
-                if (stripos($url, '_{%poaogoe%}') !== false) {
-                    $url = str_replace('_{%poaogoe%}', '{%poaogoe%}', $url);
-                } elseif (stripos($url, '/{%poaogoe%}') !== false) {
-                    $url = str_replace('/{%poaogoe%}', '{%poaogoe%}', $url);
-                } elseif (stripos($url, '-{%poaogoe%}') !== false) {
-                    $url = str_replace('-{%poaogoe%}', '{%poaogoe%}', $url);
-                } else {
-                    $url = preg_replace('/(?<=\})[^\{\}]+(?=\{%poaogoe%\})/i', '', $url, 1);
-                }
-            }
-        }
+        $url = str_replace('{%page%}', '{%poaogoe%}', $url);
+
         $url = str_replace('{%poaogoe%}', '{%page%}', $url);
+        if ($showFristPage == false) {
+            $url = preg_replace('/(?<=\})[^\}]+(?=\{%page%\})/i', '', $url, 1);
+            $url = str_replace('{%page%}', '', $url);
+        }
 
         foreach ($newargs as $key => $value) {
             $url = str_replace('{%' . $value['match'] . '%}', '(?P<' . $value['name'] . '>' . $value['regex'] . ')', $url);
         }
 
+        $prefix = GetValueInArray($route, 'prefix', '');
+        if ($prefix != '') {
+            $prefix .= '/';
+        }
+        $url = str_replace('{%host%}', '{%host%}' . $prefix, $url);
+
+        $arrayReplace = array('{%host%}' => '^', '.' => '\\.', '{%page%}' => '{%poaogoe%}', '/' => '\\/');
+        foreach ($arrayReplace as $key => $value) {
+            $url = str_replace($key, $value, $url);
+        }
+
         $url = $url . '$';
-        if ($url == '^$') {
+
+        if ($url == '^$' || $url == '^\/$') {
             return '';
         }
+
         return '/(?J)' . $url . '/';
     }
 
     /**
      * @param $url
      * @param $type
-     * @param $haspage boolean
+     * @param $showFristPage boolean
      *
      * @return string
      */
-    public static function OutputUrlRegEx($url, $type, $haspage = false)
+    public static function OutputUrlRegEx($url, $type, $showFristPage = false)
     {
         global $zbp;
 
@@ -284,7 +317,7 @@ class UrlRule
         $url = str_replace('%page%', '%poaogoe%', $url);
         preg_match('/(?<=\})[^\{\}]+(?=\{%poaogoe%\})/i', $s, $matches);
         if (isset($matches[0])) {
-            if ($haspage) {
+            if ($showFristPage) {
                 //$url = str_replace($matches[0], '(?:' . $matches[0] . ')', $url);
                 $url = preg_replace('/(?<=\})[^\{\}]+(?=\{%poaogoe%\})/i', '(?:' . $matches[0] . ')', $url, 1);
             } else {
@@ -349,7 +382,7 @@ class UrlRule
         $url = str_replace(':>', '}', $url);
         $url = str_replace('/', '\/', $url);
 
-        if ($haspage) {
+        if ($showFristPage) {
             $url = str_replace('%poaogoe%', '(?P<page>[0-9]*)', $url);
         } else {
             if ($type == 'list') {

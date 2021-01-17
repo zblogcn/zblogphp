@@ -53,8 +53,9 @@ $replace_array = array(
     'name' => "名称<br/>",
     'classname' => "类名 - 默认是Post，但也可以是继承自BasePost类型的新类<br/>",   
     'template' => "类的模板名 - 分别是自身的模板 对应分类的模板 对应Tag的模板 列表的模板(含日期列表) 搜索页的模板<br/>",  
-    'urlrule' => "类的Url原始规则 - 分别是自身规则 列表规则 分类列表规则 Tag列表规则 作者列表规则 日期列表规则 搜索列表规则<br/>",  
+    'single_urlrule' => "类的Url原始规则 - 分别是自身单个规则 列表规则 分类列表规则 Tag列表规则 作者列表规则 日期列表规则 搜索列表规则<br/>",  
     'actions' => "权限命令数组 - 权限名称分别是 新建 编辑 删除 提交 公开发布 管理 全部管理 查看 搜索<br/>",
+    'routes' => "路由数组<br/>",
 );
 
 foreach ($posttype as $id => $array) {
@@ -72,6 +73,13 @@ foreach ($posttype as $id => $array) {
             echo '</td></tr>';
         } else {
             echo '<tr><td>' . GetValueInArray($replace_array, $key) .'"<b>'.$key.'</b>" => ';
+            if ($key == 'routes') {
+                $rs = array();
+                foreach ($value as $k1 => $v2) {
+                    $rs[$k1] = $v2['name'];
+                }
+                $value = $rs;
+            }
             $t = var_export($value, true);
             echo $t;
             echo '</td></tr>';
