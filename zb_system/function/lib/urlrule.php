@@ -31,7 +31,7 @@ class UrlRule
     /**
      * @var bool
      */
-    public $forceDisplayPage = false;//强制显示page参数
+    public $forceDisplayFirstPage = false;//强制显示page参数
 
     public static $categoryLayer = '-1';
 
@@ -69,7 +69,7 @@ class UrlRule
 
         $this->Rules['{%host%}'] = $zbp->host;
         if (isset($this->Rules['{%page%}'])) {
-            if ($this->forceDisplayPage == false) {
+            if ($this->forceDisplayFirstPage == false) {
                 if ($this->Rules['{%page%}'] == '1' || $this->Rules['{%page%}'] == '0') {
                     $this->Rules['{%page%}'] = '';
                 }
@@ -96,8 +96,10 @@ class UrlRule
         global $zbp;
         $s = $this->PreUrl;
 
+        $match_without_page = GetValueInArray($this->Route, 'match_without_page', true);
+
         if (isset($this->Rules['{%page%}'])) {
-            if ($this->forceDisplayPage == false) {
+            if ($this->forceDisplayFirstPage == false && $match_without_page) {
                 if ($this->Rules['{%page%}'] == '1' || $this->Rules['{%page%}'] == '0') {
                     $this->Rules['{%page%}'] = '';
                 }
@@ -109,6 +111,11 @@ class UrlRule
             preg_match('/(?<=\})[^\{\}%&]+(?=\{%page%\})/i', $s, $matches);
             if (isset($matches[0])) {
                 $s = str_replace($matches[0], '', $s);
+                //如果'{%page%}'前只有{%host%}就把{%page%}之后的全删除了
+                $array = explode('{%page%}', $s);
+                if (is_array($array) && isset($array[0]) && substr_count($array[0], '{%') == 1) {
+                    $s = substr($s, 0, strpos($s, '{%page%}'));
+                }
             } else {
                 preg_match('/(?<=&)[^\{\}%&]+(?=\{%page%\})/i', $s, $matches);
                 if (isset($matches[0])) {
@@ -243,11 +250,11 @@ class UrlRule
 
     /**
      * @param $route
-     * @param $showFristPage boolean
+     * @param $match_without_page boolean
      *
      * @return string
      */
-    public static function OutputUrlRegEx_Route($route, $showFristPage = false)
+    public static function OutputUrlRegEx_Route($route, $match_without_page = false)
     {
         global $zbp;
         self::$categoryLayer = $GLOBALS['zbp']->category_recursion_real_deep;
@@ -258,8 +265,13 @@ class UrlRule
         $url = str_replace('{%page%}', '{%poaogoe%}', $url);
 
         $url = str_replace('{%poaogoe%}', '{%page%}', $url);
-        if ($showFristPage == false) {
+        if ($match_without_page == true) {
             $url = preg_replace('/(?<=\})[^\}]+(?=\{%page%\})/i', '', $url, 1);
+            //如果'{%page%}'前只有{%host%}就把{%page%}之后的全删除了
+            $array = explode('{%page%}', $url);
+            if (is_array($array) && isset($array[0]) && substr_count($array[0], '{%') == 1) {
+                $url = substr($url, 0, strpos($url, '{%page%}'));
+            }
             $url = str_replace('{%page%}', '', $url);
         }
 
@@ -273,13 +285,12 @@ class UrlRule
         }
         $url = str_replace('{%host%}', '{%host%}' . $prefix, $url);
 
-        $arrayReplace = array('{%host%}' => '^', '.' => '\\.', '{%page%}' => '{%poaogoe%}', '/' => '\\/');
+        $arrayReplace = array('{%host%}' => '^', '.' => '\\.', '/' => '\\/');
         foreach ($arrayReplace as $key => $value) {
             $url = str_replace($key, $value, $url);
         }
 
         $url = $url . '$';
-
         if ($url == '^$' || $url == '^\/$') {
             return '';
         }
@@ -290,11 +301,11 @@ class UrlRule
     /**
      * @param $url
      * @param $type
-     * @param $showFristPage boolean
+     * @param $match_without_page boolean
      *
      * @return string
      */
-    public static function OutputUrlRegEx($url, $type, $showFristPage = false)
+    public static function OutputUrlRegEx($url, $type, $match_without_page = false)
     {
         global $zbp;
 
@@ -307,32 +318,18 @@ class UrlRule
         foreach ($zbp->posttype as $key => $value) {
             $post_type_name[] = $value['name'];
         }
-
         $orginUrl = $url;
-        $s = $url;
-        $s = str_replace('%page%', '%poaogoe%', $s);
-        $url = str_replace('{%host%}', '^', $url);
-        $url = str_replace('.', '\\.', $url);
 
-        $url = str_replace('%page%', '%poaogoe%', $url);
-        preg_match('/(?<=\})[^\{\}]+(?=\{%poaogoe%\})/i', $s, $matches);
-        if (isset($matches[0])) {
-            if ($showFristPage) {
-                //$url = str_replace($matches[0], '(?:' . $matches[0] . ')', $url);
-                $url = preg_replace('/(?<=\})[^\{\}]+(?=\{%poaogoe%\})/i', '(?:' . $matches[0] . ')', $url, 1);
-            } else {
-                //$url = str_replace($matches[0], '', $url);
-                if (stripos($url, '_{%poaogoe%}') !== false) {
-                    $url = str_replace('_{%poaogoe%}', '{%poaogoe%}', $url);
-                } elseif (stripos($url, '/{%poaogoe%}') !== false) {
-                    $url = str_replace('/{%poaogoe%}', '{%poaogoe%}', $url);
-                } elseif (stripos($url, '-{%poaogoe%}') !== false) {
-                    $url = str_replace('-{%poaogoe%}', '{%poaogoe%}', $url);
-                } else {
-                    $url = preg_replace('/(?<=\})[^\{\}]+(?=\{%poaogoe%\})/i', '', $url, 1);
-                }
+        if ($match_without_page) {
+            $url = preg_replace('/(?<=\})[^\}]+(?=\{%page%\})/i', '', $url, 1);
+            //如果'{%page%}'前只有{%host%}就把{%page%}之后的全删除了
+            $array = explode('{%page%}', $url);
+            if (is_array($array) && isset($array[0]) && substr_count($array[0], '{%') == 1) {
+                $url = substr($url, 0, strpos($url, '{%page%}'));
             }
+            $url = str_replace('{%page%}', '', $url);
         }
+        $url = str_replace('{%page%}', '(?P<page>[0-9]+)', $url);
 
         if ($type == 'date') {
             $url = str_replace('%date%', '(?P<date>[0-9\-]+)', $url);
@@ -376,28 +373,13 @@ class UrlRule
             $url = str_replace('%' . $type . '%', '(?P<' . $type . '>[^\./_]+?)', $url);
         }
  
+        $url = str_replace('{%host%}', '^', $url);
+        $url = str_replace('.', '\\.', $url);
         $url = str_replace('{', '', $url);
         $url = str_replace('}', '', $url);
         $url = str_replace('<:', '{', $url);
         $url = str_replace(':>', '}', $url);
         $url = str_replace('/', '\/', $url);
-
-        if ($showFristPage) {
-            $url = str_replace('%poaogoe%', '(?P<page>[0-9]*)', $url);
-        } else {
-            if ($type == 'list') {
-                if (isset($matches[0])) {
-                    $s = str_replace('{%host%}', '^', $orginUrl);
-                    $s = str_replace('.', '\\.', $s);
-                    $i = strpos($s, $matches[0]);
-                    $url = substr($url, 0, $i);
-                } else {
-                    $url = str_replace('%poaogoe%', '', $url);
-                }
-            } else {
-                $url = str_replace('%poaogoe%', '', $url);
-            }
-        }
 
         $url = $url . '$';
         if ($url == '^$') {

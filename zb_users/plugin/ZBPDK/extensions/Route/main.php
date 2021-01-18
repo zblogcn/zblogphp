@@ -62,6 +62,7 @@ $replace_array = array(
     '\'parameters_get\' =' => "//从\$_GET获取值传给call的参数()\r\n" . '\'parameters_get\' =',
     '\'parameters_with\' =' => "//固定传的call参数(先从\$_GET取值再从本条路由规则中取值并覆盖)\r\n" . '\'parameters_with\' =',
     '\'urlrule\' =' => "//伪静路由的原始规则(必须)\r\n" . '\'urlrule\' =',
+    '\'match_without_page\' =' => "//设为ture或不设此参数，伪静路由会匹配2次，一次带page一次不带page,设为false只强制匹配带page参数的\r\n" . '\'match_without_page\' =',
 );
 
 foreach ($defined_route as $route_type => $route_note) {

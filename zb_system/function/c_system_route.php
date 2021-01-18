@@ -10,7 +10,7 @@ if (!defined('ZBP_PATH')) {
 //###############################################################################################################
 
 /**
- * 根据Rewrite_url规则显示页面.
+ * 根据url路由规则显示页面.
  *
  * @param string $inpurl 页面url
  *
@@ -66,7 +66,7 @@ function ViewAuto($inpurl)
 
     //匹配动态路由（在伪静下也匹配但不输出内容只做跳转用）
     foreach ($zbp->routes['active'] as $key => $route) {
-        $prefix = GetValueInArray($route, 'prefix', ''); //prefix的作用是给某个post类型指定一个独立的目录提供访问，不必都挤在根目录下
+        $prefix = GetValueInArray($route, 'prefix', '');
         if (($url == $prefix . '') || ($url == $prefix . '/') || ($url == $prefix . '/index.php')) {
             $bCheckGets = ViewAuto_Check_Get_And_Not_Get_And_Must_Get(GetValueInArray($route, 'get', array()), GetValueInArray($route, 'not_get', array()), GetValueInArray($route, 'must_get', array()));
             //如果条件符合就组合参数数组并调用函数
@@ -106,40 +106,44 @@ function ViewAuto($inpurl)
 
     //匹配伪静路由
     foreach ($zbp->routes['rewrite'] as $key => $route) {
-        //$showFristPage 为真就执行2次，为假为执行1次
+        //$match_without_page 为真就执行2次，为假为执行1次
         if (isset($route['parameters']) && is_array($route['parameters'])) {
             $parameters = UrlRule::ProcessParameters($route);
         } else {
             $parameters = array();
         }
-        $showFristPage = false;
+        $match_without_page = false;
         foreach ($parameters as $key => $value) {
             if ($value['match'] == 'page') {
-                $showFristPage = true;
+                $match_without_page = true;
             }
         }
-        $showFristPage = $showFristPage ? array(0 => false, 1 => true) : array(0 => false);
-        foreach ($showFristPage as $showFristPage_key => $showFristPage_value) {
+        if (isset($route['match_without_page'])) {
+            $match_without_page = $match_without_page && $route['match_without_page'];
+        }            
+        $match_without_page = $match_without_page ? array(0 => false, 1 => true) : array(0 => false);
+        foreach ($match_without_page as $match_without_page_key => $match_without_page_value) {
             $bCheckGets = ViewAuto_Check_Get_And_Not_Get_And_Must_Get(GetValueInArray($route, 'get', array()), GetValueInArray($route, 'not_get', array()), GetValueInArray($route, 'must_get', array()));
 
             //如果直接指定了$route['urlrule_regex']，就不调用UrlRule::OutputUrlRegEx，直接preg_match，那就不执行$hasPage_value = true的情况
             if (isset($route['urlrule_regex']) && trim($route['urlrule_regex']) != '') {
                 $r = $route['urlrule_regex'];
-                if ($showFristPage == true) {
+                if ($match_without_page == true) {
                     continue;
                 }
             } else {
                 //进入UrlRule::OutputUrlRegEx_Route
-                $r = UrlRule::OutputUrlRegEx_Route($route, $showFristPage_value);
+                $r = UrlRule::OutputUrlRegEx_Route($route, $match_without_page_value);
+                //$r = UrlRule::OutputUrlRegEx($zbp->GetPostType(0, 'list_urlrule'), 'list', $match_without_page_value);
             }
 
             $m = array();
             //如果条件符合就组合参数数组并调用函数
-            //var_dump($showFristPage_value, $route['urlrule'], $r, $url, $m);//die;
+            //var_dump($match_without_page_value, $route['urlrule'], $r, $url, $m);//die;
             if ($bCheckGets && (($r == '' && $r == $url) || ($r <> '' && preg_match($r, $url, $m) == 1))) {
                 $array = array('route' => $route);
                 $array = array_merge($array, $m);
-                //var_dump($showFristPage_value, $route['urlrule'], $r, $url, $m);die;
+                //var_dump($match_without_page_value, $route['urlrule'], $r, $url, $m);die;
                 foreach ($parameters as $key => $value) {
                     if (isset($m[(string) $value['match']])) {
                         $array[$value['name']] = $m[(string) $value['match']];
