@@ -450,6 +450,17 @@ DefinePluginFilter('Filter_Plugin_Zbp_LoadManage');
  */
 DefinePluginFilter('Filter_Plugin_Zbp_Terminate');
 
+/*
+'**************************************************<
+'类型:Filter
+'名称:Filter_Plugin_Zbp_LoadLanguage
+'参数:&$lang
+'说明:Zbp类的加载语言包的接口
+'调用:
+'**************************************************>
+ */
+DefinePluginFilter('Filter_Plugin_Zbp_LoadLanguage');
+
 //###############################################################################################################
 //<前台view,index>
 

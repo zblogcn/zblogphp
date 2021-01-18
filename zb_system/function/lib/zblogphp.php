@@ -2093,6 +2093,11 @@ class ZBlogPHP
             }
         }
 
+        foreach ($GLOBALS['hooks']['Filter_Plugin_Zbp_LoadLanguage'] as $fpname => &$fpsignal) {
+            $fpname($this->lang);
+            $this->langs = json_decode(json_encode($this->lang));
+        }
+
         return true;
     }
 
