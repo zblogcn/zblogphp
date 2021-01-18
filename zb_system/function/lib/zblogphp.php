@@ -785,13 +785,13 @@ class ZBlogPHP
 
         // 默认路由
         //  添加 默认路由 = 文章页列表(无参数)路由
-        $this->RegRoute(array('type' => 'default', 'name' => 'default_post_article_list_index', 'call' => 'ViewList', 'posttype' => 0, 'urlrule' => $this->GetPostType(0, 'list_urlrule'), 'parameters_with' => array('posttype'), 'not_get' => array('page', 'cate', 'auth', 'tags', 'date', 'id', 'alias')));
+        $this->RegRoute(array('type' => 'default', 'name' => 'default_post_article_list_index', 'call' => 'ViewList', 'posttype' => null, 'urlrule' => $this->GetPostType(0, 'list_urlrule'), 'parameters_with' => array('posttype'), 'not_get' => array('page', 'cate', 'auth', 'tags', 'date', 'id', 'alias'), 'request_method' => array('POST', 'GET')));
 
         // 动态路由
         //  添加 文章页单页 动态路由
-        $this->RegRoute(array('type' => 'active', 'name' => 'active_post_article_single', 'call' => 'ViewPost', 'posttype' => 0, 'get' => array('id', 'alias'), 'not_get' => array('cate', 'auth', 'tags', 'date'), 'parameters_get' => array('id', 'alias'), 'parameters_with' => array('posttype')));
+        $this->RegRoute(array('type' => 'active', 'name' => 'active_post_article_single', 'call' => 'ViewPost', 'posttype' => 0, 'get' => array('id', 'alias'), 'not_get' => array('cate', 'auth', 'tags', 'date'), 'urlrule' => $this->GetPostType(0, 'single_urlrule'), 'parameters_get' => array('id', 'alias'), 'parameters_with' => array('posttype')));
         //  添加 页面页单页 动态路由
-        $this->RegRoute(array('type' => 'active', 'name' => 'active_post_page_single', 'call' => 'ViewPost', 'posttype' => 1, 'get' => array('id', 'alias'), 'not_get' => array('cate', 'auth', 'tags', 'date'), 'parameters_get' => array('id', 'alias'), 'parameters_with' => array('posttype')));
+        $this->RegRoute(array('type' => 'active', 'name' => 'active_post_page_single', 'call' => 'ViewPost', 'posttype' => 1, 'get' => array('id', 'alias'), 'not_get' => array('cate', 'auth', 'tags', 'date'), 'urlrule' => $this->GetPostType(0, 'single_urlrule'), 'parameters_get' => array('id', 'alias'), 'parameters_with' => array('posttype')));
         //  添加 文章页列表(带参数) 动态路由
         $this->RegRoute(array('type' => 'active', 'name' => 'active_post_article_list', 'call' => 'ViewList', 'posttype' => 0, 'get' => array('page'), 'not_get' => array('id', 'alias'), 'urlrule' => $this->GetPostType(0, 'list_urlrule'), 'parameters_get' => array('page'), 'parameters_with' => array('posttype')));
         //  添加 文章cate页列表(带参数) 动态路由
@@ -803,7 +803,7 @@ class ZBlogPHP
         //  添加 文章date页列表(带参数) 动态路由
         $this->RegRoute(array('type' => 'active', 'name' => 'active_post_article_list_date', 'call' => 'ViewList', 'posttype' => 0, 'get' => array('page', 'date'), 'not_get' => array('id', 'alias'), 'parameters_get' => array('page', 'date'), 'parameters_with' => array('posttype')));
 
-        //给PostType追加routes数据
+        //给“文章类和页面类”指定routes数据
         $routes = array(
             'post_article_single' => $this->GetRoute('active', 'active_post_article_single'),
             'post_article_list' => $this->GetRoute('active', 'active_post_article_list'),
@@ -820,9 +820,9 @@ class ZBlogPHP
         $this->SetPostType(1, 'routes', $routes);
 
         //  添加 页面页列表(带参数) 动态路由
-        //$this->RegRoute(array('type' => 'active', 'name' => 'active_post_page_list', 'call' => 'ViewList', 'posttype' => 1, 'prefix' => 'page', 'get' => array('page', 'cate', 'auth', 'tags', 'date'), 'not_get' => array('id', 'alias'), 'parameters_get' => array('page'), 'parameters_with' => array('posttype')));
+        //$this->RegRoute(array('type' => 'active', 'name' => 'active_post_page_list', 'call' => 'ViewList', 'posttype' => 1, 'prefix' => '', 'get' => array('page'), 'not_get' => array('id', 'alias'), 'parameters_get' => array('page'), 'parameters_with' => array('posttype')));
         //  添加 页面页列表(无参数) 动态路由
-        //$this->RegRoute(array('type' => 'active', 'name' => 'active_post_page_list_index', 'call' => 'ViewList', 'posttype' => 1, 'prefix' => 'page', 'get' => array(), 'not_get' => array('id', 'alias'), 'parameters_get' => array(), 'parameters_with' => array('posttype')));
+        //$this->RegRoute(array('type' => 'active', 'name' => 'active_post_page_list_index', 'call' => 'ViewList', 'posttype' => 1, 'prefix' => '', 'get' => array(), 'not_get' => array('id', 'alias'), 'parameters_get' => array(), 'parameters_with' => array('posttype')));
 
         if ($this->option['ZC_STATIC_MODE'] == 'REWRITE') {
             // 伪静路由
@@ -848,7 +848,7 @@ class ZBlogPHP
             // 2.注册伪静路由
             //$this->RegRoute(array('type' => 'rewrite', 'name' => 'rewrite_post_article_search', 'call' => 'ViewSearch', 'posttype' => 0, 'urlrule' => $this->GetPostType(0, 'search_urlrule'), 'parameters' => array('search' => array('search' => '[^/]+'), 'page'), 'parameters_with' => array('posttype')));
 
-            //给$posttype追加routes数据
+            //在伪静模式下，第2次追加覆盖，给“文章类和页面类”更新routes数据
             $routes = array(
                 'post_article_single' => $this->GetRoute('rewrite', 'rewrite_post_article_single'),
                 'post_article_list' => $this->GetRoute('rewrite', 'rewrite_post_article_list'),

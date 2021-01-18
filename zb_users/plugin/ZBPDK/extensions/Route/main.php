@@ -63,12 +63,15 @@ $replace_array = array(
     '\'parameters_with\' =' => "//固定传的call参数(先从\$_GET取值再从本条路由规则中取值并覆盖)\r\n" . '\'parameters_with\' =',
     '\'urlrule\' =' => "//伪静路由的原始规则(必须)\r\n" . '\'urlrule\' =',
     '\'match_without_page\' =' => "//设为ture或不设此参数，伪静路由会匹配2次，一次带page一次不带page,设为false只强制匹配带page参数的\r\n" . '\'match_without_page\' =',
+    '\'request_method\' =' => "//Request Method为Http的请求访问，一般不设或是设为array('GET', 'POST')或是'GET'\r\n" . '\'request_method\' =',    
 );
 
 foreach ($defined_route as $route_type => $route_note) {
     echo '<table class="tableFull tableBorder table_striped table_hover"><tbody><tr><th>'.$route_note.'</th></tr>';
     foreach ($zbp->routes[$route_type] as $key => $value) {
-        echo '<tr><td title="点击查看详细信息" style="cursor:pointer;" onclick="$(this).find(\'div\').toggle();">['.$zbp->posttype[$value['posttype']]['name'].'] '.$value['name'].' => ' . $value['call'] . '(';
+        $posttype_now = GetValueInArray($posttype, $value['posttype'], array());
+        $posttype_name =GetValueInArray($posttype_now, 'name', '');
+        echo '<tr><td title="点击查看详细信息" style="cursor:pointer;" onclick="$(this).find(\'div\').toggle();">['.$posttype_name.'] '.$value['name'].' => ' . $value['call'] . '(';
         $s = '';
         if (isset($value['parameters'])) {
             foreach ($value['parameters'] as $key2 => $value2) {

@@ -46,18 +46,11 @@ function ViewAuto($inpurl)
     if (($url == '' || $url == '/' || $url == 'index.php') && empty($_GET)) {
         foreach ($zbp->routes['default'] as $key => $route) {
             $bCheckGets = ViewAuto_Check_Get_And_Not_Get_And_Must_Get(array(), array(), array());
+            $bCheckGets = $bCheckGets && ViewAuto_Check_Request_Method(GetValueInArray($route, 'request_method', ''));
             if ($bCheckGets) {
-                $array = array('route' => $route);
-                if (isset($route['parameters_with']) && is_array($route['parameters_with'])) {
-                    foreach ($route['parameters_with'] as $key => $value) {
-                        if (isset($_GET[$value])) {
-                            $array[$value] = $_GET[$value];
-                        }
-                        if (isset($route[$value])) {
-                            $array[$value] = $route[$value];
-                        }
-                    }
-                }
+                $array = array();
+                $array = ViewAuto_Process_Parameters_With($array, GetValueInArray($route, 'parameters_with', array()), $route);
+                $array['route'] = $route;
                 ViewAuto_Call_Auto($route['call'], $array);
                 return;
             }
@@ -71,26 +64,14 @@ function ViewAuto($inpurl)
             $bCheckGets = ViewAuto_Check_Get_And_Not_Get_And_Must_Get(GetValueInArray($route, 'get', array()), GetValueInArray($route, 'not_get', array()), GetValueInArray($route, 'must_get', array()));
             //如果条件符合就组合参数数组并调用函数
             if ($bCheckGets) {
-                $array = array('route' => $route);
-                if (isset($route['parameters_get']) && is_array($route['parameters_get'])) {
-                    foreach ($route['parameters_get'] as $key => $value) {
-                        $array[$value] = GetVars($value, 'GET');
-                    }
-                }
-                if (isset($route['parameters_with']) && is_array($route['parameters_with'])) {
-                    foreach ($route['parameters_with'] as $key => $value) {
-                        if (isset($_GET[$value])) {
-                            $array[$value] = $_GET[$value];
-                        }
-                        if (isset($route[$value])) {
-                            $array[$value] = $route[$value];
-                        }
-                    }
-                }
+                $array = array();
+                $array = ViewAuto_Process_Parameters_Get($array, GetValueInArray($route, 'parameters_get', array()));
+                $array = ViewAuto_Process_Parameters_With($array, GetValueInArray($route, 'parameters_with', array()), $route);
                 if ($zbp->option['ZC_STATIC_MODE'] == 'REWRITE') {
-                    //伪静下传用参数
+                    //伪静下传取消显示的参数
                     $array['canceldisplay'] = true;
                 }
+                $array['route'] = $route;
                 $result = ViewAuto_Call_Auto($route['call'], $array);
                 if ($result == true) {
                     $template = &$zbp->template;
@@ -120,7 +101,7 @@ function ViewAuto($inpurl)
         }
         if (isset($route['match_without_page'])) {
             $match_without_page = $match_without_page && $route['match_without_page'];
-        }            
+        }
         $match_without_page = $match_without_page ? array(0 => false, 1 => true) : array(0 => false);
         foreach ($match_without_page as $match_without_page_key => $match_without_page_value) {
             $bCheckGets = ViewAuto_Check_Get_And_Not_Get_And_Must_Get(GetValueInArray($route, 'get', array()), GetValueInArray($route, 'not_get', array()), GetValueInArray($route, 'must_get', array()));
@@ -141,7 +122,7 @@ function ViewAuto($inpurl)
             //如果条件符合就组合参数数组并调用函数
             //var_dump($match_without_page_value, $route['urlrule'], $r, $url, $m);//die;
             if ($bCheckGets && (($r == '' && $r == $url) || ($r <> '' && preg_match($r, $url, $m) == 1))) {
-                $array = array('route' => $route);
+                $array = array();
                 $array = array_merge($array, $m);
                 //var_dump($match_without_page_value, $route['urlrule'], $r, $url, $m);die;
                 foreach ($parameters as $key => $value) {
@@ -149,16 +130,8 @@ function ViewAuto($inpurl)
                         $array[$value['name']] = $m[(string) $value['match']];
                     }
                 }
-                if (isset($route['parameters_with']) && is_array($route['parameters_with'])) {
-                    foreach ($route['parameters_with'] as $key => $value) {
-                        if (isset($_GET[$value])) {
-                            $array[$value] = $_GET[$value];
-                        }
-                        if (isset($route[$value])) {
-                            $array[$value] = $route[$value];
-                        }
-                    }
-                }
+                $array = ViewAuto_Process_Parameters_With($array, GetValueInArray($route, 'parameters_with', array()), $route);
+                                $array['route'] = $route;
                 $result = ViewAuto_Call_Auto($route['call'], $array);
                 if ($result == false) {
                     $zbp->ShowError(2, __FILE__, __LINE__);
@@ -173,23 +146,12 @@ function ViewAuto($inpurl)
     if ($url == '' || $url == '/' || $url == 'index.php') {
         foreach ($zbp->routes['default'] as $key => $route) {
             $bCheckGets = ViewAuto_Check_Get_And_Not_Get_And_Must_Get(GetValueInArray($route, 'get', array()), GetValueInArray($route, 'not_get', array()), GetValueInArray($route, 'must_get', array()));
+            $bCheckGets = $bCheckGets && ViewAuto_Check_Request_Method(GetValueInArray($route, 'request_method', ''));
             if ($bCheckGets) {
-                $array = array('route' => $route);
-                if (isset($route['parameters_get']) && is_array($route['parameters_get'])) {
-                    foreach ($route['parameters_get'] as $key => $value) {
-                        $array[$value] = GetVars($value, 'GET');
-                    }
-                }
-                if (isset($route['parameters_with']) && is_array($route['parameters_with'])) {
-                    foreach ($route['parameters_with'] as $key => $value) {
-                        if (isset($_GET[$value])) {
-                            $array[$value] = $_GET[$value];
-                        }
-                        if (isset($route[$value])) {
-                            $array[$value] = $route[$value];
-                        }
-                    }
-                }
+                $array = array();
+                $array = ViewAuto_Process_Parameters_Get($array, GetValueInArray($route, 'parameters_get', array()));
+                $array = ViewAuto_Process_Parameters_With($array, GetValueInArray($route, 'parameters_with', array()), $route);
+                $array['route'] = $route;
                 ViewAuto_Call_Auto($route['call'], $array);
                 return;
             }
@@ -213,6 +175,39 @@ function ViewAuto($inpurl)
 /**
  * ViewAuto的辅助函数
  */
+function ViewAuto_Process_Parameters_Get($array, $parameters_get)
+{
+    if (isset($parameters_get) && is_array($parameters_get)) {
+        foreach ($parameters_get as $key => $value) {
+            if (isset($_GET[$value])) {
+                $array[$value] = $_GET[$value];
+            }
+        }
+    }
+    return $array;
+}
+
+/**
+ * ViewAuto的辅助函数
+ */
+function ViewAuto_Process_Parameters_With($array, $parameters_with, $route)
+{
+    if (isset($parameters_with) && is_array($parameters_with)) {
+        foreach ($parameters_with as $key => $value) {
+            if (isset($_GET[$value])) {
+                $array[$value] = $_GET[$value];
+            }
+            if (isset($route[$value])) {
+                $array[$value] = $route[$value];
+            }
+        }
+    }
+    return $array;
+}
+
+/**
+ * ViewAuto的辅助函数
+ */
 function ViewAuto_Call_Auto($function, $array)
 {
     if (strpos($function, '::') !== false) {
@@ -225,6 +220,32 @@ function ViewAuto_Call_Auto($function, $array)
     } else {
         return call_user_func($function, $array);
     }
+}
+
+/**
+ * ViewAuto的辅助函数
+ */
+function ViewAuto_Check_Request_Method($request_method)
+{
+    $b = false;
+    if (!empty($request_method)) {
+        $m = $_SERVER['REQUEST_METHOD'];
+        if (is_array($request_method)) {
+            foreach ($request_method as $key => $value) {
+                if (strcasecmp($value, $m) == 0) {
+                    $b = true;
+                    break;
+                }
+            }
+        } else {
+            if (strcasecmp($request_method, $m) == 0) {
+                $b = true;
+            }
+        }
+    } else {
+        $b = true;
+    }
+    return $b;
 }
 
 /**

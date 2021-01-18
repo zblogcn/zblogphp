@@ -45,7 +45,9 @@ class UrlRule
             if (isset($url['urlrule_regex']) && $url['urlrule_regex'] != '') {
                 $this->PreUrl = $url['urlrule_regex'];
             } else {
-                $this->PreUrl = $url['urlrule'];
+                if (isset($url['urlrule'])) {
+                    $this->PreUrl = $url['urlrule'];
+                }
             }
         } else {
             $this->PreUrl = $url;
@@ -58,6 +60,14 @@ class UrlRule
     public function GetPreUrl()
     {
         return $this->PreUrl;
+    }
+
+    /**
+     * @return array
+     */
+    public function GetRoute()
+    {
+        return $this->Route;
     }
 
     /**
