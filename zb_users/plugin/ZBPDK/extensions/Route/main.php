@@ -56,7 +56,7 @@ $replace_array = array(
     '\'posttype\' =' => "//Post类型(文章为0，页面为1，以此类推)\r\n" . '\'posttype\' =',
     '\'prefix\' =' => "//prefix如指定的话，可以让不同Post类型在不同的prefix目录下被访问到而不是全挤在根目录下接受访问\r\n" . '\'prefix\' =',
     '\'get\' =' => "//只要有一个就可以匹配到本规则的\$_GET参数(可以为空数组即不指定参数)\r\n" . '\'get\' =',
-    '\'not_get\' =' => "//必须排除的\$_GET参数(可以为空数组)\r\n" . '\'not_get\' =',
+    '\'not_get\' =' => "//必须排除的\$_GET参数(可以为空数组),如果是array('/.+/')就会禁止任何参数传入\r\n" . '\'not_get\' =',
     '\'must_get\' =' => "//必须包含的\$_GET参数(可以为空数组)\r\n" . '\'get\' =',
     '\'parameters\' =' => "//从伪静规则匹配到的数组中取值传给call的参数(示例为array('cate'=>'id', 'page'=>'page') or array('post'=>array('id','alias'), 'page'=>'page') )\r\n" . '\'parameters\' =',
     '\'parameters_get\' =' => "//从\$_GET获取值传给call的参数()\r\n" . '\'parameters_get\' =',

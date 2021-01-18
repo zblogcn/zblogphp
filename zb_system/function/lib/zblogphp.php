@@ -785,7 +785,7 @@ class ZBlogPHP
 
         // 默认路由
         //  添加 默认路由 = 文章页列表(无参数)路由
-        $this->RegRoute(array('type' => 'default', 'name' => 'default_post_article_list_index', 'call' => 'ViewList', 'posttype' => null, 'urlrule' => $this->GetPostType(0, 'list_urlrule'), 'parameters_with' => array('posttype'), 'not_get' => array('page', 'cate', 'auth', 'tags', 'date', 'id', 'alias'), 'request_method' => array('POST', 'GET')));
+        $this->RegRoute(array('type' => 'default', 'name' => 'default_post_article_list_index', 'call' => 'ViewList', 'posttype' => 0, 'urlrule' => $this->GetPostType(0, 'list_urlrule'), 'parameters_with' => array('posttype'), 'not_get' => array('id', 'alias'), 'request_method' => array('POST', 'GET')));
 
         // 动态路由
         //  添加 文章页单页 动态路由

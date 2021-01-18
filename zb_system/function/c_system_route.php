@@ -268,9 +268,18 @@ function ViewAuto_Check_Get_And_Not_Get_And_Must_Get($get, $notget, $mustget)
     //检查GET参数是否有不需要的存在(全部不能存在) NOT
     if (!empty($notget)) {
         foreach ($notget as $key => $value) {
-            if (isset($_GET[$value])) {
-                $b = false;
-                break;
+            if ((substr($value, 0, 1) == '/' && substr_count ($value, '/') > 1) || (substr($value, 0, 1) == '#' && substr_count ($value, '#') > 1) || (substr($value, 0, 1) == '~' && substr_count ($value, '~') > 1)) {
+                foreach ($_GET as $key2 => $value2) {
+                    if (preg_match($value, $key2) === 1) {
+                        $b = false;
+                        return $b;
+                    }
+                }
+            } else {
+                if (isset($_GET[$value])) {
+                    $b = false;
+                    return $b;
+                }
             }
         }
     }
