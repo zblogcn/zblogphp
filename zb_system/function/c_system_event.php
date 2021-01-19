@@ -63,9 +63,7 @@ function SetLoginCookie($user, $cookieTime)
     $secure = HTTP_SCHEME == 'https://';
     setcookie('username_' . hash("crc32b", $zbp->guid), $user->Name, $cookieTime, $zbp->cookiespath, '', $secure, false);
     setcookie('token_' . hash("crc32b", $zbp->guid), $token, $cookieTime, $zbp->cookiespath, '', $secure, $zbp->cookie_tooken_httponly);
-    $cookiespath = str_replace('/', '', $zbp->cookiespath);
-    $cookiespath = $cookiespath != '' ? ('_' . $cookiespath) : $cookiespath;
-    setcookie('addinfo' . $cookiespath, json_encode($addinfo), $cookieTime, $zbp->cookiespath, '', $secure, false);
+    setcookie('addinfo' . str_replace('/', '', $zbp->cookiespath), json_encode($addinfo), $cookieTime, $zbp->cookiespath, '', $secure, false);
 
     return true;
 }
@@ -80,9 +78,7 @@ function Logout()
     setcookie('username_' . hash("crc32b", $zbp->guid), '', (time() - 3600), $zbp->cookiespath);
     setcookie('token_' . hash("crc32b", $zbp->guid), '', (time() - 3600), $zbp->cookiespath);
     setcookie('password', '', (time() - 3600), $zbp->cookiespath);
-    $cookiespath = str_replace('/', '', $zbp->cookiespath);
-    $cookiespath = $cookiespath != '' ? ('_' . $cookiespath) : $cookiespath;
-    setcookie("addinfo" . $cookiespath, '', (time() - 3600), $zbp->cookiespath);
+    setcookie("addinfo" . str_replace('/', '', $zbp->cookiespath), '', (time() - 3600), $zbp->cookiespath);
 
     foreach ($GLOBALS['hooks']['Filter_Plugin_Logout_Succeed'] as $fpname => &$fpsignal) {
         $fpname();
@@ -1131,6 +1127,8 @@ function CheckComment()
     }
 
     $zbp->AddBuildModule('comments');
+
+    return $cmt;
 }
 
 /**
@@ -2008,6 +2006,7 @@ function SetSidebar()
         $zbp->option[$optionName] = trim(GetVars($formName, 'POST'), '|');
     }
     $zbp->SaveOption();
+    return true;
 }
 
 /**

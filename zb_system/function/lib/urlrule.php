@@ -24,6 +24,11 @@ class UrlRule
     private $Route = array();
 
     /**
+     * @var bool
+     */
+    public $isIndex = false; //指示是否为首页的规则(已废弃)
+
+    /**
      * @var bool MakeReplace(变量名义意不明，以后要换)为真就进行Make_Rewrite_Replace 为假为进行Make_Active_Replace
      */
     public $MakeReplace = true;
@@ -183,7 +188,11 @@ class UrlRule
     {
         $newargs = array();
         
-        $parameters = $route['parameters'];
+        if (isset($route['parameters'])) {
+            $parameters = $route['parameters'];
+        } else {
+            $parameters = array();
+        }
 
         $args = array();
         foreach ($parameters as $key2 => $value2) {
@@ -309,19 +318,24 @@ class UrlRule
     }
 
     /**
+     * 1.7新版本的OutputUrlRegEx
+     * 
      * @param $url
      * @param $type
      * @param $match_without_page boolean
      *
      * @return string
      */
-    public static function OutputUrlRegEx($url, $type, $match_without_page = false)
+    public static function OutputUrlRegEx($url, $type, $haspage = false)
     {
         global $zbp;
 
         if (is_array($url)) {
             return self::OutputUrlRegEx_Route($url);
         }
+
+        //1.7版本的参数意义反转了 $haspage = false(没有page页) 就是 $match_without_page = true (去除page页)
+        $match_without_page = !$haspage;
 
         self::$categoryLayer = $GLOBALS['zbp']->category_recursion_real_deep;
         $post_type_name = array('post');
@@ -395,6 +409,155 @@ class UrlRule
         if ($url == '^$') {
             return '';
         }
+        return '/(?J)' . $url . '/';
+
+        // 关于J标识符的使用
+        // @see https://bugs.php.net/bug.php?id=47456
+    }
+
+    /**
+     * 旧版本的OutputUrlRegEx (暂时没有删除，如果出错了可以改用这个 )
+     * 
+     * @param $url
+     * @param $type
+     * @param $match_without_page boolean
+     *
+     * @return string
+     */
+    public static function OutputUrlRegEx_OLD($url, $type, $haspage = false)
+    {
+        global $zbp;
+
+        if (is_array($url)) {
+            return self::OutputUrlRegEx_Route($url);
+        }
+
+        self::$categoryLayer = $GLOBALS['zbp']->category_recursion_real_deep;
+        $post_type_name = array('post');
+        foreach ($zbp->posttype as $key => $value) {
+            $post_type_name[] = $value['name'];
+        }
+
+        $s = $url;
+        $s = str_replace('%page%', '%poaogoe%', $s);
+        $url = str_replace('{%host%}', '^', $url);
+        $url = str_replace('.', '\\.', $url);
+        if ($type == 'index') {
+            $url = str_replace('%page%', '%poaogoe%', $url);
+            preg_match('/[^\{\}]+(?=\{%poaogoe%\})/i', $s, $matches);
+            if (isset($matches[0])) {
+                $url = str_replace($matches[0], '(?:' . $matches[0] . ')<:1:>', $url);
+            }
+            $url = $url . '$';
+            $url = str_replace('%poaogoe%', '(?P<page>[0-9]*)', $url);
+        }
+        if ($type == 'cate' || $type == 'tags' || $type == 'date' || $type == 'auth' || $type == 'list') {
+            $url = str_replace('%page%', '%poaogoe%', $url);
+            preg_match('/(?<=\})[^\{\}]+(?=\{%poaogoe%\})/i', $s, $matches);
+            if (isset($matches[0])) {
+                if ($haspage) {
+                    //$url = str_replace($matches[0], '(?:' . $matches[0] . ')', $url);
+                    $url = preg_replace('/(?<=\})[^\{\}]+(?=\{%poaogoe%\})/i', '(?:' . $matches[0] . ')', $url, 1);
+                } else {
+                    //$url = str_replace($matches[0], '', $url);
+                    if (stripos($url, '_{%poaogoe%}') !== false) {
+                        $url = str_replace('_{%poaogoe%}', '{%poaogoe%}', $url);
+                    } elseif (stripos($url, '/{%poaogoe%}') !== false) {
+                        $url = str_replace('/{%poaogoe%}', '{%poaogoe%}', $url);
+                    } elseif (stripos($url, '-{%poaogoe%}') !== false) {
+                        $url = str_replace('-{%poaogoe%}', '{%poaogoe%}', $url);
+                    } else {
+                        $url = preg_replace('/(?<=\})[^\{\}]+(?=\{%poaogoe%\})/i', '', $url, 1);
+                    }
+                }
+            }
+            $url = $url . '$';
+            if ($haspage) {
+                $url = str_replace('%poaogoe%', '(?P<page>[0-9]*)', $url);
+            } else {
+                $url = str_replace('%poaogoe%', '', $url);
+            }
+
+            $url = str_replace('%date%', '(?P<date>[0-9\-]+)', $url);
+            if ($type == 'cate') {
+                $url = str_replace('%id%', '(?P<cate>[0-9]+)', $url);
+
+                $carray = array();
+                for ($i = 1; $i <= self::$categoryLayer; $i++) {
+                    $carray[$i] = '[^\./_]*';
+                    for ($j = 1; $j <= ($i - 1); $j++) {
+                        $carray[$i] = '[^\./_]*/' . $carray[$i];
+                    }
+                }
+                $fullcategory = implode('|', $carray);
+                $url = str_replace('%alias%', '(?P<cate>(' . $fullcategory . ')+?)', $url);
+            }
+            if ($type == 'tags') {
+                   $url = str_replace('%id%', '(?P<tags>[0-9]+)', $url);
+                $url = str_replace('%alias%', '(?P<tags>[^\./_]+?)', $url);
+            }
+            if ($type == 'auth') {
+                $url = str_replace('%id%', '(?P<auth>[0-9]+)', $url);
+                $url = str_replace('%alias%', '(?P<auth>[^\./_]+?)', $url);
+            }
+        }
+        if (in_array($type, $post_type_name)) {
+            $url = str_replace('%page%', '%poaogoe%', $url);
+            preg_match('/(?<=\})[^\{\}]+(?=\{%poaogoe%\})/i', $s, $matches);
+            if (isset($matches[0])) {
+                if ($haspage) {
+                    //$url = str_replace($matches[0], '(?:' . $matches[0] . ')', $url);
+                    $url = preg_replace('/(?<=\})[^\{\}]+(?=\{%poaogoe%\})/i', '(?:' . $matches[0] . ')', $url, 1);
+                } else {
+                    //$url = str_replace($matches[0], '', $url);
+                    if (stripos($url, '_{%poaogoe%}') !== false) {
+                        $url = str_replace('_{%poaogoe%}', '{%poaogoe%}', $url);
+                    } elseif (stripos($url, '/{%poaogoe%}') !== false) {
+                        $url = str_replace('/{%poaogoe%}', '{%poaogoe%}', $url);
+                    } elseif (stripos($url, '-{%poaogoe%}') !== false) {
+                        $url = str_replace('-{%poaogoe%}', '{%poaogoe%}', $url);
+                    } else {
+                        $url = preg_replace('/(?<=\})[^\{\}]+(?=\{%poaogoe%\})/i', '', $url, 1);
+                    }
+                }
+            }
+            if ($haspage) {
+                $url = str_replace('%poaogoe%', '(?P<page>[0-9]*)', $url);
+            } else {
+                $url = str_replace('%poaogoe%', '', $url);
+            }
+            if (strpos($url, '%id%') !== false) {
+                $url = str_replace('%id%', '(?P<id>[0-9]+)', $url);
+            }
+            if (strpos($url, '%alias%') !== false) {
+                if ($type == 'article') {
+                    $url = str_replace('%alias%', '(?P<alias>[^/]+)', $url);
+                } else {
+                    $url = str_replace('%alias%', '(?P<alias>.+)', $url);
+                }
+            }
+            $url = $url . '$';
+            $url = str_replace('%category%', '(?P<category>(([^\./_]*/?)<:1,' . self::$categoryLayer . ':>))', $url);
+            $url = str_replace('%author%', '(?P<author>[^\./_]+)', $url);
+            $url = str_replace('%year%', '(?P<year>[0-9]<:4:>)', $url);
+            $url = str_replace('%month%', '(?P<month>[0-9]<:1,2:>)', $url);
+            $url = str_replace('%day%', '(?P<day>[0-9]<:1,2:>)', $url);
+        }
+        $url = str_replace('{', '', $url);
+        $url = str_replace('}', '', $url);
+        $url = str_replace('<:', '{', $url);
+        $url = str_replace(':>', '}', $url);
+        $url = str_replace('/', '\/', $url);
+        //$url = str_replace('\/$', '$', $url);
+        if ($haspage == false && $type == 'list') {
+            if (substr($url, 0, 7) == '^page\.' || $url == '^page\/$') {
+                $url = '';
+            }
+        }
+        if ($url == '') {
+            return $url;
+        }
+
         return '/(?J)' . $url . '/';
 
         // 关于J标识符的使用

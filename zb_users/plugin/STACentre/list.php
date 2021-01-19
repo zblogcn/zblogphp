@@ -151,11 +151,13 @@ if (strpos($default_tab, 'apache') !== false) {
                 <span>IIS 7及以上  + URL Rewrite Module</span>
               </a>
             </li>
+<?php if($zbp->version < 170000){ ?>
             <li>
               <a href="#tab3" <?php echo $default_tab == 3 ? 'class="default-tab"' : ''; ?>>
                 <span>IIS 6 + ISAPI Rewrite 2.X</span>
               </a>
             </li>
+<?php }?>
             <li>
               <a href="#tab4" <?php echo $default_tab == 4 ? 'class="default-tab"' : ''; ?>>
                 <span>Nginx</span>
@@ -166,11 +168,13 @@ if (strpos($default_tab, 'apache') !== false) {
                 <span>Lighttpd</span>
               </a>
             </li>
+<?php if($zbp->version < 170000){ ?>
             <li>
               <a href="#tab6" <?php echo $default_tab == 6 ? 'class="default-tab"' : ''; ?>>
                 <span>无组件</span>
               </a>
             </li>
+<?php }?>
           </ul>
           <div class="clear"></div>
         </div>

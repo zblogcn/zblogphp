@@ -45,14 +45,16 @@ function ViewAuto($inpurl)
     //无GET参数时，首先进入默认路由
     if (($url == '' || $url == '/' || $url == 'index.php') && empty($_GET)) {
         foreach ($zbp->routes['default'] as $key => $route) {
-            $bCheckGets = ViewAuto_Check_Get_And_Not_Get_And_Must_Get(array(), array(), array());
-            $bCheckGets = $bCheckGets && ViewAuto_Check_Request_Method(GetValueInArray($route, 'request_method', ''));
-            if ($bCheckGets) {
+            $b = ViewAuto_Check_Get_And_Not_Get_And_Must_Get(array(), array(), array());
+            $b = $b && ViewAuto_Check_Request_Method(GetValueInArray($route, 'request_method', ''));
+            if ($b) {
                 $array = array();
                 $array = ViewAuto_Process_Parameters_With($array, GetValueInArray($route, 'parameters_with', array()), $route);
                 $array['route'] = $route;
-                ViewAuto_Call_Auto($route['call'], $array);
-                return;
+                $result = ViewAuto_Call_Auto($route['call'], $array);
+                if ($result == true) {
+                    return;
+                }
             }
         }
     }
@@ -61,20 +63,20 @@ function ViewAuto($inpurl)
     foreach ($zbp->routes['active'] as $key => $route) {
         $prefix = GetValueInArray($route, 'prefix', '');
         if (($url == $prefix . '') || ($url == $prefix . '/') || ($url == $prefix . '/index.php')) {
-            $bCheckGets = ViewAuto_Check_Get_And_Not_Get_And_Must_Get(GetValueInArray($route, 'get', array()), GetValueInArray($route, 'not_get', array()), GetValueInArray($route, 'must_get', array()));
+            $b = ViewAuto_Check_Get_And_Not_Get_And_Must_Get(GetValueInArray($route, 'get', array()), GetValueInArray($route, 'not_get', array()), GetValueInArray($route, 'must_get', array()));
             //如果条件符合就组合参数数组并调用函数
-            if ($bCheckGets) {
+            if ($b) {
                 $array = array();
                 $array = ViewAuto_Process_Parameters_Get($array, GetValueInArray($route, 'parameters_get', array()));
                 $array = ViewAuto_Process_Parameters_With($array, GetValueInArray($route, 'parameters_with', array()), $route);
                 if ($zbp->option['ZC_STATIC_MODE'] == 'REWRITE') {
-                    //伪静下传取消显示的参数
                     $array['canceldisplay'] = true;
                 }
                 $array['route'] = $route;
                 $result = ViewAuto_Call_Auto($route['call'], $array);
                 if ($result == true) {
                     $template = &$zbp->template;
+                    //如果开启伪静，那么通过原动态访问的会跳转
                     if ($zbp->option['ZC_STATIC_MODE'] == 'REWRITE') {
                         Redirect($template->GetTags('url'));
                     }
@@ -102,26 +104,25 @@ function ViewAuto($inpurl)
         if (isset($route['match_without_page'])) {
             $match_without_page = $match_without_page && $route['match_without_page'];
         }
-        $match_without_page = $match_without_page ? array(0 => false, 1 => true) : array(0 => false);
-        foreach ($match_without_page as $match_without_page_key => $match_without_page_value) {
-            $bCheckGets = ViewAuto_Check_Get_And_Not_Get_And_Must_Get(GetValueInArray($route, 'get', array()), GetValueInArray($route, 'not_get', array()), GetValueInArray($route, 'must_get', array()));
+        $match_without_page_array = $match_without_page ? array(0 => false, 1 => true) : array(0 => false);
+        foreach ($match_without_page_array as $match_without_page_key => $match_without_page_value) {
+            $b = ViewAuto_Check_Get_And_Not_Get_And_Must_Get(GetValueInArray($route, 'get', array()), GetValueInArray($route, 'not_get', array()), GetValueInArray($route, 'must_get', array()));
 
             //如果直接指定了$route['urlrule_regex']，就不调用UrlRule::OutputUrlRegEx，直接preg_match，那就不执行$hasPage_value = true的情况
             if (isset($route['urlrule_regex']) && trim($route['urlrule_regex']) != '') {
                 $r = $route['urlrule_regex'];
-                if ($match_without_page == true) {
+                if ($match_without_page_value == true) {
                     continue;
                 }
             } else {
-                //进入UrlRule::OutputUrlRegEx_Route
-                $r = UrlRule::OutputUrlRegEx_Route($route, $match_without_page_value);
                 //$r = UrlRule::OutputUrlRegEx($zbp->GetPostType(0, 'list_urlrule'), 'list', $match_without_page_value);
+                $r = UrlRule::OutputUrlRegEx_Route($route, $match_without_page_value);
             }
 
             $m = array();
             //如果条件符合就组合参数数组并调用函数
             //var_dump($match_without_page_value, $route['urlrule'], $r, $url, $m);//die;
-            if ($bCheckGets && (($r == '' && $r == $url) || ($r <> '' && preg_match($r, $url, $m) == 1))) {
+            if ($b && (($r == '' && $r == $url) || ($r <> '' && preg_match($r, $url, $m) == 1))) {
                 $array = array();
                 $array = array_merge($array, $m);
                 //var_dump($match_without_page_value, $route['urlrule'], $r, $url, $m);die;
@@ -130,13 +131,15 @@ function ViewAuto($inpurl)
                         $array[$value['name']] = $m[(string) $value['match']];
                     }
                 }
+
                 $array = ViewAuto_Process_Parameters_With($array, GetValueInArray($route, 'parameters_with', array()), $route);
                                 $array['route'] = $route;
+//var_dump($route);
+//die;
                 $result = ViewAuto_Call_Auto($route['call'], $array);
-                if ($result == false) {
-                    $zbp->ShowError(2, __FILE__, __LINE__);
+                if ($result == true) {
+                    return;
                 }
-                return;
             }
         }
     }
@@ -145,15 +148,17 @@ function ViewAuto($inpurl)
     //都不能匹配时，再进入一次默认路由
     if ($url == '' || $url == '/' || $url == 'index.php') {
         foreach ($zbp->routes['default'] as $key => $route) {
-            $bCheckGets = ViewAuto_Check_Get_And_Not_Get_And_Must_Get(GetValueInArray($route, 'get', array()), GetValueInArray($route, 'not_get', array()), GetValueInArray($route, 'must_get', array()));
-            $bCheckGets = $bCheckGets && ViewAuto_Check_Request_Method(GetValueInArray($route, 'request_method', ''));
-            if ($bCheckGets) {
+            $b = ViewAuto_Check_Get_And_Not_Get_And_Must_Get(GetValueInArray($route, 'get', array()), GetValueInArray($route, 'not_get', array()), GetValueInArray($route, 'must_get', array()));
+            $b = $b && ViewAuto_Check_Request_Method(GetValueInArray($route, 'request_method', ''));
+            if ($b) {
                 $array = array();
                 $array = ViewAuto_Process_Parameters_Get($array, GetValueInArray($route, 'parameters_get', array()));
                 $array = ViewAuto_Process_Parameters_With($array, GetValueInArray($route, 'parameters_with', array()), $route);
                 $array['route'] = $route;
-                ViewAuto_Call_Auto($route['call'], $array);
-                return;
+                $result = ViewAuto_Call_Auto($route['call'], $array);
+                if ($result == true) {
+                    return;
+                }
             }
         }
     }
@@ -298,6 +303,35 @@ function ViewAuto_Check_Get_And_Not_Get_And_Must_Get($get, $notget, $mustget)
         }
     }
     return $b;
+}
+
+/**
+ * ViewAuto的辅助函数
+ */
+function ViewAuto_Process_Pagebar_Replace_Array(&$pagebar, $route, $args)
+{
+    $args = is_array($args) ? $args : array();
+    $array = GetValueInArray($args, 0, array());
+    $array = is_array($array) ? $array : array();
+    $parameters = UrlRule::ProcessParameters($route);
+    $replace = array();
+
+    foreach ($parameters as $key => $value) {
+        if (isset($array[$key])) {
+            $replace[$value['match']] = $array[$key];
+        }
+    }
+    $rules = &$pagebar->UrlRule->Rules;
+    foreach ($replace as $key => $value) {
+        if (!isset($rules['{%' . $key . '%}'])) {
+            $rules['{%' . $key . '%}'] = $value;
+        }
+    }
+    foreach ($array as $key => $value) {
+        if (is_string($key) && is_scalar($value) && !isset($rules['{%' . $key . '%}'])) {
+            $rules['{%' . $key . '%}'] = $value;
+        }
+    }
 }
 
 //###############################################################################################################
@@ -566,10 +600,12 @@ function ViewSearch()
     } else {
         $zbp->template->SetTags('url', $zbp->host);
     }
+    $zbp->template->SetTags('args', $fpargs);
+    $zbp->template->SetTags('route', $route);
 
     //1.6统一改为search模式
     $zbp->template->SetTags('type', 'search');
-    //1.7强制指定搜索模板为优先为search或是index
+    //1.7指定搜索模板为优先为search或是index
     if ($zbp->template->HasTemplate($zbp->GetPostType($posttype, 'search_template'))) {
         $zbp->template->SetTemplate($zbp->GetPostType($posttype, 'search_template'));
     } else {
@@ -612,7 +648,7 @@ function ViewSearch()
  *
  * @return string
  */
-function ViewList($page = null, $cate = null, $auth = null, $date = null, $tags = null, $canceldisplay = false, $posttype = 0)
+function ViewList($page = null, $cate = null, $auth = null, $date = null, $tags = null, $isrewrite = false, $posttype = 0, $canceldisplay = false)
 {
     global $zbp;
 
@@ -708,7 +744,7 @@ function ViewList($page = null, $cate = null, $auth = null, $date = null, $tags 
             }
 
             if ($category->ID == '') {
-                if (!empty($route)) {
+                if (!empty($route) || $isrewrite == true) {
                     return false;
                 }
 
@@ -762,7 +798,7 @@ function ViewList($page = null, $cate = null, $auth = null, $date = null, $tags 
             }
 
             if ($author->ID == '') {
-                if (!empty($route)) {
+                if (!empty($route) || $isrewrite == true) {
                     return false;
                 }
 
@@ -849,7 +885,7 @@ function ViewList($page = null, $cate = null, $auth = null, $date = null, $tags 
             }
 
             if ($tag->ID == 0) {
-                if (!empty($route)) {
+                if (!empty($route) || $isrewrite == true) {
                     return false;
                 }
 
@@ -907,6 +943,7 @@ function ViewList($page = null, $cate = null, $auth = null, $date = null, $tags 
     $order = array('log_PostTime' => 'DESC');
     $limit = array(($pagebar->PageNow - 1) * $pagebar->PageCount, $pagebar->PageCount);
     $option = array('pagebar' => $pagebar);
+    ViewAuto_Process_Pagebar_Replace_Array($pagebar, $route, $fpargs);
 
     foreach ($GLOBALS['hooks']['Filter_Plugin_LargeData_Article'] as $fpname => &$fpsignal) {
         $fpreturn = $fpname($select, $w, $order, $limit, $option, $type);
@@ -959,12 +996,13 @@ function ViewList($page = null, $cate = null, $auth = null, $date = null, $tags 
     $zbp->template->SetTags('author', $author);
     $zbp->template->SetTags('category', $category);
 
-    $zbp->template->SetTags('args', $fpargs);
     if (is_object($pagebar) && isset($pagebar->buttons[$pagebar->PageNow])) {
         $zbp->template->SetTags('url', $pagebar->buttons[$pagebar->PageNow]);
     } else {
         $zbp->template->SetTags('url', $zbp->host);
     }
+    $zbp->template->SetTags('args', $fpargs);
+    $zbp->template->SetTags('route', $route);
 
     if ($zbp->template->hasTemplate($template)) {
         $zbp->template->SetTemplate($template);
@@ -1000,7 +1038,7 @@ function ViewList($page = null, $cate = null, $auth = null, $date = null, $tags 
  *
  * @return string
  */
-function ViewPost($id = null, $alias = null, $canceldisplay = false, $posttype = 0)
+function ViewPost($id = null, $alias = null, $isrewrite = false, $posttype = 0, $canceldisplay = false)
 {
     global $zbp;
 
@@ -1079,7 +1117,7 @@ function ViewPost($id = null, $alias = null, $canceldisplay = false, $posttype =
 
     $articles = $zbp->GetPostList($select, $w, $order, $limit, $option);
     if (count($articles) == 0) {
-        if (!empty($route)) {
+        if (!empty($route) || $isrewrite == true) {
             return false;
         }
         $zbp->ShowError(2, __FILE__, __LINE__);
@@ -1102,8 +1140,12 @@ function ViewPost($id = null, $alias = null, $canceldisplay = false, $posttype =
         $zbp->ShowError(2, __FILE__, __LINE__);
     }
 
-    if (!empty($route) && isset($object[0]) && !isset($object['page']) && !(stripos(urldecode($article->Url), $object[0]) !== false)) {
-        $zbp->ShowError(2, __FILE__, __LINE__);
+    if (!empty($route) || $isrewrite == true) {
+        if (isset($object[0]) && !isset($object['page'])) {
+            if (!(stripos(urldecode($article->Url), $object[0]) !== false)) {
+                $zbp->ShowError(2, __FILE__, __LINE__);
+            }
+        }
     }
 
     $zbp->LoadTagsByIDString($article->Tag);
@@ -1119,6 +1161,7 @@ function ViewPost($id = null, $alias = null, $canceldisplay = false, $posttype =
     $pagebar->PageNow = 1;
     $pagebar->PageBarCount = $zbp->pagebarcount;
     //$pagebar->Count = $article->CommNums;
+    ViewAuto_Process_Pagebar_Replace_Array($pagebar, $route, $fpargs);
 
     if ($zbp->option['ZC_COMMENT_TURNOFF']) {
         $article->IsLock = true;
@@ -1186,6 +1229,7 @@ function ViewPost($id = null, $alias = null, $canceldisplay = false, $posttype =
     $zbp->template->SetTags('comments', $comments);
 
     $zbp->template->SetTags('args', $fpargs);
+    $zbp->template->SetTags('route', $route);
 
     if ($zbp->template->hasTemplate($article->Template)) {
         $zbp->template->SetTemplate($article->Template);
