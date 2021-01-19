@@ -42,43 +42,36 @@ function ViewAuto($inpurl)
 
     $url = urldecode($url);
 
-    //无GET参数时，首先进入默认路由
-    if (($url == '' || $url == '/' || $url == 'index.php') && empty($_GET)) {
-        foreach ($zbp->routes['default'] as $key => $route) {
-            $b = ViewAuto_Check_Get_And_Not_Get_And_Must_Get(array(), array(), array());
-            $b = $b && ViewAuto_Check_Request_Method(GetValueInArray($route, 'request_method', ''));
-            if ($b) {
-                $array = array();
-                $array = ViewAuto_Process_Parameters_With($array, GetValueInArray($route, 'parameters_with', array()), $route);
-                $array['route'] = $route;
-                $result = ViewAuto_Call_Auto($route['call'], $array);
-                if ($result == true) {
-                    return;
-                }
-            }
-        }
-    }
-
-    //匹配动态路由（在伪静下也匹配但不输出内容只做跳转用）
+    //匹配动态路由（在伪静下也匹配但不输出内容，符合条件只做跳转用）
     foreach ($zbp->routes['active'] as $key => $route) {
         $prefix = GetValueInArray($route, 'prefix', '');
-        if (($url == $prefix . '') || ($url == $prefix . '/') || ($url == $prefix . '/index.php')) {
+        $prefix = empty($prefix) ? '' : ($prefix . '/');
+        if (($url == $prefix . '') || ($url == $prefix . 'index.php')) {
             $b = ViewAuto_Check_Get_And_Not_Get_And_Must_Get(GetValueInArray($route, 'get', array()), GetValueInArray($route, 'not_get', array()), GetValueInArray($route, 'must_get', array()));
+            $b = $b && ViewAuto_Check_Request_Method(GetValueInArray($route, 'request_method', ''));
             //如果条件符合就组合参数数组并调用函数
             if ($b) {
                 $array = array();
                 $array = ViewAuto_Process_Parameters_Get($array, GetValueInArray($route, 'parameters_get', array()));
                 $array = ViewAuto_Process_Parameters_With($array, GetValueInArray($route, 'parameters_with', array()), $route);
-                if ($zbp->option['ZC_STATIC_MODE'] == 'REWRITE') {
-                    $array['canceldisplay'] = true;
+                $b_redirect = true;//!empty(GetValueInArray($route, 'parameters_get', array()));
+                //$b_redirect = $b_redirect && !($url == '' || $url == 'index.php');
+                if ($zbp->option['ZC_STATIC_MODE'] == 'REWRITE' && $b_redirect) {
+                    $r = UrlRule::OutputUrlRegEx_Route($route, false);
+                    if (!empty($r)) {
+                        $array['canceldisplay'] = true;
+                    }
+
                 }
                 $array['route'] = $route;
                 $result = ViewAuto_Call_Auto($route['call'], $array);
                 if ($result == true) {
                     $template = &$zbp->template;
                     //如果开启伪静，那么通过原动态访问的会跳转
-                    if ($zbp->option['ZC_STATIC_MODE'] == 'REWRITE') {
-                        Redirect($template->GetTags('url'));
+                    if ($zbp->option['ZC_STATIC_MODE'] == 'REWRITE' && $b_redirect) {
+                        if (!empty($r)) {
+                            Redirect($template->GetTags('url'));
+                        }
                     }
                     return;
                 }
@@ -86,46 +79,44 @@ function ViewAuto($inpurl)
         }
     }
 
-
     //匹配伪静路由
     foreach ($zbp->routes['rewrite'] as $key => $route) {
-        //$match_without_page 为真就执行2次，为假为执行1次
+        //$match_with_page 默认匹配1次 (true)，有page参数可以匹配2次 (false, true)
         if (isset($route['parameters']) && is_array($route['parameters'])) {
             $parameters = UrlRule::ProcessParameters($route);
         } else {
             $parameters = array();
         }
-        $match_without_page = false;
+        $match_with_page = array();
         foreach ($parameters as $key => $value) {
             if ($value['match'] == 'page') {
-                $match_without_page = true;
+                $match_with_page['can_ignore_page'] = false;
             }
         }
-        if (isset($route['match_without_page'])) {
-            $match_without_page = $match_without_page && $route['match_without_page'];
+        $only_match_page = GetValueInArray($route, 'only_match_page', false);
+        if ($only_match_page == true) {
+            unset($match_with_page['can_ignore_page']);
         }
-        $match_without_page_array = $match_without_page ? array(0 => false, 1 => true) : array(0 => false);
-        foreach ($match_without_page_array as $match_without_page_key => $match_without_page_value) {
-            $b = ViewAuto_Check_Get_And_Not_Get_And_Must_Get(GetValueInArray($route, 'get', array()), GetValueInArray($route, 'not_get', array()), GetValueInArray($route, 'must_get', array()));
+        $match_with_page['normal'] = true;
 
-            //如果直接指定了$route['urlrule_regex']，就不调用UrlRule::OutputUrlRegEx，直接preg_match，那就不执行$hasPage_value = true的情况
+        foreach ($match_with_page as $match_with_page_key => $match_with_page_value) {
+            $b = ViewAuto_Check_Get_And_Not_Get_And_Must_Get(GetValueInArray($route, 'get', array()), GetValueInArray($route, 'not_get', array()), GetValueInArray($route, 'must_get', array()));
+            $b = $b && ViewAuto_Check_Request_Method(GetValueInArray($route, 'request_method', ''));
+            //如果直接指定了$route['urlrule_regex']，就不调用UrlRule::OutputUrlRegEx，直接preg_match，那就不执行$match_with_page_value = true的情况
             if (isset($route['urlrule_regex']) && trim($route['urlrule_regex']) != '') {
                 $r = $route['urlrule_regex'];
-                if ($match_without_page_value == true) {
-                    continue;
-                }
             } else {
-                //$r = UrlRule::OutputUrlRegEx($zbp->GetPostType(0, 'list_urlrule'), 'list', $match_without_page_value);
-                $r = UrlRule::OutputUrlRegEx_Route($route, $match_without_page_value);
+                //$r = UrlRule::OutputUrlRegEx($zbp->GetPostType(0, 'list_urlrule'), 'list', $match_with_page_value);
+                $r = UrlRule::OutputUrlRegEx_Route($route, $match_with_page_value);
             }
 
             $m = array();
             //如果条件符合就组合参数数组并调用函数
-            //var_dump($match_without_page_value, $route['urlrule'], $r, $url, $m);//die;
+            //var_dump($match_with_page_value, $route['urlrule'], $r, $url, $m);//die;
             if ($b && (($r == '' && $r == $url) || ($r <> '' && preg_match($r, $url, $m) == 1))) {
                 $array = array();
                 $array = array_merge($array, $m);
-                //var_dump($match_without_page_value, $route['urlrule'], $r, $url, $m);die;
+                //var_dump($match_with_page_value, $route['urlrule'], $r, $url, $m);die;
                 foreach ($parameters as $key => $value) {
                     if (isset($m[(string) $value['match']])) {
                         $array[$value['name']] = $m[(string) $value['match']];
@@ -134,8 +125,6 @@ function ViewAuto($inpurl)
 
                 $array = ViewAuto_Process_Parameters_With($array, GetValueInArray($route, 'parameters_with', array()), $route);
                                 $array['route'] = $route;
-//var_dump($route);
-//die;
                 $result = ViewAuto_Call_Auto($route['call'], $array);
                 if ($result == true) {
                     return;
@@ -144,8 +133,7 @@ function ViewAuto($inpurl)
         }
     }
 
-
-    //都不能匹配时，再进入一次默认路由
+    //都不能匹配时，进入一次默认路由
     if ($url == '' || $url == '/' || $url == 'index.php') {
         foreach ($zbp->routes['default'] as $key => $route) {
             $b = ViewAuto_Check_Get_And_Not_Get_And_Must_Get(GetValueInArray($route, 'get', array()), GetValueInArray($route, 'not_get', array()), GetValueInArray($route, 'must_get', array()));
@@ -273,7 +261,7 @@ function ViewAuto_Check_Get_And_Not_Get_And_Must_Get($get, $notget, $mustget)
     //检查GET参数是否有不需要的存在(全部不能存在) NOT
     if (!empty($notget)) {
         foreach ($notget as $key => $value) {
-            if ((substr($value, 0, 1) == '/' && substr_count ($value, '/') > 1) || (substr($value, 0, 1) == '#' && substr_count ($value, '#') > 1) || (substr($value, 0, 1) == '~' && substr_count ($value, '~') > 1)) {
+            if ((substr($value, 0, 1) == '/' && substr_count($value, '/') > 1) || (substr($value, 0, 1) == '#' && substr_count($value, '#') > 1) || (substr($value, 0, 1) == '~' && substr_count($value, '~') > 1)) {
                 foreach ($_GET as $key2 => $value2) {
                     if (preg_match($value, $key2) === 1) {
                         $b = false;

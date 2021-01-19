@@ -111,18 +111,19 @@ class UrlRule
         global $zbp;
         $s = $this->PreUrl;
 
-        $match_without_page = GetValueInArray($this->Route, 'match_without_page', true);
+        $only_match_page = GetValueInArray($this->Route, 'only_match_page', false);
 
         if (isset($this->Rules['{%page%}'])) {
-            if ($this->forceDisplayFirstPage == false && $match_without_page) {
-                if ($this->Rules['{%page%}'] == '1' || $this->Rules['{%page%}'] == '0') {
+            if ($this->Rules['{%page%}'] == '1' || $this->Rules['{%page%}'] == '0') {
+                //如果强制显示第一页为假和只匹配带page参数的条件为假
+                if ($this->forceDisplayFirstPage == false && $only_match_page == false) {
                     $this->Rules['{%page%}'] = '';
                 }
             }
         } else {
             $this->Rules['{%page%}'] = '';
         }
-        if ($this->Rules['{%page%}'] == '') {
+        if ($this->Rules['{%page%}'] == '' && strpos($s, '{%page%}') !== false) {
             preg_match('/(?<=\})[^\{\}%&]+(?=\{%page%\})/i', $s, $matches);
             if (isset($matches[0])) {
                 $s = str_replace($matches[0], '', $s);
@@ -143,7 +144,7 @@ class UrlRule
         if ($prefix != '') {
             $prefix .= '/';
         }
-        $this->Rules['{%host%}'] = $zbp->host . $prefix;
+        $this->Rules['{%host%}'] = '{%host%}' . $prefix;
         foreach ($this->Rules as $key => $value) {
             if (!is_array($value)) {
                 $s = str_replace($key, $value, $s);
@@ -160,6 +161,8 @@ class UrlRule
             $s = substr($s, 0, (strlen($s) - 1));
         }
 
+        $this->Rules['{%host%}'] = $zbp->host;
+        $s = str_replace('{%host%}', $zbp->host, $s);
         $this->Url = htmlspecialchars($s);
 
         return $this->Url;
@@ -269,11 +272,11 @@ class UrlRule
 
     /**
      * @param $route
-     * @param $match_without_page boolean
+     * @param $match_with_page boolean
      *
      * @return string
      */
-    public static function OutputUrlRegEx_Route($route, $match_without_page = false)
+    public static function OutputUrlRegEx_Route($route, $match_with_page = false)
     {
         global $zbp;
         self::$categoryLayer = $GLOBALS['zbp']->category_recursion_real_deep;
@@ -284,7 +287,7 @@ class UrlRule
         $url = str_replace('{%page%}', '{%poaogoe%}', $url);
 
         $url = str_replace('{%poaogoe%}', '{%page%}', $url);
-        if ($match_without_page == true) {
+        if ($match_with_page == false) {
             $url = preg_replace('/(?<=\})[^\}]+(?=\{%page%\})/i', '', $url, 1);
             //如果'{%page%}'前只有{%host%}就把{%page%}之后的全删除了
             $array = explode('{%page%}', $url);
@@ -319,23 +322,20 @@ class UrlRule
 
     /**
      * 1.7新版本的OutputUrlRegEx
-     * 
+     *
      * @param $url
      * @param $type
-     * @param $match_without_page boolean
+     * @param $match_with_page boolean
      *
      * @return string
      */
-    public static function OutputUrlRegEx($url, $type, $haspage = false)
+    public static function OutputUrlRegEx($url, $type, $match_with_page = false)
     {
         global $zbp;
 
         if (is_array($url)) {
             return self::OutputUrlRegEx_Route($url);
         }
-
-        //1.7版本的参数意义反转了 $haspage = false(没有page页) 就是 $match_without_page = true (去除page页)
-        $match_without_page = !$haspage;
 
         self::$categoryLayer = $GLOBALS['zbp']->category_recursion_real_deep;
         $post_type_name = array('post');
@@ -344,7 +344,7 @@ class UrlRule
         }
         $orginUrl = $url;
 
-        if ($match_without_page) {
+        if ($match_with_page == false && strpos($url, '{%page%}') !== false) {
             $url = preg_replace('/(?<=\})[^\}]+(?=\{%page%\})/i', '', $url, 1);
             //如果'{%page%}'前只有{%host%}就把{%page%}之后的全删除了
             $array = explode('{%page%}', $url);
@@ -417,10 +417,10 @@ class UrlRule
 
     /**
      * 旧版本的OutputUrlRegEx (暂时没有删除，如果出错了可以改用这个 )
-     * 
+     *
      * @param $url
      * @param $type
-     * @param $match_without_page boolean
+     * @param $haspage boolean
      *
      * @return string
      */

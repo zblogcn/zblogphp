@@ -83,7 +83,12 @@ class Tag extends Base
                 }
             }
             $backAttr = $zbp->option['ZC_ALIAS_BACK_ATTR'];
-            $u = new UrlRule($zbp->GetPostType($this->Type, 'list_tag_urlrule'));
+            $routes = $zbp->GetPostType($this->Type, 'routes');
+            if (isset($routes['post_' . $zbp->GetPostType($this->Type, 'name') . '_list_tag'])) {
+                $u = new UrlRule($routes['post_' . $zbp->GetPostType($this->Type, 'name') . '_list_tag']);
+            } else {
+                $u = new UrlRule($zbp->GetPostType($this->Type, 'list_tag_urlrule'));
+            }
             $u->Rules['{%id%}'] = $this->ID;
             $u->Rules['{%alias%}'] = rawurlencode($this->Alias == '' ? $this->$backAttr : $this->Alias);
 

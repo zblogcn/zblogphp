@@ -784,10 +784,12 @@ class ZBlogPHP
         //注册Article的路由和Page的路由
 
         // 默认路由
-        //  添加 默认路由 = 文章页列表(无参数)路由
-        $this->RegRoute(array('type' => 'default', 'name' => 'default_post_article_list_index', 'call' => 'ViewList', 'posttype' => 0, 'urlrule' => $this->GetPostType(0, 'list_urlrule'), 'parameters_with' => array('posttype'), 'not_get' => array('id', 'alias'), 'request_method' => array('POST', 'GET')));
+        // 系统初始化时没有添加默认路由
+        // 默认路由是在路由的最后执行，默认路由不检查Regex规则是否匹配，只会传入get参数，就调用Call，需要细心匹配
 
         // 动态路由
+        //  添加 首页路由 = 文章页列表(无参数)路由 首页路由不要设置parameters_get项
+        $this->RegRoute(array('type' => 'active', 'name' => 'active_post_article_list_index', 'call' => 'ViewList', 'posttype' => 0, 'urlrule' => $this->GetPostType(0, 'list_urlrule'), 'parameters_with' => array('posttype'), 'not_get' => array('page', 'cate', 'tags', 'auth', 'date', 'id', 'alias')));
         //  添加 文章页单页 动态路由
         $this->RegRoute(array('type' => 'active', 'name' => 'active_post_article_single', 'call' => 'ViewPost', 'posttype' => 0, 'get' => array('id', 'alias'), 'not_get' => array('cate', 'auth', 'tags', 'date'), 'urlrule' => $this->GetPostType(0, 'single_urlrule'), 'parameters_get' => array('id', 'alias'), 'parameters_with' => array('posttype')));
         //  添加 页面页单页 动态路由
@@ -844,9 +846,9 @@ class ZBlogPHP
 
 
             //  这是一个例子： 文章搜索的伪静路由的实现  1.设定原始规则
-            $this->posttype[0]['search_urlrule'] = '{%host%}{%search%}_{%page%}.html';
+            //$this->posttype[0]['search_urlrule'] = '{%host%}{%search%}_{%page%}.html';
             // 2.注册伪静路由
-            $this->RegRoute(array('type' => 'rewrite', 'name' => 'rewrite_post_article_search', 'call' => 'ViewSearch', 'prefix' => 'search', 'posttype' => 0, 'urlrule' => $this->GetPostType(0, 'search_urlrule'), 'parameters' => array('search' => array('search' => '[^/]+'), 'page'),'parameters_with' => array('posttype')));
+            //$this->RegRoute(array('type' => 'rewrite', 'name' => 'rewrite_post_article_search', 'call' => 'ViewSearch', 'prefix' => 'search', 'posttype' => 0, 'urlrule' => $this->GetPostType(0, 'search_urlrule'), 'parameters' => array('search' => array('search' => '[^/_]+'), 'page'), 'parameters_with' => array('posttype'), 'request_method' => array('GET', 'POST'), 'only_match_page' => false));
 
             //在伪静模式下，第2次追加覆盖，给“文章类和页面类”更新routes数据
             $routes = array(

@@ -48,22 +48,22 @@ require $blogpath . 'zb_system/admin/admin_top.php';
     <form id="form1" onSubmit="return false">
 <?php
 
-$defined_route = array("default"=>'Default默认路由',"active"=>'Active动态路由',"rewrite"=>'Rewrite伪静路由');
+$defined_route = array("active"=>'Active动态路由',"rewrite"=>'Rewrite伪静路由',"default"=>'Default默认路由');
 $replace_array = array(
     '\'type\' =' => "//路由类型\r\n" . '\'type\' =',
     '\'name\' =' => "//路由名称(同类型下不可重复，否则会覆盖)\r\n" . '\'name\' =',
     '\'call\' =' => "//路由调用的函数(可以为'函数名'或是'变量名@方法名'或是'变量名::静态方法')\r\n" . '\'call\' =',
-    '\'posttype\' =' => "//Post类型(文章为0，页面为1，以此类推)\r\n" . '\'posttype\' =',
-    '\'prefix\' =' => "//prefix如指定的话，可以让不同Post类型在不同的prefix目录下被访问到而不是全挤在根目录下接受访问\r\n" . '\'prefix\' =',
+    '\'posttype\' =' => "//Post类型(文章为0，页面为1等，如果不是用于Post类型可以设为null或删除该项)\r\n" . '\'posttype\' =',
+    '\'prefix\' =' => "//prefix如指定的话，可以让不同规则在不同的prefix前缀目录下被访问到\r\n" . '\'prefix\' =',
     '\'get\' =' => "//只要有一个就可以匹配到本规则的\$_GET参数(可以为空数组即不指定参数)\r\n" . '\'get\' =',
     '\'not_get\' =' => "//必须排除的\$_GET参数(可以为空数组),如果是array('/.+/')就会禁止任何参数传入\r\n" . '\'not_get\' =',
     '\'must_get\' =' => "//必须包含的\$_GET参数(可以为空数组)\r\n" . '\'get\' =',
     '\'parameters\' =' => "//从伪静规则匹配到的数组中取值传给call的参数(示例为array('cate'=>'id', 'page'=>'page') or array('post'=>array('id','alias'), 'page'=>'page') )\r\n" . '\'parameters\' =',
     '\'parameters_get\' =' => "//从\$_GET获取值传给call的参数()\r\n" . '\'parameters_get\' =',
     '\'parameters_with\' =' => "//固定传的call参数(先从\$_GET取值再从本条路由规则中取值并覆盖)\r\n" . '\'parameters_with\' =',
-    '\'urlrule\' =' => "//伪静路由的原始规则(必须)\r\n" . '\'urlrule\' =',
-    '\'match_without_page\' =' => "//设为ture或不设此参数，伪静路由会匹配2次，一次带page一次不带page,设为false只强制匹配带page参数的\r\n" . '\'match_without_page\' =',
-    '\'request_method\' =' => "//Request Method为Http的请求访问，一般不设或是设为array('GET', 'POST')或是'GET'\r\n" . '\'request_method\' =',    
+    '\'urlrule\' =' => "//动态路由和伪静路由的原始规则(必须)\r\n" . '\'urlrule\' =',
+    '\'only_match_page\' =' => "//设为ture将强制匹配带page参数的url(不设或设为false的将会匹配一次带page一次不带page的)\r\n" . '\'match_without_page\' =',
+    '\'request_method\' =' => "//Request Method为Http的请求访问，一般不设或是设为array('GET', 'POST')或是'GET'(只能GET不能POST)\r\n" . '\'request_method\' =',    
 );
 
 foreach ($defined_route as $route_type => $route_note) {

@@ -116,7 +116,12 @@ class BaseMember extends Base
                     return $fpreturn;
                 }
             }
-            $u = new UrlRule($zbp->option['ZC_AUTHOR_REGEX']);
+            $routes = $zbp->GetPostType(0, 'routes');
+            if (isset($routes['post_' . $zbp->GetPostType(0, 'name') . '_list_author'])) {
+                $u = new UrlRule($routes['post_' . $zbp->GetPostType(0, 'name') . '_list_author']);
+            } else {
+                $u = new UrlRule($zbp->GetPostType(0, 'list_author_urlrule'));
+            }
             $u->Rules['{%id%}'] = $this->ID;
             $u->Rules['{%alias%}'] = $this->Alias == '' ? rawurlencode($this->Name) : $this->Alias;
 

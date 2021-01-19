@@ -910,7 +910,7 @@ function Admin_ArticleMng()
     <input name="search" style="width:250px;" type="text" value="" /> &nbsp;&nbsp;&nbsp;&nbsp;<input type="submit" class="button" value="' . $zbp->lang['msg']['submit'] . '"/></p>';
     echo '</form>';
 
-    $p = new Pagebar('{%host%}zb_system/cmd.php?act=ArticleMng{&page=%page%}{&status=%status%}{&istop=%istop%}{&category=%category%}{&search=%search%}', false);
+    $p = new Pagebar('{%host%}zb_system/cmd.php?act=ArticleMng{&status=%status%}{&istop=%istop%}{&category=%category%}{&search=%search%}{&page=%page%}', false);
     $p->PageCount = $zbp->managecount;
     $p->PageNow = (int) GetVars('page', 'GET') == 0 ? 1 : (int) GetVars('page', 'GET');
     if (GetVars('search') !== GetVars('search', 'GET')) {
@@ -1221,7 +1221,7 @@ function Admin_CommentMng()
     echo '<form method="post" action="' . $zbp->host . 'zb_system/cmd.php?act=CommentBat">';
     echo '<input type="hidden" name="csrfToken" value="' . $zbp->GetCSRFToken() . '">';
 
-    $p = new Pagebar('{%host%}zb_system/cmd.php?act=CommentMng{&page=%page%}{&ischecking=%ischecking%}{&search=%search%}', false);
+    $p = new Pagebar('{%host%}zb_system/cmd.php?act=CommentMng{&ischecking=%ischecking%}{&search=%search%}{&page=%page%}', false);
     $p->PageCount = $zbp->managecount;
     $p->PageNow = (int) GetVars('page', 'GET') == 0 ? 1 : (int) GetVars('page', 'GET');
     if (GetVars('search') !== GetVars('search', 'GET')) {
@@ -1577,7 +1577,7 @@ function Admin_TagMng()
     <input name="search" style="width:250px;" type="text" value="" /> &nbsp;&nbsp;&nbsp;&nbsp;<input type="submit" class="button" value="' . $zbp->lang['msg']['submit'] . '"/></p>';
     echo '</form>';
 
-    $p = new Pagebar('{%host%}zb_system/cmd.php?act=TagMng&page={%page%}{&search=%search%}', false);
+    $p = new Pagebar('{%host%}zb_system/cmd.php?act=TagMng{&search=%search%}{&page=%page%}', false);
     $p->PageCount = $zbp->managecount;
     $p->PageNow = (int) GetVars('page', 'GET') == 0 ? 1 : (int) GetVars('page', 'GET');
     $p->PageBarCount = $zbp->pagebarcount;
