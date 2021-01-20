@@ -56,6 +56,11 @@ unset($post_data['token']);
                             <p><?php echo $GLOBALS['lang']['msg']['error_info']; ?></p>
         <?php
         echo '(' . $error->type . ')' . $error->typeName . ' :   ' . (FormatString($error->messagefull, '[noscript]'));
+        if ($GLOBALS['option']['ZC_DEBUG_MODE'] && !empty(ZBlogException::$error_moreinfo)) {
+            $s = var_export(ZBlogException::$error_moreinfo, true);
+            $s = str_replace('array', '', $s);
+            echo $s;
+        }
         echo ' (' . ZC_VERSION_FULL . ') ';
         if (!in_array('Status: 404 Not Found', headers_list())) {
                 echo '(' . GetEnvironment() . ') ';

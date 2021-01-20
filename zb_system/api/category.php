@@ -20,7 +20,7 @@ function api_category_get()
 {
     global $zbp;
 
-    ApiCheckAuth(false, 'ajax');
+    ApiCheckAuth(false, 'view');
 
     $category = null;
     $cateId = (int) GetVars('id');
@@ -34,6 +34,8 @@ function api_category_get()
     } else {
         $category = $zbp->GetCategoryByName($cateName);
     }
+
+    ApiCheckAuth(false, $zbp->GetPostType_Actions($category->Type, 'view'));
 
     $array = ApiGetObjectArray($category, array('Url', 'Symbol', 'Level', 'SymbolName', 'AllCount'));
 
@@ -134,14 +136,51 @@ function api_category_list()
 {
     global $zbp;
 
-    ApiCheckAuth(true, 'view');
+    $type = (int) GetVars('type');
+    $mng = strtolower((string) GetVars('manage')); //&manage=1
+
+    $limitCount = $zbp->option['ZC_MANAGE_COUNT'];
+
+    // 权限验证
+    //检查管理模式权限
+    if (!empty($mng)) {
+        //检查管理模式权限
+        ApiCheckAuth(true, 'CategoryMng');
+        //ApiCheckAuth(true, 'CategoryAll');
+
+        $limitCount = $zbp->option['ZC_MANAGE_COUNT'];
+    } else {
+        // 默认非管理模式
+        ApiCheckAuth(true, 'view');
+        $limitCount = $zbp->option['ZC_MANAGE_COUNT'];
+    }
+
+    $filter = ApiGetRequestFilter(
+        $limitCount,
+        array(
+            'ID' => 'cate_ID',
+            'Order' => 'cate_Order',
+            'Count' => 'cate_Count',
+            'Group' => 'cate_Group',
+        )
+    );
+
+    $where[] = array('=', 'cate_Type', $type);
+    $order = $filter['order'];
+    $limit = $filter['limit'];
+    $option = $filter['option'];
 
     $listArr = ApiGetObjectArrayList(
-        $zbp->GetCategoryList(),
+        $zbp->GetCategoryList('*', $where, $order, $limit, $option),
         array('Url', 'Symbol', 'Level', 'SymbolName', 'AllCount')
     );
 
+    $paginationArr = ApiGetPagebarInfo($option);
+
     return array(
-        'data' => $listArr,
+        'data' => array(
+            'list' => $listArr,
+            'pagebar' => $paginationArr,
+        ),
     );
 }

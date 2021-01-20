@@ -184,6 +184,7 @@ $GLOBALS['actions'] = array(
     'PageDel' => 2,
     'PagePub' => 2,
 
+    'CategoryNew' => 2,
     'CategoryEdt' => 2,
     'CategoryPst' => 2,
     'CategoryDel' => 2,

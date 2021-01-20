@@ -284,6 +284,11 @@ class ZBlogException
     public static $error_line = null;
 
     /**
+     * 静态error_moreinfo
+     */
+    public static $error_moreinfo = array();
+
+    /**
      * 静态islogerror
      */
     public static $islogerror = false;

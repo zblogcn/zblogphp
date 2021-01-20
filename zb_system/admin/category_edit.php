@@ -11,7 +11,7 @@ require '../function/c_system_admin.php';
 
 $zbp->Load();
 
-$action = 'CategoryEdt';
+$action = 'CategoryPst';
 if (!$zbp->CheckRights($action)) {
     $zbp->ShowError(6, __FILE__, __LINE__);
     die();
@@ -30,8 +30,18 @@ require ZBP_PATH . 'zb_system/admin/admin_top.php';
 $cateid = null;
 if (isset($_GET['id'])) {
     $cateid = (int) GetVars('id', 'GET');
+    $action = 'CategoryEdt';
+    if (!$zbp->CheckRights($action)) {
+        $zbp->ShowError(6, __FILE__, __LINE__);
+        die();
+    }
 } else {
     $cateid = 0;
+    $action = 'CategoryNew';
+    if (!$zbp->CheckRights($action)) {
+        $zbp->ShowError(6, __FILE__, __LINE__);
+        die();
+    }
 }
 
 $cate = $zbp->GetCategoryByID($cateid);

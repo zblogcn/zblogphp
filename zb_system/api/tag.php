@@ -20,7 +20,7 @@ function api_tag_get()
 {
     global $zbp;
 
-    ApiCheckAuth(false, 'ajax');
+    ApiCheckAuth(false, 'view');
 
     $tag = null;
     $tagId = (int) GetVars('id');
@@ -124,18 +124,25 @@ function api_tag_list()
 {
     global $zbp;
 
-    $mng = strtolower((string) GetVars('manage')); //&manage=1
     $type = (int) GetVars('type');
+    $mng = strtolower((string) GetVars('manage')); //&manage=1
 
     $where = array();
     $where[] = array('=', 'tag_Type', $type);
 
     // 权限验证
     //检查管理模式权限
-    ApiCheckAuth(true, 'TagMng');
-    ApiCheckAuth(true, 'TagAll');
-    $limitCount = $zbp->option['ZC_MANAGE_COUNT'];
+    if (!empty($mng)) {
+        //检查管理模式权限
+        ApiCheckAuth(true, 'TagMng');
+        //ApiCheckAuth(true, 'TagAll');
 
+        $limitCount = $zbp->option['ZC_MANAGE_COUNT'];
+    } else {
+        // 默认非管理模式
+        ApiCheckAuth(true, 'view');
+        $limitCount = $zbp->option['ZC_MANAGE_COUNT'];
+    }
 
     $filter = ApiGetRequestFilter(
         $limitCount,

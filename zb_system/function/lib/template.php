@@ -696,7 +696,7 @@ class Template
         $file = $this->path . $entryPage . '.php';
 
         if (!is_readable($file)) {
-            $zbp->ShowError(86, __FILE__, __LINE__);
+            $zbp->ShowError(86, __FILE__, __LINE__, array('lost_file' => $file));
         }
 
         // 入口处将tags里的变量提升全局

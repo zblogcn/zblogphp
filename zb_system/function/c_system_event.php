@@ -1,6 +1,6 @@
 <?php
 /**
- * 事件相关函数.
+ * 事件操作相关函数.
  */
 
 if (!defined('ZBP_PATH')) {
@@ -631,7 +631,7 @@ function PostArticle_CheckTagAndConvertIDtoString($tagnamestring, $post_type = 0
     }
 
     $d = array_diff($b, $c);
-    if ($zbp->CheckRights('TagNew')) {
+    if ($zbp->CheckRights('TagNew') && $zbp->CheckRights('TagPst')) {
         foreach ($d as $key) {
             $tag = new Tag();
             $tag->Name = $key;
@@ -1240,6 +1240,10 @@ function BatchComment()
 function PostCategory()
 {
     global $zbp;
+    if (!$zbp->CheckRights('CategoryPst')) {
+        $zbp->ShowError(6, __FILE__, __LINE__);
+    }
+
     if (!isset($_POST['ID'])) {
         return false;
     }
@@ -1256,10 +1260,17 @@ function PostCategory()
     }
 
     $cate = new Category();
-    if (GetVars('ID', 'POST') == 0) {
+    $cate_id = (int) GetVars('ID', 'POST');
+    if ($cate_id == 0) {
         $i = 0;
+        if (!$zbp->CheckRights('CategoryNew')) {
+            $zbp->ShowError(6, __FILE__, __LINE__);
+        }
     } else {
-        $cate = $zbp->GetCategoryByID(GetVars('ID', 'POST'));
+        $cate = $zbp->GetCategoryByID($cate_id);
+        if (!$zbp->CheckRights('CategoryEdt')) {
+            $zbp->ShowError(6, __FILE__, __LINE__);
+        }
     }
 
     foreach ($zbp->datainfo['Category'] as $key => $value) {
@@ -1317,6 +1328,9 @@ function PostCategory()
 function DelCategory()
 {
     global $zbp;
+    if (!$zbp->CheckRights('CategoryDel')) {
+        $zbp->ShowError(6, __FILE__, __LINE__);
+    }
 
     $id = (int) GetVars('id');
     $cate = $zbp->GetCategoryByID($id);
@@ -1367,6 +1381,10 @@ function DelCategory_Articles($id)
 function PostTag()
 {
     global $zbp;
+    if (!$zbp->CheckRights('TagPst')) {
+        $zbp->ShowError(6, __FILE__, __LINE__);
+    }
+
     if (!isset($_POST['ID'])) {
         return false;
     }
@@ -1378,8 +1396,14 @@ function PostTag()
     $tag = new Tag();
     if (GetVars('ID', 'POST') == 0) {
         $i = 0;
+        if (!$zbp->CheckRights('TagNew')) {
+            $zbp->ShowError(6, __FILE__, __LINE__);
+        }
     } else {
         $tag = $zbp->GetTagByID(GetVars('ID', 'POST'));
+        if (!$zbp->CheckRights('TagEdt')) {
+            $zbp->ShowError(6, __FILE__, __LINE__);
+        }
     }
 
     foreach ($zbp->datainfo['Tag'] as $key => $value) {
@@ -1441,6 +1465,9 @@ function PostTag()
 function DelTag()
 {
     global $zbp;
+    if (!$zbp->CheckRights('TagDel')) {
+        $zbp->ShowError(6, __FILE__, __LINE__);
+    }
 
     $tagid = (int) GetVars('id', 'GET');
     $tag = $zbp->GetTagByID($tagid);

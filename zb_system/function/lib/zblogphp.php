@@ -3786,7 +3786,7 @@ class ZBlogPHP
      *
      * @return mixed
      */
-    public function ShowError($errorText, $file = null, $line = null)
+    public function ShowError($errorText, $file = null, $line = null, $moreinfo = array())
     {
         $errorCode = 0;
         if (is_numeric($errorText)) {
@@ -3801,6 +3801,8 @@ class ZBlogPHP
         ZBlogException::$error_id = $errorCode;
         ZBlogException::$error_file = $file;
         ZBlogException::$error_line = $line;
+        $array = ZBlogException::$error_moreinfo;
+        ZBlogException::$error_moreinfo = array_merge($array, $moreinfo);
 
         if (stripos('{' . sha1('mustshowerror') . '}', $errorText) === 0) {
             $errorText = str_replace('{' . sha1('mustshowerror') . '}', '', $errorText);
@@ -3811,7 +3813,7 @@ class ZBlogPHP
         }
 
         foreach ($GLOBALS['hooks']['Filter_Plugin_Zbp_ShowError'] as $fpname => &$fpsignal) {
-            $fpreturn = $fpname($errorCode, $errorText, $file, $line);
+            $fpreturn = $fpname($errorCode, $errorText, $file, $line, $moreinfo);
             if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
                 $fpsignal = PLUGIN_EXITSIGNAL_NONE;
 
@@ -4043,7 +4045,7 @@ class ZBlogPHP
             }
 
             return 'Post';
-        } elseif ('classname' == $key) {
+        } elseif ('actions' == $key) {
             $actions = array();
             if (isset($this->posttype[$typeid]['actions'])) {
                 $actions = $this->posttype[$typeid]['actions'];
@@ -4062,6 +4064,25 @@ class ZBlogPHP
             if (isset($this->posttype[$typeid][$key])) {
                 return $this->posttype[$typeid][$key];
             }
+        }
+    }
+
+    /**
+     * 获取PostType信息(如果是修改的话请直接编辑$zbp->posttype)
+     *
+     * @param $key
+     *
+     * @param $typeid
+     *
+     * @return string
+     */
+    public function GetPostType_Actions($typeid, $action)
+    {
+        if ($action == null || empty($action)) {
+            return '';
+        }
+        if (isset($this->posttype[$typeid]['actions'][$action])) {
+            return $this->posttype[$typeid]['actions'][$action];
         }
     }
 

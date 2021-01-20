@@ -160,7 +160,7 @@ function ApiCheckAuth($loginRequire = false, $action = 'view')
     }
 
     // 权限认证
-    if (!empty($action) && !$GLOBALS['zbp']->CheckRights($action)) {
+    if (!$GLOBALS['zbp']->CheckRights($action)) {
         ApiResponse(null, null, 403, $GLOBALS['lang']['error']['6']);
     }
 
@@ -253,7 +253,7 @@ function ApiGetObjectArrayList($list, $other_props = array(), $remove_props = ar
  * @param array $sortableColumns sortby 对应的模块数据表中支持排序的属性
  * @return array
  */
-function ApiGetRequestFilter($limitDefault = 10, $sortableColumns = array())
+function ApiGetRequestFilter($limitDefault = null, $sortableColumns = array())
 {
     $condition = array(
         'limit' => array(0, $limitDefault),
@@ -264,10 +264,15 @@ function ApiGetRequestFilter($limitDefault = 10, $sortableColumns = array())
     $order = strtoupper((string) GetVars('order'));
     $limit = (int) GetVars('limit');
     $offset = (int) GetVars('offset');
-    $pageNow = (int) GetVars('pagenow');
+    $pageNow = (int) GetVars('page');
     $perPage = (int) GetVars('perpage');
-    if ($perPage === 0) {
-        $perPage = $limitDefault;
+
+    //如果不设置$limitDefault的话，就使用perpage的值
+    if ($limitDefault !== null) {
+        $perPage = (int) $limitDefault;
+    }
+    if ($perPage <= 0) {
+        $perPage = 10;
     }
 
     // 排序顺序

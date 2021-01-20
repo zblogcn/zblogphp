@@ -205,7 +205,7 @@ function Logs($logString, $level = 'INFO', $source = 'system')
     $handle = @fopen($f, 'a+');
     if ($handle) {
         $t = $time;
-        @fwrite($handle, '[' . $t . ']' . "\r\n" . $level . "\r\n" . $source . "\r\n" . $logString . "\r\n");
+        @fwrite($handle, '[' . $t . ']' . " " . $level . " " . $source . "\r\n" . $logString . "\r\n");
         @fclose($handle);
     }
     ZBlogException::ResumeErrorHook();

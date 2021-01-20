@@ -11,7 +11,7 @@ require '../function/c_system_admin.php';
 
 $zbp->Load();
 
-$action = 'TagEdt';
+$action = 'TagPst';
 if (!$zbp->CheckRights($action)) {
     $zbp->ShowError(6, __FILE__, __LINE__);
     die();
@@ -30,8 +30,18 @@ require ZBP_PATH . 'zb_system/admin/admin_top.php';
 $tagid = null;
 if (isset($_GET['id'])) {
     $tagid = (int) GetVars('id', 'GET');
+    $action = 'TagEdt';
+    if (!$zbp->CheckRights($action)) {
+        $zbp->ShowError(6, __FILE__, __LINE__);
+        die();
+    }
 } else {
     $tagid = 0;
+    $action = 'TagNew';
+    if (!$zbp->CheckRights($action)) {
+        $zbp->ShowError(6, __FILE__, __LINE__);
+        die();
+    }
 }
 
 $tag = $zbp->GetTagByID($tagid);
