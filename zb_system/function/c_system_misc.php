@@ -599,14 +599,16 @@ function misc_updatedapp()
         die();
     }
     if ($zbp->cache->success_updated_app !== '') {
+        $appid = $zbp->cache->success_updated_app;
+
         $zbp->cache->success_updated_app = '';
         $zbp->SaveCache();
 
-        $fn = 'UpdatePlugin_' . $zbp->cache->success_updated_app;
+        $fn = 'UpdatePlugin_' . $appid;
         if (function_exists($fn)) {
             $fn();
         } else {
-            $fn = $zbp->cache->success_updated_app . '_Updated';
+            $fn = $appid . '_Updated';
             if (function_exists($fn)) {
                 $fn();
             }

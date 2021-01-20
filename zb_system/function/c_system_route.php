@@ -10,7 +10,7 @@ if (!defined('ZBP_PATH')) {
 //###############################################################################################################
 
 /**
- * 根据url路由规则显示页面.
+ * 根据url路由规则显示页面的主路由器函数.
  *
  * @param string $inpurl 页面url
  *
@@ -54,8 +54,8 @@ function ViewAuto($inpurl)
                 $array = array();
                 $array = ViewAuto_Process_Parameters_Get($array, GetValueInArray($route, 'parameters_get', array()));
                 $array = ViewAuto_Process_Parameters_With($array, GetValueInArray($route, 'parameters_with', array()), $route);
-                $b_redirect = true;//!empty(GetValueInArray($route, 'parameters_get', array()));
-                //$b_redirect = $b_redirect && !($url == '' || $url == 'index.php');
+                $b_redirect = !empty(GetValueInArray($route, 'parameters_get', array()));
+                $b_redirect = $b_redirect && !($url == '' || $url == 'index.php');
                 if ($zbp->option['ZC_STATIC_MODE'] == 'REWRITE' && $b_redirect) {
                     $r = UrlRule::OutputUrlRegEx_Route($route, false);
                     if (!empty($r)) {
