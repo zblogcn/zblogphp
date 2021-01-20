@@ -1964,6 +1964,14 @@ function SetTheme($theme, $style)
     }
 
     $zbp->option['ZC_BLOG_THEME'] = $theme;
+    if ($style == '') {
+        $stylefiles = GetFilesInDir($zbp->usersdir . 'theme/' . $theme . '/style', 'css');
+        if (is_array($stylefiles) && count($stylefiles) > 0) {
+            $style = key($stylefiles);
+        } else {
+            $style = 'style';
+        }
+    }
     $zbp->option['ZC_BLOG_CSS'] = $style;
     if ($theme != $oldTheme) {
         $app->LoadSideBars();

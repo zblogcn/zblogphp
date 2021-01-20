@@ -131,15 +131,24 @@ class BasePost extends Base
         switch ($name) {
             case 'Category':
             case 'Author':
-            case 'TypeName':
+            case 'StatusName':
             case 'Url':
             case 'Tags':
             case 'TagsName':
             case 'TagsCount':
             case 'CommentPostUrl':
+            case 'CommentPostKey':
+            case 'ValidCodeUrl':
             case 'Prev':
             case 'Next':
             case 'RelatedList':
+            case 'TypeName':
+            case 'TypeActions':
+            case 'Date':
+            case 'PostDate':
+            case 'CreateDate':
+            case 'UpdateDate':
+                return ;
             case 'Template':
                 if ($value == $zbp->GetPostType($this->Type, 'template')) {
                     $value = '';
@@ -334,6 +343,13 @@ class BasePost extends Base
                 return $zbp->GetPostType($this->Type, 'name');
             case 'TypeActions':
                 return $zbp->GetPostType($this->Type, 'actions');
+            case 'Date':
+            case 'PostDate':
+                return new ZbpDate($this->PostTime);
+            case 'CreateDate':
+                return new ZbpDate($this->PostTime);
+            case 'UpdateDate':
+                return new ZbpDate($this->PostTime);
             default:
                 foreach ($GLOBALS['hooks']['Filter_Plugin_Post_Get'] as $fpname => &$fpsignal) {
                     $fpreturn = $fpname($this, $name);

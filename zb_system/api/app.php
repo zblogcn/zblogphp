@@ -193,8 +193,13 @@ function api_app_get_apps()
     $apps = array();
 
     foreach (array_merge($zbp->LoadThemes(), $zbp->LoadPlugins()) as $app) {
-        $app = (array) $app;
-        $app = array_merge(array('is_actived' => $zbp->CheckPlugin($app['id'])), (array) $app);
+        $new = new StdClass;
+        $vars = get_class_vars('App');
+        foreach ($vars as $key => $value) {
+            $new->$key = $app->$key;
+        }
+        $new->is_actived = $zbp->CheckPlugin($new->id);
+        $app = (array) $new;
         $apps[] = $app;
     }
 
@@ -219,8 +224,13 @@ function api_app_get_plugins()
     $apps = array();
 
     foreach ($zbp->LoadPlugins() as $app) {
-        $app = (array) $app;
-        $app = array_merge(array('is_actived' => $zbp->CheckPlugin($app['id'])), (array) $app);
+        $new = new StdClass;
+        $vars = get_class_vars('App');
+        foreach ($vars as $key => $value) {
+            $new->$key = $app->$key;
+        }
+        $new->is_actived = $zbp->CheckPlugin($new->id);
+        $app = (array) $new;
         $apps[] = $app;
     }
 
@@ -245,8 +255,13 @@ function api_app_get_themes()
     $apps = array();
 
     foreach ($zbp->LoadThemes() as $app) {
-        $app = (array) $app;
-        $app = array_merge(array('is_actived' => $zbp->CheckPlugin($app['id'])), (array) $app);
+        $new = new StdClass;
+        $vars = get_class_vars('App');
+        foreach ($vars as $key => $value) {
+            $new->$key = $app->$key;
+        }
+        $new->is_actived = $zbp->CheckPlugin($new->id);
+        $app = (array) $new;
         $apps[] = $app;
     }
 
@@ -274,13 +289,15 @@ function IsValidAppId($id = '', $type = '')
 
     switch ($type) {
         case 'plugin':
-            array_push($apps, $zbp->LoadPlugins());
+            $apps += $zbp->LoadPlugins();
             break;
         case 'theme':
-            array_push($apps, $zbp->LoadThemes());
+            $apps += $zbp->LoadThemes();
             break;
         default:
-            array_push($apps, $zbp->LoadPlugins(), $zbp->LoadThemes());
+            $apps += $zbp->LoadPlugins();
+            $apps += $zbp->LoadThemes();
+            break;
     }
 
     foreach ($apps as $app) {
