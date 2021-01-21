@@ -632,6 +632,7 @@ function ViewSearch()
  * @param bool  $posttype   Post表的类型
  *
  * @api Filter_Plugin_ViewList_Begin
+ * @api Filter_Plugin_ViewList_Begin_V2
  * @api Filter_Plugin_ViewList_Template
  *
  * @throws Exception
@@ -642,9 +643,13 @@ function ViewList($page = null, $cate = null, $auth = null, $date = null, $tags 
 {
     global $zbp;
 
-    $fpargs = call_user_func('func_get_args');
-    foreach ($GLOBALS['hooks']['Filter_Plugin_ViewList_Begin'] as $fpname => &$fpsignal) {
-        $fpreturn = call_user_func_array($fpname, $fpargs);
+    $fpargs_v1 = array();
+    $fpargs_v2 = call_user_func('func_get_args');
+    $fpargs = &$fpargs_v2;
+
+    //新版本的函数V2
+    foreach ($GLOBALS['hooks']['Filter_Plugin_ViewList_Begin_V2'] as $fpname => &$fpsignal) {
+        $fpreturn = call_user_func_array($fpname, $fpargs_v2);
         if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
             $fpsignal = PLUGIN_EXITSIGNAL_NONE;
 
@@ -658,12 +663,24 @@ function ViewList($page = null, $cate = null, $auth = null, $date = null, $tags 
         $auth = GetValueInArray($page, 'auth', null);
         $date = GetValueInArray($page, 'date', null);
         $tags = GetValueInArray($page, 'tags', null);
-        $canceldisplay = GetValueInArray($page, 'canceldisplay', false);
         $posttype = GetValueInArray($page, 'posttype', 0);
+        $canceldisplay = GetValueInArray($page, 'canceldisplay', false);
         $route = GetValueInArray($page, 'route', array());
         $page = GetValueInArray($page, 'page', null);
+        //处理上一版本兼容性的问题
+        $fpargs_v1 = array($page, $cate, $auth, $date, $tags, $isrewrite, $posttype, $canceldisplay);
     } else {
         $route = array();
+    }
+
+    //老版本的兼容接口
+    foreach ($GLOBALS['hooks']['Filter_Plugin_ViewList_Begin'] as $fpname => &$fpsignal) {
+        $fpreturn = call_user_func_array($fpname, $fpargs_v1);
+        if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
+            $fpsignal = PLUGIN_EXITSIGNAL_NONE;
+
+            return $fpreturn;
+        }
     }
 
     $type = 'index';
@@ -1021,8 +1038,13 @@ function ViewList($page = null, $cate = null, $auth = null, $date = null, $tags 
  *
  * @param array|int|string $id         文章ID/ ID/别名对象 (1.7起做为主要array型参数，后续的都作废了)
  * @param string           $alias     （如果有的话）文章别名
- * @param bool             $canceldisplay  取消Display输出
+ * @param bool             $isrewrite  是否启用urlrewrite
  * @param bool             $posttype   Post表的类型
+ * @param bool             $canceldisplay  取消Display输出
+ *
+ * @api Filter_Plugin_ViewPost_Begin
+ * @api Filter_Plugin_ViewPost_Begin_V2
+ * @api Filter_Plugin_ViewPost_Template
  *
  * @throws Exception
  *
@@ -1032,9 +1054,13 @@ function ViewPost($id = null, $alias = null, $isrewrite = false, $posttype = 0, 
 {
     global $zbp;
 
-    $fpargs = call_user_func('func_get_args');
-    foreach ($GLOBALS['hooks']['Filter_Plugin_ViewPost_Begin'] as $fpname => &$fpsignal) {
-        $fpreturn = call_user_func_array($fpname, $fpargs);
+    $fpargs_v1 = array();
+    $fpargs_v2 = call_user_func('func_get_args');
+    $fpargs = &$fpargs_v2;
+
+    //新版本的函数V2
+    foreach ($GLOBALS['hooks']['Filter_Plugin_ViewPost_Begin_V2'] as $fpname => &$fpsignal) {
+        $fpreturn = call_user_func_array($fpname, $fpargs_v2);
         if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
             $fpsignal = PLUGIN_EXITSIGNAL_NONE;
 
@@ -1046,17 +1072,29 @@ function ViewPost($id = null, $alias = null, $isrewrite = false, $posttype = 0, 
     if (is_array($id)) {
         $object = $id;
         $alias = GetValueInArray($id, 'alias', null);
-        $canceldisplay = GetValueInArray($id, 'canceldisplay', false);
         $posttype = GetValueInArray($id, 'posttype', 0);
+        $canceldisplay = GetValueInArray($id, 'canceldisplay', false);
         $route = GetValueInArray($id, 'route', array());
         $post = GetValueInArray($id, 'post', null);
         $id = GetValueInArray($id, 'id', null);
+        //处理上一版本兼容性的问题
+        $fpargs_v1 = array($id, $alias, $isrewrite, $posttype, $canceldisplay);
     } else {
         $object = array();
         $id = $id;
         $alias = $alias;
         $route = array();
         $post = null;
+    }
+
+    //兼容老版本的接口
+    foreach ($GLOBALS['hooks']['Filter_Plugin_ViewPost_Begin'] as $fpname => &$fpsignal) {
+        $fpreturn = call_user_func_array($fpname, $fpargs_v1);
+        if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
+            $fpsignal = PLUGIN_EXITSIGNAL_NONE;
+
+            return $fpreturn;
+        }
     }
 
     //从$post中读取正确的$id或$alias

@@ -821,13 +821,14 @@ class ZBlogPHP
         );
         $this->SetPostType(1, 'routes', $routes);
 
+        // 示例
         //  添加 页面页列表(带参数) 动态路由
         //$this->RegRoute(array('type' => 'active', 'name' => 'active_post_page_list', 'call' => 'ViewList', 'posttype' => 1, 'prefix' => '', 'get' => array('page'), 'not_get' => array('id', 'alias'), 'parameters_get' => array('page'), 'parameters_with' => array('posttype')));
         //  添加 页面页列表(无参数) 动态路由
         //$this->RegRoute(array('type' => 'active', 'name' => 'active_post_page_list_index', 'call' => 'ViewList', 'posttype' => 1, 'prefix' => '', 'get' => array(), 'not_get' => array('id', 'alias'), 'parameters_get' => array(), 'parameters_with' => array('posttype')));
 
+        // 如果 开启了伪静模式，就再注入伪静路由
         if ($this->option['ZC_STATIC_MODE'] == 'REWRITE') {
-            // 伪静路由
             //  添加 文章页单页 伪静路由
             $this->RegRoute(array('type' => 'rewrite', 'name' => 'rewrite_post_article_single', 'call' => 'ViewPost', 'posttype' => 0, 'urlrule' => $this->GetPostType(0, 'single_urlrule'), 'parameters' => array('post' => array('id', 'alias')), 'parameters_with' => array('posttype')));
             //  添加 文章index列表 伪静路由

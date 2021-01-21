@@ -113,7 +113,7 @@ class UrlRule
 
         $only_match_page = GetValueInArray($this->GetRoute(), 'only_match_page', false);
         $forceDisplayFirstPage = $this->forceDisplayFirstPage;
-        if (empty($this->GetRoute())) {
+        if ($this->GetRoute() == array()) {
             $useAbbr = $this->useAbbr;
         } else {
             $useAbbr = (bool) GetValueInArray($this->GetRoute(), 'use_abbr', false);
@@ -131,15 +131,14 @@ class UrlRule
             $this->Rules['{%page%}'] = '';
         }
         if ($this->Rules['{%page%}'] == '' && strpos($url, '{%page%}') !== false) {
-
             if ($useAbbr) {
                 $array = explode('{%page%}', $url);
                 if (is_array($array) && isset($array[0])) {
                     $url = substr($url, 0, strpos($url, '{%page%}'));
                     $i = (int) strripos($url, '}');
-                    $j = (int) strripos($url, '/'); 
+                    $j = (int) strripos($url, '/');
                     $i = ($j > $i) ? $j : $i;
-                    $url = substr($url, 0, $i+1);
+                    $url = substr($url, 0, ($i + 1));
                 }
             }
 
@@ -154,7 +153,6 @@ class UrlRule
             }
 
             $url = str_replace('{%page%}', '', $url);
-
         }
 
         $prefix = GetValueInArray($this->GetRoute(), 'prefix', '');
@@ -304,15 +302,14 @@ class UrlRule
         $orginUrl = $url = $route['urlrule'];
 
         if ($match_with_page == false && strpos($url, '{%page%}') !== false) {
-
             if ($useAbbr) {
                 $array = explode('{%page%}', $url);
                 if (is_array($array) && isset($array[0])) {
                     $url = substr($url, 0, strpos($url, '{%page%}'));
                     $i = (int) strripos($url, '}');
-                    $j = (int) strripos($url, '/'); 
+                    $j = (int) strripos($url, '/');
                     $i = ($j > $i) ? $j : $i;
-                    $url = substr($url, 0, $i+1);
+                    $url = substr($url, 0, ($i + 1));
                 }
             }
 
@@ -327,7 +324,6 @@ class UrlRule
             }
 
             $url = str_replace('{%page%}', '', $url);
-
         }
         $url = str_replace('{%page%}', '(?P<page>[0-9]+)', $url);
 
@@ -381,15 +377,14 @@ class UrlRule
         $orginUrl = $url;
 
         if ($match_with_page == false && strpos($url, '{%page%}') !== false) {
-
             if ($useAbbr) {
                 $array = explode('{%page%}', $url);
                 if (is_array($array) && isset($array[0])) {
                     $url = substr($url, 0, strpos($url, '{%page%}'));
                     $i = (int) strripos($url, '}');
-                    $j = (int) strripos($url, '/'); 
+                    $j = (int) strripos($url, '/');
                     $i = ($j > $i) ? $j : $i;
-                    $url = substr($url, 0, $i+1);
+                    $url = substr($url, 0, ($i + 1));
                 }
             }
 
@@ -404,7 +399,6 @@ class UrlRule
             }
 
             $url = str_replace('{%page%}', '', $url);
-
         }
         $url = str_replace('{%page%}', '(?P<page>[0-9]+)', $url);
 

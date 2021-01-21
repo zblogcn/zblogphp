@@ -1307,6 +1307,17 @@ DefinePluginFilter('Filter_Plugin_ViewList_Begin');
 /*
 '**************************************************<
 '类型:Filter
+'名称:Filter_Plugin_ViewList_Begin_V2
+'参数:&$array
+'说明:定义列表输出接口(第2版，只传一个$array)
+'调用:
+'**************************************************>
+ */
+DefinePluginFilter('Filter_Plugin_ViewList_Begin_V2');
+
+/*
+'**************************************************<
+'类型:Filter
 '名称:Filter_Plugin_ViewList_Core
 '参数:&$type,&$page,&$category,&$author,&$datetime,&$tag,&$w,&$pagebar
 '说明:定义列表核心接口
@@ -1358,6 +1369,17 @@ DefinePluginFilter('Filter_Plugin_ViewFeed_End');
 '**************************************************>
  */
 DefinePluginFilter('Filter_Plugin_ViewPost_Begin');
+
+/*
+'**************************************************<
+'类型:Filter
+'名称:Filter_Plugin_ViewPost_Begin_V2
+'参数:&$array
+'说明:定义POST显示输出begin接口(第2版，只传入一个$array)
+'调用:
+'**************************************************>
+ */
+DefinePluginFilter('Filter_Plugin_ViewPost_Begin_V2');
 
 /*
 '**************************************************<

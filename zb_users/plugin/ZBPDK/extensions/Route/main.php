@@ -92,6 +92,15 @@ foreach ($defined_route as $route_type => $route_note) {
         //echo $s;
         echo ')';
         $t = var_export($value,true);
+        if ($value['type'] == 'active') {
+            $replace_array['\'type\' ='] = "//路由类型 (active类型不匹配规则，只从过滤\$_GET和从\$_GET中取值并传入Call，不匹配将跳出本规则进入下一条)\r\n" . '\'type\' =';
+        }
+        if ($value['type'] == 'rewrite') {
+            $replace_array['\'type\' ='] = "//路由类型 (rewrite类型使用Route规则进行匹配，从规则中取得参数并传入Call，不匹配将跳出本规则进入下一条)\r\n" . '\'type\' =';
+        }
+        if ($value['type'] == 'default') {
+            $replace_array['\'type\' ='] = "//路由类型 (default类型为默认路由，不检查Regex规则是否匹配，只会传入get参数就调用Call，前面不能匹配的规则都会进入默认路由，如果没有匹配到请返回false，让下一条路由生效！)\r\n" . '\'type\' =';
+        }
         foreach ($replace_array as $key => $value) {
             $t = str_replace('  ' . $key, $value, $t);
         }
