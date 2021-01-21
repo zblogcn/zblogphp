@@ -42,7 +42,7 @@ function ViewAuto($inpurl)
 
     $url = urldecode($url);
 
-    //匹配动态路由（在伪静下也匹配但不输出内容，符合条件只做跳转用）
+    //匹配动态路由（某些情况下，在伪静开启时匹配但不输出内容，如果是符合条件就可以跳转）
     foreach ($zbp->routes['active'] as $key => $route) {
         $prefix = GetValueInArray($route, 'prefix', '');
         $prefix = empty($prefix) ? '' : ($prefix . '/');
@@ -52,26 +52,21 @@ function ViewAuto($inpurl)
             //如果条件符合就组合参数数组并调用函数
             if ($b) {
                 $array = array();
-                $array = ViewAuto_Process_Parameters_Get($array, GetValueInArray($route, 'parameters_get', array()));
-                $array = ViewAuto_Process_Parameters_With($array, GetValueInArray($route, 'parameters_with', array()), $route);
-                $b_redirect = GetValueInArray($route, 'parameters_get', array());
-                $b_redirect = !empty($b_redirect);
-                $b_redirect = $b_redirect && !($url == '' || $url == 'index.php');
-                if ($zbp->option['ZC_STATIC_MODE'] == 'REWRITE' && $b_redirect) {
-                    $r = UrlRule::OutputUrlRegEx_Route($route, false);
-                    if (!empty($r)) {
-                        $array['canceldisplay'] = true;
-                    }
+                ViewAuto_Process_Parameters_Get($array, GetValueInArray($route, 'parameters_get', array()));
+                ViewAuto_Process_Parameters_With($array, GetValueInArray($route, 'parameters_with', array()), $route);
+                $b_redirect = GetValueInArray($route, 'to_permalink', false);
+                $b_redirect = $zbp->option['ZC_STATIC_MODE'] == 'REWRITE' && $b_redirect;
+                $b_redirect = ViewAuto_Check_CheckRegex2UrlIsNotEmpty($route) && $b_redirect;
+                if ($b_redirect) {
+                    $array['canceldisplay'] = true;
                 }
                 $array['route'] = $route;
                 $result = ViewAuto_Call_Auto($route['call'], $array);
                 if ($result == true) {
                     $template = &$zbp->template;
-                    //如果开启伪静，那么通过原动态访问的会跳转
-                    if ($zbp->option['ZC_STATIC_MODE'] == 'REWRITE' && $b_redirect) {
-                        if (!empty($r)) {
-                            Redirect($template->GetTags('url'));
-                        }
+                    //如果开启伪静且$b_redirect，那么通过原动态访问的会跳转至$template->GetTags('url')
+                    if ($b_redirect) {
+                        Redirect($template->GetTags('url'));
                     }
                     return;
                 }
@@ -82,22 +77,9 @@ function ViewAuto($inpurl)
     //匹配伪静路由
     foreach ($zbp->routes['rewrite'] as $key => $route) {
         //$match_with_page 默认匹配1次 (true)，有page参数可以匹配2次 (false, true)
-        if (isset($route['parameters']) && is_array($route['parameters'])) {
-            $parameters = UrlRule::ProcessParameters($route);
-        } else {
-            $parameters = array();
-        }
+        $parameters = array();
         $match_with_page = array();
-        foreach ($parameters as $key => $value) {
-            if ($value['match'] == 'page') {
-                $match_with_page['can_ignore_page'] = false;
-            }
-        }
-        $only_match_page = GetValueInArray($route, 'only_match_page', false);
-        if ($only_match_page == true) {
-            unset($match_with_page['can_ignore_page']);
-        }
-        $match_with_page['normal'] = true;
+        ViewAuto_Get_Parameters_And_Match_with_page($route, $parameters, $match_with_page);
 
         foreach ($match_with_page as $match_with_page_key => $match_with_page_value) {
             $b = ViewAuto_Check_Get_And_Not_Get_And_Must_Get(GetValueInArray($route, 'get', array()), GetValueInArray($route, 'not_get', array()), GetValueInArray($route, 'must_get', array()));
@@ -116,14 +98,13 @@ function ViewAuto($inpurl)
             if ($b && (($r == '' && $r == $url) || ($r <> '' && preg_match($r, $url, $m) == 1))) {
                 $array = array();
                 $array = array_merge($array, $m);
-                //var_dump($match_with_page_value, $route['urlrule'], $r, $url, $m);die;
+                //var_dump($match_with_page_value, $route['urlrule'], $r, $url, $m);//die;
                 foreach ($parameters as $key => $value) {
                     if (isset($m[(string) $value['match']])) {
                         $array[$value['name']] = $m[(string) $value['match']];
                     }
                 }
-
-                $array = ViewAuto_Process_Parameters_With($array, GetValueInArray($route, 'parameters_with', array()), $route);
+                ViewAuto_Process_Parameters_With($array, GetValueInArray($route, 'parameters_with', array()), $route);
                                 $array['route'] = $route;
                 $result = ViewAuto_Call_Auto($route['call'], $array);
                 if ($result == true) {
@@ -140,8 +121,8 @@ function ViewAuto($inpurl)
             $b = $b && ViewAuto_Check_Request_Method(GetValueInArray($route, 'request_method', ''));
             if ($b) {
                 $array = array();
-                $array = ViewAuto_Process_Parameters_Get($array, GetValueInArray($route, 'parameters_get', array()));
-                $array = ViewAuto_Process_Parameters_With($array, GetValueInArray($route, 'parameters_with', array()), $route);
+                ViewAuto_Process_Parameters_Get($array, GetValueInArray($route, 'parameters_get', array()));
+                ViewAuto_Process_Parameters_With($array, GetValueInArray($route, 'parameters_with', array()), $route);
                 $array['route'] = $route;
                 $result = ViewAuto_Call_Auto($route['call'], $array);
                 if ($result == true) {
@@ -168,7 +149,7 @@ function ViewAuto($inpurl)
 /**
  * ViewAuto的辅助函数
  */
-function ViewAuto_Process_Parameters_Get($array, $parameters_get)
+function ViewAuto_Process_Parameters_Get(&$array, $parameters_get)
 {
     if (isset($parameters_get) && is_array($parameters_get)) {
         foreach ($parameters_get as $key => $value) {
@@ -185,7 +166,7 @@ function ViewAuto_Process_Parameters_Get($array, $parameters_get)
 /**
  * ViewAuto的辅助函数
  */
-function ViewAuto_Process_Parameters_With($array, $parameters_with, $route)
+function ViewAuto_Process_Parameters_With(&$array, $parameters_with, $route)
 {
     if (isset($parameters_with) && is_array($parameters_with)) {
         foreach ($parameters_with as $key => $value) {
@@ -219,6 +200,56 @@ function ViewAuto_Call_Auto($function, $array)
     } else {
         return call_user_func($function, $array);
     }
+}
+
+/**
+ * ViewAuto的辅助函数
+ */
+function ViewAuto_Check_CheckRegex2UrlIsNotEmpty($route)
+{
+    $urlrule = GetValueInArray($route, 'urlrule', '');
+    if (empty($urlrule)) {
+        return false;
+    }
+    $match_with_page = false;
+    if (array_key_exists('page', $_GET)) {
+        $match_with_page = true;
+    }
+    $r = UrlRule::OutputUrlRegEx_Route($route, $match_with_page);
+    if ($r != '') {
+        return true;
+    }
+    return false;
+}
+
+/**
+ * ViewAuto的辅助函数
+ */
+function ViewAuto_Get_Parameters_And_Match_with_page($route, &$parameters, &$match_with_page)
+{
+    if (isset($route['parameters']) && is_array($route['parameters'])) {
+        $parameters = UrlRule::ProcessParameters($route);
+    } else {
+        $parameters = array();
+    }
+
+    $match_with_page = array('can_ignore_page' => false);
+    $haspage = false;
+    foreach ($parameters as $key => $value) {
+        if ($value['match'] == 'page') {
+            $haspage = true;
+        }
+    }
+    if ($haspage == false) {
+        unset($match_with_page['can_ignore_page']);
+    }
+
+    $only_match_page = GetValueInArray($route, 'only_match_page', false);
+    if ($only_match_page == true) {
+        unset($match_with_page['can_ignore_page']);
+    }
+
+    $match_with_page['normal'] = true;
 }
 
 /**

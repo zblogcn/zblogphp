@@ -62,17 +62,16 @@ $replace_array = array(
     '\'parameters_get\' =' => "//从\$_GET获取值传给call的参数()\r\n" . '\'parameters_get\' =',
     '\'parameters_with\' =' => "//固定传的call参数(先从\$_GET取值再从本条路由规则中取值并覆盖)\r\n" . '\'parameters_with\' =',
     '\'urlrule\' =' => "//动态路由和伪静路由的原始规则(必须)\r\n" . '\'urlrule\' =',
-    '\'use_abbr_url\' =' => "//指示规则可以被缩写为'域名/'或是'域名/目录/'\r\n" . '\'use_abbr\' =',
+    '\'abbr_url\' =' => "//指示规则可以被缩写为'域名/'或是'域名/目录/'\r\n" . '\'abbr_url\' =',
     '\'only_match_page\' =' => "//设为ture将强制匹配带page参数的url(不设或设为false的将会匹配一次带page一次不带page的)\r\n" . '\'match_without_page\' =',
-    '\'request_method\' =' => "//Request Method为Http的请求访问，一般不设或是设为array('GET', 'POST')或是'GET'(只能GET不能POST)\r\n" . '\'request_method\' =',    
+    '\'request_method\' =' => "//Request Method为Http的请求访问，一般不设或是设为array('GET', 'POST')或是'GET'(只能GET不能POST)\r\n" . '\'request_method\' =',
+    '\'to_permalink\' =' => "//如果是在动态路由下被访问到，允许跳转到Call里返回的固定链接url\r\n" . '\'to_permalink\' =',
 );
 
 foreach ($defined_route as $route_type => $route_note) {
     echo '<table class="tableFull tableBorder table_striped table_hover"><tbody><tr><th>'.$route_note.'</th></tr>';
     foreach ($zbp->routes[$route_type] as $key => $value) {
-        $posttype_now = GetValueInArray($posttype, $value['posttype'], array());
-        $posttype_name =GetValueInArray($posttype_now, 'name', '');
-        echo '<tr><td title="点击查看详细信息" style="cursor:pointer;" onclick="$(this).find(\'div\').toggle();">['.$posttype_name.'] '.$value['name'].' => ' . $value['call'] . '(';
+        echo '<tr><td title="点击查看详细信息" style="cursor:pointer;" onclick="$(this).find(\'div\').toggle();">'.$value['name'].' => ' . $value['call'] . '(';
         $s = '';
         if (isset($value['parameters'])) {
             foreach ($value['parameters'] as $key2 => $value2) {
