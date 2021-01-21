@@ -76,6 +76,16 @@ function ApiLoadMods(&$mods)
 }
 
 /**
+ * 移除指定的 API Mods.
+ */
+function ApiRemoveMods($name)
+{
+    global $mods;
+    unset($mods[$name]);
+    return $mods;
+}
+
+/**
  * API 响应.
  *
  * @param array|null $data

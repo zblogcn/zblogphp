@@ -87,6 +87,7 @@ function api_member_post()
     ApiCheckAuth(true, 'MemberPst');
 
     try {
+        //PostMember()内部有判断'MemberNew' or 'MemberEdt' or 'MemberAll'
         $member = PostMember();
         $zbp->BuildModule();
         $zbp->SaveCache();
@@ -118,19 +119,21 @@ function api_member_get()
 {
     global $zbp;
 
-    ApiCheckAuth(false, 'ajax');
+    ApiCheckAuth(true, 'MemberPst');
 
     $member = null;
     $memberId = GetVars('id');
-    $memberName = GetVars('name');
 
     if ($memberId !== null) {
         $member = $zbp->GetMemberByID($memberId);
-    } elseif (!empty($memberName)) {
-        $member = $zbp->GetMemberByName($memberName);
     }
 
-    if ($member && $member->ID !== null) {
+    //如果不是读本人的
+    if ($member->ID != $zbp->ID) {
+        ApiCheckAuth(true, 'MemberAll');
+    }
+
+    if ($member && $member->ID != null) {
         return array(
             'data' => array(
                 'member' => ApiGetObjectArray(
@@ -191,13 +194,16 @@ function api_member_list()
 {
     global $zbp;
 
-    ApiCheckAuth(true, 'MemberAll');
+    ApiCheckAuth(true, 'MemberMng');
 
     $level = GetVars('level');
     $status = GetVars('status');
 
     // 组织查询条件
     $where = array();
+    if (!$zbp->CheckRights('MemberAll')) {
+        $where[] = array('=', 'mem_ID', $zbp->user->ID);
+    }
     if (!is_null($level)) {
         $where[] = array('=', 'mem_Level', $level);
     }
@@ -205,7 +211,7 @@ function api_member_list()
         $where[] = array('=', 'mem_Status', $status);
     }
     $filter = ApiGetRequestFilter(
-        $GLOBALS['option']['ZC_DISPLAY_COUNT'],
+        $zbp->option['ZC_MANAGE_COUNT'],
         array(
             'ID' => 'mem_ID',
             'CreateTime' => 'mem_CreateTime',

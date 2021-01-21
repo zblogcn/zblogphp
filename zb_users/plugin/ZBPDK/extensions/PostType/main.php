@@ -59,14 +59,7 @@ $replace_array = array(
 );
 
 foreach ($posttype as $id => $array) {
-    $i = 0;
-    foreach ($routes as $key => $value) {
-        foreach ($value as $key2 => $value2) {
-            if ($value2['posttype'] == $id)
-                $i += 1;
-        }
-    }
-    echo '<table class="tableFull tableBorder table_striped table_hover"><thead><tr><th title="点击查看详细信息" style="cursor:pointer;" onclick="$(this).parentsUntil(\'table\').next().toggle();">'.ucfirst($array['name']).'类型<b style="font-weight:normal;"> (posttype = '.$id.') 在系统路由表中注册 <i>'.$i.'</i> 条路由</b></th></tr></thead><tbody style="display:none;">';
+    echo '<table class="tableFull tableBorder table_striped table_hover"><thead><tr><th title="点击查看详细信息" style="cursor:pointer;" onclick="$(this).parentsUntil(\'table\').next().toggle();">'.ucfirst($array['name']).'类型<b style="font-weight:normal;"> (posttype = '.$id.')</b></th></tr></thead><tbody style="display:none;">';
     foreach ($array as $key => $value) {
         if (!is_array($value)){
             echo '<tr><td>' . GetValueInArray($replace_array, $key) .'"<b>'.$key.'</b>" => <b>' . $value . '</b>';

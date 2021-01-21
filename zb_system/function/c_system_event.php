@@ -1495,6 +1495,10 @@ function DelTag()
 function PostMember()
 {
     global $zbp;
+    if (!$zbp->CheckRights('MemberPst')) {
+        $zbp->ShowError(6, __FILE__, __LINE__);
+    }
+
     $mem = new Member();
 
     $data = array();
@@ -1544,8 +1548,23 @@ function PostMember()
         if ($mem->Guid == '') {
             $mem->Guid = GetGuid();
         }
+        if (!$zbp->CheckRights('MemberNew')) {
+            $zbp->ShowError(6, __FILE__, __LINE__);
+        }
     } else {
         $mem = $zbp->GetMemberByID($data['ID']);
+        if ($mem->ID == 0) {
+            $zbp->ShowError(69, __FILE__, __LINE__);
+        }
+        if (!$zbp->CheckRights('MemberEdt')) {
+            $zbp->ShowError(6, __FILE__, __LINE__);
+        }
+        //检查是编辑还是编辑他人
+        if ($mem->ID <> $zbp->user->ID) {
+            if (!$zbp->CheckRights('MemberAll')) {
+                $zbp->ShowError(6, __FILE__, __LINE__);
+            }
+        }
     }
 
     foreach ($zbp->datainfo['Member'] as $key => $value) {
@@ -1611,6 +1630,9 @@ function PostMember()
 function DelMember()
 {
     global $zbp;
+    if (!$zbp->CheckRights('MemberDel')) {
+        $zbp->ShowError(6, __FILE__, __LINE__);
+    }
 
     $id = (int) GetVars('id', 'GET');
     $mem = $zbp->GetMemberByID($id);

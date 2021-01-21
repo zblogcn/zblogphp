@@ -171,6 +171,7 @@ $GLOBALS['actions'] = array(
     'getcmt' => 6,
     'ajax'   => 6,
     'view'   => 6,
+    'api'    => 6,
 
     'ArticleNew' => 4,
     'ArticleEdt' => 4,
