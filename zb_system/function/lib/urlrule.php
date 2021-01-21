@@ -26,7 +26,7 @@ class UrlRule
     /**
      * @var bool
      */
-    public $isIndex = false; //指示是否为首页的规则(已废弃)
+    public $useAbbr = false; //指示是否是可以精简规则的
 
     /**
      * @var bool MakeReplace(变量名义意不明，以后要换)为真就进行Make_Rewrite_Replace 为假为进行Make_Active_Replace
@@ -90,15 +90,15 @@ class UrlRule
                 }
             }
         }
-        $s = $this->PreUrl;
+        $url = $this->GetPreUrl();
         foreach ($this->Rules as $key => $value) {
-            $s = preg_replace($key, $value, $s);
+            $url = preg_replace($key, $value, $url);
         }
-        $s = preg_replace('/\{[\?\/&a-z0-9]*=\}/', '', $s);
-        $s = preg_replace('/\{\/?}/', '', $s);
-        $s = str_replace(array('{', '}'), array('', ''), $s);
+        $url = preg_replace('/\{[\?\/&a-z0-9]*=\}/', '', $url);
+        $url = preg_replace('/\{\/?}/', '', $url);
+        $url = str_replace(array('{', '}'), array('', ''), $url);
 
-        $this->Url = htmlspecialchars($s);
+        $this->Url = htmlspecialchars($url);
 
         return $this->Url;
     }
@@ -109,61 +109,78 @@ class UrlRule
     private function Make_Rewrite_Replace()
     {
         global $zbp;
-        $s = $this->PreUrl;
+        $url = $this->GetPreUrl();
 
-        $only_match_page = GetValueInArray($this->Route, 'only_match_page', false);
+        $only_match_page = GetValueInArray($this->GetRoute(), 'only_match_page', false);
+        $forceDisplayFirstPage = $this->forceDisplayFirstPage;
+        if (empty($this->GetRoute())) {
+            $useAbbr = $this->useAbbr;
+        } else {
+            $useAbbr = (bool) GetValueInArray($this->GetRoute(), 'use_abbr', false);
+            $forceDisplayFirstPage = (bool) GetValueInArray($this->GetRoute(), 'force_display_firstpage', false);
+        }
 
         if (isset($this->Rules['{%page%}'])) {
             if ($this->Rules['{%page%}'] == '1' || $this->Rules['{%page%}'] == '0') {
                 //如果强制显示第一页为假和只匹配带page参数的条件为假
-                if ($this->forceDisplayFirstPage == false && $only_match_page == false) {
+                if ($forceDisplayFirstPage == false && $only_match_page == false) {
                     $this->Rules['{%page%}'] = '';
                 }
             }
         } else {
             $this->Rules['{%page%}'] = '';
         }
-        if ($this->Rules['{%page%}'] == '' && strpos($s, '{%page%}') !== false) {
-            preg_match('/(?<=\})[^\{\}%&]+(?=\{%page%\})/i', $s, $matches);
-            if (isset($matches[0])) {
-                $s = str_replace($matches[0], '', $s);
-                //如果'{%page%}'前只有{%host%}就把{%page%}之后的全删除了
-                $array = explode('{%page%}', $s);
-                if (is_array($array) && isset($array[0]) && substr_count($array[0], '{%') == 1) {
-                    $s = substr($s, 0, strpos($s, '{%page%}'));
-                }
-            } else {
-                preg_match('/(?<=&)[^\{\}%&]+(?=\{%page%\})/i', $s, $matches);
-                if (isset($matches[0])) {
-                    $s = str_replace($matches[0], '', $s);
+        if ($this->Rules['{%page%}'] == '' && strpos($url, '{%page%}') !== false) {
+
+            if ($useAbbr) {
+                $array = explode('{%page%}', $url);
+                if (is_array($array) && isset($array[0])) {
+                    $url = substr($url, 0, strpos($url, '{%page%}'));
+                    $i = (int) strripos($url, '}');
+                    $j = (int) strripos($url, '/'); 
+                    $i = ($j > $i) ? $j : $i;
+                    $url = substr($url, 0, $i+1);
                 }
             }
+
+            if (stripos($url, '_{%page%}') !== false) {
+                $url = str_replace('_{%page%}', '{%page%}', $url);
+            } elseif (stripos($url, '/{%page%}') !== false) {
+                $url = str_replace('/{%page%}', '{%page%}', $url);
+            } elseif (stripos($url, '-{%page%}') !== false) {
+                $url = str_replace('-{%page%}', '{%page%}', $url);
+            } else {
+                $url = preg_replace('/(?<=\})[^\}]+(?=\{%page%\})/i', '', $url, 1);
+            }
+
+            $url = str_replace('{%page%}', '', $url);
+
         }
 
-        $prefix = GetValueInArray($this->Route, 'prefix', '');
+        $prefix = GetValueInArray($this->GetRoute(), 'prefix', '');
         if ($prefix != '') {
             $prefix .= '/';
         }
         $this->Rules['{%host%}'] = '{%host%}' . $prefix;
         foreach ($this->Rules as $key => $value) {
             if (!is_array($value)) {
-                $s = str_replace($key, $value, $s);
+                $url = str_replace($key, $value, $url);
             }
         }
 
-        if (substr($this->PreUrl, -1) != '/' && substr($s, -1) == '/') {
-            $s = substr($s, 0, (strlen($s) - 1));
+        if (substr($this->GetPreUrl(), -1) != '/' && substr($url, -1) == '/') {
+            $url = substr($url, 0, (strlen($url) - 1));
         }
-        if (substr($s, -2) == '//') {
-            $s = substr($s, 0, (strlen($s) - 1));
+        if (substr($url, -2) == '//') {
+            $url = substr($url, 0, (strlen($url) - 1));
         }
-        if (substr($s, -1) == '&') {
-            $s = substr($s, 0, (strlen($s) - 1));
+        if (substr($url, -1) == '&') {
+            $url = substr($url, 0, (strlen($url) - 1));
         }
 
         $this->Rules['{%host%}'] = $zbp->host;
-        $s = str_replace('{%host%}', $zbp->host, $s);
-        $this->Url = htmlspecialchars($s);
+        $url = str_replace('{%host%}', $zbp->host, $url);
+        $this->Url = htmlspecialchars($url);
 
         return $this->Url;
     }
@@ -272,30 +289,47 @@ class UrlRule
 
     /**
      * @param $route
-     * @param $match_with_page boolean
+     * @param $haspage 指示规则是否需要匹配{%page%}(如为假将生成一个没有{%page%}的参数) boolean
      *
      * @return string
      */
-    public static function OutputUrlRegEx_Route($route, $match_with_page = false)
+    public static function OutputUrlRegEx_Route($route, $haspage = false)
     {
         global $zbp;
         self::$categoryLayer = $GLOBALS['zbp']->category_recursion_real_deep;
+        $match_with_page = $haspage;
+        $useAbbr = (bool) GetValueInArray($route, 'use_abbr', false);
 
         $newargs = self::ProcessParameters($route);
         $orginUrl = $url = $route['urlrule'];
 
-        $url = str_replace('{%page%}', '{%poaogoe%}', $url);
+        if ($match_with_page == false && strpos($url, '{%page%}') !== false) {
 
-        $url = str_replace('{%poaogoe%}', '{%page%}', $url);
-        if ($match_with_page == false) {
-            $url = preg_replace('/(?<=\})[^\}]+(?=\{%page%\})/i', '', $url, 1);
-            //如果'{%page%}'前只有{%host%}就把{%page%}之后的全删除了
-            $array = explode('{%page%}', $url);
-            if (is_array($array) && isset($array[0]) && substr_count($array[0], '{%') == 1) {
-                $url = substr($url, 0, strpos($url, '{%page%}'));
+            if ($useAbbr) {
+                $array = explode('{%page%}', $url);
+                if (is_array($array) && isset($array[0])) {
+                    $url = substr($url, 0, strpos($url, '{%page%}'));
+                    $i = (int) strripos($url, '}');
+                    $j = (int) strripos($url, '/'); 
+                    $i = ($j > $i) ? $j : $i;
+                    $url = substr($url, 0, $i+1);
+                }
             }
+
+            if (stripos($url, '_{%page%}') !== false) {
+                $url = str_replace('_{%page%}', '{%page%}', $url);
+            } elseif (stripos($url, '/{%page%}') !== false) {
+                $url = str_replace('/{%page%}', '{%page%}', $url);
+            } elseif (stripos($url, '-{%page%}') !== false) {
+                $url = str_replace('-{%page%}', '{%page%}', $url);
+            } else {
+                $url = preg_replace('/(?<=\})[^\}]+(?=\{%page%\})/i', '', $url, 1);
+            }
+
             $url = str_replace('{%page%}', '', $url);
+
         }
+        $url = str_replace('{%page%}', '(?P<page>[0-9]+)', $url);
 
         foreach ($newargs as $key => $value) {
             $url = str_replace('{%' . $value['match'] . '%}', '(?P<' . $value['name'] . '>' . $value['regex'] . ')', $url);
@@ -321,21 +355,23 @@ class UrlRule
     }
 
     /**
-     * 1.7新版本的OutputUrlRegEx
+     * 1.7新版本的OutputUrlRegEx (如果需要使用，请用V2新版输出，注意结果有可能是空值)
      *
      * @param $url
      * @param $type
-     * @param $match_with_page boolean
+     * @param $useAbbr 指示规则可以被缩写为"域名/"或是"域名/目录/"
+     * @param $haspage 指示规则是否需要匹配{%page%}(如为假将生成一个没有{%page%}的参数) boolean
      *
      * @return string
      */
-    public static function OutputUrlRegEx($url, $type, $match_with_page = false)
+    public static function OutputUrlRegEx_V2($url, $type, $haspage = false, $useAbbr = false)
     {
         global $zbp;
 
         if (is_array($url)) {
             return self::OutputUrlRegEx_Route($url);
         }
+        $match_with_page = $haspage;
 
         self::$categoryLayer = $GLOBALS['zbp']->category_recursion_real_deep;
         $post_type_name = array('post');
@@ -345,13 +381,30 @@ class UrlRule
         $orginUrl = $url;
 
         if ($match_with_page == false && strpos($url, '{%page%}') !== false) {
-            $url = preg_replace('/(?<=\})[^\}]+(?=\{%page%\})/i', '', $url, 1);
-            //如果'{%page%}'前只有{%host%}就把{%page%}之后的全删除了
-            $array = explode('{%page%}', $url);
-            if (is_array($array) && isset($array[0]) && substr_count($array[0], '{%') == 1) {
-                $url = substr($url, 0, strpos($url, '{%page%}'));
+
+            if ($useAbbr) {
+                $array = explode('{%page%}', $url);
+                if (is_array($array) && isset($array[0])) {
+                    $url = substr($url, 0, strpos($url, '{%page%}'));
+                    $i = (int) strripos($url, '}');
+                    $j = (int) strripos($url, '/'); 
+                    $i = ($j > $i) ? $j : $i;
+                    $url = substr($url, 0, $i+1);
+                }
             }
+
+            if (stripos($url, '_{%page%}') !== false) {
+                $url = str_replace('_{%page%}', '{%page%}', $url);
+            } elseif (stripos($url, '/{%page%}') !== false) {
+                $url = str_replace('/{%page%}', '{%page%}', $url);
+            } elseif (stripos($url, '-{%page%}') !== false) {
+                $url = str_replace('-{%page%}', '{%page%}', $url);
+            } else {
+                $url = preg_replace('/(?<=\})[^\}]+(?=\{%page%\})/i', '', $url, 1);
+            }
+
             $url = str_replace('{%page%}', '', $url);
+
         }
         $url = str_replace('{%page%}', '(?P<page>[0-9]+)', $url);
 
@@ -416,7 +469,7 @@ class UrlRule
     }
 
     /**
-     * 旧版本的OutputUrlRegEx (暂时没有删除，如果出错了可以改用这个 )
+     * 旧版本的OutputUrlRegEx (暂时没有删除，给老版本兼容使用)
      *
      * @param $url
      * @param $type
@@ -424,7 +477,7 @@ class UrlRule
      *
      * @return string
      */
-    public static function OutputUrlRegEx_OLD($url, $type, $haspage = false)
+    public static function OutputUrlRegEx($url, $type, $haspage = false)
     {
         global $zbp;
 

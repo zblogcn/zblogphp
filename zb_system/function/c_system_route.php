@@ -106,7 +106,7 @@ function ViewAuto($inpurl)
             if (isset($route['urlrule_regex']) && trim($route['urlrule_regex']) != '') {
                 $r = $route['urlrule_regex'];
             } else {
-                //$r = UrlRule::OutputUrlRegEx($zbp->GetPostType(0, 'list_urlrule'), 'list', $match_with_page_value);
+                //$r = UrlRule::OutputUrlRegEx_V2($zbp->GetPostType(0, 'list_urlrule'), 'list', $match_with_page_value);
                 $r = UrlRule::OutputUrlRegEx_Route($route, $match_with_page_value);
             }
 

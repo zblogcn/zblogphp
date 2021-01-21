@@ -12,8 +12,6 @@ if (!defined('ZBP_PATH')) {
  */
 
 $GLOBALS['setting_keys'] = array(
-    'ZC_BLOG_HOST',
-    'ZC_PERMANENT_DOMAIN_ENABLE',
     'ZC_BLOG_NAME',
     'ZC_BLOG_SUBNAME',
     'ZC_BLOG_COPYRIGHT',
@@ -73,12 +71,14 @@ function api_system_basic_info()
             'comment_turnoff' => $zbp->option['ZC_COMMENT_TURNOFF'],
             'comment_verify_enable' => $zbp->option['ZC_COMMENT_VERIFY_ENABLE'],
             'comment_reverse_order' => $zbp->option['ZC_COMMENT_REVERSE_ORDER'],
-            'close_site' => $zbp->option['ZC_CLOSE_SITE'],
-            'lang' => $zbp->lang
         ),
         'is_logged_in' => $zbp->user->ID != 0,
         'current_member' => $zbp->user,
     );
+
+    if ($zbp->islogin) {
+    	$info['zbp']['lang'] = $zbp->lang;
+    }
 
     return [
         'data' => $info,
@@ -137,7 +137,7 @@ function api_system_misc_statistic()
 }
 
 /**
- * 清空缓存并重新编译模板接口.
+ * Misc获取常用tags
  *
  * @return array
  */

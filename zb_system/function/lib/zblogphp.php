@@ -342,6 +342,8 @@ class ZBlogPHP
 
     public $isdebug = false; //是否Debug Mode
 
+    public $islogin = false; //是否Login
+
     /**
      * @var Template 当前模板
      */
@@ -829,7 +831,7 @@ class ZBlogPHP
             //  添加 文章页单页 伪静路由
             $this->RegRoute(array('type' => 'rewrite', 'name' => 'rewrite_post_article_single', 'call' => 'ViewPost', 'posttype' => 0, 'urlrule' => $this->GetPostType(0, 'single_urlrule'), 'parameters' => array('post' => array('id', 'alias')), 'parameters_with' => array('posttype')));
             //  添加 文章index列表 伪静路由
-            $this->RegRoute(array('type' => 'rewrite', 'name' => 'rewrite_post_article_list_index', 'call' => 'ViewList', 'posttype' => 0, 'urlrule' => $this->GetPostType(0, 'list_urlrule'), 'not_get' => array('id', 'alias'), 'parameters' => array('page'), 'parameters_with' => array('posttype')));
+            $this->RegRoute(array('type' => 'rewrite', 'name' => 'rewrite_post_article_list_index', 'call' => 'ViewList', 'posttype' => 0, 'urlrule' => $this->GetPostType(0, 'list_urlrule'), 'not_get' => array('id', 'alias'), 'parameters' => array('page'), 'parameters_with' => array('posttype'), 'use_abbr' => true));
             //  添加 文章category列表 伪静路由
             $this->RegRoute(array('type' => 'rewrite', 'name' => 'rewrite_post_article_list_category', 'call' => 'ViewList', 'posttype' => 0, 'urlrule' => $this->GetPostType(0, 'list_category_urlrule'), 'not_get' => array('id', 'alias'), 'parameters' => array('cate' => array('id', 'alias'), 'page'), 'parameters_with' => array('posttype')));
             //  添加 文章tag列表 伪静路由
@@ -969,6 +971,7 @@ class ZBlogPHP
         $this->ReflushLanguages();
         $this->ConvertTableAndDatainfo();
 
+        $this->islogin = empty($this->user->ID) ? false : true;
         $this->isload = true;
         return true;
     }
@@ -1475,11 +1478,12 @@ class ZBlogPHP
 
         if (is_object($user)) {
             $this->user = $user;
-
+            $this->islogin = true;
             return true;
         }
         $this->user = new Member();
         $this->user->Guid = GetGuid();
+        $this->islogin = false;
 
         return false;
     }

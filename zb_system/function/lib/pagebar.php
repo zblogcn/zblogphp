@@ -119,10 +119,11 @@ class PageBar
      * @param bool $makeReplace
      * @param bool $forceDisplayFirstPage = false
      */
-    public function __construct($urlrule, $makeReplace = true, $forceDisplayFirstPage = false)
+    public function __construct($urlrule, $makeReplace = true, $useAbbr = false, $forceDisplayFirstPage = false)
     {
         $this->UrlRule = new UrlRule($urlrule);
         $this->UrlRule->MakeReplace = $makeReplace;
+        $this->UrlRule->useAbbr = $useAbbr;
         $this->UrlRule->forceDisplayFirstPage = $forceDisplayFirstPage;
         $this->Buttons = &$this->buttons;
         $this->PrevButton = &$this->prevbutton;

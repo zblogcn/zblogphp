@@ -32,6 +32,7 @@ function ApiTokenVerify()
         if ($user != null) {
             define('ZBP_IN_API_VERIFYBYTOKEN', true);
             $zbp->user = $user;
+            $zbp->islogin = true;
         }
     }
 }
