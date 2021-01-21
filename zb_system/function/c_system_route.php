@@ -52,8 +52,8 @@ function ViewAuto($inpurl)
             //如果条件符合就组合参数数组并调用函数
             if ($b) {
                 $array = array();
-                ViewAuto_Process_Parameters_Get($array, GetValueInArray($route, 'parameters_get', array()));
-                ViewAuto_Process_Parameters_With($array, GetValueInArray($route, 'parameters_with', array()), $route);
+                ViewAuto_Process_Args_get($array, GetValueInArray($route, 'args_get', array()));
+                ViewAuto_Process_Args_with($array, GetValueInArray($route, 'args_with', array()), $route);
                 $b_redirect = GetValueInArray($route, 'to_permalink', false);
                 $b_redirect = $zbp->option['ZC_STATIC_MODE'] == 'REWRITE' && $b_redirect;
                 $b_redirect = ViewAuto_Check_CheckRegex2UrlIsNotEmpty($route) && $b_redirect;
@@ -104,7 +104,7 @@ function ViewAuto($inpurl)
                         $array[$value['name']] = $m[(string) $value['match']];
                     }
                 }
-                ViewAuto_Process_Parameters_With($array, GetValueInArray($route, 'parameters_with', array()), $route);
+                ViewAuto_Process_Args_with($array, GetValueInArray($route, 'args_with', array()), $route);
                                 $array['route'] = $route;
                 $result = ViewAuto_Call_Auto($route['call'], $array);
                 if ($result == true) {
@@ -121,8 +121,8 @@ function ViewAuto($inpurl)
             $b = $b && ViewAuto_Check_Request_Method(GetValueInArray($route, 'request_method', ''));
             if ($b) {
                 $array = array();
-                ViewAuto_Process_Parameters_Get($array, GetValueInArray($route, 'parameters_get', array()));
-                ViewAuto_Process_Parameters_With($array, GetValueInArray($route, 'parameters_with', array()), $route);
+                ViewAuto_Process_Args_get($array, GetValueInArray($route, 'args_get', array()));
+                ViewAuto_Process_Args_with($array, GetValueInArray($route, 'args_with', array()), $route);
                 $array['route'] = $route;
                 $result = ViewAuto_Call_Auto($route['call'], $array);
                 if ($result == true) {
@@ -149,10 +149,10 @@ function ViewAuto($inpurl)
 /**
  * ViewAuto的辅助函数
  */
-function ViewAuto_Process_Parameters_Get(&$array, $parameters_get)
+function ViewAuto_Process_Args_get(&$array, $args_get)
 {
-    if (isset($parameters_get) && is_array($parameters_get)) {
-        foreach ($parameters_get as $key => $value) {
+    if (isset($args_get) && is_array($args_get)) {
+        foreach ($args_get as $key => $value) {
             if (isset($_GET[$value])) {
                 $array[$value] = $_GET[$value];
             } else {
@@ -166,10 +166,10 @@ function ViewAuto_Process_Parameters_Get(&$array, $parameters_get)
 /**
  * ViewAuto的辅助函数
  */
-function ViewAuto_Process_Parameters_With(&$array, $parameters_with, $route)
+function ViewAuto_Process_Args_with(&$array, $args_with, $route)
 {
-    if (isset($parameters_with) && is_array($parameters_with)) {
-        foreach ($parameters_with as $key => $value) {
+    if (isset($args_with) && is_array($args_with)) {
+        foreach ($args_with as $key => $value) {
             if (is_integer($key) && is_scalar($value)) {
                 if (isset($_GET[$value])) {
                     $array[$value] = $_GET[$value];
@@ -227,7 +227,7 @@ function ViewAuto_Check_CheckRegex2UrlIsNotEmpty($route)
  */
 function ViewAuto_Get_Parameters_And_Match_with_page($route, &$parameters, &$match_with_page)
 {
-    if (isset($route['parameters']) && is_array($route['parameters'])) {
+    if (isset($route['args']) && is_array($route['args'])) {
         $parameters = UrlRule::ProcessParameters($route);
     } else {
         $parameters = array();
@@ -1135,7 +1135,7 @@ function ViewPost($id = null, $alias = null, $isrewrite = false, $posttype = 0, 
     }
 
     //从$post中读取正确的$id或$alias
-    if (isset($route['parameters']) && is_array($route['parameters'])) {
+    if (isset($route['args']) && is_array($route['args'])) {
         $parameters = UrlRule::ProcessParameters($route);
         foreach ($parameters as $key => $value) {
             if ($value['match'] == 'id') {

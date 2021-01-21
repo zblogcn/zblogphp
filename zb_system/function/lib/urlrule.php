@@ -206,8 +206,8 @@ class UrlRule
     {
         $newargs = array();
         
-        if (isset($route['parameters'])) {
-            $parameters = $route['parameters'];
+        if (isset($route['args'])) {
+            $parameters = $route['args'];
         } else {
             $parameters = array();
         }
