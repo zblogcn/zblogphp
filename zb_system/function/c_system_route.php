@@ -189,11 +189,15 @@ function ViewAuto_Process_Parameters_With($array, $parameters_with, $route)
 {
     if (isset($parameters_with) && is_array($parameters_with)) {
         foreach ($parameters_with as $key => $value) {
-            if (isset($_GET[$value])) {
-                $array[$value] = $_GET[$value];
-            }
-            if (isset($route[$value])) {
-                $array[$value] = $route[$value];
+            if (is_integer($key) && is_scalar($value)) {
+                if (isset($_GET[$value])) {
+                    $array[$value] = $_GET[$value];
+                }
+                if (isset($route[$value])) {
+                    $array[$value] = $route[$value];
+                }
+            } elseif (is_string($key)) {
+                $array[$key] = $value;
             }
         }
     }
@@ -526,6 +530,7 @@ function ViewSearch()
     $pagebar->UrlRule->Rules['{%page%}'] = $page;
     $pagebar->UrlRule->Rules['{%q%}'] = rawurlencode($q);
     $pagebar->UrlRule->Rules['{%search%}'] = rawurlencode($q);
+    ViewAuto_Process_Pagebar_Replace_Array($pagebar, $route, $fpargs);
 
     foreach ($GLOBALS['hooks']['Filter_Plugin_ViewSearch_Core'] as $fpname => &$fpsignal) {
         $fpname($q, $page, $w, $pagebar, $order);
@@ -624,12 +629,13 @@ function ViewSearch()
  * 显示列表页面.
  *
  * @param int   $page (1.7起做为主要array型参数，后续的都作废了)
- * @param mixed $cate
- * @param mixed $auth
- * @param mixed $date
- * @param mixed $tags      tags列表
- * @param bool  $canceldisplay 是否取消内容输出
- * @param bool  $posttype   Post表的类型
+ * @param mixed $cate           分类 id或alias
+ * @param mixed $auth           作者 id或alias
+ * @param mixed $date           日期
+ * @param mixed $tags           tags id或alias
+ * @param mixed $isrewrite      是否启用urlrewrite
+ * @param bool  $posttype       Post表的类型
+ * @param bool  $canceldisplay  是否取消内容输出
  *
  * @api Filter_Plugin_ViewList_Begin
  * @api Filter_Plugin_ViewList_Begin_V2
@@ -1189,7 +1195,6 @@ function ViewPost($id = null, $alias = null, $isrewrite = false, $posttype = 0, 
     $pagebar->PageNow = 1;
     $pagebar->PageBarCount = $zbp->pagebarcount;
     //$pagebar->Count = $article->CommNums;
-    ViewAuto_Process_Pagebar_Replace_Array($pagebar, $route, $fpargs);
 
     if ($zbp->option['ZC_COMMENT_TURNOFF']) {
         $article->IsLock = true;

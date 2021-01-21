@@ -116,7 +116,7 @@ class UrlRule
         if ($this->GetRoute() == array()) {
             $useAbbr = $this->useAbbr;
         } else {
-            $useAbbr = (bool) GetValueInArray($this->GetRoute(), 'use_abbr', false);
+            $useAbbr = (bool) GetValueInArray($this->GetRoute(), 'use_abbr_url', false);
             $forceDisplayFirstPage = (bool) GetValueInArray($this->GetRoute(), 'force_display_firstpage', false);
         }
 
@@ -296,7 +296,7 @@ class UrlRule
         global $zbp;
         self::$categoryLayer = $GLOBALS['zbp']->category_recursion_real_deep;
         $match_with_page = $haspage;
-        $useAbbr = (bool) GetValueInArray($route, 'use_abbr', false);
+        $useAbbr = (bool) GetValueInArray($route, 'use_abbr_url', false);
 
         $newargs = self::ProcessParameters($route);
         $orginUrl = $url = $route['urlrule'];
