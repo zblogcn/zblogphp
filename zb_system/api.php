@@ -18,9 +18,7 @@ if (!$GLOBALS['option']['ZC_API_ENABLE']) {
     ApiResponse(null, null, 503, $GLOBALS['lang']['error']['95']);
 }
 
-if (!$zbp->CheckRights('api')) {
-    $zbp->ShowError(6, __FILE__, __LINE__);
-}
+ApiCheckAuth(false, 'api');
 
 $mods = array();
 

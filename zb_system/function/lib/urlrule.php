@@ -337,13 +337,13 @@ class UrlRule
         }
         $url = str_replace('{%host%}', '{%host%}' . $prefix, $url);
 
-        $arrayReplace = array('{%host%}' => '^', '.' => '\\.', '/' => '\\/');
+        $arrayReplace = array('{%host%}' => '', '.' => '\\.', '/' => '\\/');
         foreach ($arrayReplace as $key => $value) {
             $url = str_replace($key, $value, $url);
         }
 
-        $url = $url . '$';
-        if ($url == '$' || $url == '^$' || $url == '^\/$') {
+        $url = '^' . $url . '$';
+        if ($url == '^$' || $url == '^\/$') {
             return '';
         }
 
@@ -444,7 +444,7 @@ class UrlRule
             $url = str_replace('%' . $type . '%', '(?P<' . $type . '>[^\./_]+?)', $url);
         }
  
-        $url = str_replace('{%host%}', '^', $url);
+        $url = str_replace('{%host%}', '', $url);
         $url = str_replace('.', '\\.', $url);
         $url = str_replace('{', '', $url);
         $url = str_replace('}', '', $url);
@@ -452,8 +452,8 @@ class UrlRule
         $url = str_replace(':>', '}', $url);
         $url = str_replace('/', '\/', $url);
 
-        $url = $url . '$';
-        if ($url == '^$') {
+        $url = '^' . $url . '$';
+        if ($url == '^$' || $url == '^\/$') {
             return '';
         }
         return '/(?J)' . $url . '/';

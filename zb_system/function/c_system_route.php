@@ -55,13 +55,12 @@ function ViewAuto($inpurl)
                 ViewAuto_Process_Args_get($array, GetValueInArray($route, 'args_get', array()));
                 ViewAuto_Process_Args_with($array, GetValueInArray($route, 'args_with', array()), $route);
                 $b_redirect = GetValueInArray($route, 'to_permalink', false);
-                $b_redirect = $zbp->option['ZC_STATIC_MODE'] == 'REWRITE' && $b_redirect;
+                $b_redirect = ($zbp->option['ZC_STATIC_MODE'] == 'REWRITE') && $b_redirect;
                 $b_redirect = ViewAuto_Check_CheckRegex2UrlIsNotEmpty($route) && $b_redirect;
                 if ($b_redirect) {
                     $array['canceldisplay'] = true;
                 }
-                $array['route'] = $route;
-                $result = ViewAuto_Call_Auto($route['call'], $array);
+                $result = ViewAuto_Call_Auto($route, $array);
                 if ($result == true) {
                     $template = &$zbp->template;
                     //如果开启伪静且$b_redirect，那么通过原动态访问的会跳转至$template->GetTags('url')
@@ -74,6 +73,7 @@ function ViewAuto($inpurl)
         }
     }
 
+
     //匹配伪静路由
     foreach ($zbp->routes['rewrite'] as $key => $route) {
         //$match_with_page 默认匹配1次 (true)，有page参数可以匹配2次 (false, true)
@@ -84,9 +84,9 @@ function ViewAuto($inpurl)
         foreach ($match_with_page as $match_with_page_key => $match_with_page_value) {
             $b = ViewAuto_Check_Get_And_Not_Get_And_Must_Get(GetValueInArray($route, 'get', array()), GetValueInArray($route, 'not_get', array()), GetValueInArray($route, 'must_get', array()));
             $b = $b && ViewAuto_Check_Request_Method(GetValueInArray($route, 'request_method', ''));
-            //如果直接指定了$route['urlrule_regex']，就不调用UrlRule::OutputUrlRegEx，直接preg_match，那就不执行$match_with_page_value = true的情况
+            //如果直接指定了$route['urlrule_regex']，就不调用UrlRule::OutputUrlRegEx，直接preg_match
             if (isset($route['urlrule_regex']) && trim($route['urlrule_regex']) != '') {
-                $r = $route['urlrule_regex'];
+                $r = trim($route['urlrule_regex']);
             } else {
                 //$r = UrlRule::OutputUrlRegEx_V2($zbp->GetPostType(0, 'list_urlrule'), 'list', $match_with_page_value);
                 $r = UrlRule::OutputUrlRegEx_Route($route, $match_with_page_value);
@@ -95,18 +95,13 @@ function ViewAuto($inpurl)
             $m = array();
             //如果条件符合就组合参数数组并调用函数
             //var_dump($match_with_page_value, $route['urlrule'], $r, $url, $m);//die;
-            if ($b && (($r == '' && $r == $url) || ($r <> '' && preg_match($r, $url, $m) == 1))) {
-                $array = array();
-                $array = array_merge($array, $m);
+            $b = $b && (($r != '' && preg_match($r, $url, $m) == 1) || ($r == '' && $url == '') || ($r == '' && $url == 'index.php'));
+            if ($b) {
+                $array = $m;
                 //var_dump($match_with_page_value, $route['urlrule'], $r, $url, $m);//die;
-                foreach ($parameters as $key => $value) {
-                    if (isset($m[(string) $value['match']])) {
-                        $array[$value['name']] = $m[(string) $value['match']];
-                    }
-                }
+                ViewAuto_Process_Args($array, $parameters);
                 ViewAuto_Process_Args_with($array, GetValueInArray($route, 'args_with', array()), $route);
-                                $array['route'] = $route;
-                $result = ViewAuto_Call_Auto($route['call'], $array);
+                $result = ViewAuto_Call_Auto($route, $array);
                 if ($result == true) {
                     return;
                 }
@@ -123,8 +118,7 @@ function ViewAuto($inpurl)
                 $array = array();
                 ViewAuto_Process_Args_get($array, GetValueInArray($route, 'args_get', array()));
                 ViewAuto_Process_Args_with($array, GetValueInArray($route, 'args_with', array()), $route);
-                $array['route'] = $route;
-                $result = ViewAuto_Call_Auto($route['call'], $array);
+                $result = ViewAuto_Call_Auto($route, $array);
                 if ($result == true) {
                     return;
                 }
@@ -141,9 +135,22 @@ function ViewAuto($inpurl)
         }
     }
 
-    $zbp->ShowError(2, __FILE__, __LINE__);
+    //$zbp->ShowError(2, __FILE__, __LINE__);
 
     return false;
+}
+
+/**
+ * ViewAuto的辅助函数
+ */
+function ViewAuto_Process_Args(&$array, $parameters)
+{
+    foreach ($parameters as $key => $value) {
+        if (isset($m[(string) $value['match']])) {
+            $array[$value['name']] = $m[(string) $value['match']];
+        }
+    }
+    return $array;
 }
 
 /**
@@ -188,8 +195,10 @@ function ViewAuto_Process_Args_with(&$array, $args_with, $route)
 /**
  * ViewAuto的辅助函数
  */
-function ViewAuto_Call_Auto($function, $array)
+function ViewAuto_Call_Auto($route, $array)
 {
+    $function = $route['call'];
+    $array['route'] = $route;
     if (strpos($function, '::') !== false) {
         $array = explode('::', $function);
         call_user_func(array($array[0], $array[1]));
@@ -676,7 +685,7 @@ function ViewSearch()
  *
  * @return string
  */
-function ViewList($page = null, $cate = null, $auth = null, $date = null, $tags = null, $isrewrite = false, $posttype = 0, $canceldisplay = false)
+function ViewList($page = null, $cate = null, $auth = null, $date = null, $tags = null, $isrewrite = false, $posttype = null, $canceldisplay = false)
 {
     global $zbp;
 
@@ -684,7 +693,7 @@ function ViewList($page = null, $cate = null, $auth = null, $date = null, $tags 
     $fpargs_v2 = call_user_func('func_get_args');
     $fpargs = &$fpargs_v2;
 
-    //新版本的函数V2
+    //新版本的函数V2 (v2版本传入的第一个参数是array)
     foreach ($GLOBALS['hooks']['Filter_Plugin_ViewList_Begin_V2'] as $fpname => &$fpsignal) {
         $fpreturn = call_user_func_array($fpname, $fpargs_v2);
         if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
@@ -704,11 +713,12 @@ function ViewList($page = null, $cate = null, $auth = null, $date = null, $tags 
         $canceldisplay = GetValueInArray($page, 'canceldisplay', false);
         $route = GetValueInArray($page, 'route', array());
         $page = GetValueInArray($page, 'page', null);
-        //处理上一版本兼容性的问题
-        $fpargs_v1 = array($page, $cate, $auth, $date, $tags, $isrewrite, $posttype, $canceldisplay);
     } else {
         $route = array();
     }
+
+    //处理上一版本兼容性的问题
+    $fpargs_v1 = array($page, $cate, $auth, $date, $tags, $isrewrite, $posttype, $canceldisplay);
 
     //老版本的兼容接口
     foreach ($GLOBALS['hooks']['Filter_Plugin_ViewList_Begin'] as $fpname => &$fpsignal) {
@@ -1087,7 +1097,7 @@ function ViewList($page = null, $cate = null, $auth = null, $date = null, $tags 
  *
  * @return string
  */
-function ViewPost($id = null, $alias = null, $isrewrite = false, $posttype = 0, $canceldisplay = false)
+function ViewPost($id = null, $alias = null, $isrewrite = false, $posttype = null, $canceldisplay = false)
 {
     global $zbp;
 
@@ -1095,7 +1105,7 @@ function ViewPost($id = null, $alias = null, $isrewrite = false, $posttype = 0, 
     $fpargs_v2 = call_user_func('func_get_args');
     $fpargs = &$fpargs_v2;
 
-    //新版本的函数V2
+    //新版本的函数V2 (v2版本传入的第一个参数是array)
     foreach ($GLOBALS['hooks']['Filter_Plugin_ViewPost_Begin_V2'] as $fpname => &$fpsignal) {
         $fpreturn = call_user_func_array($fpname, $fpargs_v2);
         if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
@@ -1108,21 +1118,20 @@ function ViewPost($id = null, $alias = null, $isrewrite = false, $posttype = 0, 
     //修正首个参数使用array而不传入后续参数的情况
     if (is_array($id)) {
         $object = $id;
-        $alias = GetValueInArray($id, 'alias', null);
-        $posttype = GetValueInArray($id, 'posttype', 0);
-        $canceldisplay = GetValueInArray($id, 'canceldisplay', false);
-        $route = GetValueInArray($id, 'route', array());
-        $post = GetValueInArray($id, 'post', null);
-        $id = GetValueInArray($id, 'id', null);
-        //处理上一版本兼容性的问题
-        $fpargs_v1 = array($id, $alias, $isrewrite, $posttype, $canceldisplay);
+        $alias = GetValueInArray($object, 'alias', null);
+        $posttype = GetValueInArray($object, 'posttype', 0);
+        $canceldisplay = GetValueInArray($object, 'canceldisplay', false);
+        $route = GetValueInArray($object, 'route', array());
+        $post = GetValueInArray($object, 'post', null);
+        $id = GetValueInArray($object, 'id', null);
     } else {
         $object = array();
-        $id = $id;
-        $alias = $alias;
         $route = array();
         $post = null;
     }
+
+    //处理上一版本兼容性的问题
+    $fpargs_v1 = array($id, $alias, $isrewrite, $posttype, $canceldisplay);
 
     //兼容老版本的接口
     foreach ($GLOBALS['hooks']['Filter_Plugin_ViewPost_Begin'] as $fpname => &$fpsignal) {
@@ -1285,11 +1294,13 @@ function ViewPost($id = null, $alias = null, $isrewrite = false, $posttype = 0, 
     $zbp->template->SetTags('article', $article);
     $zbp->template->SetTags('type', $article->TypeName);
     $zbp->template->SetTags('page', 1);
+
     if ($pagebar->PageAll == 0 || $pagebar->PageAll == 1) {
         $pagebar = null;
     }
-
     $zbp->template->SetTags('pagebar', $pagebar);
+    $zbp->template->SetTags('commentspagebar', $pagebar);
+    $zbp->template->SetTags('commentspage', 1);
     $zbp->template->SetTags('comments', $comments);
 
     $zbp->template->SetTags('args', $fpargs);
@@ -1390,12 +1401,14 @@ function ViewComments($postid, $page)
     $zbp->template->SetTags('title', $zbp->title);
     $zbp->template->SetTags('article', $post);
     $zbp->template->SetTags('type', 'comment');
-    $zbp->template->SetTags('page', $page);
+
     if ($pagebar->PageAll == 1) {
         $pagebar = null;
     }
 
     $zbp->template->SetTags('pagebar', $pagebar);
+    $zbp->template->SetTags('commentspagebar', $pagebar);
+    $zbp->template->SetTags('commentspage', $page);
     $zbp->template->SetTags('comments', $comments);
 
     $zbp->template->SetTemplate($template);
