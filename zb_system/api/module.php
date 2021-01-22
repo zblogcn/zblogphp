@@ -186,6 +186,8 @@ function api_module_set_sidebar()
 {
     global $zbp;
 
+    //传入的参数是$_Post['sidebar'] .. $_Post['sidebar9'],值为"模块filename名|模块2filename.."
+
     ApiCheckAuth(true, 'SidebarSet');
 
     SetSidebar();

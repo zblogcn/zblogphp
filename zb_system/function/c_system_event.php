@@ -2068,7 +2068,9 @@ function SetSidebar()
     for ($i = 1; $i <= 9; $i++) {
         $optionName = $i === 1 ? 'ZC_SIDEBAR_ORDER' : "ZC_SIDEBAR${i}_ORDER";
         $formName = $i === 1 ? 'sidebar' : "sidebar${i}";
-        $zbp->option[$optionName] = trim(GetVars($formName, 'POST'), '|');
+        if (isset($_POST[$formName])) {
+            $zbp->option[$optionName] = trim(GetVars($formName, 'POST'), '|');
+        }
     }
     $zbp->SaveOption();
     return true;
