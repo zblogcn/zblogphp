@@ -329,6 +329,10 @@ class UrlRule
         $url = str_replace('.', '\\.', $url);
         $url = str_replace('/', '\\/', $url);
 
+        $prefix = GetValueInArray($route, 'prefix', '');
+        $prefix = ($prefix != '') ? ($prefix . '\/') : $prefix;
+        $url = str_replace('{%host%}', $prefix, $url);
+
         //把page传进$newargs
         $newargs[] = array('name'  => 'page', 'match' => 'page', 'regex' => '[0-9]+');
         //传入{%参数%}的正则
@@ -336,10 +340,6 @@ class UrlRule
             $url = str_replace('{%' . $value['match'] . '%}', '(?P<' . $value['name'] . '>' . $value['regex'] . ')', $url);
         }
 
-        $prefix = GetValueInArray($route, 'prefix', '');
-        $prefix = ($prefix != '') ? ($prefix . '\/') : $prefix;
-
-        $url = str_replace('{%host%}', $prefix, $url);
         $url = '^' . $url . '$';
         if ($url == '^$' || $url == '^\/$') {
             return '';
