@@ -849,9 +849,9 @@ class ZBlogPHP
             $this->RegRoute(array('type' => 'rewrite', 'name' => 'rewrite_post_page_single', 'call' => 'ViewPost', 'prefix' => '', 'urlrule' => $this->GetPostType(1, 'single_urlrule'), 'args' => array('post' => array('id', 'alias')), 'args_with' => array('posttype' => 1)));
 
             //  这是一个例子： 文章搜索的伪静路由的实现  1.设定原始规则
-            $this->posttype[0]['search_urlrule'] = '{%host%}{%search%}_{%page%}.html';
+            //$this->posttype[0]['search_urlrule'] = '{%host%}{%search%}_{%page%}.html';
             // 2.注册伪静路由
-            $this->RegRoute(array('type' => 'rewrite', 'name' => 'rewrite_post_article_search', 'call' => 'ViewSearch', 'prefix' => 'search', 'urlrule' => $this->GetPostType(0, 'search_urlrule'), 'args' => array('search' => array('search' => '[^\/_]+'), 'page'), 'args_with' => array('posttype' => 0), 'request_method' => array('GET', 'POST'), 'only_match_page' => false));
+            //$this->RegRoute(array('type' => 'rewrite', 'name' => 'rewrite_post_article_search', 'call' => 'ViewSearch', 'prefix' => 'search', 'urlrule' => $this->GetPostType(0, 'search_urlrule'), 'args' => array('search' => array('search' => '[^\/_]+'), 'page'), 'args_with' => array('posttype' => 0), 'request_method' => array('GET', 'POST'), 'only_match_page' => false));
 
             //在伪静模式下，第2次追加覆盖，给“文章类和页面类”更新routes数据
             $routes = array(

@@ -674,9 +674,7 @@ function ViewSearch()
  * @param mixed $date           日期
  * @param mixed $tags           tags id或alias
  * @param mixed $isrewrite      是否启用urlrewrite
- * @param array $route          1.7里新增路由信息
- * @param bool  $posttype       Post表的类型
- * @param bool  $canceldisplay  是否取消内容输出
+ * @param array $object         把1.7里新增array型参数传给旧版本的接口
  *
  * @api Filter_Plugin_ViewList_Begin
  * @api Filter_Plugin_ViewList_Begin_V2
@@ -686,7 +684,7 @@ function ViewSearch()
  *
  * @return string
  */
-function ViewList($page = null, $cate = null, $auth = null, $date = null, $tags = null, $isrewrite = false, $route = array(), $posttype = null, $canceldisplay = false)
+function ViewList($page = null, $cate = null, $auth = null, $date = null, $tags = null, $isrewrite = false, $object = array())
 {
     global $zbp;
 
@@ -694,7 +692,7 @@ function ViewList($page = null, $cate = null, $auth = null, $date = null, $tags 
     $fpargs_v2 = call_user_func('func_get_args');
     $fpargs = &$fpargs_v2;
 
-    //新版本的函数V2 (v2版本传入的第一个参数是array)
+    //新版本的函数V2 (v2版本传入的第一个参数是array且只传一个array)
     foreach ($GLOBALS['hooks']['Filter_Plugin_ViewList_Begin_V2'] as $fpname => &$fpsignal) {
         $fpreturn = call_user_func_array($fpname, $fpargs_v2);
         if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
@@ -706,6 +704,8 @@ function ViewList($page = null, $cate = null, $auth = null, $date = null, $tags 
 
     //修正首个参数使用array而不传入后续参数的情况
     if (is_array($page)) {
+        $object = $page;
+        $isrewrite = true;
         $cate = GetValueInArray($page, 'cate', null);
         $auth = GetValueInArray($page, 'auth', null);
         $date = GetValueInArray($page, 'date', null);
@@ -715,11 +715,13 @@ function ViewList($page = null, $cate = null, $auth = null, $date = null, $tags 
         $route = GetValueInArray($page, 'route', array());
         $page = GetValueInArray($page, 'page', null);
     } else {
-        $fpargs_v1 = array();
+        $object = array();
+        $posttype = null;
+        $canceldisplay = false;
     }
 
     //处理上一版本兼容性的问题
-    $fpargs_v1 = array($page, $cate, $auth, $date, $tags, $isrewrite, $route, $posttype, $canceldisplay);
+    $fpargs_v1 = array($page, $cate, $auth, $date, $tags, $isrewrite, $object);
 
     //老版本的兼容接口
     foreach ($GLOBALS['hooks']['Filter_Plugin_ViewList_Begin'] as $fpname => &$fpsignal) {
@@ -1087,9 +1089,7 @@ function ViewList($page = null, $cate = null, $auth = null, $date = null, $tags 
  * @param array|int|string $id         文章ID/ ID/别名对象 (1.7起做为主要array型参数，后续的都作废了)
  * @param string           $alias     （如果有的话）文章别名
  * @param bool             $isrewrite  是否启用urlrewrite
- * @param array            $route      1.7里新增路由信息
- * @param bool             $posttype   Post表的类型
- * @param bool             $canceldisplay  取消Display输出
+ * @param array            $object     把1.7里新增array型参数传给旧版本的接口
  *
  * @api Filter_Plugin_ViewPost_Begin
  * @api Filter_Plugin_ViewPost_Begin_V2
@@ -1099,7 +1099,7 @@ function ViewList($page = null, $cate = null, $auth = null, $date = null, $tags 
  *
  * @return string
  */
-function ViewPost($id = null, $alias = null, $isrewrite = false, $route = array(), $posttype = null, $canceldisplay = false)
+function ViewPost($id = null, $alias = null, $isrewrite = false, $object = array())
 {
     global $zbp;
 
@@ -1107,7 +1107,7 @@ function ViewPost($id = null, $alias = null, $isrewrite = false, $route = array(
     $fpargs_v2 = call_user_func('func_get_args');
     $fpargs = &$fpargs_v2;
 
-    //新版本的函数V2 (v2版本传入的第一个参数是array)
+    //新版本的函数V2 (v2版本传入的第一个参数是array且只传一个array)
     foreach ($GLOBALS['hooks']['Filter_Plugin_ViewPost_Begin_V2'] as $fpname => &$fpsignal) {
         $fpreturn = call_user_func_array($fpname, $fpargs_v2);
         if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
@@ -1120,19 +1120,22 @@ function ViewPost($id = null, $alias = null, $isrewrite = false, $route = array(
     //修正首个参数使用array而不传入后续参数的情况
     if (is_array($id)) {
         $object = $id;
-        $alias = GetValueInArray($object, 'alias', null);
+        $isrewrite = true;
         $posttype = GetValueInArray($object, 'posttype', 0);
         $canceldisplay = GetValueInArray($object, 'canceldisplay', false);
         $route = GetValueInArray($object, 'route', array());
         $post = GetValueInArray($object, 'post', null);
+        $alias = GetValueInArray($object, 'alias', null);
         $id = GetValueInArray($object, 'id', null);
     } else {
-        $object = array();
         $post = null;
+        $object = array();
+        $posttype = null;
+        $canceldisplay = false;
     }
 
     //处理上一版本兼容性的问题
-    $fpargs_v1 = array($id, $alias, $isrewrite, $route, $posttype, $canceldisplay);
+    $fpargs_v1 = array($id, $alias, $isrewrite, $object);
 
     //兼容老版本的接口
     foreach ($GLOBALS['hooks']['Filter_Plugin_ViewPost_Begin'] as $fpname => &$fpsignal) {
@@ -1150,6 +1153,9 @@ function ViewPost($id = null, $alias = null, $isrewrite = false, $route = array(
         foreach ($parameters as $key => $value) {
             if ($value['match'] == 'id') {
                 $id = $post;
+                if (function_exists('ctype_digit') && !ctype_digit((string) $id)) {
+                    $id = null;
+                }
             }
             if ($value['match'] == 'alias') {
                 $alias = $post;
