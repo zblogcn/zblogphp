@@ -258,13 +258,13 @@ class UrlRule
                 $value['regex'] = '[0-9]+';
             }
             if ($value['match'] == 'alias' && $value['regex'] == '') {
-                $value['regex'] = '[^\./_]+?';
+                $value['regex'] = '[^\.\/_]+?';
             }
             if ($value['match'] == 'category' && $value['regex'] == '') {
-                $value['regex'] = '(([^\./_]*/?)<:1,' . self::$categoryLayer . ':>))';
+                $value['regex'] = '([^\.\/_]*\/?){1,' . self::$categoryLayer . '}';
             }
             if ($value['match'] == 'author' && $value['regex'] == '') {
-                $value['regex'] = '[^\./_]+';
+                $value['regex'] = '[^\.\/_]+';
             }
             if ($value['match'] == 'year' && $value['regex'] == '') {
                 $value['regex'] = '[0-9]{4}';
@@ -326,23 +326,20 @@ class UrlRule
             $url = str_replace('{%page%}', '', $url);
         }
         $url = str_replace('{%host%}/', '{%host%}', $url);
-        $url = str_replace('{%page%}', '(?P<page>[0-9]+)', $url);
+        $url = str_replace('.', '\\.', $url);
+        $url = str_replace('/', '\\/', $url);
 
+        //把page传进$newargs
+        $newargs[] = array('name'  => 'page', 'match' => 'page', 'regex' => '[0-9]+');
+        //传入{%参数%}的正则
         foreach ($newargs as $key => $value) {
             $url = str_replace('{%' . $value['match'] . '%}', '(?P<' . $value['name'] . '>' . $value['regex'] . ')', $url);
         }
 
         $prefix = GetValueInArray($route, 'prefix', '');
-        if ($prefix != '') {
-            $prefix .= '/';
-        }
-        $url = str_replace('{%host%}', '{%host%}' . $prefix, $url);
+        $prefix = ($prefix != '') ? ($prefix . '\/') : $prefix;
 
-        $arrayReplace = array('{%host%}' => '', '.' => '\\.', '/' => '\\/');
-        foreach ($arrayReplace as $key => $value) {
-            $url = str_replace($key, $value, $url);
-        }
-
+        $url = str_replace('{%host%}', $prefix, $url);
         $url = '^' . $url . '$';
         if ($url == '^$' || $url == '^\/$') {
             return '';
@@ -356,8 +353,8 @@ class UrlRule
      *
      * @param $url
      * @param $type
-     * @param $useAbbr 指示规则可以被缩写为"域名/"或是"域名/目录/"
      * @param $haspage 指示规则是否需要匹配{%page%}(如为假将生成一个没有{%page%}的参数) boolean
+     * @param $useAbbr 指示规则可以被缩写为"域名/"或是"域名/目录/"
      *
      * @return string
      */
@@ -402,57 +399,57 @@ class UrlRule
             $url = str_replace('{%page%}', '', $url);
         }
         $url = str_replace('{%host%}/', '{%host%}', $url);
-        $url = str_replace('{%page%}', '(?P<page>[0-9]+)', $url);
+        $url = str_replace('.', '\\.', $url);
+        $url = str_replace('/', '\\/', $url);
+
+        $array = array();
+        $array[] = array('{%page%}' => '(?P<page>[0-9]+)');
+        $array[] = array('{%host%}' => '');
 
         if ($type == 'date') {
-            $url = str_replace('%date%', '(?P<date>[0-9\-]+)', $url);
+            $array[] = array('{%date%}' => '(?P<date>[0-9\-]+)');
         } elseif ($type == 'cate') {
-            $url = str_replace('%id%', '(?P<cate>[0-9]+)', $url);
-
             $carray = array();
             for ($i = 1; $i <= self::$categoryLayer; $i++) {
-                $carray[$i] = '[^\./_]*';
+                $carray[$i] = '[^\.\/_]*';
                 for ($j = 1; $j <= ($i - 1); $j++) {
-                    $carray[$i] = '[^\./_]*/' . $carray[$i];
+                    $carray[$i] = '[^\.\/_]*/' . $carray[$i];
                 }
             }
             $fullcategory = implode('|', $carray);
-            $url = str_replace('%alias%', '(?P<cate>(' . $fullcategory . ')+?)', $url);
+            $array[] = array('{%id%}' => '(?P<cate>[0-9]+)');
+            $array[] = array('{%alias%}' => '(?P<cate>(' . $fullcategory . ')+?)');
         } elseif ($type == 'tags') {
-               $url = str_replace('%id%', '(?P<tags>[0-9]+)', $url);
-            $url = str_replace('%alias%', '(?P<tags>[^\./_]+?)', $url);
+            $array[] = array('{%id%}' => '(?P<tags>[0-9]+)');
+            $array[] = array('{%alias%}' => '(?P<tags>[^\.\/_]+?)');
         } elseif ($type == 'auth') {
-            $url = str_replace('%id%', '(?P<auth>[0-9]+)', $url);
-            $url = str_replace('%alias%', '(?P<auth>[^\./_]+?)', $url);
+            $array[] = array('{%id%}' => '(?P<auth>[0-9]+)');
+            $array[] = array('{%alias%}' => '(?P<auth>[^\.\/_]+?)');
         } elseif (in_array($type, $post_type_name)) {
             if (strpos($url, '%id%') !== false) {
-                $url = str_replace('%id%', '(?P<id>[0-9]+)', $url);
+                $array[] = array('{%id%}' => '(?P<id>[0-9]+)');
             }
             if (strpos($url, '%alias%') !== false) {
                 if ($type == 'article') {
-                    $url = str_replace('%alias%', '(?P<alias>[^/]+)', $url);
+                    $array[] = array('{%alias%}' => '(?P<alias>[^\/]+)');
                 } else {
-                    $url = str_replace('%alias%', '(?P<alias>.+)', $url);
+                    $array[] = array('{%alias%}' => '(?P<alias>.+)');
                 }
             }
-            $url = str_replace('%category%', '(?P<category>(([^\./_]*/?)<:1,' . self::$categoryLayer . ':>))', $url);
-            $url = str_replace('%author%', '(?P<author>[^\./_]+)', $url);
-            $url = str_replace('%year%', '(?P<year>[0-9]<:4:>)', $url);
-            $url = str_replace('%month%', '(?P<month>[0-9]<:1,2:>)', $url);
-            $url = str_replace('%day%', '(?P<day>[0-9]<:1,2:>)', $url);
+            $array[] = array('{%category%}' => '(?P<category>([^\.\/_]*\/?){1,' . self::$categoryLayer . '})');
+            $array[] = array('{%author%}' => '(?P<author>[^\.\/_]+)');
+            $array[] = array('{%year%}' => '(?P<year>[0-9]{4})');
+            $array[] = array('{%month%}' => '(?P<month>[0-9]{1,2})');
+            $array[] = array('{%day%}' => '(?P<day>[0-9]{1,2})');
         } else {
-            $url = str_replace('%id%', '(?P<' . $type . '>[0-9]+)', $url);
-            $url = str_replace('%alias%', '(?P<' . $type . '>[^\./_]+?)', $url);
-            $url = str_replace('%' . $type . '%', '(?P<' . $type . '>[^\./_]+?)', $url);
+            $array[] = array('{%id%}' => '(?P<' . $type . '>[0-9]+)');
+            $array[] = array('{%alias%}' => '(?P<' . $type . '>[^\.\/_]+?)');
+            $array[] = array('{' . $type . '}' => '(?P<' . $type . '>[^\.\/_]+?)');
         }
  
-        $url = str_replace('{%host%}', '', $url);
-        $url = str_replace('.', '\\.', $url);
-        $url = str_replace('{', '', $url);
-        $url = str_replace('}', '', $url);
-        $url = str_replace('<:', '{', $url);
-        $url = str_replace(':>', '}', $url);
-        $url = str_replace('/', '\/', $url);
+        foreach ($array as $key => $value) {
+            $url = str_replace(key($value), current($value), $url);
+        }
 
         $url = '^' . $url . '$';
         if ($url == '^$' || $url == '^\/$') {
@@ -586,7 +583,7 @@ class UrlRule
                 }
             }
             $url = $url . '$';
-            $url = str_replace('%category%', '(?P<category>(([^\./_]*/?)<:1,' . self::$categoryLayer . ':>))', $url);
+            $url = str_replace('%category%', '(?P<category>([^\./_]*/?)<:1,' . self::$categoryLayer . ':>)', $url);
             $url = str_replace('%author%', '(?P<author>[^\./_]+)', $url);
             $url = str_replace('%year%', '(?P<year>[0-9]<:4:>)', $url);
             $url = str_replace('%month%', '(?P<month>[0-9]<:1,2:>)', $url);

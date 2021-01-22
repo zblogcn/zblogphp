@@ -589,7 +589,7 @@ function ViewSearch()
     foreach ($array as $a) {
         $r = new Post();
         $r->LoadInfoByDataArray($a->GetData());
-        $article->Content .= '<p><a href="' . $a->Url . '">' . str_replace($q, '<strong>' . $q . '</strong>', $a->Title) . '</a><br/>';
+        $article->Content .= '<p><a href="' . $a->Url . '">' . str_ireplace($q, '<strong>' . $q . '</strong>', $a->Title) . '</a><br/>';
         $s = strip_tags($a->Intro) . ' ' . strip_tags($a->Content);
         $i = Zbp_Stripos($s, $q, 0);
         if ($i !== false) {
@@ -598,8 +598,8 @@ function ViewSearch()
             } else {
                 $t = SubStrUTF8_Start($s, 0, 100);
             }
-            $article->Content .= str_replace($q, '<strong>' . $q . '</strong>', $t) . '<br/>';
-            $r->Intro = str_replace($q, '<strong>' . $q . '</strong>', $t);
+            $article->Content .= str_ireplace($q, '<strong>' . $q . '</strong>', $t) . '<br/>';
+            $r->Intro = str_ireplace($q, '<strong>' . $q . '</strong>', $t);
             $r->Content = $a->Content;
         } else {
             $s = strip_tags($a->Title);
@@ -674,6 +674,7 @@ function ViewSearch()
  * @param mixed $date           日期
  * @param mixed $tags           tags id或alias
  * @param mixed $isrewrite      是否启用urlrewrite
+ * @param array $route          1.7里新增路由信息
  * @param bool  $posttype       Post表的类型
  * @param bool  $canceldisplay  是否取消内容输出
  *
@@ -685,7 +686,7 @@ function ViewSearch()
  *
  * @return string
  */
-function ViewList($page = null, $cate = null, $auth = null, $date = null, $tags = null, $isrewrite = false, $posttype = null, $canceldisplay = false)
+function ViewList($page = null, $cate = null, $auth = null, $date = null, $tags = null, $isrewrite = false, $route = array(), $posttype = null, $canceldisplay = false)
 {
     global $zbp;
 
@@ -714,11 +715,11 @@ function ViewList($page = null, $cate = null, $auth = null, $date = null, $tags 
         $route = GetValueInArray($page, 'route', array());
         $page = GetValueInArray($page, 'page', null);
     } else {
-        $route = array();
+        $fpargs_v1 = array();
     }
 
     //处理上一版本兼容性的问题
-    $fpargs_v1 = array($page, $cate, $auth, $date, $tags, $isrewrite, $posttype, $canceldisplay);
+    $fpargs_v1 = array($page, $cate, $auth, $date, $tags, $isrewrite, $route, $posttype, $canceldisplay);
 
     //老版本的兼容接口
     foreach ($GLOBALS['hooks']['Filter_Plugin_ViewList_Begin'] as $fpname => &$fpsignal) {
@@ -1086,6 +1087,7 @@ function ViewList($page = null, $cate = null, $auth = null, $date = null, $tags 
  * @param array|int|string $id         文章ID/ ID/别名对象 (1.7起做为主要array型参数，后续的都作废了)
  * @param string           $alias     （如果有的话）文章别名
  * @param bool             $isrewrite  是否启用urlrewrite
+ * @param array            $route      1.7里新增路由信息
  * @param bool             $posttype   Post表的类型
  * @param bool             $canceldisplay  取消Display输出
  *
@@ -1097,7 +1099,7 @@ function ViewList($page = null, $cate = null, $auth = null, $date = null, $tags 
  *
  * @return string
  */
-function ViewPost($id = null, $alias = null, $isrewrite = false, $posttype = null, $canceldisplay = false)
+function ViewPost($id = null, $alias = null, $isrewrite = false, $route = array(), $posttype = null, $canceldisplay = false)
 {
     global $zbp;
 
@@ -1126,12 +1128,11 @@ function ViewPost($id = null, $alias = null, $isrewrite = false, $posttype = nul
         $id = GetValueInArray($object, 'id', null);
     } else {
         $object = array();
-        $route = array();
         $post = null;
     }
 
     //处理上一版本兼容性的问题
-    $fpargs_v1 = array($id, $alias, $isrewrite, $posttype, $canceldisplay);
+    $fpargs_v1 = array($id, $alias, $isrewrite, $route, $posttype, $canceldisplay);
 
     //兼容老版本的接口
     foreach ($GLOBALS['hooks']['Filter_Plugin_ViewPost_Begin'] as $fpname => &$fpsignal) {
@@ -1164,7 +1165,7 @@ function ViewPost($id = null, $alias = null, $isrewrite = false, $posttype = nul
 
     $w[] = array('=', 'log_Type', $posttype);
 
-    if ($id !== null) {
+    if ($id !== null && is_numeric($id)) {
         if (function_exists('ctype_digit') && !ctype_digit((string) $id)) {
             $zbp->ShowError(3, __FILE__, __LINE__);
         }
