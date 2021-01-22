@@ -2473,6 +2473,17 @@ DefinePluginFilter('Filter_Plugin_API_Extend_Mods');
 /*
 '**************************************************<
 '类型:Filter
+'名称:Filter_Plugin_API_ListCheck
+'参数:&$mods_allow, &$mods_disallow
+'说明:API 的黑白名单机制
+'调用:
+'**************************************************>
+ */
+DefinePluginFilter('Filter_Plugin_API_ListCheck');
+
+/*
+'**************************************************<
+'类型:Filter
 '名称:Filter_Plugin_API_Get_Request_Filter
 '参数:&$condition
 '说明:API 获取约束过滤条件

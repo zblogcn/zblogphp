@@ -135,7 +135,7 @@ function ViewAuto($inpurl)
         }
     }
 
-    //$zbp->ShowError(2, __FILE__, __LINE__);
+    $zbp->ShowError(2, __FILE__, __LINE__);
 
     return false;
 }

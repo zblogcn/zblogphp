@@ -20,15 +20,20 @@ function api_upload_get()
 {
     global $zbp;
 
-    ApiCheckAuth(false, 'UploadMng');
+    ApiCheckAuth(true, 'UploadMng');
 
     $uploadId = (int) GetVars('id');
 
     if ($uploadId > 0) {
         $upload = $zbp->GetUploadByID($uploadId);
+
+        if ($upload->AuthorID != $zbp->user->ID) {
+            ApiCheckAuth(true, 'UploadAll');
+        }
+
         $uploadData = ApiGetObjectArray(
             $upload,
-            array(),
+            array('Url'),
             array(),
             ApiGetAndFilterRelationQuery(array(
                 'Author' => array(
@@ -124,19 +129,35 @@ function api_upload_list()
 
     // 组织查询条件
     $where = array();
-    if ($authId > 0) {
-        $where[] = array('=', 'ul_AuthorID', $authId);
+
+    if (!$zbp->CheckRights('UploadAll')) {
+        if ($authId == $zbp->user->ID) {
+            $where[] = array('=', 'ul_AuthorID', $authId);
+        } else {
+            $where[] = array('=', 'ul_AuthorID', $zbp->user->ID);
+        }
+    } else {
+        if ($authId > 0) {
+            $where[] = array('=', 'ul_AuthorID', $authId);
+        }
     }
-    if ($postId > 0) {
-        $where[] = array('=', 'ul_LogID', $postId);
+
+    if (!$zbp->CheckRights('UploadAll')) {
+        $post = $zbp->GetPostByID($postId);
+        if ($post->AuthorID == $zbp->user->ID) {
+            $where[] = array('=', 'ul_LogID', $post->AuthorID);
+        }
+    } else {
+        if ($postId > 0) {
+            $where[] = array('=', 'ul_LogID', $postId);
+        }
     }
+
     $filter = ApiGetRequestFilter(
-        $GLOBALS['option']['ZC_DISPLAY_COUNT'],
+        $zbp->option['ZC_MANAGE_COUNT'],
         array(
             'ID' => 'ul_ID',
             'PostTime' => 'ul_PostTime',
-            'Name' => 'ul_Name',
-            'SourceName' => 'ul_SourceName',
             'DownNums' => 'ul_DownNums'
         )
     );
@@ -148,7 +169,7 @@ function api_upload_list()
         array(
             'list' => ApiGetObjectArrayList(
                 $zbp->GetUploadList('*', $where, $order, $limit, $option),
-                array(),
+                array('Url'),
                 array(),
                 ApiGetAndFilterRelationQuery(array(
                     'Author' => array(

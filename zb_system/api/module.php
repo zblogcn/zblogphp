@@ -23,7 +23,7 @@ function api_module_get()
     ApiCheckAuth(false, 'view');
 
     if (! $zbp->CheckRights('ModuleMng')) {
-        $remove_props = array('MaxLi', 'Source', 'Metas');
+        $remove_props = array('Metas');
     } else {
         $remove_props = array();
     }
@@ -32,14 +32,16 @@ function api_module_get()
     $modId = (int) GetVars('id');
     $modFileName = GetVars('filename');
 
-    if ($modId > 0) {
+    if ($modId != 0) {
         $module = $zbp->GetModuleByID($modId);
-    } elseif ($modFileName !== null) {
+    } elseif ($modFileName != '') {
         $module = $zbp->GetModuleByFileName($modFileName);
     }
 
-    if ($module && $module->ID !== null) {
-        $array = ApiGetObjectArray($module, array(), $remove_props);
+    if ($module && $module->ID != 0) {
+        $array = ApiGetObjectArray($module, 
+        	array('SourceType', 'NoRefresh'),
+        	$remove_props);
 
         return array(
             'data' => array('module' => $array),
@@ -68,7 +70,7 @@ function api_module_post()
         $zbp->BuildModule();
         $zbp->SaveCache();
 
-        $array = ApiGetObjectArray($module, array('SourceType', 'NoRefresh', 'ContentWithoutId'));
+        $array = ApiGetObjectArray($module, array('SourceType', 'NoRefresh'));
 
         return array(
             'message' => $GLOBALS['lang']['msg']['operation_succeed'],
@@ -145,9 +147,7 @@ function api_module_list()
         } elseif ($module->SourceType == 'user') {
             $userMods[] = $module;
         } elseif ($module->SourceType == 'theme') {
-            if ($module->Source == 'theme' || (substr($module->Source, (-1 - strlen($zbp->theme)))) == ('_' . $zbp->theme)) {
-                $themeMods[] = $module;
-            }
+            $themeMods[] = $module;
         } else {
             $pluginMods[] = $module;
         }

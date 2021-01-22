@@ -86,6 +86,67 @@ function ApiRemoveMods($name)
 }
 
 /**
+ * 检查API Mods的白名单和黑名单.
+ */
+function ApiListCheck(&$mods_allow, &$mods_disallow)
+{
+    global $zbp, $mod, $act;
+
+    //接口及对$mods_allow, $mods_disallow的添加
+    foreach ($GLOBALS['hooks']['Filter_Plugin_API_ListCheck'] as $fpname => &$fpsignal) {
+        $new_allow = $new_disallow = array();
+        $fpname($new_allow, $new_disallow);
+
+        $mods_allow = array_merge($mods_allow, $new_allow);
+        $mods_disallow = array_merge($mods_disallow, $new_disallow);
+    }
+
+    $b = false;
+
+    foreach ($mods_allow as $array) {
+        if (!empty($array) && is_array($array)) {
+            foreach ($array as $m => $a) {
+                if ($mod == $m) {
+                    if ($a == '') {
+                        $b = true;
+                        break;
+                    } elseif ($act == $a) {
+                        $b = true;
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+    if (!empty($mods_allow) && $b == false) {
+        $zbp->ShowError(96, __FILE__, __LINE__);
+    }
+
+    $b = true;
+
+    foreach ($mods_disallow as $array) {
+        if (!empty($array) && is_array($array)) {
+            foreach ($array as $m => $a) {
+                if ($mod == $m) {
+                    if ($a == '') {
+                        $b = false;
+                        break;
+                    } elseif ($act == $a) {
+                        $b = false;
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+    if (!empty($mods_disallow) && $b == false) {
+        $zbp->ShowError(96, __FILE__, __LINE__);
+    }
+}
+
+/**
  * API 响应.
  *
  * @param array|null $data

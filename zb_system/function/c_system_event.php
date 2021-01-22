@@ -1698,6 +1698,9 @@ function DelMember_AllData($id)
 function PostModule()
 {
     global $zbp;
+    if (!$zbp->CheckRights('ModulePst')) {
+        $zbp->ShowError(6, __FILE__, __LINE__);
+    }
 
     if (isset($_POST['catalog_style'])) {
         $zbp->option['ZC_MODULE_CATALOG_STYLE'] = $_POST['catalog_style'];
@@ -1794,38 +1797,37 @@ function PostModule()
 function DelModule()
 {
     global $zbp;
+    if (!$zbp->CheckRights('ModuleDel')) {
+        $zbp->ShowError(6, __FILE__, __LINE__);
+    }
 
-    if (GetVars('source', 'GET') == 'theme') {
+    if (isset($_GET['id'])) {
+        $id = (int) GetVars('id', 'GET');
+        $mod = $zbp->GetModuleByID($id);
+        if ($mod->Source != 'system' && $mod->ID != 0) {
+            $mod->Del();
+            foreach ($GLOBALS['hooks']['Filter_Plugin_DelModule_Succeed'] as $fpname => &$fpsignal) {
+                $fpname($mod);
+            }
+            unset($mod);
+            return true;
+        }
+    } elseif (GetVars('source', 'GET') == 'theme') {
         $fn = GetVars('filename', 'GET');
         if ($fn) {
             $mod = $zbp->GetModuleByFileName($fn);
-            if ($mod->FileName == $fn) {
+            if ($mod->FileName == $fn && $mod->ID != 0) {
                 $mod->Del();
                 foreach ($GLOBALS['hooks']['Filter_Plugin_DelModule_Succeed'] as $fpname => &$fpsignal) {
                     $fpname($mod);
                 }
-
+                unset($mod);
                 return true;
             }
-            unset($mod);
         }
-
-        return false;
     }
 
-    $id = (int) GetVars('id', 'GET');
-    $mod = $zbp->GetModuleByID($id);
-    if ($mod->Source != 'system') {
-        $mod->Del();
-        foreach ($GLOBALS['hooks']['Filter_Plugin_DelModule_Succeed'] as $fpname => &$fpsignal) {
-            $fpname($mod);
-        }
-    } else {
-        return false;
-    }
-    unset($mod);
-
-    return true;
+    return false;
 }
 
 //###############################################################################################################
@@ -1839,6 +1841,9 @@ function DelModule()
 function PostUpload()
 {
     global $zbp;
+    if (!$zbp->CheckRights('UploadPst')) {
+        $zbp->ShowError(6, __FILE__, __LINE__);
+    }
 
     foreach ($_FILES as $key => $value) {
         if ($_FILES[$key]['error'] == 0) {
@@ -1902,6 +1907,9 @@ function PostUpload()
 function DelUpload()
 {
     global $zbp;
+    if (!$zbp->CheckRights('UploadDel')) {
+        $zbp->ShowError(6, __FILE__, __LINE__);
+    }
 
     $id = (int) GetVars('id', 'GET');
     $u = $zbp->GetUploadByID($id);
