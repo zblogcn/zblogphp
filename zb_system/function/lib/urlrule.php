@@ -248,7 +248,7 @@ class UrlRule
             $s = $route['urlrule'];
             $s = str_replace('{%host%}', '', $s);
             $marray = array();
-            if (preg_match_all('/%[^\{]+%/', $s, $m) > 1) {
+            if (preg_match_all('/%[^%]+%/', $s, $m) >= 1) {
                 foreach ($m as $key => $value) {
                     if (is_array($value)) {
                         foreach ($value as $k1 => $v1) {

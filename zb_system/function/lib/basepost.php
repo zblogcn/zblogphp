@@ -136,6 +136,7 @@ class BasePost extends Base
             case 'Tags':
             case 'TagsName':
             case 'TagsCount':
+            case 'FirstTag':
             case 'CommentPostUrl':
             case 'CommentPostKey':
             case 'ValidCodeUrl':
@@ -148,7 +149,7 @@ class BasePost extends Base
             case 'PostDate':
             case 'CreateDate':
             case 'UpdateDate':
-                return ;
+                return;
             case 'Template':
                 if ($value == $zbp->GetPostType($this->Type, 'template')) {
                     $value = '';
@@ -238,6 +239,13 @@ class BasePost extends Base
                 return substr_count($this->Tag, '{');
             case 'TagsName':
                 return $this->TagsToNameString();
+            case 'FirstTag':
+                $array = $zbp->LoadTagsByIDString($this->Tag);
+                if (count($array) == 0) {
+                    return new Tag;
+                } else {
+                    return current($array);
+                }
             case 'Template':
                 $value = $this->data[$name];
                 if ($value == '') {

@@ -96,6 +96,7 @@ function ViewAuto()
             $m = array();
             //如果条件符合就组合参数数组并调用函数
             //var_dump($match_with_page_value, $route['urlrule'], $r, $url, $m);//die;
+            //var_dump(preg_match($r, $url, $m));
             $b = $b && (($r != '' && preg_match($r, $url, $m) == 1) || ($r == '' && $url == '') || ($r == '' && $url == 'index.php'));
             if ($b) {
                 $array = $m;
@@ -720,7 +721,7 @@ function ViewList($page = null, $cate = null, $auth = null, $date = null, $tags 
         $page = GetValueInArray($page, 'page', null);
     } else {
         $object = array();
-        $posttype = null;
+        $posttype = 0;
         $canceldisplay = false;
     }
 
@@ -768,6 +769,10 @@ function ViewList($page = null, $cate = null, $auth = null, $date = null, $tags 
 
     $articles = array();
     $articles_top = array();
+
+    $article_class = $zbp->GetPostType($posttype, 'classname');
+    $article = new $article_class;
+    unset($article_class);
 
     switch ($type) {
             //#######################################################################################################
@@ -834,6 +839,7 @@ function ViewList($page = null, $cate = null, $auth = null, $date = null, $tags 
 
             $pagebar->UrlRule->Rules['{%id%}'] = $category->ID;
             $pagebar->UrlRule->Rules['{%alias%}'] = $category->Alias == '' ? rawurlencode($category->Name) : $category->Alias;
+            $article->CateID = $category->ID;
             break;
             //#######################################################################################################
         case 'author':
@@ -875,6 +881,7 @@ function ViewList($page = null, $cate = null, $auth = null, $date = null, $tags 
             //$pagebar->Count = $author->Articles;
             $pagebar->UrlRule->Rules['{%id%}'] = $author->ID;
             $pagebar->UrlRule->Rules['{%alias%}'] = $author->Alias == '' ? rawurlencode($author->Name) : $author->Alias;
+            $article->AuthorID = $author->ID;
             break;
             //#######################################################################################################
         case 'date':
@@ -922,6 +929,7 @@ function ViewList($page = null, $cate = null, $auth = null, $date = null, $tags 
                 $pagebar->UrlRule->Rules['{%date%}'] = date('Y-n', $datetime);
             }
 
+            $article->PostTime = $datetime;
             $datetime = Metas::ConvertArray(getdate($datetime));
             break;
             //#######################################################################################################
@@ -963,6 +971,7 @@ function ViewList($page = null, $cate = null, $auth = null, $date = null, $tags 
             $w[] = array('LIKE', 'log_Tag', '%{' . $tag->ID . '}%');
             $pagebar->UrlRule->Rules['{%id%}'] = $tag->ID;
             $pagebar->UrlRule->Rules['{%alias%}'] = $tag->Alias == '' ? rawurlencode($tag->Name) : $tag->Alias;
+            $article->Tag = '{' . $tag->ID . '}';
             break;
         default:
             throw new Exception('Unknown type');
@@ -972,6 +981,7 @@ function ViewList($page = null, $cate = null, $auth = null, $date = null, $tags 
     $pagebar->PageNow = $page;
     $pagebar->PageBarCount = $zbp->pagebarcount;
     $pagebar->UrlRule->Rules['{%page%}'] = $page;
+    $pagebar->UrlRule->RulesObject = &$article;
 
     foreach ($GLOBALS['hooks']['Filter_Plugin_ViewList_Core'] as $fpname => &$fpsignal) {
         $fpname($type, $page, $category, $author, $datetime, $tag, $w, $pagebar, $template);
@@ -1245,7 +1255,7 @@ function ViewPost($id = null, $alias = null, $isrewrite = false, $object = array
     $pagebar->PageCount = $zbp->commentdisplaycount;
     $pagebar->PageNow = 1;
     $pagebar->PageBarCount = $zbp->pagebarcount;
-    //$pagebar->Count = $article->CommNums;
+    $pagebar->UrlRule->RulesObject = &$article;
 
     if ($zbp->option['ZC_COMMENT_TURNOFF']) {
         $article->IsLock = true;
