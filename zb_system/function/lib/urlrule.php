@@ -50,6 +50,9 @@ class UrlRule
      */
     public function __construct($url)
     {
+        if (self::$categoryLayer == -1) {
+            self::$categoryLayer = $GLOBALS['zbp']->category_recursion_real_deep;
+        }
         if (is_array($url)) {
             $this->Route = $url;
             if (isset($url['urlrule_regex']) && $url['urlrule_regex'] != '') {
@@ -417,7 +420,9 @@ class UrlRule
         }
         $match_with_page = $haspage;
 
-        self::$categoryLayer = $GLOBALS['zbp']->category_recursion_real_deep;
+        if (self::$categoryLayer == -1) {
+            self::$categoryLayer = $GLOBALS['zbp']->category_recursion_real_deep;
+        }
         $post_type_name = array('post');
         foreach ($zbp->posttype as $key => $value) {
             $post_type_name[] = $value['name'];
@@ -528,7 +533,9 @@ class UrlRule
             return self::OutputUrlRegEx_Route($url);
         }
 
-        self::$categoryLayer = $GLOBALS['zbp']->category_recursion_real_deep;
+        if (self::$categoryLayer == -1) {
+            self::$categoryLayer = $GLOBALS['zbp']->category_recursion_real_deep;
+        }
         $post_type_name = array('post');
         foreach ($zbp->posttype as $key => $value) {
             $post_type_name[] = $value['name'];

@@ -12,7 +12,6 @@ if (!defined('ZBP_PATH')) {
 /**
  * 根据url路由规则显示页面的主路由器函数.
  *
- * @param string $inpurl 页面url
  *
  * @api Filter_Plugin_ViewAuto_Begin
  * @api Filter_Plugin_ViewAuto_End
@@ -21,9 +20,11 @@ if (!defined('ZBP_PATH')) {
  *
  * @return null|string
  */
-function ViewAuto($inpurl)
+function ViewAuto()
 {
     global $zbp;
+
+    $inpurl = $zbp->currenturl;
 
     $url = GetValueInArray(explode('?', $inpurl), '0');
 
@@ -407,7 +408,7 @@ function ViewIndex()
         case 'view':
         case '':
         default:
-            ViewAuto($url);
+            ViewAuto();
     }
 
     return true;
