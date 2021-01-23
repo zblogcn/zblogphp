@@ -34,11 +34,6 @@ class UrlRule
     public $useAbbr = false; //指示是否是可以精简规则的
 
     /**
-     * @var bool MakeReplace(变量名义意不明，以后要换)为真就进行Make_Rewrite_Replace 为假为进行Make_Active_Replace
-     */
-    public $MakeReplace = true;
-
-    /**
      * @var bool
      */
     public $forceDisplayFirstPage = false;//强制显示page参数
@@ -86,35 +81,7 @@ class UrlRule
     /**
      * @return string
      */
-    private function Make_Active_Replace()
-    {
-        global $zbp;
-
-        $this->Rules['{%host%}'] = $zbp->host;
-        if (isset($this->Rules['{%page%}'])) {
-            if ($this->forceDisplayFirstPage == false) {
-                if ($this->Rules['{%page%}'] == '1' || $this->Rules['{%page%}'] == '0') {
-                    $this->Rules['{%page%}'] = '';
-                }
-            }
-        }
-        $url = $this->GetPreUrl();
-        foreach ($this->Rules as $key => $value) {
-            $url = preg_replace($key, $value, $url);
-        }
-        $url = preg_replace('/\{[\?\/&a-z0-9]*=\}/', '', $url);
-        $url = preg_replace('/\{\/?}/', '', $url);
-        $url = str_replace(array('{', '}'), array('', ''), $url);
-
-        $this->Url = htmlspecialchars($url);
-
-        return $this->Url;
-    }
-
-    /**
-     * @return string
-     */
-    private function Make_Rewrite_Replace()
+    public function Make()
     {
         global $zbp;
         $url = $this->GetPreUrl();
@@ -137,6 +104,13 @@ class UrlRule
         } else {
             $this->Rules['{%page%}'] = '';
         }
+
+        //处理之前Active的过程
+        if (strpos($url, '{&') !== false) {
+            $url = str_ireplace('{&', '&', $url);
+            $url = str_ireplace('=%', '={%', $url);
+        }
+
         if ($this->Rules['{%page%}'] == '' && strpos($url, '{%page%}') !== false) {
             if (stripos($url, '_{%page%}') !== false) {
                 $url = str_replace('_{%page%}', '{%page%}', $url);
@@ -144,17 +118,22 @@ class UrlRule
                 $url = str_replace('/{%page%}', '{%page%}', $url);
             } elseif (stripos($url, '-{%page%}') !== false) {
                 $url = str_replace('-{%page%}', '{%page%}', $url);
+            } elseif (stripos($url, '={%page%}') !== false) {
+                $url = str_replace('={%page%}', '={%page%}', $url);
             } else {
                 $url = preg_replace('/(?<=\})[^\}]+(?=\{%page%\})/i', '', $url, 1);
             }
 
+            //如是精简模式，就把{%page%}之后的全部删除，再删除之前的，一直到}/&为止
             if ($useAbbr) {
                 $array = explode('{%page%}', $url);
                 if (is_array($array) && isset($array[0])) {
                     $url = substr($url, 0, strpos($url, '{%page%}'));
                     $i = (int) strripos($url, '}');
                     $j = (int) strripos($url, '/');
+                    $k = (int) strripos($url, '&');
                     $i = ($j > $i) ? $j : $i;
+                    $i = ($k > $i) ? $k : $i;
                     $url = substr($url, 0, ($i + 1));
                 }
             }
@@ -176,31 +155,27 @@ class UrlRule
             }
         }
 
+        //处理之前Active的过程 去掉无用的=&之类的
+        if (strpos($url, '?') !== false) {
+            $url = $url . '&';
+            $j = substr_count($url, '=&');
+            for ($i = 0; $i < $j; $i++) {
+                $url = preg_replace('/&[^=]+=&/', '&', $url);
+            }
+        }
+
+        //处理尾巴上的//或是&
         if (substr($this->GetPreUrl(), -1) != '/' && substr($url, -1) == '/') {
             $url = substr($url, 0, (strlen($url) - 1));
         }
         if (substr($url, -2) == '//') {
             $url = substr($url, 0, (strlen($url) - 1));
         }
-        if (substr($url, -1) == '&') {
-            $url = substr($url, 0, (strlen($url) - 1));
-        }
+        $url = trim($url, '&');
 
         $this->Url = htmlspecialchars($url);
 
         return $this->Url;
-    }
-
-    /**
-     * @return string
-     */
-    public function Make()
-    {
-        if ($this->MakeReplace) {
-            return $this->Make_Rewrite_Replace();
-        } else {
-            return $this->Make_Active_Replace();
-        }
     }
 
     /**
@@ -219,7 +194,7 @@ class UrlRule
         } else {
             $parameters = array();
         }
-        $args =  $parameters;
+        $args = $parameters;
 
         //从$route的args项中读取各种花式设置方法设置的参数
         foreach ($args as $key => $value) {
@@ -227,13 +202,13 @@ class UrlRule
                 //如果是array( array('name3','regex3','relate3','alias3') )
                 if (is_int(key($value))) {
                     if (count($value) == 1) {
-                        $newargs[] = array('name' => $value[0], 'regex' => '', 'relate' => '', 'alias'=>'');
+                        $newargs[] = array('name' => $value[0], 'regex' => '', 'relate' => '', 'alias' => '');
                     }
                     if (count($value) == 2) {
-                        $newargs[] = array('name' => $value[0], 'regex' => $value[1], 'relate' => '', 'alias'=>'');
+                        $newargs[] = array('name' => $value[0], 'regex' => $value[1], 'relate' => '', 'alias' => '');
                     }
                     if (count($value) == 3) {
-                        $newargs[] = array('name' => $value[0], 'regex' => $value[1], 'relate' => $value[2], 'alias'=>'');
+                        $newargs[] = array('name' => $value[0], 'regex' => $value[1], 'relate' => $value[2], 'alias' => '');
                     }
                     if (count($value) == 4) {
                         $newargs[] = array('name' => $value[0], 'regex' => $value[1], 'relate' => $value[2], 'alias' => $value[3]);
@@ -248,20 +223,20 @@ class UrlRule
                     if (stripos($value, '@') !== false) {
                         $alias = SplitAndGet($value, '@', 0);
                         $name = SplitAndGet($value, '@', 1);
-                        $newargs[] = array('name' => $name, 'regex' => '', 'relate' => '', 'alias'=> $alias);
+                        $newargs[] = array('name' => $name, 'regex' => '', 'relate' => '', 'alias' => $alias);
                     } else {
                     //如果是  array( 'name7', 'name8')
-                        $newargs[] = array('name' => $value, 'regex' => '', 'relate' => '', 'alias'=>'');
+                        $newargs[] = array('name' => $value, 'regex' => '', 'relate' => '', 'alias' => '');
                     }
                 } else {
                     //如果是  array( 'alias5@name5'=>'regex5')
                     if (stripos($key, '@') !== false) {
                         $alias = SplitAndGet($key, '@', 0);
                         $name = SplitAndGet($key, '@', 1);
-                        $newargs[] = array('name' => $name, 'regex' => $value, 'relate' => '', 'alias'=> $alias);
+                        $newargs[] = array('name' => $name, 'regex' => $value, 'relate' => '', 'alias' => $alias);
                     } else {
                     //如果是  array( 'name6'=>'regex6')
-                        $newargs[] = array('name' => $key, 'regex' => $value, 'relate' => '', 'alias'=>'');
+                        $newargs[] = array('name' => $key, 'regex' => $value, 'relate' => '', 'alias' => '');
                     }
                 }
             }
@@ -295,7 +270,7 @@ class UrlRule
                 }
             }
             if ($b == false) {
-                $newargs[] = array('name' => $value, 'regex' => '', 'relate' => '', 'alias'=>'');
+                $newargs[] = array('name' => $value, 'regex' => '', 'relate' => '', 'alias' => '');
             }
         }
         //在$newargs 查找如果有$name不在$route_array中就把它从$newargs删除了
@@ -335,7 +310,7 @@ class UrlRule
             if ($value['name'] == 'date' && $value['regex'] == '') {
                 $value['regex'] = '[0-9\-]+';
             }
-        }//var_dump($newargs);
+        }
         return $newargs;
     }
 

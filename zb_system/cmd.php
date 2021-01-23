@@ -30,15 +30,9 @@ foreach ($GLOBALS['hooks']['Filter_Plugin_Cmd_Begin'] as $fpname => &$fpsignal) 
 
 switch ($zbp->action) {
     case 'login':
-        if (!empty($zbp->user->ID) && GetVars('redirect', 'GET')) {
-            $a = parse_url(GetVars('redirect', 'GET'));
-            $b = parse_url($zbp->host);
-            if (isset($a['host']) && isset($b['host']) && strtolower($a['host']) == strtolower($b['host'])) {
-                Redirect(GetVars('redirect', 'GET'));
-            }
-        }
+        Redirect_to_inside(GetVars('redirect', 'GET'));
         if ($zbp->CheckRights('admin')) {
-            Redirect('cmd.php?act=admin');
+            Redirect('admin/index.php?act=admin');
         }
         if (empty($zbp->user->ID) && GetVars('redirect', 'GET')) {
             setcookie("redirect", GetVars('redirect', 'GET'), 0, $zbp->cookiespath);
@@ -54,25 +48,16 @@ switch ($zbp->action) {
         Redirect('admin/index.php?act=admin');
         break;
     case 'verify':
-        /*
-         * 考虑兼容原因，此处不加CSRF验证。logout加的原因是主题的退出无大碍。
-         */
+        // 考虑兼容原因，此处不加CSRF验证。logout加的原因是主题的退出无大碍。
         if (VerifyLogin()) {
-            if (!empty($zbp->user->ID) && GetVars('redirect', 'COOKIE')) {
-                $a = parse_url(GetVars('redirect', 'COOKIE'));
-                $b = parse_url($zbp->host);
-                if (isset($a['host']) && isset($b['host']) && strtolower($a['host']) == strtolower($b['host'])) {
-                    Redirect(GetVars('redirect', 'COOKIE'));
-                }
-            }
+            Redirect_to_inside(GetVars('redirect', 'COOKIE'));
             Redirect('admin/index.php?act=admin');
         } else {
             Redirect('../');
         }
         break;
     case 'search':
-        $q = rawurlencode(trim(strip_tags(GetVars('q', 'POST'))));
-        Redirect($zbp->searchurl . '?q=' . $q);
+        Redirect_to_search();
         break;
     case 'cmt':
         $die = false;
@@ -85,17 +70,11 @@ switch ($zbp->action) {
             Add_Filter_Plugin('Filter_Plugin_Zbp_ShowError', 'JsonError4ShowErrorHook', PLUGIN_EXITSIGNAL_RETURN);
             $die = true;
         }
-
         PostComment();
         $zbp->BuildModule();
         $zbp->SaveCache();
 
-        if ($die) {
-            exit;
-        }
-
-        Redirect(GetVars('HTTP_REFERER', 'SERVER'));
-
+        $die ? exit : Redirect(GetVars('HTTP_REFERER', 'SERVER'));
         break;
     case 'getcmt':
         ViewComments((int) GetVars('postid', 'GET'), (int) GetVars('page', 'GET'));
@@ -358,9 +337,7 @@ switch ($zbp->action) {
         //判断及提前跳转
         if ($zbp->option['ZC_PERMANENT_DOMAIN_ENABLE'] == true) {
             if ($oldHost != $zbp->option['ZC_BLOG_HOST']) {
-                if (!defined('ZBP_IN_AJAX') && !defined('ZBP_IN_API')) {
-                    Redirect($zbp->option['ZC_BLOG_HOST'] . 'zb_system/cmd.php?act=login');
-                }
+                Redirect($zbp->option['ZC_BLOG_HOST'] . 'zb_system/cmd.php?act=login');
             }
         }
         $zbp->SetHint('good');

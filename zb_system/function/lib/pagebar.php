@@ -116,13 +116,14 @@ class PageBar
 
     /**
      * @param $url
-     * @param bool $makeReplace
+     * @param bool $no_use
+     * @param bool $useAbbr
      * @param bool $forceDisplayFirstPage = false
      */
-    public function __construct($urlrule, $makeReplace = true, $useAbbr = false, $forceDisplayFirstPage = false)
+    public function __construct($urlrule, $no_use = true, $useAbbr = false, $forceDisplayFirstPage = false)
     {
         $this->UrlRule = new UrlRule($urlrule);
-        $this->UrlRule->MakeReplace = $makeReplace;
+        //$no_use 参数已被废弃了
         $this->UrlRule->useAbbr = $useAbbr;
         $this->UrlRule->forceDisplayFirstPage = $forceDisplayFirstPage;
         $this->Buttons = &$this->buttons;

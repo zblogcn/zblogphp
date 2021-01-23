@@ -87,6 +87,31 @@ function Logout()
 
 //###############################################################################################################
 
+function Redirect_to_search()
+{
+    global $zbp;
+    $q = rawurlencode(trim(strip_tags(GetVars('q', 'POST'))));
+    Redirect($zbp->searchurl . '?q=' . $q);
+}
+
+function Redirect_to_inside($url)
+{
+    global $zbp;
+    if (empty($zbp->user->ID)) {
+        return;
+    }
+    if (empty($url)) {
+        return;
+    }
+    $a = parse_url($url);
+    $b = parse_url($zbp->host);
+    if (isset($a['host']) && isset($b['host']) && strtolower($a['host']) == strtolower($b['host'])) {
+        Redirect($url);
+    }
+}
+
+//###############################################################################################################
+
 /**
  * 通用的提交Post表对象数据.
  *

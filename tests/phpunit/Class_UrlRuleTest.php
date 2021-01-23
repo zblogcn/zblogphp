@@ -8,7 +8,7 @@
 
 class Class_UrlRuleTest extends PHPUnit\Framework\TestCase
 {
-    public function testUseless()
+    public function testRewrite()
     {
         UrlRule::$categoryLayer = 4;
         $s = '{%host%}{%category%}/{%alias%}.html';
@@ -28,11 +28,117 @@ class Class_UrlRuleTest extends PHPUnit\Framework\TestCase
 
         $s = '';
         $s0 = '';
-        $s00 = '/(?J)^$/';
+        $s00 = '/(?J)$/';
         $s1 = UrlRule::OutputUrlRegEx_V2($s, 'list', true, false);
         $s2 = UrlRule::OutputUrlRegEx($s, 'list', true, false);
         $this->assertEquals($s0, $s1);
         $this->assertEquals($s00, $s2);
 
+    }
+
+    public function testActive_old()
+    {
+        $zbp= $GLOBALS['zbp'];
+        $zbp->host = 'https://localhost/';
+        $this->assertEquals($zbp->host, 'https://localhost/');
+
+        $p = new Pagebar('{%host%}zb_system/cmd.php?act=ArticleMng{&status=%status%}{&istop=%istop%}{&category=%category%}{&search=%search%}{&page=%page%}', true);
+        $p->PageCount = 100;
+        $p->PageNow = 1;
+        $p->PageBarCount = 10;
+
+        $p->UrlRule->Rules['{%category%}'] = 5;
+        $p->UrlRule->Rules['{%search%}'] = rawurlencode('abc');
+        $p->UrlRule->Rules['{%status%}'] = 1;
+        $p->UrlRule->Rules['{%istop%}'] = 2;
+        $p->UrlRule->Rules['{%page%}'] = 11;
+        $s = $p->UrlRule->Make();
+        $s0 = 'https://localhost/zb_system/cmd.php?act=ArticleMng&amp;status=1&amp;istop=2&amp;category=5&amp;search=abc&amp;page=11';
+        $this->assertEquals($s, $s0);
+
+
+        $p->UrlRule->Rules['{%page%}'] = 1;
+        $s0 = 'https://localhost/zb_system/cmd.php?act=ArticleMng&amp;status=1&amp;istop=2&amp;category=5&amp;search=abc';
+        $s = $p->UrlRule->Make();
+        $this->assertEquals($s, $s0);
+
+    }
+
+    public function testActive_old2()
+    {
+        $zbp= $GLOBALS['zbp'];
+        $zbp->host = 'https://localhost/';
+
+        $p = new Pagebar('{%host%}zb_system/cmd.php?act=ArticleMng{&status=%status%}{&istop=%istop%}{&category=%category%}{&search=%search%}{&page=%page%}', true);
+        $p->PageCount = 100;
+        $p->PageNow = 1;
+        $p->PageBarCount = 10;
+
+        $p->UrlRule->Rules['{%category%}'] = null;
+        $p->UrlRule->Rules['{%search%}'] = null;
+        $p->UrlRule->Rules['{%status%}'] = null;
+        $p->UrlRule->Rules['{%istop%}'] = null;
+        $p->UrlRule->Rules['{%page%}'] = 11;
+        $s = $p->UrlRule->Make();
+        $s0 = 'https://localhost/zb_system/cmd.php?act=ArticleMng&amp;page=11';
+        $this->assertEquals($s, $s0);
+
+
+        $p->UrlRule->Rules['{%page%}'] = 1;
+        $s0 = 'https://localhost/zb_system/cmd.php?act=ArticleMng';
+        $s = $p->UrlRule->Make();
+        $this->assertEquals($s, $s0);
+    }
+
+    public function testActive_old3()
+    {
+        $zbp= $GLOBALS['zbp'];
+        $zbp->host = 'https://localhost/';
+
+        $p = new Pagebar('{%host%}zb_system/cmd.php?act=ArticleMng&aaa=dog&fddd={&status=%status%}&zzzz=&ggg=pig{&page=%page%}', true, true);
+        $p->PageCount = 100;
+        $p->PageNow = 1;
+        $p->PageBarCount = 10;
+
+        $p->UrlRule->Rules['{%category%}'] = null;
+        $p->UrlRule->Rules['{%search%}'] = null;
+        $p->UrlRule->Rules['{%status%}'] = null;
+        $p->UrlRule->Rules['{%istop%}'] = null;
+        $p->UrlRule->Rules['{%page%}'] = 11;
+        $s = $p->UrlRule->Make();
+        $s0 = 'https://localhost/zb_system/cmd.php?act=ArticleMng&amp;aaa=dog&amp;ggg=pig&amp;page=11';
+        $this->assertEquals($s, $s0);
+
+
+        $p->UrlRule->Rules['{%page%}'] = 1;
+        $s0 = 'https://localhost/zb_system/cmd.php?act=ArticleMng&amp;aaa=dog&amp;ggg=pig';
+        $s = $p->UrlRule->Make();
+        $this->assertEquals($s, $s0);
+    }
+
+    public function testActive_old4()
+    {
+        $zbp= $GLOBALS['zbp'];
+        $zbp->host = 'https://localhost/';
+
+        $p = new Pagebar('{%host%}zb_system/cmd.php?act=ArticleMng&aaa=dog&fddd={&status=%status%}&zzzz=&ggg=pig{&page=%page%}', true, false, true);
+        $p->PageCount = 100;
+        $p->PageNow = 1;
+        $p->PageBarCount = 10;
+
+        $p->UrlRule->Rules['{%category%}'] = null;
+        $p->UrlRule->Rules['{%search%}'] = null;
+        $p->UrlRule->Rules['{%status%}'] = null;
+        $p->UrlRule->Rules['{%istop%}'] = null;
+        $p->UrlRule->Rules['{%page%}'] = 11;
+        $s = $p->UrlRule->Make();
+        $s0 = 'https://localhost/zb_system/cmd.php?act=ArticleMng&amp;aaa=dog&amp;ggg=pig&amp;page=11';
+        $this->assertEquals($s, $s0);
+
+
+        $p->UrlRule->Rules['{%page%}'] = 1;
+        $s0 = 'https://localhost/zb_system/cmd.php?act=ArticleMng&amp;aaa=dog&amp;ggg=pig&amp;page=1';
+        $s = $p->UrlRule->Make();
+        $this->assertEquals($s, $s0);
     }
 }
