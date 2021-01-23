@@ -16,7 +16,6 @@ class Class_UrlRuleTest extends PHPUnit\Framework\TestCase
         $s1 = UrlRule::OutputUrlRegEx_V2($s, 'article', true, false);
         $s2 = UrlRule::OutputUrlRegEx($s, 'article', true, false);
         $this->assertEquals($s0, $s1);
-        //$this->assertEquals($s0, $s2);
 
         $s = '{%host%}';
         $s0 = '';
@@ -33,6 +32,33 @@ class Class_UrlRuleTest extends PHPUnit\Framework\TestCase
         $s2 = UrlRule::OutputUrlRegEx($s, 'list', true, false);
         $this->assertEquals($s0, $s1);
         $this->assertEquals($s00, $s2);
+
+    }
+
+    public function testRewrite2()
+    {
+        UrlRule::$categoryLayer = 4;
+        $s = '{%host%}page_{%page%}.html';
+        $s0 = '/(?J)^page\.html$/';
+        $s1 = UrlRule::OutputUrlRegEx_V2($s, 'list', false, false);
+        $s2 = UrlRule::OutputUrlRegEx($s, 'list', false);
+        $this->assertEquals($s0, $s1);
+        $this->assertEquals($s0, $s2);
+
+        UrlRule::$categoryLayer = 4;
+        $s = '{%host%}page_{%page%}.html';
+        $s0 = '/(?J)^page_(?P<page>[0-9]+)\.html$/';
+        $s1 = UrlRule::OutputUrlRegEx_V2($s, 'list', true, false);
+        $s2 = UrlRule::OutputUrlRegEx($s, 'list', true);
+        $this->assertEquals($s0, $s1);
+        $s0 = '/(?J)^page_(?P<page>[0-9]*)\.html$/';
+        $this->assertEquals($s0, $s2);
+
+        UrlRule::$categoryLayer = 4;
+        $s = '{%host%}page_{%page%}.html';
+        $s0 = '/(?J)^page_(?P<page>[0-9]+)\.html$/';
+        $s1 = UrlRule::OutputUrlRegEx_V2($s, 'list', true, true);
+        $this->assertEquals($s0, $s1);
 
     }
 

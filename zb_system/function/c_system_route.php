@@ -77,7 +77,7 @@ function ViewAuto()
 
     //匹配伪静路由
     foreach ($zbp->routes['rewrite'] as $key => $route) {
-        //$match_with_page 默认匹配1次 (true)，有page参数可以匹配2次 (false, true)
+        //$match_with_page 默认匹配1次 (true)，有page参数可以匹配2次 [false=(remove page), true=(keep page)]
         $parameters = array();
         $match_with_page = array();
         ViewAuto_Get_Parameters_And_Match_with_page($route, $parameters, $match_with_page);
@@ -246,7 +246,7 @@ function ViewAuto_Get_Parameters_And_Match_with_page($route, &$parameters, &$mat
         $parameters = array();
     }
 
-    $match_with_page = array('can_ignore_page' => false);
+    $match_with_page = array('remove_page' => false);
     $haspage = false;
     foreach ($parameters as $key => $value) {
         if ($value['name'] == 'page') {
@@ -254,15 +254,15 @@ function ViewAuto_Get_Parameters_And_Match_with_page($route, &$parameters, &$mat
         }
     }
     if ($haspage == false) {
-        unset($match_with_page['can_ignore_page']);
+        unset($match_with_page['remove_page']);
     }
 
     $only_match_page = GetValueInArray($route, 'only_match_page', false);
     if ($only_match_page == true) {
-        unset($match_with_page['can_ignore_page']);
+        unset($match_with_page['remove_page']);
     }
 
-    $match_with_page['normal'] = true;
+    $match_with_page['keep_page'] = true;
 }
 
 /**

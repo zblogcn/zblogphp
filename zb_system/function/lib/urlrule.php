@@ -202,20 +202,20 @@ class UrlRule
                 //如果是array( array('name3','regex3','relate3','alias3') )
                 if (is_int(key($value))) {
                     if (count($value) == 1) {
-                        $newargs[] = array('name' => $value[0], 'regex' => '', 'relate' => '', 'alias' => '');
+                        $newargs[] = array('name' => $value[0], 'regex' => '', 'alias' => '', 'relate' => '');
                     }
                     if (count($value) == 2) {
-                        $newargs[] = array('name' => $value[0], 'regex' => $value[1], 'relate' => '', 'alias' => '');
+                        $newargs[] = array('name' => $value[0], 'regex' => $value[1], 'alias' => '', 'relate' => '');
                     }
                     if (count($value) == 3) {
-                        $newargs[] = array('name' => $value[0], 'regex' => $value[1], 'relate' => $value[2], 'alias' => '');
+                        $newargs[] = array('name' => $value[0], 'regex' => $value[1], 'alias' => $value[2], 'relate' => '');
                     }
                     if (count($value) == 4) {
-                        $newargs[] = array('name' => $value[0], 'regex' => $value[1], 'relate' => $value[2], 'alias' => $value[3]);
+                        $newargs[] = array('name' => $value[0], 'regex' => $value[1], 'alias' => $value[2], 'relate' => $value[3]);
                     }
                 } else {
                 //如果是array( array('name'=>'name4','regex'=>'regex4','relate'=>'relate4', 'alias'=>'alias4') )
-                    $newargs[] = array('name' => $value['name'], 'regex' => $value['regex'], 'relate' => $value['relate'], 'alias' => $value['alias']);
+                    $newargs[] = array('name' => $value['name'], 'regex' => $value['regex'], 'alias' => $value['alias'], 'relate' => $value['relate']);
                 }
             } else {
                 if (is_integer($key)) {
@@ -223,25 +223,26 @@ class UrlRule
                     if (stripos($value, '@') !== false) {
                         $alias = SplitAndGet($value, '@', 0);
                         $name = SplitAndGet($value, '@', 1);
-                        $newargs[] = array('name' => $name, 'regex' => '', 'relate' => '', 'alias' => $alias);
+                        $newargs[] = array('name' => $name, 'regex' => '', 'alias' => $alias, 'relate' => '');
                     } else {
                     //如果是  array( 'name7', 'name8')
-                        $newargs[] = array('name' => $value, 'regex' => '', 'relate' => '', 'alias' => '');
+                        $newargs[] = array('name' => $value, 'regex' => '', 'alias' => '', 'relate' => '');
                     }
                 } else {
                     //如果是  array( 'alias5@name5'=>'regex5')
                     if (stripos($key, '@') !== false) {
                         $alias = SplitAndGet($key, '@', 0);
                         $name = SplitAndGet($key, '@', 1);
-                        $newargs[] = array('name' => $name, 'regex' => $value, 'relate' => '', 'alias' => $alias);
+                        $newargs[] = array('name' => $name, 'regex' => $value, 'alias' => $alias, 'relate' => '');
                     } else {
                     //如果是  array( 'name6'=>'regex6')
-                        $newargs[] = array('name' => $key, 'regex' => $value, 'relate' => '', 'alias' => '');
+                        $newargs[] = array('name' => $key, 'regex' => $value, 'alias' => '', 'relate' => '');
                     }
                 }
             }
         }
 
+        //在$route['urlrule']取出嵌入在规则里的每一个参数的名称
         $route_array = array();
         if (!empty($route) && is_array($route)) {
             $s = $route['urlrule'];
@@ -316,15 +317,15 @@ class UrlRule
 
     /**
      * @param $route
-     * @param $haspage 指示规则是否需要匹配{%page%}(如为假将生成一个没有{%page%}的参数) boolean
+     * @param $keepPage 指示规则是否需要匹配{%page%}(如为假将生成一个没有{%page%}的参数) boolean
      *
      * @return string
      */
-    public static function OutputUrlRegEx_Route($route, $haspage = false)
+    public static function OutputUrlRegEx_Route($route, $keepPage = false)
     {
         global $zbp;
         self::$categoryLayer = $GLOBALS['zbp']->category_recursion_real_deep;
-        $match_with_page = $haspage;
+        $match_with_page = $keepPage;
         $useAbbr = (bool) GetValueInArray($route, 'abbr_url', false);
 
         $newargs = self::ProcessParameters($route);
@@ -347,7 +348,9 @@ class UrlRule
                     $url = substr($url, 0, strpos($url, '{%page%}'));
                     $i = (int) strripos($url, '}');
                     $j = (int) strripos($url, '/');
+                    $k = (int) strripos($url, '&');
                     $i = ($j > $i) ? $j : $i;
+                    $i = ($k > $i) ? $k : $i;
                     $url = substr($url, 0, ($i + 1));
                 }
             }
@@ -381,19 +384,19 @@ class UrlRule
      *
      * @param $url
      * @param $type
-     * @param $haspage 指示规则是否需要匹配{%page%}(如为假将生成一个没有{%page%}的参数) boolean
+     * @param $keepPage 指示规则是否需要匹配{%page%}(如为假将生成一个没有{%page%}的参数) boolean
      * @param $useAbbr 指示规则可以被缩写为"域名/"或是"域名/目录/"
      *
      * @return string
      */
-    public static function OutputUrlRegEx_V2($url, $type, $haspage = false, $useAbbr = false)
+    public static function OutputUrlRegEx_V2($url, $type, $keepPage = false, $useAbbr = false)
     {
         global $zbp;
 
         if (is_array($url)) {
             return self::OutputUrlRegEx_Route($url);
         }
-        $match_with_page = $haspage;
+        $match_with_page = $keepPage;
 
         if (self::$categoryLayer == -1) {
             self::$categoryLayer = $GLOBALS['zbp']->category_recursion_real_deep;
@@ -421,7 +424,9 @@ class UrlRule
                     $url = substr($url, 0, strpos($url, '{%page%}'));
                     $i = (int) strripos($url, '}');
                     $j = (int) strripos($url, '/');
+                    $k = (int) strripos($url, '&');
                     $i = ($j > $i) ? $j : $i;
+                    $i = ($k > $i) ? $k : $i;
                     $url = substr($url, 0, ($i + 1));
                 }
             }
@@ -496,11 +501,11 @@ class UrlRule
      *
      * @param $url
      * @param $type
-     * @param $haspage boolean
+     * @param $keepPage boolean
      *
      * @return string
      */
-    public static function OutputUrlRegEx($url, $type, $haspage = false)
+    public static function OutputUrlRegEx($url, $type, $keepPage = false)
     {
         global $zbp;
 
@@ -533,7 +538,7 @@ class UrlRule
             $url = str_replace('%page%', '%poaogoe%', $url);
             preg_match('/(?<=\})[^\{\}]+(?=\{%poaogoe%\})/i', $s, $matches);
             if (isset($matches[0])) {
-                if ($haspage) {
+                if ($keepPage) {
                     //$url = str_replace($matches[0], '(?:' . $matches[0] . ')', $url);
                     $url = preg_replace('/(?<=\})[^\{\}]+(?=\{%poaogoe%\})/i', '(?:' . $matches[0] . ')', $url, 1);
                 } else {
@@ -550,7 +555,7 @@ class UrlRule
                 }
             }
             $url = $url . '$';
-            if ($haspage) {
+            if ($keepPage) {
                 $url = str_replace('%poaogoe%', '(?P<page>[0-9]*)', $url);
             } else {
                 $url = str_replace('%poaogoe%', '', $url);
@@ -583,7 +588,7 @@ class UrlRule
             $url = str_replace('%page%', '%poaogoe%', $url);
             preg_match('/(?<=\})[^\{\}]+(?=\{%poaogoe%\})/i', $s, $matches);
             if (isset($matches[0])) {
-                if ($haspage) {
+                if ($keepPage) {
                     //$url = str_replace($matches[0], '(?:' . $matches[0] . ')', $url);
                     $url = preg_replace('/(?<=\})[^\{\}]+(?=\{%poaogoe%\})/i', '(?:' . $matches[0] . ')', $url, 1);
                 } else {
@@ -599,7 +604,7 @@ class UrlRule
                     }
                 }
             }
-            if ($haspage) {
+            if ($keepPage) {
                 $url = str_replace('%poaogoe%', '(?P<page>[0-9]*)', $url);
             } else {
                 $url = str_replace('%poaogoe%', '', $url);
@@ -627,14 +632,6 @@ class UrlRule
         $url = str_replace(':>', '}', $url);
         $url = str_replace('/', '\/', $url);
         //$url = str_replace('\/$', '$', $url);
-        if ($haspage == false && $type == 'list') {
-            if (substr($url, 0, 7) == '^page\.' || $url == '^page\/$') {
-                $url = '';
-            }
-        }
-        if ($url == '') {
-            return $url;
-        }
 
         return '/(?J)' . $url . '/';
 
