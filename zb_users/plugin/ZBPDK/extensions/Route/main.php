@@ -58,7 +58,7 @@ $replace_array = array(
     '\'get\' =' => "//只要有一个值匹配到本规则的\$_GET参数就通过(逻辑为指定array('page')那么必须有\$_GET['page']存在才行，指定array('id','alias')那么只要有id或alias存在就可以)\r\n" . '\'get\' =',
     '\'not_get\' =' => "//必须排除的\$_GET参数(可以为空数组),如果是array('/.+/')就会禁止任何参数传入\r\n" . '\'not_get\' =',
     '\'must_get\' =' => "//必须包含的\$_GET参数(可以为空数组)\r\n" . '\'get\' =',
-    '\'args\' =' => "//从伪静规则匹配到的数组中取值传给call的参数(示例为array('cate'=>'id', 'page'=>'page') or array('post'=>array('id','alias'), 'page'=>'page') )\r\n" . '\'args\' =',
+    '\'args\' =' => "//从伪静规则匹配到的数组中取值传给call的参数(示例为array('id', 'page') or array('cate@alias', 'page') )\r\n" . '\'args\' =',
     '\'args_get\' =' => "//从\$_GET获取值传给call的参数()\r\n" . '\'args_get\' =',
     '\'args_with\' =' => "//固定传的call参数(先从\$_GET取值再从本条路由规则中取值并覆盖)\r\n" . '\'args_with\' =',
     '\'urlrule\' =' => "//动态路由和伪静路由的原始规则(必须)\r\n" . '\'urlrule\' =',

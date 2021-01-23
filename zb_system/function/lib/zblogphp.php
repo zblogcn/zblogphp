@@ -833,25 +833,25 @@ class ZBlogPHP
         // 如果 开启了伪静模式，就再注入伪静路由
         if ($this->option['ZC_STATIC_MODE'] == 'REWRITE') {
             //  添加 文章页单页 伪静路由
-            $this->RegRoute(array('type' => 'rewrite', 'name' => 'rewrite_post_article_single', 'call' => 'ViewPost', 'urlrule' => $this->GetPostType(0, 'single_urlrule'), 'args' => array('post' => array('id', 'alias')), 'args_with' => array()));
+            $this->RegRoute(array('type' => 'rewrite', 'name' => 'rewrite_post_article_single', 'call' => 'ViewPost', 'urlrule' => $this->GetPostType(0, 'single_urlrule'), 'args' => array('post@id', 'post@alias'), 'args_with' => array()));
             //  添加 文章index列表 伪静路由
-            $this->RegRoute(array('type' => 'rewrite', 'name' => 'rewrite_post_article_list_index', 'call' => 'ViewList', 'urlrule' => $this->GetPostType(0, 'list_urlrule'), 'not_get' => array('id', 'alias'), 'args' => array('page'), 'args_with' => array(), 'abbr_url' => true));
+            $this->RegRoute(array('type' => 'rewrite', 'name' => 'rewrite_post_article_list_index', 'call' => 'ViewList', 'urlrule' => $this->GetPostType(0, 'list_urlrule'), 'not_get' => array('post@id', 'post@alias'), 'args' => array('page'), 'args_with' => array(), 'abbr_url' => true));
             //  添加 文章category列表 伪静路由
-            $this->RegRoute(array('type' => 'rewrite', 'name' => 'rewrite_post_article_list_category', 'call' => 'ViewList', 'urlrule' => $this->GetPostType(0, 'list_category_urlrule'), 'not_get' => array('id', 'alias'), 'args' => array('cate' => array('id', 'alias'), 'page'), 'args_with' => array()));
+            $this->RegRoute(array('type' => 'rewrite', 'name' => 'rewrite_post_article_list_category', 'call' => 'ViewList', 'urlrule' => $this->GetPostType(0, 'list_category_urlrule'), 'not_get' => array('id', 'alias'), 'args' => array('cate@id', 'cate@alias', 'page'), 'args_with' => array()));
             //  添加 文章tag列表 伪静路由
-            $this->RegRoute(array('type' => 'rewrite', 'name' => 'rewrite_post_article_list_tag', 'call' => 'ViewList', 'urlrule' => $this->GetPostType(0, 'list_tag_urlrule'), 'not_get' => array('id', 'alias'), 'args' => array('tags' => array('id', 'alias'), 'page'), 'args_with' => array()));
+            $this->RegRoute(array('type' => 'rewrite', 'name' => 'rewrite_post_article_list_tag', 'call' => 'ViewList', 'urlrule' => $this->GetPostType(0, 'list_tag_urlrule'), 'not_get' => array('id', 'alias'), 'args' => array('tags@id', 'tags@alias', 'page'), 'args_with' => array()));
             //  添加 文章author列表 伪静路由
-            $this->RegRoute(array('type' => 'rewrite', 'name' => 'rewrite_post_article_list_author', 'call' => 'ViewList', 'urlrule' => $this->GetPostType(0, 'list_author_urlrule'), 'not_get' => array('id', 'alias'), 'args' => array('auth' => array('id', 'alias'), 'page'), 'args_with' => array()));
+            $this->RegRoute(array('type' => 'rewrite', 'name' => 'rewrite_post_article_list_author', 'call' => 'ViewList', 'urlrule' => $this->GetPostType(0, 'list_author_urlrule'), 'not_get' => array('id', 'alias'), 'args' => array('auth@id', 'auth@alias', 'page'), 'args_with' => array()));
             //  添加 文章date列表 伪静路由
             $this->RegRoute(array('type' => 'rewrite', 'name' => 'rewrite_post_article_list_date', 'call' => 'ViewList', 'urlrule' => $this->GetPostType(0, 'list_date_urlrule'), 'not_get' => array('id', 'alias'), 'args' => array('date', 'page'), 'args_with' => array()));
 
             //  添加 页面页单页 伪静路由
-            $this->RegRoute(array('type' => 'rewrite', 'name' => 'rewrite_post_page_single', 'call' => 'ViewPost', 'prefix' => '', 'urlrule' => $this->GetPostType(1, 'single_urlrule'), 'args' => array('post' => array('id', 'alias')), 'args_with' => array('posttype' => 1)));
+            $this->RegRoute(array('type' => 'rewrite', 'name' => 'rewrite_post_page_single', 'call' => 'ViewPost', 'prefix' => '', 'urlrule' => $this->GetPostType(1, 'single_urlrule'), 'args' => array('id', 'alias'), 'args_with' => array('posttype' => 1)));
 
             //  这是一个例子： 文章搜索的伪静路由的实现  1.设定原始规则
-            //$this->posttype[0]['search_urlrule'] = '{%host%}{%search%}_{%page%}.html';
+            $this->posttype[0]['search_urlrule'] = '{%host%}{%search%}_{%page%}.html';
             // 2.注册伪静路由
-            //$this->RegRoute(array('type' => 'rewrite', 'name' => 'rewrite_post_article_search', 'call' => 'ViewSearch', 'prefix' => 'search', 'urlrule' => $this->GetPostType(0, 'search_urlrule'), 'args' => array('search' => array('search' => '[^\/_]+'), 'page'), 'args_with' => array('posttype' => 0), 'request_method' => array('GET', 'POST'), 'only_match_page' => false));
+            $this->RegRoute(array('type' => 'rewrite', 'name' => 'rewrite_post_article_search', 'call' => 'ViewSearch', 'prefix' => 'search', 'urlrule' => $this->GetPostType(0, 'search_urlrule'), 'args' => array('search' => '[^\/_]+', 'page'), 'args_with' => array('posttype' => 0), 'request_method' => array('GET', 'POST'), 'only_match_page' => false));
 
             //在伪静模式下，第2次追加覆盖，给“文章类和页面类”更新routes数据
             $routes = array(

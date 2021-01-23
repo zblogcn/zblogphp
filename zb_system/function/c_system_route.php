@@ -98,9 +98,9 @@ function ViewAuto($inpurl)
             $b = $b && (($r != '' && preg_match($r, $url, $m) == 1) || ($r == '' && $url == '') || ($r == '' && $url == 'index.php'));
             if ($b) {
                 $array = $m;
-                //var_dump($match_with_page_value, $route['urlrule'], $r, $url, $m);//die;
-                ViewAuto_Process_Args($array, $parameters);
+                ViewAuto_Process_Args($array, $parameters, $m);
                 ViewAuto_Process_Args_with($array, GetValueInArray($route, 'args_with', array()), $route);
+                //var_dump($match_with_page_value, $route['urlrule'], $r, $url, $m, $array);//die;
                 $result = ViewAuto_Call_Auto($route, $array);
                 if ($result == true) {
                     return;
@@ -143,11 +143,14 @@ function ViewAuto($inpurl)
 /**
  * ViewAuto的辅助函数
  */
-function ViewAuto_Process_Args(&$array, $parameters)
+function ViewAuto_Process_Args(&$array, $parameters, $m)
 {
     foreach ($parameters as $key => $value) {
-        if (isset($m[(string) $value['match']])) {
-            $array[$value['name']] = $m[(string) $value['match']];
+        if (isset($m[(string) $value['name']])) {
+            $array[$value['name']] = $m[(string) $value['name']];
+            if ($value['alias'] != '') {
+                $array[$value['alias']] = $m[(string) $value['name']];
+            }
         }
     }
     return $array;
@@ -245,7 +248,7 @@ function ViewAuto_Get_Parameters_And_Match_with_page($route, &$parameters, &$mat
     $match_with_page = array('can_ignore_page' => false);
     $haspage = false;
     foreach ($parameters as $key => $value) {
-        if ($value['match'] == 'page') {
+        if ($value['name'] == 'page') {
             $haspage = true;
         }
     }
@@ -352,7 +355,7 @@ function ViewAuto_Process_Pagebar_Replace_Array(&$pagebar, $route, $args)
 
     foreach ($parameters as $key => $value) {
         if (isset($array[$key])) {
-            $replace[$value['match']] = $array[$key];
+            $replace[$value['name']] = $array[$key];
         }
     }
     $rules = &$pagebar->UrlRule->Rules;
@@ -1151,13 +1154,13 @@ function ViewPost($id = null, $alias = null, $isrewrite = false, $object = array
     if (isset($route['args']) && is_array($route['args'])) {
         $parameters = UrlRule::ProcessParameters($route);
         foreach ($parameters as $key => $value) {
-            if ($value['match'] == 'id') {
+            if ($value['name'] == 'id') {
                 $id = $post;
                 if (function_exists('ctype_digit') && !ctype_digit((string) $id)) {
                     $id = null;
                 }
             }
-            if ($value['match'] == 'alias') {
+            if ($value['name'] == 'alias') {
                 $alias = $post;
             }
         }

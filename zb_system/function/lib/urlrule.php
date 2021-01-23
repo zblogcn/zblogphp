@@ -15,6 +15,11 @@ class UrlRule
     public $Rules = array();
 
     /**
+     * @var object
+     */
+    public $RulesObject = null;
+
+    /**
      * @var string
      */
     public $Url = '';
@@ -159,7 +164,9 @@ class UrlRule
         if ($prefix != '') {
             $prefix .= '/';
         }
-        $this->Rules['{%host%}'] = '{%host%}' . $prefix;
+
+        //先从Rules替换一次
+        $this->Rules['{%host%}'] = $zbp->host . $prefix;
         foreach ($this->Rules as $key => $value) {
             if (!is_array($value)) {
                 $url = str_replace($key, $value, $url);
@@ -176,8 +183,6 @@ class UrlRule
             $url = substr($url, 0, (strlen($url) - 1));
         }
 
-        $this->Rules['{%host%}'] = $zbp->host;
-        $url = str_replace('{%host%}', $zbp->host, $url);
         $this->Url = htmlspecialchars($url);
 
         return $this->Url;
@@ -211,29 +216,55 @@ class UrlRule
         } else {
             $parameters = array();
         }
+        $args =  $parameters;
 
-        $args = array();
-        foreach ($parameters as $key2 => $value2) {
-            if (is_integer($key2)) {
-                $args[$value2] = $value2;
-            } else {
-                $args[$key2] = $value2;
-            }
-        }
+        //从$route的args项中读取各种花式设置方法设置的参数
         foreach ($args as $key => $value) {
             if (is_array($value)) {
-                foreach ($value as $key2 => $value2) {
-                    if (is_integer($key2)) {
-                        $newargs[] = array('name' => $key, 'match' => $value2, 'regex' => '');
-                    } else {
-                        $newargs[] = array('name' => $key, 'match' => $key2, 'regex' => $value2);
+                //如果是array( array('name3','regex3','relate3','alias3') )
+                if (is_int(key($value))) {
+                    if (count($value) == 1) {
+                        $newargs[] = array('name' => $value[0], 'regex' => '', 'relate' => '', 'alias'=>'');
                     }
+                    if (count($value) == 2) {
+                        $newargs[] = array('name' => $value[0], 'regex' => $value[1], 'relate' => '', 'alias'=>'');
+                    }
+                    if (count($value) == 3) {
+                        $newargs[] = array('name' => $value[0], 'regex' => $value[1], 'relate' => $value[2], 'alias'=>'');
+                    }
+                    if (count($value) == 4) {
+                        $newargs[] = array('name' => $value[0], 'regex' => $value[1], 'relate' => $value[2], 'alias' => $value[3]);
+                    }
+                } else {
+                //如果是array( array('name'=>'name4','regex'=>'regex4','relate'=>'relate4', 'alias'=>'alias4') )
+                    $newargs[] = array('name' => $value['name'], 'regex' => $value['regex'], 'relate' => $value['relate'], 'alias' => $value['alias']);
                 }
             } else {
-                $newargs[] = array('name' => $key, 'match'  => $value, 'regex' => '');
+                if (is_integer($key)) {
+                    //如果是  array( 'alias1@name1', 'alias2@name2')
+                    if (stripos($value, '@') !== false) {
+                        $alias = SplitAndGet($value, '@', 0);
+                        $name = SplitAndGet($value, '@', 1);
+                        $newargs[] = array('name' => $name, 'regex' => '', 'relate' => '', 'alias'=> $alias);
+                    } else {
+                    //如果是  array( 'name7', 'name8')
+                        $newargs[] = array('name' => $value, 'regex' => '', 'relate' => '', 'alias'=>'');
+                    }
+                } else {
+                    //如果是  array( 'alias5@name5'=>'regex5')
+                    if (stripos($key, '@') !== false) {
+                        $alias = SplitAndGet($key, '@', 0);
+                        $name = SplitAndGet($key, '@', 1);
+                        $newargs[] = array('name' => $name, 'regex' => $value, 'relate' => '', 'alias'=> $alias);
+                    } else {
+                    //如果是  array( 'name6'=>'regex6')
+                        $newargs[] = array('name' => $key, 'regex' => $value, 'relate' => '', 'alias'=>'');
+                    }
+                }
             }
         }
 
+        $route_array = array();
         if (!empty($route) && is_array($route)) {
             $s = $route['urlrule'];
             $s = str_replace('{%host%}', '', $s);
@@ -249,39 +280,59 @@ class UrlRule
             }
             foreach ($marray as $key => $value) {
                 $value = str_replace('%', '', $value);
-                $newargs[] = array('name' => $value, 'match' => $value, 'regex' => '');
+                $route_array[] = $value;
+            }
+        }
+        foreach ($route_array as $key => $value) {
+            //在$newargs 查找$value是否存在，不存在就插入
+            $b = false;
+            foreach ($newargs as $key2 => $value2) {
+                if ($value2['name'] == $value) {
+                    $b = true;
+                }
+            }
+            if ($b == false) {
+                $newargs[] = array('name' => $value, 'regex' => '', 'relate' => '', 'alias'=>'');
+            }
+        }
+        //在$newargs 查找如果有$name不在$route_array中就把它从$newargs删除了
+        foreach ($newargs as $key => $value) {
+            if ($value['alias'] != '') {
+                if (in_array($value['name'], $route_array) == false) {
+                    unset($newargs[$key]);
+                }
             }
         }
 
         foreach ($newargs as $key => &$value) {
-            if ($value['match'] == 'id' && $value['regex'] == '') {
+            if ($value['name'] == 'id' && $value['regex'] == '') {
                 $value['regex'] = '[0-9]+';
             }
-            if ($value['match'] == 'alias' && $value['regex'] == '') {
+            if ($value['name'] == 'alias' && $value['regex'] == '') {
                 $value['regex'] = '[^\.\/_]+?';
             }
-            if ($value['match'] == 'category' && $value['regex'] == '') {
+            if ($value['name'] == 'category' && $value['regex'] == '') {
                 $value['regex'] = '([^\.\/_]*\/?){1,' . self::$categoryLayer . '}';
             }
-            if ($value['match'] == 'author' && $value['regex'] == '') {
+            if ($value['name'] == 'author' && $value['regex'] == '') {
                 $value['regex'] = '[^\.\/_]+';
             }
-            if ($value['match'] == 'year' && $value['regex'] == '') {
+            if ($value['name'] == 'year' && $value['regex'] == '') {
                 $value['regex'] = '[0-9]{4}';
             }
-            if ($value['match'] == 'month' && $value['regex'] == '') {
+            if ($value['name'] == 'month' && $value['regex'] == '') {
                 $value['regex'] = '[0-9]{1,2}';
             }
-            if ($value['match'] == 'day' && $value['regex'] == '') {
+            if ($value['name'] == 'day' && $value['regex'] == '') {
                 $value['regex'] = '[0-9]{1,2}';
             }
-            if ($value['match'] == 'page' && $value['regex'] == '') {
+            if ($value['name'] == 'page' && $value['regex'] == '') {
                 $value['regex'] = '[0-9]+';
             }
-            if ($value['match'] == 'date' && $value['regex'] == '') {
+            if ($value['name'] == 'date' && $value['regex'] == '') {
                 $value['regex'] = '[0-9\-]+';
             }
-        }
+        }//var_dump($newargs);
         return $newargs;
     }
 
@@ -326,18 +377,17 @@ class UrlRule
             $url = str_replace('{%page%}', '', $url);
         }
         $url = str_replace('{%host%}/', '{%host%}', $url);
+        $prefix = GetValueInArray($route, 'prefix', '');
+        $prefix = ($prefix != '') ? ($prefix . '/') : $prefix;
+        $url = str_replace('{%host%}', $prefix, $url);
         $url = str_replace('.', '\\.', $url);
         $url = str_replace('/', '\\/', $url);
 
-        $prefix = GetValueInArray($route, 'prefix', '');
-        $prefix = ($prefix != '') ? ($prefix . '\/') : $prefix;
-        $url = str_replace('{%host%}', $prefix, $url);
-
         //把page传进$newargs
-        $newargs[] = array('name'  => 'page', 'match' => 'page', 'regex' => '[0-9]+');
+        $newargs[] = array('name'  => 'page', 'regex' => '[0-9]+');
         //传入{%参数%}的正则
         foreach ($newargs as $key => $value) {
-            $url = str_replace('{%' . $value['match'] . '%}', '(?P<' . $value['name'] . '>' . $value['regex'] . ')', $url);
+            $url = str_replace('{%' . $value['name'] . '%}', '(?P<' . $value['name'] . '>' . $value['regex'] . ')', $url);
         }
 
         $url = '^' . $url . '$';

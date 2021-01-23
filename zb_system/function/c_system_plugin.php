@@ -1340,7 +1340,7 @@ DefinePluginFilter('Filter_Plugin_ViewSearch_Core');
 /*
 '**************************************************<
 '类型:Filter
-'名称:Filter_Plugin_ViewList_Core
+'名称:Filter_Plugin_ViewFeed_Core
 '参数:$w
 '说明:定义Feed核心接口
 '调用:
