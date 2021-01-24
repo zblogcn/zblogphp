@@ -145,10 +145,10 @@ class BasePost extends Base
             case 'RelatedList':
             case 'TypeName':
             case 'TypeActions':
-            case 'Date':
             case 'PostDate':
             case 'CreateDate':
             case 'UpdateDate':
+            case 'AliasFirst':
                 return;
             case 'Template':
                 if ($value == $zbp->GetPostType($this->Type, 'template')) {
@@ -209,6 +209,7 @@ class BasePost extends Base
                     $u = new UrlRule($zbp->GetPostType($this->Type, 'single_urlrule'));
                 }
                 $u->Rules['{%id%}'] = $this->ID;
+                $u->RulesObject = &$this;
                 if ($this->Alias) {
                     $u->Rules['{%alias%}'] = $this->Alias;
                 } else {
@@ -351,13 +352,18 @@ class BasePost extends Base
                 return $zbp->GetPostType($this->Type, 'name');
             case 'TypeActions':
                 return $zbp->GetPostType($this->Type, 'actions');
-            case 'Date':
             case 'PostDate':
                 return new ZbpDate($this->PostTime);
             case 'CreateDate':
                 return new ZbpDate($this->PostTime);
             case 'UpdateDate':
                 return new ZbpDate($this->PostTime);
+            case 'AliasFirst':
+                if ($this->Alias) {
+                    return $this->Alias;
+                } else {
+                    return $this->Title;
+                }
             default:
                 foreach ($GLOBALS['hooks']['Filter_Plugin_Post_Get'] as $fpname => &$fpsignal) {
                     $fpreturn = $fpname($this, $name);

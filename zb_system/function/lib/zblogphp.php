@@ -789,8 +789,8 @@ class ZBlogPHP
         // 系统初始化时没有添加默认路由
         // 默认路由是在路由的最后执行，默认路由不检查Regex规则是否匹配，只会传入get参数，就调用Call，需要细心匹配
 
-        // 这是一个默认路由的例子 会匹配被前面所有动态，伪静路由跳过的url
-        //$this->RegRoute(array('type' => 'default', 'name' => 'default_example', 'call' => 'ViewList', 'urlrule' => $this->GetPostType(0, 'list_urlrule'),'get' => array(), 'not_get' => array(), 'args_get' => array()));
+        // 这是一个默认路由的例子 会匹配被前面所有动态路由、伪静路由跳过的url
+        //$this->RegRoute(array('type' => 'default', 'name' => 'default_example', 'call' => 'ViewList', 'urlrule' => $this->GetPostType(0, 'list_urlrule'),'get' => array(), 'not_get' => array(), 'args_get' => array(), args_with' => array()));
 
         // 动态路由
         //  添加 文章页列表 动态路由 （首页路由）
@@ -823,12 +823,6 @@ class ZBlogPHP
             'post_page_single' => array('active' => 'active_post_page_single'),
         );
         $this->SetPostType(1, 'routes', $routes);
-
-        // 示例
-        //  添加 页面页列表(带参数) 动态路由
-        //$this->RegRoute(array('type' => 'active', 'name' => 'active_post_page_list', 'call' => 'ViewList', 'prefix' => '', 'get' => array('page'), 'not_get' => array('id', 'alias'), 'args_get' => array('page'), 'args_with' => array()));
-        //  添加 页面页列表(无参数) 动态路由
-        //$this->RegRoute(array('type' => 'active', 'name' => 'active_post_page_list_index', 'call' => 'ViewList', 'prefix' => '', 'get' => array(), 'not_get' => array('id', 'alias'), 'args_get' => array(), 'args_with' => array()));
 
         // 如果 开启了伪静模式，就再注入伪静路由
         if ($this->option['ZC_STATIC_MODE'] == 'REWRITE') {
@@ -4154,7 +4148,7 @@ class ZBlogPHP
         if (is_array($type)) {
             $key = key($type);
             $value = current($type);
-            if (isset($this->routes[$key][$value])){
+            if (isset($this->routes[$key][$value])) {
                 return $this->routes[$key][$value];
             }
             return;

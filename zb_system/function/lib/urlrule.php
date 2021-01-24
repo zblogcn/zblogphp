@@ -147,7 +147,60 @@ class UrlRule
             $prefix .= '/';
         }
 
-        //先从Rules替换一次
+        //魔术戏法：处理路由规则里预先指定好的"关联数据来源"的参数并先替换一次
+        $paras = self::ProcessParameters($this->GetRoute());
+        foreach ($paras as $key => &$p) {
+            if ($p['relate'] && is_object($this->RulesObject)) {
+                $object = clone $this->RulesObject;
+                $objectArray = explode('.', $p['relate']);
+                foreach ($objectArray as $key => $subObject) {
+                    //先判断是数组，还是函数，还是对象
+                    if (stripos($subObject, '[') !== false) {
+                        $i = preg_match_all('/\[.+\]/', $subObject, $m);
+                        if ($i > 0) {
+                            $arrayName = trim(SplitAndGet($subObject, '[', 0));
+                            $a = trim(str_replace(array('[', ']'), '', current($m[0])));
+                            $object = $object->$arrayName;
+                            if (isset($object[$a])) {
+                                $object = $object[$a];
+                            } else {
+                                $object = null;
+                            }
+                        }
+                    } elseif (stripos($subObject, '(') !== false) {
+                        $i = preg_match_all('/\(.+\)/', $subObject, $m);
+                        if ($i > 0) {
+                            $functionName = trim(SplitAndGet($subObject, '(', 0));
+                            $a = trim(str_replace(array('(', ')'), '', current($m[0])));
+                            $array = array();
+                            if ($a) {
+                                $array = explode(',', $a);
+                            }
+                            $object = call_user_func_array(array($object, $functionName), $array);
+                        }
+                    } else {
+                        $object = $object->$subObject;
+                    }
+                    //如果是标量就退出
+                    if (is_scalar($object) || is_null($object)) {
+                        break;
+                    }
+                }
+                if (is_scalar($object)) {
+                    $p['relate_value'] = $object;
+                }
+                if (is_null($object)) {
+                    $p['relate_value'] = '';
+                }
+            }
+        }
+        foreach ($paras as $key => $p) {
+            if ($p['relate'] && array_key_exists('relate_value', $p)) {
+                $url = str_replace('{%' . $p['name'] . '%}', $p['relate_value'], $url);
+            }
+        }
+
+        //再从Rules替换一次
         $this->Rules['{%host%}'] = $zbp->host . $prefix;
         foreach ($this->Rules as $key => $value) {
             if (!is_array($value)) {

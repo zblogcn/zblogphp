@@ -81,7 +81,7 @@ class Category extends Base
     public function __set($name, $value)
     {
         global $zbp;
-        if (in_array($name, array('Url', 'Symbol', 'Level', 'SymbolName', 'Parent'))) {
+        if (in_array($name, array('Url', 'Symbol', 'Level', 'SymbolName', 'Parent', 'AliasFirst'))) {
             return;
         } elseif ($name == 'Template') {
             if ($value == $zbp->GetPostType($this->Type, 'category_template')) {
@@ -130,6 +130,7 @@ class Category extends Base
             } else {
                 $u = new UrlRule($zbp->GetPostType($this->Type, 'list_category_urlrule'));
             }
+            $u->RulesObject = &$this;
             $u->Rules['{%id%}'] = $this->ID;
             $u->Rules['{%alias%}'] = $this->Alias == '' ? $this->$backAttr : $this->Alias;
 
@@ -187,12 +188,13 @@ class Category extends Base
             }
             return $i;
         }
-        /*if ($name == 'ChildrenCategories') {
-            if ($this->priChildrenCategories === null) {
-                $this->priChildrenCategories = $this->GetSubCategories($this);
+        if ($name == 'AliasFirst') {
+            if ($this->Alias) {
+                return $this->Alias;
+            } else {
+                return $this->Name;
             }
-            return $this->priChildrenCategories;
-        }*/
+        }
         foreach ($GLOBALS['hooks']['Filter_Plugin_Category_Get'] as $fpname => &$fpsignal) {
             $fpreturn = $fpname($this, $name);
             if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {

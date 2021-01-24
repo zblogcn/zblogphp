@@ -84,7 +84,7 @@ class BaseMember extends Base
     public function __set($name, $value)
     {
         global $zbp;
-        if (in_array($name, array('Url', 'Avatar', 'LevelName', 'EmailMD5', 'StaticName', 'PassWord_MD5Path', 'IsGod'))) {
+        if (in_array($name, array('Url', 'Avatar', 'LevelName', 'EmailMD5', 'StaticName', 'PassWord_MD5Path', 'IsGod', 'AliasFirst'))) {
             return;
         } elseif ($name == 'Template') {
             if ($value == $zbp->option['ZC_INDEX_DEFAULT_TEMPLATE']) {
@@ -122,6 +122,7 @@ class BaseMember extends Base
             } else {
                 $u = new UrlRule($zbp->GetPostType(0, 'list_author_urlrule'));
             }
+            $u->RulesObject = &$this;
             $u->Rules['{%id%}'] = $this->ID;
             $u->Rules['{%alias%}'] = $this->Alias == '' ? rawurlencode($this->Name) : $this->Alias;
 
@@ -187,6 +188,13 @@ class BaseMember extends Base
                 }
 
                 return $this->private_isgod;
+            }
+        }
+        if ($name == 'AliasFirst') {
+            if ($this->Alias) {
+                return $this->Alias;
+            } else {
+                return $this->Name;
             }
         }
         foreach ($GLOBALS['hooks']['Filter_Plugin_Member_Get'] as $fpname => &$fpsignal) {

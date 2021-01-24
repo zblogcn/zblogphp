@@ -48,7 +48,7 @@ class Tag extends Base
     public function __set($name, $value)
     {
         global $zbp;
-        if ($name == 'Url') {
+        if (in_array($name, array('Url', 'AliasFirst'))) {
             return;
         }
         if ($name == 'Template') {
@@ -89,6 +89,7 @@ class Tag extends Base
             } else {
                 $u = new UrlRule($zbp->GetPostType($this->Type, 'list_tag_urlrule'));
             }
+            $u->RulesObject = &$this;
             $u->Rules['{%id%}'] = $this->ID;
             $u->Rules['{%alias%}'] = rawurlencode($this->Alias == '' ? $this->$backAttr : $this->Alias);
 
@@ -101,6 +102,13 @@ class Tag extends Base
             }
 
             return $value;
+        }
+        if ($name == 'AliasFirst') {
+            if ($this->Alias) {
+                return $this->Alias;
+            } else {
+                return $this->Name;
+            }
         }
         foreach ($GLOBALS['hooks']['Filter_Plugin_Tag_Get'] as $fpname => &$fpsignal) {
             $fpreturn = $fpname($this, $name);
