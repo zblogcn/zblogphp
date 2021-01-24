@@ -199,38 +199,17 @@ function Admin_ArticleMng()
     echo '<form method="post" action="' . $zbp->host . 'zb_system/cmd.php?act=PostBat&type=' . ZC_POST_TYPE_ARTICLE . '">';
     echo '<table border="1" class="tableFull tableBorder table_hover table_striped tableBorder-thcenter">';
 
-    if ($order_get == 'id_asc') {
-        $button_order_id_order = 'id_desc';
-        $button_order_id_icon = 'icon-arrow-up-short';
-        $button_order_id_class = 'element-visibility-visible-always element-visibility-hidden';
-    } else {
-        $button_order_id_order = 'id_asc';
-        $button_order_id_icon = 'icon-arrow-down-short';
-        $button_order_id_class = 'element-visibility-hidden';
-    }
-    $p->UrlRule->Rules['{%order%}'] = $button_order_id_order;
-    $button_order_id = ' <a class="order_button ' . $button_order_id_class . '" href="' . $p->UrlRule->Make() . '"><i style="font-size:0.75em;" class="' . $button_order_id_icon . '"></i></a>';
-
-    if ($order_get == 'posttime_asc') {
-        $button_order_posttime_order = 'posttime_desc';
-        $button_order_posttime_icon = 'icon-arrow-up-short';
-        $button_order_posttime_class = 'element-visibility-visible-always element-visibility-hidden';
-    } else {
-        $button_order_posttime_order = 'posttime_asc';
-        $button_order_posttime_icon = 'icon-arrow-down-short';
-        $button_order_posttime_class = 'element-visibility-hidden';
-    }
-    $p->UrlRule->Rules['{%order%}'] = $button_order_posttime_order;
-    $button_order_posttime = ' <a class="order_button ' . $button_order_posttime_class . '" href="' . $p->UrlRule->Make() . '"><i style="font-size:0.75em;" class="' . $button_order_posttime_icon . '"></i></a>';
+    list($button_id_html) = MakeOrderButton('id', $p->UrlRule, $order_get);
+    list($button_posttime_html) = MakeOrderButton('posttime', $p->UrlRule, $order_get);
 
     $tables = '';
     $tableths = array();
     $tableths[] = '<tr>';
-    $tableths[] = '<th>' . $zbp->lang['msg']['id'] . $button_order_id . '</th>';
+    $tableths[] = '<th>' . $zbp->lang['msg']['id'] . $button_id_html . '</th>';
     $tableths[] = '<th>' . $zbp->lang['msg']['category'] . '</th>';
     $tableths[] = '<th>' . $zbp->lang['msg']['author'] . '</th>';
     $tableths[] = '<th>' . $zbp->lang['msg']['title'] . '</th>';
-    $tableths[] = '<th>' . $zbp->lang['msg']['date'] . $button_order_posttime . '</th>';
+    $tableths[] = '<th>' . $zbp->lang['msg']['date'] . $button_posttime_html . '</th>';
     $tableths[] = '<th>' . $zbp->lang['msg']['comment'] . '</th>';
     $tableths[] = '<th>' . $zbp->lang['msg']['status'] . '</th>';
     $tableths[] = '<th></th>';
@@ -353,22 +332,12 @@ function Admin_PageMng()
     echo '<form method="post" action="' . $zbp->host . 'zb_system/cmd.php?act=PostBat&type=' . ZC_POST_TYPE_PAGE . '">';
     echo '<table border="1" class="tableFull tableBorder tableBorder-thcenter table_hover table_striped">';
 
-    if ($order_get == 'id_asc') {
-        $button_order_id_order = 'id_desc';
-        $button_order_id_icon = 'icon-arrow-up-short';
-        $button_order_id_class = 'element-visibility-visible-always element-visibility-hidden';
-    } else {
-        $button_order_id_order = 'id_asc';
-        $button_order_id_icon = 'icon-arrow-down-short';
-        $button_order_id_class = 'element-visibility-hidden';
-    }
-    $p->UrlRule->Rules['{%order%}'] = $button_order_id_order;
-    $button_order_id = ' <a class="order_button ' . $button_order_id_class . '" href="' . $p->UrlRule->Make() . '"><i style="font-size:0.75em;" class="' . $button_order_id_icon . '"></i></a>';
+    list($button_id_html) = MakeOrderButton('id', $p->UrlRule, $order_get);
 
     $tables = '';
     $tableths = array();
     $tableths[] = '<tr>';
-    $tableths[] = '<th>' . $zbp->lang['msg']['id'] . $button_order_id . '</th>';
+    $tableths[] = '<th>' . $zbp->lang['msg']['id'] . $button_id_html . '</th>';
     $tableths[] = '<th>' . $zbp->lang['msg']['author'] . '</th>';
     $tableths[] = '<th>' . $zbp->lang['msg']['title'] . '</th>';
     $tableths[] = '<th>' . $zbp->lang['msg']['date'] . '</th>';
@@ -767,23 +736,13 @@ function Admin_MemberMng()
         $op
     );
 
-    if ($order_get == 'id_asc') {
-        $button_order_id_order = 'id_desc';
-        $button_order_id_icon = 'icon-arrow-up-short';
-        $button_order_id_class = 'element-visibility-visible-always element-visibility-hidden';
-    } else {
-        $button_order_id_order = 'id_asc';
-        $button_order_id_icon = 'icon-arrow-down-short';
-        $button_order_id_class = 'element-visibility-hidden';
-    }
-    $p->UrlRule->Rules['{%order%}'] = $button_order_id_order;
-    $button_order_id = ' <a class="order_button ' . $button_order_id_class . '" href="' . $p->UrlRule->Make() . '"><i style="font-size:0.75em;" class="' . $button_order_id_icon . '"></i></a>';
+    list($button_id_html) = MakeOrderButton('id', $p->UrlRule, $order_get);
 
     echo '<table border="1" class="tableFull tableBorder tableBorder-thcenter table_hover table_striped">';
     $tables = '';
     $tableths = array();
     $tableths[] = '<tr>';
-    $tableths[] = '<th>' . $zbp->lang['msg']['id'] . $button_order_id . '</th>';
+    $tableths[] = '<th>' . $zbp->lang['msg']['id'] . $button_id_html . '</th>';
     $tableths[] = '<th>' . $zbp->lang['msg']['member_level'] . '</th>';
     $tableths[] = '<th>' . $zbp->lang['msg']['name'] . '</th>';
     $tableths[] = '<th>' . $zbp->lang['msg']['alias'] . '</th>';
