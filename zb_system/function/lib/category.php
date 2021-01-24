@@ -126,7 +126,7 @@ class Category extends Base
 
             $routes = $zbp->GetPostType($this->Type, 'routes');
             if (isset($routes['post_' . $zbp->GetPostType($this->Type, 'name') . '_list_category'])) {
-                $u = new UrlRule($routes['post_' . $zbp->GetPostType($this->Type, 'name') . '_list_category']);
+                $u = new UrlRule($zbp->GetRoute($routes['post_' . $zbp->GetPostType($this->Type, 'name') . '_list_category']));
             } else {
                 $u = new UrlRule($zbp->GetPostType($this->Type, 'list_category_urlrule'));
             }

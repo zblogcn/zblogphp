@@ -271,12 +271,12 @@ class UrlRule
                 }
             }
             if ($b == false) {
-                $newargs[] = array('name' => $value, 'regex' => '', 'relate' => '', 'alias' => '');
+                $newargs[] = array('name' => $value, 'regex' => '', 'alias' => '', 'relate' => '');
             }
         }
-        //在$newargs 查找如果有$name不在$route_array中就把它从$newargs删除了
+        //在$newargs 查找如果有同时设有$alias和$name的参数，不在$route_array中就把它从$newargs删除了
         foreach ($newargs as $key => $value) {
-            if ($value['alias'] != '') {
+            if ($value['alias'] != '' && $value['name'] != '') {
                 if (in_array($value['name'], $route_array) == false) {
                     unset($newargs[$key]);
                 }
@@ -338,6 +338,8 @@ class UrlRule
                 $url = str_replace('/{%page%}', '{%page%}', $url);
             } elseif (stripos($url, '-{%page%}') !== false) {
                 $url = str_replace('-{%page%}', '{%page%}', $url);
+            } elseif (stripos($url, '={%page%}') !== false) {
+                $url = str_replace('={%page%}', '={%page%}', $url);
             } else {
                 $url = preg_replace('/(?<=\})[^\}]+(?=\{%page%\})/i', '', $url, 1);
             }
@@ -414,6 +416,8 @@ class UrlRule
                 $url = str_replace('/{%page%}', '{%page%}', $url);
             } elseif (stripos($url, '-{%page%}') !== false) {
                 $url = str_replace('-{%page%}', '{%page%}', $url);
+            } elseif (stripos($url, '={%page%}') !== false) {
+                $url = str_replace('={%page%}', '={%page%}', $url);
             } else {
                 $url = preg_replace('/(?<=\})[^\}]+(?=\{%page%\})/i', '', $url, 1);
             }

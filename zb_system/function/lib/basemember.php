@@ -118,7 +118,7 @@ class BaseMember extends Base
             }
             $routes = $zbp->GetPostType(0, 'routes');
             if (isset($routes['post_' . $zbp->GetPostType(0, 'name') . '_list_author'])) {
-                $u = new UrlRule($routes['post_' . $zbp->GetPostType(0, 'name') . '_list_author']);
+                $u = new UrlRule($zbp->GetRoute($routes['post_' . $zbp->GetPostType(0, 'name') . '_list_author']));
             } else {
                 $u = new UrlRule($zbp->GetPostType(0, 'list_author_urlrule'));
             }

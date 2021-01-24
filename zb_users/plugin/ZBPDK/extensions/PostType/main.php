@@ -69,7 +69,7 @@ foreach ($posttype as $id => $array) {
             if ($key == 'routes') {
                 $rs = array();
                 foreach ($value as $k1 => $v2) {
-                    $rs[$k1] = $v2['name'];
+                    $rs[$k1] = $v2;
                 }
                 $value = $rs;
             }
