@@ -62,6 +62,23 @@ class Class_UrlRuleTest extends PHPUnit\Framework\TestCase
 
     }
 
+    public function testActive_new()
+    {
+        $zbp= $GLOBALS['zbp'];
+        $zbp->host = 'https://localhost/';
+        $this->assertEquals($zbp->host, 'https://localhost/');
+
+        $p = new Pagebar('{%host%}zb_system/cmd.php?act=CategoryMng{&type=%type%}{&search=%search%}{&page=%page%}', false);
+        $p->PageCount = 100;
+        $p->PageNow = 1;
+        $p->PageBarCount = 10;
+
+        $s = $p->UrlRule->Make();
+        $s0 = 'https://localhost/zb_system/cmd.php?act=CategoryMng';
+
+        $this->assertEquals($s, $s0);
+    }
+
     public function testActive_old()
     {
         $zbp= $GLOBALS['zbp'];

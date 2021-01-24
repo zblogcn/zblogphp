@@ -523,13 +523,15 @@ function ViewSearch()
 
     $q = GetVars('q', 'GET');
     $page = GetVars('page', 'GET');
-    $disablebot = true;
 
     $args = GetValueInArray($fpargs, 0, null);
     if (is_array($args)) {
         $canceldisplay = GetValueInArray($args, 'canceldisplay', false);
         $posttype = GetValueInArray($args, 'posttype', 0);
-        $q = GetValueInArray($args, 'search', '');
+        $q = GetValueInArray($args, 'q', '');
+        if (isset($args['search']) && $args['search']) {
+            $q = $args['search'];
+        }
         $page = GetValueInArray($args, 'page', 0);
         $route = GetValueInArray($args, 'route', array());
         $disablebot = GetValueInArray($args, 'disablebot', true);
@@ -537,6 +539,7 @@ function ViewSearch()
         $canceldisplay = false;
         $posttype = 0;
         $route = array('urlrule' => $zbp->option['ZC_SEARCH_REGEX']);
+        $disablebot = true;
     }
 
     $q = trim(htmlspecialchars($q));

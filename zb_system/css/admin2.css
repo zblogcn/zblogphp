@@ -51,6 +51,15 @@ label { cursor: pointer; }
 .header { margin-bottom: 5px; height: 85px; padding: 0; background: #3a6ea5; position: relative; }
 .header .top { }
 
+.element-display-block {display:block;}
+.element-display-none {display:none;}
+.element-display-block-always {display:block;}
+.element-display-none-always {display:none;}
+.element-visibility-visible {visibility:visible;}
+.element-visibility-hidden {visibility:hidden;}
+.element-visibility-visible-always {visibility:visible;}
+.element-visibility-hidden-always {visibility:hidden;}
+
 /**/
 .logo { width: 200px; height: 70px; padding: 10px 0 0 0; left: 20px; }
 .logo img { width: 200px; height: 70px; padding: 0 0 0 0; background: url("../image/admin/logo_white.svg") center center no-repeat; }

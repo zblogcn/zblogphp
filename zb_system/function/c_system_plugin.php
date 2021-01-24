@@ -843,6 +843,83 @@ DefinePluginFilter('Filter_Plugin_Admin_SettingMng_SubMenu');
 /*
 '**************************************************<
 '类型:Filter
+'名称:Filter_Plugin_Admin_ArticleMng_Core
+'参数:$s, $w, $or, $l, $op
+'说明:文章管理页的核心接口(1.7新加入)
+'调用:
+'**************************************************>
+ */
+DefinePluginFilter('Filter_Plugin_Admin_ArticleMng_Core');
+
+/*
+'**************************************************<
+'类型:Filter
+'名称:Filter_Plugin_Admin_PageMng_Core
+'参数:$s, $w, $or, $l, $op
+'说明:文章管理页的核心接口(1.7新加入)
+'调用:
+'**************************************************>
+ */
+DefinePluginFilter('Filter_Plugin_Admin_PageMng_Core');
+
+/*
+'**************************************************<
+'类型:Filter
+'名称:Filter_Plugin_Admin_CommentMng_Core
+'参数:$s, $w, $or, $l, $op
+'说明:评论管理页的核心接口(1.7新加入)
+'调用:
+'**************************************************>
+ */
+DefinePluginFilter('Filter_Plugin_Admin_CommentMng_Core');
+
+/*
+'**************************************************<
+'类型:Filter
+'名称:Filter_Plugin_Admin_CategoryMng_Core
+'参数:$s, $w, $or, $l, $op
+'说明:分类管理页的核心接口(1.7新加入)
+'调用:
+'**************************************************>
+ */
+DefinePluginFilter('Filter_Plugin_Admin_CategoryMng_Core');
+
+/*
+'**************************************************<
+'类型:Filter
+'名称:Filter_Plugin_Admin_MemberMng_Core
+'参数:$s, $w, $or, $l, $op
+'说明:会员管理页的核心接口(1.7新加入)
+'调用:
+'**************************************************>
+ */
+DefinePluginFilter('Filter_Plugin_Admin_MemberMng_Core');
+
+/*
+'**************************************************<
+'类型:Filter
+'名称:Filter_Plugin_Admin_UploadMng_Core
+'参数:$s, $w, $or, $l, $op
+'说明:会员管理页的核心接口(1.7新加入)
+'调用:
+'**************************************************>
+ */
+DefinePluginFilter('Filter_Plugin_Admin_UploadMng_Core');
+
+/*
+'**************************************************<
+'类型:Filter
+'名称:Filter_Plugin_Admin_TagMng_Core
+'参数:$s, $w, $or, $l, $op
+'说明:会员管理页的核心接口(1.7新加入)
+'调用:
+'**************************************************>
+ */
+DefinePluginFilter('Filter_Plugin_Admin_TagMng_Core');
+
+/*
+'**************************************************<
+'类型:Filter
 '名称:Filter_Plugin_Edit_SubMenu
 '参数:
 '说明:编辑页菜单(1.5.1加入)

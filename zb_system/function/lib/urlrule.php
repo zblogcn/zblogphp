@@ -147,7 +147,7 @@ class UrlRule
             $prefix .= '/';
         }
 
-        //魔术戏法：处理路由规则里预先指定好的"关联数据来源"的参数并先替换一次
+        //1.7的魔术戏法：处理路由规则里预先指定好的"关联数据来源"的参数并先替换一次
         $paras = self::ProcessParameters($this->GetRoute());
         foreach ($paras as $key => &$p) {
             if ($p['relate'] && is_object($this->RulesObject)) {
@@ -200,13 +200,16 @@ class UrlRule
             }
         }
 
-        //再从Rules替换一次
+        //从“Rules数组规则”再替换一次
         $this->Rules['{%host%}'] = $zbp->host . $prefix;
         foreach ($this->Rules as $key => $value) {
             if (!is_array($value)) {
                 $url = str_replace($key, $value, $url);
             }
         }
+
+        //处理没有被替换掉的{%abc%}之类的
+        $url = preg_replace('/\{%[^%]+%\}/', '', $url);
 
         //处理之前Active的过程 去掉无用的=&之类的
         if (strpos($url, '?') !== false) {
