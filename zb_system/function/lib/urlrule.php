@@ -278,7 +278,7 @@ class UrlRule
                     $newargs[] = $array;
                 } else {
                 //如果是array( array('name'=>'name4','regex'=>'regex4','relate'=>'relate4', 'alias'=>'alias4') )
-                    foreach (array($default_names as $key2 => $value2) {
+                    foreach ($default_names as $key2 => $value2) {
                         if (!array_key_exists($value2, $value)) {
                             $value[$value2] = '';
                         }
