@@ -194,7 +194,7 @@ class UrlRule
             if (array_key_exists('value', $p)) {
                 $url = str_replace('{%' . $p['name'] . '%}', $p['value'], $url);
             }
-            if ($p['relate'] && array_key_exists('relate_value', $p)) {
+            if (isset($p['relate']) && $p['relate'] && array_key_exists('relate_value', $p)) {
                 $url = str_replace('{%' . $p['name'] . '%}', $p['relate_value'], $url);
             }
         }
@@ -356,10 +356,10 @@ class UrlRule
                 $value['regex'] = '[0-9]+';
             }
             if ($value['name'] == 'alias' && $value['regex'] == '') {
-                $value['regex'] = '[^\.\/_]+?';
+                $value['regex'] = '.+';
             }
             if ($value['name'] == 'category' && $value['regex'] == '') {
-                $value['regex'] = '([^\.\/_]*\/?){1,' . self::$categoryLayer . '}';
+                $value['regex'] = '.+';
             }
             if ($value['name'] == 'author' && $value['regex'] == '') {
                 $value['regex'] = '[^\.\/_]+';
@@ -392,7 +392,7 @@ class UrlRule
     public static function OutputUrlRegEx_Route($route, $keepPage = false)
     {
         global $zbp;
-        self::$categoryLayer = $GLOBALS['zbp']->category_recursion_real_deep;
+
         $match_with_page = $keepPage;
         $useAbbr = (bool) GetValueInArray($route, 'abbr_url', false);
 
@@ -464,7 +464,7 @@ class UrlRule
         global $zbp;
 
         if (is_array($url)) {
-            return self::OutputUrlRegEx_Route($url);
+            return self::OutputUrlRegEx_Route($url, $keepPage = false);
         }
         $match_with_page = $keepPage;
 
@@ -516,42 +516,34 @@ class UrlRule
         if ($type == 'date') {
             $array[] = array('{%date%}' => '(?P<date>[0-9\-]+)');
         } elseif ($type == 'cate') {
-            $carray = array();
-            for ($i = 1; $i <= self::$categoryLayer; $i++) {
-                $carray[$i] = '[^\.\/_]*';
-                for ($j = 1; $j <= ($i - 1); $j++) {
-                    $carray[$i] = '[^\.\/_]*/' . $carray[$i];
-                }
-            }
-            $fullcategory = implode('|', $carray);
             $array[] = array('{%id%}' => '(?P<cate>[0-9]+)');
-            $array[] = array('{%alias%}' => '(?P<cate>(' . $fullcategory . ')+?)');
+            $array[] = array('{%alias%}' => '(?P<cate>.+)');
         } elseif ($type == 'tags') {
             $array[] = array('{%id%}' => '(?P<tags>[0-9]+)');
-            $array[] = array('{%alias%}' => '(?P<tags>[^\.\/_]+?)');
+            $array[] = array('{%alias%}' => '(?P<tags>[^\.\/_]+)');
         } elseif ($type == 'auth') {
             $array[] = array('{%id%}' => '(?P<auth>[0-9]+)');
-            $array[] = array('{%alias%}' => '(?P<auth>[^\.\/_]+?)');
+            $array[] = array('{%alias%}' => '(?P<auth>[^\.\/_]+)');
         } elseif (in_array($type, $post_type_name)) {
             if (strpos($url, '%id%') !== false) {
                 $array[] = array('{%id%}' => '(?P<id>[0-9]+)');
             }
             if (strpos($url, '%alias%') !== false) {
                 if ($type == 'article') {
-                    $array[] = array('{%alias%}' => '(?P<alias>[^\/]+)');
+                    $array[] = array('{%alias%}' => '(?P<alias>.+)');
                 } else {
                     $array[] = array('{%alias%}' => '(?P<alias>.+)');
                 }
             }
-            $array[] = array('{%category%}' => '(?P<category>([^\.\/_]*\/?){1,' . self::$categoryLayer . '})');
-            $array[] = array('{%author%}' => '(?P<author>[^\.\/_]+)');
+            $array[] = array('{%category%}' => '(?P<category>.+)');
+            $array[] = array('{%author%}' => '(?P<author>.+)');
             $array[] = array('{%year%}' => '(?P<year>[0-9]{4})');
             $array[] = array('{%month%}' => '(?P<month>[0-9]{1,2})');
             $array[] = array('{%day%}' => '(?P<day>[0-9]{1,2})');
         } else {
             $array[] = array('{%id%}' => '(?P<' . $type . '>[0-9]+)');
-            $array[] = array('{%alias%}' => '(?P<' . $type . '>[^\.\/_]+?)');
-            $array[] = array('{' . $type . '}' => '(?P<' . $type . '>[^\.\/_]+?)');
+            $array[] = array('{%alias%}' => '(?P<' . $type . '>.+)');
+            $array[] = array('{' . $type . '}' => '(?P<' . $type . '>.+)');
         }
  
         foreach ($array as $key => $value) {
@@ -582,7 +574,7 @@ class UrlRule
         global $zbp;
 
         if (is_array($url)) {
-            return self::OutputUrlRegEx_Route($url);
+            return self::OutputUrlRegEx_Route($url, $keepPage);
         }
 
         if (self::$categoryLayer == -1) {
@@ -649,11 +641,11 @@ class UrlRule
             }
             if ($type == 'tags') {
                    $url = str_replace('%id%', '(?P<tags>[0-9]+)', $url);
-                $url = str_replace('%alias%', '(?P<tags>[^\./_]+?)', $url);
+                $url = str_replace('%alias%', '(?P<tags>[^\./_]+)', $url);
             }
             if ($type == 'auth') {
                 $url = str_replace('%id%', '(?P<auth>[0-9]+)', $url);
-                $url = str_replace('%alias%', '(?P<auth>[^\./_]+?)', $url);
+                $url = str_replace('%alias%', '(?P<auth>[^\./_]+)', $url);
             }
         }
         if (in_array($type, $post_type_name)) {
@@ -686,7 +678,7 @@ class UrlRule
             }
             if (strpos($url, '%alias%') !== false) {
                 if ($type == 'article') {
-                    $url = str_replace('%alias%', '(?P<alias>[^/]+)', $url);
+                    $url = str_replace('%alias%', '(?P<alias>.+)', $url);
                 } else {
                     $url = str_replace('%alias%', '(?P<alias>.+)', $url);
                 }

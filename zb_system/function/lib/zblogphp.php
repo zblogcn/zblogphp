@@ -774,8 +774,8 @@ class ZBlogPHP
         $page_actions = array('new' => 'PageNew', 'edit' => 'PageEdt', 'del' => 'PageDel', 'post' => 'PagePst', 'publish' => 'PagePub', 'manage' => 'PageMng', 'all' => 'PageAll', 'view' => 'view', 'search' => 'search');
         //  自己的模板 对应分类的模板 对应Tag的模板 列表的模板(含日期列表) 搜索页的模板
         $page_templates = array('template' => $this->option['ZC_POST_DEFAULT_TEMPLATE'], 'category_template' => $this->option['ZC_INDEX_DEFAULT_TEMPLATE'], 'tag_template' => $this->option['ZC_INDEX_DEFAULT_TEMPLATE'], 'list_template' => $this->option['ZC_INDEX_DEFAULT_TEMPLATE'], 'search_template' => $this->option['ZC_SEARCH_DEFAULT_TEMPLATE']);
-        //  自身规则 列表规则 分类列表规则 Tag列表规则 作者列表规则 日期列表规则 搜索列表规则
-        $page_urlrules = array('single_urlrule' => $this->option['ZC_PAGE_REGEX'], 'list_urlrule' => $this->option['ZC_INDEX_REGEX'], 'list_category_urlrule' => $this->option['ZC_CATEGORY_REGEX'], 'list_tag_urlrule' => $this->option['ZC_TAGS_REGEX'], 'list_author_urlrule' => $this->option['ZC_AUTHOR_REGEX'], 'list_date_urlrule' => $this->option['ZC_DATE_REGEX'], 'search_urlrule' => $this->option['ZC_SEARCH_REGEX']);
+        //  自身规则 列表规则 分类列表规则 作者列表规则 日期列表规则 Tag列表规则 搜索列表规则
+        $page_urlrules = array('single_urlrule' => $this->option['ZC_PAGE_REGEX'], 'list_urlrule' => $this->option['ZC_INDEX_REGEX'], 'list_category_urlrule' => $this->option['ZC_CATEGORY_REGEX'], 'list_author_urlrule' => $this->option['ZC_AUTHOR_REGEX'], 'list_date_urlrule' => $this->option['ZC_DATE_REGEX'], 'list_tag_urlrule' => $this->option['ZC_TAGS_REGEX'], 'search_urlrule' => $this->option['ZC_SEARCH_REGEX']);
         $article_urlrules = $page_urlrules;
         $article_urlrules['single_urlrule'] = $this->option['ZC_ARTICLE_REGEX'];
 
@@ -801,12 +801,12 @@ class ZBlogPHP
         $this->RegRoute(array('type' => 'active', 'name' => 'active_post_page_single', 'call' => 'ViewPost', 'get' => array('id', 'alias'), 'not_get' => array('cate', 'auth', 'tags', 'date'), 'urlrule' => $this->GetPostType(0, 'single_urlrule'), 'args_get' => array('id', 'alias'), 'args_with' => array('posttype' => 1), 'to_permalink' => true));
         //  添加 文章cate页列表(带参数) 动态路由
         $this->RegRoute(array('type' => 'active', 'name' => 'active_post_article_list_category', 'call' => 'ViewList', 'urlrule' => $this->GetPostType(0, 'list_category_urlrule'), 'get' => array('cate'), 'not_get' => array('id', 'alias'), 'args_get' => array('page', 'cate'), 'args_with' => array()));
-        //  添加 文章tags页列表(带参数) 动态路由
-        $this->RegRoute(array('type' => 'active', 'name' => 'active_post_article_list_tag', 'call' => 'ViewList', 'urlrule' => $this->GetPostType(0, 'list_tag_urlrule'), 'get' => array('tags'), 'not_get' => array('id', 'alias'), 'args_get' => array('page', 'tags'), 'args_with' => array()));
         //  添加 文章auth页列表(带参数) 动态路由
         $this->RegRoute(array('type' => 'active', 'name' => 'active_post_article_list_author', 'call' => 'ViewList', 'urlrule' => $this->GetPostType(0, 'list_author_urlrule'), 'get' => array('auth'), 'not_get' => array('id', 'alias'), 'args_get' => array('page', 'auth'), 'args_with' => array()));
         //  添加 文章date页列表(带参数) 动态路由
         $this->RegRoute(array('type' => 'active', 'name' => 'active_post_article_list_date', 'call' => 'ViewList', 'urlrule' => $this->GetPostType(0, 'list_date_urlrule'), 'get' => array('date'), 'not_get' => array('id', 'alias'), 'args_get' => array('page', 'date'), 'args_with' => array()));
+        //  添加 文章tags页列表(带参数) 动态路由
+        $this->RegRoute(array('type' => 'active', 'name' => 'active_post_article_list_tag', 'call' => 'ViewList', 'urlrule' => $this->GetPostType(0, 'list_tag_urlrule'), 'get' => array('tags'), 'not_get' => array('id', 'alias'), 'args_get' => array('page', 'tags'), 'args_with' => array()));
 
         //给“文章类和页面类”指定routes数据
         $routes = array(
@@ -827,20 +827,20 @@ class ZBlogPHP
         // 如果 开启了伪静模式，就再注入伪静路由
         if ($this->option['ZC_STATIC_MODE'] == 'REWRITE') {
             //  添加 文章页单页 伪静路由
-            $this->RegRoute(array('type' => 'rewrite', 'name' => 'rewrite_post_article_single', 'call' => 'ViewPost', 'urlrule' => $this->GetPostType(0, 'single_urlrule'), 'args' => array('post@id', 'post@alias'), 'args_with' => array()));
+            $this->RegRoute(array('type' => 'rewrite', 'name' => 'rewrite_post_article_single', 'call' => 'ViewPost', 'urlrule' => $this->GetPostType(0, 'single_urlrule'), 'args' => array('post@id', 'post@alias' => '.+?'), 'args_with' => array()));
             //  添加 文章index列表 伪静路由
             $this->RegRoute(array('type' => 'rewrite', 'name' => 'rewrite_post_article_list_index', 'call' => 'ViewList', 'urlrule' => $this->GetPostType(0, 'list_urlrule'), 'not_get' => array('id', 'alias'), 'args' => array('page'), 'args_with' => array(), 'abbr_url' => true));
             //  添加 文章category列表 伪静路由
             $this->RegRoute(array('type' => 'rewrite', 'name' => 'rewrite_post_article_list_category', 'call' => 'ViewList', 'urlrule' => $this->GetPostType(0, 'list_category_urlrule'), 'not_get' => array('id', 'alias'), 'args' => array('cate@id', 'cate@alias', 'page'), 'args_with' => array()));
-            //  添加 文章tag列表 伪静路由
-            $this->RegRoute(array('type' => 'rewrite', 'name' => 'rewrite_post_article_list_tag', 'call' => 'ViewList', 'urlrule' => $this->GetPostType(0, 'list_tag_urlrule'), 'not_get' => array('id', 'alias'), 'args' => array('tags@id', 'tags@alias', 'page'), 'args_with' => array()));
             //  添加 文章author列表 伪静路由
             $this->RegRoute(array('type' => 'rewrite', 'name' => 'rewrite_post_article_list_author', 'call' => 'ViewList', 'urlrule' => $this->GetPostType(0, 'list_author_urlrule'), 'not_get' => array('id', 'alias'), 'args' => array('auth@id', 'auth@alias', 'page'), 'args_with' => array()));
             //  添加 文章date列表 伪静路由
             $this->RegRoute(array('type' => 'rewrite', 'name' => 'rewrite_post_article_list_date', 'call' => 'ViewList', 'urlrule' => $this->GetPostType(0, 'list_date_urlrule'), 'not_get' => array('id', 'alias'), 'args' => array('date', 'page'), 'args_with' => array()));
+            //  添加 文章tag列表 伪静路由
+            $this->RegRoute(array('type' => 'rewrite', 'name' => 'rewrite_post_article_list_tag', 'call' => 'ViewList', 'urlrule' => $this->GetPostType(0, 'list_tag_urlrule'), 'not_get' => array('id', 'alias'), 'args' => array('tags@id', 'tags@alias', 'page'), 'args_with' => array()));
 
             //  添加 页面页单页 伪静路由
-            $this->RegRoute(array('type' => 'rewrite', 'name' => 'rewrite_post_page_single', 'call' => 'ViewPost', 'prefix' => '', 'urlrule' => $this->GetPostType(1, 'single_urlrule'), 'args' => array('post@id', 'post@alias'), 'args_with' => array('posttype' => 1)));
+            $this->RegRoute(array('type' => 'rewrite', 'name' => 'rewrite_post_page_single', 'call' => 'ViewPost', 'prefix' => '', 'urlrule' => $this->GetPostType(1, 'single_urlrule'), 'args' => array('post@id', 'post@alias' => '.+?'), 'args_with' => array('posttype' => 1)));
 
             //在伪静模式下，第2次追加覆盖，给“文章类和页面类”更新routes数据
             $routes = array(
@@ -3012,6 +3012,7 @@ class ZBlogPHP
                 return $c;
             }
         }
+        return new Category;
     }
 
     /**
@@ -3034,6 +3035,7 @@ class ZBlogPHP
                 return $c;
             }
         }
+        return new Category;
     }
 
     /**
@@ -3055,6 +3057,7 @@ class ZBlogPHP
                 return $c;
             }
         }
+        return new Category;
     }
 
     /**
@@ -3166,6 +3169,45 @@ class ZBlogPHP
                     array('mem_Name', $name),
                     array('mem_Alias', $name),
                 )
+            )
+        )->limit(1)->sql;
+
+        /** @var Member[] $am */
+        $am = $this->GetListType('Member', $sql);
+        if (count($am) > 0) {
+            $m = $am[0];
+
+            return $m;
+        }
+
+        return new Member();
+    }
+
+    /**
+     * 通过获取用户的别名的实例(不区分大小写).
+     *
+     * @param string $name
+     *
+     * @return Member|Base
+     */
+    public function GetMemberByAlias($name)
+    {
+        $name = trim($name);
+        if (!$name || !(CheckRegExp($name, '[nickname]'))) {
+            return new Member();
+        }
+
+        foreach ($this->members as $key => &$value) {
+            if (strcasecmp($value->Alias, $name) == 0) {
+                return $value;
+            }
+        }
+
+        $like = ($this->db->type == 'pgsql') ? 'ILIKE' : 'LIKE';
+
+        $sql = $this->db->sql->get()->select($this->table['Member'])->where(
+            array(
+                array('=', 'mem_Alias', $name)
             )
         )->limit(1)->sql;
 
@@ -3876,9 +3918,9 @@ class ZBlogPHP
         $urs['single_urlrule'] = $this->option['ZC_PAGE_REGEX'];
         $urs['list_urlrule'] = $this->option['ZC_INDEX_REGEX'];
         $urs['list_category_urlrule'] = $this->option['ZC_CATEGORY_REGEX'];
-        $urs['list_tag_urlrule'] = $this->option['ZC_TAGS_REGEX'];
         $urs['list_author_urlrule'] = $this->option['ZC_AUTHOR_REGEX'];
         $urs['list_date_urlrule'] = $this->option['ZC_DATE_REGEX'];
+        $urs['list_tag_urlrule'] = $this->option['ZC_TAGS_REGEX'];
         $urs['search_urlrule'] = $this->option['ZC_SEARCH_REGEX'];
         if (!is_array($urlRule)) {
             if ($urlRule != '') {
@@ -3989,12 +4031,6 @@ class ZBlogPHP
             }
 
             return $this->option['ZC_CATEGORY_REGEX'];
-        } elseif ('list_tag_urlrule' == $key) {
-            if (isset($this->posttype[$typeid]['list_tag_urlrule'])) {
-                return $this->posttype[$typeid]['list_tag_urlrule'];
-            }
-
-            return $this->option['ZC_TAGS_REGEX'];
         } elseif ('list_author_urlrule' == $key) {
             if (isset($this->posttype[$typeid]['list_author_urlrule'])) {
                 return $this->posttype[$typeid]['list_author_urlrule'];
@@ -4007,6 +4043,12 @@ class ZBlogPHP
             }
 
             return $this->option['ZC_DATE_REGEX'];
+        } elseif ('list_tag_urlrule' == $key) {
+            if (isset($this->posttype[$typeid]['list_tag_urlrule'])) {
+                return $this->posttype[$typeid]['list_tag_urlrule'];
+            }
+
+            return $this->option['ZC_TAGS_REGEX'];
         } elseif ('search_urlrule' == $key) {
             if (isset($this->posttype[$typeid]['search_urlrule'])) {
                 return $this->posttype[$typeid]['search_urlrule'];

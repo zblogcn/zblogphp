@@ -421,20 +421,10 @@ function Admin_CategoryMng()
 
     echo '<table border="1" class="tableFull tableBorder tableBorder-thcenter table_hover table_striped">';
 
-    $tables = '';
-    $tableths = array();
-    $tableths[] = '<tr>';
-    $tableths[] = '<th>' . $zbp->lang['msg']['id'] . '</th>';
-    $tableths[] = '<th>' . $zbp->lang['msg']['order'] . '</th>';
-    $tableths[] = '<th>' . $zbp->lang['msg']['name'] . '</th>';
-    $tableths[] = '<th>' . $zbp->lang['msg']['alias'] . '</th>';
-    $tableths[] = '<th>' . $zbp->lang['msg']['post_count'] . '</th>';
-    $tableths[] = '<th></th>';
-    $tableths[] = '</tr>';
-
     $search = GetVars('search');
+    $order_get = GetVars('order', 'GET');
 
-    $p = new Pagebar('{%host%}zb_system/cmd.php?act=CategoryMng{&type=%type%}{&search=%search%}{&page=%page%}', false);
+    $p = new Pagebar('{%host%}zb_system/cmd.php?act=CategoryMng{&type=%type%}{&search=%search%}{&order=%order%}{&page=%page%}', false);
     $p->PageCount = $zbp->managecount;
     $p->PageNow = (int) GetVars('page', 'GET') == 0 ? 1 : (int) GetVars('page', 'GET');
     $p->PageBarCount = $zbp->pagebarcount;
@@ -449,7 +439,26 @@ function Admin_CategoryMng()
     }
 
     $s = '';
-    $or = array('cate_ID' => 'ASC');
+    if ($order_get == 'id_desc') {
+        $or = array('cate_ID' => 'DESC');
+    } elseif ($order_get == 'id_asc') {
+        $or = array('cate_ID' => 'ASC');
+    } elseif ($order_get == 'order_desc') {
+        $or = array('cate_Order' => 'DESC');
+    } elseif ($order_get == 'order_asc') {
+        $or = array('cate_Order' => 'ASC');
+    } elseif ($order_get == 'name_desc') {
+        $or = array('cate_Name' => 'DESC');
+    } elseif ($order_get == 'name_asc') {
+        $or = array('cate_Name' => 'ASC');
+    } elseif ($order_get == 'alias_desc') {
+        $or = array('cate_Alias' => 'DESC');
+    } elseif ($order_get == 'alias_asc') {
+        $or = array('cate_Alias' => 'ASC');
+    } else {
+        $or = array('cate_ID' => 'ASC');
+    }
+    
     $l = array(($p->PageNow - 1) * $p->PageCount, $p->PageCount);
     $op = array('pagebar' => $p);
 
@@ -468,6 +477,21 @@ function Admin_CategoryMng()
 
     //Array_Isset($zbp->categoriesbyorder_type, $posttype, array());
     //$array = $zbp->categoriesbyorder_type[$posttype];
+    list($button_id_html) = MakeOrderButton('id', $p->UrlRule, $order_get);
+    list($button_order_html) = MakeOrderButton('order', $p->UrlRule, $order_get);
+    list($button_name_html) = MakeOrderButton('name', $p->UrlRule, $order_get);
+    list($button_alias_html) = MakeOrderButton('alias', $p->UrlRule, $order_get);
+
+    $tables = '';
+    $tableths = array();
+    $tableths[] = '<tr>';
+    $tableths[] = '<th>' . $zbp->lang['msg']['id'] . $button_id_html . '</th>';
+    $tableths[] = '<th>' . $zbp->lang['msg']['order'] . $button_order_html . '</th>';
+    $tableths[] = '<th>' . $zbp->lang['msg']['name'] . $button_name_html . '</th>';
+    $tableths[] = '<th>' . $zbp->lang['msg']['alias'] . $button_alias_html . '</th>';
+    $tableths[] = '<th>' . $zbp->lang['msg']['post_count'] . '</th>';
+    $tableths[] = '<th></th>';
+    $tableths[] = '</tr>';
 
     foreach ($array as $category) {
         $tabletds = array(); //table string
@@ -506,6 +530,7 @@ function Admin_CategoryMng()
     echo '</p></div>';
     echo '<script>ActiveLeftMenu("aCategoryMng");</script>';
     echo '<script>AddHeaderFontIcon("icon-folder-fill");</script>';
+    echo '<script>$(\'a.order_button\').parent().bind(\'mouseenter mouseleave\', function() {$(this).find(\'a.order_button\').toggleClass(\'element-visibility-hidden\');});</script>';
 }
 
 //###############################################################################################################
@@ -717,6 +742,18 @@ function Admin_MemberMng()
         $or = array('mem_ID' => 'DESC');
     } elseif ($order_get == 'id_asc') {
         $or = array('mem_ID' => 'ASC');
+    } elseif ($order_get == 'level_desc') {
+        $or = array('mem_Level' => 'DESC');
+    } elseif ($order_get == 'level_asc') {
+        $or = array('mem_Level' => 'ASC');
+    } elseif ($order_get == 'name_desc') {
+        $or = array('mem_Name' => 'DESC');
+    } elseif ($order_get == 'name_asc') {
+        $or = array('mem_Name' => 'ASC');
+    } elseif ($order_get == 'alias_desc') {
+        $or = array('mem_Alias' => 'DESC');
+    } elseif ($order_get == 'alias_asc') {
+        $or = array('mem_Alias' => 'ASC');
     } else {
         $or = array('mem_ID' => 'ASC');
     }
@@ -737,15 +774,18 @@ function Admin_MemberMng()
     );
 
     list($button_id_html) = MakeOrderButton('id', $p->UrlRule, $order_get);
+    list($button_level_html) = MakeOrderButton('level', $p->UrlRule, $order_get);
+    list($button_name_html) = MakeOrderButton('name', $p->UrlRule, $order_get);
+    list($button_alias_html) = MakeOrderButton('alias', $p->UrlRule, $order_get);
 
     echo '<table border="1" class="tableFull tableBorder tableBorder-thcenter table_hover table_striped">';
     $tables = '';
     $tableths = array();
     $tableths[] = '<tr>';
     $tableths[] = '<th>' . $zbp->lang['msg']['id'] . $button_id_html . '</th>';
-    $tableths[] = '<th>' . $zbp->lang['msg']['member_level'] . '</th>';
-    $tableths[] = '<th>' . $zbp->lang['msg']['name'] . '</th>';
-    $tableths[] = '<th>' . $zbp->lang['msg']['alias'] . '</th>';
+    $tableths[] = '<th>' . $zbp->lang['msg']['member_level'] . $button_level_html . '</th>';
+    $tableths[] = '<th>' . $zbp->lang['msg']['name'] . $button_name_html . '</th>';
+    $tableths[] = '<th>' . $zbp->lang['msg']['alias'] . $button_alias_html . '</th>';
     $tableths[] = '<th>' . $zbp->lang['msg']['all_artiles'] . '</th>';
     $tableths[] = '<th>' . $zbp->lang['msg']['all_pages'] . '</th>';
     $tableths[] = '<th>' . $zbp->lang['msg']['all_comments'] . '</th>';
@@ -919,7 +959,7 @@ function Admin_TagMng()
     <input name="search" style="width:250px;" type="text" value="" /> &nbsp;&nbsp;&nbsp;&nbsp;<input type="submit" class="button" value="' . $zbp->lang['msg']['submit'] . '"/></p>';
     echo '</form>';
 
-    $p = new Pagebar('{%host%}zb_system/cmd.php?act=TagMng{&type=%type%}{&search=%search%}{&page=%page%}', false);
+    $p = new Pagebar('{%host%}zb_system/cmd.php?act=TagMng{&type=%type%}{&search=%search%}{&order=%order%}{&page=%page%}', false);
     $p->PageCount = $zbp->managecount;
     $p->PageNow = (int) GetVars('page', 'GET') == 0 ? 1 : (int) GetVars('page', 'GET');
     $p->PageBarCount = $zbp->pagebarcount;
@@ -928,6 +968,7 @@ function Admin_TagMng()
     }
 
     $search = GetVars('search');
+    $order_get = GetVars('order', 'GET');
 
     $p->UrlRule->Rules['{%search%}'] = rawurlencode($search);
     $p->UrlRule->Rules['{%type%}'] = GetVars('type', 'GET');
@@ -940,7 +981,22 @@ function Admin_TagMng()
 
 
     $s = '';
-    $or = array('tag_ID' => 'ASC');
+    if ($order_get == 'id_desc') {
+        $or = array('tag_ID' => 'DESC');
+    } elseif ($order_get == 'id_asc') {
+        $or = array('tag_ID' => 'ASC');
+    } elseif ($order_get == 'name_desc') {
+        $or = array('tag_Name' => 'DESC');
+    } elseif ($order_get == 'name_asc') {
+        $or = array('tag_Name' => 'ASC');
+    } elseif ($order_get == 'alias_desc') {
+        $or = array('tag_Alias' => 'DESC');
+    } elseif ($order_get == 'alias_asc') {
+        $or = array('tag_Alias' => 'ASC');
+    } else {
+        $or = array('tag_ID' => 'ASC');
+    }
+
     $l = array(($p->PageNow - 1) * $p->PageCount, $p->PageCount);
     $op = array('pagebar' => $p);
 
@@ -951,13 +1007,17 @@ function Admin_TagMng()
 
     $array = $zbp->GetTagList($s, $w, $or, $l, $op);
 
+    list($button_id_html) = MakeOrderButton('id', $p->UrlRule, $order_get);
+    list($button_name_html) = MakeOrderButton('name', $p->UrlRule, $order_get);
+    list($button_alias_html) = MakeOrderButton('alias', $p->UrlRule, $order_get);
+
     echo '<table border="1" class="tableFull tableBorder tableBorder-thcenter table_hover table_striped">';
     $tables = '';
     $tableths = array();
     $tableths[] = '<tr>';
-    $tableths[] = '<th>' . $zbp->lang['msg']['id'] . '</th>';
-    $tableths[] = '<th>' . $zbp->lang['msg']['name'] . '</th>';
-    $tableths[] = '<th>' . $zbp->lang['msg']['alias'] . '</th>';
+    $tableths[] = '<th>' . $zbp->lang['msg']['id'] . $button_id_html . '</th>';
+    $tableths[] = '<th>' . $zbp->lang['msg']['name'] . $button_name_html . '</th>';
+    $tableths[] = '<th>' . $zbp->lang['msg']['alias'] . $button_alias_html . '</th>';
     $tableths[] = '<th>' . $zbp->lang['msg']['post_count'] . '</th>';
     $tableths[] = '<th></th>';
     $tableths[] = '</tr>';
@@ -999,6 +1059,7 @@ function Admin_TagMng()
 
     echo '<script>ActiveLeftMenu("aTagMng");</script>';
     echo '<script>AddHeaderFontIcon("icon-tags-fill");</script>';
+    echo '<script>$(\'a.order_button\').parent().bind(\'mouseenter mouseleave\', function() {$(this).find(\'a.order_button\').toggleClass(\'element-visibility-hidden\');});</script>';
 }
 
 //###############################################################################################################

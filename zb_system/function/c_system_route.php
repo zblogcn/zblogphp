@@ -247,7 +247,7 @@ function ViewAuto_Get_Parameters_And_Match_with_page($route, &$parameters, &$mat
         $parameters = array();
     }
 
-    $match_with_page = array('remove_page' => false);
+    $match_with_page = array('keep_page' => true, 'remove_page' => false);
     $haspage = false;
     foreach ($parameters as $key => $value) {
         if ($value['name'] == 'page') {
@@ -262,8 +262,6 @@ function ViewAuto_Get_Parameters_And_Match_with_page($route, &$parameters, &$mat
     if ($only_match_page == true) {
         unset($match_with_page['remove_page']);
     }
-
-    $match_with_page['keep_page'] = true;
 }
 
 /**
@@ -806,6 +804,9 @@ function ViewList($page = null, $cate = null, $auth = null, $date = null, $tags 
                 $category = $zbp->GetCategoryByID($cate['id']);
             } else {
                 $category = $zbp->GetCategoryByAlias($cate['alias'], $posttype);
+                if ($category->ID == '') {
+                    $category = $zbp->GetCategoryByAliasOrName($cate['alias'], $posttype);
+                }
             }
 
             if ($category->ID == '') {

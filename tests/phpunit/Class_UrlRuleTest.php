@@ -12,7 +12,7 @@ class Class_UrlRuleTest extends PHPUnit\Framework\TestCase
     {
         UrlRule::$categoryLayer = 4;
         $s = '{%host%}{%category%}/{%alias%}.html';
-        $s0 = '/(?J)^(?P<category>([^\.\/_]*\/?){1,4})\/(?P<alias>[^\/]+)\.html$/';
+        $s0 = '/(?J)^(?P<category>.+)\/(?P<alias>.+)\.html$/';
         $s1 = UrlRule::OutputUrlRegEx_V2($s, 'article', true, false);
         $s2 = UrlRule::OutputUrlRegEx($s, 'article', true, false);
         $this->assertEquals($s0, $s1);
@@ -46,13 +46,14 @@ class Class_UrlRuleTest extends PHPUnit\Framework\TestCase
         $this->assertEquals($s0, $s2);
 
         UrlRule::$categoryLayer = 4;
-        $s = '{%host%}page_{%page%}.html';
-        $s0 = '/(?J)^page_(?P<page>[0-9]+)\.html$/';
-        $s1 = UrlRule::OutputUrlRegEx_V2($s, 'list', true, false);
-        $s2 = UrlRule::OutputUrlRegEx($s, 'list', true);
+        $s = '{%host%}category/{%alias%}_page_{%page%}.html';
+        $s0 = '/(?J)^category\/(?P<cate>.+)_page_(?P<page>[0-9]+)\.html$/';
+        $s1 = UrlRule::OutputUrlRegEx_V2($s, 'cate', true, false);
         $this->assertEquals($s0, $s1);
-        $s0 = '/(?J)^page_(?P<page>[0-9]*)\.html$/';
-        $this->assertEquals($s0, $s2);
+
+        $s00 = '/(?J)^category\/(?P<cate>([^\.\/_]*|[^\.\/_]*\/[^\.\/_]*|[^\.\/_]*\/[^\.\/_]*\/[^\.\/_]*|[^\.\/_]*\/[^\.\/_]*\/[^\.\/_]*\/[^\.\/_]*)+?)(?:_page_)(?P<page>[0-9]*)\.html$/';
+        $s2 = UrlRule::OutputUrlRegEx($s, 'cate', true);
+        $this->assertEquals($s00, $s2);
 
         UrlRule::$categoryLayer = 4;
         $s = '{%host%}page_{%page%}.html';
@@ -61,6 +62,44 @@ class Class_UrlRuleTest extends PHPUnit\Framework\TestCase
         $this->assertEquals($s0, $s1);
 
     }
+
+    public function testRewrite3()
+    {
+        UrlRule::$categoryLayer = 4;
+        $s = '{%host%}tags/{%alias%}/{%page%}.html';
+        $s0 = '/(?J)^tags\/(?P<tags>[^\.\/_]+)\/(?P<page>[0-9]+)\.html$/';
+        $s1 = UrlRule::OutputUrlRegEx_V2($s, 'tags', true, false);
+        $this->assertEquals($s0, $s1);
+
+        $s00 = '/(?J)^tags\/(?P<tags>[^\.\/_]+)(?:\/)(?P<page>[0-9]*)\.html$/';
+        $s2 = UrlRule::OutputUrlRegEx($s, 'tags', true, false);
+        $this->assertEquals($s00, $s2);
+    }
+
+    public function testRewrite4()
+    {
+        UrlRule::$categoryLayer = 4;
+        $s = '{%host%}tags/{%alias%}/{%page%}.html';
+        $s0 = '/(?J)^tags\/(?P<tags>[^\.\/_]+)\.html$/';
+        $s1 = UrlRule::OutputUrlRegEx_V2($s, 'tags', false, false);
+        $this->assertEquals($s0, $s1);
+
+        $s00 = '/(?J)^tags\/(?P<tags>[^\.\/_]+)\.html$/';
+        $s2 = UrlRule::OutputUrlRegEx($s, 'tags', false, false);
+        $this->assertEquals($s00, $s2);
+    }
+
+    public function testRewrite5()
+    {
+        UrlRule::$categoryLayer = 4;
+        $route = array('type' => 'rewrite', 'name' => 'ddd', 'urlrule'=>'{%host%}tags/{%alias%}/{%page%}.html', 'args' => array('tags@id', 'tags@alias'=>'.+', 'page'));
+
+        $s0 = '/(?J)^tags\/(?P<alias>.+)\/(?P<page>[0-9]+)\.html$/';
+        $s1 = UrlRule::OutputUrlRegEx_Route($route, true, false);
+        $this->assertEquals($s0, $s1);
+
+    }
+
 
     public function testActive_new()
     {
