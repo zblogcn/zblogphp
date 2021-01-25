@@ -773,10 +773,6 @@ function ViewList($page = null, $cate = null, $auth = null, $date = null, $tags 
     $articles = array();
     $articles_top = array();
 
-    $article_class = $zbp->GetPostType($posttype, 'classname');
-    $article = new $article_class;
-    unset($article_class);
-
     switch ($type) {
             //#######################################################################################################
         case 'index':
@@ -842,7 +838,7 @@ function ViewList($page = null, $cate = null, $auth = null, $date = null, $tags 
 
             $pagebar->UrlRule->Rules['{%id%}'] = $category->ID;
             $pagebar->UrlRule->Rules['{%alias%}'] = $category->Alias == '' ? rawurlencode($category->Name) : $category->Alias;
-            $article->CateID = $category->ID;
+            $pagebar->UrlRule->RulesObject = $category;
             break;
             //#######################################################################################################
         case 'author':
@@ -884,7 +880,7 @@ function ViewList($page = null, $cate = null, $auth = null, $date = null, $tags 
             //$pagebar->Count = $author->Articles;
             $pagebar->UrlRule->Rules['{%id%}'] = $author->ID;
             $pagebar->UrlRule->Rules['{%alias%}'] = $author->Alias == '' ? rawurlencode($author->Name) : $author->Alias;
-            $article->AuthorID = $author->ID;
+            $pagebar->UrlRule->RulesObject = $author;
             break;
             //#######################################################################################################
         case 'date':
@@ -932,7 +928,7 @@ function ViewList($page = null, $cate = null, $auth = null, $date = null, $tags 
                 $pagebar->UrlRule->Rules['{%date%}'] = date('Y-n', $datetime);
             }
 
-            $article->PostTime = $datetime;
+            $pagebar->UrlRule->RulesObject = new ZbpDate($datetime);
             $datetime = Metas::ConvertArray(getdate($datetime));
             break;
             //#######################################################################################################
@@ -974,7 +970,7 @@ function ViewList($page = null, $cate = null, $auth = null, $date = null, $tags 
             $w[] = array('LIKE', 'log_Tag', '%{' . $tag->ID . '}%');
             $pagebar->UrlRule->Rules['{%id%}'] = $tag->ID;
             $pagebar->UrlRule->Rules['{%alias%}'] = $tag->Alias == '' ? rawurlencode($tag->Name) : $tag->Alias;
-            $article->Tag = '{' . $tag->ID . '}';
+            $pagebar->UrlRule->RulesObject = $tag;
             break;
         default:
             throw new Exception('Unknown type');
@@ -984,7 +980,6 @@ function ViewList($page = null, $cate = null, $auth = null, $date = null, $tags 
     $pagebar->PageNow = $page;
     $pagebar->PageBarCount = $zbp->pagebarcount;
     $pagebar->UrlRule->Rules['{%page%}'] = $page;
-    $pagebar->UrlRule->RulesObject = &$article;
 
     foreach ($GLOBALS['hooks']['Filter_Plugin_ViewList_Core'] as $fpname => &$fpsignal) {
         $fpname($type, $page, $category, $author, $datetime, $tag, $w, $pagebar, $template);

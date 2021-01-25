@@ -50,13 +50,13 @@ class UrlRule
         }
         if (is_array($url)) {
             $this->Route = $url;
-            if (isset($url['urlrule_regex']) && $url['urlrule_regex'] != '') {
-                $this->PreUrl = $url['urlrule_regex'];
-            } else {
-                if (isset($url['urlrule'])) {
-                    $this->PreUrl = $url['urlrule'];
-                }
+            //if (isset($url['urlrule_regex']) && $url['urlrule_regex'] != '') {
+            //    $this->PreUrl = $url['urlrule_regex'];
+            //} else {
+            if (isset($url['urlrule'])) {
+                $this->PreUrl = $url['urlrule'];
             }
+            //}
         } else {
             $this->PreUrl = $url;
         }
@@ -111,6 +111,7 @@ class UrlRule
             $url = str_ireplace('=%', '={%', $url);
         }
 
+        //如果没有page页，就删除{%page%}
         if ($this->Rules['{%page%}'] == '' && strpos($url, '{%page%}') !== false) {
             if (stripos($url, '_{%page%}') !== false) {
                 $url = str_replace('_{%page%}', '{%page%}', $url);
@@ -137,14 +138,8 @@ class UrlRule
                     $url = substr($url, 0, ($i + 1));
                 }
             }
-
             $url = str_replace('{%page%}', '', $url);
-        }
-        $url = str_replace('{%host%}/', '{%host%}', $url);
-
-        $prefix = GetValueInArray($this->GetRoute(), 'prefix', '');
-        if ($prefix != '') {
-            $prefix .= '/';
+            $url = str_replace('{%host%}/', '{%host%}', $url);
         }
 
         //1.7的魔术戏法：处理路由规则里预先指定好的"关联数据来源"的参数并先替换一次
@@ -198,10 +193,16 @@ class UrlRule
             if ($p['relate'] && array_key_exists('relate_value', $p)) {
                 $url = str_replace('{%' . $p['name'] . '%}', $p['relate_value'], $url);
             }
+            if (array_key_exists('value', $p)) {
+                $url = str_replace('{%' . $p['name'] . '%}', $p['value'], $url);
+            }
         }
 
         //从“Rules数组规则”再替换一次
+        $prefix = GetValueInArray($this->GetRoute(), 'prefix', '');
+        $prefix = ($prefix != '') ? ($prefix . '/') : $prefix;
         $this->Rules['{%host%}'] = $zbp->host . $prefix;
+
         foreach ($this->Rules as $key => $value) {
             if (!is_array($value)) {
                 $url = str_replace($key, $value, $url);
@@ -221,9 +222,6 @@ class UrlRule
         }
 
         //处理尾巴上的//或是&
-        if (substr($this->GetPreUrl(), -1) != '/' && substr($url, -1) == '/') {
-            $url = substr($url, 0, (strlen($url) - 1));
-        }
         if (substr($url, -2) == '//') {
             $url = substr($url, 0, (strlen($url) - 1));
         }
@@ -272,6 +270,11 @@ class UrlRule
                 } else {
                 //如果是array( array('name'=>'name4','regex'=>'regex4','relate'=>'relate4', 'alias'=>'alias4') )
                     $newargs[] = array('name' => $value['name'], 'regex' => $value['regex'], 'alias' => $value['alias'], 'relate' => $value['relate']);
+                    foreach ($value as $key => $value) {
+                        if (!in_array($key, array('name', 'regex', 'alias', 'relate'))) {
+                            $newargs[$key] = $value;
+                        }
+                    }
                 }
             } else {
                 if (is_integer($key)) {
