@@ -190,11 +190,12 @@ class UrlRule
             }
         }
         foreach ($paras as $key => $p) {
-            if ($p['relate'] && array_key_exists('relate_value', $p)) {
-                $url = str_replace('{%' . $p['name'] . '%}', $p['relate_value'], $url);
-            }
+            //首先替换人为指定value的
             if (array_key_exists('value', $p)) {
                 $url = str_replace('{%' . $p['name'] . '%}', $p['value'], $url);
+            }
+            if ($p['relate'] && array_key_exists('relate_value', $p)) {
+                $url = str_replace('{%' . $p['name'] . '%}', $p['relate_value'], $url);
             }
         }
 
@@ -249,32 +250,40 @@ class UrlRule
             $parameters = array();
         }
         $args = $parameters;
+        $default_names = array('name', 'regex', 'alias', 'relate');
 
         //从$route的args项中读取各种花式设置方法设置的参数
         foreach ($args as $key => $value) {
             if (is_array($value)) {
                 //如果是array( array('name3','regex3','relate3','alias3') )
                 if (is_int(key($value))) {
-                    if (count($value) == 1) {
-                        $newargs[] = array('name' => $value[0], 'regex' => '', 'alias' => '', 'relate' => '');
+                    $array = array();
+                    if (count($value) <= 1) {
+                        $array['name'] = $value[0];
                     }
-                    if (count($value) == 2) {
-                        $newargs[] = array('name' => $value[0], 'regex' => $value[1], 'alias' => '', 'relate' => '');
+                    if (count($value) <= 2) {
+                        $array['regex'] = $value[1];
                     }
-                    if (count($value) == 3) {
-                        $newargs[] = array('name' => $value[0], 'regex' => $value[1], 'alias' => $value[2], 'relate' => '');
+                    if (count($value) <= 3) {
+                        $array['alias'] = $value[2];
                     }
-                    if (count($value) == 4) {
-                        $newargs[] = array('name' => $value[0], 'regex' => $value[1], 'alias' => $value[2], 'relate' => $value[3]);
+                    if (count($value) <= 4) {
+                        $array['relate'] = $value[3];
                     }
-                } else {
-                //如果是array( array('name'=>'name4','regex'=>'regex4','relate'=>'relate4', 'alias'=>'alias4') )
-                    $newargs[] = array('name' => $value['name'], 'regex' => $value['regex'], 'alias' => $value['alias'], 'relate' => $value['relate']);
-                    foreach ($value as $key => $value) {
-                        if (!in_array($key, array('name', 'regex', 'alias', 'relate'))) {
-                            $newargs[$key] = $value;
+                    foreach ($default_names as $key2 => $value2) {
+                        if (!array_key_exists($value2, $array)) {
+                            $array[$value2] = '';
                         }
                     }
+                    $newargs[] = $array;
+                } else {
+                //如果是array( array('name'=>'name4','regex'=>'regex4','relate'=>'relate4', 'alias'=>'alias4') )
+                    foreach (array($default_names as $key2 => $value2) {
+                        if (!array_key_exists($value2, $value)) {
+                            $value[$value2] = '';
+                        }
+                    }
+                    $newargs[] = $value;
                 }
             } else {
                 if (is_integer($key)) {
