@@ -893,19 +893,37 @@ function ViewList($page = null, $cate = null, $auth = null, $date = null, $tags 
                 $datetime = $date['date'];
             }
 
-            $dateregex_ymd = '/[0-9]{1,4}-[0-9]{1,2}-[0-9]{1,2}/i';
-            $dateregex_ym = '/[0-9]{1,4}-[0-9]{1,2}/i';
+            $hasDay = false;
 
-            if (preg_match($dateregex_ymd, $datetime) == 0 && preg_match($dateregex_ym, $datetime) == 0) {
-                return false;
-            }
             $datetime_txt = $datetime;
-            $datetime = strtotime($datetime);
-            if ($datetime == false) {
+            if (function_exists('date_create_from_format')) {
+                $objdate = date_create_from_format($zbp->option['ZC_DATETIME_WITHDAY_RULE'], $datetime_txt);
+                if ($objdate !== false) {
+                    $datetime = strtotime($objdate->format('Y-n-j'));
+                    $hasDay = true;
+                } else {
+                    $objdate = date_create_from_format($zbp->option['ZC_DATETIME_RULE'], $datetime_txt);
+                    if ($objdate !== false) {
+                        $datetime = strtotime($objdate->format('Y-n'));
+                    }
+                }
+                if ($objdate === false) {
+                    return false;
+                }
+            } else {
+                $datetime_txt = str_replace($zbp->option['ZC_DATETIME_SEPARATOR'], '-', $datetime_txt);
+                if (substr_count($datetime_txt, '-') > 1) {
+                    $hasDay = true;
+                }
+                if (strtotime($datetime_txt) !== false) {
+                    $datetime = strtotime($datetime_txt);
+                }
+            }
+            if (!is_int($datetime)) {
                 return false;
             }
 
-            if (preg_match($dateregex_ymd, $datetime_txt) != 0 && isset($zbp->lang['msg']['year_month_day'])) {
+            if ($hasDay) {
                 $datetitle = str_replace(array('%y%', '%m%', '%d%'), array(date('Y', $datetime), date('n', $datetime), date('j', $datetime)), $zbp->lang['msg']['year_month_day']);
             } else {
                 $datetitle = str_replace(array('%y%', '%m%'), array(date('Y', $datetime), date('n', $datetime)), $zbp->lang['msg']['year_month']);
@@ -921,12 +939,12 @@ function ViewList($page = null, $cate = null, $auth = null, $date = null, $tags 
 
             $template = $zbp->GetPostType($posttype, 'list_template');
 
-            if (preg_match($dateregex_ymd, $datetime_txt) != 0) {
+            if ($hasDay) {
                 $w[] = array('BETWEEN', 'log_PostTime', $datetime, strtotime('+1 day', $datetime));
-                $pagebar->UrlRule->Rules['{%date%}'] = date('Y-n-j', $datetime);
+                $pagebar->UrlRule->Rules['{%date%}'] = date($zbp->option['ZC_DATETIME_WITHDAY_RULE'], $datetime);
             } else {
                 $w[] = array('BETWEEN', 'log_PostTime', $datetime, strtotime('+1 month', $datetime));
-                $pagebar->UrlRule->Rules['{%date%}'] = date('Y-n', $datetime);
+                $pagebar->UrlRule->Rules['{%date%}'] = date($zbp->option['ZC_DATETIME_RULE'], $datetime);
             }
 
             $pagebar->UrlRule->RulesObject = new ZbpDate($datetime);

@@ -176,6 +176,10 @@ return array(
 
     'ZC_ALIAS_BACK_ATTR' => 'Name',
 
+    'ZC_DATETIME_SEPARATOR' => '-',
+    'ZC_DATETIME_RULE' => 'Y-n',
+    'ZC_DATETIME_WITHDAY_RULE' => 'Y-n-j',
+
     'ZC_SEARCH_COUNT' => 20,
     'ZC_SEARCH_REGEX' => '{%host%}search.php?q={%q%}&page={%page%}',
 

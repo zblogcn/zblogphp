@@ -121,7 +121,7 @@ class ModuleBuilder
         $vdate = new ZbpDate($value);
         $tags['prevMonth'] = date('n', $value);
         $tags['prevYear'] = date('Y', $value);
-        $url->Rules['{%date%}'] = $tags['prevYear'] . '-' . $tags['prevMonth'];
+        $url->Rules['{%date%}'] = date($zbp->option['ZC_DATETIME_RULE'], $value);
         $url->Rules['{%year%}'] = $tags['prevYear'];
         $url->Rules['{%month%}'] = $tags['prevMonth'];
         $url->RulesObject = $vdate;
@@ -131,7 +131,7 @@ class ModuleBuilder
         $vdate = new ZbpDate($value);
         $tags['nowMonth'] = date('n', $value);
         $tags['nowYear'] = date('Y', $value);
-        $url->Rules['{%date%}'] = $tags['nowYear'] . '-' . $tags['nowMonth'];
+        $url->Rules['{%date%}'] = date($zbp->option['ZC_DATETIME_RULE'], $value);
         $url->Rules['{%year%}'] = $tags['nowYear'];
         $url->Rules['{%month%}'] = $tags['nowMonth'];
         $url->RulesObject = $vdate;
@@ -141,7 +141,7 @@ class ModuleBuilder
         $vdate = new ZbpDate($value);
         $tags['nextMonth'] = date('n', $value);
         $tags['nextYear'] = date('Y', $value);
-        $url->Rules['{%date%}'] = $tags['nextYear'] . '-' . $tags['nextMonth'];
+        $url->Rules['{%date%}'] = date($zbp->option['ZC_DATETIME_RULE'], $value);
         $url->Rules['{%year%}'] = $tags['nextYear'];
         $url->Rules['{%month%}'] = $tags['nextMonth'];
         $url->RulesObject = $vdate;
@@ -168,7 +168,7 @@ class ModuleBuilder
             if (!isset($arraydate[$key])) {
                 $fullDate = $tags['nowYear'] . '-' . $tags['nowMonth'] . '-' . $key;
                 $vdate = new ZbpDate(strtotime($fullDate));
-                $url->Rules['{%date%}'] = $fullDate;
+                $url->Rules['{%date%}'] = date($zbp->option['ZC_DATETIME_WITHDAY_RULE'], strtotime($fullDate));
                 $url->Rules['{%year%}'] = $tags['nowYear'];
                 $url->Rules['{%month%}'] = $tags['nowMonth'];
                 $url->Rules['{%day%}'] = $key;
@@ -314,7 +314,7 @@ class ModuleBuilder
             } else {
                 $url = new UrlRule($zbp->GetPostType(0, 'list_date_urlrule'));
             }
-            $url->Rules['{%date%}'] = date('Y-n', $value);
+            $url->Rules['{%date%}'] = date($zbp->option['ZC_DATETIME_RULE'], $value);
             $url->Rules['{%year%}'] = date('Y', $value);
             $url->Rules['{%month%}'] = date('n', $value);
             $url->Rules['{%day%}'] = 1;

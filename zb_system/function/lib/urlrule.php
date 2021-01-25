@@ -377,7 +377,10 @@ class UrlRule
                 $value['regex'] = '[0-9]+';
             }
             if ($value['name'] == 'date' && $value['regex'] == '') {
-                $value['regex'] = '[0-9\-]+';
+                $separator = $GLOBALS['option']['ZC_DATETIME_SEPARATOR'];
+                $separator = str_replace('/', '\/', $separator);
+                $separator = str_replace('-', '\-', $separator);
+                $value['regex'] = '[0-9' . $separator . ']+';
             }
         }
         return $newargs;
