@@ -306,6 +306,10 @@ function Admin_PageMng()
         $or = array('log_ID' => 'DESC');
     } elseif ($order_get == 'id_asc') {
         $or = array('log_ID' => 'ASC');
+    } elseif ($order_get == 'posttime_desc') {
+        $or = array('log_PostTime' => 'DESC');
+    } elseif ($order_get == 'posttime_asc') {
+        $or = array('log_PostTime' => 'ASC');
     } else {
         $or = array('log_PostTime' => 'DESC');
     }
@@ -333,6 +337,7 @@ function Admin_PageMng()
     echo '<table border="1" class="tableFull tableBorder tableBorder-thcenter table_hover table_striped">';
 
     list($button_id_html) = MakeOrderButton('id', $p->UrlRule, $order_get);
+    list($button_posttime_html) = MakeOrderButton('posttime', $p->UrlRule, $order_get);
 
     $tables = '';
     $tableths = array();
@@ -340,7 +345,7 @@ function Admin_PageMng()
     $tableths[] = '<th>' . $zbp->lang['msg']['id'] . $button_id_html . '</th>';
     $tableths[] = '<th>' . $zbp->lang['msg']['author'] . '</th>';
     $tableths[] = '<th>' . $zbp->lang['msg']['title'] . '</th>';
-    $tableths[] = '<th>' . $zbp->lang['msg']['date'] . '</th>';
+    $tableths[] = '<th>' . $zbp->lang['msg']['date'] . $button_posttime_html . '</th>';
     $tableths[] = '<th>' . $zbp->lang['msg']['comment'] . '</th>';
     $tableths[] = '<th>' . $zbp->lang['msg']['status'] . '</th>';
     $tableths[] = '<th></th>';
@@ -477,7 +482,7 @@ function Admin_CategoryMng()
 
     //Array_Isset($zbp->categoriesbyorder_type, $posttype, array());
     //$array = $zbp->categoriesbyorder_type[$posttype];
-    list($button_id_html) = MakeOrderButton('id', $p->UrlRule, $order_get);
+    list($button_id_html) = MakeOrderButton('id', $p->UrlRule, $order_get, 'desc');
     list($button_order_html) = MakeOrderButton('order', $p->UrlRule, $order_get);
     list($button_name_html) = MakeOrderButton('name', $p->UrlRule, $order_get);
     list($button_alias_html) = MakeOrderButton('alias', $p->UrlRule, $order_get);
@@ -556,7 +561,9 @@ function Admin_CommentMng()
     echo '<form method="post" action="' . $zbp->host . 'zb_system/cmd.php?act=CommentBat">';
     echo '<input type="hidden" name="csrfToken" value="' . $zbp->GetCSRFToken() . '">';
 
-    $p = new Pagebar('{%host%}zb_system/cmd.php?act=CommentMng{&ischecking=%ischecking%}{&search=%search%}{&page=%page%}', false);
+    $order_get = GetVars('order', 'GET');
+
+    $p = new Pagebar('{%host%}zb_system/cmd.php?act=CommentMng{&ischecking=%ischecking%}{&search=%search%}{&order=%order%}{&page=%page%}', false);
     $p->PageCount = $zbp->managecount;
     $p->PageNow = (int) GetVars('page', 'GET') == 0 ? 1 : (int) GetVars('page', 'GET');
     if (GetVars('search') !== GetVars('search', 'GET')) {
@@ -566,6 +573,7 @@ function Admin_CommentMng()
 
     $p->UrlRule->Rules['{%search%}'] = rawurlencode(GetVars('search'));
     $p->UrlRule->Rules['{%ischecking%}'] = (bool) GetVars('ischecking');
+    $p->UrlRule->Rules['{%order%}'] = $order_get;
 
     $w = array();
     if (!$zbp->CheckRights('CommentAll')) {
@@ -581,7 +589,29 @@ function Admin_CommentMng()
     $w[] = array('=', 'comm_Ischecking', (int) GetVars('ischecking'));
 
     $s = '';
-    $or = array('comm_ID' => 'DESC');
+    if ($order_get == 'id_desc') {
+        $or = array('comm_ID' => 'DESC');
+    } elseif ($order_get == 'id_asc') {
+        $or = array('comm_ID' => 'ASC');
+    } elseif ($order_get == 'posttime_desc') {
+        $or = array('comm_PostTime' => 'DESC');
+    } elseif ($order_get == 'posttime_asc') {
+        $or = array('comm_PostTime' => 'ASC');
+    } elseif ($order_get == 'logid_desc') {
+        $or = array('comm_LogID' => 'DESC');
+    } elseif ($order_get == 'logid_asc') {
+        $or = array('comm_LogID' => 'ASC');
+    } elseif ($order_get == 'authorid_desc') {
+        $or = array('comm_AuthorID' => 'DESC');
+    } elseif ($order_get == 'authorid_asc') {
+        $or = array('comm_AuthorID' => 'ASC');
+    } elseif ($order_get == 'parentid_desc') {
+        $or = array('comm_ParentID' => 'DESC');
+    } elseif ($order_get == 'parentid_asc') {
+        $or = array('comm_ParentID' => 'ASC');
+    } else {
+        $or = array('comm_ID' => 'DESC');
+    }
     $l = array(($p->PageNow - 1) * $p->PageCount, $p->PageCount);
     $op = array('pagebar' => $p);
 
@@ -602,16 +632,22 @@ function Admin_CommentMng()
         $op
     );
 
+    list($button_id_html) = MakeOrderButton('id', $p->UrlRule, $order_get, 'desc');
+    list($button_posttime_html) = MakeOrderButton('posttime', $p->UrlRule, $order_get);
+    list($button_logid_html) = MakeOrderButton('logid', $p->UrlRule, $order_get);
+    list($button_authorid_html) = MakeOrderButton('authorid', $p->UrlRule, $order_get);
+    list($button_parentid_html) = MakeOrderButton('parentid', $p->UrlRule, $order_get);
+
     echo '<table border="1" class="tableFull tableBorder tableBorder-thcenter table_hover table_striped">';
     $tables = '';
     $tableths = array();
     $tableths[] = '<tr>';
-    $tableths[] = '<th>' . $zbp->lang['msg']['id'] . '</th>';
+    $tableths[] = '<th>' . $zbp->lang['msg']['id'] . $button_id_html . '</th>';
     $tableths[] = '<th>' . $zbp->lang['msg']['parend_id'] . '</th>';
-    $tableths[] = '<th>' . $zbp->lang['msg']['name'] . '</th>';
+    $tableths[] = '<th>' . $zbp->lang['msg']['name'] . $button_authorid_html . '</th>';
     $tableths[] = '<th>' . $zbp->lang['msg']['content'] . '</th>';
-    $tableths[] = '<th>' . $zbp->lang['msg']['article'] . '</th>';
-    $tableths[] = '<th>' . $zbp->lang['msg']['date'] . '</th>';
+    $tableths[] = '<th>' . $zbp->lang['msg']['article'] . $button_logid_html . '</th>';
+    $tableths[] = '<th>' . $zbp->lang['msg']['date'] . $button_posttime_html . '</th>';
     $tableths[] = '<th></th>';
     $tableths[] = '<th><a href="" onclick="BatchSelectAll();return false;">' . $zbp->lang['msg']['select_all'] . '</a></th>';
     $tableths[] = '</tr>';
@@ -687,6 +723,7 @@ function Admin_CommentMng()
     echo '</div>';
     echo '<script>ActiveLeftMenu("aCommentMng");</script>';
     echo '<script>AddHeaderFontIcon("icon-chat-text-fill"); $(".cmt-note").tooltip();</script>';
+    echo '<script>$(\'a.order_button\').parent().bind(\'mouseenter mouseleave\', function() {$(this).find(\'a.order_button\').toggleClass(\'element-visibility-hidden\');});</script>';
 }
 
 //###############################################################################################################
@@ -773,7 +810,7 @@ function Admin_MemberMng()
         $op
     );
 
-    list($button_id_html) = MakeOrderButton('id', $p->UrlRule, $order_get);
+    list($button_id_html) = MakeOrderButton('id', $p->UrlRule, $order_get, 'desc');
     list($button_level_html) = MakeOrderButton('level', $p->UrlRule, $order_get);
     list($button_name_html) = MakeOrderButton('name', $p->UrlRule, $order_get);
     list($button_alias_html) = MakeOrderButton('alias', $p->UrlRule, $order_get);
@@ -867,13 +904,37 @@ function Admin_UploadMng()
         $w[] = array('=', 'ul_AuthorID', $zbp->user->ID);
     }
 
-    $p = new Pagebar('{%host%}zb_system/cmd.php?act=UploadMng{&page=%page%}', false);
+    $order_get = GetVars('order', 'GET');
+
+    $p = new Pagebar('{%host%}zb_system/cmd.php?act=UploadMng{&order=%order%}{&page=%page%}', false);
     $p->PageCount = $zbp->managecount;
     $p->PageNow = (int) GetVars('page', 'GET') == 0 ? 1 : (int) GetVars('page', 'GET');
     $p->PageBarCount = $zbp->pagebarcount;
 
     $s = '';
-    $or = array('ul_PostTime' => 'DESC');
+    if ($order_get == 'id_desc') {
+        $or = array('ul_ID' => 'DESC');
+    } elseif ($order_get == 'id_asc') {
+        $or = array('ul_ID' => 'ASC');
+    } elseif ($order_get == 'size_desc') {
+        $or = array('ul_Size' => 'DESC');
+    } elseif ($order_get == 'size_asc') {
+        $or = array('ul_Size' => 'ASC');
+    } elseif ($order_get == 'authorid_desc') {
+        $or = array('ul_AuthorID' => 'DESC');
+    } elseif ($order_get == 'authorid_asc') {
+        $or = array('ul_AuthorID' => 'ASC');
+    } elseif ($order_get == 'logid_desc') {
+        $or = array('ul_LogID' => 'DESC');
+    } elseif ($order_get == 'logid_asc') {
+        $or = array('ul_LogID' => 'ASC');
+    } elseif ($order_get == 'posttime_desc') {
+        $or = array('ul_PostTime' => 'DESC');
+    } elseif ($order_get == 'posttime_asc') {
+        $or = array('ul_PostTime' => 'ASC');
+    } else {
+        $or = array('ul_PostTime' => 'DESC');
+    }
     $l = array(($p->PageNow - 1) * $p->PageCount, $p->PageCount);
     $op = array('pagebar' => $p);
 
@@ -884,15 +945,21 @@ function Admin_UploadMng()
 
     $array = $zbp->GetUploadList($s, $w, $or, $l, $op);
 
+    list($button_id_html) = MakeOrderButton('id', $p->UrlRule, $order_get);
+    list($button_size_html) = MakeOrderButton('size', $p->UrlRule, $order_get);
+    list($button_authorid_html) = MakeOrderButton('authorid', $p->UrlRule, $order_get);
+    list($button_logid_html) = MakeOrderButton('logid', $p->UrlRule, $order_get);
+    list($button_posttime_html) = MakeOrderButton('posttime', $p->UrlRule, $order_get);
+
     echo '<table border="1" class="tableFull tableBorder tableBorder-thcenter table_hover table_striped">';
     $tables = '';
     $tableHeaders = array();
     $tableHeaders[] = '<tr>';
-    $tableHeaders[] = '<th>' . $zbp->lang['msg']['id'] . '</th>';
-    $tableHeaders[] = '<th>' . $zbp->lang['msg']['author'] . '</th>';
+    $tableHeaders[] = '<th>' . $zbp->lang['msg']['id'] . $button_id_html . '</th>';
+    $tableHeaders[] = '<th>' . $zbp->lang['msg']['author'] . $button_authorid_html . '</th>';
     $tableHeaders[] = '<th>' . $zbp->lang['msg']['name'] . '</th>';
-    $tableHeaders[] = '<th>' . $zbp->lang['msg']['date'] . '</th>';
-    $tableHeaders[] = '<th>' . $zbp->lang['msg']['size'] . '</th>';
+    $tableHeaders[] = '<th>' . $zbp->lang['msg']['date'] . $button_posttime_html . '</th>';
+    $tableHeaders[] = '<th>' . $zbp->lang['msg']['size'] . $button_size_html . '</th>';
     $tableHeaders[] = '<th>' . $zbp->lang['msg']['type'] . '</th>';
     $tableHeaders[] = '<th></th>';
     $tableHeaders[] = '</tr>';
@@ -932,6 +999,7 @@ function Admin_UploadMng()
     echo '</p></div>';
     echo '<script>ActiveLeftMenu("aUploadMng");</script>';
     echo '<script>AddHeaderFontIcon("icon-inboxes-fill");</script>';
+    echo '<script>$(\'a.order_button\').parent().bind(\'mouseenter mouseleave\', function() {$(this).find(\'a.order_button\').toggleClass(\'element-visibility-hidden\');});</script>';
 }
 
 //###############################################################################################################
@@ -1007,7 +1075,7 @@ function Admin_TagMng()
 
     $array = $zbp->GetTagList($s, $w, $or, $l, $op);
 
-    list($button_id_html) = MakeOrderButton('id', $p->UrlRule, $order_get);
+    list($button_id_html) = MakeOrderButton('id', $p->UrlRule, $order_get, 'desc');
     list($button_name_html) = MakeOrderButton('name', $p->UrlRule, $order_get);
     list($button_alias_html) = MakeOrderButton('alias', $p->UrlRule, $order_get);
 

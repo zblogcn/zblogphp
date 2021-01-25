@@ -802,7 +802,7 @@ function CreateOptionsOfGuestIPType($default)
 /**
  * 生成排序按钮
  */
-function MakeOrderButton($id, $urlrule, $order_get)
+function MakeOrderButton($id, $urlrule, $order_get, $default = 'asc')
 {
     $button_order_id_class = '';
     if ($order_get == $id . '_asc' || $order_get == $id . '_desc') {
@@ -812,10 +812,20 @@ function MakeOrderButton($id, $urlrule, $order_get)
         $button_order_id_order = $id . '_desc';
         $button_order_id_icon = 'icon-arrow-up-short';
         $button_order_id_class .= 'element-visibility-hidden ';
-    } else {
+    } elseif ($order_get == $id . '_desc') {
         $button_order_id_order = $id . '_asc';
         $button_order_id_icon = 'icon-arrow-down-short';
         $button_order_id_class .= 'element-visibility-hidden ';
+    } else {
+        if ($default == 'asc') {
+            $button_order_id_order = $id . '_asc';
+            $button_order_id_icon = 'icon-arrow-down-short';
+            $button_order_id_class .= 'element-visibility-hidden ';
+        } else {
+            $button_order_id_order = $id . '_desc';
+            $button_order_id_icon = 'icon-arrow-up-short';
+            $button_order_id_class .= 'element-visibility-hidden ';
+        }
     }
     $urlrule->Rules['{%order%}'] = $button_order_id_order;
     $button_order_id = ' <a class="order_button ' . $button_order_id_class . '" href="' . $urlrule->Make() . '"><i style="font-size:0.75em;" class="' . $button_order_id_icon . '"></i></a>';

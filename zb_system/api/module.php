@@ -39,9 +39,11 @@ function api_module_get()
     }
 
     if ($module && $module->ID != 0) {
-        $array = ApiGetObjectArray($module, 
-        	array('SourceType', 'NoRefresh'),
-        	$remove_props);
+        $array = ApiGetObjectArray(
+            $module,
+            array('SourceType', 'NoRefresh'),
+            $remove_props
+        );
 
         return array(
             'data' => array('module' => $array),

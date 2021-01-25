@@ -31,13 +31,15 @@ function api_comment_get()
             $comment,
             array(),
             array(),
-            ApiGetAndFilterRelationQuery(array(
-                'Post' => array(),
-                'Author' => array(
-                    'other_props' => array('Url', 'Template', 'Avatar', 'StaticName'),
-                    'remove_props' => array('Guid', 'Password', 'IP')
-                ),
-            ))
+            ApiGetAndFilterRelationQuery(
+                array(
+                    'Post' => array(),
+                    'Author' => array(
+                        'other_props' => array('Url', 'Template', 'Avatar', 'StaticName'),
+                        'remove_props' => array('Guid', 'Password', 'IP')
+                    ),
+                )
+            )
         );
 
         if ($comment && $comment->ID != null) {
@@ -73,19 +75,20 @@ function api_comment_post()
             $comment,
             array(),
             array(),
-            ApiGetAndFilterRelationQuery(array(
-                'Author' => array(
-                    'other_props' => array('Url', 'Template', 'Avatar', 'StaticName'),
-                    'remove_props' => array('Guid', 'Password', 'IP')
-                ),
-            ))
+            ApiGetAndFilterRelationQuery(
+                array(
+                    'Author' => array(
+                        'other_props' => array('Url', 'Template', 'Avatar', 'StaticName'),
+                        'remove_props' => array('Guid', 'Password', 'IP')
+                    ),
+                )
+            )
         );
 
         return array(
             'message' => $GLOBALS['lang']['msg']['operation_succeed'],
             'data' => array('comment' => $array),
         );
-
     } catch (Exception $e) {
         return array(
             'code' => 500,
@@ -171,12 +174,14 @@ function api_comment_list()
                 ),
                 array(),
                 array(),
-                ApiGetAndFilterRelationQuery(array(
-                    'Author' => array(
-                        'other_props' => array('Url', 'Template', 'Avatar', 'StaticName'),
-                        'remove_props' => array('Guid', 'Password', 'IP')
-                    ),
-                ))
+                ApiGetAndFilterRelationQuery(
+                    array(
+                        'Author' => array(
+                            'other_props' => array('Url', 'Template', 'Avatar', 'StaticName'),
+                            'remove_props' => array('Guid', 'Password', 'IP')
+                        ),
+                    )
+                )
             );
             return array(
                 'data' => $listArr,
@@ -189,13 +194,15 @@ function api_comment_list()
             $zbp->GetCommentList('*', null, $order, $limit, $option),
             array(),
             array(),
-            ApiGetAndFilterRelationQuery(array(
-                'Post' => array(),
-                'Author' => array(
-                    'other_props' => array('Url', 'Template', 'Avatar', 'StaticName'),
-                    'remove_props' => array('Guid', 'Password', 'IP')
-                ),
-            ))
+            ApiGetAndFilterRelationQuery(
+                array(
+                    'Post' => array(),
+                    'Author' => array(
+                        'other_props' => array('Url', 'Template', 'Avatar', 'StaticName'),
+                        'remove_props' => array('Guid', 'Password', 'IP')
+                    ),
+                )
+            )
         );
     }
 

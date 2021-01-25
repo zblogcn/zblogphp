@@ -35,12 +35,14 @@ function api_upload_get()
             $upload,
             array('Url'),
             array(),
-            ApiGetAndFilterRelationQuery(array(
-                'Author' => array(
-                    'other_props' => array('Url', 'Template', 'Avatar', 'StaticName'),
-                    'remove_props' => array('Guid', 'Password', 'IP')
-                ),
-            ))
+            ApiGetAndFilterRelationQuery(
+                array(
+                    'Author' => array(
+                        'other_props' => array('Url', 'Template', 'Avatar', 'StaticName'),
+                        'remove_props' => array('Guid', 'Password', 'IP')
+                    ),
+                )
+            )
         );
 
         if ($upload && $upload->ID !== null) {
@@ -171,12 +173,14 @@ function api_upload_list()
                 $zbp->GetUploadList('*', $where, $order, $limit, $option),
                 array('Url'),
                 array(),
-                ApiGetAndFilterRelationQuery(array(
-                    'Author' => array(
-                        'other_props' => array('Url', 'Template', 'Avatar', 'StaticName'),
-                        'remove_props' => array('Guid', 'Password', 'IP')
-                    ),
-                ))
+                ApiGetAndFilterRelationQuery(
+                    array(
+                        'Author' => array(
+                            'other_props' => array('Url', 'Template', 'Avatar', 'StaticName'),
+                            'remove_props' => array('Guid', 'Password', 'IP')
+                        ),
+                    )
+                )
             ),
             'pagination' => ApiGetPagebarInfo($option),
         )

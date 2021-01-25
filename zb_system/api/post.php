@@ -102,18 +102,20 @@ function api_post_post()
             $post,
             array('Url','TagsCount','TagsName','CommentPostKey','ValidCodeUrl'),
             array(),
-            ApiGetAndFilterRelationQuery(array(
-                'Category' => array(
-                    'other_props' => array('Url', 'Symbol', 'Level', 'SymbolName', 'AllCount'),
-                ),
-                'Author' => array(
-                    'other_props' => array('Url', 'Template', 'Avatar', 'StaticName'),
-                    'remove_props' => array('Guid', 'Password', 'IP')
-                ),
-                'Tags' => array(
-                    'other_props' => array('Url', 'Template'),
-                ),
-            ))
+            ApiGetAndFilterRelationQuery(
+                array(
+                    'Category' => array(
+                        'other_props' => array('Url', 'Symbol', 'Level', 'SymbolName', 'AllCount'),
+                    ),
+                    'Author' => array(
+                        'other_props' => array('Url', 'Template', 'Avatar', 'StaticName'),
+                        'remove_props' => array('Guid', 'Password', 'IP')
+                    ),
+                    'Tags' => array(
+                        'other_props' => array('Url', 'Template'),
+                    ),
+                )
+            )
         );
 
         return array(
@@ -253,18 +255,20 @@ function api_post_list()
         $zbp->GetPostList('*', $where, $order, $limit, $option),
         array('Url','TagsCount','TagsName','CommentPostKey','ValidCodeUrl'),
         array(),
-        ApiGetAndFilterRelationQuery(array(
-            'Category' => array(
-                'other_props' => array('Url', 'Symbol', 'Level', 'SymbolName', 'AllCount'),
-            ),
-            'Author' => array(
-                'other_props' => array('Url', 'Template', 'Avatar', 'StaticName'),
-                'remove_props' => array('Guid', 'Password', 'IP')
-            ),
-            'Tags' => array(
-                'other_props' => array('Url', 'Template'),
-            ),
-        ))
+        ApiGetAndFilterRelationQuery(
+            array(
+                'Category' => array(
+                    'other_props' => array('Url', 'Symbol', 'Level', 'SymbolName', 'AllCount'),
+                ),
+                'Author' => array(
+                    'other_props' => array('Url', 'Template', 'Avatar', 'StaticName'),
+                    'remove_props' => array('Guid', 'Password', 'IP')
+                ),
+                'Tags' => array(
+                    'other_props' => array('Url', 'Template'),
+                ),
+            )
+        )
     );
     $paginationArr = ApiGetPagebarInfo($option);
 

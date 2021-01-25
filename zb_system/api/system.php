@@ -77,12 +77,12 @@ function api_system_basic_info()
     );
 
     if ($zbp->islogin) {
-    	$info['zbp']['lang'] = $zbp->lang;
+        $info['zbp']['lang'] = $zbp->lang;
     }
 
-    return [
+    return array(
         'data' => $info,
-    ];
+    );
 }
 
 /**
@@ -150,14 +150,14 @@ function api_system_misc_showtags()
     ApiCheckAuth(true, 'misc');
 
     if (!$zbp->CheckRights($actions['new']) || !$zbp->CheckRights($actions['edit'])) {
-    	$zbp->ShowError(6);
+        $zbp->ShowError(6);
     }
 
     $array = $zbp->GetTagList(null, array('=', 'tag_Type', $type), array('tag_Count' => 'DESC', 'tag_ID' => 'ASC'), array(100), null);
 
     $listArr = ApiGetObjectArrayList(
         $array,
-        array('Url','Template'),
+        array('Url', 'Template')
     );
 
     return array(
@@ -166,7 +166,6 @@ function api_system_misc_showtags()
         ),
     );
 }
-
 
 /**
  * 设置获取接口.
@@ -225,4 +224,3 @@ function api_system_save_setting()
         'message' => $GLOBALS['lang']['msg']['operation_succeed'],
     );
 }
-

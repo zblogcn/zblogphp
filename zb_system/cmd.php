@@ -74,7 +74,11 @@ switch ($zbp->action) {
         $zbp->BuildModule();
         $zbp->SaveCache();
 
-        $die ? exit : Redirect(GetVars('HTTP_REFERER', 'SERVER'));
+        if ($die) {
+            exit;
+        } else {
+            Redirect(GetVars('HTTP_REFERER', 'SERVER'));
+        }
         break;
     case 'getcmt':
         ViewComments((int) GetVars('postid', 'GET'), (int) GetVars('page', 'GET'));
@@ -191,11 +195,10 @@ switch ($zbp->action) {
         $zbp->BuildModule();
         $zbp->SaveCache();
         //判断及提前跳转
-        if (
-            isset($_POST['Password']) &&
-            $mem->ID == $zbp->user->ID &&
-            !defined('ZBP_IN_AJAX') &&
-            !defined('ZBP_IN_API')
+        if (isset($_POST['Password'])
+            && $mem->ID == $zbp->user->ID
+            && !defined('ZBP_IN_AJAX')
+            && !defined('ZBP_IN_API')
         ) {
             Redirect($zbp->host . 'zb_system/cmd.php?act=login');
         }
