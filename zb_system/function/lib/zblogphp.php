@@ -827,7 +827,7 @@ class ZBlogPHP
         // 如果 开启了伪静模式，就再注入伪静路由
         if ($this->option['ZC_STATIC_MODE'] == 'REWRITE') {
             //  添加 文章页单页 伪静路由
-            $this->RegRoute(array('type' => 'rewrite', 'name' => 'rewrite_post_article_single', 'call' => 'ViewPost', 'urlrule' => $this->GetPostType(0, 'single_urlrule'), 'args' => array('post@id', 'post@alias' => '.+?'), 'args_with' => array()));
+            $this->RegRoute(array('type' => 'rewrite', 'name' => 'rewrite_post_article_single', 'call' => 'ViewPost', 'urlrule' => $this->GetPostType(0, 'single_urlrule'), 'args' => array('post@id', 'post@alias'), 'args_with' => array()));
             //  添加 文章index列表 伪静路由
             $this->RegRoute(array('type' => 'rewrite', 'name' => 'rewrite_post_article_list_index', 'call' => 'ViewList', 'urlrule' => $this->GetPostType(0, 'list_urlrule'), 'not_get' => array('id', 'alias'), 'args' => array('page'), 'args_with' => array(), 'abbr_url' => true));
             //  添加 文章category列表 伪静路由
@@ -840,7 +840,7 @@ class ZBlogPHP
             $this->RegRoute(array('type' => 'rewrite', 'name' => 'rewrite_post_article_list_tag', 'call' => 'ViewList', 'urlrule' => $this->GetPostType(0, 'list_tag_urlrule'), 'not_get' => array('id', 'alias'), 'args' => array('tags@id', 'tags@alias', 'page'), 'args_with' => array()));
 
             //  添加 页面页单页 伪静路由
-            $this->RegRoute(array('type' => 'rewrite', 'name' => 'rewrite_post_page_single', 'call' => 'ViewPost', 'prefix' => '', 'urlrule' => $this->GetPostType(1, 'single_urlrule'), 'args' => array('post@id', 'post@alias' => '.+?'), 'args_with' => array('posttype' => 1)));
+            $this->RegRoute(array('type' => 'rewrite', 'name' => 'rewrite_post_page_single', 'call' => 'ViewPost', 'prefix' => '', 'urlrule' => $this->GetPostType(1, 'single_urlrule'), 'args' => array('post@id', 'post@alias'), 'args_with' => array('posttype' => 1)));
 
             //在伪静模式下，第2次追加覆盖，给“文章类和页面类”更新routes数据
             $this->SetPostType_Sub(0, 'routes', 'post_article_single', array('rewrite' => 'rewrite_post_article_single'));
