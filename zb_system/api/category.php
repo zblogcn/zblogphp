@@ -35,7 +35,7 @@ function api_category_get()
         $category = $zbp->GetCategoryByName($cateName);
     }
 
-    ApiCheckAuth(false, $zbp->GetPostType_Actions($category->Type, 'view'));
+    ApiCheckAuth(false, $zbp->GetPostType_Sub($category->Type, 'actions', 'view'));
 
     $array = ApiGetObjectArray($category, array('Url', 'Symbol', 'Level', 'SymbolName', 'AllCount'));
 

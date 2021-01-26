@@ -843,28 +843,19 @@ class ZBlogPHP
             $this->RegRoute(array('type' => 'rewrite', 'name' => 'rewrite_post_page_single', 'call' => 'ViewPost', 'prefix' => '', 'urlrule' => $this->GetPostType(1, 'single_urlrule'), 'args' => array('post@id', 'post@alias' => '.+?'), 'args_with' => array('posttype' => 1)));
 
             //在伪静模式下，第2次追加覆盖，给“文章类和页面类”更新routes数据
-            $routes = array(
-                'post_article_single' => array('rewrite' => 'rewrite_post_article_single'),
-                'post_article_list' => array('rewrite' => 'rewrite_post_article_list_index'),
-                'post_article_list_category' => array('rewrite' => 'rewrite_post_article_list_category'),
-                'post_article_list_tag' => array('rewrite' => 'rewrite_post_article_list_tag'),
-                'post_article_list_author' => array('rewrite' => 'rewrite_post_article_list_author'),
-                'post_article_list_date' => array('rewrite' => 'rewrite_post_article_list_date'),
-            );
-            $this->SetPostType(0, 'routes', $routes);
-
-            $routes = array(
-                'post_page_single' => array('rewrite' => 'rewrite_post_page_single'),
-            );
-            $this->SetPostType(1, 'routes', $routes);
+            $this->SetPostType_Sub(0, 'routes', 'post_article_single', array('rewrite' => 'rewrite_post_article_single'));
+            $this->SetPostType_Sub(0, 'routes', 'post_article_list', array('rewrite' => 'rewrite_post_article_list_index'));
+            $this->SetPostType_Sub(0, 'routes', 'post_article_list_category', array('rewrite' => 'rewrite_post_article_list_category'));
+            $this->SetPostType_Sub(0, 'routes', 'post_article_list_tag', array('rewrite' => 'rewrite_post_article_list_tag'));
+            $this->SetPostType_Sub(0, 'routes', 'post_article_list_author', array('rewrite' => 'rewrite_post_article_list_author'));
+            $this->SetPostType_Sub(0, 'routes', 'post_article_list_date', array('rewrite' => 'rewrite_post_article_list_date'));
+            $this->SetPostType_Sub(1, 'routes', 'post_page_single', array('rewrite' => 'rewrite_post_page_single'));
 
 
             //  这是一个例子： 文章搜索的伪静路由的实现  1.设定原始规则 2.注册伪静路由 3.将路由追加进posttype里
             //$this->posttype[0]['search_urlrule'] = '{%host%}{%q%}_{%page%}.html';
             //$this->RegRoute(array('type' => 'rewrite', 'name' => 'rewrite_post_article_search', 'call' => 'ViewSearch', 'prefix' => 'search', 'urlrule' => $this->GetPostType(0, 'search_urlrule'), 'args' => array('q' => '[^\/_]+', 'page'), 'args_with' => array('posttype' => 0), 'request_method' => array('GET', 'POST'), 'only_match_page' => false));
-            //$routes = $this->GetPostType(0, 'routes');
-            //$routes['post_article_search'] = array('rewrite' => 'rewrite_post_article_search');
-            //$this->SetPostType(0, 'routes', $routes);
+            $this->SetPostType_Sub(0, 'routes', 'post_article_search', array('rewrite' => 'rewrite_post_article_search'));
         }
 
         $this->isinitialized = true;
@@ -3980,7 +3971,7 @@ class ZBlogPHP
     }
 
     /**
-     * 注册PostType.
+     * 设置PostType.
      *
      * @param $typeId
      * @param $name
@@ -4114,22 +4105,22 @@ class ZBlogPHP
     }
 
     /**
-     * 获取PostType信息(如果是修改的话请直接编辑$zbp->posttype)
-     *
-     * @param $key
-     *
-     * @param $typeid
-     *
-     * @return string
+     * 设置PostType下Array项目信息
      */
-    public function GetPostType_Actions($typeid, $action)
+    public function SetPostType_Sub($typeid, $name, $subname, $value)
     {
-        if ($action == null || empty($action)) {
-            return '';
+        $this->posttype[$typeid][$name][$subname] = $value;
+    }
+
+    /**
+     * 获取PostType下Array项目信息
+     */
+    public function GetPostType_Sub($typeid, $name, $subname)
+    {
+        if (isset($this->posttype[$typeid][$name][$subname])) {
+            return $this->posttype[$typeid][$name][$subname];
         }
-        if (isset($this->posttype[$typeid]['actions'][$action])) {
-            return $this->posttype[$typeid]['actions'][$action];
-        }
+        return null;
     }
 
     /**
