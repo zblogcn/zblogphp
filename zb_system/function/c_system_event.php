@@ -93,9 +93,9 @@ function Redirect_to_search()
     //$q = rawurlencode(trim(strip_tags(GetVars('q', 'POST'))));
     //Redirect($zbp->searchurl . '?q=' . $q);
 
-    $routes = $zbp->GetPostType(0, 'routes');
-    if (isset($routes['post_article_search'])) {
-        $r = new UrlRule($zbp->GetRoute($routes['post_article_search']));
+    $route = $zbp->GetPostType_Sub(0, 'routes', 'post_article_search');
+    if (!empty($route)) {
+        $r = new UrlRule($zbp->GetRoute($route));
     } else {
         $urlrule = $zbp->GetPostType(0, 'search_urlrule');
         $r = new UrlRule($urlrule);

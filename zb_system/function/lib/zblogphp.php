@@ -853,9 +853,9 @@ class ZBlogPHP
 
 
             //  这是一个例子： 文章搜索的伪静路由的实现  1.设定原始规则 2.注册伪静路由 3.将路由追加进posttype里
-            //$this->posttype[0]['search_urlrule'] = '{%host%}{%q%}_{%page%}.html';
+            //$this->SetPostType(0, 'search_urlrule', '{%host%}{%q%}_{%page%}.html');
             //$this->RegRoute(array('type' => 'rewrite', 'name' => 'rewrite_post_article_search', 'call' => 'ViewSearch', 'prefix' => 'search', 'urlrule' => $this->GetPostType(0, 'search_urlrule'), 'args' => array('q' => '[^\/_]+', 'page'), 'args_with' => array('posttype' => 0), 'request_method' => array('GET', 'POST'), 'only_match_page' => false));
-            $this->SetPostType_Sub(0, 'routes', 'post_article_search', array('rewrite' => 'rewrite_post_article_search'));
+            //$this->SetPostType_Sub(0, 'routes', 'post_article_search', array('rewrite' => 'rewrite_post_article_search'));
         }
 
         $this->isinitialized = true;
