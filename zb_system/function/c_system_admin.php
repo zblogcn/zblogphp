@@ -167,6 +167,14 @@ function Admin_ArticleMng()
         $or = array('log_ID' => 'DESC');
     } elseif ($order_get == 'id_asc') {
         $or = array('log_ID' => 'ASC');
+    } elseif ($order_get == 'cateid_desc') {
+        $or = array('log_CateID' => 'DESC');
+    } elseif ($order_get == 'cateid_asc') {
+        $or = array('log_CateID' => 'ASC');
+    } elseif ($order_get == 'authorid_desc') {
+        $or = array('log_AuthorID' => 'DESC');
+    } elseif ($order_get == 'authorid_asc') {
+        $or = array('log_AuthorID' => 'ASC');
     } elseif ($order_get == 'posttime_desc') {
         $or = array('log_PostTime' => 'DESC');
     } elseif ($order_get == 'posttime_asc') {
@@ -201,13 +209,15 @@ function Admin_ArticleMng()
 
     list($button_id_html) = MakeOrderButton('id', $p->UrlRule, $order_get);
     list($button_posttime_html) = MakeOrderButton('posttime', $p->UrlRule, $order_get);
+    list($button_cateid_html) = MakeOrderButton('cateid', $p->UrlRule, $order_get);
+    list($button_authorid_html) = MakeOrderButton('authorid', $p->UrlRule, $order_get);
 
     $tables = '';
     $tableths = array();
     $tableths[] = '<tr>';
     $tableths[] = '<th>' . $zbp->lang['msg']['id'] . $button_id_html . '</th>';
-    $tableths[] = '<th>' . $zbp->lang['msg']['category'] . '</th>';
-    $tableths[] = '<th>' . $zbp->lang['msg']['author'] . '</th>';
+    $tableths[] = '<th>' . $zbp->lang['msg']['category'] . $button_cateid_html . '</th>';
+    $tableths[] = '<th>' . $zbp->lang['msg']['author'] . $button_authorid_html . '</th>';
     $tableths[] = '<th>' . $zbp->lang['msg']['title'] . '</th>';
     $tableths[] = '<th>' . $zbp->lang['msg']['date'] . $button_posttime_html . '</th>';
     $tableths[] = '<th>' . $zbp->lang['msg']['comment'] . '</th>';
@@ -306,6 +316,14 @@ function Admin_PageMng()
         $or = array('log_ID' => 'DESC');
     } elseif ($order_get == 'id_asc') {
         $or = array('log_ID' => 'ASC');
+    } elseif ($order_get == 'cateid_desc') {
+        $or = array('log_CateID' => 'DESC');
+    } elseif ($order_get == 'cateid_asc') {
+        $or = array('log_CateID' => 'ASC');
+    } elseif ($order_get == 'authorid_desc') {
+        $or = array('log_AuthorID' => 'DESC');
+    } elseif ($order_get == 'authorid_asc') {
+        $or = array('log_AuthorID' => 'ASC');
     } elseif ($order_get == 'posttime_desc') {
         $or = array('log_PostTime' => 'DESC');
     } elseif ($order_get == 'posttime_asc') {
@@ -338,12 +356,14 @@ function Admin_PageMng()
 
     list($button_id_html) = MakeOrderButton('id', $p->UrlRule, $order_get);
     list($button_posttime_html) = MakeOrderButton('posttime', $p->UrlRule, $order_get);
+    list($button_cateid_html) = MakeOrderButton('cateid', $p->UrlRule, $order_get);
+    list($button_authorid_html) = MakeOrderButton('authorid', $p->UrlRule, $order_get);
 
     $tables = '';
     $tableths = array();
     $tableths[] = '<tr>';
     $tableths[] = '<th>' . $zbp->lang['msg']['id'] . $button_id_html . '</th>';
-    $tableths[] = '<th>' . $zbp->lang['msg']['author'] . '</th>';
+    $tableths[] = '<th>' . $zbp->lang['msg']['author'] . $button_authorid_html . '</th>';
     $tableths[] = '<th>' . $zbp->lang['msg']['title'] . '</th>';
     $tableths[] = '<th>' . $zbp->lang['msg']['date'] . $button_posttime_html . '</th>';
     $tableths[] = '<th>' . $zbp->lang['msg']['comment'] . '</th>';

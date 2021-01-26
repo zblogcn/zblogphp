@@ -247,7 +247,7 @@ function ViewAuto_Get_Parameters_And_Match_with_page($route, &$parameters, &$mat
         $parameters = array();
     }
 
-    $match_with_page = array('keep_page' => true, 'remove_page' => false);
+    $match_with_page = array('remove_page' => false);
     $haspage = false;
     foreach ($parameters as $key => $value) {
         if ($value['name'] == 'page') {
@@ -262,6 +262,7 @@ function ViewAuto_Get_Parameters_And_Match_with_page($route, &$parameters, &$mat
     if ($only_match_page == true) {
         unset($match_with_page['remove_page']);
     }
+    $match_with_page['keep_page'] = true;
 }
 
 /**
@@ -896,6 +897,7 @@ function ViewList($page = null, $cate = null, $auth = null, $date = null, $tags 
             $hasDay = false;
 
             $datetime_txt = $datetime;
+            $datetime = null;
             if (function_exists('date_create_from_format')) {
                 $objdate = date_create_from_format($zbp->option['ZC_DATETIME_WITHDAY_RULE'], $datetime_txt);
                 if ($objdate !== false) {
@@ -907,9 +909,6 @@ function ViewList($page = null, $cate = null, $auth = null, $date = null, $tags 
                         $datetime = strtotime($objdate->format('Y-n'));
                     }
                 }
-                if ($objdate === false) {
-                    return false;
-                }
             } else {
                 $datetime_txt = str_replace($zbp->option['ZC_DATETIME_SEPARATOR'], '-', $datetime_txt);
                 if (substr_count($datetime_txt, '-') > 1) {
@@ -920,7 +919,11 @@ function ViewList($page = null, $cate = null, $auth = null, $date = null, $tags 
                 }
             }
             if (!is_int($datetime)) {
-                return false;
+                if (!empty($route) || $isrewrite == true) {
+                    return false;
+                }
+
+                $zbp->ShowError(2, __FILE__, __LINE__);
             }
 
             if ($hasDay) {
@@ -1255,7 +1258,8 @@ function ViewPost($id = null, $alias = null, $isrewrite = false, $object = array
     if (!empty($route) || $isrewrite == true) {
         if (isset($object[0]) && !isset($object['page'])) {
             if (!(stripos(urldecode($article->Url), $object[0]) !== false)) {
-                $zbp->ShowError(2, __FILE__, __LINE__);
+                //$zbp->ShowError(2, __FILE__, __LINE__);
+                return false;
             }
         }
     }

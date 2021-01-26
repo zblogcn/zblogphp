@@ -380,7 +380,10 @@ class UrlRule
                 $separator = $GLOBALS['option']['ZC_DATETIME_SEPARATOR'];
                 $separator = str_replace('/', '\/', $separator);
                 $separator = str_replace('-', '\-', $separator);
-                $value['regex'] = '[0-9' . $separator . ']+';
+                $separator = str_replace('.', '\.', $separator);
+                $date = $GLOBALS['option']['ZC_DATETIME_RULE'];
+                $letter = (strpos($date, 'F') !== false || strpos($date, 'M') !== false) ? 'a-zA-Z' : '';
+                $value['regex'] = '[' . $letter . '0-9' . $separator . ']+';
             }
         }
         return $newargs;
