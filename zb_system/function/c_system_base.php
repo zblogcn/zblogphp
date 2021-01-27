@@ -390,7 +390,7 @@ $GLOBALS['datainfo'] = array(
 /*
  * 默认路由url数组
  */
-$GLOBALS['routes'] = array('default' => array(), 'active' => array(), 'rewrite' => array());
+$GLOBALS['routes'] = array();
 
 /*
  * 初始化统计信息

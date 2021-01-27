@@ -167,7 +167,7 @@ class BaseMember extends Base
         if ($name == 'Template') {
             $value = $this->data[$name];
             if ($value == '') {
-                $value = $zbp->option['ZC_INDEX_DEFAULT_TEMPLATE'];
+                $value = $zbp->GetPostType(0, 'author_template');
             }
 
             return $value;

@@ -769,94 +769,8 @@ class ZBlogPHP
         !defined('ZBP_IN_XMLRPC') || $this->isxmlrpc = true;
         !$this->option['ZC_DEBUG_MODE'] || $this->isdebug = true;
 
-        //为Article和Page注册类型准备数据
-        //  权限名称分别是 新建 编辑 删除 提交 公开发布 管理 全部管理 查看 搜索
-        $page_actions = array('new' => 'PageNew', 'edit' => 'PageEdt', 'del' => 'PageDel', 'post' => 'PagePst', 'publish' => 'PagePub', 'manage' => 'PageMng', 'all' => 'PageAll', 'view' => 'view', 'search' => 'search');
-        //  自己的模板 对应分类的模板 对应Tag的模板 列表的模板(含日期列表) 搜索页的模板
-        $page_templates = array('template' => $this->option['ZC_POST_DEFAULT_TEMPLATE'], 'category_template' => $this->option['ZC_INDEX_DEFAULT_TEMPLATE'], 'tag_template' => $this->option['ZC_INDEX_DEFAULT_TEMPLATE'], 'list_template' => $this->option['ZC_INDEX_DEFAULT_TEMPLATE'], 'search_template' => $this->option['ZC_SEARCH_DEFAULT_TEMPLATE']);
-        //  自身规则 列表规则 分类列表规则 作者列表规则 日期列表规则 Tag列表规则 搜索列表规则
-        $page_urlrules = array('single_urlrule' => $this->option['ZC_PAGE_REGEX'], 'list_urlrule' => $this->option['ZC_INDEX_REGEX'], 'list_category_urlrule' => $this->option['ZC_CATEGORY_REGEX'], 'list_author_urlrule' => $this->option['ZC_AUTHOR_REGEX'], 'list_date_urlrule' => $this->option['ZC_DATE_REGEX'], 'list_tag_urlrule' => $this->option['ZC_TAGS_REGEX'], 'search_urlrule' => $this->option['ZC_SEARCH_REGEX']);
-        $article_urlrules = $page_urlrules;
-        $article_urlrules['single_urlrule'] = $this->option['ZC_ARTICLE_REGEX'];
-
-        //注册Article和Page
-        $this->RegPostType(0, 'article', $article_urlrules, $page_templates, 'Post');
-        $this->RegPostType(1, 'page', $page_urlrules, $page_templates, 'Post', $page_actions);
-
-        //注册Article的路由和Page的路由
-
-        // 默认路由
-        // 系统初始化时没有添加默认路由
-        // 默认路由是在路由的最后执行，默认路由不检查Regex规则是否匹配，只会传入get参数，就调用Call，需要细心匹配
-
-        // 这是一个默认路由的例子 会匹配被前面所有动态路由、伪静路由跳过的url
-        //$this->RegRoute(array('type' => 'default', 'name' => 'default_example', 'call' => 'ViewList', 'urlrule' => $this->GetPostType(0, 'list_urlrule'),'get' => array(), 'not_get' => array(), 'args_get' => array(), args_with' => array()));
-
-        // 动态路由
-        //  添加 文章页列表 动态路由 （首页路由）
-        $this->RegRoute(array('type' => 'active', 'name' => 'active_post_article_list_index', 'call' => 'ViewList', 'urlrule' => $this->GetPostType(0, 'list_urlrule'),'get' => array(), 'not_get' => array('cate', 'tags', 'auth', 'date', 'id', 'alias'), 'args_get' => array('page'), 'args_with' => array(), 'abbr_url' => true));
-        //  添加 文章页单页 动态路由
-        $this->RegRoute(array('type' => 'active', 'name' => 'active_post_article_single', 'call' => 'ViewPost', 'get' => array('id', 'alias'), 'not_get' => array('cate', 'auth', 'tags', 'date'), 'urlrule' => $this->GetPostType(0, 'single_urlrule'), 'args_get' => array('id', 'alias'), 'args_with' => array(), 'to_permalink' => true));
-        //  添加 页面页单页 动态路由
-        $this->RegRoute(array('type' => 'active', 'name' => 'active_post_page_single', 'call' => 'ViewPost', 'get' => array('id', 'alias'), 'not_get' => array('cate', 'auth', 'tags', 'date'), 'urlrule' => $this->GetPostType(0, 'single_urlrule'), 'args_get' => array('id', 'alias'), 'args_with' => array('posttype' => 1), 'to_permalink' => true));
-        //  添加 文章cate页列表(带参数) 动态路由
-        $this->RegRoute(array('type' => 'active', 'name' => 'active_post_article_list_category', 'call' => 'ViewList', 'urlrule' => $this->GetPostType(0, 'list_category_urlrule'), 'get' => array('cate'), 'not_get' => array('id', 'alias'), 'args_get' => array('page', 'cate'), 'args_with' => array()));
-        //  添加 文章auth页列表(带参数) 动态路由
-        $this->RegRoute(array('type' => 'active', 'name' => 'active_post_article_list_author', 'call' => 'ViewList', 'urlrule' => $this->GetPostType(0, 'list_author_urlrule'), 'get' => array('auth'), 'not_get' => array('id', 'alias'), 'args_get' => array('page', 'auth'), 'args_with' => array()));
-        //  添加 文章date页列表(带参数) 动态路由
-        $this->RegRoute(array('type' => 'active', 'name' => 'active_post_article_list_date', 'call' => 'ViewList', 'urlrule' => $this->GetPostType(0, 'list_date_urlrule'), 'get' => array('date'), 'not_get' => array('id', 'alias'), 'args_get' => array('page', 'date'), 'args_with' => array()));
-        //  添加 文章tags页列表(带参数) 动态路由
-        $this->RegRoute(array('type' => 'active', 'name' => 'active_post_article_list_tag', 'call' => 'ViewList', 'urlrule' => $this->GetPostType(0, 'list_tag_urlrule'), 'get' => array('tags'), 'not_get' => array('id', 'alias'), 'args_get' => array('page', 'tags'), 'args_with' => array()));
-
-        //给“文章类和页面类”指定routes数据
-        $routes = array(
-            'post_article_single' => array('active' => 'active_post_article_single'),
-            'post_article_list' => array('active' => 'active_post_article_list_index'),
-            'post_article_list_category' => array('active' => 'active_post_article_list_category'),
-            'post_article_list_tag' => array('active' => 'active_post_article_list_tag'),
-            'post_article_list_author' => array('active' => 'active_post_article_list_author'),
-            'post_article_list_date' => array('active' => 'active_post_article_list_date'),
-        );
-        $this->SetPostType(0, 'routes', $routes);
-
-        $routes = array(
-            'post_page_single' => array('active' => 'active_post_page_single'),
-        );
-        $this->SetPostType(1, 'routes', $routes);
-
-        // 如果 开启了伪静模式，就再注入伪静路由
-        if ($this->option['ZC_STATIC_MODE'] == 'REWRITE') {
-            //  添加 文章页单页 伪静路由
-            $this->RegRoute(array('type' => 'rewrite', 'name' => 'rewrite_post_article_single', 'call' => 'ViewPost', 'urlrule' => $this->GetPostType(0, 'single_urlrule'), 'args' => array('post@id', 'post@alias'), 'args_with' => array()));
-            //  添加 文章index列表 伪静路由
-            $this->RegRoute(array('type' => 'rewrite', 'name' => 'rewrite_post_article_list_index', 'call' => 'ViewList', 'urlrule' => $this->GetPostType(0, 'list_urlrule'), 'not_get' => array('id', 'alias'), 'args' => array('page'), 'args_with' => array(), 'abbr_url' => true));
-            //  添加 文章category列表 伪静路由
-            $this->RegRoute(array('type' => 'rewrite', 'name' => 'rewrite_post_article_list_category', 'call' => 'ViewList', 'urlrule' => $this->GetPostType(0, 'list_category_urlrule'), 'not_get' => array('id', 'alias'), 'args' => array('cate@id', 'cate@alias', 'page'), 'args_with' => array()));
-            //  添加 文章author列表 伪静路由
-            $this->RegRoute(array('type' => 'rewrite', 'name' => 'rewrite_post_article_list_author', 'call' => 'ViewList', 'urlrule' => $this->GetPostType(0, 'list_author_urlrule'), 'not_get' => array('id', 'alias'), 'args' => array('auth@id', 'auth@alias', 'page'), 'args_with' => array()));
-            //  添加 文章date列表 伪静路由
-            $this->RegRoute(array('type' => 'rewrite', 'name' => 'rewrite_post_article_list_date', 'call' => 'ViewList', 'urlrule' => $this->GetPostType(0, 'list_date_urlrule'), 'not_get' => array('id', 'alias'), 'args' => array('date', 'page'), 'args_with' => array()));
-            //  添加 文章tag列表 伪静路由
-            $this->RegRoute(array('type' => 'rewrite', 'name' => 'rewrite_post_article_list_tag', 'call' => 'ViewList', 'urlrule' => $this->GetPostType(0, 'list_tag_urlrule'), 'not_get' => array('id', 'alias'), 'args' => array('tags@id', 'tags@alias', 'page'), 'args_with' => array()));
-
-            //  添加 页面页单页 伪静路由
-            $this->RegRoute(array('type' => 'rewrite', 'name' => 'rewrite_post_page_single', 'call' => 'ViewPost', 'prefix' => '', 'urlrule' => $this->GetPostType(1, 'single_urlrule'), 'args' => array('post@id', 'post@alias'), 'args_with' => array('posttype' => 1)));
-
-            //在伪静模式下，第2次追加覆盖，给“文章类和页面类”更新routes数据
-            $this->SetPostType_Sub(0, 'routes', 'post_article_single', array('rewrite' => 'rewrite_post_article_single'));
-            $this->SetPostType_Sub(0, 'routes', 'post_article_list', array('rewrite' => 'rewrite_post_article_list_index'));
-            $this->SetPostType_Sub(0, 'routes', 'post_article_list_category', array('rewrite' => 'rewrite_post_article_list_category'));
-            $this->SetPostType_Sub(0, 'routes', 'post_article_list_tag', array('rewrite' => 'rewrite_post_article_list_tag'));
-            $this->SetPostType_Sub(0, 'routes', 'post_article_list_author', array('rewrite' => 'rewrite_post_article_list_author'));
-            $this->SetPostType_Sub(0, 'routes', 'post_article_list_date', array('rewrite' => 'rewrite_post_article_list_date'));
-            $this->SetPostType_Sub(1, 'routes', 'post_page_single', array('rewrite' => 'rewrite_post_page_single'));
-
-
-            //  这是一个例子： 文章搜索的伪静路由的实现  1.设定原始规则 2.注册伪静路由 3.将路由追加进posttype里
-            //$this->SetPostType(0, 'search_urlrule', '{%host%}{%q%}_{%page%}.html');
-            //$this->RegRoute(array('type' => 'rewrite', 'name' => 'rewrite_post_article_search', 'call' => 'ViewSearch', 'prefix' => 'search', 'urlrule' => $this->GetPostType(0, 'search_urlrule'), 'args' => array('q' => '[^\/_]+', 'page'), 'args_with' => array('posttype' => 0), 'request_method' => array('GET', 'POST'), 'only_match_page' => false));
-            //$this->SetPostType_Sub(0, 'routes', 'post_article_search', array('rewrite' => 'rewrite_post_article_search'));
-        }
+        $this->LoadPostType();
+        $this->LoadRoutes();
 
         $this->isinitialized = true;
 
@@ -868,6 +782,67 @@ class ZBlogPHP
         }
 
         return true;
+    }
+
+    /**
+     * 读取文件里的PostType配置(以后可能会放进数据库里)
+     */
+    public function LoadPostType()
+    {
+        foreach (array(0 => 'article', 1 => 'page') as $key => $value) {
+            $posttype = include ZBP_PATH . 'zb_system/defend/posttype_' . $value . '.php';
+
+            empty($posttype['single_urlrule']) ? $posttype['single_urlrule'] = $this->option['ZC_PAGE_REGEX'] : null;
+            empty($posttype['list_urlrule']) ? $posttype['list_urlrule'] = $this->option['ZC_INDEX_REGEX'] : null;
+            empty($posttype['list_category_urlrule']) ? $posttype['list_category_urlrule'] = $this->option['ZC_CATEGORY_REGEX'] : null;
+            empty($posttype['list_author_urlrule']) ? $posttype['list_author_urlrule'] = $this->option['ZC_AUTHOR_REGEX'] : null;
+            empty($posttype['list_date_urlrule']) ? $posttype['list_date_urlrule'] = $this->option['ZC_DATE_REGEX'] : null;
+            empty($posttype['list_tag_urlrule']) ? $posttype['list_tag_urlrule'] = $this->option['ZC_TAGS_REGEX'] : null;
+            empty($posttype['search_urlrule']) ? $posttype['search_urlrule'] = $this->option['ZC_SEARCH_REGEX'] : null;
+
+            $this->posttype[$key] = $posttype;
+        }
+    }
+
+    /**
+     * 读取文件里的路由配置(以后可能会放进数据库里)
+     */
+    public function LoadRoutes()
+    {
+        foreach (array(0 => 'article', 1 => 'page') as $key => $value) {
+            $route = include ZBP_PATH . 'zb_system/defend/post_' . $value . '_routes.php';
+            foreach ($route as $key2 => $value2) {
+                if (empty($value2['urlrule'])) {
+                    if ($value2['name'] == 'post_' . $value . '_single') {
+                        $value2['urlrule'] = $this->GetPostType($key, 'single_urlrule');
+                    }
+                    if ($value2['name'] == 'post_' . $value . '_list') {
+                        $value2['urlrule'] = $this->GetPostType($key, 'list_urlrule');
+                    }
+                    if ($value2['name'] == 'post_' . $value . '_list_category') {
+                        $value2['urlrule'] = $this->GetPostType($key, 'list_category_urlrule');
+                    }
+                    if ($value2['name'] == 'post_' . $value . '_list_author') {
+                        $value2['urlrule'] = $this->GetPostType($key, 'list_author_urlrule');
+                    }
+                    if ($value2['name'] == 'post_' . $value . '_list_date') {
+                        $value2['urlrule'] = $this->GetPostType($key, 'list_date_urlrule');
+                    }
+                    if ($value2['name'] == 'post_' . $value . '_list_tag') {
+                        $value2['urlrule'] = $this->GetPostType($key, 'list_tag_urlrule');
+                    }
+                    if ($value2['name'] == 'post_' . $value . '_search') {
+                        $value2['urlrule'] = $this->GetPostType($key, 'search_urlrule');
+                    }
+                }
+                $this->routes[$key2] = $value2;
+                if ($value2['type'] != 'rewrite' || ($this->option['ZC_STATIC_MODE'] == 'REWRITE' && $value2['type'] == 'rewrite')) {
+                    $this->SetPostType_Sub($key, 'routes', $value2['name'], array($value2['type'] => $value2['name']));
+                }
+            }
+        }
+        //var_export($this->posttype);
+        //var_export($this->routes);
     }
 
     /**
@@ -3930,9 +3905,11 @@ class ZBlogPHP
         }
         $tps = array();
         $tps['template'] = $this->option['ZC_POST_DEFAULT_TEMPLATE'];
+        $tps['list_template'] = $this->option['ZC_INDEX_DEFAULT_TEMPLATE'];
         $tps['category_template'] = $this->option['ZC_INDEX_DEFAULT_TEMPLATE'];
         $tps['tag_template'] = $this->option['ZC_INDEX_DEFAULT_TEMPLATE'];
-        $tps['list_template'] = $this->option['ZC_INDEX_DEFAULT_TEMPLATE'];
+        $tps['author_template'] = $this->option['ZC_INDEX_DEFAULT_TEMPLATE'];
+        $tps['date_template'] = $this->option['ZC_INDEX_DEFAULT_TEMPLATE'];
         $tps['search_template'] = $this->option['ZC_SEARCH_DEFAULT_TEMPLATE'];
 
         if (!is_array($template)) {
@@ -4052,6 +4029,12 @@ class ZBlogPHP
             }
 
             return $this->option['ZC_POST_DEFAULT_TEMPLATE'];
+        } elseif ('list_template' == $key) {
+            if (isset($this->posttype[$typeid]['list_template']) && !empty($this->posttype[$typeid]['list_template'])) {
+                return $this->posttype[$typeid]['list_template'];
+            }
+
+            return $this->option['ZC_INDEX_DEFAULT_TEMPLATE'];
         } elseif ('category_template' == $key) {
             if (isset($this->posttype[$typeid]['category_template']) && !empty($this->posttype[$typeid]['category_template'])) {
                 return $this->posttype[$typeid]['category_template'];
@@ -4064,9 +4047,15 @@ class ZBlogPHP
             }
 
             return $this->option['ZC_INDEX_DEFAULT_TEMPLATE'];
-        } elseif ('list_template' == $key) {
-            if (isset($this->posttype[$typeid]['list_template']) && !empty($this->posttype[$typeid]['list_template'])) {
-                return $this->posttype[$typeid]['list_template'];
+        } elseif ('author_template' == $key) {
+            if (isset($this->posttype[$typeid]['author_template']) && !empty($this->posttype[$typeid]['author_template'])) {
+                return $this->posttype[$typeid]['author_template'];
+            }
+
+            return $this->option['ZC_INDEX_DEFAULT_TEMPLATE'];
+        } elseif ('date_template' == $key) {
+            if (isset($this->posttype[$typeid]['date_template']) && !empty($this->posttype[$typeid]['date_template'])) {
+                return $this->posttype[$typeid]['date_template'];
             }
 
             return $this->option['ZC_INDEX_DEFAULT_TEMPLATE'];
@@ -4158,12 +4147,14 @@ class ZBlogPHP
      */
     public function RegRoute($array, $prepend = false)
     {
-        $routes = &$this->routes[$array['type']];
+        $routes = &$this->routes;
         if ($prepend == false) {
-            $routes[$array['name']] = $array;
+            $routes[$array['type'] . '_' . $array['name']] = $array;
         } else {
-            unset($routes[$array['name']]);
-            $routes = array_merge(array($array['name'] => $array), $routes);
+            unset($routes[$array['type'] . '_' . $array['name']]);
+            $new_name = $array['type'] . '_' . $array['name'];
+            $new_array = array($new_name => $array);
+            $routes = array_merge($new_array, $routes);
         }
         return true;
     }
@@ -4178,17 +4169,13 @@ class ZBlogPHP
      */
     public function GetRoute($type, $name = null)
     {
+        $routes = &$this->routes;
         if (is_array($type)) {
-            $key = key($type);
-            $value = current($type);
-            if (isset($this->routes[$key][$value])) {
-                return $this->routes[$key][$value];
-            }
-            return;
+            $name = current($type);
+            $type = key($type);
         }
-        $routes = &$this->routes[$type];
-        if (isset($routes[$name])) {
-            return $routes[$name];
+        if (isset($routes[$type . '_' . $name])) {
+            return $routes[$type . '_' . $name];
         }
     }
 
@@ -4202,8 +4189,8 @@ class ZBlogPHP
      */
     public function RemoveRoute($type, $name)
     {
-        $routes = &$this->routes[$type];
-        unset($routes[$name]);
+        $routes = &$this->routes;
+        unset($routes[$type . '_' . $name]);
         return true;
     }
 

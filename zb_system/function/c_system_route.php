@@ -42,9 +42,29 @@ function ViewAuto()
     }
 
     $url = urldecode($url);
+    $active_routes = array();
+    $rewrite_routes = array();
+    $default_routes = array();
+    foreach ($zbp->routes as $key => $route) {
+        if ($route['type'] == 'active') {
+            if (GetValueInArray($route, 'suspended', false) == false) {
+                $active_routes[] = $route;
+            }
+        }
+        if ($route['type'] == 'rewrite') {
+            if ($zbp->option['ZC_STATIC_MODE'] == 'REWRITE' && GetValueInArray($route, 'suspended', false) == false) {
+                $rewrite_routes[] = $route;
+            }
+        }
+        if ($route['type'] == 'default') {
+            if (GetValueInArray($route, 'suspended', false) == false) {
+                $default_routes[] = $route;
+            }
+        }
+    }
 
     //匹配动态路由（某些情况下，在伪静开启时匹配但不输出内容，如果是符合条件就可以跳转）
-    foreach ($zbp->routes['active'] as $key => $route) {
+    foreach ($active_routes as $key => $route) {
         $prefix = GetValueInArray($route, 'prefix', '');
         $prefix = empty($prefix) ? '' : ($prefix . '/');
         if (($url == $prefix . '') || ($url == $prefix . 'index.php')) {
@@ -76,7 +96,7 @@ function ViewAuto()
 
 
     //匹配伪静路由
-    foreach ($zbp->routes['rewrite'] as $key => $route) {
+    foreach ($rewrite_routes as $key => $route) {
         //$match_with_page 默认匹配1次 (true)，有page参数可以匹配2次 [false=(remove page), true=(keep page)]
         $parameters = array();
         $match_with_page = array();
@@ -113,7 +133,7 @@ function ViewAuto()
 
     //都不能匹配时，进入一次默认路由
     if ($url == '' || $url == '/' || $url == 'index.php') {
-        foreach ($zbp->routes['default'] as $key => $route) {
+        foreach ($default_routes as $key => $route) {
             $b = ViewAuto_Check_Get_And_Not_Get_And_Must_Get(GetValueInArray($route, 'get', array()), GetValueInArray($route, 'not_get', array()), GetValueInArray($route, 'must_get', array()));
             $b = $b && ViewAuto_Check_Request_Method(GetValueInArray($route, 'request_method', ''));
             if ($b) {
@@ -940,7 +960,7 @@ function ViewList($page = null, $cate = null, $auth = null, $date = null, $tags 
 
             $zbp->modulesbyfilename['calendar']->Content = ModuleBuilder::Calendar(date('Y', $datetime) . '-' . date('n', $datetime));
 
-            $template = $zbp->GetPostType($posttype, 'list_template');
+            $template = $zbp->GetPostType($posttype, 'date_template');
 
             if ($hasDay) {
                 $w[] = array('BETWEEN', 'log_PostTime', $datetime, strtotime('+1 day', $datetime));
