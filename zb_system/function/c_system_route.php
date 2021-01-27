@@ -132,18 +132,16 @@ function ViewAuto()
     }
 
     //都不能匹配时，进入一次默认路由
-    if ($url == '' || $url == '/' || $url == 'index.php') {
-        foreach ($default_routes as $key => $route) {
-            $b = ViewAuto_Check_Get_And_Not_Get_And_Must_Get(GetValueInArray($route, 'get', array()), GetValueInArray($route, 'not_get', array()), GetValueInArray($route, 'must_get', array()));
-            $b = $b && ViewAuto_Check_Request_Method(GetValueInArray($route, 'request_method', ''));
-            if ($b) {
-                $array = array();
-                ViewAuto_Process_Args_get($array, GetValueInArray($route, 'args_get', array()));
-                ViewAuto_Process_Args_with($array, GetValueInArray($route, 'args_with', array()), $route);
-                $result = ViewAuto_Call_Auto($route, $array);
-                if ($result == true) {
-                    return;
-                }
+    foreach ($default_routes as $key => $route) {
+        $b = ViewAuto_Check_Get_And_Not_Get_And_Must_Get(GetValueInArray($route, 'get', array()), GetValueInArray($route, 'not_get', array()), GetValueInArray($route, 'must_get', array()));
+        $b = $b && ViewAuto_Check_Request_Method(GetValueInArray($route, 'request_method', ''));
+        if ($b) {
+            $array = array();
+            ViewAuto_Process_Args_get($array, GetValueInArray($route, 'args_get', array()));
+            ViewAuto_Process_Args_with($array, GetValueInArray($route, 'args_with', array()), $route);
+            $result = ViewAuto_Call_Auto($route, $array);
+            if ($result == true) {
+                return;
             }
         }
     }

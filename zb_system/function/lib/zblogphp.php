@@ -789,10 +789,15 @@ class ZBlogPHP
      */
     public function LoadPostType()
     {
-        foreach (array(0 => 'article', 1 => 'page') as $key => $value) {
-            $posttype = include ZBP_PATH . 'zb_system/defend/posttype_' . $value . '.php';
-
-            empty($posttype['single_urlrule']) ? $posttype['single_urlrule'] = $this->option['ZC_PAGE_REGEX'] : null;
+        foreach (array(0 => 'article', 1 => 'page') as $postid => $postname) {
+            $posttype = include ZBP_PATH . 'zb_system/defend/posttype_' . $postname . '.php';
+            if (empty($posttype['single_urlrule'])) {
+                if ($postid == 0) {
+                    $posttype['single_urlrule'] = $this->option['ZC_ARTICLE_REGEX'];
+                } else {
+                    $posttype['single_urlrule'] = $this->option['ZC_PAGE_REGEX'];
+                }
+            }
             empty($posttype['list_urlrule']) ? $posttype['list_urlrule'] = $this->option['ZC_INDEX_REGEX'] : null;
             empty($posttype['list_category_urlrule']) ? $posttype['list_category_urlrule'] = $this->option['ZC_CATEGORY_REGEX'] : null;
             empty($posttype['list_author_urlrule']) ? $posttype['list_author_urlrule'] = $this->option['ZC_AUTHOR_REGEX'] : null;
@@ -800,7 +805,7 @@ class ZBlogPHP
             empty($posttype['list_tag_urlrule']) ? $posttype['list_tag_urlrule'] = $this->option['ZC_TAGS_REGEX'] : null;
             empty($posttype['search_urlrule']) ? $posttype['search_urlrule'] = $this->option['ZC_SEARCH_REGEX'] : null;
 
-            $this->posttype[$key] = $posttype;
+            $this->posttype[$postid] = $posttype;
         }
     }
 
@@ -809,35 +814,35 @@ class ZBlogPHP
      */
     public function LoadRoutes()
     {
-        foreach (array(0 => 'article', 1 => 'page') as $key => $value) {
-            $route = include ZBP_PATH . 'zb_system/defend/post_' . $value . '_routes.php';
+        foreach (array(0 => 'article', 1 => 'page') as $postid => $postname) {
+            $route = include ZBP_PATH . 'zb_system/defend/post_' . $postname . '_routes.php';
             foreach ($route as $key2 => $value2) {
                 if (empty($value2['urlrule'])) {
-                    if ($value2['name'] == 'post_' . $value . '_single') {
-                        $value2['urlrule'] = $this->GetPostType($key, 'single_urlrule');
+                    if ($value2['name'] == 'post_' . $postname . '_single') {
+                        $value2['urlrule'] = $this->GetPostType($postid, 'single_urlrule');
                     }
-                    if ($value2['name'] == 'post_' . $value . '_list') {
-                        $value2['urlrule'] = $this->GetPostType($key, 'list_urlrule');
+                    if ($value2['name'] == 'post_' . $postname . '_list') {
+                        $value2['urlrule'] = $this->GetPostType($postid, 'list_urlrule');
                     }
-                    if ($value2['name'] == 'post_' . $value . '_list_category') {
-                        $value2['urlrule'] = $this->GetPostType($key, 'list_category_urlrule');
+                    if ($value2['name'] == 'post_' . $postname . '_list_category') {
+                        $value2['urlrule'] = $this->GetPostType($postid, 'list_category_urlrule');
                     }
-                    if ($value2['name'] == 'post_' . $value . '_list_author') {
-                        $value2['urlrule'] = $this->GetPostType($key, 'list_author_urlrule');
+                    if ($value2['name'] == 'post_' . $postname . '_list_author') {
+                        $value2['urlrule'] = $this->GetPostType($postid, 'list_author_urlrule');
                     }
-                    if ($value2['name'] == 'post_' . $value . '_list_date') {
-                        $value2['urlrule'] = $this->GetPostType($key, 'list_date_urlrule');
+                    if ($value2['name'] == 'post_' . $postname . '_list_date') {
+                        $value2['urlrule'] = $this->GetPostType($postid, 'list_date_urlrule');
                     }
-                    if ($value2['name'] == 'post_' . $value . '_list_tag') {
-                        $value2['urlrule'] = $this->GetPostType($key, 'list_tag_urlrule');
+                    if ($value2['name'] == 'post_' . $postname . '_list_tag') {
+                        $value2['urlrule'] = $this->GetPostType($postid, 'list_tag_urlrule');
                     }
-                    if ($value2['name'] == 'post_' . $value . '_search') {
-                        $value2['urlrule'] = $this->GetPostType($key, 'search_urlrule');
+                    if ($value2['name'] == 'post_' . $postname . '_search') {
+                        $value2['urlrule'] = $this->GetPostType($postid, 'search_urlrule');
                     }
                 }
                 $this->routes[$key2] = $value2;
                 if ($value2['type'] != 'rewrite' || ($this->option['ZC_STATIC_MODE'] == 'REWRITE' && $value2['type'] == 'rewrite')) {
-                    $this->SetPostType_Sub($key, 'routes', $value2['name'], array($value2['type'] => $value2['name']));
+                    $this->SetPostType_Sub($postid, 'routes', $value2['name'], array($value2['type'] => $value2['name']));
                 }
             }
         }
