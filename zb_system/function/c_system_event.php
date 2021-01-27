@@ -1550,7 +1550,7 @@ function PostMember()
     }
 
     //检测密码
-    if (trim($_POST["Password"]) == '' || trim($_POST["PasswordRe"]) == '' || $_POST["Password"] != $_POST["PasswordRe"]) {
+    if (!isset($_POST["Password"]) || trim($_POST["Password"]) == '' || trim($_POST["PasswordRe"]) == '' || $_POST["Password"] != $_POST["PasswordRe"]) {
         unset($_POST["Password"]);
         unset($_POST["PasswordRe"]);
     }
