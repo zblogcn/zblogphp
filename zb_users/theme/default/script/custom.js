@@ -15,7 +15,8 @@ zbp.plugin.on("comment.reply.start", "default", function(id) {
   var frm = $('#divCommentPost')
   var cancel = $("#cancel-reply")
 
-  frm.before($("<div id='temp-frm' style='display:none'>")).addClass("reply-frm")
+  if (!frm.hasClass("reply-frm"))
+    frm.before($("<div id='temp-frm' style='display:none'>")).addClass("reply-frm")
   $('#AjaxComment' + i).before(frm)
 
   cancel.show().click(function() {
