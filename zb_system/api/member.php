@@ -86,6 +86,14 @@ function api_member_post()
 
     ApiCheckAuth(true, 'MemberPst');
 
+    // 避免 PostMember 出错
+    if (! isset($_POST['Password'])) {
+        unset($_POST['Password']);
+    }
+    if (! isset($_POST['PasswordRe'])) {
+        unset($_POST['PasswordRe']);
+    }
+
     try {
         //PostMember()内部有判断'MemberNew' or 'MemberEdt' or 'MemberAll'
         $member = PostMember();
