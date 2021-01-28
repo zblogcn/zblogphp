@@ -101,7 +101,7 @@ function Redirect_to_search()
         $r = new UrlRule($urlrule);
     }
 
-    $q = trim(strip_tags(GetVars('q', 'POST')));
+    $q = rawurlencode(trim(strip_tags(GetVars('q', 'POST'))));
     $r->Rules['{%page%}'] = '';
     $r->Rules['{%q%}'] = $q;
     $r->Rules['{%search%}'] = $q;

@@ -182,7 +182,7 @@ class UrlRule
                     }
                 }
                 if (is_scalar($object)) {
-                    $p['relate_value'] = $object;
+                    $p['relate_value'] = rawurlencode($object);
                 }
                 if (is_null($object)) {
                     $p['relate_value'] = '';
