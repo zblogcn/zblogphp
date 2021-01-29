@@ -336,7 +336,7 @@ class ZBlogPHP
 
     public $isxmlrpc = false; //是否加载XML-RPC模式
 
-    private $isGzip = false; //是否开启gzip(已废弃)
+    public $ishttps = false; //链接至isHttps
 
     public $isHttps = false; //是否HTTPS
 
@@ -555,6 +555,8 @@ class ZBlogPHP
             $this->user->$key = $value[3];
         }
         $this->user->Metas = new Metas();
+
+        $this->ishttps = &$this->isHttps;
 
         $this->BindingCache();
     }
