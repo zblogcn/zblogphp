@@ -106,14 +106,9 @@ function ApiListCheck(&$mods_allow, &$mods_disallow)
     foreach ($mods_allow as $array) {
         if (!empty($array) && is_array($array)) {
             foreach ($array as $m => $a) {
-                if ($mod == $m) {
-                    if ($a == '') {
-                        $b = true;
-                        break;
-                    } elseif ($act == $a) {
-                        $b = true;
-                        break;
-                    }
+                if ($mod == $m && ($a == '' || $act == $a)) {
+                    $b = true;
+                    break;
                 }
             }
         }
@@ -128,14 +123,9 @@ function ApiListCheck(&$mods_allow, &$mods_disallow)
     foreach ($mods_disallow as $array) {
         if (!empty($array) && is_array($array)) {
             foreach ($array as $m => $a) {
-                if ($mod == $m) {
-                    if ($a == '') {
-                        $b = false;
-                        break;
-                    } elseif ($act == $a) {
-                        $b = false;
-                        break;
-                    }
+                if ($mod == $m && ($a == '' || $act == $a)) {
+                    $b = false;
+                    break;
                 }
             }
         }
