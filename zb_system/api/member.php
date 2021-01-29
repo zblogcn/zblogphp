@@ -88,10 +88,10 @@ function api_member_post()
 
     // 避免 PostMember 出错
     if (! isset($_POST['Password'])) {
-        unset($_POST['Password']);
+        $_POST['Password'] = '';
     }
     if (! isset($_POST['PasswordRe'])) {
-        unset($_POST['PasswordRe']);
+        $_POST['PasswordRe'] = '';
     }
 
     try {
