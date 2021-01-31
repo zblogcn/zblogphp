@@ -84,8 +84,8 @@ function api_post_post()
 
     ApiCheckAuth(true, $actions['post']);
 
-    //如果直接给分类名称的话
-    if (isset($_POST['CateName'])) {
+    //如果直接给分类名称没有给分类ID的话
+    if (!isset($_POST['CateID']) && isset($_POST['CateName'])) {
         $_POST['CateID'] = $zbp->GetCategoryByName(trim($_POST['CateName']), $postType)->ID;
     }
 
