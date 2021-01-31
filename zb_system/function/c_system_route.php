@@ -1082,7 +1082,7 @@ function ViewList($page = null, $cate = null, $auth = null, $date = null, $tags 
     foreach ($articles as $key => &$article) {
         $classname = $zbp->GetPostType($posttype, 'classname');
         if (strcasecmp(get_class($article), $classname) != 0) {
-            $newarticle = $article->Cloned($classname);
+            $newarticle = $article->Cloned(false, $classname);
             $article = $newarticle;
             $zbp->AddPostCache($article);
         }
@@ -1264,7 +1264,7 @@ function ViewPost($id = null, $alias = null, $isrewrite = false, $object = array
     } else {
         $classname = $zbp->GetPostType($posttype, 'classname');
         if (strcasecmp(get_class($article), $classname) != 0) {
-            $newarticle = $article->Cloned($classname);
+            $newarticle = $article->Cloned(false, $classname);
             $article = $newarticle;
             $zbp->AddPostCache($article);
         }

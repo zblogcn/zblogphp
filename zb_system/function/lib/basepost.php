@@ -364,8 +364,6 @@ class BasePost extends Base
                 } else {
                     return $this->Title;
                 }
-            case 'OriginalTitle':
-                return isset($this->data['OriginalTitle']) ? $this->data['OriginalTitle'] : $this->Title;
             default:
                 foreach ($GLOBALS['hooks']['Filter_Plugin_Post_Get'] as $fpname => &$fpsignal) {
                     $fpreturn = $fpname($this, $name);

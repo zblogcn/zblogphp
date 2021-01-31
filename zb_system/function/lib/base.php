@@ -28,6 +28,11 @@ class Base
     protected $data = array();
 
     /**
+     * @var array 原始数据
+     */
+    protected $original = array();
+
+    /**
      * @var Metas|null 扩展元数据
      */
     public $Metas = null;
@@ -69,8 +74,10 @@ class Base
 
         if (function_exists('get_called_class')) {
             $this->classname = get_called_class();
-        } elseif (is_string($classname)) {
-            $this->classname = $classname;
+        } elseif (is_string($classname) && trim($classname)) {
+            $this->classname = trim($classname);
+        } else {
+            $this->classname = get_class($this);
         }
 
         if (true == $hasmetas) {
@@ -80,6 +87,7 @@ class Base
         foreach ($this->datainfo as $key => $value) {
             $this->data[$key] = $value[3];
         }
+        $this->original = $this->data;
     }
 
     /**
@@ -130,6 +138,20 @@ class Base
             return $this->data;
         } else {
             return $this->data[$key];
+        }
+    }
+
+    /**
+     * 获取原始数据(不设$key就返回整个original数组).
+     *
+     * @return array
+     */
+    public function GetOriginal($key = null)
+    {
+        if (null == $key) {
+            return $this->original;
+        } else {
+            return $this->original[$key];
         }
     }
 
@@ -250,6 +272,8 @@ class Base
         //    $fpname($this, $this->data);
         //}
 
+        $this->original = $this->data;
+
         return true;
     }
 
@@ -342,6 +366,8 @@ class Base
         //    $fpname($this, $this->data);
         //}
 
+        $this->original = $this->data;
+
         return true;
     }
 
@@ -379,6 +405,8 @@ class Base
         //foreach ($GLOBALS['hooks']['Filter_Plugin_Base_Data_Load'] as $fpname => &$fpsignal) {
         //    $fpname($this, $this->data);
         //}
+
+        $this->original = $this->data;
 
         return true;
     }
@@ -485,13 +513,22 @@ class Base
      *
      * @return object
      */
-    public function Cloned($classname = null)
+    public function Cloned($with_original = false, $classname = null)
     {
         if (empty($classname)) {
             $classname = $this->classname;
         }
-        $new = new $classname;
-        $new->LoadInfoByDataArray($this->data);
+        if ($classname == 'Base') {
+            $new = new $classname($this->table, $this->datainfo);
+        } else {
+            $new = new $classname;
+        }
+
+        if ($with_original == false) {
+            $new->LoadInfoByDataArray($this->data);
+        } else {
+            $new->LoadInfoByDataArray($this->original);
+        }
         return $new;
     }
 
