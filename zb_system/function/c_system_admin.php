@@ -1284,18 +1284,15 @@ function Admin_ModuleMng()
         CreateModuleDiv($m);
     }
 
+    $sideids = array(1 => '', 2 => '2', 3 => '3', 4 => '4', 5 => '5', 6 => '6', 7 => '7', 8 => '8', 9 => '9');
+
     echo '<hr/>';
     echo "\r\n";
     echo '<form id="edit" method="post" action="' . BuildSafeCmdURL('act=SidebarSet') . '">';
-    echo '<input type="hidden" id="strsidebar" name="edtSidebar" value="' . $zbp->option['ZC_SIDEBAR_ORDER'] . '"/>';
-    echo '<input type="hidden" id="strsidebar2" name="edtSidebar2" value="' . $zbp->option['ZC_SIDEBAR2_ORDER'] . '"/>';
-    echo '<input type="hidden" id="strsidebar3" name="edtSidebar3" value="' . $zbp->option['ZC_SIDEBAR3_ORDER'] . '"/>';
-    echo '<input type="hidden" id="strsidebar4" name="edtSidebar4" value="' . $zbp->option['ZC_SIDEBAR4_ORDER'] . '"/>';
-    echo '<input type="hidden" id="strsidebar5" name="edtSidebar5" value="' . $zbp->option['ZC_SIDEBAR5_ORDER'] . '"/>';
-    echo '<input type="hidden" id="strsidebar6" name="edtSidebar6" value="' . $zbp->option['ZC_SIDEBAR6_ORDER'] . '"/>';
-    echo '<input type="hidden" id="strsidebar7" name="edtSidebar7" value="' . $zbp->option['ZC_SIDEBAR7_ORDER'] . '"/>';
-    echo '<input type="hidden" id="strsidebar8" name="edtSidebar8" value="' . $zbp->option['ZC_SIDEBAR8_ORDER'] . '"/>';
-    echo '<input type="hidden" id="strsidebar9" name="edtSidebar9" value="' . $zbp->option['ZC_SIDEBAR9_ORDER'] . '"/>';
+
+    foreach ($sideids as $key => $value) {
+        echo '<input type="hidden" id="strsidebar' . $value . '" name="edtSidebar' . $value . '" value="' . $zbp->option['ZC_SIDEBAR' . $value . '_ORDER'] . '"/>';
+    }
     echo '</form>';
     echo "\r\n";
     echo '<div class="clear"></div></div>';
@@ -1303,78 +1300,17 @@ function Admin_ModuleMng()
     //widget-list end
     echo "\r\n";
     //siderbar-list begin
-    echo '<div class="siderbar-list">';
-    echo '<div class="siderbar-drop" id="siderbar"><div class="siderbar-header">' . $zbp->lang['msg']['sidebar'] . '&nbsp;<img class="roll" src="../image/admin/loading.gif" width="16" alt="" /><span class="ui-icon ui-icon-triangle-1-s"></span></div><div  class="siderbar-sort-list" >';
-    echo '<div class="siderbar-note" >' . str_replace('%s', count($zbp->template->sidebar), $zbp->lang['msg']['sidebar_module_count']) . '</div>';
-    foreach ($zbp->template->sidebar as $m) {
-        CreateModuleDiv($m, false);
+    foreach ($sideids as $key => $value) {
+        $id = 'sidebar' . $value;
+        echo '<div class="siderbar-list">';
+        echo '<div class="siderbar-drop" id="siderbar' . $value . '"><div class="siderbar-header">' . $zbp->lang['msg'][$id] . '&nbsp;<img class="roll" src="../image/admin/loading.gif" width="16" alt="" /><span class="ui-icon ui-icon-triangle-1-s"></span></div><div  class="siderbar-sort-list" >';
+        echo '<div class="siderbar-note" >' . str_replace('%s', count($zbp->template->$id), $zbp->lang['msg']['sidebar_module_count']) . '</div>';
+        foreach ($zbp->template->$id as $m) {
+            CreateModuleDiv($m, false);
+        }
+        echo '</div></div>';
+        echo "\r\n";
     }
-    echo '</div></div>';
-    echo "\r\n";
-
-    echo '<div class="siderbar-drop" id="siderbar2"><div class="siderbar-header">' . $zbp->lang['msg']['sidebar2'] . '&nbsp;<img class="roll" src="../image/admin/loading.gif" width="16" alt="" /><span class="ui-icon ui-icon-triangle-1-s"></span></div><div  class="siderbar-sort-list" >';
-    echo '<div class="siderbar-note" >' . str_replace('%s', count($zbp->template->sidebar2), $zbp->lang['msg']['sidebar_module_count']) . '</div>';
-    foreach ($zbp->template->sidebar2 as $m) {
-        CreateModuleDiv($m, false);
-    }
-    echo '</div></div>';
-    echo "\r\n";
-
-    echo '<div class="siderbar-drop" id="siderbar3"><div class="siderbar-header">' . $zbp->lang['msg']['sidebar3'] . '&nbsp;<img class="roll" src="../image/admin/loading.gif" width="16" alt="" /><span class="ui-icon ui-icon-triangle-1-s"></span></div><div  class="siderbar-sort-list" >';
-    echo '<div class="siderbar-note" >' . str_replace('%s', count($zbp->template->sidebar3), $zbp->lang['msg']['sidebar_module_count']) . '</div>';
-    foreach ($zbp->template->sidebar3 as $m) {
-        CreateModuleDiv($m, false);
-    }
-    echo '</div></div>';
-    echo "\r\n";
-
-    echo '<div class="siderbar-drop" id="siderbar4"><div class="siderbar-header">' . $zbp->lang['msg']['sidebar4'] . '&nbsp;<img class="roll" src="../image/admin/loading.gif" width="16" alt="" /><span class="ui-icon ui-icon-triangle-1-s"></span></div><div  class="siderbar-sort-list" >';
-    echo '<div class="siderbar-note" >' . str_replace('%s', count($zbp->template->sidebar4), $zbp->lang['msg']['sidebar_module_count']) . '</div>';
-    foreach ($zbp->template->sidebar4 as $m) {
-        CreateModuleDiv($m, false);
-    }
-    echo '</div></div>';
-    echo "\r\n";
-
-    echo '<div class="siderbar-drop" id="siderbar5"><div class="siderbar-header">' . $zbp->lang['msg']['sidebar5'] . '&nbsp;<img class="roll" src="../image/admin/loading.gif" width="16" alt="" /><span class="ui-icon ui-icon-triangle-1-s"></span></div><div  class="siderbar-sort-list" >';
-    echo '<div class="siderbar-note" >' . str_replace('%s', count($zbp->template->sidebar5), $zbp->lang['msg']['sidebar_module_count']) . '</div>';
-    foreach ($zbp->template->sidebar5 as $m) {
-        CreateModuleDiv($m, false);
-    }
-    echo '</div></div>';
-    echo "\r\n";
-
-    echo '<div class="siderbar-drop" id="siderbar6"><div class="siderbar-header">' . $zbp->lang['msg']['sidebar6'] . '&nbsp;<img class="roll" src="../image/admin/loading.gif" width="16" alt="" /><span class="ui-icon ui-icon-triangle-1-s"></span></div><div  class="siderbar-sort-list" >';
-    echo '<div class="siderbar-note" >' . str_replace('%s', count($zbp->template->sidebar6), $zbp->lang['msg']['sidebar_module_count']) . '</div>';
-    foreach ($zbp->template->sidebar6 as $m) {
-        CreateModuleDiv($m, false);
-    }
-    echo '</div></div>';
-    echo "\r\n";
-
-    echo '<div class="siderbar-drop" id="siderbar7"><div class="siderbar-header">' . $zbp->lang['msg']['sidebar7'] . '&nbsp;<img class="roll" src="../image/admin/loading.gif" width="16" alt="" /><span class="ui-icon ui-icon-triangle-1-s"></span></div><div  class="siderbar-sort-list" >';
-    echo '<div class="siderbar-note" >' . str_replace('%s', count($zbp->template->sidebar7), $zbp->lang['msg']['sidebar_module_count']) . '</div>';
-    foreach ($zbp->template->sidebar7 as $m) {
-        CreateModuleDiv($m, false);
-    }
-    echo '</div></div>';
-    echo "\r\n";
-
-    echo '<div class="siderbar-drop" id="siderbar8"><div class="siderbar-header">' . $zbp->lang['msg']['sidebar8'] . '&nbsp;<img class="roll" src="../image/admin/loading.gif" width="16" alt="" /><span class="ui-icon ui-icon-triangle-1-s"></span></div><div  class="siderbar-sort-list" >';
-    echo '<div class="siderbar-note" >' . str_replace('%s', count($zbp->template->sidebar8), $zbp->lang['msg']['sidebar_module_count']) . '</div>';
-    foreach ($zbp->template->sidebar8 as $m) {
-        CreateModuleDiv($m, false);
-    }
-    echo '</div></div>';
-    echo "\r\n";
-
-    echo '<div class="siderbar-drop" id="siderbar9"><div class="siderbar-header">' . $zbp->lang['msg']['sidebar9'] . '&nbsp;<img class="roll" src="../image/admin/loading.gif" width="16" alt="" /><span class="ui-icon ui-icon-triangle-1-s"></span></div><div  class="siderbar-sort-list" >';
-    echo '<div class="siderbar-note" >' . str_replace('%s', count($zbp->template->sidebar9), $zbp->lang['msg']['sidebar_module_count']) . '</div>';
-    foreach ($zbp->template->sidebar9 as $m) {
-        CreateModuleDiv($m, false);
-    }
-    echo '</div></div>';
-    echo "\r\n";
 
     echo '<div class="clear"></div></div>';
     //siderbar-list end
@@ -1388,71 +1324,24 @@ function Admin_ModuleMng()
     <script>
         $(function() {
             function sortFunction() {
-                var s1 = "";
-                $("#siderbar").find("div.funid").each(function(i) {
-                    s1 += $(this).html() + "|";
-                });
-
-                var s2 = "";
-                $("#siderbar2").find("div.funid").each(function(i) {
-                    s2 += $(this).html() + "|";
-                });
-
-                var s3 = "";
-                $("#siderbar3").find("div.funid").each(function(i) {
-                    s3 += $(this).html() + "|";
-                });
-
-                var s4 = "";
-                $("#siderbar4").find("div.funid").each(function(i) {
-                    s4 += $(this).html() + "|";
-                });
-
-                var s5 = "";
-                $("#siderbar5").find("div.funid").each(function(i) {
-                    s5 += $(this).html() + "|";
-                });
-
-                var s6 = "";
-                $("#siderbar6").find("div.funid").each(function(i) {
-                    s6 += $(this).html() + "|";
-                });
-
-                var s7 = "";
-                $("#siderbar7").find("div.funid").each(function(i) {
-                    s7 += $(this).html() + "|";
-                });
-
-                var s8 = "";
-                $("#siderbar8").find("div.funid").each(function(i) {
-                    s8 += $(this).html() + "|";
-                });
-
-                var s9 = "";
-                $("#siderbar9").find("div.funid").each(function(i) {
-                    s9 += $(this).html() + "|";
-                });
-
-                $("#strsidebar").val(s1);
-                $("#strsidebar2").val(s2);
-                $("#strsidebar3").val(s3);
-                $("#strsidebar4").val(s4);
-                $("#strsidebar5").val(s5);
-                $("#strsidebar6").val(s6);
-                $("#strsidebar7").val(s7);
-                $("#strsidebar8").val(s8);
-                $("#strsidebar9").val(s9);
+    <?php
+    foreach ($sideids as $key => $value) {
+        echo '
+        var s' . $key . ' = "";
+        $("#siderbar' . $value . '").find("div.funid").each(function(i) {
+            s' . $key . ' += $(this).html() + "|";
+        });
+        ';
+        echo '$("#strsidebar' . $value . '").val(s' . $key . ');';
+    }
+    ?>
 
                 $.post($("#edit").attr("action"), {
-                        "sidebar": s1,
-                        "sidebar2": s2,
-                        "sidebar3": s3,
-                        "sidebar4": s4,
-                        "sidebar5": s5,
-                        "sidebar6": s6,
-                        "sidebar7": s7,
-                        "sidebar8": s8,
-                        "sidebar9": s9
+    <?php
+    foreach ($sideids as $key => $value) {
+        echo '"sidebar' . $value . '": s' . $key . ',';
+    }
+    ?>
                     },
                     function(data) {
                         //alert("Data Loaded: " + data);
