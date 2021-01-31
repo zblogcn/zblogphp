@@ -83,10 +83,9 @@ function ViewAuto()
                 }
                 $result = ViewAuto_Call_Auto($route, $array);
                 if ($result == true) {
-                    $template = &$zbp->template;
-                    //如果开启伪静且$b_redirect，那么通过原动态访问的会跳转至$template->GetTags('url')
-                    if ($b_redirect) {
-                        Redirect($template->GetTags('url'));
+                    //如果开启伪静且$b_redirect，那么通过原动态访问的会跳转至$result
+                    if ($b_redirect && is_string($result)) {
+                        Redirect($result);
                     }
                     return;
                 }
@@ -684,6 +683,8 @@ function ViewSearch()
 
     if ($canceldisplay == false) {
         $zbp->template->Display();
+    } else {
+        return $zbp->template->GetTags('url');
     }
 
     return true;
@@ -1131,6 +1132,8 @@ function ViewList($page = null, $cate = null, $auth = null, $date = null, $tags 
 
     if ($canceldisplay == false) {
         $zbp->template->Display();
+    } else {
+        return $zbp->template->GetTags('url');
     }
 
     return true;
@@ -1384,6 +1387,8 @@ function ViewPost($id = null, $alias = null, $isrewrite = false, $object = array
 
     if ($canceldisplay == false) {
         $zbp->template->Display();
+    } else {
+        return $zbp->template->GetTags('url');
     }
 
     return true;
