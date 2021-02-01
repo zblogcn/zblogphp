@@ -24,7 +24,13 @@ function api_member_login()
 
     $member = null;
 
-    if ($zbp->Verify_MD5(trim(GetVars('username', 'POST')), md5(trim(GetVars('password', 'POST'))), $member)) {
+    if (GetVars('password_type', 'POST') === 'md5') {
+        $md5pw = trim(GetVars('password', 'POST'));
+    } else {
+        $md5pw = md5(trim(GetVars('password', 'POST')));
+    }
+
+    if ($zbp->Verify_MD5(trim(GetVars('username', 'POST')), $md5pw, $member)) {
         $zbp->user = $member;
         $sd = (float) GetVars('savedate', 'POST');
         $sd = ($sd < 1) ? 1 : $sd;
