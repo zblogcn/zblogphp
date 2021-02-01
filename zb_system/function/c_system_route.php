@@ -637,7 +637,6 @@ function ViewSearch()
             $r->Intro = str_replace($q, '<strong>' . $q . '</strong>', $t);
             $r->Content = $a->Content;
         }
-        $r->OriginalTitle = $r->Title;
         $r->Title = str_replace($q, '<strong>' . $q . '</strong>', $r->Title);
         $article->Content .= '<a href="' . $a->Url . '">' . $a->Url . '</a><br/></p>';
         $results[] = $r;

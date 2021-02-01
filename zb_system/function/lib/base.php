@@ -466,10 +466,13 @@ class Base
             $this->$id_name = $this->db->Insert($sql);
         } else {
             $sql = $this->db->sql->Update($this->table, $keyvalue, array(array('=', $id_field, $this->$id_name)));
+            $r = $this->db->Update($sql);
+            $this->original = $this->data;
 
-            return $this->db->Update($sql);
+            return $r;
         }
 
+        $this->original = $this->data;
         return true;
     }
 
