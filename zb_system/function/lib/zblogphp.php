@@ -817,7 +817,7 @@ class ZBlogPHP
     public function LoadRoutes()
     {
         foreach (array(0 => 'article', 1 => 'page') as $postid => $postname) {
-            $route = include ZBP_PATH . 'zb_system/defend/post_' . $postname . '_routes.php';
+            $route = include ZBP_PATH . 'zb_system/defend/routes_post_' . $postname . '.php';
             foreach ($route as $key2 => $value2) {
                 if (empty($value2['urlrule'])) {
                     if ($value2['name'] == 'post_' . $postname . '_single') {
