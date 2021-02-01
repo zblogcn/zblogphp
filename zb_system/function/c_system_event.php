@@ -339,11 +339,11 @@ function PostArticle()
                     $imgNew = ImgToThumbUrl($imgs);
                     //缩略并裁剪
                     if ($zbp->option['ZC_ARTICLE_THUMB_TYPE'] == 1) {
-                        if (Thumbnail::ClipThumb($imgs, $imgNew, $zbp->option['ZC_ARTICLE_THUMB_WIDTH'], $zbp->option['ZC_ARTICLE_THUMB_HEIGHT'])) {
+                        if (Thumb::ClipZoom($imgs, $imgNew, $zbp->option['ZC_ARTICLE_THUMB_WIDTH'], $zbp->option['ZC_ARTICLE_THUMB_HEIGHT'])) {
                             $_POST['Thumb'] = ImgToThumbUrl('{#ZC_BLOG_HOST#}' . $img);
                         }
                     } else {
-                        if (Thumbnail::Thumb($imgs, $imgNew, $zbp->option['ZC_ARTICLE_THUMB_WIDTH'], false)) {
+                        if (Thumb::Zoom($imgs, $imgNew, $zbp->option['ZC_ARTICLE_THUMB_WIDTH'], false)) {
                             $_POST['Thumb'] = ImgToThumbUrl('{#ZC_BLOG_HOST#}' . $img);
                         }
                     }
@@ -369,7 +369,7 @@ function PostArticle()
                         if ($r) {
                             if (file_put_contents($url, $r)) {
                                 $imgNew = ImgToThumbUrl($url);
-                                if (Thumbnail::ClipThumb($url, $imgNew, $zbp->option['ZC_ARTICLE_THUMB_WIDTH'], $zbp->option['ZC_ARTICLE_THUMB_HEIGHT'])) {
+                                if (Thumb::ClipZoom($url, $imgNew, $zbp->option['ZC_ARTICLE_THUMB_WIDTH'], $zbp->option['ZC_ARTICLE_THUMB_HEIGHT'])) {
                                     $_POST['Thumb'] = '{#ZC_BLOG_HOST#}' . $path . ImgToThumbUrl($name);
                                 }
                             }
@@ -378,7 +378,7 @@ function PostArticle()
                 } else {
                     $r = $zbp->path . str_replace('{#ZC_BLOG_HOST#}', '', $_POST['FirstImg']);
                     $imgNew = ImgToThumbUrl($url);
-                    if (Thumbnail::ClipThumb($r, $imgNew, $zbp->option['ZC_ARTICLE_THUMB_WIDTH'], $zbp->option['ZC_ARTICLE_THUMB_HEIGHT'])) {
+                    if (Thumb::ClipZoom($r, $imgNew, $zbp->option['ZC_ARTICLE_THUMB_WIDTH'], $zbp->option['ZC_ARTICLE_THUMB_HEIGHT'])) {
                         $_POST['Thumb'] = '{#ZC_BLOG_HOST#}' . $path . ImgToThumbUrl($name);
                     }
                 }

@@ -78,7 +78,17 @@ function updatedb()
     //172360
     $old = @$db->sql->get()->select($t['Post'])->column($d['Post']['Thumb'][0])->limit(1)->query;
     if (count($old) == 1 && $old[0] === false) {
-        @$db->Query("ALTER TABLE {$t['Post']} ADD {$d['Post']['Thumb'][0]} VARCHAR(250) NOT NULL DEFAULT '';");
+        switch ($db->type) {
+            case 'mysql':
+                @$db->Query("ALTER TABLE {$t['Post']} ADD {$d['Post']['Thumb'][0]} longtext NOT NULL;");
+                break;
+            case 'postgresql':
+                @$db->Query("ALTER TABLE {$t['Post']} ADD {$d['Post']['Thumb'][0]} text NOT NULL;");
+                break;
+            case 'sqlite':
+                @$db->Query("ALTER TABLE {$t['Post']} ADD {$d['Post']['Thumb'][0]} text NOT NULL;");
+                break;
+        }
     }
 
     //172370

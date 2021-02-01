@@ -7,7 +7,7 @@ if (!defined('ZBP_PATH')) {
 /**
  * 缩略图生成类.
  */
-class Thumbnail
+class Thumb
 {
     /**
      * 图片缩略
@@ -17,9 +17,9 @@ class Thumbnail
      * @param int $forcedwidth      生成的宽度
      * @param int $forcedheight     生成的高度
      * return array array('filesize'=>0, 'width'=>0, 'height'=>0)
-     * Thumbnail::Thumb('xxx.jpg', 'xxx_thumb.jpg', 200, 200);
+     * Thumb::Zoom('xxx.jpg', 'xxx_thumb.jpg', 200, 200);
      */
-    public static function Thumb($sourcefile, $destfile, $forcedwidth = 300, $forcedheight = 300)
+    public static function Zoom($sourcefile, $destfile, $forcedwidth = 300, $forcedheight = 300)
     {
         $return = array('filesize' => 0, 'width' => 0, 'height' => 0);
         $destext = strtolower(substr(strrchr($destfile, '.'), 1));
@@ -121,7 +121,7 @@ class Thumbnail
      * @param int $clipy            被裁切图片的Y坐标
      * @param int $clipwidth        被裁区域的宽度
      * @param int $clipheight       被裁区域的高度
-     * Thumbnail::Clip('xxx/x.jpg', 'xxx/newx.jpg', 10, 40, 150, 150)
+     * Thumb::Clip('xxx/x.jpg', 'xxx/newx.jpg', 10, 40, 150, 150)
      */
     public static function Clip($sourcefile, $destfile, $clipx, $clipy, $clipwidth, $clipheight)
     {
@@ -171,7 +171,7 @@ class Thumbnail
     }
 
     // 先裁切后缩略，因为确定了，width, height, 不需要返回宽高。
-    public static function ClipThumb($sourcefile, $destfile, $forcedwidth = 80, $forcedheight = 80)
+    public static function ClipZoom($sourcefile, $destfile, $forcedwidth = 80, $forcedheight = 80)
     {
         // 获取原图片宽高
         $getimgsize = getimagesize($sourcefile);
@@ -202,7 +202,7 @@ class Thumbnail
             if ($n <= 0) {
                 return 0;
             }
-            $r = static::Thumb($destfile, $destfile, $forcedwidth, $forcedheight);
+            $r = static::Zoom($destfile, $destfile, $forcedwidth, $forcedheight);
             return $r['filesize'];
             // 原图为竖着的矩形
         } else {
@@ -212,7 +212,7 @@ class Thumbnail
             if ($n <= 0) {
                 return 0;
             }
-            $r = static::Thumb($destfile, $destfile, $forcedwidth, $forcedheight);
+            $r = static::Zoom($destfile, $destfile, $forcedwidth, $forcedheight);
             return $r['filesize'];
         }
     }

@@ -18,7 +18,7 @@ CREATE TABLE %pre%post (
   log_ViewNums integer NOT NULL DEFAULT 0,
   log_Template varchar(250) NOT NULL DEFAULT '',
   log_FirstImg varchar(250) NOT NULL DEFAULT '',
-  log_Thumb varchar(250) NOT NULL DEFAULT '',
+  log_Thumb text NOT NULL DEFAULT '',
   log_Meta text NOT NULL DEFAULT ''
 );
 
