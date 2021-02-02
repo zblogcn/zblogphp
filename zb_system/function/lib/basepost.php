@@ -382,16 +382,49 @@ class BasePost extends Base
         }
     }
 
-    public function Thumbs($width, $height, $count = 1, $clip = true)
+    /**
+     * 获取缩略图.
+     *
+     * @param integer $width
+     * @param integer $height
+     * @param integer $count
+     * @param boolean $clip
+     * @return array
+     */
+    public function Thumbs($width = 200, $height = 200, $count = 1, $clip = true)
     {
+        global $zbp;
+
+        $thumbs = array();
+
         $i = 0;
         foreach ($this->AllImages as $image) {
             if ($i >= $count) {
                 break;
             }
+            if (! $image) {
+                continue;
+            }
+            if (substr($image, 0, strlen($zbp->host)) != $zbp->host) {
+                continue;
+            }
+
+            $img_path = str_replace($zbp->host, $zbp->path, $image);
+            $thumb_url = 'cache/thumbs/' . $this->ID . '-' . $width . '-' . $height . '-' . ($clip === true ? '1' : '0') . '-' . md5($image) . '.' . GetFileExt($image);
+            $thumb_path = $zbp->usersdir . $thumb_url;
+
+            if (file_exists($thumb_path)) {
+                $thumbs[] = $zbp->host . 'zb_users/' . $thumb_url;
+                continue;
+            }
+            $method = $clip === true ? 'ClipZoom' : 'Zoom';
+            Thumb::$method($img_path, $thumb_path, $width, $height);
+            $thumbs[] = $zbp->host . 'zb_users/' . $thumb_url;
 
             $i++;
         }
+
+        return $thumbs;
     }
 
     /**
