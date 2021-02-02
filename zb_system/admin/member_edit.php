@@ -88,7 +88,7 @@ $member = $zbp->GetMemberByID($memberid);
                     <?php echo $lang['msg']['name']; ?>:</span>
                 <span class="star">(*)</span>
                 <br />
-                <input id="edtName" class="edit" size="40" name="Name" pattern=".{<?php echo $zbp->option['ZC_USERNAME_MIN']; ?>,<?php echo $zbp->option['ZC_USERNAME_MAX']; ?>}" maxlength="<?php echo $zbp->option['ZC_USERNAME_MAX']; ?>" type="text" value="<?php echo $member->Name; ?>" 
+                <input id="edtName" class="edit" size="40" name="Name" placeholder="<?php echo $zbp->lang['error']['77']; ?>" maxlength="<?php echo $zbp->option['ZC_USERNAME_MAX']; ?>" type="text" value="<?php echo $member->Name; ?>" 
                     <?php
                     if (!$zbp->CheckRights('MemberAll')) {
                         echo 'readonly="readonly"';

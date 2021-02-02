@@ -1470,6 +1470,9 @@ function Zbp_SubStr($sourcestr, $start)
  */
 function Zbp_StrLen($string)
 {
+    if (function_exists('grapheme_strlen')) {
+        return grapheme_strlen($string);
+    }
     if (function_exists('mb_strlen') && function_exists('mb_internal_encoding')) {
         mb_internal_encoding('UTF-8');
         return mb_strlen($string);
