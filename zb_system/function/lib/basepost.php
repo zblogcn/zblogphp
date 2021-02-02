@@ -38,6 +38,8 @@ class BasePost extends Base
 
     private $private_next = '';
 
+    protected $allImages;
+
     public function __construct()
     {
         global $zbp;
@@ -364,6 +366,8 @@ class BasePost extends Base
                 } else {
                     return $this->Title;
                 }
+            case 'AllImages':
+                return is_array($this->allImages) ? $this->allImages : GetImagesFromHtml($this->Content);
             default:
                 foreach ($GLOBALS['hooks']['Filter_Plugin_Post_Get'] as $fpname => &$fpsignal) {
                     $fpreturn = $fpname($this, $name);
@@ -375,6 +379,18 @@ class BasePost extends Base
                 }
 
                 return parent::__get($name);
+        }
+    }
+
+    public function Thumbs($width, $height, $count = 1, $clip = true)
+    {
+        $i = 0;
+        foreach ($this->AllImages as $image) {
+            if ($i >= $count) {
+                break;
+            }
+
+            $i++;
         }
     }
 

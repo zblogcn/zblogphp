@@ -2115,3 +2115,30 @@ function ImgToThumbUrl($path)
     $end = substr($path, $pos);
     return $start . '_thumb' . $end;
 }
+
+/**
+ * 从 HTML 中获取所有图片及其属性.
+ *
+ * @param  string $html
+ * @return array
+ */
+function GetImagesFromHtml($html)
+{
+    $dom = new DOMDocument('1.0', 'utf-8');
+
+    $dom->loadHTML(mb_convert_encoding($html, 'HTML-ENTITIES', 'UTF-8'));
+    $node_list = $dom->getElementsByTagName('img');
+
+    $array = array();
+
+    for ($i = 0; $i < $node_list->length; $i++) {
+        $node = $node_list->item($i);
+        $img_info = array();
+        foreach ($node->attributes as $name => $attr_node) {
+            $img_info[$name] = $attr_node->nodeValue;
+        }
+        $array[] = $img_info;
+    }
+
+    return $array;
+}
