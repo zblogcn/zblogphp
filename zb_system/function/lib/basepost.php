@@ -395,6 +395,10 @@ class BasePost extends Base
     {
         global $zbp;
 
+        if (! is_dir($thumb_dir = $zbp->usersdir . 'cache/thumbs/')) {
+            mkdir($thumb_dir);
+        }
+
         $thumbs = array();
 
         $i = 0;
@@ -405,21 +409,31 @@ class BasePost extends Base
             if (! $image) {
                 continue;
             }
-            if (substr($image, 0, strlen($zbp->host)) != $zbp->host) {
-                continue;
-            }
 
             $img_path = str_replace($zbp->host, $zbp->path, $image);
-            $thumb_url = 'cache/thumbs/' . $this->ID . '-' . $width . '-' . $height . '-' . ($clip === true ? '1' : '0') . '-' . md5($image) . '.' . GetFileExt($image);
-            $thumb_path = $zbp->usersdir . $thumb_url;
+            $thumb_name = $this->ID . '-' . $width . '-' . $height . '-' . ($clip === true ? '1' : '0') . '-' . md5($image) . '.' . GetFileExt($image);
+            $thumb_path = $thumb_dir . $thumb_name;
+            $thumb_url = $zbp->host . 'zb_users/cache/thumbs/' . $thumb_name;
 
             if (file_exists($thumb_path)) {
-                $thumbs[] = $zbp->host . 'zb_users/' . $thumb_url;
+                $thumbs[] = $thumb_url;
                 continue;
             }
-            $method = $clip === true ? 'ClipZoom' : 'Zoom';
-            Thumb::$method($img_path, $thumb_path, $width, $height);
-            $thumbs[] = $zbp->host . 'zb_users/' . $thumb_url;
+            $thumb = new Thumb;
+            try {
+                if (substr($image, 0, strlen($zbp->host)) != $zbp->host) {
+                    $thumb->loadSrcByExternalUrl($image);
+                } else {
+                    $thumb->loadSrcByPath($img_path);
+                }
+                $thumb->shouldClip($clip)
+                    ->setWidth($width)
+                    ->setHeight($height)
+                    ->setDstImagePath($thumb_path)
+                    ->handle();
+                $thumbs[] = $thumb_url;
+            } catch (Exception $e) {   
+            }
 
             $i++;
         }
