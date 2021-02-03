@@ -9,6 +9,7 @@ if (!defined('ZBP_PATH')) {
  */
 class Thumb
 {
+
     /**
      * 是否需要裁剪.
      *
@@ -19,7 +20,7 @@ class Thumb
     /**
      * 图片句柄.
      *
-     * @var 
+     * @var resource
      */
     protected $srcRes;
 
@@ -229,24 +230,24 @@ class Thumb
         $this->loafSrcWidthAndHeight();
 
         // 按规定比例缩略
-        $src_scale = $this->srcWidth / $this->srcHeight;
+        $src_scale = ($this->srcWidth / $this->srcHeight);
 
         // 如果裁剪的高为未定义，那么等比例缩小，高自适应
         if (! $forced_height) {
             $dst_width = $forced_width;
-            $dst_height = $forced_width / $src_scale; 
+            $dst_height = ($forced_width / $src_scale);
         } else {
-            $dst_scale = $forced_width / $forced_height;
+            $dst_scale = ($forced_width / $forced_height);
             if ($this->srcWidth <= $forced_width && $this->srcHeight <= $forced_height) {
                 $dst_width = $this->srcWidth;
                 $dst_height = $this->srcHeight;
             } elseif ($src_scale >= $dst_scale) {
                 $dst_width = $this->srcWidth >= $forced_width ? $forced_width : $this->srcWidth;
-                $dst_height = $dst_width / $src_scale;
+                $dst_height = ($dst_width / $src_scale);
                 $dst_height = $dst_height >= $forced_height ? $forced_height : $dst_height;
             } else {
                 $dst_height = $this->srcHeight >= $forced_height ? $forced_height : $this->srcHeight;
-                $dst_width = $dst_height * $src_scale;
+                $dst_width = ($dst_height * $src_scale);
                 $dst_width = $dst_width >= $forced_width ? $forced_width : $dst_width;
             }
         }
@@ -260,7 +261,7 @@ class Thumb
      * 保存缩略图.
      */
     protected function save()
-    {        
+    {
         $this->syncSrcFromTmp();
 
         $ext = GetFileExt($this->dstImagePath);
@@ -285,12 +286,12 @@ class Thumb
     public function handle()
     {
         if ($this->shouldClip) {
-            $src_scale = $this->srcWidth / $this->srcHeight;
-            $dst_scale = $this->dstWidth / $this->dstHeight;
-            $h_scale = $this->srcHeight / $this->dstHeight;
-            $w_scale = $this->srcWidth / $this->dstWidth;
-            $w_des = $this->dstWidth * $h_scale;
-            $h_des = $this->dstHeight * $w_scale;
+            $src_scale = ($this->srcWidth / $this->srcHeight);
+            $dst_scale = ($this->dstWidth / $this->dstHeight);
+            $h_scale = ($this->srcHeight / $this->dstHeight);
+            $w_scale = ($this->srcWidth / $this->dstWidth);
+            $w_des = ($this->dstWidth * $h_scale);
+            $h_des = ($this->dstHeight * $w_scale);
             if ($this->srcWidth <= $this->dstWidth && $this->srcHeight <= $this->dstHeight) {
                 $dst_width = $this->srcWidth;
                 $dst_height = $this->srcHeight;
@@ -299,11 +300,11 @@ class Thumb
             // 原图为横着的矩形
             if ($src_scale >= $dst_scale) {
                 // 以原图的高度作为标准，进行缩略
-                $dst_widthx = ($this->srcWidth - $w_des) / 2;
+                $dst_widthx = (($this->srcWidth - $w_des) / 2);
                 $this->clip($dst_widthx, 0, $w_des, $this->srcHeight);
                 $this->zoom($this->dstWidth, $this->dstHeight);
             } else {
-                $dst_heighty = ($this->srcHeight - $h_des) / 2;
+                $dst_heighty = (($this->srcHeight - $h_des) / 2);
                 $this->clip(0, $dst_heighty, $this->srcWidth, $h_des);
                 $this->zoom($this->dstWidth, $this->dstHeight);
             }
@@ -315,4 +316,5 @@ class Thumb
 
         imagedestroy($this->srcRes);
     }
+
 }

@@ -112,7 +112,7 @@ class Template
         }
         //针对不同的模板目录创建不同的编译目录
         if (!($template_dirname == '' || $template_dirname == 'template')) {
-            $path = substr($path, 0, strlen($path) - 1) . '___' . $template_dirname . '/';
+            $path = substr($path, 0, (strlen($path) - 1)) . '___' . $template_dirname . '/';
         }
         $this->path = $path;
     }
@@ -589,7 +589,7 @@ class Template
         $exp = $this->replace_dot($matches[1]);
         
         $code = $this->parse_switch_case($matches[2]);
-        $code = preg_replace('/^(\s+?){php}/','${1}',$code);
+        $code = preg_replace('/^(\s+?){php}/', '${1}', $code);
         
         return "{php} switch($exp) { $code{php} }  {/php}";
     }
@@ -601,8 +601,8 @@ class Template
      */
     protected function parse_switch_case($code)
     {
-        $code = preg_replace('/{break;?}/','{php}break;{/php}',$code);
-        $code = preg_replace('/{default:?}/','{php}default:{/php}',$code);
+        $code = preg_replace('/{break;?}/', '{php}break;{/php}', $code);
+        $code = preg_replace('/{default:?}/', '{php}default:{/php}', $code);
         
         $code = preg_replace_callback('/{case(.+?)}/', array($this, 'parse_switch_case_repalce'), $code);
         return $code;
@@ -615,7 +615,7 @@ class Template
      */
     protected function parse_switch_case_repalce($matches)
     {
-        return '{php}case '.rtrim(trim($matches[1]),':').':{/php}';
+        return '{php}case ' . rtrim(trim($matches[1]), ':') . ':{/php}';
     }
 
     /**
@@ -860,7 +860,7 @@ class Template
     {
         global $zbp;
         if (!file_exists($dir)) {
-            return ;
+            return;
         }
         if (function_exists('scandir')) {
             foreach (scandir($dir) as $d) {
@@ -944,8 +944,8 @@ class Template
         $this->templateTags['categories'] = &$zbp->categories;
         $this->templateTags['categorysbyorder'] = &$zbp->categoriesbyorder;
         $this->templateTags['categoriesbyorder'] = &$zbp->categoriesbyorder;
-		$this->templateTags['categories_all'] = &$zbp->categories_all;
-		$this->templateTags['categoriesbyorder_type'] = &$zbp->categoriesbyorder_type;
+        $this->templateTags['categories_all'] = &$zbp->categories_all;
+        $this->templateTags['categoriesbyorder_type'] = &$zbp->categoriesbyorder_type;
         $this->templateTags['modules'] = &$zbp->modulesbyfilename;
         $this->templateTags['title'] = htmlspecialchars($zbp->title);
         $this->templateTags['host'] = &$zbp->host;

@@ -37,12 +37,10 @@ if (isset($_GET['source']) && isset($_GET['filename'])) {
         $zbp->ShowError(61);
     }
 } elseif (isset($_GET['filename'])) {
-
     $mod = $zbp->GetModuleByFileName(GetVars('filename', 'GET'));
     if ($mod->ID == 0 || $mod->SourceType == 'themeinclude') {
         $zbp->ShowError(69);
     }
-
 } else {
     if (isset($_GET['id'])) {
         $modid = (int) GetVars('id', 'GET');
