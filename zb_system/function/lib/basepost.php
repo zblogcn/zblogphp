@@ -428,13 +428,10 @@ class BasePost extends Base
                 } else {
                     $thumb->loadSrcByPath($img_path);
                 }
-                $thumb->shouldClip($clip)
-                    ->setWidth($width)
-                    ->setHeight($height)
-                    ->setDstImagePath($thumb_path)
-                    ->handle();
+                $thumb->shouldClip($clip)->setWidth($width)->setHeight($height)->setDstImagePath($thumb_path)->handle();
                 $thumbs[] = $thumb_url;
-            } catch (Exception $e) {   
+            } catch (Exception $e) {
+                continue;
             }
 
             $i++;
@@ -448,7 +445,6 @@ class BasePost extends Base
      */
     public function Save()
     {
-        global $zbp;
         if ($this->Type == ZC_POST_TYPE_ARTICLE) {
             if ($this->Template == GetValueInArray($this->Category->GetData(), 'LogTemplate')) {
                 $this->data['Template'] = '';

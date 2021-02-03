@@ -136,7 +136,7 @@ class Module extends Base
             @file_put_contents($f, $c);
 
             if ($this->ID == 0) {
-                $this->ID = 0 - (int)crc32($this->Source . $this->FileName);
+                $this->ID = (0 - (int) crc32($this->Source . $this->FileName));
             }
             return true;
         }
@@ -168,7 +168,7 @@ class Module extends Base
             }
         }
 
-		$zbp->RemoveCache($this);
+        $zbp->RemoveCache($this);
 
         if ($this->SourceType == 'themeinclude') {
             if (empty($this->FileName)) {

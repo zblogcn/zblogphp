@@ -40,10 +40,9 @@ ApiListCheck($mods_allow, $mods_disallow);
 
 ApiLoadPostData();
 
-if (
-    $_SERVER['REQUEST_METHOD'] === 'POST' && 
-    (! ($mod === 'member' && $act === 'login')) &&
-    (! ($mod === 'comment' && $act === 'post'))
+if ($_SERVER['REQUEST_METHOD'] === 'POST'
+    && (! ($mod === 'member' && $act === 'login'))
+    && (! ($mod === 'comment' && $act === 'post'))
 ) {
     ApiVerifyCSRF();
 }
