@@ -329,7 +329,9 @@ function ApiGetRequestFilter($limitDefault = null, $sortableColumns = array())
 
     //如果不设置$limitDefault的话，就使用perpage的值
     if ($limitDefault !== null) {
-        $perPage = (int) $limitDefault;
+        if ($perPage > (int) $limitDefault) {
+            $perPage = (int) $limitDefault;
+        }
     }
     if ($perPage <= 0) {
         $perPage = 10;
@@ -381,7 +383,7 @@ function ApiGetPagebarInfo($option = null)
     $info['CurrentCount'] = $pagebar->CurrentCount;
     //$info['PageBarCount'] = $pagebar->PageBarCount;
     //$info['PageCount'] = $pagebar->PageCount;
-    $info['PrePageCount'] = $pagebar->PrePageCount;
+    $info['PerPageCount'] = $pagebar->PerPageCount;
     $info['PageAll'] = $pagebar->PageAll;
     $info['PageNow'] = $pagebar->PageNow;
     $info['PageCurrent'] = $pagebar->PageCurrent;

@@ -30,14 +30,14 @@ class PageBar
     public $PageBarCount = 0;
 
     /**
-     * @var int 每页数量（改为PrePageCount）
+     * @var int 每页数量（改为PerPageCount）
      */
     public $PageCount = 0;
 
     /**
      * @var int 每页数量
      */
-    public $PrePageCount = 0;
+    public $PerPageCount = 0;
 
     /**
      * @var int 总页数
