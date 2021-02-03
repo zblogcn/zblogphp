@@ -75,18 +75,6 @@ function updatedb()
         @$db->Query("ALTER TABLE {$t['Member']} ADD {$d['Member']['UpdateTime'][0]} integer NOT NULL DEFAULT 0;");
     }
 
-    //172360
-    $old = @$db->sql->get()->select($t['Post'])->column($d['Post']['Thumb'][0])->limit(1)->query;
-    if (count($old) == 1 && $old[0] === false) {
-        @$db->Query("ALTER TABLE {$t['Post']} ADD {$d['Post']['Thumb'][0]} text NOT NULL;");
-    }
-
-    //172370
-    $old = @$db->sql->get()->select($t['Post'])->column($d['Post']['FirstImg'][0])->limit(1)->query;
-    if (count($old) == 1 && $old[0] === false) {
-        @$db->Query("ALTER TABLE {$t['Post']} ADD {$d['Post']['FirstImg'][0]} VARCHAR(250) NOT NULL DEFAULT '';");
-    }
-
     //删除一个长期存在而又无用的索引
     @$db->sql->get()->drop($t['Post'])->index('%pre%log_VTSC')->query;
 
