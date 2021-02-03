@@ -368,6 +368,8 @@ class BasePost extends Base
                 }
             case 'AllImages':
                 return is_array($this->allImages) ? $this->allImages : GetImagesFromHtml($this->Content);
+            case 'ImageCount':
+                return count($this->AllImages);
             default:
                 foreach ($GLOBALS['hooks']['Filter_Plugin_Post_Get'] as $fpname => &$fpsignal) {
                     $fpreturn = $fpname($this, $name);
