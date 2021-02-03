@@ -117,6 +117,13 @@ function api_member_post()
         $zbp->BuildModule();
         $zbp->SaveCache();
 
+        if ($member === false) {
+            return array(
+                'code' => 500,
+                'message' => $GLOBALS['lang']['msg']['operation_failed'],
+            );
+        }
+
         return array(
             'message' => $GLOBALS['lang']['msg']['operation_succeed'],
             'data' => array(
@@ -154,7 +161,7 @@ function api_member_get()
     }
 
     //如果不是读本人的
-    if ($member->ID != $zbp->ID) {
+    if ($member->ID != $zbp->user->ID) {
         ApiCheckAuth(true, 'MemberAll');
     }
 
