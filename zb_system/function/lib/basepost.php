@@ -395,49 +395,7 @@ class BasePost extends Base
      */
     public function Thumbs($width = 200, $height = 200, $count = 1, $clip = true)
     {
-        global $zbp;
-
-        if (! is_dir($thumb_dir = $zbp->usersdir . 'cache/thumbs/')) {
-            mkdir($thumb_dir);
-        }
-
-        $thumbs = array();
-
-        $i = 0;
-        foreach ($this->AllImages as $image) {
-            if ($i >= $count) {
-                break;
-            }
-            if (! $image) {
-                continue;
-            }
-
-            $img_path = str_replace($zbp->host, $zbp->path, $image);
-            $thumb_name = $this->ID . '-' . $width . '-' . $height . '-' . ($clip === true ? '1' : '0') . '-' . md5($image) . '.' . GetFileExt($image);
-            $thumb_path = $thumb_dir . $thumb_name;
-            $thumb_url = $zbp->host . 'zb_users/cache/thumbs/' . $thumb_name;
-
-            if (file_exists($thumb_path)) {
-                $thumbs[] = $thumb_url;
-                continue;
-            }
-            $thumb = new Thumb;
-            try {
-                if (substr($image, 0, strlen($zbp->host)) != $zbp->host) {
-                    $thumb->loadSrcByExternalUrl($image);
-                } else {
-                    $thumb->loadSrcByPath($img_path);
-                }
-                $thumb->shouldClip($clip)->setWidth($width)->setHeight($height)->setDstImagePath($thumb_path)->handle();
-                $thumbs[] = $thumb_url;
-            } catch (Exception $e) {
-                continue;
-            }
-
-            $i++;
-        }
-
-        return $thumbs;
+        return Thumb::Thumbs($this->AllImages, $width, $height, $count, $clip);
     }
 
     /**

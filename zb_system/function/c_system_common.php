@@ -2131,3 +2131,13 @@ function GetImagesFromHtml($html)
     preg_match_all($pattern, htmlspecialchars_decode($html), $matches);
     return is_array($matches[1]) ? array_unique($matches[1]) : array();
 }
+
+/**
+ * 判断 URL 是否为本地.
+ */
+function CheckUrlIsLocal($url)
+{
+    global $zbp;
+
+    return substr($url, 0, strlen($zbp->host)) === $zbp->host;
+}
