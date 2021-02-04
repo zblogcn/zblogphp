@@ -129,7 +129,7 @@ class PageBar
         $this->Buttons = &$this->buttons;
         $this->PrevButton = &$this->prevbutton;
         $this->NextButton = &$this->nextbutton;
-        $this->PrePageCount = &$this->PageCount;
+        $this->PerPageCount = &$this->PageCount;
         $this->AllCount = &$this->Count;
         $this->PageCurrent = &$this->PageNow;
     }
