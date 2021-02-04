@@ -510,3 +510,35 @@ function ApiUrlGenerate($mod, $act = 'get', $query = array())
 
     return $zbp->host . 'zb_system/api.php?mod=' . $mod . '&act=' . $act . $query_string;
 }
+
+/**
+ * API 限流.
+ *
+ * @param string $name
+ * @param integer $max_reqs
+ * @param integer $period
+ */
+function ApiThrottle($name = 'default', $max_reqs = 5, $period = 60)
+{
+    global $zbpcache;
+
+    if (!isset($zbpcache)) {
+        return;
+    }
+
+    $user_id = md5(GetGuestIP());
+
+    $cache_key = "api-throttle:$name:$user_id";
+    $cached_value = $zbpcache->Get($cache_key);
+    $cached_req = json_decode($cached_value, true);
+    if (!$cached_value || !$cached_req || (time() >= $cached_req['expire_time'])) {
+        $cached_req = array('hits' => 0, 'expire_time' => (time() + $period));
+    }
+
+    if ($cached_req['hits'] >= $max_reqs) {
+        ApiResponse(null, null, 429, 'Too many requests.');
+    }
+
+    $cached_req['hits']++;
+    $zbpcache->Set($cache_key, json_encode($cached_req), ($cached_req['expire_time'] - time()));
+}
