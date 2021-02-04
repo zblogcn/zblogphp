@@ -2134,6 +2134,8 @@ function GetImagesFromHtml($html)
 
 /**
  * 判断 URL 是否为本地.
+ *
+ * @return array
  */
 function CheckUrlIsLocal($url)
 {
