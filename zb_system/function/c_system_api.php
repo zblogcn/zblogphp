@@ -330,7 +330,7 @@ function ApiGetRequestFilter($limitDefault = null, $sortableColumns = array(), $
     $pageNow = (int) GetVars('page');
     $perPage = (int) GetVars('perpage');
 
-    $max_count_perpage = $zbp->apiMaxCountPerPage;
+    $max_count_perpage = ($max_count_perpage !== null) ? $max_count_perpage : $zbp->apiMaxCountPerPage;
 
     if (($perPage > (int) $max_count_perpage) || ((int) $perPage <= 0)) {
         if ($limitDefault !== null) {
