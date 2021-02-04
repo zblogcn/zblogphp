@@ -116,7 +116,7 @@ class Thumb
             throw new Exception('图片载入失败');
         }
 
-        $this->loafSrcWidthAndHeight();
+        $this->loadSrcWidthAndHeight();
 
         if ($this->srcWidth == 0 || $this->srcHeight == 0) {
             throw new Exception('图片宽高不正常');
@@ -128,7 +128,7 @@ class Thumb
     /**
      * 载入原图宽高.
      */
-    protected function loafSrcWidthAndHeight()
+    protected function loadSrcWidthAndHeight()
     {
         $this->srcWidth = imagesx($this->srcRes);
         $this->srcHeight = imagesy($this->srcRes);
@@ -227,7 +227,7 @@ class Thumb
     {
         $this->syncSrcFromTmp();
 
-        $this->loafSrcWidthAndHeight();
+        $this->loadSrcWidthAndHeight();
 
         // 按规定比例缩略
         $src_scale = ($this->srcWidth / $this->srcHeight);
