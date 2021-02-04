@@ -393,7 +393,7 @@ class BasePost extends Base
      * @param boolean $clip
      * @return array
      */
-    public function Thumbs($width = 200, $height = 200, $count = 1, $clip = true)
+    public function Thumbs($width = 200, $height = 150, $count = 1, $clip = true)
     {
         return Thumb::Thumbs($this->AllImages, $width, $height, $count, $clip);
     }

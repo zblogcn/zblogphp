@@ -76,7 +76,7 @@ class Thumb
      * @param boolean $clip   是否裁剪
      * @return array
      */
-    public static function Thumbs($images, $width = 200, $height = 200, $count = 1, $clip = true)
+    public static function Thumbs($images, $width = 200, $height = 150, $count = 1, $clip = true)
     {
         global $zbp;
 

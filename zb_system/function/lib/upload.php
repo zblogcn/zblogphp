@@ -248,4 +248,22 @@ class Upload extends Base
         return parent::Del();
     }
 
+    /**
+     * 获取该附件图片缩略图.
+     *
+     * @param integer $width
+     * @param integer $height
+     * @param boolean $clip
+     * @return string|null
+     */
+    public function Thumb($width = 200, $height = 150, $clip = true)
+    {
+        if (strpos($this->MimeType, 'image') === false) {
+            return null;
+        }
+
+        $thumbs = Thumb::Thumbs(array($this->Url), $width, $height, 1, $clip);
+        return isset($thumbs[0]) ? $thumbs[0] : null;
+    }
+
 }
