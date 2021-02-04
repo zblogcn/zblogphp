@@ -313,10 +313,13 @@ function ApiGetObjectArrayList($list, $other_props = array(), $remove_props = ar
  *
  * @param int $limitDefault 默认记录数
  * @param array $sortableColumns sortby 对应的模块数据表中支持排序的属性
+ * @param int $max_count_perpage 每页最多条数
  * @return array
  */
-function ApiGetRequestFilter($limitDefault = null, $sortableColumns = array())
+function ApiGetRequestFilter($limitDefault = null, $sortableColumns = array(), $max_count_perpage = null)
 {
+    global $zbp;
+
     $condition = array(
         'limit' => array(0, $limitDefault),
         'order' => null,
@@ -327,14 +330,14 @@ function ApiGetRequestFilter($limitDefault = null, $sortableColumns = array())
     $pageNow = (int) GetVars('page');
     $perPage = (int) GetVars('perpage');
 
-    //如果不设置$limitDefault的话，就使用perpage的值
-    if ($limitDefault !== null) {
-        if ($perPage > (int) $limitDefault) {
-            $perPage = (int) $limitDefault;
+    $max_count_perpage = $zbp->apiMaxCountPerPage;
+
+    if (($perPage > (int) $max_count_perpage) || ((int) $perPage <= 0)) {
+        if ($limitDefault !== null) {
+            $perPage = $limitDefault;
+        } else {
+            $perPage = 10;
         }
-    }
-    if ($perPage <= 0) {
-        $perPage = 10;
     }
 
     // 排序顺序

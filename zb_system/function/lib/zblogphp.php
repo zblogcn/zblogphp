@@ -399,6 +399,11 @@ class ZBlogPHP
     public $commentdisplaycount = 10;
 
     /**
+     * @var int API 每页最多条数
+     */
+    public $apiMaxCountPerPage = 50;
+
+    /**
      * @var int 当前实例下CSRF Token过期时间（小时）
      */
     public $csrfExpiration = 1;
