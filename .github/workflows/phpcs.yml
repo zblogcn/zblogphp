@@ -20,5 +20,6 @@ jobs:
       with:
         githubToken: ${{ secrets.GH_BOT_TOKEN }}
         output: '" "'
+        prNumber: ${{ github.event.pull_request.number }}
     - name: PHPCS check
       run: ./vendor/bin/phpcs "${{ steps.get_file_changes.outputs.files }}" --report=checkstyle
