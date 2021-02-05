@@ -1,19 +1,52 @@
-.github          export-ignore
-.gitattributes   export-ignore
-.gitignore       export-ignore
+.github                               export-ignore
+.gitattributes                        export-ignore
+.gitignore                            export-ignore
 LICENSE
-contributing.md  export-ignore
-phpcs.xml        export-ignore
+contributing.md                       export-ignore
+phpcs.xml                             export-ignore
 search.php
-utils/           export-ignore
+utils/                                export-ignore
 zb_users/
-composer.json    export-ignore
+# 预置主题
+zb_users/theme/Zit/
+zb_users/theme/default/
+zb_users/theme/tpure/
+zb_users/theme/HTML5CSS3/             export-ignore
+zb_users/theme/WhitePage/
+zb_users/theme/garland/               export-ignore
+zb_users/theme/metro/                 export-ignore
+zb_users/theme/x2013/                 export-ignore
+# 预置插件
+zb_users/plugin/AdminColor
+zb_users/plugin/alipay                export-ignore
+zb_users/plugin/app_zblogcn_admin_css export-ignore
+zb_users/plugin/AuditRecords          export-ignore
+zb_users/plugin/clinic                export-ignore
+zb_users/plugin/CloudStorage          export-ignore
+zb_users/plugin/CustomMeta            export-ignore
+zb_users/plugin/Gravatar
+zb_users/plugin/Howl                  export-ignore
+zb_users/plugin/LargeData             export-ignore
+zb_users/plugin/LinksManage
+zb_users/plugin/RegPage               export-ignore
+zb_users/plugin/ScheduledTasks        export-ignore
+zb_users/plugin/SQLLog                export-ignore
+zb_users/plugin/STACentre
+zb_users/plugin/Totoro
+zb_users/plugin/tpluginmaker          export-ignore
+zb_users/plugin/UEditor
+zb_users/plugin/upyun                 export-ignore
+zb_users/plugin/wearingtheme          export-ignore
+zb_users/plugin/wp2zbp                export-ignore
+zb_users/plugin/ZBPDK                 export-ignore
+zb_users/plugin/ZBPJFExample          export-ignore
+composer.json                         export-ignore
 feed.php
-readme.md        export-ignore
-standards/       export-ignore
+readme.md                             export-ignore
+standards/                            export-ignore
 zb_install/
-composer.lock    export-ignore
+composer.lock                         export-ignore
 index.php
 readme.txt
-tests/           export-ignore
+tests/                                export-ignore
 zb_system/
