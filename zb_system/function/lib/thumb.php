@@ -102,6 +102,7 @@ class Thumb
 
             if (file_exists($thumb_path)) {
                 $thumbs[] = $thumb_url;
+                $i++;
                 continue;
             }
             $thumb = new static;
@@ -113,11 +114,10 @@ class Thumb
                 }
                 $thumb->shouldClip($clip)->setWidth($width)->setHeight($height)->setDstImagePath($thumb_path)->handle();
                 $thumbs[] = $thumb_url;
+                $i++;
             } catch (Exception $e) {
                 continue;
             }
-
-            $i++;
         }
 
         return $thumbs;
