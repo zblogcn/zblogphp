@@ -325,7 +325,7 @@ function ApiGetRequestFilter($limitDefault = null, $sortableColumns = array(), $
         'order' => null,
         'option' => null,
     );
-    $sortBy = strtolower((string) GetVars('sortby'));
+    $sortBy = (string) GetVars('sortby');
     $order = strtoupper((string) GetVars('order'));
     $pageNow = (int) GetVars('page');
     $perPage = (int) GetVars('perpage');

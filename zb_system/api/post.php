@@ -201,7 +201,7 @@ function api_post_list()
     $tagId = (int) GetVars('tag_id');
     $authId = (int) GetVars('auth_id');
     $date = GetVars('date');
-    $mng = strtolower((string) GetVars('manage')); //&manage=1
+    $mng = (string) trim(GetVars('manage')); //&manage=1
     $type = (int) GetVars('type');
     $actions = $zbp->GetPostType($type, 'actions');
 
@@ -227,7 +227,7 @@ function api_post_list()
 
     $where[] = array('=', 'log_Type', $type);
     // 权限验证
-    if (!empty($mng)) {
+    if ($mng == '1') {
         //检查管理模式权限
         ApiCheckAuth(true, $actions['manage']);
         // 如果没有管理all权限
