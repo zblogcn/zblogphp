@@ -107,7 +107,7 @@ class Thumb
                 continue;
             }
             $ext = GetFileExt($image);
-            if (! in_array($ext, array('jpeg', 'jpg', 'png', 'gif'))) {
+            if (! in_array($ext, array('jpeg', 'jpg', 'png', 'gif', 'bmp'))) {
                 continue;
             }
 
@@ -360,6 +360,9 @@ class Thumb
                 break;
             case 'png':
                 imagepng($this->srcRes, $this->dstImagePath);
+                break;
+            case 'bmp':
+                imagebmp($this->srcRes, $this->dstImagePath);
                 break;
         }
     }
