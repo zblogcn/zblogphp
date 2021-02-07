@@ -616,3 +616,18 @@ function misc_updatedapp()
         die;
     }
 }
+
+/**
+ * 杂项之清除缩略图目录
+ */
+function misc_clearthumbcache()
+{
+    global $zbp;
+    if (!$zbp->CheckRights('root')) {
+        return ;
+    }
+    CheckIsRefererValid();
+    rrmdir($zbp->usersdir . '/cache/thumbs');
+    $zbp->SetHint('good');
+    Redirect($_SERVER["HTTP_REFERER"]);
+}

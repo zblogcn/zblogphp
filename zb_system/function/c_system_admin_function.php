@@ -17,7 +17,7 @@ if (!defined('ZBP_PATH')) {
  */
 function Include_Admin_Addarticlesubmenu()
 {
-    echo MakeSubMenu($GLOBALS['lang']['msg']['clear_thumb_cache'], 'javascript:window.confirm(\'' . $GLOBALS['lang']['msg']['confirm_clear_thumb_cache'] . '\') && (window.location.href = \'' . BuildSafeCmdURL('act=ClearThumbCache') . '\');', 'm-right', null, null, null, 'icon-trash-fill');
+    echo MakeSubMenu($GLOBALS['lang']['msg']['clear_thumb_cache'], 'javascript:window.confirm(\'' . $GLOBALS['lang']['msg']['confirm_clear_thumb_cache'] . '\') && (window.location.href = \'' . BuildSafeCmdURL('act=misc&type=clearthumbcache') . '\');', 'm-right', null, null, null, 'icon-trash-fill');
 }
 
 /**

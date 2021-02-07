@@ -280,6 +280,8 @@ return array(
         'enable_post_batch_delete'          => 'Enable Batch Delete of Post',
         'enable_api'                        => 'Enable API',
         'enable_xmlrpc'                     => 'Enable XML-RPC',
+        'clear_thumb_cache'                 => 'Clear thumb cache',
+        'confirm_clear_thumb_cache'         => 'Confirm to clear thumb cache.',
         ''                                  => '',
     ),
 
@@ -518,7 +520,7 @@ return array(
         '70' => 'Context can not be empty.',
         '71' => 'Current edits not saved.',
         '72' => 'Name can not be null or not in the correct format.',
-        '73' => 'Please confirm password is set correctly.',
+        '73' => 'The password confirmation does not match.',
         '74' => 'Are you still using the old browser version with IE kernel? Please upgrade to IE11! \r\nYou can change to a different browser if you want to.',
         '75' => 'File name can not be empty!',
         '76' => 'Html ID can not be empty!',
