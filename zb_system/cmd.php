@@ -353,6 +353,12 @@ switch ($zbp->action) {
         $zbp->SetHint('good');
         Redirect($_SERVER["HTTP_REFERER"]);
         break;
+    case 'ClearThumbCache':
+        CheckIsRefererValid();
+        rrmdir($zbp->usersdir . '/cache/thumbs');
+        $zbp->SetHint('good');
+        Redirect($_SERVER["HTTP_REFERER"]);
+        break;
     case 'misc':
         include './function/c_system_misc.php';
         ob_clean();

@@ -965,6 +965,7 @@ class ZBlogPHP
             $this->ShowError(6, __FILE__, __LINE__);
         }
 
+        Add_Filter_Plugin('Filter_Plugin_Admin_ArticleMng_SubMenu', 'Include_Admin_Addarticlesubmenu');
         Add_Filter_Plugin('Filter_Plugin_Admin_PageMng_SubMenu', 'Include_Admin_Addpagesubmenu');
         Add_Filter_Plugin('Filter_Plugin_Admin_TagMng_SubMenu', 'Include_Admin_Addtagsubmenu');
         Add_Filter_Plugin('Filter_Plugin_Admin_CategoryMng_SubMenu', 'Include_Admin_Addcatesubmenu');

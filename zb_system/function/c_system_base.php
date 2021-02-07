@@ -233,6 +233,8 @@ $GLOBALS['actions'] = array(
     'PluginMng'   => 1,
     'ModuleMng'   => 1,
 
+    'ClearThumbCache' => 1,
+
     'PostBat'     => 2,
     'ArticleAll'  => 2,
     'PageAll'     => 2,

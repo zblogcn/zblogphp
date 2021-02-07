@@ -13,6 +13,14 @@ if (!defined('ZBP_PATH')) {
 //###############################################################################################################
 
 /**
+ * 添加文章管理管理子菜单(内置插件函数).
+ */
+function Include_Admin_Addarticlesubmenu()
+{
+    echo MakeSubMenu($GLOBALS['lang']['msg']['clear_thumb_cache'], 'javascript:window.confirm(\'' . $GLOBALS['lang']['msg']['confirm_clear_thumb_cache'] . '\') && (window.location.href = \'' . BuildSafeCmdURL('act=ClearThumbCache') . '\');', 'm-right', null, null, null, 'icon-trash-fill');
+}
+
+/**
  * 添加页面管理子菜单(内置插件函数).
  */
 function Include_Admin_Addpagesubmenu()

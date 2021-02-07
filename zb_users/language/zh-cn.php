@@ -276,6 +276,8 @@ return array(
         'enable_post_batch_delete'          => '启用文章批量删除',
         'enable_api'                        => '启用API协议',
         'enable_xmlrpc'                     => '启用XML-RPC协议',
+        'clear_thumb_cache'                 => '清空缩略图缓存',
+        'confirm_clear_thumb_cache'         => '确定要清空缩略图缓存吗？强烈建议仅在更换主题等操作后清空。',
         ''                                  => '',
     ),
 
