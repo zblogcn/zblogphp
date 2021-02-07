@@ -11,6 +11,13 @@ class Thumb
 {
 
     /**
+     * 默认图片.
+     *
+     * @var string|null
+     */
+    static public $defaultImg;
+
+    /**
      * 是否需要裁剪.
      *
      * @var boolean
@@ -76,15 +83,14 @@ class Thumb
     /**
      * 生成缩略图.
      *
-     * @param array       $images      图片
-     * @param integer     $width       宽度
-     * @param integer     $height      高度
-     * @param integer     $count       数量
-     * @param boolean     $clip        是否裁剪
-     * @param string|null $default_img 默认图片
+     * @param array   $images 图片
+     * @param integer $width  宽度
+     * @param integer $height 高度
+     * @param integer $count  数量
+     * @param boolean $clip   是否裁剪
      * @return array
      */
-    public static function Thumbs($images, $width = 200, $height = 150, $count = 1, $clip = true, $default_img = null)
+    public static function Thumbs($images, $width = 200, $height = 150, $count = 1, $clip = true)
     {
         global $zbp;
 
@@ -92,8 +98,8 @@ class Thumb
             mkdir($thumb_dir);
         }
 
-        if ($default_img === null) {
-            $default_img = ZBP_PATH . 'zb_system/image/default/thumb.png';
+        if (self::$defaultImg === null) {
+            self::$defaultImg = ZBP_PATH . 'zb_system/image/default/thumb.png';
         }
 
         $thumbs = array();
@@ -133,8 +139,8 @@ class Thumb
                 }
             } catch (Exception $e) {
                 ZBlogException::ResumeErrorHook();
-                if ($default_img) {
-                    $thumb->loadSrcByPath($default_img);
+                if (self::$defaultImg) {
+                    $thumb->loadSrcByPath(self::$defaultImg);
                 }
             }
             ZBlogException::ResumeErrorHook();
