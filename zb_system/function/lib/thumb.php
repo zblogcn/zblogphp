@@ -158,7 +158,7 @@ class Thumb
     public function loadSrcByPath($img_path)
     {
         if (! file_exists($img_path)) {
-            throw new Exception('图片不存在');
+            throw new Exception($GLOBALS['zbp']->lang['error']['99']);
         }
 
         return $this->loadSrcByString(file_get_contents($img_path));
@@ -182,7 +182,7 @@ class Thumb
             return $this->loadSrcByString($r);
         }
 
-        throw new Exception('远程图片请求失败');
+        throw new Exception($GLOBALS['zbp']->lang['error']['100']);
     }
 
     /**
@@ -196,13 +196,13 @@ class Thumb
         $this->srcRes = imagecreatefromstring($img_string);
         
         if (! $this->srcRes) {
-            throw new Exception('图片载入失败');
+            throw new Exception($GLOBALS['zbp']->lang['error']['101']);
         }
 
         $this->loadSrcWidthAndHeight();
 
         if ($this->srcWidth == 0 || $this->srcHeight == 0) {
-            throw new Exception('图片宽高不正常');
+            throw new Exception($GLOBALS['zbp']->lang['error']['102']);
         }
 
         $this->loadedCompletely = true;

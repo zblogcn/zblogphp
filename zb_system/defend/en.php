@@ -544,6 +544,10 @@ return array(
         '96' => 'API is not available!',
         '97' => 'The resource does not exist.',
         '98' => 'Duplicate label name',
+        '99' => 'Picture does not exist',
+        '100' => 'Remote picture request failed',
+        '101' => 'Image failed to load',
+        '102' => 'Image aspect ratio error',
     ),
 
     'offical_urls' => array(
