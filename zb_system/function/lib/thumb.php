@@ -93,8 +93,7 @@ class Thumb
         }
 
         if ($default_img === null) {
-            // @todo 放个默认图
-            $default_img = ZBP_PATH . '';
+            $default_img = ZBP_PATH . 'zb_system/image/default/thumb.png';
         }
 
         $thumbs = array();
@@ -107,9 +106,14 @@ class Thumb
             if (! $image) {
                 continue;
             }
+            $ext = GetFileExt($image);
+            if (! in_array($ext, array('jpeg', 'jpg', 'png', 'gif'))) {
+                continue;
+            }
 
             $img_path = str_replace($zbp->host, $zbp->path, $image);
-            $thumb_name = md5($image) . '-' . $width . '-' . $height . '-' . ($clip === true ? '1' : '0') . '.' . GetFileExt($image);
+
+            $thumb_name = md5($image) . '-' . $width . '-' . $height . '-' . ($clip === true ? '1' : '0') . '.' . $ext;
             $thumb_path = $thumb_dir . $thumb_name;
             $thumb_url = $zbp->host . 'zb_users/cache/thumbs/' . $thumb_name;
 
@@ -119,6 +123,8 @@ class Thumb
                 continue;
             }
             $thumb = new static;
+
+            ZBlogException::SuspendErrorHook();
             try {
                 if (! CheckUrlIsLocal($image)) {
                     $thumb->loadSrcByExternalUrl($image);
@@ -126,10 +132,12 @@ class Thumb
                     $thumb->loadSrcByPath($img_path);
                 }
             } catch (Exception $e) {
+                ZBlogException::ResumeErrorHook();
                 if ($default_img) {
                     $thumb->loadSrcByPath($default_img);
                 }
             }
+            ZBlogException::ResumeErrorHook();
 
             if ($thumb->loadedCompletely) {
                 $thumb->shouldClip($clip)->setWidth($width)->setHeight($height)->setDstImagePath($thumb_path)->handle();
