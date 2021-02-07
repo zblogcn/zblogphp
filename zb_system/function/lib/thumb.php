@@ -67,21 +67,34 @@ class Thumb
     protected $dstImagePath;
 
     /**
+     * 是否成功载入.
+     *
+     * @var boolean
+     */
+    protected $loadedCompletely = false;
+
+    /**
      * 生成缩略图.
      *
-     * @param array $images   图片
-     * @param integer $width  宽度
-     * @param integer $height 高度
-     * @param integer $count  数量
-     * @param boolean $clip   是否裁剪
+     * @param array       $images      图片
+     * @param integer     $width       宽度
+     * @param integer     $height      高度
+     * @param integer     $count       数量
+     * @param boolean     $clip        是否裁剪
+     * @param string|null $default_img 默认图片
      * @return array
      */
-    public static function Thumbs($images, $width = 200, $height = 150, $count = 1, $clip = true)
+    public static function Thumbs($images, $width = 200, $height = 150, $count = 1, $clip = true, $default_img = null)
     {
         global $zbp;
 
         if (! is_dir($thumb_dir = $zbp->usersdir . 'cache/thumbs/')) {
             mkdir($thumb_dir);
+        }
+
+        if ($default_img === null) {
+            // @todo 放个默认图
+            $default_img = ZBP_PATH . '';
         }
 
         $thumbs = array();
@@ -112,11 +125,16 @@ class Thumb
                 } else {
                     $thumb->loadSrcByPath($img_path);
                 }
+            } catch (Exception $e) {
+                if ($default_img) {
+                    $thumb->loadSrcByPath($default_img);
+                }
+            }
+
+            if ($thumb->loadedCompletely) {
                 $thumb->shouldClip($clip)->setWidth($width)->setHeight($height)->setDstImagePath($thumb_path)->handle();
                 $thumbs[] = $thumb_url;
                 $i++;
-            } catch (Exception $e) {
-                continue;
             }
         }
 
@@ -179,6 +197,7 @@ class Thumb
             throw new Exception('图片宽高不正常');
         }
 
+        $this->loadedCompletely = true;
         return $this;
     }
 

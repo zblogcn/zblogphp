@@ -1904,7 +1904,7 @@ DefinePluginFilter('Filter_Plugin_Post_Set');
 '**************************************************<
 '类型:Filter
 '名称:Filter_Plugin_Post_Thumbs
-'参数:&$this, &$all_images, &$width, &$height, &$count, &$clip
+'参数:&$this, &$all_images, &$width, &$height, &$count, &$clip, &$default_img
 '说明:干预Post类Thumbs方法的接口
 '调用:
 '**************************************************>

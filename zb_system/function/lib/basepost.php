@@ -387,25 +387,26 @@ class BasePost extends Base
     /**
      * 获取缩略图.
      *
-     * @param integer $width
-     * @param integer $height
-     * @param integer $count
-     * @param boolean $clip
+     * @param integer      $width
+     * @param integer      $height
+     * @param integer      $count
+     * @param boolean      $clip
+     * @param string|null  $default_img
      * @return array
      */
-    public function Thumbs($width = 200, $height = 150, $count = 1, $clip = true)
+    public function Thumbs($width = 200, $height = 150, $count = 1, $clip = true, $default_img = null)
     {
         $all_images = $this->AllImages;
 
         foreach ($GLOBALS['hooks']['Filter_Plugin_Post_Thumbs'] as $fpname => &$fpsignal) {
-            $fpreturn = $fpname($this, $all_images, $width, $height, $count, $clip);
+            $fpreturn = $fpname($this, $all_images, $width, $height, $count, $clip, $default_img);
             if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
                 $fpsignal = PLUGIN_EXITSIGNAL_NONE;
                 return $fpreturn;
             }
         }
 
-        return Thumb::Thumbs($all_images, $width, $height, $count, $clip);
+        return Thumb::Thumbs($all_images, $width, $height, $count, $clip, $default_img);
     }
 
     /**
