@@ -1903,6 +1903,17 @@ DefinePluginFilter('Filter_Plugin_Post_Set');
 /*
 '**************************************************<
 '类型:Filter
+'名称:Filter_Plugin_Post_Thumbs
+'参数:&$this, &$all_images, &$width, &$height, &$count, &$clip
+'说明:干预Post类Thumbs方法的接口
+'调用:
+'**************************************************>
+ */
+DefinePluginFilter('Filter_Plugin_Post_Thumbs');
+
+/*
+'**************************************************<
+'类型:Filter
 '名称:Filter_Plugin_Category_Url
 '参数:&$this
 '说明:干预Category类Url方法的接口
