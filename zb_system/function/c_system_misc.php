@@ -623,10 +623,12 @@ function misc_updatedapp()
 function misc_clearthumbcache()
 {
     global $zbp;
-    if (!$zbp->CheckRights('root')) {
-        return ;
+
+    if (! $zbp->CheckRights('root')) {
+        return;
     }
     CheckIsRefererValid();
+
     rrmdir($zbp->usersdir . '/cache/thumbs');
     $zbp->SetHint('good');
     Redirect($_SERVER["HTTP_REFERER"]);
