@@ -95,23 +95,7 @@ class Thumb
             return;
         }
 
-        $prefix = substr($default_img, 0, 7);
-        if ($prefix === 'http://' || $prefix === 'https:/') {
-            // 是 URL
-            if (CheckUrlIsLocal($default_img)) {
-                // 本地图片 URL
-                $default_img = UrlHostToPath($default_img);
-            } else {
-                $default_img = ZBP_THUMB_DEFAULT_IMG;
-            }
-        }
-
-        if (! file_exists($default_img)) {
-            // 如果不存在图片
-            $default_img = ZBP_THUMB_DEFAULT_IMG;
-        }
-
-        self::$defaultImg = $default_img;
+        self::$defaultImg = UrlHostToPath($default_img);
     }
 
     /**
