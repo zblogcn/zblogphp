@@ -108,15 +108,15 @@ define('ZC_POST_TYPE_ALBUM', 8); // 相册
  * @param  id=>{name,url,template,classname}
  */
 $GLOBALS['posttype'] = array(
-    array('name' => 'article', 'urlrule' => '', 'template' => '', 'classname' => 'Post', 'actions' => array(), 'routes' => array()), //0
-    array('name' => 'page', 'urlrule' => '', 'template' => '', 'classname' => 'Post', 'actions' => array(), 'routes' => array()), //1
-    array('name' => 'tweet', 'urlrule' => '', 'template' => '', 'classname' => 'Post', 'actions' => array(), 'routes' => array()), //2
-    array('name' => 'discussion', 'urlrule' => '', 'template' => '', 'classname' => 'Post', 'actions' => array(), 'routes' => array()), //3
-    array('name' => 'link', 'urlrule' => '', 'template' => '', 'classname' => 'Post', 'actions' => array(), 'routes' => array()), //4
-    array('name' => 'music', 'urlrule' => '', 'template' => '', 'classname' => 'Post', 'actions' => array(), 'routes' => array()), //5
-    array('name' => 'video', 'urlrule' => '', 'template' => '', 'classname' => 'Post', 'actions' => array(), 'routes' => array()), //6
-    array('name' => 'photo', 'urlrule' => '', 'template' => '', 'classname' => 'Post', 'actions' => array(), 'routes' => array()), //7
-    array('name' => 'album', 'urlrule' => '', 'template' => '', 'classname' => 'Post', 'actions' => array(), 'routes' => array()), //8
+    array('name' => 'article', 'single_urlrule' => '', 'template' => '', 'classname' => 'Post', 'actions' => array(), 'routes' => array()), //0
+    array('name' => 'page', 'single_urlrule' => '', 'template' => '', 'classname' => 'Post', 'actions' => array(), 'routes' => array()), //1
+    array('name' => 'tweet', 'single_urlrule' => '', 'template' => '', 'classname' => 'Post', 'actions' => array(), 'routes' => array()), //2
+    array('name' => 'discussion', 'single_urlrule' => '', 'template' => '', 'classname' => 'Post', 'actions' => array(), 'routes' => array()), //3
+    array('name' => 'link', 'single_urlrule' => '', 'template' => '', 'classname' => 'Post', 'actions' => array(), 'routes' => array()), //4
+    array('name' => 'music', 'single_urlrule' => '', 'template' => '', 'classname' => 'Post', 'actions' => array(), 'routes' => array()), //5
+    array('name' => 'video', 'single_urlrule' => '', 'template' => '', 'classname' => 'Post', 'actions' => array(), 'routes' => array()), //6
+    array('name' => 'photo', 'single_urlrule' => '', 'template' => '', 'classname' => 'Post', 'actions' => array(), 'routes' => array()), //7
+    array('name' => 'album', 'single_urlrule' => '', 'template' => '', 'classname' => 'Post', 'actions' => array(), 'routes' => array()), //8
 );
 
 /*

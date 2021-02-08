@@ -4126,6 +4126,52 @@ class ZBlogPHP
     }
 
     /**
+     * @param $typeid
+     *
+     * @return string
+     */
+    public function GetPostType_Name($typeid)
+    {
+        if (isset($this->posttype[$typeid])) {
+            return $this->posttype[$typeid]['name'];
+        }
+
+        return '';
+    }
+
+    public function GetPostType_UrlRule($typeid)
+    {
+        if (isset($this->posttype[$typeid])) {
+            return $this->posttype[$typeid]['single_urlrule'];
+        }
+
+        return $this->option['ZC_PAGE_REGEX'];
+    }
+
+    public function GetPostType_Template($typeid)
+    {
+        if (isset($this->posttype[$typeid])) {
+            return $this->posttype[$typeid]['template'];
+        }
+
+        return $this->option['ZC_POST_DEFAULT_TEMPLATE'];
+    }
+
+    public function GetPostType_CategoryType($typeid)
+    {
+        if (isset($this->posttype[$typeid])) {
+            return $typeid;
+        }
+    }
+
+    public function GetPostType_TagType($typeid)
+    {
+        if (isset($this->posttype[$typeid])) {
+            return $typeid;
+        }
+    }
+
+    /**
      * 注册Action.
      *
      * @param $name
