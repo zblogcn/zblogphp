@@ -143,7 +143,7 @@ function Admin_ArticleMng()
     $p->UrlRule->Rules['{%order%}'] = $order_get;
 
     $w = array();
-    $w = $w[] = array('=', 'log_Type', 0);
+    $w[] = array('=', 'log_Type', 0);
 
     if (!$zbp->CheckRights('ArticleAll')) {
         $w[] = array('=', 'log_AuthorID', $zbp->user->ID);
