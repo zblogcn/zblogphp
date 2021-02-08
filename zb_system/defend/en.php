@@ -119,6 +119,7 @@ return array(
         'global_setting'                    => 'Global Settings',
         'page_setting'                      => 'Reading Settings',
         'comment_setting'                   => 'Discussion Settings',
+        'api_setting'                       => 'API Settings',
         'other_setting'                     => 'Other Settings',
         'blog_host'                         => 'Site Address (Site URL)',
         'blog_host_add'                     => 'Default automatic recognition. If you need to permanent your site address, please click on the button and enter your domain name.',
@@ -131,13 +132,6 @@ return array(
         'blog_language'                     => 'Site Language',
         'allow_upload_type'                 => 'Allows to Upload a File of Type',
         'allow_upload_size'                 => 'Allow Upload File Size (in MB)',
-        'thumb_tip'                         => 'Tip: if you select the mode of abbreviating and not clipping, the size will be reduced in equal proportion. The width is set according to the following configuration, and the height is adaptive',
-        'thumb_switch'                      => 'Article generation thumbnail switch',
-        'thumb_type'                        => 'Article generation thumbnail type',
-        'thumb_clip'                        => 'Thumbnail and crop mode',
-        'thumb_scale'                       => 'Thumbnail no crop mode',
-        'thumb_width'                       => 'Width of article generated thumbnail (in PX)',
-        'thumb_height'                      => 'Height of article generated thumbnail (in PX)',
         'debug_mode'                        => 'Development Mode',
         'display_count'                     => 'List Page Displays the Number of Posts',
         'pagebar_count'                     => 'Pagebar Displays the Number of Pages',
@@ -279,6 +273,10 @@ return array(
         'update_db'                         => 'Please click the link to upgrade the database structure.',
         'enable_post_batch_delete'          => 'Enable Batch Delete of Post',
         'enable_api'                        => 'Enable API',
+        'enable_api_throttle'               => 'Enable API Throttle',
+        'enable_api_throttle_note'          => 'Only takes effect when zbpcache plugin is enabled.',
+        'api_throttle_max_reqs_per_min'     => 'API max requests per minute',
+        'api_throttle_max_reqs_note'        => 'Only takes effect when API Throttle is enabled.',
         'enable_xmlrpc'                     => 'Enable XML-RPC',
         'clear_thumb_cache'                 => 'Clear thumb cache',
         'confirm_clear_thumb_cache'         => 'Confirm to clear thumb cache.',
@@ -563,15 +561,15 @@ return array(
 
         // ZBP errors first
         '6' => '
-			Did you already logined? Please login, and then retry the operation. <br/>
-			Do you have the permissions? You can <a href="{%BlogHost%}zb_system/cmd.php?act=misc&type=vrs" target="_blank"> Click here to see your permissions </a>. <br/>
-			<br/>
-		',
+            Did you already logined? Please login, and then retry the operation. <br/>
+            Do you have the permissions? You can <a href="{%BlogHost%}zb_system/cmd.php?act=misc&type=vrs" target="_blank"> Click here to see your permissions </a>. <br/>
+            <br/>
+        ',
         '8' => '
-			Have you entered the correct name and password? <br/>
-			If you are the webmaster and have forgotten your password, you can click to download <a href="https://wiki.zblogcn.com/doku.php?id=zblogphp:error:%E9%A6%96%E9%A1%B5#error-8" target="_blank">[Login Failed]</a>. <br/>
-			<br/>
-		',
+            Have you entered the correct name and password? <br/>
+            If you are the webmaster and have forgotten your password, you can click to download <a href="https://wiki.zblogcn.com/doku.php?id=zblogphp:error:%E9%A6%96%E9%A1%B5#error-8" target="_blank">[Login Failed]</a>. <br/>
+            <br/>
+        ',
         '91' => '
              Your PHP version may be too old to enable this application. You\'d better to contact your host and upgrade to the latest PHP version they can provide. <br/>
              For security and efficiency, we also strongly recommend to update your PHP to the latest version.
@@ -584,28 +582,28 @@ return array(
         'other' => array(
             // Other errors then
             'mysql' => '
-					Please check your MySQL configuration in zb_users/c_option.php, or check the MySQL connection information that you just fill. <br/>
-					And your MySQL database has been successfully started? <br/>
-			<br/>
-			',
+                    Please check your MySQL configuration in zb_users/c_option.php, or check the MySQL connection information that you just fill. <br/>
+                    And your MySQL database has been successfully started? <br/>
+            <br/>
+            ',
 
             'sqlite' => '
-			Please check your SQLite configuration in zb_users/c_option.php. <br/>
-			Or check you have read and write permissions of that SQLite file. <br/>
-			<br/>
-			',
+            Please check your SQLite configuration in zb_users/c_option.php. <br/>
+            Or check you have read and write permissions of that SQLite file. <br/>
+            <br/>
+            ',
 
             'disabled for security reasons' => '
-				You can disable the Safe Mode of PHP.<br/>
-				Otherwise you can disable the plugin which caused this error and contact the author of which.
-				<br/>
-			',
+                You can disable the Safe Mode of PHP.<br/>
+                Otherwise you can disable the plugin which caused this error and contact the author of which.
+                <br/>
+            ',
 
         ),
 
         'end' => '
-			If you are a visitor, this may be something happened. Please try again later, or contact the webmaster. <br/>
-			If you are the webmaster, You can click on <a href="{%morehelp%}" target="_blank"> [more] </a> to get more help from Z-Blog Wiki(Chinese only). Therefore, to publish a thread in English in <a href="https://bbs.zblogcn.com/" target="_blank">Z-Blog official forum </a> with detailed error description and screenshots for help is a choice.
-		',
+            If you are a visitor, this may be something happened. Please try again later, or contact the webmaster. <br/>
+            If you are the webmaster, You can click on <a href="{%morehelp%}" target="_blank"> [more] </a> to get more help from Z-Blog Wiki(Chinese only). Therefore, to publish a thread in English in <a href="https://bbs.zblogcn.com/" target="_blank">Z-Blog official forum </a> with detailed error description and screenshots for help is a choice.
+        ',
     ),
 );
