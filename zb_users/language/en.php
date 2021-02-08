@@ -280,8 +280,6 @@ return array(
         'enable_post_batch_delete'          => 'Enable Batch Delete of Post',
         'enable_api'                        => 'Enable API',
         'enable_xmlrpc'                     => 'Enable XML-RPC',
-        'clear_thumb_cache'                 => 'Clear thumb cache',
-        'confirm_clear_thumb_cache'         => 'Confirm to clear thumb cache.',
         ''                                  => '',
     ),
 
