@@ -2106,20 +2106,6 @@ function Array_Isset(&$array, $key, $default)
 }
 
 /**
- * 原图转为缩略图地址
- *
- * @param  string $path 原图片地址
- * @return string      缩略图地址
- */
-function ImgToThumbUrl($path)
-{
-    $pos = strripos($path, '.');
-    $start = substr($path, 0, $pos);
-    $end = substr($path, $pos);
-    return $start . '_thumb' . $end;
-}
-
-/**
  * 从 HTML 中获取所有图片.
  *
  * @param  string $html
@@ -2142,4 +2128,21 @@ function CheckUrlIsLocal($url)
     global $zbp;
 
     return substr($url, 0, strlen($zbp->host)) === $zbp->host;
+}
+
+/**
+ * 把 URL 中的 Host 转换为本地路径.
+ *
+ * @param string $url
+ * @return string
+ */
+function UrlHostToPath($url)
+{
+    global $zbp;
+
+    if (! CheckUrlIsLocal($url)) {
+        return $url;
+    }
+
+    return ZBP_PATH . substr($url, strlen($zbp->host));
 }

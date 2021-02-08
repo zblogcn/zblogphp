@@ -4,6 +4,9 @@ if (!defined('ZBP_PATH')) {
     exit('Access denied');
 }
 
+// 系统提供的默认缩略图
+define('ZBP_THUMB_DEFAULT_IMG', ZBP_PATH . 'zb_system/image/default/thumb.png');
+
 /**
  * 缩略图类.
  */
@@ -81,6 +84,32 @@ class Thumb
     protected $loadedCompletely = false;
 
     /**
+     * 确认默认图片是否正确.
+     */
+    protected static function ensureDefaultImgIsOK()
+    {
+        if (self::$defaultImg === ZBP_THUMB_DEFAULT_IMG) {
+            return; // 系统的 defaultImg 直接放行
+        }
+
+        if (self::$defaultImg === null) {
+            self::$defaultImg = ZBP_THUMB_DEFAULT_IMG;
+        }
+
+        $prefix = substr(self::$defaultImg, 0, 7);
+        if ($prefix !== 'http://' && $prefix !== 'https:/') {
+            return; // 本地图片路径直接放行
+        }
+
+        if (CheckUrlIsLocal(self::$defaultImg)) {
+            self::$defaultImg = UrlHostToPath(self::$defaultImg); // 本地 Url 替换成路径
+            return;
+        }
+
+        self::$defaultImg = ZBP_THUMB_DEFAULT_IMG;
+    }
+
+    /**
      * 生成缩略图.
      *
      * @param array   $images 图片
@@ -98,9 +127,7 @@ class Thumb
             mkdir($thumb_dir);
         }
 
-        if (self::$defaultImg === null) {
-            self::$defaultImg = ZBP_PATH . 'zb_system/image/default/thumb.png';
-        }
+        self::ensureDefaultImgIsOK();
 
         $thumbs = array();
 
@@ -117,7 +144,7 @@ class Thumb
                 continue;
             }
 
-            $img_path = str_replace($zbp->host, $zbp->path, $image);
+            $img_path = UrlHostToPath($image);
 
             $thumb_name = md5($image) . '-' . $width . '-' . $height . '-' . ($clip === true ? '1' : '0') . '.' . $ext;
             $thumb_path = $thumb_dir . $thumb_name;
