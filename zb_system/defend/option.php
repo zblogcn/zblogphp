@@ -223,6 +223,6 @@ return array(
 
     // API 相关
     'ZC_API_ENABLE'                     => false,
-    'ZC_API_THROTTLE_ENABLE'            => true,
+    'ZC_API_THROTTLE_ENABLE'            => false,
     'ZC_API_THROTTLE_MAX_REQS_PER_MIN'  => 60,
 );
