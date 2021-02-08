@@ -18,7 +18,7 @@ class Thumb
      *
      * @var string|null
      */
-    static public $defaultImg;
+    static protected $defaultImg;
 
     /**
      * 是否需要裁剪.
@@ -84,29 +84,34 @@ class Thumb
     protected $loadedCompletely = false;
 
     /**
-     * 确认默认图片是否正确.
+     * 更改默认图片.
+     *
+     * @param string|null $default_img 默认图片路径
      */
-    protected static function ensureDefaultImgIsOK()
+    public static function changeDefaultImg($default_img)
     {
-        if (self::$defaultImg === ZBP_THUMB_DEFAULT_IMG) {
-            return; // 系统的 defaultImg 直接放行
-        }
-
-        if (self::$defaultImg === null) {
+        if ($default_img === null || $default_img === ZBP_THUMB_DEFAULT_IMG) {
             self::$defaultImg = ZBP_THUMB_DEFAULT_IMG;
-        }
-
-        $prefix = substr(self::$defaultImg, 0, 7);
-        if ($prefix !== 'http://' && $prefix !== 'https:/') {
-            return; // 本地图片路径直接放行
-        }
-
-        if (CheckUrlIsLocal(self::$defaultImg)) {
-            self::$defaultImg = UrlHostToPath(self::$defaultImg); // 本地 Url 替换成路径
             return;
         }
 
-        self::$defaultImg = ZBP_THUMB_DEFAULT_IMG;
+        $prefix = substr($default_img, 0, 7);
+        if ($prefix === 'http://' || $prefix === 'https:/') {
+            // 是 URL
+            if (CheckUrlIsLocal($default_img)) {
+                // 本地图片 URL
+                $default_img = UrlHostToPath($default_img)
+            } else {
+                $default_img = ZBP_THUMB_DEFAULT_IMG;
+            }
+        }
+
+        if (! file_exists($default_img)) {
+            // 如果不存在图片
+            $default_img = ZBP_THUMB_DEFAULT_IMG;
+        }
+
+        self::$defaultImg = $default_img;
     }
 
     /**
@@ -127,7 +132,9 @@ class Thumb
             mkdir($thumb_dir);
         }
 
-        self::ensureDefaultImgIsOK();
+        if (self::$defaultImg === null) {
+            self::$defaultImg = ZBP_THUMB_DEFAULT_IMG;
+        }
 
         $thumbs = array();
 
