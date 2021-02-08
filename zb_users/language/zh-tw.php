@@ -119,6 +119,7 @@ return array(
         'global_setting'                    => '全域設定',
         'page_setting'                      => '閱讀設定',
         'comment_setting'                   => '討論設定',
+        'api_setting'                       => 'API設定',
         'other_setting'                     => '其他設定',
         'blog_host'                         => '網站位址',
         'blog_host_add'                     => '默認自動讀取當前網站位址，如需固定網站位址請點擊按鈕並輸入域名。',
@@ -131,13 +132,6 @@ return array(
         'blog_language'                     => '網站語言',
         'allow_upload_type'                 => '允許上傳檔案的類型',
         'allow_upload_size'                 => '允許上傳檔案的大小（單位MB）',
-        'thumb_tip'                         => '提示：如果選擇縮略不裁剪模式，將等比例縮略尺寸，寬根據下面配置設定，高自適應',
-        'thumb_switch'                      => '文章生成縮略圖開關',
-        'thumb_type'                        => '文章生成縮略圖類型',
-        'thumb_clip'                        => '縮略並裁剪模式',
-        'thumb_scale'                       => '縮略不裁剪模式',
-        'thumb_width'                       => '文章生成縮略圖的寬(單位PX)',
-        'thumb_height'                      => '文章生成縮略圖的高(單位PX)',
         'debug_mode'                        => '開發模式',
         'display_count'                     => '列表頁顯示文章的數量',
         'pagebar_count'                     => '翻頁條顯示翻頁的數量',
@@ -279,7 +273,13 @@ return array(
         'update_db'                         => '請點擊該鏈接升級數據庫結構。',
         'enable_post_batch_delete'          => '啟用文章批量刪除',
         'enable_api'                        => '啟用API協議',
+        'enable_api_throttle'               => '啟用API限流',
+        'enable_api_throttle_note'          => '僅在 zbpcache 挿件開啟後生效',
+        'api_throttle_max_reqs_per_min'     => 'API每分鐘限制請求數',
+        'api_throttle_max_reqs_note'        => '僅在開啟API限流後生效',
         'enable_xmlrpc'                     => '啟用XML-RPC協議',
+        'clear_thumb_cache'                 => '清空縮略圖緩存',
+        'confirm_clear_thumb_cache'         => '確定清空縮略圖緩存？',
         ''                                  => '',
     ),
 
@@ -544,10 +544,10 @@ return array(
         '96' => '找不到對應的API！',
         '97' => '資源不存在',
         '98' => '标签名称重复',
-        '99' => '图片不存在',
-        '100' => '远程图片请求失败',
-        '101' => '图片载入失败',
-        '102' => '图片宽高不正常',
+        '99' => '圖片不存在',
+        '100' => '遠程圖片請求失敗',
+        '101' => '圖片載入失敗',
+        '102' => '原圖片寬高不正常',
     ),
 
     'offical_urls' => array(
@@ -561,57 +561,57 @@ return array(
 
         // ZBP errors first
         '6' => '
-			您是否已經登入？請先登入控制台，再重試操作。<br/>
-			您是否有此功能所需的權限？您可以<a href="{%bloghost%}zb_system/cmd.php?act=misc&type=vrs" target="_blank">點擊這裡查看您的權限</a>。<br/>
-			<br/>
-		',
+            您是否已經登入？請先登入控制台，再重試操作。<br/>
+            您是否有此功能所需的權限？您可以<a href="{%bloghost%}zb_system/cmd.php?act=misc&type=vrs" target="_blank">點擊這裡查看您的權限</a>。<br/>
+            <br/>
+        ',
         '8' => '
-			您是否輸入了正確的名稱和密碼？<br/>
-			如果您是管理員且忘記了密碼，可以點擊<a href="https://wiki.zblogcn.com/doku.php?id=zblogphp:error:%E9%A6%96%E9%A1%B5#error-8" target="_blank">【登入失敗】</a>。<br/>
-			<br/>
-		',
+            您是否輸入了正確的名稱和密碼？<br/>
+            如果您是管理員且忘記了密碼，可以點擊<a href="https://wiki.zblogcn.com/doku.php?id=zblogphp:error:%E9%A6%96%E9%A1%B5#error-8" target="_blank">【登入失敗】</a>。<br/>
+            <br/>
+        ',
         '91' => '
-            您的PHP版本可能太舊，請您聯繫您的主機商，把PHP版本升級為他們所能提供的最新版本。 <br/>
-            為了安全與效率，我們也強烈建議您把您的PHP更新到最新版本。
-        ',
+            您的PHP版本可能太舊，請您聯繫您的主機商，把PHP版本升級為他們所能提供的最新版本。 <br/>
+            為了安全與效率，我們也強烈建議您把您的PHP更新到最新版本。
+        ',
         '92' => '
-            您的主機環境可能缺少某些必要組件，請聯繫您的主機商啟用這些組件，才可使用本應用。 <br/>
-            您可以<a href="https://wiki.zblogcn.com/doku.php?id=zblogphp:error:%E9%A6%96%E9%A1%B5#error-92" target="_blank">點擊這裡，來獲得缺少組件的大致列表。 </a>
-        ',
+            您的主機環境可能缺少某些必要組件，請聯繫您的主機商啟用這些組件，才可使用本應用。 <br/>
+            您可以<a href="https://wiki.zblogcn.com/doku.php?id=zblogphp:error:%E9%A6%96%E9%A1%B5#error-92" target="_blank">點擊這裡，來獲得缺少組件的大致列表。 </a>
+        ',
 
         'other' => array(
             // Other errors then
             'mysql' => '
-			您在 zb_users/c_option.php 內配置、或剛才填寫的的 MySQL 連接信息是否正確？ <br/>
-			您所連接的 MySQL 資料庫是否已經成功啟動？ <br/>
-			<br/>
-			',
+            您在 zb_users/c_option.php 內配置、或剛才填寫的的 MySQL 連接信息是否正確？ <br/>
+            您所連接的 MySQL 資料庫是否已經成功啟動？ <br/>
+            <br/>
+            ',
 
             'sqlite' => '
-			您在zb_users/c_option.php內配置的 SQLite 連接信息是否正常？ <br/>
-			您是否有相關 SQLite 資料庫的讀寫權限？ <br/>
-			相關 SQLite 資料庫是否被損壞？ <br/>
-			<br/>
-			',
+            您在zb_users/c_option.php內配置的 SQLite 連接信息是否正常？ <br/>
+            您是否有相關 SQLite 資料庫的讀寫權限？ <br/>
+            相關 SQLite 資料庫是否被損壞？ <br/>
+            <br/>
+            ',
 
             'access' => '
-			您是否將Z-BlogPHP資料夾內所有檔案的許可權設定為0777或0755？如果您不知道，請聯系您的空間商。<br/>
-			<br/>
-			',
+            您是否將Z-BlogPHP資料夾內所有檔案的許可權設定為0777或0755？如果您不知道，請聯系您的空間商。<br/>
+            <br/>
+            ',
 
             'disabled for security reasons' => '
-			您的主機開啟了PHP安全模式，導致某些函數無法使用。建議：<br/>
-			1.聯系您的主機商關閉“安全模式”<br/>
-			2.關閉某些使用相關函數的挿件，或聯系這些挿件的作者。<br/>
-			<br/>
-			',
+            您的主機開啟了PHP安全模式，導致某些函數無法使用。建議：<br/>
+            1.聯系您的主機商關閉“安全模式”<br/>
+            2.關閉某些使用相關函數的挿件，或聯系這些挿件的作者。<br/>
+            <br/>
+            ',
 
         ),
 
         'end' => '
-			如果您是訪客，這說明網站程式可能出現了一些錯誤。請您稍後再試，或聯繫站長。 <br/>
+            如果您是訪客，這說明網站程式可能出現了一些錯誤。請您稍後再試，或聯繫站長。 <br/>
             如果您是站長，您可以點擊<a href="{%morehelp%}" target="_blank">【更多幫助】</a>來查看Z-Blog官方關於這個錯誤的說明，也可以到<a href="https://bbs.zblogcn.com/" target="_blank">Z-Blog官方論壇</a>，附上錯誤詳細截圖與描述尋求幫助。
-		',
+        ',
     ),
 
 );

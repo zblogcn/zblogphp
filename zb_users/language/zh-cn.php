@@ -115,6 +115,7 @@ return array(
         'global_setting'                    => '全局设置',
         'page_setting'                      => '页面设置',
         'comment_setting'                   => '评论设置',
+        'api_setting'                       => 'API设置',
         'other_setting'                     => '其它设置',
         'blog_host'                         => '网站地址',
         'blog_host_add'                     => '默认自动读取当前网址，如需固定网站域名请点击按钮并输入域名。',
@@ -127,13 +128,6 @@ return array(
         'blog_language'                     => '网站语言',
         'allow_upload_type'                 => '允许上传文件的类型',
         'allow_upload_size'                 => '允许上传文件的大小(单位MB)',
-        'thumb_tip'                         => '提示：如果选择缩略不裁剪模式，将等比例缩略尺寸，宽根据下面配置设定，高自适应',
-        'thumb_switch'                      => '文章生成缩略图开关',
-        'thumb_type'                        => '文章生成缩略图类型',
-        'thumb_clip'                        => '缩略并裁剪模式',
-        'thumb_scale'                       => '缩略不裁剪模式',
-        'thumb_width'                       => '文章生成缩略图的宽(单位PX)',
-        'thumb_height'                      => '文章生成缩略图的高(单位PX)',
         'debug_mode'                        => '调试模式',
         'display_count'                     => '列表页显示文章的数量',
         'pagebar_count'                     => '翻页条显示翻页的数量',
@@ -275,6 +269,10 @@ return array(
         'update_db'                         => '请点击该链接升级数据库结构。',
         'enable_post_batch_delete'          => '启用文章批量删除',
         'enable_api'                        => '启用API协议',
+        'enable_api_throttle'               => '启用API限流',
+        'enable_api_throttle_note'          => '仅在 zbpcache 插件开启后生效',
+        'api_throttle_max_reqs_per_min'     => 'API每分钟限制请求数',
+        'api_throttle_max_reqs_note'        => '仅在开启API限流后生效',
         'enable_xmlrpc'                     => '启用XML-RPC协议',
         'clear_thumb_cache'                 => '清空缩略图缓存',
         'confirm_clear_thumb_cache'         => '确定要清空缩略图缓存吗？强烈建议仅在更换主题等操作后清空。',
@@ -545,7 +543,7 @@ return array(
         '99' => '图片不存在',
         '100' => '远程图片请求失败',
         '101' => '图片载入失败',
-        '102' => '图片宽高不正常',
+        '102' => '原图片宽高不正常',
     ),
 
     'offical_urls' => array(
@@ -559,15 +557,15 @@ return array(
 
         // ZBP errors first
         '6' => '
-			您是否已经登录？请先登录后台，再重试操作。<br/>
-			您是否有此功能所需的权限？您可以<a href="{%bloghost%}zb_system/cmd.php?act=misc&type=vrs" target="_blank">点击这里查看您的权限</a>。<br/>
-			<br/>
-		',
+            您是否已经登录？请先登录后台，再重试操作。<br/>
+            您是否有此功能所需的权限？您可以<a href="{%bloghost%}zb_system/cmd.php?act=misc&type=vrs" target="_blank">点击这里查看您的权限</a>。<br/>
+            <br/>
+        ',
         '8' => '
-			您是否输入了正确的用户名和密码？<br/>
-			如果您是网站管理员且忘记了密码，可以点击<a href="https://wiki.zblogcn.com/doku.php?id=zblogphp:error:%E9%A6%96%E9%A1%B5#error-8" target="_blank">【登录失败】</a>。<br/>
-			<br/>
-		',
+            您是否输入了正确的用户名和密码？<br/>
+            如果您是网站管理员且忘记了密码，可以点击<a href="https://wiki.zblogcn.com/doku.php?id=zblogphp:error:%E9%A6%96%E9%A1%B5#error-8" target="_blank">【登录失败】</a>。<br/>
+            <br/>
+        ',
         '91' => '
             您的PHP版本可能太旧，请您联系您的主机商，把PHP版本升级为他们所能提供的最新版本。<br/>
             为了安全与效率，我们也强烈建议您把您的PHP更新到最新版本。
@@ -580,36 +578,36 @@ return array(
         'other' => array(
             // Other errors then
             'mysql' => '
-				您在zb_users/c_option.php内配置、或刚才填写的的 MySQL 连接信息是否正确？<br/>
-				您所连接的 MySQL 数据库是否已经成功启动？<br/>
-				<br/>
-			',
+                您在zb_users/c_option.php内配置、或刚才填写的的 MySQL 连接信息是否正确？<br/>
+                您所连接的 MySQL 数据库是否已经成功启动？<br/>
+                <br/>
+            ',
 
             'sqlite' => '
-				您在zb_users/c_option.php内配置的 SQLite 连接信息是否正常？<br/>
-				您是否有相关 SQLite 数据库的读写权限？<br/>
-				相关 SQLite 数据库是否被损坏？<br/>
-				<br/>
-			',
+                您在zb_users/c_option.php内配置的 SQLite 连接信息是否正常？<br/>
+                您是否有相关 SQLite 数据库的读写权限？<br/>
+                相关 SQLite 数据库是否被损坏？<br/>
+                <br/>
+            ',
 
             'access' => '
-				您是否将Z-BlogPHP文件夹内所有文件的权限设置为0777或0755？如果您不知道，请联系您的空间商。<br/>
-				<br/>
-			',
+                您是否将Z-BlogPHP文件夹内所有文件的权限设置为0777或0755？如果您不知道，请联系您的空间商。<br/>
+                <br/>
+            ',
 
             'disabled for security reasons' => '
-				您的主机开启了PHP安全模式，导致某些函数无法使用。建议：<br/>
-				1. 联系您的主机商关闭“安全模式”<br/>
-				2. 关闭某些使用相关函数的插件，或联系这些插件的作者。<br/>
-				<br/>
-			',
+                您的主机开启了PHP安全模式，导致某些函数无法使用。建议：<br/>
+                1. 联系您的主机商关闭“安全模式”<br/>
+                2. 关闭某些使用相关函数的插件，或联系这些插件的作者。<br/>
+                <br/>
+            ',
 
         ),
 
         'end' => '
-			如果您是访客，这说明网站程序可能出现了一些错误。请您稍后再试，或联系站长。<br/>
-			如果您是站长，您可以点击<a href="{%morehelp%}" target="_blank">【更多信息】</a>来查看Z-Blog官方关于这个错误的说明，也可以到<a href="https://bbs.zblogcn.com/" target="_blank">Z-Blog官方论坛</a>，附上错误详细截图与描述寻求帮助。
-		',
+            如果您是访客，这说明网站程序可能出现了一些错误。请您稍后再试，或联系站长。<br/>
+            如果您是站长，您可以点击<a href="{%morehelp%}" target="_blank">【更多信息】</a>来查看Z-Blog官方关于这个错误的说明，也可以到<a href="https://bbs.zblogcn.com/" target="_blank">Z-Blog官方论坛</a>，附上错误详细截图与描述寻求帮助。
+        ',
     ),
 
 );
