@@ -13,14 +13,6 @@ if (!defined('ZBP_PATH')) {
 //###############################################################################################################
 
 /**
- * 添加文章管理管理子菜单(内置插件函数).
- */
-function Include_Admin_Addarticlesubmenu()
-{
-    echo MakeSubMenu($GLOBALS['lang']['msg']['clear_thumb_cache'], 'javascript:window.confirm(\'' . $GLOBALS['lang']['msg']['confirm_clear_thumb_cache'] . '\') && (window.location.href = \'' . BuildSafeCmdURL('act=misc&type=clearthumbcache') . '\');', 'm-right', null, null, null, 'icon-trash-fill');
-}
-
-/**
  * 添加页面管理子菜单(内置插件函数).
  */
 function Include_Admin_Addpagesubmenu()
@@ -87,6 +79,14 @@ function Include_Admin_Addcmtsubmenu()
         }
         echo MakeSubMenu($GLOBALS['lang']['msg']['check_comment'] . $n, '../cmd.php?act=CommentMng&amp;ischecking=1', 'm-left ' . (GetVars('ischecking') ? 'm-now' : ''), null, null, null, 'icon-shield-shaded');
     }
+}
+
+/**
+ * 添加网站设置子菜单(内置插件函数).
+ */
+function Include_Admin_Addsettingsubmenu()
+{
+    echo MakeSubMenu($GLOBALS['lang']['msg']['clear_thumb_cache'], 'javascript:window.confirm(\'' . $GLOBALS['lang']['msg']['confirm_clear_thumb_cache'] . '\') && (window.location.href = \'' . BuildSafeCmdURL('act=misc&type=clearthumbcache') . '\');', 'm-right', null, null, null, 'icon-trash-fill');
 }
 
 /**
