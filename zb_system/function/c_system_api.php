@@ -514,11 +514,11 @@ function ApiUrlGenerate($mod, $act = 'get', $query = array())
 /**
  * API 限流.
  *
- * @param string $name
+ * @param string  $name
  * @param integer $max_reqs
  * @param integer $period
  */
-function ApiThrottle($name = 'default', $max_reqs = 5, $period = 60)
+function ApiThrottle($name = 'default', $max_reqs = 60, $period = 60)
 {
     global $zbpcache;
 

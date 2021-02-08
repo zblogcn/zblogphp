@@ -216,9 +216,13 @@ return array(
     'ZC_VERSION_IN_HEADER'           => true,
     'ZC_ADDITIONAL_SECURITY'         => true,
     'ZC_XMLRPC_ENABLE'               => false,
-    'ZC_API_ENABLE'                  => false,
     'ZC_XMLRPC_USE_WEBTOKEN'         => false,
     'ZC_USING_CDN_GUESTIP_TYPE'      => 'REMOTE_ADDR',
     'ZC_POST_BATCH_DELETE'           => false,
     'ZC_JS_304_ENABLE'               => true,
+
+    // API 相关
+    'ZC_API_ENABLE'                     => false,
+    'ZC_API_THROTTLE_ENABLE'            => true,
+    'ZC_API_THROTTLE_MAX_REQS_PER_MIN'  => 60,
 );

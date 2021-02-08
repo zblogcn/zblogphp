@@ -24,6 +24,10 @@ foreach ($GLOBALS['hooks']['Filter_Plugin_API_Begin'] as $fpname => &$fpsignal) 
 
 ApiCheckAuth(false, 'api');
 
+if ($GLOBALS['option']['ZC_API_THROTTLE_ENABLE']) {
+    ApiThrottle('default', $GLOBALS['option']['ZC_API_THROTTLE_MAX_REQS_PER_MIN'] ? $GLOBALS['option']['ZC_API_THROTTLE_MAX_REQS_PER_MIN'] : 60);
+}
+
 $mods = array();
 
 // 载入系统和应用的 mod

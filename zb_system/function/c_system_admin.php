@@ -1527,6 +1527,7 @@ function Admin_SettingMng()
                         <li><a href="#tab3"><span><?php echo $zbp->lang['msg']['page_setting']; ?></span></a></li>
                         <li><a href="#tab4"><span><?php echo $zbp->lang['msg']['comment_setting']; ?></span></a></li>
                         <li><a href="#tab5"><span><?php echo @$zbp->langs->msg->backend_setting; ?></span></a></li>
+                        <li><a href="#tab6"><span><?php echo $zbp->lang['msg']['api_setting']; ?></span></a></li>
                     </ul>
                     <div class="clear"></div>
                 </div>
@@ -1619,7 +1620,6 @@ function changeDomain(newurl){
                     echo '<tr><td><p><b>' . $zbp->lang['msg']['using_cdn_guest_type'] . '</b></p></td><td><p><select id="ZC_USING_CDN_GUESTIP_TYPE" name="ZC_USING_CDN_GUESTIP_TYPE" style="width:600px;" >';
                     echo CreateOptionsOfGuestIPType($zbp->option['ZC_USING_CDN_GUESTIP_TYPE']);
                     echo '</select></p></td></tr>';
-                    echo '<tr><td><p><b>' . $zbp->lang['msg']['enable_api'] . '</b></p></td><td><p><input id="ZC_API_ENABLE" name="ZC_API_ENABLE" type="text" value="' . $zbp->option['ZC_API_ENABLE'] . '" class="checkbox"/></p></td></tr>';
                     echo '<tr><td><p><b>' . $zbp->lang['msg']['enable_xmlrpc'] . '</b></p></td><td><p><input id="ZC_XMLRPC_ENABLE" name="ZC_XMLRPC_ENABLE" type="text" value="' . $zbp->option['ZC_XMLRPC_ENABLE'] . '" class="checkbox"/></p></td></tr>';
                     echo '<tr><td><p><b>' . $zbp->lang['msg']['close_site'] . '</b></p></td><td><p><input id="ZC_CLOSE_SITE" name="ZC_CLOSE_SITE" type="text" value="' . $zbp->option['ZC_CLOSE_SITE'] . '" class="checkbox"/></p></td></tr>';
 
@@ -1653,6 +1653,14 @@ function changeDomain(newurl){
                     echo '<tr><td><p><b>' . @$zbp->langs->msg->get_text_intro . '</b></p></td><td><p><input id="ZC_ARTICLE_INTRO_WITH_TEXT" name="ZC_ARTICLE_INTRO_WITH_TEXT" type="text" value="' . $zbp->option['ZC_ARTICLE_INTRO_WITH_TEXT'] . '" class="checkbox"/></p></td></tr>';
                     echo '<tr><td><p><b>' . $zbp->lang['msg']['manage_count'] . '</b></p></td><td><p><input id="ZC_MANAGE_COUNT" name="ZC_MANAGE_COUNT" style="width:600px;" type="text" value="' . $zbp->option['ZC_MANAGE_COUNT'] . '" /></p></td></tr>';
                     echo '<tr><td><p><b>' . @$zbp->langs->msg->enable_post_batch_delete . '</b></p></td><td><p><input id="ZC_POST_BATCH_DELETE" name="ZC_POST_BATCH_DELETE" type="text" value="' . $zbp->option['ZC_POST_BATCH_DELETE'] . '" class="checkbox"/></p></td></tr>';
+                    echo '</table>';
+                    echo '</div>';
+
+                    echo '<div class="tab-content" style="border:none;padding:0px;margin:0;" id="tab6">';
+                    echo '<table style="padding:0px;margin:0px;width:100%;" class="table_hover table_striped">';
+                    echo '<tr><td class="td25"><p><b>' . $zbp->lang['msg']['enable_api'] . '</b></p></td><td><p><input id="ZC_API_ENABLE" name="ZC_API_ENABLE" type="text" value="' . $zbp->option['ZC_API_ENABLE'] . '" class="checkbox"/></p></td></tr>';
+                    echo '<tr><td><p><b>' . $zbp->lang['msg']['enable_api_throttle'] . '</b><br/><span class="note">' . $zbp->lang['msg']['enable_api_throttle_note'] . '</span></p></td><td><p><input id="ZC_API_THROTTLE_ENABLE" name="ZC_API_THROTTLE_ENABLE" type="text" value="' . $zbp->option['ZC_API_THROTTLE_ENABLE'] . '" class="checkbox"/></p></td></tr>';
+                    echo '<tr><td><p><b>' . $zbp->lang['msg']['api_throttle_max_reqs_per_min'] . '</b><br/><span class="note">' . $zbp->lang['msg']['api_throttle_max_reqs_note'] . '</span></p></td><td><p><input id="ZC_API_THROTTLE_MAX_REQS_PER_MIN" name="ZC_API_THROTTLE_MAX_REQS_PER_MIN" style="width:600px;" type="text" value="' . $zbp->option['ZC_API_THROTTLE_MAX_REQS_PER_MIN'] . '" /></p></td></tr>';
                     echo '</table>';
                     echo '</div>';
                     ?>
