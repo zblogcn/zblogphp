@@ -100,7 +100,7 @@ class Thumb
             // 是 URL
             if (CheckUrlIsLocal($default_img)) {
                 // 本地图片 URL
-                $default_img = UrlHostToPath($default_img)
+                $default_img = UrlHostToPath($default_img);
             } else {
                 $default_img = ZBP_THUMB_DEFAULT_IMG;
             }
