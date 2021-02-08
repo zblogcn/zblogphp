@@ -1032,7 +1032,7 @@ function Admin_TagMng()
     global $zbp;
 
     $posttype = (int) GetVars('type');
-    $typetitle = $posttype > 0 ? (ucfirst($zbp->GetPostType($type, 'name')) . '-') : '';
+    $typetitle = $posttype > 0 ? (ucfirst($zbp->GetPostType($posttype, 'name')) . '-') : '';
 
     echo '<div class="divHeader">' . $typetitle . $zbp->lang['msg']['tag_manage'] . '</div>';
     echo '<div class="SubMenu">';
