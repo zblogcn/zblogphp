@@ -1215,6 +1215,15 @@ function ViewPost($id = null, $alias = null, $isrewrite = false, $object = array
         $posttype = null;
         $canceldisplay = false;
         $route = array();
+        if (is_array($id)) {
+            $object = $id;
+            $id = isset($object['id']) ? $object['id'] : null;
+            $alias = isset($object['alias']) ? $object['alias'] : null;
+        } else {
+            $object = array('id' => $id);
+            $object['alias'] = $alias;
+            $object[0] = empty($alias) ? $id : $alias;
+        }
     }
 
     //处理上一版本兼容性的问题
