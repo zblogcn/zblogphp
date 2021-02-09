@@ -108,15 +108,15 @@ define('ZC_POST_TYPE_ALBUM', 8); // 相册
  * @param  id=>{name,url,template,classname}
  */
 $GLOBALS['posttype'] = array(
-    array('name' => 'article', 'single_urlrule' => '', 'template' => '', 'classname' => 'Post', 'actions' => array(), 'routes' => array()), //0
-    array('name' => 'page', 'single_urlrule' => '', 'template' => '', 'classname' => 'Post', 'actions' => array(), 'routes' => array()), //1
-    array('name' => 'tweet', 'single_urlrule' => '', 'template' => '', 'classname' => 'Post', 'actions' => array(), 'routes' => array()), //2
-    array('name' => 'discussion', 'single_urlrule' => '', 'template' => '', 'classname' => 'Post', 'actions' => array(), 'routes' => array()), //3
-    array('name' => 'link', 'single_urlrule' => '', 'template' => '', 'classname' => 'Post', 'actions' => array(), 'routes' => array()), //4
-    array('name' => 'music', 'single_urlrule' => '', 'template' => '', 'classname' => 'Post', 'actions' => array(), 'routes' => array()), //5
-    array('name' => 'video', 'single_urlrule' => '', 'template' => '', 'classname' => 'Post', 'actions' => array(), 'routes' => array()), //6
-    array('name' => 'photo', 'single_urlrule' => '', 'template' => '', 'classname' => 'Post', 'actions' => array(), 'routes' => array()), //7
-    array('name' => 'album', 'single_urlrule' => '', 'template' => '', 'classname' => 'Post', 'actions' => array(), 'routes' => array()), //8
+    array('name' => 'article', 'classname' => 'Post', 'actions' => array(), 'routes' => array()), //0
+    array('name' => 'page', 'classname' => 'Post', 'actions' => array(), 'routes' => array()), //1
+    array('name' => 'tweet', 'classname' => 'Post', 'actions' => array(), 'routes' => array()), //2
+    array('name' => 'discussion', 'classname' => 'Post', 'actions' => array(), 'routes' => array()), //3
+    array('name' => 'link', 'classname' => 'Post', 'actions' => array(), 'routes' => array()), //4
+    array('name' => 'music', 'classname' => 'Post', 'actions' => array(), 'routes' => array()), //5
+    array('name' => 'video', 'classname' => 'Post', 'actions' => array(), 'routes' => array()), //6
+    array('name' => 'photo', 'classname' => 'Post', 'actions' => array(), 'routes' => array()), //7
+    array('name' => 'album', 'classname' => 'Post', 'actions' => array(), 'routes' => array()), //8
 );
 
 /*

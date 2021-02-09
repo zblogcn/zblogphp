@@ -365,6 +365,10 @@ function ViewAuto_Check_Get_And_Not_Get_And_Must_Get($get, $notget, $mustget)
  */
 function ViewAuto_Process_Pagebar_Replace_Array(&$pagebar, $route, $args)
 {
+    if (empty($route)) {
+        return;
+    }
+
     $args = is_array($args) ? $args : array();
     $array = GetValueInArray($args, 0, array());
     $array = is_array($array) ? $array : array();
@@ -716,6 +720,7 @@ function ViewList($page = null, $cate = null, $auth = null, $date = null, $tags 
 
     $fpargs_v1 = array();
     $fpargs_v2 = call_user_func('func_get_args');
+    $fpargs_count = count($fpargs_v2);
     $fpargs = &$fpargs_v2;
 
     //新版本的函数V2 (v2版本传入的第一个参数是array且只传一个array)
@@ -729,7 +734,7 @@ function ViewList($page = null, $cate = null, $auth = null, $date = null, $tags 
     }
 
     //修正首个参数使用array而不传入后续参数的情况
-    if (is_array($page)) {
+    if (is_array($page) && isset($page['route']) && $fpargs_count == 1) {
         $object = $page;
         $isrewrite = true;
         $cate = GetValueInArray($page, 'cate', null);
@@ -744,6 +749,7 @@ function ViewList($page = null, $cate = null, $auth = null, $date = null, $tags 
         $object = array();
         $posttype = 0;
         $canceldisplay = false;
+        $route = array();
     }
 
     //处理上一版本兼容性的问题
@@ -794,7 +800,11 @@ function ViewList($page = null, $cate = null, $auth = null, $date = null, $tags 
     switch ($type) {
             //#######################################################################################################
         case 'index':
-            $pagebar = new Pagebar($route);
+            if (!empty($route)) {
+                    $pagebar = new Pagebar($route);
+            } else {
+                $pagebar = new Pagebar($zbp->option['ZC_INDEX_REGEX'], true, true);
+            }
             if (0 == $posttype) {
                 $pagebar->Count = $zbp->cache->normal_article_nums;
             }
@@ -807,7 +817,11 @@ function ViewList($page = null, $cate = null, $auth = null, $date = null, $tags 
             break;
             //#######################################################################################################
         case 'category':
-            $pagebar = new Pagebar($route);
+            if (!empty($route)) {
+                    $pagebar = new Pagebar($route);
+            } else {
+                $pagebar = new Pagebar($zbp->option['ZC_CATEGORY_REGEX']);
+            }
             $category = new Category();
 
             if (!is_array($cate)) {
@@ -863,7 +877,11 @@ function ViewList($page = null, $cate = null, $auth = null, $date = null, $tags 
             break;
             //#######################################################################################################
         case 'author':
-            $pagebar = new Pagebar($route);
+            if (!empty($route)) {
+                    $pagebar = new Pagebar($route);
+            } else {
+                $pagebar = new Pagebar($zbp->option['ZC_AUTHOR_REGEX']);
+            }
             $author = new Member();
 
             if (!is_array($auth)) {
@@ -905,7 +923,11 @@ function ViewList($page = null, $cate = null, $auth = null, $date = null, $tags 
             break;
             //#######################################################################################################
         case 'date':
-            $pagebar = new Pagebar($route);
+            if (!empty($route)) {
+                    $pagebar = new Pagebar($route);
+            } else {
+                $pagebar = new Pagebar($zbp->option['ZC_DATE_REGEX']);
+            }
 
             if (!is_array($date)) {
                 $datetime = $date;
@@ -974,7 +996,11 @@ function ViewList($page = null, $cate = null, $auth = null, $date = null, $tags 
             break;
             //#######################################################################################################
         case 'tag':
-            $pagebar = new Pagebar($route);
+            if (!empty($route)) {
+                    $pagebar = new Pagebar($route);
+            } else {
+                $pagebar = new Pagebar($zbp->option['ZC_TAGS_REGEX']);
+            }
             $tag = new Tag();
 
             if (!is_array($tags)) {
@@ -1160,6 +1186,7 @@ function ViewPost($id = null, $alias = null, $isrewrite = false, $object = array
 
     $fpargs_v1 = array();
     $fpargs_v2 = call_user_func('func_get_args');
+    $fpargs_count = count($fpargs_v2);
     $fpargs = &$fpargs_v2;
 
     //新版本的函数V2 (v2版本传入的第一个参数是array且只传一个array)
@@ -1173,7 +1200,7 @@ function ViewPost($id = null, $alias = null, $isrewrite = false, $object = array
     }
 
     //修正首个参数使用array而不传入后续参数的情况
-    if (is_array($id)) {
+    if (is_array($id) && isset($id['route']) && $fpargs_count == 1) {
         $object = $id;
         $isrewrite = true;
         $posttype = GetValueInArray($object, 'posttype', 0);
@@ -1187,6 +1214,7 @@ function ViewPost($id = null, $alias = null, $isrewrite = false, $object = array
         $object = array();
         $posttype = null;
         $canceldisplay = false;
+        $route = array();
     }
 
     //处理上一版本兼容性的问题
