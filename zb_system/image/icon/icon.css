@@ -1,4 +1,4 @@
-@font-face{font-family:'zblog';src:url('zblog.ttf?4cdk78') format('truetype');font-weight:normal;font-style:normal;font-display:block;}
+@font-face{font-family:'zblog';src:url('zblog.ttf?t4vkir') format('truetype');font-weight:normal;font-style:normal;font-display:block;}
 [class^="icon-"],[class*=" icon-"]{font-family:'zblog'!important;speak:never;font-style:normal;font-weight:normal;font-variant:normal;text-transform:none;vertical-align:middle;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;}
 
 .icon-alarm:before {
@@ -3525,7 +3525,7 @@
 .icon-x-square-fill:before {
   content: "\ed83";
 }
-.icon-zblog:before {
+.icon-zblog-alphabet:before {
   content: "\ed84";
 }
 .icon-zblog-appcenter:before {
@@ -3536,9 +3536,6 @@
 }
 .icon-zblog-circle-fill:before {
   content: "\e971";
-}
-.icon-zblog-full-logo:before {
-  content: "\ed86";
 }
 .icon-zblog-square:before {
   content: "\ed87";
@@ -3551,4 +3548,13 @@
 }
 .icon-zoom-out:before {
   content: "\ed8a";
+}
+.icon-zblog:before {
+  content: "\ed86";
+}
+.icon-zblog-full-logo:before {
+  content: "\ed96";
+}
+.icon-zblogphp:before {
+  content: "\ed97";
 }
