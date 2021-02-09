@@ -1474,19 +1474,17 @@ function Admin_PluginMng()
         echo '<td class="td20">' . htmlspecialchars($plugin->modified) . '</td>';
         echo '<td class="td10 tdCenter">';
 
-        if ($plugin->IsUsed() && $plugin->CanManage()) {
-            echo '<a href="' . $plugin->GetManageUrl() . '" title="' . $zbp->lang['msg']['manage'] . '"><i class="icon-tools"></i></a>';
-            if ($plugin->type !== 'theme') {
-                echo '&nbsp;&nbsp;&nbsp;&nbsp;';
-            }
-        }
-
         if ($plugin->type == 'plugin') {
             if ($plugin->IsUsed()) {
                 echo '<a href="' . BuildSafeCmdURL('act=PluginDis&amp;name=' . htmlspecialchars($plugin->id)) . '" title="' . $zbp->lang['msg']['disable'] . '"><i class="icon-cancel on"></i></a>';
+                echo '&nbsp;&nbsp;&nbsp;&nbsp;';
             } else {
                 echo '<a href="' . BuildSafeCmdURL('act=PluginEnb&amp;name=' . htmlspecialchars($plugin->id)) . '" title="' . $zbp->lang['msg']['enable'] . '"><i class="icon-power off"></i></a>';
             }
+        }
+
+        if ($plugin->IsUsed() && $plugin->CanManage()) {
+            echo '<a href="' . $plugin->GetManageUrl() . '" title="' . $zbp->lang['msg']['manage'] . '"><i class="icon-tools"></i></a>';
         }
 
         echo '</td>';
