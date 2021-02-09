@@ -296,6 +296,7 @@ return array(
         'getcmt'      => '整理迴響',
         'ajax'        => 'AJAX',
         'view'        => '查看',
+        'api'         => '調用API',
         'ArticleNew'  => '新增文章',
         'ArticleEdt'  => '編輯文章',
         'ArticlePst'  => '發表文章',

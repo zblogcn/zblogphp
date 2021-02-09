@@ -292,6 +292,7 @@ return array(
         'getcmt'      => '获取评论',
         'ajax'        => 'AJAX',
         'view'        => '查看',
+        'api'         => '调用API',
         'ArticleNew'  => '新建文章',
         'ArticleEdt'  => '文章编辑',
         'ArticlePst'  => '文章发布',
