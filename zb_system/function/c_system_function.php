@@ -989,8 +989,10 @@ function CountTag(&$tag, $plus = null, $type = 0)
 
     if ($plus === null) {
         $id = $tag->ID;
-
-        $s = $zbp->db->sql->Count($zbp->table['Post'], array(array('COUNT', '*', 'num')), array('=', 'log_Type', $type), array(array('LIKE', 'log_Tag', '%{' . $id . '}%')));
+        $w = array();
+        $w[] = array('=', 'log_Type', $type);
+        $w[] = array('LIKE', 'log_Tag', '%{' . $id . '}%');
+        $s = $zbp->db->sql->Count($zbp->table['Post'], array(array('COUNT', '*', 'num')), $w);
         $num = GetValueInArrayByCurrent($zbp->db->Query($s), 'num');
 
         $tag->Count = $num;
