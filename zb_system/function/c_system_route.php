@@ -725,7 +725,7 @@ function ViewList($page = null, $cate = null, $auth = null, $date = null, $tags 
 
     //新版本的函数V2 (v2版本传入的第一个参数是array且只传一个array)
     foreach ($GLOBALS['hooks']['Filter_Plugin_ViewList_Begin_V2'] as $fpname => &$fpsignal) {
-        $fpreturn = call_user_func_array($fpname, $fpargs_v2);
+        $fpreturn = $fpname($page);
         if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
             $fpsignal = PLUGIN_EXITSIGNAL_NONE;
 
@@ -1191,7 +1191,7 @@ function ViewPost($id = null, $alias = null, $isrewrite = false, $object = array
 
     //新版本的函数V2 (v2版本传入的第一个参数是array且只传一个array)
     foreach ($GLOBALS['hooks']['Filter_Plugin_ViewPost_Begin_V2'] as $fpname => &$fpsignal) {
-        $fpreturn = call_user_func_array($fpname, $fpargs_v2);
+        $fpreturn = $fpname($id);
         if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
             $fpsignal = PLUGIN_EXITSIGNAL_NONE;
 
