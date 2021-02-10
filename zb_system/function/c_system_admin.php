@@ -1,4 +1,5 @@
 <?php
+
 /**
  * 后台管理相关
  * @package Z-BlogPHP
@@ -241,7 +242,7 @@ function Admin_ArticleMng()
         $tabletds[] = '<td class="td10 tdCenter">' .
             '<a href="../cmd.php?act=ArticleEdt&amp;id=' . $article->ID . '"><i class="icon-pencil-square"></i></a>' .
             '&nbsp;&nbsp;&nbsp;&nbsp;' .
-            '<a onclick="return window.confirm(\'' . str_replace(array('"','\''), '', $zbp->lang['msg']['confirm_operating']) . '\');" href="' . BuildSafeCmdURL('act=ArticleDel&amp;id=' . $article->ID) . '"><i class="icon-trash"></i></a>' .
+            '<a onclick="return window.confirm(\'' . str_replace(array('"', '\''), '', $zbp->lang['msg']['confirm_operating']) . '\');" href="' . BuildSafeCmdURL('act=ArticleDel&amp;id=' . $article->ID) . '"><i class="icon-trash"></i></a>' .
             '</td>';
         if ($zbp->CheckRights('PostBat') && $zbp->option['ZC_POST_BATCH_DELETE']) {
             $tabletds[] = '<td class="td5 tdCenter"><input type="checkbox" id="id' . $article->ID . '" name="id[]" value="' . $article->ID . '"></td>';
@@ -270,7 +271,7 @@ function Admin_ArticleMng()
         }
     }
     if ($zbp->CheckRights('PostBat') && $zbp->option['ZC_POST_BATCH_DELETE']) {
-        echo '<input  style="float:right;" type="submit" name="all_del" onclick="return window.confirm(\'' . str_replace(array('"','\''), '', $zbp->lang['msg']['confirm_operating']) . '\');" value="' . $zbp->lang['msg']['all_del'] . '">';
+        echo '<input  style="float:right;" type="submit" name="all_del" onclick="return window.confirm(\'' . str_replace(array('"', '\''), '', $zbp->lang['msg']['confirm_operating']) . '\');" value="' . $zbp->lang['msg']['all_del'] . '">';
     }
     echo '</p></form></div>';
     echo '<script>ActiveLeftMenu("aArticleMng");</script>';
@@ -386,7 +387,7 @@ function Admin_PageMng()
         $tabletds[] = '<td class="td10 tdCenter">' .
             '<a href="../cmd.php?act=PageEdt&amp;id=' . $article->ID . '"><i class="icon-pencil-square"></i></a>' .
             '&nbsp;&nbsp;&nbsp;&nbsp;' .
-            '<a onclick="return window.confirm(\'' . str_replace(array('"','\''), '', $zbp->lang['msg']['confirm_operating']) . '\');" href="' . BuildSafeCmdURL('act=PageDel&amp;id=' . $article->ID) . '"><i class="icon-trash"></i></a>' .
+            '<a onclick="return window.confirm(\'' . str_replace(array('"', '\''), '', $zbp->lang['msg']['confirm_operating']) . '\');" href="' . BuildSafeCmdURL('act=PageDel&amp;id=' . $article->ID) . '"><i class="icon-trash"></i></a>' .
             '</td>';
         if ($zbp->CheckRights('PostBat') && $zbp->option['ZC_POST_BATCH_DELETE']) {
             $tabletds[] = '<td class="td5 tdCenter"><input type="checkbox" id="id' . $article->ID . '" name="id[]" value="' . $article->ID . '"></td>';
@@ -413,7 +414,7 @@ function Admin_PageMng()
         }
     }
     if ($zbp->CheckRights('PostBat') && $zbp->option['ZC_POST_BATCH_DELETE']) {
-        echo '<input  style="float:right;" type="submit" name="all_del" onclick="return window.confirm(\'' . str_replace(array('"','\''), '', $zbp->lang['msg']['confirm_operating']) . '\');" value="' . $zbp->lang['msg']['all_del'] . '">';
+        echo '<input  style="float:right;" type="submit" name="all_del" onclick="return window.confirm(\'' . str_replace(array('"', '\''), '', $zbp->lang['msg']['confirm_operating']) . '\');" value="' . $zbp->lang['msg']['all_del'] . '">';
     }
     echo '</p><form></div>';
     echo '<script>ActiveLeftMenu("aPageMng");</script>';
@@ -485,7 +486,7 @@ function Admin_CategoryMng()
     } else {
         $or = array('cate_ID' => 'ASC');
     }
-    
+
     $l = array(($p->PageNow - 1) * $p->PageCount, $p->PageCount);
     $op = array('pagebar' => $p);
 
@@ -534,7 +535,7 @@ function Admin_CategoryMng()
         $tabletds[] = '<td class="td10">' . $category->Count . '</td>';
         $tabletds[] = '<td class="td10 tdCenter">' .
             '<a href="../cmd.php?act=CategoryEdt&amp;id=' . $category->ID . '"><i class="icon-pencil-square"></i></a>' .
-            ((count($category->SubCategories) == 0) ? '&nbsp;&nbsp;&nbsp;&nbsp;<a onclick="return window.confirm(\'' . str_replace(array('"','\''), '', $zbp->lang['msg']['confirm_operating']) . '\');" href="' . BuildSafeCmdURL('act=CategoryDel&amp;id=' . $category->ID) . '"><i class="icon-trash"></i></a>' : '') .
+            ((count($category->SubCategories) == 0) ? '&nbsp;&nbsp;&nbsp;&nbsp;<a onclick="return window.confirm(\'' . str_replace(array('"', '\''), '', $zbp->lang['msg']['confirm_operating']) . '\');" href="' . BuildSafeCmdURL('act=CategoryDel&amp;id=' . $category->ID) . '"><i class="icon-trash"></i></a>' : '') .
             '</td>';
 
         $tabletds[] = '</tr>';
@@ -549,7 +550,7 @@ function Admin_CategoryMng()
     echo implode($tableths) . $tables;
 
     echo '</table>';
-        if (!$zbp->option['ZC_CATEGORY_MANAGE_LEGACY_DISPLAY']) {
+    if (!$zbp->option['ZC_CATEGORY_MANAGE_LEGACY_DISPLAY']) {
         echo '<hr/><p class="pagebar">';
         foreach ($p->Buttons as $key => $value) {
             if ($p->PageNow == $key) {
@@ -703,7 +704,7 @@ function Admin_CommentMng()
         $tabletds[] = '<td class="td5">' . $cmt->LogID . '</td>';
         $tabletds[] = '<td class="td15">' . $cmt->Time() . '</td>';
         $tabletds[] = '<td class="td10 tdCenter">' .
-            '<a onclick="return window.confirm(\'' . str_replace(array('"','\''), '', $zbp->lang['msg']['confirm_operating']) . '\');" href="' . BuildSafeCmdURL('act=CommentDel&amp;id=' . $cmt->ID) . '"><i class="icon-trash" title="' . $zbp->lang['msg']['del'] . '"></i></a>' .
+            '<a onclick="return window.confirm(\'' . str_replace(array('"', '\''), '', $zbp->lang['msg']['confirm_operating']) . '\');" href="' . BuildSafeCmdURL('act=CommentDel&amp;id=' . $cmt->ID) . '"><i class="icon-trash" title="' . $zbp->lang['msg']['del'] . '"></i></a>' .
             '&nbsp;&nbsp;&nbsp;&nbsp;' .
             (!GetVars('ischecking', 'GET') ? '<a href="' . BuildSafeCmdURL('act=CommentChk&amp;id=' . $cmt->ID . '&amp;ischecking=' . (int) !GetVars('ischecking', 'GET')) . '"><i class="icon-shield-fill-x" title="' . $zbp->lang['msg']['audit'] . '"></i></a>' : '<a href="' . BuildSafeCmdURL('act=CommentChk&amp;id=' . $cmt->ID . '&amp;ischecking=' . (int) !GetVars('ischecking', 'GET')) . '"><i class="icon-shield-fill-check" title="' . $zbp->lang['msg']['pass'] . '"></i></a>') .
             '</td>';
@@ -725,10 +726,10 @@ function Admin_CommentMng()
     echo '<p style="float:right;">';
 
     if ((bool) GetVars('ischecking')) {
-        echo '<input type="submit" name="all_del" onclick="return window.confirm(\'' . str_replace(array('"','\''), '', $zbp->lang['msg']['confirm_operating']) . '\');"  value="' . $zbp->lang['msg']['all_del'] . '"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+        echo '<input type="submit" name="all_del" onclick="return window.confirm(\'' . str_replace(array('"', '\''), '', $zbp->lang['msg']['confirm_operating']) . '\');"  value="' . $zbp->lang['msg']['all_del'] . '"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
         echo '<input type="submit" name="all_pass"  value="' . $zbp->lang['msg']['all_pass'] . '"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
     } else {
-        echo '<input type="submit" name="all_del" onclick="return window.confirm(\'' . str_replace(array('"','\''), '', $zbp->lang['msg']['confirm_operating']) . '\');"  value="' . $zbp->lang['msg']['all_del'] . '"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+        echo '<input type="submit" name="all_del" onclick="return window.confirm(\'' . str_replace(array('"', '\''), '', $zbp->lang['msg']['confirm_operating']) . '\');"  value="' . $zbp->lang['msg']['all_del'] . '"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
         echo '<input type="submit" name="all_audit"  value="' . $zbp->lang['msg']['all_audit'] . '"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
     }
 
@@ -872,7 +873,7 @@ function Admin_MemberMng()
         $tabletds[] = '<td class="td10 tdCenter">' .
             '<a href="../cmd.php?act=MemberEdt&amp;id=' . $member->ID . '"><i class="icon-pencil-square"></i></a>' .
             (($zbp->CheckRights('MemberDel') && ($member->IsGod !== true)) ? '&nbsp;&nbsp;&nbsp;&nbsp;' .
-                '<a onclick="return window.confirm(\'' . str_replace(array('"','\''), '', $zbp->lang['msg']['confirm_operating']) . '\');" href="' . BuildSafeCmdURL('act=MemberDel&amp;id=' . $member->ID) . '"><i class="icon-trash"></i></a>' : '') .
+                '<a onclick="return window.confirm(\'' . str_replace(array('"', '\''), '', $zbp->lang['msg']['confirm_operating']) . '\');" href="' . BuildSafeCmdURL('act=MemberDel&amp;id=' . $member->ID) . '"><i class="icon-trash"></i></a>' : '') .
             '</td>';
 
         $tabletds[] = '</tr>';
@@ -1002,7 +1003,7 @@ function Admin_UploadMng()
         $ret[] = '<td class="td10">' . $upload->Size . '</td>';
         $ret[] = '<td class="td20">' . htmlspecialchars($upload->MimeType) . '</td>';
         $ret[] = '<td class="td10 tdCenter">' .
-            '<a onclick="return window.confirm(\'' . str_replace(array('"','\''), '', $zbp->lang['msg']['confirm_operating']) . '\');" href="' . BuildSafeCmdURL('act=UploadDel&amp;id=' . $upload->ID) . '"><i class="icon-trash"></i></a>' .
+            '<a onclick="return window.confirm(\'' . str_replace(array('"', '\''), '', $zbp->lang['msg']['confirm_operating']) . '\');" href="' . BuildSafeCmdURL('act=UploadDel&amp;id=' . $upload->ID) . '"><i class="icon-trash"></i></a>' .
             '</td>';
 
         $ret[] = '</tr>';
@@ -1128,7 +1129,7 @@ function Admin_TagMng()
         $tabletds[] = '<td class="td10 tdCenter">' .
             '<a href="../cmd.php?act=TagEdt&amp;id=' . $tag->ID . '"><i class="icon-pencil-square"></i></a>' .
             '&nbsp;&nbsp;&nbsp;&nbsp;' .
-            '<a onclick="return window.confirm(\'' . str_replace(array('"','\''), '', $zbp->lang['msg']['confirm_operating']) . '\');" href="' . BuildSafeCmdURL('act=TagDel&amp;id=' . $tag->ID) . '"><i class="icon-trash"></i></a>' .
+            '<a onclick="return window.confirm(\'' . str_replace(array('"', '\''), '', $zbp->lang['msg']['confirm_operating']) . '\');" href="' . BuildSafeCmdURL('act=TagDel&amp;id=' . $tag->ID) . '"><i class="icon-trash"></i></a>' .
             '</td>';
 
         $tabletds[] = '</tr>';
@@ -1332,24 +1333,24 @@ function Admin_ModuleMng()
     <script>
         $(function() {
             function sortFunction() {
-    <?php
-    foreach ($sideids as $key => $value) {
-        echo '
+                <?php
+                foreach ($sideids as $key => $value) {
+                    echo '
         var s' . $key . ' = "";
         $("#siderbar' . $value . '").find("div.funid").each(function(i) {
             s' . $key . ' += $(this).html() + "|";
         });
         ';
-        echo '$("#strsidebar' . $value . '").val(s' . $key . ');';
-    }
-    ?>
+                    echo '$("#strsidebar' . $value . '").val(s' . $key . ');';
+                }
+                ?>
 
                 $.post($("#edit").attr("action"), {
-    <?php
-    foreach ($sideids as $key => $value) {
-        echo '"sidebar' . $value . '": s' . $key . ',';
-    }
-    ?>
+                        <?php
+                        foreach ($sideids as $key => $value) {
+                            echo '"sidebar' . $value . '": s' . $key . ',';
+                        }
+                        ?>
                     },
                     function(data) {
                         //alert("Data Loaded: " + data);
@@ -1417,7 +1418,7 @@ function Admin_ModuleMng()
 
         });
     </script>
-    <?php
+<?php
     echo '<script>AddHeaderFontIcon("icon-grid-3x3-gap-fill");</script>';
 }
 
@@ -1520,7 +1521,7 @@ function Admin_SettingMng()
         $fpname();
     }
     echo '</div>';
-    ?>
+?>
     <form method="post" action="<?php echo BuildSafeCmdURL('act=SettingSav'); ?>" onsubmit="return checkDomain();">
         <div id="divMain2">
             <div class="content-box">
@@ -1679,7 +1680,7 @@ function changeDomain(newurl){
             <p><input type="submit" class="button" value="<?php echo $zbp->lang['msg']['submit']; ?>" id="btnPost" onclick="" /></p>
         </div>
     </form>
-    <?php
+<?php
     echo '<script>ActiveTopMenu("topmenu2");</script>';
     echo '<script>AddHeaderFontIcon("icon-gear-fill");</script>';
 }

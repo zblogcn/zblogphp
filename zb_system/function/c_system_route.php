@@ -718,10 +718,8 @@ function ViewList($page = null, $cate = null, $auth = null, $date = null, $tags 
 {
     global $zbp;
 
-    $fpargs_v1 = array();
-    $fpargs_v2 = call_user_func('func_get_args');
-    $fpargs_count = count($fpargs_v2);
-    $fpargs = &$fpargs_v2;
+    $fpargs = call_user_func('func_get_args');
+    $fpargs_count = count($fpargs);
 
     //新版本的函数V2 (v2版本传入的第一个参数是array且只传一个array)
     foreach ($GLOBALS['hooks']['Filter_Plugin_ViewList_Begin_V2'] as $fpname => &$fpsignal) {
@@ -752,12 +750,9 @@ function ViewList($page = null, $cate = null, $auth = null, $date = null, $tags 
         $route = array();
     }
 
-    //处理上一版本兼容性的问题
-    $fpargs_v1 = array($page, $cate, $auth, $date, $tags, $isrewrite, $object);
-
     //老版本的兼容接口
     foreach ($GLOBALS['hooks']['Filter_Plugin_ViewList_Begin'] as $fpname => &$fpsignal) {
-        $fpreturn = call_user_func_array($fpname, $fpargs_v1);
+        $fpreturn = $fpname($page, $cate, $auth, $date, $tags, $isrewrite, $object);
         if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
             $fpsignal = PLUGIN_EXITSIGNAL_NONE;
 
@@ -1184,10 +1179,8 @@ function ViewPost($id = null, $alias = null, $isrewrite = false, $object = array
 {
     global $zbp;
 
-    $fpargs_v1 = array();
-    $fpargs_v2 = call_user_func('func_get_args');
-    $fpargs_count = count($fpargs_v2);
-    $fpargs = &$fpargs_v2;
+    $fpargs = call_user_func('func_get_args');
+    $fpargs_count = count($fpargs);
 
     //新版本的函数V2 (v2版本传入的第一个参数是array且只传一个array)
     foreach ($GLOBALS['hooks']['Filter_Plugin_ViewPost_Begin_V2'] as $fpname => &$fpsignal) {
@@ -1226,12 +1219,9 @@ function ViewPost($id = null, $alias = null, $isrewrite = false, $object = array
         }
     }
 
-    //处理上一版本兼容性的问题
-    $fpargs_v1 = array($id, $alias, $isrewrite, $object);
-
     //兼容老版本的接口
     foreach ($GLOBALS['hooks']['Filter_Plugin_ViewPost_Begin'] as $fpname => &$fpsignal) {
-        $fpreturn = call_user_func_array($fpname, $fpargs_v1);
+        $fpreturn = $fpname($id, $alias, $isrewrite, $object);
         if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
             $fpsignal = PLUGIN_EXITSIGNAL_NONE;
 
