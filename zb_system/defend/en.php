@@ -280,6 +280,7 @@ return array(
         'enable_xmlrpc'                     => 'Enable XML-RPC',
         'clear_thumb_cache'                 => 'Clear thumb cache',
         'confirm_clear_thumb_cache'         => 'Confirm to clear thumb cache.',
+        'category_legacy_display'           => 'Category manage legacy display',
         ''                                  => '',
     ),
 

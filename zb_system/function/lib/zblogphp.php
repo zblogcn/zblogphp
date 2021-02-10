@@ -1785,11 +1785,6 @@ class ZBlogPHP
         $this->categoriesbyorder_type = array();
         $this->categories_type = array();
 
-        $array = $this->GetCategoryList(null, null, array('cate_Order' => 'ASC'), null, null);
-        if (count($array) == 0) {
-            return false;
-        }
-
         foreach ($this->posttype as $key => $value) {
             if (!isset($this->categories_type[$key])) {
                 $this->categories_type[$key] = array();
@@ -1797,6 +1792,11 @@ class ZBlogPHP
             if (!isset($this->categoriesbyorder_type[$key])) {
                 $this->categoriesbyorder_type[$key] = array();
             }
+        }
+
+        $array = $this->GetCategoryList(null, null, array('cate_Order' => 'ASC'), null, null);
+        if (count($array) == 0) {
+            return false;
         }
 
         foreach ($this->posttype as $key => $value) {

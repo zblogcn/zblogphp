@@ -276,6 +276,7 @@ return array(
         'enable_xmlrpc'                     => '启用XML-RPC协议',
         'clear_thumb_cache'                 => '清空缩略图缓存',
         'confirm_clear_thumb_cache'         => '确定要清空缩略图缓存吗？强烈建议仅在更换主题等操作后清空。',
+        'category_legacy_display'           => '分类管理按传统模式显示',
         ''                                  => '',
     ),
 

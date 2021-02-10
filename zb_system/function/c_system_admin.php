@@ -439,10 +439,12 @@ function Admin_CategoryMng()
     }
     echo '</div>';
     echo '<div id="divMain2">';
-    echo '<form class="search" id="edit" method="post" action="#">';
-    echo '<p>' . $zbp->lang['msg']['search'] . ':&nbsp;&nbsp;
-    <input name="search" style="width:250px;" type="text" value="" /> &nbsp;&nbsp;&nbsp;&nbsp;<input type="submit" class="button" value="' . $zbp->lang['msg']['submit'] . '"/></p>';
-    echo '</form>';
+    if (!$zbp->option['ZC_CATEGORY_MANAGE_LEGACY_DISPLAY']) {
+        echo '<form class="search" id="edit" method="post" action="#">';
+        echo '<p>' . $zbp->lang['msg']['search'] . ':&nbsp;&nbsp;
+        <input name="search" style="width:250px;" type="text" value="" /> &nbsp;&nbsp;&nbsp;&nbsp;<input type="submit" class="button" value="' . $zbp->lang['msg']['submit'] . '"/></p>';
+        echo '</form>';
+    }
 
     echo '<table border="1" class="tableFull tableBorder tableBorder-thcenter table_hover table_striped">';
 
@@ -492,13 +494,17 @@ function Admin_CategoryMng()
         $fpreturn = $fpname($s, $w, $or, $l, $op);
     }
 
-    $array = $zbp->GetCategoryList(
-        $s,
-        $w,
-        $or,
-        $l,
-        $op
-    );
+    if (!$zbp->option['ZC_CATEGORY_MANAGE_LEGACY_DISPLAY']) {
+        $array = $zbp->GetCategoryList(
+            $s,
+            $w,
+            $or,
+            $l,
+            $op
+        );
+    } else {
+        $array = $zbp->categoriesbyorder_type[$posttype];
+    }
 
     //Array_Isset($zbp->categoriesbyorder_type, $posttype, array());
     //$array = $zbp->categoriesbyorder_type[$posttype];
@@ -543,16 +549,18 @@ function Admin_CategoryMng()
     echo implode($tableths) . $tables;
 
     echo '</table>';
-    echo '<hr/><p class="pagebar">';
-    foreach ($p->Buttons as $key => $value) {
-        if ($p->PageNow == $key) {
-            echo '<span class="now-page">' . $key . '</span>&nbsp;&nbsp;';
-        } else {
-            echo '<a href="' . $value . '">' . $key . '</a>&nbsp;&nbsp;';
+        if (!$zbp->option['ZC_CATEGORY_MANAGE_LEGACY_DISPLAY']) {
+        echo '<hr/><p class="pagebar">';
+        foreach ($p->Buttons as $key => $value) {
+            if ($p->PageNow == $key) {
+                echo '<span class="now-page">' . $key . '</span>&nbsp;&nbsp;';
+            } else {
+                echo '<a href="' . $value . '">' . $key . '</a>&nbsp;&nbsp;';
+            }
         }
+        echo '</p>';
     }
-
-    echo '</p></div>';
+    echo '</div>';
     echo '<script>ActiveLeftMenu("aCategoryMng");</script>';
     echo '<script>AddHeaderFontIcon("icon-folder-fill");</script>';
     echo '<script>$(\'a.order_button\').parent().bind(\'mouseenter mouseleave\', function() {$(this).find(\'a.order_button\').toggleClass(\'element-visibility-hidden\');});</script>';
@@ -1651,6 +1659,7 @@ function changeDomain(newurl){
                     echo '<tr><td><p><b>' . @$zbp->langs->msg->get_text_intro . '</b></p></td><td><p><input id="ZC_ARTICLE_INTRO_WITH_TEXT" name="ZC_ARTICLE_INTRO_WITH_TEXT" type="text" value="' . $zbp->option['ZC_ARTICLE_INTRO_WITH_TEXT'] . '" class="checkbox"/></p></td></tr>';
                     echo '<tr><td><p><b>' . $zbp->lang['msg']['manage_count'] . '</b></p></td><td><p><input id="ZC_MANAGE_COUNT" name="ZC_MANAGE_COUNT" style="width:600px;" type="text" value="' . $zbp->option['ZC_MANAGE_COUNT'] . '" /></p></td></tr>';
                     echo '<tr><td><p><b>' . @$zbp->langs->msg->enable_post_batch_delete . '</b></p></td><td><p><input id="ZC_POST_BATCH_DELETE" name="ZC_POST_BATCH_DELETE" type="text" value="' . $zbp->option['ZC_POST_BATCH_DELETE'] . '" class="checkbox"/></p></td></tr>';
+                    echo '<tr><td><p><b>' . @$zbp->langs->msg->category_legacy_display . '</b></p></td><td><p><input id="ZC_CATEGORY_MANAGE_LEGACY_DISPLAY" name="ZC_CATEGORY_MANAGE_LEGACY_DISPLAY" type="text" value="' . $zbp->option['ZC_CATEGORY_MANAGE_LEGACY_DISPLAY'] . '" class="checkbox"/></p></td></tr>';
                     echo '</table>';
                     echo '</div>';
 

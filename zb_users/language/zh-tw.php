@@ -280,6 +280,7 @@ return array(
         'enable_xmlrpc'                     => '啟用XML-RPC協議',
         'clear_thumb_cache'                 => '清空縮略圖緩存',
         'confirm_clear_thumb_cache'         => '確定清空縮略圖緩存？',
+        'category_legacy_display'           => '分類管理按傳統模式顯示',
         ''                                  => '',
     ),
 
