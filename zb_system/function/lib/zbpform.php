@@ -13,7 +13,7 @@ if (!defined('ZBP_PATH')) {
 
 /**用法
 zbpform::radio('aaaa',array('选项1', '选项2'));
-zbpform::zbradio('aaaa',array('选项1', '选项2'),1);
+zbpform::zbradio('aaaa',1);
 zbpform::select('aaaa',array('a'=>'选项1', 'b'=>'选项2'),'a');
 zbpform::checkbox('aaaa',array(array('选项1',0),array('选项2',1)));
 zbpform::text('aaaa','文本框');
