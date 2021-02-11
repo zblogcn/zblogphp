@@ -1346,11 +1346,11 @@ function Admin_ModuleMng()
                 ?>
 
                 $.post($("#edit").attr("action"), {
-                        <?php
-                        foreach ($sideids as $key => $value) {
-                            echo '"sidebar' . $value . '": s' . $key . ',';
-                        }
-                        ?>
+                    <?php
+                    foreach ($sideids as $key => $value) {
+                        echo '"sidebar' . $value . '": s' . $key . ',';
+                    }
+                    ?>
                     },
                     function(data) {
                         //alert("Data Loaded: " + data);
@@ -1418,7 +1418,7 @@ function Admin_ModuleMng()
 
         });
     </script>
-<?php
+    <?php
     echo '<script>AddHeaderFontIcon("icon-grid-3x3-gap-fill");</script>';
 }
 
@@ -1521,7 +1521,7 @@ function Admin_SettingMng()
         $fpname();
     }
     echo '</div>';
-?>
+    ?>
     <form method="post" action="<?php echo BuildSafeCmdURL('act=SettingSav'); ?>" onsubmit="return checkDomain();">
         <div id="divMain2">
             <div class="content-box">
@@ -1680,7 +1680,7 @@ function changeDomain(newurl){
             <p><input type="submit" class="button" value="<?php echo $zbp->lang['msg']['submit']; ?>" id="btnPost" onclick="" /></p>
         </div>
     </form>
-<?php
+    <?php
     echo '<script>ActiveTopMenu("topmenu2");</script>';
     echo '<script>AddHeaderFontIcon("icon-gear-fill");</script>';
 }
