@@ -26,6 +26,7 @@
 	</rule>
 	<!-- 自定义测试 -->
 	<rule ref="PHPCompatibility">
+		<exclude-pattern>/tests/*</exclude-pattern>
 		<exclude name="PHPCompatibility.ParameterValues.NewHTMLEntitiesEncodingDefault" />
 		<exclude name="PHPCompatibility.ParameterValues.NewIconvMbstringCharsetDefault" />
 		<!-- 已做兼容处理 -->
