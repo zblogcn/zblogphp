@@ -516,12 +516,11 @@ class ClassSQLGlobalTest extends PHPUnit\Framework\TestCase
         );
     }
 
-    /**
-     * @expectedException        Exception
-     * @expectedExceptionMessage Unimplemented fuck
-     */
     public function testExpectionInCall()
     {
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Unimplemented fuck');
+
         self::$db->fuck();
     }
 

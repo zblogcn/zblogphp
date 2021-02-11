@@ -26,7 +26,7 @@ For security vulnerabilities, please contact us via ``contact#rainbowsoft.org`` 
 ## 运行环境
 - Windows / Linux / macOS and so on...
 - IIS / Apache / nginx / Lighttpd / Kangle / Tengine / Caddy and so on...
-- PHP 5.2 - 7.4
+- PHP 5.2 - 8.0
 - MySQL 5+ / MariaDB 10+ / SQLite 3
 
 另：开发版内有 PostgreSQL 支持，需要手动启动，欢迎测试。

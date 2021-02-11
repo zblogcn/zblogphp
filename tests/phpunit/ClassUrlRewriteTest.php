@@ -1,7 +1,11 @@
 <?php
 
+use DMS\PHPUnitExtensions\ArraySubset\ArraySubsetAsserts;
+
 class ClassUrlRewriteTest extends PHPUnit\Framework\TestCase
 {
+    use ArraySubsetAsserts;
+
     protected $backupGlobalsBlacklist = array('zbp');
     protected $testRules = array(
         'article' => array(
