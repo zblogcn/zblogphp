@@ -1681,27 +1681,28 @@ class ZBlogPHP
     }
 
     /**
-     * 通过列表（文章/评论）一次性将用户预载入到 members 里.
+     * 通过列表（文章/评论/……）一次性将用户预载入到 members 里.
      *
-     * @param array $list 文章/评论列表数组
+     * @param array  $list         文章/评论列表数组
+     * @param string $mem_id_field 用户 ID 在对象中的字段名
      *
      * @return boolean
      */
-    public function LoadMembersInList($list)
+    public function LoadMembersInList($list, $mem_id_field = 'AuthorID')
     {
         $mem_ids_need_load = array();
         
         foreach ($list as $obj) {
-            if (!isset($obj->AuthorID) || ($obj->AuthorID == null)) {
+            if (!isset($obj->$mem_id_field) || ($obj->$mem_id_field == null)) {
                 continue;
             }
 
             // 已经载入的用户不重新载入
-            if (isset($this->members[$obj->AuthorID])) {
+            if (isset($this->members[$obj->$mem_id_field])) {
                 continue;
             }
 
-            $mem_ids_need_load[] = $obj->AuthorID;
+            $mem_ids_need_load[] = $obj->$mem_id_field;
         }
 
         if (count($mem_ids_need_load) === 0) {
