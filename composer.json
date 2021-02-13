@@ -32,6 +32,6 @@
         }
     },
     "scripts": {
-        "test": "sh ./vendor/bin/phpunit --whitelist=./zb_system --coverage-html=1 ./tests/phpunit"
+        "test": "sh ./vendor/bin/phpunit ./tests/phpunit"
     }
 }
