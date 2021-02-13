@@ -964,10 +964,6 @@ class ZBlogPHP
      */
     public function LoadManage()
     {
-        if (!$this->CheckRights('admin')) {
-            $this->ShowError(6, __FILE__, __LINE__);
-        }
-
         Add_Filter_Plugin('Filter_Plugin_Admin_PageMng_SubMenu', 'Include_Admin_Addpagesubmenu');
         Add_Filter_Plugin('Filter_Plugin_Admin_TagMng_SubMenu', 'Include_Admin_Addtagsubmenu');
         Add_Filter_Plugin('Filter_Plugin_Admin_CategoryMng_SubMenu', 'Include_Admin_Addcatesubmenu');
@@ -1786,6 +1782,9 @@ class ZBlogPHP
         $this->categoriesbyorder_type = array();
         $this->categories_type = array();
 
+        $this->categorys = &$this->categories;
+        $this->categorysbyorder = &$this->categoriesbyorder;
+
         foreach ($this->posttype as $key => $value) {
             if (!isset($this->categories_type[$key])) {
                 $this->categories_type[$key] = array();
@@ -1826,6 +1825,8 @@ class ZBlogPHP
         $this->categories_type = &$this->categoriesbyorder_type;
         $this->categoriesbyorder = &$this->categoriesbyorder_type[0];
         $this->categories = &$this->categoriesbyorder;
+        $this->categorys = &$this->categories;
+        $this->categorysbyorder = &$this->categoriesbyorder;
 
         return true;
     }
