@@ -24,12 +24,6 @@ function api_member_login()
 
     $member = null;
 
-    if (GetVars('password_type', 'POST') === 'md5') {
-        $md5pw = trim(GetVars('password', 'POST'));
-    } else {
-        $md5pw = md5(trim(GetVars('password', 'POST')));
-    }
-
     $password = trim(GetVars('password', 'POST'));
     $verify_ret = false;
     if ((bool) preg_match("/^[a-z0-9]{32}$/", $password) === true) {
