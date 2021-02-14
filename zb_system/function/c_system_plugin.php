@@ -2591,7 +2591,6 @@ DefinePluginFilter('Filter_Plugin_API_Get_Request_Filter');
  */
 DefinePluginFilter('Filter_Plugin_API_Get_Pagination_Info');
 
-
 /*
 '**************************************************<
 '类型:Filter
@@ -2602,3 +2601,14 @@ DefinePluginFilter('Filter_Plugin_API_Get_Pagination_Info');
 '**************************************************>
  */
 DefinePluginFilter('Filter_Plugin_API_Get_Object_Array');
+
+/*
+'**************************************************<
+'类型:Filter
+'名称:Filter_Plugin_API_VerifyCSRF
+'参数:&$skip_acts, $csrf_token
+'说明:API 校验 CSRF Token
+'调用:
+'**************************************************>
+ */
+DefinePluginFilter('Filter_Plugin_API_VerifyCSRF');
