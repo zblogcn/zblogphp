@@ -2605,10 +2605,10 @@ DefinePluginFilter('Filter_Plugin_API_Get_Object_Array');
 /*
 '**************************************************<
 '类型:Filter
-'名称:Filter_Plugin_API_VerifyCSRF
+'名称:Filter_Plugin_API_VerifyCSRF_Skip
 '参数:&$skip_acts, $csrf_token
-'说明:API 校验 CSRF Token
+'说明:API 校验 CSRF Token 跳过验证
 '调用:
 '**************************************************>
  */
-DefinePluginFilter('Filter_Plugin_API_VerifyCSRF');
+DefinePluginFilter('Filter_Plugin_API_VerifyCSRF_Skip');

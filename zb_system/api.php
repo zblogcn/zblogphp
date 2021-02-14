@@ -44,9 +44,7 @@ ApiListCheck($mods_allow, $mods_disallow);
 
 ApiLoadPostData();
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    ApiVerifyCSRF();
-}
+ApiVerifyCSRF();
 
 // 派发 API
 ApiDispatch($mods, $mod, $act);

@@ -94,7 +94,7 @@ function api_category_delete()
 {
     global $zbp;
 
-    ApiVerifyCSRF();
+    ApiVerifyCSRF(true);
     ApiCheckAuth(true, 'CategoryDel');
 
     try {

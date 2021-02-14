@@ -92,7 +92,7 @@ function api_tag_delete()
 {
     global $zbp;
 
-    ApiVerifyCSRF();
+    ApiVerifyCSRF(true);
     ApiCheckAuth(true, 'TagDel');
 
     if ($zbp->GetTagByID((int) GetVars('id', 'GET'))->ID == 0) {

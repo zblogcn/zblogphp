@@ -97,7 +97,7 @@ function api_module_delete()
 
     ApiCheckAuth(true, 'ModuleDel');
 
-    ApiVerifyCSRF();
+    ApiVerifyCSRF(true);
 
     if ($zbp->GetModuleByID((int) GetVars('id', 'GET'))->ID == 0) {
         return array(

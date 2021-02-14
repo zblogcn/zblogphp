@@ -150,7 +150,7 @@ function api_post_delete()
 {
     global $zbp;
 
-    ApiVerifyCSRF();
+    ApiVerifyCSRF(true);
 
     $post = $zbp->GetPostByID((int) GetVars('id'));
     if (empty($post->ID)) {

@@ -95,7 +95,7 @@ function api_upload_delete()
 
     ApiCheckAuth(true, 'UploadDel');
 
-    ApiVerifyCSRF();
+    ApiVerifyCSRF(true);
 
     if ($zbp->GetUploadByID((int) GetVars('id', 'GET'))->ID == 0) {
         return array(

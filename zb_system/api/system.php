@@ -122,7 +122,7 @@ function api_system_get_info()
  */
 function api_system_misc_statistic()
 {
-    ApiVerifyCSRF();
+    ApiVerifyCSRF(true);
     ApiCheckAuth(true, 'root');
     ApiCheckAuth(true, 'misc');
 

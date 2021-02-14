@@ -430,40 +430,48 @@ function ApiGetAndFilterRelationQuery($info)
 
 /**
  * API 传统登录时的 CSRF 验证.
+ *
+ * @param boolean $force_check 是否强制检查
  */
-function ApiVerifyCSRF()
+function ApiVerifyCSRF($force_check = false)
 {
     global $zbp, $mod, $act;
 
     if (! defined('ZBP_IN_API_VERIFYBYTOKEN')) {
         $csrf_token = GetVars('csrf_token');
 
-        // 不需要校验 CSRF 的 API
-        $skip_acts = array(
-            array('mod' => 'member', 'act' => 'login'),
-            array('mod' => 'comment', 'act' => 'post')
-        );
-
-        foreach ($GLOBALS['hooks']['Filter_Plugin_API_VerifyCSRF'] as $fpname => &$fpsignal) {
-            $fpreturn = $fpname($skip_acts, $csrf_token);
-            if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
-                $fpsignal = PLUGIN_EXITSIGNAL_NONE;
-    
-                return $fpreturn;
-            }
-        }
-
-        foreach ($skip_acts as $api_act) {
-            if (!isset($api_act['mod'])) {
-                continue;
-            }
-            if (!isset($api_act['mod']) && $api_act['act'] == $mod) {
-                // 如果只定义了 mod 并匹配，放行(比如说定义了 mod=member ，那 member mod 下所有 POST 都放行)
+        if (! $force_check) {
+            if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
                 return;
             }
-            if ($api_act['mod'] == $mod && $api_act['act'] == $act) {
-                // 匹配了 mod 和 act，放行
-                return;
+
+            // 不需要校验 CSRF 的 API
+            $skip_acts = array(
+                array('mod' => 'member', 'act' => 'login'),
+                array('mod' => 'comment', 'act' => 'post')
+            );
+
+            foreach ($GLOBALS['hooks']['Filter_Plugin_API_VerifyCSRF_Skip'] as $fpname => &$fpsignal) {
+                $fpreturn = $fpname($skip_acts, $csrf_token);
+                if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
+                    $fpsignal = PLUGIN_EXITSIGNAL_NONE;
+        
+                    return $fpreturn;
+                }
+            }
+
+            foreach ($skip_acts as $api_act) {
+                if (!isset($api_act['mod'])) {
+                    continue;
+                }
+                if (!isset($api_act['mod']) && $api_act['act'] == $mod) {
+                    // 如果只定义了 mod 并匹配，放行(比如说定义了 mod=member ，那 member mod 下所有 POST 都放行)
+                    return;
+                }
+                if ($api_act['mod'] == $mod && $api_act['act'] == $act) {
+                    // 匹配了 mod 和 act，放行
+                    return;
+                }
             }
         }
 

@@ -112,7 +112,7 @@ function api_comment_delete()
 
     ApiCheckAuth(true, 'CommentDel');
 
-    ApiVerifyCSRF();
+    ApiVerifyCSRF(true);
 
     if ($zbp->GetCommentByID((int) GetVars('id', 'GET'))->ID == 0) {
         return array(

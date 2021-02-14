@@ -194,7 +194,7 @@ function api_member_delete()
 
     ApiCheckAuth(true, 'MemberDel');
 
-    ApiVerifyCSRF();
+    ApiVerifyCSRF(true);
 
     if ($zbp->GetMemberByID((int) GetVars('id', 'GET'))->ID == 0) {
         return array(

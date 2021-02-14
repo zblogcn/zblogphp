@@ -125,6 +125,6 @@ class APIFoundationTest extends PHPUnit\Framework\TestCase
         $this->expectExceptionObject(new Exception($GLOBALS['lang']['error']['5'], 419));
 
         $this->expectOutputString('{"code":419,"message":"'.$GLOBALS['lang']['error']['5'].'","data":null,"error":null}');
-        ApiVerifyCSRF();
+        ApiVerifyCSRF(true);
     }
 }
