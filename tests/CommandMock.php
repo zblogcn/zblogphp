@@ -15,6 +15,10 @@ function commandmock_loadzbp()
     include dirname(__FILE__) . '/../zb_system/function/c_system_base.php';
     $GLOBALS['zbp']->Load();
 
+    if ($GLOBALS['zbp']->db === null) {
+        $GLOBALS['zbp']->db = ZBlogPHP::InitializeDB('mysqli');
+    }
+
     set_error_handler('returnFalse');
     set_exception_handler('returnFalse');
     register_shutdown_function('returnFalse');
