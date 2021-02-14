@@ -464,7 +464,7 @@ function ApiVerifyCSRF($force_check = false)
                 if (!isset($api_act['mod'])) {
                     continue;
                 }
-                if (!isset($api_act['mod']) && $api_act['act'] == $mod) {
+                if (!isset($api_act['act']) && $api_act['mod'] == $mod) {
                     // 如果只定义了 mod 并匹配，放行(比如说定义了 mod=member ，那 member mod 下所有 POST 都放行)
                     return;
                 }
