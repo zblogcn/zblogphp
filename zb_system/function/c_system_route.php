@@ -243,6 +243,9 @@ function ViewAuto_Check_To_Permalink($route)
     if (!($zbp->option['ZC_STATIC_MODE'] == 'REWRITE')) {
         return false;
     }
+    if (($zbp->option['ZC_STATIC_MODE'] == 'REWRITE') && GetValueInArray($_GET, 'rewrite', null) == true) {
+        return false;
+    }
     //检查有不存在的参数就返回false
     $get = GetValueInArray($route, 'get', array());
     foreach ($_GET as $key => $value) {
