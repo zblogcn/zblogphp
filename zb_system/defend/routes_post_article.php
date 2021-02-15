@@ -181,11 +181,6 @@ return array (
     'name' => 'post_article_list',
     'call' => 'ViewList',
     'urlrule' => '',
-    'not_get' => 
-    array (
-      0 => 'id',
-      1 => 'alias',
-    ),
     'args' => 
     array (
       0 => 'page',
@@ -202,11 +197,6 @@ return array (
     'name' => 'post_article_list_category',
     'call' => 'ViewList',
     'urlrule' => '',
-    'not_get' => 
-    array (
-      0 => 'id',
-      1 => 'alias',
-    ),
     'args' => 
     array (
       0 => 'cate@id',
@@ -224,11 +214,6 @@ return array (
     'name' => 'post_article_list_author',
     'call' => 'ViewList',
     'urlrule' => '',
-    'not_get' => 
-    array (
-      0 => 'id',
-      1 => 'alias',
-    ),
     'args' => 
     array (
       0 => 'auth@id',
@@ -246,11 +231,6 @@ return array (
     'name' => 'post_article_list_date',
     'call' => 'ViewList',
     'urlrule' => '',
-    'not_get' => 
-    array (
-      0 => 'id',
-      1 => 'alias',
-    ),
     'args' => 
     array (
       0 => 'date',
@@ -267,11 +247,6 @@ return array (
     'name' => 'post_article_list_tag',
     'call' => 'ViewList',
     'urlrule' => '',
-    'not_get' => 
-    array (
-      0 => 'id',
-      1 => 'alias',
-    ),
     'args' => 
     array (
       0 => 'tags@id',
