@@ -68,7 +68,7 @@ function ViewAuto()
     foreach ($active_routes as $key => $route) {
         $prefix = GetValueInArray($route, 'prefix', '');
         $prefix = empty($prefix) ? '' : ($prefix . '/');
-        if (($url == $prefix . '') || ($url == $prefix . 'index.php')) {
+        if (($url == $prefix . '') || ($url == $prefix . 'index.php') || (($zbp->option['ZC_STATIC_MODE'] == 'REWRITE') && GetValueInArray($_GET, 'rewrite', null) == true)) {
             $b = ViewAuto_Check_Get_And_Not_Get_And_Must_Get(GetValueInArray($route, 'get', array()), GetValueInArray($route, 'not_get', array()), GetValueInArray($route, 'must_get', array()));
             $b = $b && ViewAuto_Check_Request_Method(GetValueInArray($route, 'request_method', ''));
             //如果条件符合就组合参数数组并调用函数
@@ -76,9 +76,7 @@ function ViewAuto()
                 $array = array();
                 ViewAuto_Process_Args_get($array, GetValueInArray($route, 'args_get', array()));
                 ViewAuto_Process_Args_with($array, GetValueInArray($route, 'args_with', array()), $route);
-                $b_redirect = GetValueInArray($route, 'to_permalink', false);
-                $b_redirect = ($zbp->option['ZC_STATIC_MODE'] == 'REWRITE') && $b_redirect;
-                $b_redirect = ViewAuto_Check_Check_To_Permalink($route) && $b_redirect;
+                $b_redirect = ViewAuto_Check_To_Permalink($route);
                 if ($b_redirect) {
                     $array['canceldisplay'] = true;
                 }
@@ -236,8 +234,15 @@ function ViewAuto_Call_Auto($route, $array)
 /**
  * ViewAuto的辅助函数
  */
-function ViewAuto_Check_Check_To_Permalink($route)
+function ViewAuto_Check_To_Permalink($route)
 {
+    global $zbp;
+    if (GetValueInArray($route, 'to_permalink', false) == false) {
+        return false;
+    }
+    if (!($zbp->option['ZC_STATIC_MODE'] == 'REWRITE')) {
+        return false;
+    }
     //检查有不存在的参数就返回false
     $get = GetValueInArray($route, 'get', array());
     foreach ($_GET as $key => $value) {
