@@ -2113,10 +2113,15 @@ function Array_Isset(&$array, $key, $default)
  */
 function GetImagesFromHtml($html)
 {
-    $pattern = "/<img.*?src=[\\'|\"](.*?)[\\'|\"].*?[\\/]?>/i";
-    //$pattern = '/<img[^>]+src="([^">]+)"[^>]*>/i';
+    $pattern = "/<img[^>]+src=[\\'|\"](.*?)[\\'|\"][^>]*>/i";
+    //$pattern = '/<img[^>]+src="([^">]+)"[^>]*>/i'; //沉水
     preg_match_all($pattern, $html, $matches);
-    return is_array($matches[1]) ? array_unique($matches[1]) : array();
+    $array = is_array($matches[1]) ? $matches[1] : array();
+    foreach ($array as $key => $value) {
+        $array[$key] = htmlspecialchars_decode($array[$key]);
+    }
+    $array = array_unique($array);
+    return $array;
 }
 
 /**

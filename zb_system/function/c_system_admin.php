@@ -530,7 +530,7 @@ function Admin_CategoryMng()
         $tabletds[] = '<tr>';
         $tabletds[] = '<td class="td5">' . $category->ID . '</td>';
         $tabletds[] = '<td class="td5">' . $category->Order . '</td>';
-        $tabletds[] = '<td class="td25"><a href="' . $category->Url . '" target="_blank"><i class="icon-link-45deg"></i></a> ' . $category->Symbol . $category->Name . '</td>';
+        $tabletds[] = '<td class="td25"><a href="' . $category->Url . '" target="_blank"><i class="icon-link-45deg"></i></a> ' . ($zbp->option['ZC_CATEGORY_MANAGE_LEGACY_DISPLAY'] ? $category->Symbol : '') . $category->Name . '</td>';
         $tabletds[] = '<td class="td20">' . $category->Alias . '</td>';
         $tabletds[] = '<td class="td10">' . $category->Count . '</td>';
         $tabletds[] = '<td class="td10 tdCenter">' .
