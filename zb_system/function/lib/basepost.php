@@ -28,8 +28,8 @@ if (!defined('ZBP_PATH')) {
  * @property string TypeName 文章类型的具体信息
  * @property string StatusName 文章状态的详细信息
  * @property int|string CommNums 评论数量
- * @property string FirstImg 文章的第一张图片原图
- * @property string Thumb 文章的第一张图片缩略图
+ * @property int ImageCount 图片数量
+ * @property array AllImages 所有图片
  */
 class BasePost extends Base
 {
