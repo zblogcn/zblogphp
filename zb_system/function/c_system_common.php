@@ -2114,7 +2114,8 @@ function Array_Isset(&$array, $key, $default)
 function GetImagesFromHtml($html)
 {
     $pattern = "/<img.*?src=[\\'|\"](.*?)[\\'|\"].*?[\\/]?>/i";
-    preg_match_all($pattern, htmlspecialchars_decode($html), $matches);
+    //$pattern = '/<img[^>]+src="([^">]+)"[^>]*>/i';
+    preg_match_all($pattern, $html, $matches);
     return is_array($matches[1]) ? array_unique($matches[1]) : array();
 }
 
