@@ -25,16 +25,16 @@ function ViewAuto()
 {
     global $zbp;
 
-    $inpurl = $zbp->currenturl;
+    $original_url = $zbp->currenturl;
 
-    $url = GetValueInArray(explode('?', $inpurl), '0');
+    $url = GetValueInArray(explode('?', $original_url), '0');
 
     if ($zbp->cookiespath === substr($url, 0, strlen($zbp->cookiespath))) {
         $url = substr($url, strlen($zbp->cookiespath));
     }
 
     foreach ($GLOBALS['hooks']['Filter_Plugin_ViewAuto_Begin'] as $fpname => &$fpsignal) {
-        $fpreturn = $fpname($inpurl, $url);
+        $fpreturn = $fpname($original_url, $url);
         if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
             $fpsignal = PLUGIN_EXITSIGNAL_NONE;
 
@@ -47,6 +47,8 @@ function ViewAuto()
     $rewrite_routes = array();
     $default_routes = array();
     foreach ($zbp->routes as $key => $route) {
+        $route['original_url'] = $original_url;
+        $route['url'] = $url;
         if ($route['type'] == 'active') {
             if (GetValueInArray($route, 'suspended', false) == false) {
                 $active_routes[] = $route;

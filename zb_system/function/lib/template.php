@@ -255,17 +255,21 @@ class Template
                 }
             }
         }
-        $this->addNonexistendTags();
+        $this->addNonexistentTags();
 
         $this->CompileFiles();
 
         return true;
     }
 
-    protected function addNonexistendTags()
+    protected function addNonexistentTags()
     {
         global $zbp;
         $templates = &$this->templates;
+
+        if ($zbp->autofill_template_htmltags == false) {
+            return;
+        }
 
         if (strpos($templates['comments'], 'AjaxCommentBegin') === false) {
             $templates['comments'] = '<label id="AjaxCommentBegin"></label>' . $templates['comments'];
@@ -279,7 +283,7 @@ class Template
             $templates['comment'] = '<label id="cmt{$comment.ID}"></label>' . $templates['comment'];
         }
 
-        if (strpos($templates['commentpost'], 'inpVerify') === false && strpos($templates['commentpost'], '=\'verify\'') === false && strpos($templates['commentpost'], '="verify"') === false) {
+        if (strpos($templates['commentpost'], 'commentpost-verify') === false && strpos($templates['commentpost'], 'inpVerify') === false && strpos($templates['commentpost'], '=\'verify\'') === false && strpos($templates['commentpost'], '="verify"') === false) {
             $verify = '{template:commentpost-verify}';
 
             if (strpos($templates['commentpost'], '<!--verify-->') !== false) {

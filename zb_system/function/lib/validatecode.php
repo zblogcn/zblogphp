@@ -346,11 +346,12 @@ class ValidateCode
         $x = (($width - $textWidth) / 2);
         $y = (($height - $textHeight) / 2 + $size);
 
-        if (isset($this->textCount) && is_array($this->textCount) && !count($this->textColor)) {
-            $textColor = array($this->rand(0, 150), $this->rand(0, 150), $this->rand(0, 150));
-        } else {
-            $textColor = $this->textColor;
-        }
+        //if (isset($this->textCount) && is_array($this->textCount) && !count($this->textColor)) {
+        $textColor = array($this->rand(0, 150), $this->rand(0, 150), $this->rand(0, 150));
+        //} else {
+        //    $textColor = $this->textColor;
+        //}
+
         @$col = imagecolorallocate($image, $textColor[0], $textColor[1], $textColor[2]);
 
         // Write the letters one by one, with random angle
