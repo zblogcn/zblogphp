@@ -72,12 +72,12 @@ function api_system_basic_info()
             'comment_verify_enable' => $zbp->option['ZC_COMMENT_VERIFY_ENABLE'],
             'comment_reverse_order' => $zbp->option['ZC_COMMENT_REVERSE_ORDER'],
         ),
-        'is_logged_in' => $zbp->user->ID != 0,
-        'current_member' => ApiGetObjectArray(
+        'is_logged_in' => $zbp->islogin,
+        'current_member' => $zbp->islogin ? ApiGetObjectArray(
             $zbp->user,
             array('Url', 'Template', 'Avatar', 'StaticName'),
             array('Guid', 'Password', 'IP')
-        ),
+        ) : null,
     );
 
     if ($zbp->islogin) {
