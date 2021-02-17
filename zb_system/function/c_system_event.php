@@ -35,10 +35,16 @@ function VerifyLogin($throwException = true)
         }
 
         return true;
-    } elseif ($throwException) {
-        $zbp->ShowError(8, __FILE__, __LINE__);
     } else {
-        return false;
+        foreach ($GLOBALS['hooks']['Filter_Plugin_VerifyLogin_Failed'] as $fpname => &$fpsignal) {
+            $fpname();
+        }
+
+        if ($throwException) {
+            $zbp->ShowError(8, __FILE__, __LINE__);
+        } else {
+            return false;
+        }
     }
 }
 

@@ -60,6 +60,10 @@ function api_member_login()
         );
     }
 
+    foreach ($GLOBALS['hooks']['Filter_Plugin_VerifyLogin_Failed'] as $fpname => &$fpsignal) {
+        $fpname();
+    }
+
     return array(
         'code' => 401,
         'message' => $GLOBALS['lang']['error']['8'],

@@ -1285,6 +1285,17 @@ DefinePluginFilter('Filter_Plugin_VerifyLogin_Succeed');
 /*
 '**************************************************<
 '类型:Filter
+'名称:Filter_Plugin_VerifyLogin_Failed
+'参数:
+'说明:VerifyLogin失败的接口
+'调用:
+'**************************************************>
+ */
+DefinePluginFilter('Filter_Plugin_VerifyLogin_Failed');
+
+/*
+'**************************************************<
+'类型:Filter
 '名称:Filter_Plugin_Logout_Succeed
 '参数:
 '说明:Logout成功的接口
