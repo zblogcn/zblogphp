@@ -73,7 +73,11 @@ function api_system_basic_info()
             'comment_reverse_order' => $zbp->option['ZC_COMMENT_REVERSE_ORDER'],
         ),
         'is_logged_in' => $zbp->user->ID != 0,
-        'current_member' => $zbp->user,
+        'current_member' => ApiGetObjectArray(
+            $zbp->user,
+            array('Url', 'Template', 'Avatar', 'StaticName'),
+            array('Guid', 'Password', 'IP')
+        ),
     );
 
     if ($zbp->islogin) {
