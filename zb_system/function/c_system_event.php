@@ -1078,6 +1078,9 @@ function CheckComment()
     $ischecking = (bool) GetVars('ischecking');
 
     $cmt = $zbp->GetCommentByID($id);
+    if ($cmt->ID == 0) {
+        return $cmt;
+    }
     $orig_check = (bool) $cmt->IsChecking;
     $cmt->IsChecking = $ischecking;
 

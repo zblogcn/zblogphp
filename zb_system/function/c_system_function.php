@@ -67,7 +67,7 @@ function GetPost($idorname, $option = null)
         $option['post_type'] = null;
     }
     if (!array_key_exists('post_status', $option)) {
-        $option['post_status'] = 0;
+        $option['post_status'] = null;
     }
     if (!array_key_exists('only_article', $option)) {
         $option['only_article'] = false;
