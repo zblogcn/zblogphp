@@ -2297,6 +2297,8 @@ DefinePluginFilter('Filter_Plugin_Module_Save');
 '**************************************************>
  */
 DefinePluginFilter('Filter_Plugin_Member_Avatar');
+//修正一个名字错误，以后版本应删除
+$GLOBALS['hooks']['Filter_Plugin_Mebmer_Avatar'] = &$GLOBALS['hooks']['Filter_Plugin_Member_Avatar'];
 
 /*
 '**************************************************<

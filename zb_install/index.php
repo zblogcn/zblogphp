@@ -533,19 +533,17 @@ function Setup3()
     $option2['password'] = GetVars('password', 'GET');
     $option2['repassword'] = GetVars('repassword', 'GET');
 
-    $getenv = (bool) GetVars('getenv', 'GET');
-
     if (GetVars('dbmysql_server', 'GET') != '') {
-        $option['ZC_MYSQL_SERVER'] = $getenv ? getenv(GetVars('dbmysql_server', 'GET')) : GetVars('dbmysql_server', 'GET');
+        $option['ZC_MYSQL_SERVER'] = GetVars('dbmysql_server', 'GET');
     }
     if (GetVars('dbmysql_name', 'GET') != '') {
-        $option['ZC_MYSQL_NAME'] = $getenv ? getenv(GetVars('dbmysql_name', 'GET')) : GetVars('dbmysql_name', 'GET');
+        $option['ZC_MYSQL_NAME'] = GetVars('dbmysql_name', 'GET');
     }
     if (GetVars('dbmysql_username', 'GET') != '') {
-        $option['ZC_MYSQL_USERNAME'] = $getenv ? getenv(GetVars('dbmysql_username', 'GET')) : GetVars('dbmysql_username', 'GET');
+        $option['ZC_MYSQL_USERNAME'] = GetVars('dbmysql_username', 'GET');
     }
     if (GetVars('dbmysql_password', 'GET') != '') {
-        $option['ZC_MYSQL_PASSWORD'] = $getenv ? getenv(GetVars('dbmysql_password', 'GET')) : GetVars('dbmysql_password', 'GET');
+        $option['ZC_MYSQL_PASSWORD'] = GetVars('dbmysql_password', 'GET');
     }
     if (GetVars('dbmysql_pre', 'GET') != '') {
         $option['ZC_MYSQL_PRE'] = GetVars('dbmysql_pre', 'GET');
@@ -560,16 +558,16 @@ function Setup3()
         $option['ZC_MYSQL_COLLATE'] = GetVars('dbcollate', 'GET');
     }
     if (GetVars('dbpgsql_server', 'GET') != '') {
-        $option['ZC_PGSQL_SERVER'] = $getenv ? getenv(GetVars('dbpgsql_server', 'GET')) : GetVars('dbpgsql_server', 'GET');
+        $option['ZC_PGSQL_SERVER'] = GetVars('dbpgsql_server', 'GET');
     }
     if (GetVars('dbpgsql_name', 'GET') != '') {
-        $option['ZC_PGSQL_NAME'] = $getenv ? getenv(GetVars('dbpgsql_name', 'GET')) : GetVars('dbpgsql_name', 'GET');
+        $option['ZC_PGSQL_NAME'] = GetVars('dbpgsql_name', 'GET');
     }
     if (GetVars('dbpgsql_username', 'GET') != '') {
-        $option['ZC_PGSQL_USERNAME'] = $getenv ? getenv(GetVars('dbpgsql_username', 'GET')) : GetVars('dbpgsql_username', 'GET');
+        $option['ZC_PGSQL_USERNAME'] = GetVars('dbpgsql_username', 'GET');
     }
     if (GetVars('dbpgsql_password', 'GET') != '') {
-        $option['ZC_PGSQL_PASSWORD'] = $getenv ? getenv(GetVars('dbpgsql_password', 'GET')) : GetVars('dbpgsql_password', 'GET');
+        $option['ZC_PGSQL_PASSWORD'] = GetVars('dbpgsql_password', 'GET');
     }
     if (GetVars('dbpgsql_pre', 'GET') != '') {
         $option['ZC_PGSQL_PRE'] = GetVars('dbpgsql_pre', 'GET');
