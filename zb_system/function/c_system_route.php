@@ -61,7 +61,17 @@ function ViewAuto()
         }
         if ($route['type'] == 'default') {
             if (GetValueInArray($route, 'suspended', false) == false) {
-                $default_routes[] = $route;
+                if (GetValueInArray($route, 'only_rewrite', false) == true) {
+                    if ($zbp->option['ZC_STATIC_MODE'] == 'REWRITE') {
+                       $default_routes[] = $route; 
+                    }
+                } elseif (GetValueInArray($route, 'only_active', false) == true) {
+                    if ($zbp->option['ZC_STATIC_MODE'] == 'ACTIVE') {
+                        $default_routes[] = $route;
+                    }
+                } else {
+                    $default_routes[] = $route;
+                }
             }
         }
     }
@@ -93,7 +103,6 @@ function ViewAuto()
             }
         }
     }
-
 
     //匹配伪静路由
     foreach ($rewrite_routes as $key => $route) {
@@ -353,7 +362,7 @@ function ViewAuto_Check_Get_And_Not_Get_And_Must_Get($get, $notget, $mustget)
         foreach ($notget as $key => $value) {
             if ((substr($value, 0, 1) == '/' && substr_count($value, '/') > 1) || (substr($value, 0, 1) == '#' && substr_count($value, '#') > 1) || (substr($value, 0, 1) == '~' && substr_count($value, '~') > 1)) {
                 foreach ($_GET as $key2 => $value2) {
-                    if (preg_match($value, $key2) === 1) {
+                    if (@preg_match($value, $key2) === 1) {
                         $b = false;
                         return $b;
                     }

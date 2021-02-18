@@ -13,12 +13,7 @@ return array (
     ),
     'not_get' => 
     array (
-      0 => 'cate',
-      1 => 'tags',
-      2 => 'auth',
-      3 => 'date',
-      4 => 'id',
-      5 => 'alias',
+      0 => '/.*/i',
     ),
     'args_get' => 
     array (
@@ -283,4 +278,33 @@ return array (
     'only_match_page' => false,
   ),
 */
+//  添加 默认路由 （文章页列表的首页路由，只在没有开启伪静下启用）
+  'default_post_article_list_only_active' => 
+  array (
+    'type' => 'default',
+    'name' => 'post_article_list_only_active',
+    'call' => 'ViewList',
+    'urlrule' => '',
+    'get' => 
+    array (
+    ),
+    'not_get' => 
+    array (
+      0 => 'cate',
+      1 => 'tags',
+      2 => 'auth',
+      3 => 'date',
+      4 => 'id',
+      5 => 'alias',
+    ),
+    'args_get' => 
+    array (
+      0 => 'page',
+    ),
+    'args_with' => 
+    array (
+    ),
+    'abbr_url' => true,
+    'only_active' => true,
+  ),
 );

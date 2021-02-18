@@ -830,7 +830,10 @@ class ZBlogPHP
     public function LoadRoutes()
     {
         foreach (array(0 => 'article', 1 => 'page') as $postid => $postname) {
-            $route = include ZBP_PATH . 'zb_system/defend/routes_post_' . $postname . '.php';
+            if (!is_readable($file = ZBP_PATH . 'zb_system/defend/routes_post_' . $postname . '.php')) {
+                continue;
+            }
+            $route = include $file;
             foreach ($route as $key2 => $value2) {
                 if (empty($value2['urlrule'])) {
                     if ($value2['name'] == 'post_' . $postname . '_single') {
@@ -4217,11 +4220,11 @@ class ZBlogPHP
     public function RegRoute($array, $prepend = false)
     {
         $routes = &$this->routes;
+        $new_name = $array['type'] . '_' . $array['name'];
         if ($prepend == false) {
-            $routes[$array['type'] . '_' . $array['name']] = $array;
+            $routes[$new_name] = $array;
         } else {
-            unset($routes[$array['type'] . '_' . $array['name']]);
-            $new_name = $array['type'] . '_' . $array['name'];
+            unset($routes[$new_name]);
             $new_array = array($new_name => $array);
             $routes = array_merge($new_array, $routes);
         }
