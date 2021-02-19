@@ -37,7 +37,12 @@ function VerifyLogin($throwException = true)
         return true;
     } else {
         foreach ($GLOBALS['hooks']['Filter_Plugin_VerifyLogin_Failed'] as $fpname => &$fpsignal) {
-            $fpname();
+            $fpreturn = $fpname();
+            if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
+                $fpsignal = PLUGIN_EXITSIGNAL_NONE;
+
+                return $fpreturn;
+            }
         }
 
         if ($throwException) {
