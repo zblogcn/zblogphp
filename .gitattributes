@@ -50,3 +50,4 @@ index.php
 readme.txt
 tests/                                export-ignore
 zb_system/
+zb_system/script/zblogphp.orig.js     export-ignore
