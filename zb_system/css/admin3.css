@@ -55,3 +55,12 @@ th:last-child{border-right:none;}
 .left { float: left; margin: 12px 0; }
 .ui-progressbar { width: 256px; height: 18px; }
 .ui-widget-header { background: #3d69aa; }
+
+table.table_hover > tbody > tr > td:hover,
+table.table_hover > tbody > tr > th:hover,
+table.table_hover > tbody > tr:hover > td,
+table.table_hover > tbody > tr:hover > th {background-color: #ffffdd;}
+table.table_striped > tbody > tr:nth-of-type(odd) {background-color: #F4F4F4;}
+
+.blodcolor{color:#1d4c7d}.normalcolor{color:#3a6ea5}.lightcolor{color:#b0cdee}.highcolor{color:#3399cc}.anticolor{color:#d60000}
+.bg-blodcolor{background-color:#1d4c7d}.bg-normalcolor{background-color:#3a6ea5}.bg-lightcolor{background-color:#b0cdee}.bg-highcolor{background-color:#3399cc}.bg-anticolor{background-color:#d60000}

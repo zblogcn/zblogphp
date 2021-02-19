@@ -162,6 +162,12 @@ td,th{border:none;padding:0.5em; border-right: 1px solid #efefef;}
 td:last-child{border-right:none;}
 th:last-child{border-right:none;}
 
+table.table_hover > tbody > tr > td:hover,
+table.table_hover > tbody > tr > th:hover,
+table.table_hover > tbody > tr:hover > td,
+table.table_hover > tbody > tr:hover > th {background-color: #ffffdd;}
+table.table_striped > tbody > tr:nth-of-type(odd) {background-color: #F4F4F4;}
+
 /*表   单*/
 form { border: 0px solid black; padding: 0.0em; margin: 0.5em 0; }
 form p { padding: 0.5em 0  0.5em 0; line-height: 1.5em; }
@@ -430,3 +436,6 @@ span.button:hover { box-shadow: 0 0 1px #000; border-radius: 2px; padding: 2px 3
 }
 
 i.icon-arrow-repeat.loading-status:before { animation: refreshloading 1.5s linear infinite; display: inline-block; }
+
+.blodcolor{color:#1d4c7d}.normalcolor{color:#3a6ea5}.lightcolor{color:#b0cdee}.highcolor{color:#3399cc}.anticolor{color:#d60000}
+.bg-blodcolor{background-color:#1d4c7d}.bg-normalcolor{background-color:#3a6ea5}.bg-lightcolor{background-color:#b0cdee}.bg-highcolor{background-color:#3399cc}.bg-anticolor{background-color:#d60000}

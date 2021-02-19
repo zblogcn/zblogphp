@@ -3839,8 +3839,8 @@ class ZBlogPHP
         ZBlogException::$error_id = $errorCode;
         ZBlogException::$error_file = $file;
         ZBlogException::$error_line = $line;
-        $array = ZBlogException::$error_moreinfo;
-        ZBlogException::$error_moreinfo = array_merge($array, $moreinfo);
+        $array = ZBlogException::$error_debuginfo;
+        ZBlogException::$error_debuginfo = array_merge($array, $moreinfo);
 
         if (stripos('{' . sha1('mustshowerror') . '}', $errorText) === 0) {
             $errorText = str_replace('{' . sha1('mustshowerror') . '}', '', $errorText);

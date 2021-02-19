@@ -56,30 +56,50 @@ unset($post_data['token']);
                             <p><?php echo $GLOBALS['lang']['msg']['error_info']; ?></p>
         <?php
         echo '(' . $error->type . ')' . $error->typeName . ' :   ' . (FormatString($error->messagefull, '[noscript]'));
-        if ($GLOBALS['option']['ZC_DEBUG_MODE'] && !empty(ZBlogException::$error_moreinfo)) {
-            $s = var_export(ZBlogException::$error_moreinfo, true);
-            $s = str_replace('array', '', $s);
-            echo $s;
-        }
         echo ' (' . ZC_VERSION_FULL . ') ';
         if (!in_array('Status: 404 Not Found', headers_list())) {
                 echo '(' . GetEnvironment() . ') ';
         }
         ?>
                         </div>
+
+                        <div>
+                            <p><?php echo 'Debug Info'; ?></p>
+
+                            <table style="width: 100%" class="table_striped">
+                                <tbody>
+
+                    <?php
+                    $i = 0;
+                    foreach (ZBlogException::$error_debuginfo as $key => $value) {
+                        $i += 1;
+                        ?>
+                                    <tr>
+                                        <td style='width:50px;'><?php echo $key; ?></td>
+                                        <td><?php echo htmlspecialchars(var_export($value, true)); ?></td>
+                                    </tr>
+                                    <?php
+                    }
+                    ?>
+
+                                </tbody>
+                            </table>
+                        </div>
+
+
                         <div>
                             <p><?php echo $GLOBALS['lang']['msg']['file_line']; ?></p>
                             <i><?php echo $error->file; ?></i><br/>
-                            <table style="width: 100%">
+                            <table style="width: 100%" class="table_striped">
                                 <tbody>
 
                     <?php
                     $aFile = $error->get_code($error->file, $error->line);
                     foreach ($aFile as $iInt => $sData) {
                         ?>
-                                    <tr<?php echo ($iInt + 1) == $error->line ? ' style="background:#75BAFF"' : ''; ?>>
-                                        <td style='width:50px'><?php echo ($iInt + 1); ?></td>
-                                        <td><?php echo $sData; ?></td>
+                                    <tr>
+                                        <td style='width:50px' <?php echo ($iInt + 1) == $error->line ? ' class="bg-lightcolor"' : ''; ?> ><?php echo ($iInt + 1); ?></td>
+                                        <td <?php echo ($iInt + 1) == $error->line ? ' class="bg-lightcolor"' : ''; ?> ><?php echo $sData; ?></td>
                                     </tr>
                                     <?php
                     }
@@ -90,7 +110,7 @@ unset($post_data['token']);
                         </div>
                         <div>
                             <p><?php echo $GLOBALS['lang']['msg']['debug_backtrace']; ?></p>
-                            <table style='width:100%'>
+                            <table style='width:100%' class="table_striped">
                                 <tbody>
                     <?php
                     foreach (debug_backtrace() as $iInt => $sData) {
@@ -151,7 +171,7 @@ unset($post_data['token']);
                         </div>
                         <div>
                             <p><?php echo $GLOBALS['lang']['msg']['include_file']; ?></p>
-                            <table style='width:100%'>
+                            <table style='width:100%' class="table_striped">
                                 <tbody>
                                 <?php
                                 foreach (get_included_files() as $iInt => $sData) {

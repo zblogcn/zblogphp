@@ -74,3 +74,12 @@ body.short .logo { height: 70px; width:200px; margin: 60px auto 60px auto; }
     .login input[type="text"],.login input[type="password"]{ float: right; width: 285px; }
     input[type="checkbox"] { margin: 8px 0 0 5px; }
 }
+
+table.table_hover > tbody > tr > td:hover,
+table.table_hover > tbody > tr > th:hover,
+table.table_hover > tbody > tr:hover > td,
+table.table_hover > tbody > tr:hover > th {background-color: #ffffdd;}
+table.table_striped > tbody > tr:nth-of-type(odd) {background-color: #F4F4F4;}
+
+.blodcolor{color:#1d4c7d}.normalcolor{color:#3a6ea5}.lightcolor{color:#b0cdee}.highcolor{color:#3399cc}.anticolor{color:#d60000}
+.bg-blodcolor{background-color:#1d4c7d}.bg-normalcolor{background-color:#3a6ea5}.bg-lightcolor{background-color:#b0cdee}.bg-highcolor{background-color:#3399cc}.bg-anticolor{background-color:#d60000}

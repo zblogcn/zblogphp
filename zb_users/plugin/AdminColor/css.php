@@ -120,6 +120,9 @@ td,th{border:none;border-right: 1px solid #efefef;padding:0.6em;}
 table{border-collapse: collapse;background: #ffffff;line-height: 120%;margin:0.5em 0 0.5em 0;border:none;line-height:1.5em;}
 ';
 
+$c .= ".blodcolor{color:#1d4c7d}.normalcolor{color:#3a6ea5}.lightcolor{color:#b0cdee}.highcolor{color:#3399cc}.anticolor{color:#d60000}";
+$c .= ".bg-blodcolor{background-color:#1d4c7d}.bg-normalcolor{background-color:#3a6ea5}.bg-lightcolor{background-color:#b0cdee}.bg-highcolor{background-color:#3399cc}.bg-anticolor{background-color:#d60000}";
+
 if ($zbp->Config('AdminColor')->TableShadow) {
     $c .= 'table,.pane,.theme,form.search{box-shadow:0 0 0.5em rgba(0,0,0,0.2);}';
 } else {
