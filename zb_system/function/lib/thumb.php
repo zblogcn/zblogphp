@@ -21,6 +21,15 @@ class Thumb
     static protected $defaultImg;
 
     /**
+     * 需要排除的本地路径.
+     *
+     * @var array
+     */
+    static public $excludedPaths = array(
+        'zb_users/emotion/*'
+    );
+
+    /**
      * 是否需要裁剪.
      *
      * @var boolean
@@ -136,6 +145,9 @@ class Thumb
             }
 
             $img_path = UrlHostToPath($image);
+            if (self::checkIsExcluded($img_path)) {
+                continue;
+            }
 
             $thumb_name = md5($image) . '-' . $width . '-' . $height . '-' . ($clip === true ? '1' : '0') . '.' . $ext;
             $thumb_path = $thumb_dir . $thumb_name;
@@ -146,7 +158,7 @@ class Thumb
                 $i++;
                 continue;
             }
-            $thumb = new static;
+            $thumb = new self;
 
             ZBlogException::SuspendErrorHook();
             try {
@@ -171,6 +183,23 @@ class Thumb
         }
 
         return $thumbs;
+    }
+
+    /**
+     * 判断路径是否应该被排除.
+     *
+     * @param string $path
+     * @return boolean
+     */
+    protected static function checkIsExcluded($path)
+    {
+        foreach (self::$excludedPaths as $excluded_path) {
+            if (fnmatch(ZBP_PATH . $excluded_path, $path)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
