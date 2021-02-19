@@ -229,6 +229,14 @@ function ViewAuto_Process_Args_with(&$array, $args_with, $route)
  */
 function ViewAuto_Call_Auto($route, $array)
 {
+    if (isset($route['redirect_to'])) {
+        Redirect($route['redirect_to']);
+        return;
+    }
+    if (isset($route['redirect301_to'])) {
+        Redirect301($route['redirect301_to']);
+        return;
+    }
     $function = $route['call'];
     $array['route'] = $route;
     if (strpos($function, '::') !== false) {
