@@ -11,7 +11,7 @@
     {php}
     $days = date('t', strtotime($date)); //一个月多少天
     $dayOfWeek = date('N', strtotime($date . '-1')); //1号是星期几
-    $numberOfDays = range(0,$days);
+    $numberOfDays = range(1,$days);
     $weeks = array_chunk(array_pad($numberOfDays, -1 * $days - --$dayOfWeek, 0), 7);
     {/php}
     {foreach $weeks as $key => $week}
