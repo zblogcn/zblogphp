@@ -50,7 +50,7 @@ switch ($zbp->action) {
             $admin_function = 'Admin_CommentMng';
             $blogtitle = $lang['msg']['comment_manage'];
             if (GetVars('ischecking', 'GET') == true) {
-            	$blogtitle .= ' - ' . $GLOBALS['lang']['msg']['check_comment'];
+                $blogtitle .= ' - ' . $GLOBALS['lang']['msg']['check_comment'];
             }
         }
         break;
