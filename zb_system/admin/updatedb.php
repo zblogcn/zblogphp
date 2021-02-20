@@ -75,6 +75,9 @@ function updatedb()
         @$db->Query("ALTER TABLE {$t['Member']} ADD {$d['Member']['UpdateTime'][0]} integer NOT NULL DEFAULT 0;");
     }
 
+    //172800
+    @$db->Query("UPDATE {$t['Post']} SET {$d['Post']['UpdateTime'][0]} = {$d['Post']['PostTime'][0]} WHERE {$d['Post']['UpdateTime'][0]} = 0;");
+
     //删除一个长期存在而又无用的索引
     @$db->sql->get()->drop($t['Post'])->index('%pre%log_VTSC')->query;
 
