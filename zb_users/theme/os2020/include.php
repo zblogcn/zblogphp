@@ -14,22 +14,29 @@ function os2020_Object_Url($object)
 {
     global $zbp;
 
+    $plugin = null;
+
     switch ($type = get_class($object)) {
         case 'Post':
             $key = 'id';
             $type = $object->TypeName;
+            $plugin = &$GLOBALS['hooks']['Filter_Plugin_Post_Url'];
             break;
         case 'Category':
             $key = 'cate';
+            $plugin = &$GLOBALS['hooks']['Filter_Plugin_Category_Url'];
             break;
         case 'Member':
             $key = 'auth';
+            $plugin = &$GLOBALS['hooks']['Filter_Plugin_Member_Url'];
             break;
         case 'Tag':
             $key = 'tags';
+            $plugin = &$GLOBALS['hooks']['Filter_Plugin_Tag_Url'];
             break;
     }
-
+    //给每一次的调用都设置退出信号
+    $plugin['os2020_Object_Url'] = PLUGIN_EXITSIGNAL_RETURN;
     return $zbp->host . '?' . http_build_query(
         array(
             'type' => $type,

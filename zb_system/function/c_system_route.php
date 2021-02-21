@@ -63,7 +63,7 @@ function ViewAuto()
             if (GetValueInArray($route, 'suspended', false) == false) {
                 if (GetValueInArray($route, 'only_rewrite', false) == true) {
                     if ($zbp->option['ZC_STATIC_MODE'] == 'REWRITE') {
-                       $default_routes[] = $route; 
+                        $default_routes[] = $route;
                     }
                 } elseif (GetValueInArray($route, 'only_active', false) == true) {
                     if ($zbp->option['ZC_STATIC_MODE'] == 'ACTIVE') {

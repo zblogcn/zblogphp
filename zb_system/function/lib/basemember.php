@@ -112,6 +112,8 @@ class BaseMember extends Base
             foreach ($GLOBALS['hooks']['Filter_Plugin_Member_Url'] as $fpname => &$fpsignal) {
                 $fpreturn = $fpname($this);
                 if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
+                    $fpsignal = PLUGIN_EXITSIGNAL_NONE;
+
                     return $fpreturn;
                 }
             }
