@@ -14,9 +14,10 @@ function os2020_Object_Url($object)
 {
     global $zbp;
 
-    switch (get_class($object)) {
+    switch ($type = get_class($object)) {
         case 'Post':
             $key = 'id';
+            $type = $object->Type == 1 ? 'Page' : 'Article';
             break;
         case 'Category':
             $key = 'cate';
@@ -31,6 +32,7 @@ function os2020_Object_Url($object)
 
     return $zbp->host . '?' . http_build_query(
         array(
+            'type' => $type,
             $key => $object->ID,
         )
     );
