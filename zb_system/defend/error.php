@@ -62,7 +62,9 @@ unset($post_data['token']);
         }
         ?>
                         </div>
-
+        <?php
+        if (is_array(ZBlogException::$error_debuginfo) && !empty(ZBlogException::$error_debuginfo)) {
+        ?>
                         <div>
                             <p><?php echo 'Debug Info'; ?></p>
 
@@ -85,7 +87,9 @@ unset($post_data['token']);
                                 </tbody>
                             </table>
                         </div>
-
+        <?php
+        }
+        ?>
 
                         <div>
                             <p><?php echo $GLOBALS['lang']['msg']['file_line']; ?></p>
