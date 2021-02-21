@@ -110,7 +110,6 @@ class BaseMember extends Base
         global $zbp;
         if ($name == 'Url') {
             foreach ($GLOBALS['hooks']['Filter_Plugin_Member_Url'] as $fpname => &$fpsignal) {
-                $fpsignal = PLUGIN_EXITSIGNAL_NONE;
                 $fpreturn = $fpname($this);
                 if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
                     return $fpreturn;
