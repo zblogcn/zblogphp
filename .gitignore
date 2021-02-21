@@ -64,6 +64,7 @@ mix-manifest.json
 !/zb_users/theme/WhitePage
 !/zb_users/theme/tpure
 !/zb_users/theme/Zit
+!/zb_users/theme/os2020
 
 # Rules
 .htaccess

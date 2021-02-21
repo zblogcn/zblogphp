@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<theme version="php">
+<id>os2020</id>
+<name>OS2020</name>
+<url>https://www.inull.cn</url>
+<note>橙色阳光经典系列，OS2020</note>
+<description>Vue模板源码：https://github.com/ossso/os2020-vue-theme</description>
+<path></path>
+<include>include.php</include>
+<level>1</level>
+<author>
+  <name>橙色阳光</name>
+  <email>1122@hizhou.cn</email>
+  <url>https://www.inull.cn</url>
+</author>
+<source>
+  <name></name>
+  <email></email>
+  <url></url>
+</source>
+<adapted>162090</adapted>
+<version>1.0.0</version>
+<pubdate>2021-02-19</pubdate>
+<modified>2021-02-21</modified>
+<price>0</price>
+<phpver>5.2</phpver>
+<advanced>
+  <dependency></dependency>
+  <rewritefunctions></rewritefunctions>
+  <existsfunctions></existsfunctions>
+  <conflict></conflict>
+</advanced>
+<sidebars>
+  <sidebar1></sidebar1>
+  <sidebar2></sidebar2>
+  <sidebar3></sidebar3>
+  <sidebar4></sidebar4>
+  <sidebar5></sidebar5>
+  <sidebar6></sidebar6>
+  <sidebar7></sidebar7>
+  <sidebar8></sidebar8>
+  <sidebar9></sidebar9>
+</sidebars>
+</theme>
