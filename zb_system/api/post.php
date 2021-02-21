@@ -204,6 +204,7 @@ function api_post_list()
     $mng = (string) trim(GetVars('manage')); //&manage=1
     $type = (int) GetVars('type');
     $actions = $zbp->GetPostType($type, 'actions');
+    $search = (string) GetVars('search');
 
     // 组织查询条件
     $where = array();
@@ -223,6 +224,12 @@ function api_post_list()
         } else {
             $where[] = array('BETWEEN', 'log_PostTime', $time, strtotime('+1 month', $time));
         }
+    }
+    if (!empty($search)) {
+        ApiCheckAuth(false, 'search');
+        $type = 0;
+        $search = trim(htmlspecialchars($search));
+        $where[] = array('search', 'log_Content', 'log_Intro', 'log_Title', $search);
     }
 
     $where[] = array('=', 'log_Type', $type);
@@ -258,7 +265,7 @@ function api_post_list()
 
     $listArr = ApiGetObjectArrayList(
         $zbp->GetPostList('*', $where, $order, $limit, $option),
-        array('Url','TagsCount','TagsName','CommentPostKey','ValidCodeUrl'),
+        array('Url', 'TagsCount', 'TagsName', 'CommentPostKey', 'ValidCodeUrl'),
         array(),
         ApiGetAndFilterRelationQuery(
             array(

@@ -17,7 +17,7 @@ function os2020_Object_Url($object)
     switch ($type = get_class($object)) {
         case 'Post':
             $key = 'id';
-            $type = $object->Type == 1 ? 'Page' : 'Article';
+            $type = $object->TypeName;
             break;
         case 'Category':
             $key = 'cate';
