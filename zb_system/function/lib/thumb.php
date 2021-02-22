@@ -21,6 +21,20 @@ class Thumb
     static protected $defaultImg;
 
     /**
+     * 最小需要缩略的图片宽度.（小于该值的图片抛默认图片）
+     *
+     * @var integer
+     */
+    static public $minWidthNeedToThumb = 50;
+
+    /**
+     * 最小需要缩略的图片高度.（小于该值的图片抛默认图片）
+     *
+     * @var integer
+     */
+    static public $minHeightNeedToThumb = 50;
+
+    /**
      * 需要排除的本地路径.
      *
      * @var array
@@ -254,7 +268,8 @@ class Thumb
 
         $this->loadSrcWidthAndHeight();
 
-        if ($this->srcWidth == 0 || $this->srcHeight == 0) {
+        if ($this->srcWidth < static::$minWidthNeedToThumb || $this->srcHeight < static::$minHeightNeedToThumb) {
+            imagedestroy($this->srcRes);
             throw new Exception($GLOBALS['zbp']->lang['error']['102']);
         }
 
