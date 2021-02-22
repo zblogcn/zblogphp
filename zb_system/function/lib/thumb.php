@@ -268,7 +268,7 @@ class Thumb
 
         $this->loadSrcWidthAndHeight();
 
-        if ($this->srcWidth < static::$minWidthNeedToThumb || $this->srcHeight < static::$minHeightNeedToThumb) {
+        if ($this->srcWidth < self::$minWidthNeedToThumb || $this->srcHeight < self::$minHeightNeedToThumb) {
             imagedestroy($this->srcRes);
             throw new Exception($GLOBALS['zbp']->lang['error']['102']);
         }
