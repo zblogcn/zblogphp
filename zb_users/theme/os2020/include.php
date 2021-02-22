@@ -4,45 +4,24 @@ RegisterPlugin("os2020", "ActivePlugin_os2020");
 
 function ActivePlugin_os2020()
 {
-    Add_Filter_Plugin('Filter_Plugin_Post_Url', 'os2020_Object_Url', PLUGIN_EXITSIGNAL_RETURN);
-    Add_Filter_Plugin('Filter_Plugin_Category_Url', 'os2020_Object_Url', PLUGIN_EXITSIGNAL_RETURN);
-    Add_Filter_Plugin('Filter_Plugin_Member_Url', 'os2020_Object_Url', PLUGIN_EXITSIGNAL_RETURN);
-    Add_Filter_Plugin('Filter_Plugin_Tag_Url', 'os2020_Object_Url', PLUGIN_EXITSIGNAL_RETURN);
+    Add_Filter_Plugin('Filter_Plugin_Zbp_PreLoad', 'os2020_Change_Url');
 }
 
-function os2020_Object_Url($object)
+function os2020_Change_Url()
 {
     global $zbp;
 
-    $plugin = null;
+    $zbp->option['ZC_STATIC_MODE'] = 'ACTIVE';
+    $zbp->option['ZC_ARTICLE_REGEX'] = '{%host%}?type=acticle&id={%id%}';
+    $zbp->option['ZC_PAGE_REGEX'] = '{%host%}?type=page&id={%id%}';
+    $zbp->option['ZC_INDEX_REGEX'] = '{%host%}?page={%page%}';
+    $zbp->option['ZC_CATEGORY_REGEX'] = '{%host%}?cate={%id%}&page={%page%}';
+    $zbp->option['ZC_TAGS_REGEX'] = '{%host%}?tags={%id%}&page={%page%}';
+    $zbp->option['ZC_DATE_REGEX'] = '{%host%}?date={%date%}&page={%page%}';
+    $zbp->option['ZC_AUTHOR_REGEX'] = '{%host%}?auth={%id%}&page={%page%}';
 
-    switch ($type = get_class($object)) {
-        case 'Post':
-            $key = 'id';
-            $type = $object->TypeName;
-            $plugin = &$GLOBALS['hooks']['Filter_Plugin_Post_Url'];
-            break;
-        case 'Category':
-            $key = 'cate';
-            $plugin = &$GLOBALS['hooks']['Filter_Plugin_Category_Url'];
-            break;
-        case 'Member':
-            $key = 'auth';
-            $plugin = &$GLOBALS['hooks']['Filter_Plugin_Member_Url'];
-            break;
-        case 'Tag':
-            $key = 'tags';
-            $plugin = &$GLOBALS['hooks']['Filter_Plugin_Tag_Url'];
-            break;
-    }
-    //给每一次的调用都设置退出信号
-    $plugin['os2020_Object_Url'] = PLUGIN_EXITSIGNAL_RETURN;
-    return $zbp->host . '?' . http_build_query(
-        array(
-            'type' => $type,
-            $key => $object->ID,
-        )
-    );
+    $zbp->LoadPostType();
+    $zbp->LoadRoutes();
 }
 
 function InstallPlugin_os2020()
