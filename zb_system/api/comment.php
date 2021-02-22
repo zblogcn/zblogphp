@@ -64,7 +64,10 @@ function api_comment_post()
 {
     global $zbp;
 
-    ApiCheckAuth(false, 'cmt');
+    ApiCheckAuth(true, 'cmt');
+
+    //要求登录后，不再验证系统的验证码。
+    $zbp->option['ZC_COMMENT_VERIFY_ENABLE'] = false;
 
     try {
         $comment = PostComment();
