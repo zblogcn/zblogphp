@@ -923,6 +923,7 @@ class ZBlogPHP
 
         if (!(is_subclass_of($this->user, 'BaseMember') && $this->user->Level > 0 && !empty($this->user->ID))) {
             $this->Verify();
+            $this->islogin = empty($this->user->ID) ? false : true;
         }
 
         //创建模板类

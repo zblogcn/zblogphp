@@ -147,10 +147,36 @@ function api_comment_list()
 {
     global $zbp;
 
+    $mng = (string) trim(GetVars('manage')); //&manage=1
     $postId = (int) GetVars('post_id');
+    $authId = (int) GetVars('auth_id');
+
     $listArr = array();
+    $where = array();
+
+    if ($mng == 1) {
+        // 列出所有评论
+        ApiCheckAuth(true, 'CommentMng');
+        $limitCount = $zbp->option['ZC_MANAGE_COUNT'];
+        if (!$zbp->CheckRights('CommentAll')) {
+            $authId = $zbp->user->ID;
+        }
+    } else {
+        // 列出指定文章下的评论
+        ApiCheckAuth(false, 'getcmt');
+        $post = new Post();
+        $post->LoadInfoByID($postId);
+        if ($post->ID == 0 || $post->Status != 0) {
+            return array(
+                'code' => 404,
+                'message' => $GLOBALS['lang']['error']['97'],
+            );
+        }
+        $limitCount = $GLOBALS['option']['ZC_COMMENTS_DISPLAY_COUNT'];
+    }
+
     $filter = ApiGetRequestFilter(
-        $GLOBALS['option']['ZC_COMMENTS_DISPLAY_COUNT'],
+        $limitCount,
         array(
             'ID' => 'comm_ID',
             'PostTime' => 'comm_PostTime'
@@ -161,53 +187,34 @@ function api_comment_list()
     $option = $filter['option'];
 
     if ($postId > 0) {
-        // 列出指定文章下的评论
-        ApiCheckAuth(false, 'getcmt');
-        $post = new Post();
-        if ($post->LoadInfoByID($postId)) {
-            $listArr = ApiGetObjectArrayList(
-                $zbp->GetCommentList(
-                    '*',
-                    array(
-                        array('=', 'comm_LogID', $post->ID)
-                    ),
-                    $order,
-                    $limit,
-                    $option
-                ),
-                array(),
-                array(),
-                ApiGetAndFilterRelationQuery(
-                    array(
-                        'Author' => array(
-                            'other_props' => array('Url', 'Template', 'Avatar', 'StaticName'),
-                            'remove_props' => array('Guid', 'Password', 'IP')
-                        ),
-                    )
-                )
-            );
-            return array(
-                'data' => $listArr,
-            );
-        }
-    } else {
-        // 列出所有评论
-        ApiCheckAuth(true, 'CommentMng');
-        $listArr = ApiGetObjectArrayList(
-            $zbp->GetCommentList('*', null, $order, $limit, $option),
-            array(),
-            array(),
-            ApiGetAndFilterRelationQuery(
-                array(
-                    'Post' => array(),
-                    'Author' => array(
-                        'other_props' => array('Url', 'Template', 'Avatar', 'StaticName'),
-                        'remove_props' => array('Guid', 'Password', 'IP')
-                    ),
-                )
-            )
-        );
+        $where[] = array('=', 'comm_LogID', $postId);
     }
+    if ($authId > 0) {
+        $where[] = array('=', 'AuthorID', $authId);
+    }
+    if (GetVars('root_id') !== null) {
+        $rootId = (int) GetVars('root_id');
+        $where[] = array('=', 'RootID', $rootId);
+    }
+    if (GetVars('parent_id') !== null) {
+        $parentId = (int) GetVars('parent_id');
+        $where[] = array('=', 'ParentID', $parentId);
+    }
+
+    $listArr = ApiGetObjectArrayList(
+        $zbp->GetCommentList('*', $where, $order, $limit, $option),
+        array(),
+        array(),
+        ApiGetAndFilterRelationQuery(
+            array(
+                'Post' => array(),
+                'Author' => array(
+                    'other_props' => array('Url', 'Template', 'Avatar', 'StaticName'),
+                    'remove_props' => array('Guid', 'Password', 'IP')
+                ),
+            )
+        )
+    );
 
     $paginationArr = ApiGetPagebarInfo($option);
 

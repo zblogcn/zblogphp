@@ -1,4 +1,5 @@
 <?php
+
 /**
  * 辅助通用函数.
  */
@@ -511,7 +512,7 @@ function GetCurrentHost($blogpath, &$cookiesPath)
         $cookiesPath = '/';
         return '/';
     }
-    
+
     if (isset($_SERVER['SCRIPT_NAME']) && $_SERVER['SCRIPT_NAME']) {
         $x = $_SERVER['SCRIPT_NAME'];
         $y = $blogpath;
@@ -1285,7 +1286,11 @@ function CheckRegExp($source, $para)
 function FormatString($source, $para)
 {
     if (strpos($para, '[html-format]') !== false) {
-        $source = htmlspecialchars($source);
+        if (version_compare(PHP_VERSION, '5.4.0') >= 0) {
+            $source = htmlspecialchars($source, (ENT_COMPAT | ENT_HTML401 | ENT_SUBSTITUTE), "UTF-8");
+        } else {
+            $source = htmlspecialchars($source, ENT_COMPAT, "UTF-8");
+        }
     }
 
     if (strpos($para, '[nohtml]') !== false) {
@@ -2146,7 +2151,7 @@ function UrlHostToPath($url)
 {
     global $zbp;
 
-    if (! CheckUrlIsLocal($url)) {
+    if (!CheckUrlIsLocal($url)) {
         return $url;
     }
 
