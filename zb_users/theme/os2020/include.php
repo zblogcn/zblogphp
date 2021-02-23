@@ -5,7 +5,7 @@ RegisterPlugin("os2020", "ActivePlugin_os2020");
 function ActivePlugin_os2020()
 {
     Add_Filter_Plugin('Filter_Plugin_Zbp_PreLoad', 'os2020_Change_Url');
-    Add_Filter_Plugin('Filter_Plugin_Zbp_Load', 'os2020_Load');
+    Add_Filter_Plugin('Filter_Plugin_API_Begin', 'os2020_Refresh_ControlPanel_Content');
 }
 
 function os2020_Change_Url()
@@ -26,9 +26,10 @@ function os2020_Change_Url()
     $zbp->LoadRoutes();
 }
 
-function os2020_Load()
+function os2020_Refresh_ControlPanel_Content()
 {
     global $zbp;
+
     if ($zbp->islogin) {
         $s = '<span class="cp-hello">' . $zbp->lang['msg']['welcome'] . $zbp->user->StaticName . '(' . $zbp->user->LevelName . ')</span>';
         $s .= '<br/>';

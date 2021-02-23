@@ -3,7 +3,7 @@
 <id>os2020</id>
 <name>OS2020</name>
 <url>https://www.inull.cn</url>
-<note>橙色阳光经典系列，OS2020，ZBLOG1.7的API试水之作</note>
+<note>橙色阳光经典系列，OS2020，Z-BlogPHP 1.7 的 API 试水之作。</note>
 <description>Vue模板源码：https://github.com/ossso/os2020-vue-theme</description>
 <path></path>
 <include>include.php</include>
