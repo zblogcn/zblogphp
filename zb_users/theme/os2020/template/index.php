@@ -23,8 +23,10 @@
   <link href="zb_users/theme/os2020/static/css/index.58538027.css" rel="stylesheet">
 </head>
 
-<body><noscript><strong>We're sorry but {$name} doesn't work properly without JavaScript enabled. Please enable it to
-      continue.</strong></noscript>
+<body>
+  <noscript>
+    <strong>We're sorry but {$name} doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
+  </noscript>
   <div id="app"></div>
   <script src="zb_users/theme/os2020/static/js/chunk-vendors.5bb807b7.js"></script>
   <script src="zb_users/theme/os2020/static/js/index.f8bcbf66.js"></script>
