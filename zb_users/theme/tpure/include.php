@@ -340,7 +340,7 @@ function tpure_isMobile()
         return true;
     }
     $is_mobile = false;
-    $regex = '/android|adr|iphone|ipad|linux|windows\sphone|kindle|gt\-p|gt\-n|rim\stablet|opera|meego|Mobile|Silk|BlackBerry|Opera\Mini/i';
+    $regex = '/android|adr|iphone|ipad|linux|windows\sphone|kindle|gt\-p|gt\-n|rim\stablet|opera|meego|Mobile|Silk|BlackBerry|opera\smini/i';
     if (preg_match($regex, GetVars('HTTP_USER_AGENT', 'SERVER'))) {
         $is_mobile = true;
     }
