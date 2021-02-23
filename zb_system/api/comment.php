@@ -150,7 +150,7 @@ function api_comment_list()
     $mng = (string) trim(GetVars('manage')); //&manage=1
     $postId = (int) GetVars('post_id');
     $authId = (int) GetVars('auth_id');
-
+    $ischecking = (int) GetVars('ischecking');
     $listArr = array();
     $where = array();
 
@@ -173,6 +173,7 @@ function api_comment_list()
             );
         }
         $limitCount = $GLOBALS['option']['ZC_COMMENTS_DISPLAY_COUNT'];
+        $ischecking = false;
     }
 
     $filter = ApiGetRequestFilter(
@@ -200,6 +201,7 @@ function api_comment_list()
         $parentId = (int) GetVars('parent_id');
         $where[] = array('=', 'ParentID', $parentId);
     }
+    $w[] = array('=', 'comm_Ischecking', (int) $ischecking);
 
     $listArr = ApiGetObjectArrayList(
         $zbp->GetCommentList('*', $where, $order, $limit, $option),
