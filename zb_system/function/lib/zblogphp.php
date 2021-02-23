@@ -414,17 +414,17 @@ class ZBlogPHP
     public $themeapp = null;
 
     /**
-     * @var 分类最大递归层数
+     * @var int 分类最大递归层数
      */
     public $category_recursion_level = 5;
 
     /**
-     * @var 分类实际递归层数
+     * @var int 分类实际递归层数
      */
     public $category_recursion_real_deep = 0;
 
     /**
-     * @var 评论最大递归层数
+     * @var int 评论最大递归层数
      */
     public $comment_recursion_level = 4;
 
