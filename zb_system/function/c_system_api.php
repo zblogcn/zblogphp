@@ -501,6 +501,10 @@ function ApiLoadPostData()
  */
 function ApiDispatch($mods, $mod, $act)
 {
+    foreach ($GLOBALS['hooks']['Filter_Plugin_API_Dispatch'] as $fpname => &$fpsignal) {
+        $fpname($mods, $mod, $act);
+    }
+
     if (empty($act)) {
         $act = 'get';
     }
