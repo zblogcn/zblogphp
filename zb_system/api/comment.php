@@ -191,15 +191,15 @@ function api_comment_list()
         $where[] = array('=', 'comm_LogID', $postId);
     }
     if ($authId > 0) {
-        $where[] = array('=', 'AuthorID', $authId);
+        $where[] = array('=', 'comm_AuthorID', $authId);
     }
     if (GetVars('root_id') !== null) {
         $rootId = (int) GetVars('root_id');
-        $where[] = array('=', 'RootID', $rootId);
+        $where[] = array('=', 'comm_RootID', $rootId);
     }
     if (GetVars('parent_id') !== null) {
         $parentId = (int) GetVars('parent_id');
-        $where[] = array('=', 'ParentID', $parentId);
+        $where[] = array('=', 'comm_ParentID', $parentId);
     }
     $w[] = array('=', 'comm_Ischecking', (int) $ischecking);
 

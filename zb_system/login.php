@@ -69,9 +69,9 @@ $("#btnPost").click(function(){
         return false;
     }
 
-    $("#edtUserName").remove();
-    $("#edtPassWord").remove();
-    $("#chkRemember").remove();
+    //$("#edtUserName").remove();
+    //$("#edtPassWord").remove();
+    //$("#chkRemember").remove();
 
     $("form").attr("action","cmd.php?act=verify");
     $("#username").val(strUserName);
