@@ -1482,7 +1482,7 @@ function SaveConfig()
     $zbp->option['ZC_BLOG_THEME'] = SplitAndGet(GetVars('blogtheme', 'POST'), '|', 0);
     $zbp->option['ZC_BLOG_CSS'] = SplitAndGet(GetVars('blogtheme', 'POST'), '|', 1);
     $zbp->option['ZC_DEBUG_MODE'] = false;
-    $zbp->option['ZC_LAST_VERSION'] = $zbp->version;
+    $zbp->option['ZC_LAST_VERSION'] = ZC_LAST_VERSION;
     $zbp->option['ZC_NOW_VERSION'] = $zbp->version;
 
     $zbp->LoadCache();
