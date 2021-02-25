@@ -826,10 +826,10 @@ function Setup3()
           <input type="text" name="username" id="username" value="<?php echo $option2['username']; ?>" style="width:200px;" />
           &nbsp;<small><?php echo $zbp->lang['zb_install']['username_intro']; ?></small></p>
         <p><b><?php echo $zbp->lang['zb_install']['admin_password']; ?></b>
-          <input type="password" name="password" id="password" value="<?php echo $option2['password']; ?>" style="width:200px;" />
+          <input type="password" name="password" id="password" value="<?php echo $option2['password']; ?>" style="width:200px;" autocomplete="off" />
           &nbsp;<small><?php echo $zbp->lang['zb_install']['password_intro']; ?></small></p>
         <p><b><?php echo $zbp->lang['zb_install']['re_password']; ?></b>
-          <input type="password" name="repassword" id="repassword" value="<?php echo $option2['repassword']; ?>" style="width:200px;" />
+          <input type="password" name="repassword" id="repassword" value="<?php echo $option2['repassword']; ?>" style="width:200px;" autocomplete="off" />
         </p>
         <p><b><?php echo $zbp->lang['zb_install']['theme']; ?></b><span class="themelist">
             <?php

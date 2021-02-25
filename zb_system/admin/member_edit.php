@@ -99,25 +99,25 @@ $member = $zbp->GetMemberByID($memberid);
                 <span class='title'>
                     <?php echo $lang['msg']['password']; ?>:</span>
                 <br />
-                <input id="edtPassword" class="edit" size="40" name="Password" type="password" value="" />
+                <input id="edtPassword" class="edit" size="40" name="Password" type="password" value="" autocomplete="off" />
             </p>
             <p>
                 <span class='title'>
                     <?php echo $lang['msg']['re_password']; ?>:</span>
                 <br />
-                <input id="edtPasswordRe" class="edit" size="40" name="PasswordRe" type="password" value="" />
+                <input id="edtPasswordRe" class="edit" size="40" name="PasswordRe" type="password" value="" autocomplete="off" />
             </p>
-            <p>
-                <span class="title">
-                    <?php echo $lang['msg']['alias']; ?>:</span>
-                <br />
-                <input id="edtAlias" class="edit" size="40" name="Alias" type="text" value="<?php echo $member->Alias; ?>" /></p>
             <p>
                 <span class="title">
                     <?php echo $lang['msg']['email']; ?>:</span>
                 <span class="star">(*)</span>
                 <br />
                 <input id="edtEmail" class="edit" size="40" name="Email" type="text" value="<?php echo $member->Email; ?>" /></p>
+            <p>
+                <span class="title">
+                    <?php echo $lang['msg']['alias']; ?>:</span>
+                <br />
+                <input id="edtAlias" class="edit" size="40" name="Alias" type="text" value="<?php echo $member->Alias; ?>" /></p>
             <p>
                 <span class="title">
                     <?php echo $lang['msg']['homepage']; ?>:</span>
