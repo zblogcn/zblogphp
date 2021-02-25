@@ -17,8 +17,8 @@ For security vulnerabilities, please contact us via ``contact#rainbowsoft.org`` 
 致某些安全初学者：在管理员权限下，通过后台主题管理/插件管理上传 PHP 文件**不是漏洞**！自从 2017 年起，CNVD 已经给我们报了至少五次相关“漏洞”（如 CNVD-2019-12772、CNVD-2019-43601)。请不要用这种东西浪费我们和 CNVD 的时间，同时通过刷低水平“漏洞”骗到的 CNVD 编号对你的简历没有任何帮助。
 
 ## 社区说明
-1. 使用交流及开发建议，请转向[Z-Blog 论坛](http://bbs.zblogcn.com/)；
-1. 开发文档，参看[Z-Wiki](http://wiki.zblogcn.com/doku.php?id=zblogphp)；
+1. 使用交流及开发建议，请转向[Z-Blog 论坛](https://bbs.zblogcn.com/)；
+1. 开发文档，参看[文档](https://docs.zblogcn.com/)；
 1. 提交功能 BUG，请在论坛内，或直接在 GitHub Issue 内提交；
 1. 欢迎 Pull Request，如果你喜欢，请为我们点一个 Star :)
 
