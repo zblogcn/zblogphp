@@ -3465,34 +3465,31 @@ class ZBlogPHP
         if ($s === '' || $s === ',') {
             return array();
         }
-
-        $a = explode(',', $s);
-        $t = array_unique($a);
-
+        $s = explode(',', $s);
+        $t = array_unique($s);
         if (count($t) === 0) {
             return array();
         }
 
-        $a = array();
-        $b = array();
-        foreach ($t as $value) {
-            $v = trim($value);
-            if (isset($this->tagsbyname_type[$posttype][$v]) == false) {
-                $a[] = array('tag_Name', $v);
+        $unload_tags = array();
+        $exist_tags = array();
+        foreach ($t as $name) {
+            $name = trim($name);
+            if (isset($this->tagsbyname_type[$posttype][$name]) == false) {
+                $unload_tags[] = array('tag_Name', $name);
             } else {
-                $b[$v] = &$this->tagsbyname_type[$posttype][$v];
+                $exist_tags[$name] = &$this->tagsbyname_type[$posttype][$name];
             }
         }
 
-        if (count($a) === 0) {
-            return $b;
+        if (count($unload_tags) == 0) {
+            return $exist_tags;
         } else {
-            $t = array();
-            $array = $this->GetTagList('', array(array('=', 'tag_Type', $posttype), array('array', $a)), '', '', '');
-            foreach ($array as $v) {
-                $t[$v->Name] = &$this->tagsbyname_type[$posttype][$v->ID];
+            $array = $this->GetTagList('', array(array('=', 'tag_Type', $posttype), array('array', $unload_tags)), '', '', '');
+            foreach ($array as $tag) {
+                $exist_tags[$tag->Name] = &$this->tagsbyname_type[$posttype][$tag->Name];
             }
-            return $t;
+            return $exist_tags;
         }
     }
 
