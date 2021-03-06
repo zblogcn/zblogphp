@@ -383,7 +383,7 @@ require ZBP_PATH . 'zb_system/admin/admin_top.php';
         var sContent = "",
             sIntro = ""; //原内容与摘要
         var isSubmit = false; //是否提交保存
-        var contentBarBtn = [],introBarBtn = [];
+        var contentBarBtn = [],introBarBtn = [],contentReady = [],introReady = [];
 
         var editor_api = {
             editor: {
@@ -403,10 +403,13 @@ require ZBP_PATH . 'zb_system/admin/admin_top.php';
                     },
                     barBtn: function(name, icon, callback) {
                         contentBarBtn.push({
-                            name:name,
-                            icon:icon,
-                            callback:callback
+                            name,
+                            icon,
+                            callback
                         });
+                    },
+                    ready: function(f){
+                        contentReady.push(f);
                     }
                 },
                 intro: {
@@ -423,15 +426,15 @@ require ZBP_PATH . 'zb_system/admin/admin_top.php';
                     focus: function() {
                         return ""
                     },
-                    barBtn: function(){
-                        return ""
-                    },
                     barBtn: function(name, icon, callback) {
                         introBarBtn.push({
-                            name:name,
-                            icon:icon,
-                            callback:callback
+                            name,
+                            icon,
+                            callback
                         });
+                    },
+                    ready: function(f){
+                        introReady.push(f);
                     }
                 }
             }
