@@ -633,7 +633,7 @@ class UrlRule
 
             $url = str_replace('%date%', '(?P<date>[0-9\-]+)', $url);
             if ($type == 'cate') {
-                $url = str_replace('%id%', '(?P<cate>[0-9]+)', $url);
+                $url = str_replace('%id%', '(?P<id>[0-9]+)', $url);
 
                 $carray = array();
                 for ($i = 1; $i <= self::$categoryLayer; $i++) {
@@ -643,15 +643,15 @@ class UrlRule
                     }
                 }
                 $fullcategory = implode('|', $carray);
-                $url = str_replace('%alias%', '(?P<cate>(' . $fullcategory . ')+?)', $url);
+                $url = str_replace('%alias%', '(?P<alias>(' . $fullcategory . ')+?)', $url);
             }
             if ($type == 'tags') {
-                   $url = str_replace('%id%', '(?P<tags>[0-9]+)', $url);
-                $url = str_replace('%alias%', '(?P<tags>[^\./_]+)', $url);
+                   $url = str_replace('%id%', '(?P<id>[0-9]+)', $url);
+                $url = str_replace('%alias%', '(?P<alias>[^\./_]+)', $url);
             }
             if ($type == 'auth') {
-                $url = str_replace('%id%', '(?P<auth>[0-9]+)', $url);
-                $url = str_replace('%alias%', '(?P<auth>[^\./_]+)', $url);
+                $url = str_replace('%id%', '(?P<id>[0-9]+)', $url);
+                $url = str_replace('%alias%', '(?P<alias>[^\./_]+)', $url);
             }
         }
         if (in_array($type, $post_type_name)) {

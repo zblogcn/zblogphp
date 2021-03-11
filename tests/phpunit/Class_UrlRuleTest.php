@@ -51,7 +51,7 @@ class Class_UrlRuleTest extends PHPUnit\Framework\TestCase
         $s1 = UrlRule::OutputUrlRegEx_V2($s, 'cate', true, false);
         $this->assertEquals($s0, $s1);
 
-        $s00 = '/(?J)^category\/(?P<cate>([^\.\/_]*|[^\.\/_]*\/[^\.\/_]*|[^\.\/_]*\/[^\.\/_]*\/[^\.\/_]*|[^\.\/_]*\/[^\.\/_]*\/[^\.\/_]*\/[^\.\/_]*)+?)(?:_page_)(?P<page>[0-9]*)\.html$/';
+        $s00 = '/(?J)^category\/(?P<alias>([^\.\/_]*|[^\.\/_]*\/[^\.\/_]*|[^\.\/_]*\/[^\.\/_]*\/[^\.\/_]*|[^\.\/_]*\/[^\.\/_]*\/[^\.\/_]*\/[^\.\/_]*)+?)(?:_page_)(?P<page>[0-9]*)\.html$/';
         $s2 = UrlRule::OutputUrlRegEx($s, 'cate', true);
         $this->assertEquals($s00, $s2);
 
@@ -71,7 +71,7 @@ class Class_UrlRuleTest extends PHPUnit\Framework\TestCase
         $s1 = UrlRule::OutputUrlRegEx_V2($s, 'tags', true, false);
         $this->assertEquals($s0, $s1);
 
-        $s00 = '/(?J)^tags\/(?P<tags>[^\.\/_]+)(?:\/)(?P<page>[0-9]*)\.html$/';
+        $s00 = '/(?J)^tags\/(?P<alias>[^\.\/_]+)(?:\/)(?P<page>[0-9]*)\.html$/';
         $s2 = UrlRule::OutputUrlRegEx($s, 'tags', true, false);
         $this->assertEquals($s00, $s2);
     }
@@ -84,12 +84,25 @@ class Class_UrlRuleTest extends PHPUnit\Framework\TestCase
         $s1 = UrlRule::OutputUrlRegEx_V2($s, 'tags', false, false);
         $this->assertEquals($s0, $s1);
 
-        $s00 = '/(?J)^tags\/(?P<tags>[^\.\/_]+)\.html$/';
+        $s00 = '/(?J)^tags\/(?P<alias>[^\.\/_]+)\.html$/';
         $s2 = UrlRule::OutputUrlRegEx($s, 'tags', false, false);
         $this->assertEquals($s00, $s2);
     }
 
     public function testRewrite5()
+    {
+        UrlRule::$categoryLayer = 4;
+        $s = '{%host%}author/{%alias%}/{%page%}.html';
+        $s0 = '/(?J)^author\/(?P<auth>[^\.\/_]+)\.html$/';
+        $s1 = UrlRule::OutputUrlRegEx_V2($s, 'auth', false, false);
+        $this->assertEquals($s0, $s1);
+
+        $s00 = '/(?J)^author\/(?P<alias>[^\.\/_]+)\.html$/';
+        $s2 = UrlRule::OutputUrlRegEx($s, 'auth', false, false);
+        $this->assertEquals($s00, $s2);
+    }
+
+    public function testRewrite6()
     {
         UrlRule::$categoryLayer = 4;
         $route = array('type' => 'rewrite', 'name' => 'ddd', 'urlrule'=>'{%host%}tags/{%alias%}/{%page%}.html', 'args' => array('tags@id', 'tags@alias'=>'.+', 'page'));
