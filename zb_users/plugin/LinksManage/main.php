@@ -187,7 +187,7 @@ require $blogpath . 'zb_system/admin/admin_top.php';
         </tbody>
         <tfoot>
           <tr id="LinksManageAdd">
-            <td colspan="6" class="tdCenter"><input type="button" class="button js-add" value="添加项目">已有项目可拖动排序或删除</td>
+            <td colspan="6" class="tdCenter"><input type="button" class="button js-add" value="添加项目"> <input type="button" class="js-search" value="搜索分类/页面"> 已有项目可拖动排序或删除</td>
           </tr>
           <tr id="LinksManageDel">
             <td colspan="6" class="tdCenter">拖入这里删除</td>
@@ -234,31 +234,7 @@ require $blogpath . 'zb_system/admin/admin_top.php';
   </div>
 </div>
 
-<script>
-  function checkInfo() {
-    if (!$("#edtName").val()) {
-      alert("<?php echo $lang['error']['72'] ?>");
-      return false;
-    }
-    if (!$("#edtFileName").val()) {
-      alert("<?php echo $lang['error']['75'] ?>");
-      return false;
-    }
-    if (!$("#edtHtmlID").val()) {
-      $("#edtHtmlID").val($("#edtFileName").val());
-      return false;
-    }
-  }
-
-  // fnReplaceHost("旧内容","新内容");
-  function fnReplaceHost(o, n) {
-    $("input[name='href[]']").each(function() {
-      let curVal = $(this).val();
-      let newVal = curVal.replace(o, n);
-      $(this).val(newVal);
-    });
-  }
-</script>
+<?php echo file_get_contents(LinksManage_Path("tpl-search"));?>
 <?php
 require $blogpath . 'zb_system/admin/admin_footer.php';
 RunTime();

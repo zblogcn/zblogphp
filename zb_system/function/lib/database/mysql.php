@@ -101,7 +101,7 @@ class Database__MySQL implements Database__Interface
         $this->version = SplitAndGet($myver, '-', 0);
         if (version_compare($this->version, '5.5.3') >= 0) {
             $u = 'utf8mb4';
-            $c = 'utf8mb4_general_ci';
+            $c = 'utf8mb4_unicode_ci';
         } else {
             $u = 'utf8';
             $c = 'utf8_general_ci';

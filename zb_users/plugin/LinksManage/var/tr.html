@@ -6,13 +6,13 @@ if (!isset($item->text)){
 $item->text = FormatString($item->text, '[html-format]');
 {/php}
 <tr class="{if $item->issub}LinksManageSub{/if}">
-  <td class="fisrt"><input style="width:95%" name="href[]" value="{$item.href}" size="30"></td>
-  <td><input name="title[]" value="{$item.title}" size="20"></td>
-  <td><input name="text[]" value="{$item.text}" size="20"></td>
+  <td class="fisrt"><input class="fill-Url" name="href[]" value="{$item.href}" size="30"></td>
+  <td><input class="fill-Title" name="title[]" value="{$item.title}" size="20"></td>
+  <td><input class="fill-Title" name="text[]" value="{$item.text}" size="20"></td>
   <td><input name="target[]" value="{if $item->target == '_blank'}1{/if}" class="checkbox" /></td>
   <td><input name="sub[]" value="{if $item->issub}1{/if}" class="checkbox" /></td>
   <td><input name="ico[]" value="{if isset($item.ico)}{$item.ico}{/if}" size="15"></td>
 <tr>
 {if count($item.subs)}
-{foreach $item.subs as $item}{template:lm-module-admin}{/foreach}
+  {foreach $item.subs as $item}{template:lm-module-admin}{/foreach}
 {/if}

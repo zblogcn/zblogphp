@@ -708,8 +708,9 @@ function Setup3()
               </script>
               <script>
                 $("#dbcharset").val("<?php echo $option['ZC_MYSQL_CHARSET']; ?>");
-              </script>-->
+              </script>
               <?php echo '<input type="hidden" name="dbcollate" id="dbcollate" value="' . $option['ZC_MYSQL_COLLATE'] . '" />'; ?>
+              -->
               <script>
                 $("#dbengine").val("<?php echo $option['ZC_MYSQL_ENGINE']; ?>");
               </script>
@@ -1207,20 +1208,6 @@ function CreateTable($sql)
     if (stripos($zbp->option['ZC_DATABASE_TYPE'], 'mysql') !== false) {
         $zbp->option['ZC_MYSQL_CHARSET'] = $zbp->db->charset;
         $zbp->option['ZC_MYSQL_COLLATE'] = $zbp->db->collate;
-        if ($zbp->option['ZC_MYSQL_CHARSET'] == 'utf8mb4') {
-            $zbp->option['ZC_MYSQL_COLLATE'] = 'utf8mb4_unicode_ci';
-        }
-        if (trim(GetVars('dbcollate', 'POST')) != null) {
-            $zbp->option['ZC_MYSQL_COLLATE'] = trim(GetVars('dbcollate', 'POST'));
-            $b = @$zbp->db->Query("SET NAMES {$zbp->option['ZC_MYSQL_CHARSET']} COLLATE {$zbp->option['ZC_MYSQL_COLLATE']}");
-            if (is_array($b) && count($b) == 1 && $b[0] === false) {
-                if ($zbp->option['ZC_MYSQL_CHARSET'] == 'utf8mb4') {
-                    $zbp->option['ZC_MYSQL_COLLATE'] = 'utf8mb4_unicode_ci';
-                } elseif ($zbp->option['ZC_MYSQL_CHARSET'] == 'utf8') {
-                    $zbp->option['ZC_MYSQL_COLLATE'] = 'utf8_general_ci';
-                }
-            }
-        }
         $sql = str_ireplace('CHARSET=utf8', 'CHARSET=' . $zbp->option['ZC_MYSQL_CHARSET'], $sql);
         $sql = str_ireplace('COLLATE=utf8_general_ci', 'COLLATE=' . $zbp->option['ZC_MYSQL_COLLATE'], $sql);
     }

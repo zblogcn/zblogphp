@@ -1,6 +1,18 @@
 .hidden {
   display: none;
 }
+.fade {
+  opacity: 0;
+}
+.fade.in {
+  opacity: 1 !important;
+}
+.text-center {
+  text-align: center;
+}
+.fisrt input {
+  width: 90%;
+}
 .LinksManage {
   border-left: 2px solid #f93;
   border-radius: 3px 0 0 3px;
@@ -14,6 +26,9 @@
 }
 #LinksManageList td {
   padding: 7px;
+}
+#LinksManageList tr.new {
+  background-color: #c3dea8;
 }
 #LinksManageAdd td {
   padding: 5px;
@@ -40,4 +55,32 @@
 }
 .LinksManageAdd {
   display: none;
+}
+
+/* 搜索 */
+
+#search-box {
+  position: absolute;
+  background-color: rgb(253, 253, 253);
+  border: 1px solid rgb(204, 204, 204);
+  display: none;
+  z-index: 2000;
+  margin: 5px 0px 10px;
+  border-radius: 5px;
+  opacity: 0;
+  padding: 11px;
+  display: none;
+}
+
+#search-top {
+  cursor: move;
+  border: 1px solid #ccc;
+  font-size: 12px;
+  padding: 3px 0;
+  text-align: center;
+  margin-bottom: 3px;
+}
+
+#search-con *:not(:last-child) {
+  margin-bottom: 3px;
 }
