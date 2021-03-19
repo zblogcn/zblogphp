@@ -239,11 +239,11 @@ function PostPost()
 
     $zbp->AddBuildModule('comments');
 
-    if (GetVars('AddNavbar', 'POST') == 0) {
+    if (GetVars('AddNavbar', 'POST') === '0') {
         $zbp->DelItemToNavbar('page', $post->ID);
     }
 
-    if (GetVars('AddNavbar', 'POST') == 1) {
+    if (GetVars('AddNavbar', 'POST') === '1') {
         $zbp->AddItemToNavbar('page', $post->ID, $post->Title, $post->Url);
     }
 
@@ -758,11 +758,11 @@ function PostPage()
 
     $zbp->AddBuildModule('comments');
 
-    if (GetVars('AddNavbar', 'POST') == 0) {
+    if (GetVars('AddNavbar', 'POST') === '0') {
         $zbp->DelItemToNavbar('page', $article->ID);
     }
 
-    if (GetVars('AddNavbar', 'POST') == 1) {
+    if (GetVars('AddNavbar', 'POST') === '1') {
         $zbp->AddItemToNavbar('page', $article->ID, $article->Title, $article->Url);
     }
 
@@ -1292,11 +1292,11 @@ function PostCategory()
 
     $zbp->AddBuildModule('catalog');
 
-    if (GetVars('AddNavbar', 'POST') == 0) {
+    if (GetVars('AddNavbar', 'POST') === '0') {
         $zbp->DelItemToNavbar('category', $cate->ID);
     }
 
-    if (GetVars('AddNavbar', 'POST') == 1) {
+    if (GetVars('AddNavbar', 'POST') === '1') {
         $zbp->AddItemToNavbar('category', $cate->ID, $cate->Name, $cate->Url);
     }
 
@@ -1429,11 +1429,11 @@ function PostTag()
     $tag->Save();
     $zbp->AddCache($tag);
 
-    if (GetVars('AddNavbar', 'POST') == 0) {
+    if (GetVars('AddNavbar', 'POST') === '0') {
         $zbp->DelItemToNavbar('tag', $tag->ID);
     }
 
-    if (GetVars('AddNavbar', 'POST') == 1) {
+    if (GetVars('AddNavbar', 'POST') === '1') {
         $zbp->AddItemToNavbar('tag', $tag->ID, $tag->Name, $tag->Url);
     }
 

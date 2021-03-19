@@ -103,6 +103,13 @@ function api_post_post()
         $zbp->BuildModule();
         $zbp->SaveCache();
 
+        if ($post === false) {
+            return array(
+                'code' => 500,
+                'message' => $GLOBALS['lang']['error']['11'],
+            );
+        }
+
         $array = ApiGetObjectArray(
             $post,
             array('Url','TagsCount','TagsName','CommentPostKey','ValidCodeUrl'),
