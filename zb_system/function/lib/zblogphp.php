@@ -842,6 +842,9 @@ class ZBlogPHP
                     if ($value2['name'] == 'post_' . $postname . '_list') {
                         $value2['urlrule'] = $this->GetPostType($postid, 'list_urlrule');
                     }
+                    if ($value2['name'] == 'post_' . $postname . '_list_only_active') {
+                        $value2['urlrule'] = $this->GetPostType($postid, 'list_urlrule');
+                    }                    
                     if ($value2['name'] == 'post_' . $postname . '_list_category') {
                         $value2['urlrule'] = $this->GetPostType($postid, 'list_category_urlrule');
                     }
