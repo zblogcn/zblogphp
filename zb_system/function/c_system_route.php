@@ -503,7 +503,8 @@ function ViewFeed()
     $w = array(array('=', 'log_Status', 0));
 
     $postype = (int) GetVars('posttype', 'GET', 0);
-    $w = array(array('=', 'log_Type', $postype));
+    $w[] = array('=', 'log_Type', $postype);
+
     $actions = $zbp->GetPostType($postype, 'actions');
 
     if (!$zbp->CheckRights($actions['view'])) {
