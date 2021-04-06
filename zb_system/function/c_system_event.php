@@ -2026,11 +2026,12 @@ function SetTheme($theme, $style)
     }
 
     $zbp->SaveOption();
+
     //del oldtheme SideBars cache
     $aa = array();
     foreach ($zbp->cache as $key => $value) {
-        if (stripos($value, 'sidebars_') !== false) {
-            $aa[] = substr($value, 9);
+        if (stripos($key, 'sidebars_') !== false) {
+            $aa[] = substr($key, 9);
         }
     }
     foreach ($aa as $key => $value) {

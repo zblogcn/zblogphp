@@ -253,6 +253,7 @@ function api_post_list()
         // 默认非管理模式
         ApiCheckAuth(false, $actions['view']);
         $limitCount = $zbp->option['ZC_DISPLAY_COUNT'];
+        $where[] = array('=', 'log_Status', 0);
     }
 
     $filter = ApiGetRequestFilter(
