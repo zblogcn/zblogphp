@@ -89,6 +89,7 @@ function ViewAuto()
                 $array = array();
                 ViewAuto_Process_Args_get($array, GetValueInArray($route, 'args_get', array()), $route);
                 ViewAuto_Process_Args_with($array, GetValueInArray($route, 'args_with', array()), $route);
+                ViewAuto_Process_Args_Merge($route);
                 $b_redirect = ViewAuto_Check_To_Permalink($route);
                 if ($b_redirect) {
                     $array['canceldisplay'] = true;
@@ -132,6 +133,7 @@ function ViewAuto()
                 $array = $m;
                 ViewAuto_Process_Args($array, $parameters, $m);
                 ViewAuto_Process_Args_with($array, GetValueInArray($route, 'args_with', array()), $route);
+                ViewAuto_Process_Args_Merge($route);
                 //var_dump($match_with_page_value, $route['urlrule'], $r, $url, $m, $array);//die;
                 $result = ViewAuto_Call_Auto($route, $array);
                 if ($result == true) {
@@ -149,6 +151,7 @@ function ViewAuto()
             $array = array();
             ViewAuto_Process_Args_get($array, GetValueInArray($route, 'args_get', array()), $route);
             ViewAuto_Process_Args_with($array, GetValueInArray($route, 'args_with', array()), $route);
+            ViewAuto_Process_Args_Merge($route);
             $result = ViewAuto_Call_Auto($route, $array);
             if ($result == true) {
                 return;
@@ -191,7 +194,7 @@ function ViewAuto_Process_Args(&$array, $parameters, $m)
  */
 function ViewAuto_Process_Args_get(&$array, $args_get, $route)
 {
-    $get = GetValueInArray($route, 'get', array()) + GetValueInArray($route, 'must_get', array());
+    $get = array_merge(GetValueInArray($route, 'get', array()), GetValueInArray($route, 'must_get', array()));
 
     if (isset($args_get) && is_array($args_get)) {
         foreach ($get as $key => $value) {
@@ -228,6 +231,44 @@ function ViewAuto_Process_Args_with(&$array, $args_with, $route)
         }
     }
     return $array;
+}
+
+/**
+ * ViewAuto的辅助函数
+ */
+function ViewAuto_Process_Args_Merge(&$route)
+{
+    $array = array();
+    $get = array_merge(GetValueInArray($route, 'get', array()), GetValueInArray($route, 'must_get', array()), GetValueInArray($route, 'args_get', array()));
+    foreach ($get as $key => $value) {
+        if (isset($_GET[$value])) {
+            $array[$value] = $_GET[$value];
+        } else {
+            $array[$value] = '';
+        }
+    }
+
+    $with = GetValueInArray($route, 'args_with', array());
+    foreach ($with as $key => $value) {
+        if (is_integer($key) && is_scalar($value)) {
+            if (isset($_GET[$value])) {
+                $array[$value] = $_GET[$value];
+            }
+            if (isset($route[$value])) {
+                $array[$value] = $route[$value];
+            }
+        } elseif (is_string($key)) {
+            $array[$key] = $value;
+        }
+    }
+
+    if (!(isset($route['args']) && is_array($route['args']))) {
+        $route['args'] = array();
+    }
+    foreach ($array as $key => $value) {
+        $value = trim($value);
+        $route['args'][] = array('name' => $key, 'value' => $value);
+    }
 }
 
 /**
