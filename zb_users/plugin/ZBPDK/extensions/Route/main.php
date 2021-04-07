@@ -55,7 +55,7 @@ $replace_array = array(
     '\'call\' =' => "//路由调用的函数(可以为'函数名'或是'变量名@方法名'或是'变量名::静态方法')\r\n" . '\'call\' =',
     '\'posttype\' =' => "//Post类型(文章为0，页面为1等，如果不是用于Post类型可以设为null或删除该项)\r\n" . '\'posttype\' =',
     '\'prefix\' =' => "//prefix如指定的话，可以让不同规则在不同的prefix前缀目录下被访问到\r\n" . '\'prefix\' =',
-    '\'get\' =' => "//只要有一个值匹配到本规则的\$_GET参数就通过(逻辑为指定array('page')那么必须有\$_GET['page']存在才行，指定array('id','alias')那么只要有id或alias存在就可以)\r\n" . '\'get\' =',
+    '\'get\' =' => "//指定2个或2个以上参数如array('id','alias')那么只要有id或alias存在就可以,指定1个参数如array('page')则page可存在可不存在\r\n" . '\'get\' =',
     '\'not_get\' =' => "//必须排除的\$_GET参数(可以为空数组),如果是array('/.+/')就会禁止任何参数传入\r\n" . '\'not_get\' =',
     '\'must_get\' =' => "//必须包含的\$_GET参数(可以为空数组)\r\n" . '\'get\' =',
     '\'args\' =' => "//从伪静规则匹配到的数组中取值传给call的参数(示例为array('id', 'page') or array('cate@alias', 'page') )\r\n" . '\'args\' =',
@@ -67,6 +67,8 @@ $replace_array = array(
     '\'request_method\' =' => "//Request Method为Http的请求访问，一般不设或是设为array('GET', 'POST')或是'GET'(只能GET不能POST)\r\n" . '\'request_method\' =',
     '\'to_permalink\' =' => "//如果是在动态路由下被访问到，允许跳转到Call里返回的固定链接url\r\n" . '\'to_permalink\' =',
     '\'suspended\' =' => "//为ture时将挂起这条路由使路由系统忽略它\r\n" . '\'suspended\' =',
+    '\'only_active\' =' => "//只在动态模式下生效\r\n" . '\'only_active\' =',
+    '\'only_rewrite\' =' => "//只在伪静模式下生效\r\n" . '\'only_rewrite\' =',
 );
 
 foreach ($defined_route as $route_type => $route_note) {

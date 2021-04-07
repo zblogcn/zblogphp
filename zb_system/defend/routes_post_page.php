@@ -20,11 +20,6 @@ return array (
       3 => 'date',
     ),
     'urlrule' => '',
-    'args_get' => 
-    array (
-      0 => 'id',
-      1 => 'alias',
-    ),
     'args_with' => 
     array (
       'posttype' => 1,
@@ -37,7 +32,7 @@ return array (
     'type' => 'rewrite',
     'name' => 'post_page_single',
     'call' => 'ViewPost',
-    'prefix' => '',
+    'prefix' => 'page',
     'urlrule' => '',
     'args' => 
     array (

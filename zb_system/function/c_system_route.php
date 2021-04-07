@@ -82,11 +82,12 @@ function ViewAuto()
         $prefix = empty($prefix) ? '' : ($prefix . '/');
         if (($url == $prefix . '') || ($url == $prefix . 'index.php') || (($zbp->option['ZC_STATIC_MODE'] == 'REWRITE') && GetValueInArray($_GET, 'rewrite', null) == true)) {
             $b = ViewAuto_Check_Get_And_Not_Get_And_Must_Get(GetValueInArray($route, 'get', array()), GetValueInArray($route, 'not_get', array()), GetValueInArray($route, 'must_get', array()));
+
             $b = $b && ViewAuto_Check_Request_Method(GetValueInArray($route, 'request_method', ''));
             //如果条件符合就组合参数数组并调用函数
             if ($b) {
                 $array = array();
-                ViewAuto_Process_Args_get($array, GetValueInArray($route, 'args_get', array()));
+                ViewAuto_Process_Args_get($array, GetValueInArray($route, 'args_get', array()), $route);
                 ViewAuto_Process_Args_with($array, GetValueInArray($route, 'args_with', array()), $route);
                 $b_redirect = ViewAuto_Check_To_Permalink($route);
                 if ($b_redirect) {
@@ -146,7 +147,7 @@ function ViewAuto()
         $b = $b && ViewAuto_Check_Request_Method(GetValueInArray($route, 'request_method', ''));
         if ($b) {
             $array = array();
-            ViewAuto_Process_Args_get($array, GetValueInArray($route, 'args_get', array()));
+            ViewAuto_Process_Args_get($array, GetValueInArray($route, 'args_get', array()), $route);
             ViewAuto_Process_Args_with($array, GetValueInArray($route, 'args_with', array()), $route);
             $result = ViewAuto_Call_Auto($route, $array);
             if ($result == true) {
@@ -188,9 +189,14 @@ function ViewAuto_Process_Args(&$array, $parameters, $m)
 /**
  * ViewAuto的辅助函数
  */
-function ViewAuto_Process_Args_get(&$array, $args_get)
+function ViewAuto_Process_Args_get(&$array, $args_get, $route)
 {
+    $get = GetValueInArray($route, 'get', array()) + GetValueInArray($route, 'must_get', array());
+
     if (isset($args_get) && is_array($args_get)) {
+        foreach ($get as $key => $value) {
+            $args_get[] = $value;
+        }
         foreach ($args_get as $key => $value) {
             if (isset($_GET[$value])) {
                 $array[$value] = $_GET[$value];
@@ -354,17 +360,22 @@ function ViewAuto_Check_Request_Method($request_method)
 function ViewAuto_Check_Get_And_Not_Get_And_Must_Get($get, $notget, $mustget)
 {
     $b = false;
-    //检查GET参数是否存在(最少一个或多个存在) OR
+    //检查GET参数是否存在(如果有2个或2个以上，必须存在1个) OR (如果只有1个，则可有可无)
     if (!empty($get)) {
-        foreach ($get as $key => $value) {
-            if (isset($_GET[$value])) {
-                $b = true;
-                break;
+        if (count($get) == 1) {
+            $b = true;
+        } else {
+            foreach ($get as $key => $value) {
+                if (isset($_GET[$value])) {
+                    $b = true;
+                    break;
+                }
             }
         }
     } else {
         $b = true;
     }
+
     //检查GET参数是否有不需要的存在(全部不能存在) NOT
     if (!empty($notget)) {
         foreach ($notget as $key => $value) {
