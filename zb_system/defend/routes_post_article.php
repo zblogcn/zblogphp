@@ -19,10 +19,6 @@ return array (
       2 => 'tags',
       3 => 'date',
     ),
-    'args_get' => 
-    array (
-      0 => 'id',
-    ),
     'urlrule' => '',
     'to_permalink' => true,
   ),
@@ -75,7 +71,7 @@ return array (
     'name' => 'post_article_list_date',
     'call' => 'ViewList',
     'urlrule' => '',
-    'args' => 
+    'get' => 
     array (
       0 => 'page',
     ),
@@ -96,7 +92,7 @@ return array (
     'name' => 'post_article_list_tag',
     'call' => 'ViewList',
     'urlrule' => '',
-    'args_get' => 
+    'get' => 
     array (
       0 => 'page',
     ),
