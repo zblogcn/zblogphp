@@ -32,7 +32,7 @@ return array (
     'type' => 'rewrite',
     'name' => 'post_page_single',
     'call' => 'ViewPost',
-    'prefix' => 'page',
+    'prefix' => '',
     'urlrule' => '',
     'args' => 
     array (

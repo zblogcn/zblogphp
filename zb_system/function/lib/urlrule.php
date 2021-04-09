@@ -142,6 +142,17 @@ class UrlRule
             $url = str_replace('{%host%}/', '{%host%}', $url);
         }
 
+        //从“Rules数组规则”替换一次
+        $prefix = GetValueInArray($this->GetRoute(), 'prefix', '');
+        $prefix = ($prefix != '') ? ($prefix . '/') : $prefix;
+        $this->Rules['{%host%}'] = $zbp->host . $prefix;
+
+        foreach ($this->Rules as $key => $value) {
+            if (!is_array($value)) {
+                $url = str_replace($key, $value, $url);
+            }
+        }
+
         //1.7的魔术戏法：处理路由规则里预先指定好的"关联数据来源"的参数并先替换一次
         $paras = self::ProcessParameters($this->GetRoute());
         foreach ($paras as $key => &$p) {
@@ -196,17 +207,6 @@ class UrlRule
             }
             if (isset($p['relate']) && $p['relate'] && array_key_exists('relate_value', $p)) {
                 $url = str_replace('{%' . $p['name'] . '%}', $p['relate_value'], $url);
-            }
-        }
-
-        //从“Rules数组规则”再替换一次
-        $prefix = GetValueInArray($this->GetRoute(), 'prefix', '');
-        $prefix = ($prefix != '') ? ($prefix . '/') : $prefix;
-        $this->Rules['{%host%}'] = $zbp->host . $prefix;
-
-        foreach ($this->Rules as $key => $value) {
-            if (!is_array($value)) {
-                $url = str_replace($key, $value, $url);
             }
         }
 
