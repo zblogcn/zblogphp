@@ -15,7 +15,7 @@ GitHub: https://github.com/zblogcn/zblogphp
 =============================
 - Web Server: IIS / Apache / nginx / Lighttpd / Kangle / Tengine / Caddy and so on...
 - PHP 5.2 - 8.0 / HHVM 3
-- MySQL 5+ / MariaDB 10+ / SQLite 3
+- MySQL 5+ / MariaDB 10+ / SQLite 3 / PostgreSQL
 
 =============================
           安装说明
@@ -26,5 +26,6 @@ GitHub: https://github.com/zblogcn/zblogphp
 3. 建立数据库
    - 选择 MySQL 数据库，请输入空间商为您提供的 MySQL 帐号密码等信息
    - 选择 SQLite，请确保服务器支持 SQLite，安装程序将在点击下一步后自动创建 SQLite 数据库文件
+   - 选择 PostgreSQL 数据库，请输入相关帐号密码数据库名等信息
 4. 填写你为站点设置的管理员账号密码，务必使用强口令账号
 5. 点击下一步，安装成功，进入网站
