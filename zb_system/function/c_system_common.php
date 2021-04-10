@@ -646,7 +646,7 @@ function GetDirsInDir_Recursive($dir)
 function GetFilesInDir_Recursive($dir, $type)
 {
     $dirs = GetDirsInDir_Recursive($dir);
-    $dirs[] = $dirs;
+    $dirs[] = $dir;
     $files = array();
     foreach ($dirs as $key => $d) {
         $f = GetFilesInDir($d, $type);
