@@ -934,7 +934,7 @@ function Setup4()
                 $zbp->option['ZC_MYSQL_NAME'] = trim(str_replace(array('\'', '"'), array('', ''), GetVars('dbmysql_name', 'POST')));
                 $zbp->option['ZC_MYSQL_PRE'] = trim(str_replace(array('\'', '"'), array('', ''), GetVars('dbmysql_pre', 'POST')));
                 if ($zbp->option['ZC_MYSQL_PRE'] == '') {
-                    $zbp->option['ZC_MYSQL_PRE'] == 'zbp_';
+                    $zbp->option['ZC_MYSQL_PRE'] = 'zbp_';
                 }
 
                 $zbp->option['ZC_MYSQL_ENGINE'] = GetVars('dbengine', 'POST');
