@@ -821,7 +821,7 @@ function CountTopPost($type = 0, $addplus = null, $delplus = null)
 {
     global $zbp;
     $varname = 'top_post_array_' . $type;
-    $array = unserialize($zbp->cache->$varname);
+    @$array = unserialize($zbp->cache->$varname);
     if (!is_array($array)) {
         $array = array();
     }

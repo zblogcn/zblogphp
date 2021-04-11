@@ -3535,12 +3535,16 @@ class ZBlogPHP
             return array();
         }
 
-        $articles_top_notorder_idarray = unserialize($this->cache->$varname);
+        @$articles_top_notorder_idarray = unserialize($this->cache->$varname);
         if (!is_array($articles_top_notorder_idarray)) {
             CountTopPost($type, null, null);
-            $articles_top_notorder_idarray = unserialize($this->cache->$varname);
+            @$articles_top_notorder_idarray = unserialize($this->cache->$varname);
         }
-        $articles_top_notorder = $this->GetPostByArray($articles_top_notorder_idarray);
+
+        $articles_top_notorder = array();
+        if (is_array($articles_top_notorder_idarray)) {
+            $articles_top_notorder = $this->GetPostByArray($articles_top_notorder_idarray);
+        }
 
         return $articles_top_notorder;
     }
