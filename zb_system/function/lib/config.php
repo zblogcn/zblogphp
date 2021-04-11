@@ -314,8 +314,7 @@ class Config implements Iterator
                 unset($this->data_pre_value[$key]);
                 continue;
             }
-            $this->kvdata[$this->data_pre_key[$key]] = unserialize($this->data_pre_value[$key]);
-
+            @$this->kvdata[$this->data_pre_key[$key]] = unserialize($this->data_pre_value[$key]);
         }
 
         foreach ($this->kvdata as $key => &$value) {
