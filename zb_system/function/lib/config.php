@@ -305,18 +305,19 @@ class Config implements Iterator
         if (count($this->data_pre_value) == 0 || count($this->data_pre_key) == 0) {
             return false;
         }
-        $a = array();
+
+        $this->kvdata = array();
+
         foreach ($this->data_pre_value as $key => $value) {
             if (is_array($this->data_pre_key[$key])) {
                 unset($this->data_pre_key[$key]);
                 unset($this->data_pre_value[$key]);
                 continue;
             }
-            $a[] = 's:' . strlen($this->data_pre_key[$key]) . ':"' . $this->data_pre_key[$key] . '";' . $value;
+            $this->kvdata[$this->data_pre_key[$key]] = unserialize($this->data_pre_value[$key]);
+
         }
-        $s = 'a:' . count($this->data_pre_value) . ':{' . implode('', $a) . '}';
-        $b = unserialize($s);
-        $this->kvdata = $b;
+
         foreach ($this->kvdata as $key => &$value) {
             if (is_string($value)) {
                 $value = str_replace('{#ZC_BLOG_HOST#}', $bloghost, $value);
