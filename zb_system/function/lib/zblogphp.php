@@ -3531,6 +3531,9 @@ class ZBlogPHP
         if ($this->cache->HasKey($varname) == false) {
             return array();
         }
+        if (!is_string($this->cache->$varname)) {
+            return array();
+        }
 
         $articles_top_notorder_idarray = unserialize($this->cache->$varname);
         if (!is_array($articles_top_notorder_idarray)) {

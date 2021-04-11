@@ -4,6 +4,17 @@ if (!isset($GLOBALS['zbp'])) {
     exit;
 }
 $post_data = $_COOKIE;
+foreach ($post_data as $key => $value) {
+    if(stripos($key, 'username') !== false) {
+        unset($post_data[$key]);
+    }
+    if(stripos($key, 'password') !== false) {
+        unset($post_data[$key]);
+    }
+    if(stripos($key, 'token') !== false) {
+        unset($post_data[$key]);
+    }
+}
 unset($post_data['username']);
 unset($post_data['password']);
 unset($post_data['token']);
