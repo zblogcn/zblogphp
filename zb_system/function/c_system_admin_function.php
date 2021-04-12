@@ -260,7 +260,7 @@ function MakeTopMenu($requireAction, $strName, $strUrl, $strTarget, $strLiId, $s
     if ($strLiId == "") {
         $strLiId = "topmenu" . $AdminTopMenuCount;
     }
-    $strIconElem = $strIconClass !== "" ? "<i class=\"" . $strIconClass . "\"></i><span>" : "";
+    $strIconElem = $strIconClass !== "" ? "<i class=\"" . $strIconClass . "\"></i><span>" : "<span>";
     $tmp = "<li id=\"" . $strLiId . "\"><a href=\"" . $strUrl . "\" target=\"" . $strTarget . "\" title=\"" . htmlspecialchars($strName) . "\">" . $strIconElem . $strName . "</span></a></li>";
 
     return $tmp;

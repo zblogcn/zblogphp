@@ -95,6 +95,9 @@ function ViewAuto()
                     $array['canceldisplay'] = true;
                 }
                 $result = ViewAuto_Call_Auto($route, $array);
+                if ($result === false) {
+                    continue;
+                }
                 if ($result == true) {
                     //如果开启伪静且$b_redirect，那么通过原动态访问的会跳转至$result
                     if ($b_redirect && is_string($result)) {
@@ -136,6 +139,9 @@ function ViewAuto()
                 ViewAuto_Process_Args_Merge($route);
                 //var_dump($match_with_page_value, $route['urlrule'], $r, $url, $m, $array);//die;
                 $result = ViewAuto_Call_Auto($route, $array);
+                if ($result === false) {
+                    continue;
+                }
                 if ($result == true) {
                     return;
                 }
@@ -153,6 +159,9 @@ function ViewAuto()
             ViewAuto_Process_Args_with($array, GetValueInArray($route, 'args_with', array()), $route);
             ViewAuto_Process_Args_Merge($route);
             $result = ViewAuto_Call_Auto($route, $array);
+            if ($result === false) {
+                continue;
+            }
             if ($result == true) {
                 return;
             }
@@ -288,14 +297,14 @@ function ViewAuto_Call_Auto($route, $array)
     $array['route'] = $route;
     if (strpos($function, '::') !== false) {
         $func = explode('::', $function);
-        call_user_func(array($func[0], $func[1]), $array);
+        return call_user_func(array($func[0], $func[1]), $array);
     } elseif (strpos($function, '@') !== false) {
         $func = explode('@', $function);
         if (version_compare(PHP_VERSION, '7.0.0') >= 0) {
-            call_user_func(array($func[0], $func[1]), $array);
+            return call_user_func(array($func[0], $func[1]), $array);
         } else {
             $o = new $func[0];
-            call_user_func(array($o, $func[1]), $array);
+            return call_user_func(array($o, $func[1]), $array);
         }
     } else {
         return call_user_func($function, $array);

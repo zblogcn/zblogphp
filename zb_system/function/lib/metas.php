@@ -185,7 +185,7 @@ class Metas
         //if(strpos($s,'{')===0){
         //$this->p_data=json_decode($s,true);
         //}else{
-        $this->p_data = @unserialize($s);
+        @$this->p_data = unserialize($s);
         //}
         if (is_array($this->p_data)) {
             if (count($this->p_data) == 0) {
