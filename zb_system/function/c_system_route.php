@@ -103,8 +103,8 @@ function ViewAuto()
                     if ($b_redirect && is_string($result)) {
                         Redirect($result);
                     }
-                    return;
                 }
+                return $result;
             }
         }
     }
@@ -142,9 +142,7 @@ function ViewAuto()
                 if ($result === false) {
                     continue;
                 }
-                if ($result == true) {
-                    return;
-                }
+                return $result;
             }
         }
     }
@@ -162,9 +160,7 @@ function ViewAuto()
             if ($result === false) {
                 continue;
             }
-            if ($result == true) {
-                return;
-            }
+            return $result;
         }
     }
 

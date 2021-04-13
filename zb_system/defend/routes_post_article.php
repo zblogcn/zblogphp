@@ -237,6 +237,5 @@ return array (
       5 => 'alias',
     ),
     'abbr_url' => true,
-    'only_active' => true,
   ),
 );
