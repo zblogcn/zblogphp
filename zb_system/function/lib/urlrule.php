@@ -85,13 +85,18 @@ class UrlRule
     {
         global $zbp;
         $url = $this->GetPreUrl();
+        $route = $this->GetRoute();
 
-        $only_match_page = GetValueInArray($this->GetRoute(), 'only_match_page', false);
+        $only_match_page = GetValueInArray($route, 'only_match_page', false);
         $forceDisplayFirstPage = $this->forceDisplayFirstPage;
         $useAbbr = $this->useAbbr;
-        if ($this->GetRoute() != array()) {
-            $useAbbr = (bool) GetValueInArray($this->GetRoute(), 'abbr_url', false);
-            $forceDisplayFirstPage = (bool) GetValueInArray($this->GetRoute(), 'force_display_firstpage', false);
+        if (!empty($route)) {
+            if (isset($route['abbr_url'])) {
+                $useAbbr = (bool) $route['abbr_url'];
+            }
+            if (isset($route['force_display_firstpage'])) {
+                $forceDisplayFirstPage = (bool) $route['force_display_firstpage'];
+            }
         }
 
         if (isset($this->Rules['{%page%}'])) {
@@ -143,7 +148,7 @@ class UrlRule
         }
 
         //从“Rules数组规则”替换一次
-        $prefix = GetValueInArray($this->GetRoute(), 'prefix', '');
+        $prefix = GetValueInArray($route, 'prefix', '');
         $prefix = ($prefix != '') ? ($prefix . '/') : $prefix;
         $this->Rules['{%host%}'] = $zbp->host . $prefix;
 
@@ -154,7 +159,7 @@ class UrlRule
         }
 
         //1.7的魔术戏法：处理路由规则里预先指定好的"关联数据来源"的参数并先替换一次
-        $paras = self::ProcessParameters($this->GetRoute());
+        $paras = self::ProcessParameters($route);
         foreach ($paras as $key => &$p) {
             if ($p['relate'] && is_object($this->RulesObject)) {
                 $object = clone $this->RulesObject;

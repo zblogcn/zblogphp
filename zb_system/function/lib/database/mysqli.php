@@ -147,7 +147,7 @@ class Database__MySQLi implements Database__Interface
         }
         if (mysqli_set_charset($db, $u) == false) {
             $u = "utf8";
-            mysql_set_charset($u, $db);
+            mysqli_set_charset($u, $db);
         }
         $this->charset = $u;
         $this->collate = $c;
