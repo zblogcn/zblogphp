@@ -2079,11 +2079,6 @@ class ZBlogPHP
                 $defend_en = include $this->systemdir . 'defend/en.php';
                 $nowlang = $languagePtr;
                 $this->lang = array_merge($defend_en, $nowlang);
-                foreach ($this->lang as $key => $value) {
-                    if (isset($defend_en[$key]) && isset($nowlang[$key]) && is_array($defend_en[$key]) && is_array($nowlang[$key])) {
-                        $this->lang[$key] = array_merge($defend_en[$key], $nowlang[$key]);
-                    }
-                }
             }
             $this->langs = json_decode(json_encode($this->lang));
         } else {
