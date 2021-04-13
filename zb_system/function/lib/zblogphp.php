@@ -2078,10 +2078,10 @@ class ZBlogPHP
             if (is_readable($this->systemdir . 'defend/en.php')) {
                 $defend_en = include $this->systemdir . 'defend/en.php';
                 $nowlang = $languagePtr;
-                $this->lang = ($nowlang + $defend_en);
+                $this->lang = array_merge($defend_en, $nowlang);
                 foreach ($this->lang as $key => $value) {
-                    if (is_array($value)) {
-                        $this->lang[$key] = ($nowlang[$key] + $defend_en[$key]);
+                    if (isset($defend_en[$key]) && isset($nowlang[$key]) && is_array($defend_en[$key]) && is_array($nowlang[$key])) {
+                        $this->lang[$key] = array_merge($defend_en[$key], $nowlang[$key]);
                     }
                 }
             }
