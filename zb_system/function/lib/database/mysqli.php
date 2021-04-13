@@ -103,7 +103,9 @@ class Database__MySQLi implements Database__Interface
                 $c = 'utf8_general_ci';
             }
             if (mysqli_set_charset($db, $u) == false) {
-                mysqli_set_charset($db, "utf8");
+                $u = "utf8";
+                $c = 'utf8_general_ci';
+                mysqli_set_charset($db, $u);
             } else {
                 mysqli_query($db, "SET NAMES {$u} COLLATE {$c}");
             }
@@ -147,7 +149,8 @@ class Database__MySQLi implements Database__Interface
         }
         if (mysqli_set_charset($db, $u) == false) {
             $u = "utf8";
-            mysqli_set_charset($u, $db);
+            $c = 'utf8_general_ci';
+            mysqli_set_charset($db, $u);
         }
         $this->charset = $u;
         $this->collate = $c;
