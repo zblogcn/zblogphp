@@ -3772,10 +3772,8 @@ class ZBlogPHP
         for ($i = 1; $i <= 10; $i++) {
             if (isset($this->hints[$i]) && is_object($this->hints[$i])) {
                 $this->ShowHint($this->hints[$i]);
-                if (GetVars("hint_signal" . $i, 'COOKIE') === json_encode($this->hints[$i])) {
-                    setcookie("hint_signal" . $i, '', (time() - 3600), $this->cookiespath);
-                    unset($_COOKIE["hint_signal" . $i]);
-                }
+                setcookie("hint_signal" . $i, '', (time() - 3600), $this->cookiespath);
+                unset($_COOKIE["hint_signal" . $i]);
             }
         }
         for ($i = 1; $i <= 10; $i++) {
@@ -3784,6 +3782,7 @@ class ZBlogPHP
             if ($hint !== null) {
                 $this->ShowHint($hint);
                 setcookie("hint_signal" . $i, '', (time() - 3600), $this->cookiespath);
+                unset($_COOKIE["hint_signal" . $i]);
             }
         }
     }
