@@ -84,6 +84,10 @@ function updatedb()
 
 if ($zbp->version >= ZC_LAST_VERSION && (int) $zbp->option['ZC_LAST_VERSION'] < ZC_LAST_VERSION) {
     updatedb();
-    JsonReturn($zbp->langs->msg->operation_succeed);
+    if (isset($_GET['updatedb'])) {
+        echo $zbp->langs->msg->operation_succeed;
+    } else {
+        JsonReturn($zbp->langs->msg->operation_succeed);
+    }
 }
 die;

@@ -213,7 +213,7 @@ if (strpos($default_tab, 'apache') !== false) {
               </span>
             </p>
           </div>
-
+<?php if($zbp->version < 170000){ ?>
           <div class="tab-content <?php echo $default_tab == 3 ? 'default-tab' : ''; ?>" style='border:none;padding:0px;margin:0;' id="tab3">
             <textarea id="ta_httpini" style="width:99%;height:200px" readonly><?php echo htmlentities(show_httpini())?></textarea>
             <hr/>
@@ -231,7 +231,7 @@ if (strpos($default_tab, 'apache') !== false) {
               提示:ISAPI Rewrite 3请按Apache规则生成.
             </p>
           </div>
-
+<?php }?>
           <div class="tab-content <?php echo $default_tab == 4 ? 'default-tab' : ''; ?>" style='border:none;padding:0px;margin:0;' id="tab4">
             <textarea style="width:99%;height:200px" readonly><?php echo htmlentities(show_nginx())?></textarea>
             <hr/>
