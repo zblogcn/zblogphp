@@ -131,7 +131,7 @@ function ViewAuto()
             //如果条件符合就组合参数数组并调用函数
             //var_dump($match_with_page_value, $route['urlrule'], $r, $url, $m);//die;
             //var_dump(preg_match($r, $url, $m));
-            $b = $b && (($r != '' && preg_match($r, $url, $m) == 1) || ($r == '' && $url == '') || ($r == '' && $url == 'index.php'));
+            $b = $b && (($r != '' && preg_match($r, $url, $m) == 1) || ($r == '' && $url == '') || ($r == '' && $url == 'index.php') || ($r == '/(?J)^index\.php\/$/' && $url == ''));
             if ($b) {
                 $array = $m;
                 ViewAuto_Process_Args($array, $parameters, $m);
