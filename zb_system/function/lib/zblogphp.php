@@ -379,6 +379,11 @@ class ZBlogPHP
     public $managecount = 50;
 
     /**
+     * @var null 管理页面排序依据
+     */
+    public $manageorder = null;
+
+    /**
      * @var int 页码显示条数
      */
     public $pagebarcount = 10;
@@ -392,6 +397,11 @@ class ZBlogPHP
      * @var int 文章列表显示条数
      */
     public $displaycount = 10;
+
+    /**
+     * @var null 文章列表排序依据
+     */
+    public $displayorder = null;
 
     /**
      * @var int 评论显示数量
@@ -544,9 +554,11 @@ class ZBlogPHP
         $this->style = &$blogstyle;
 
         $this->managecount = &$this->option['ZC_MANAGE_COUNT'];
+        $this->manageorder = &$this->option['ZC_MANAGE_ORDER'];
         $this->pagebarcount = &$this->option['ZC_PAGEBAR_COUNT'];
         $this->searchcount = &$this->option['ZC_SEARCH_COUNT'];
         $this->displaycount = &$this->option['ZC_DISPLAY_COUNT'];
+        $this->displayorder = &$this->option['ZC_DISPLAY_ORDER'];
         $this->commentdisplaycount = &$this->option['ZC_COMMENTS_DISPLAY_COUNT'];
 
         $this->categoriesbyorder_type[0] = array();
@@ -1699,7 +1711,7 @@ class ZBlogPHP
     public function LoadMembersInList($list, $mem_id_field = 'AuthorID')
     {
         $mem_ids_need_load = array();
-        
+
         foreach ($list as $obj) {
             if (!isset($obj->$mem_id_field) || ($obj->$mem_id_field == null)) {
                 continue;
@@ -2398,7 +2410,7 @@ class ZBlogPHP
             if ($this->CheckCache($type, $l->$id) == false) {
                 $this->AddCache($l);
             }
-            
+
             $list[] = $l;
         }
 
