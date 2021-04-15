@@ -393,7 +393,18 @@ class Config implements Iterator
             return true;
         }
 
-        $old = @$this->db->Query($this->db->sql->Select($this->table, $this->datainfo['Key'][0], null, null, 1));
+        if ($this->db->type == 'sqlite') {
+            $old = @$this->db->Query('PRAGMA table_info([zbp_config])');
+            $old = serialize($old);
+            if (stripos($old, '"' . $this->datainfo['Key'][0] . '"') !== false) {
+                $old = array();
+            } else {
+                $old = array(false);
+            }
+        } else {
+            $old = @$this->db->Query($this->db->sql->Select($this->table, $this->datainfo['Key'][0], null, null, 1));
+        }
+
         //没有这个字段：array(1) { [0]=> bool(false) }
         if (count($old) == 1 && $old[0] === false) { //如果还没有建conf_Key字段就不要原子化存储
             $value = $this->Serialize();

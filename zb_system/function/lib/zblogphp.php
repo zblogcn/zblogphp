@@ -2391,15 +2391,16 @@ class ZBlogPHP
         }
 
         foreach ($array as $a) {
-            /** @var Base $l */
-            $l = new $type();
-            $l->LoadInfoByAssoc($a);
-            $id = $l->GetIdName();
-            if ($this->CheckCache($type, $l->$id) == false) {
-                $this->AddCache($l);
+            if (is_array($a)) {
+                /** @var Base $l */
+                $l = new $type();
+                $l->LoadInfoByAssoc($a);
+                $id = $l->GetIdName();
+                if ($this->CheckCache($type, $l->$id) == false) {
+                    $this->AddCache($l);
+                }
+                $list[] = $l;
             }
-            
-            $list[] = $l;
         }
 
         return $list;
