@@ -129,8 +129,8 @@ function ViewAuto()
 
             $m = array();
             //如果条件符合就组合参数数组并调用函数
-            //var_dump($match_with_page_value, $route['urlrule'], $r, $url, $m);//die;
-            //var_dump(preg_match($r, $url, $m));
+            //var_dump($route['name'],$match_with_page_value, $route['urlrule'], $r, $url, $m);//die;
+            //if($r != '')var_dump(preg_match($r, $url, $m));
             $b = $b && (($r != '' && preg_match($r, $url, $m) == 1) || ($r == '' && $url == '') || ($r == '' && $url == 'index.php') || ($r == '/(?J)^index\.php\/$/' && $url == ''));
             if ($b) {
                 $array = $m;
@@ -146,7 +146,7 @@ function ViewAuto()
             }
         }
     }
-
+//die;
     //都不能匹配时，进入一次默认路由
     foreach ($default_routes as $key => $route) {
         $b = ViewAuto_Check_Get_And_Not_Get_And_Must_Get(GetValueInArray($route, 'get', array()), GetValueInArray($route, 'not_get', array()), GetValueInArray($route, 'must_get', array()));
@@ -932,12 +932,12 @@ function ViewList($page = null, $cate = null, $auth = null, $date = null, $tags 
                 $category = $zbp->GetCategoryByID($cate['id']);
             } else {
                 $category = $zbp->GetCategoryByAlias($cate['alias'], $posttype);
-                if ($category->ID == '') {
+                if (empty($category->ID)) {
                     $category = $zbp->GetCategoryByAliasOrName($cate['alias'], $posttype);
                 }
             }
 
-            if ($category->ID == '') {
+            if (empty($category->ID)) {
                 if (!empty($route) || $isrewrite == true) {
                     return false;
                 }
@@ -996,7 +996,7 @@ function ViewList($page = null, $cate = null, $auth = null, $date = null, $tags 
                 $author = $zbp->GetMemberByNameOrAlias($auth['alias']);
             }
 
-            if ($author->ID == '') {
+            if (empty($author->ID)) {
                 if (!empty($route) || $isrewrite == true) {
                     return false;
                 }
