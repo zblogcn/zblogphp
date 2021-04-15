@@ -180,8 +180,12 @@ function Admin_ArticleMng()
         $or = array('log_PostTime' => 'DESC');
     } elseif ($order_get == 'posttime_asc') {
         $or = array('log_PostTime' => 'ASC');
+    } elseif ($order_get == 'updatetime_desc') {
+        $or = array('log_UpdateTime' => 'DESC');
+    } elseif ($order_get == 'updatetime_asc') {
+        $or = array('log_UpdateTime' => 'ASC');
     } else {
-        $or = array('log_PostTime' => 'DESC');
+        $or = array($zbp->manageorder => 'DESC');
     }
     $l = array(($p->PageNow - 1) * $p->PageCount, $p->PageCount);
     $op = array('pagebar' => $p);

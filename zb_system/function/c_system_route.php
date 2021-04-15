@@ -687,7 +687,7 @@ function ViewSearch()
     if (!($zbp->CheckRights($article->TypeActions['all']))) {
         $w[] = array('=', 'log_Status', 0);
     }
-    $order = array('log_PostTime' => 'DESC');
+    $order = array($zbp->displayorder => 'DESC');
 
     $pagebar = new Pagebar($route);
     $pagebar->PageCount = $zbp->searchcount;
@@ -1170,7 +1170,7 @@ function ViewList($page = null, $cate = null, $auth = null, $date = null, $tags 
     }
 
     $select = '';
-    $order = array('log_PostTime' => 'DESC');
+    $order = array($zbp->displayorder => 'DESC');
     $limit = array(($pagebar->PageNow - 1) * $pagebar->PageCount, $pagebar->PageCount);
     $option = array('pagebar' => $pagebar);
     ViewAuto_Process_Pagebar_Replace_Array($pagebar, $route, $fpargs);
