@@ -591,7 +591,7 @@ function ViewFeed()
     $articles = $zbp->GetPostList(
         '*',
         $w,
-        array('log_PostTime' => 'DESC'),
+        array('log_UpdateTime' => 'DESC'),
         $zbp->option['ZC_RSS2_COUNT'],
         null
     );
