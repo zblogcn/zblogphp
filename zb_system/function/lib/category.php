@@ -138,7 +138,7 @@ class Category extends Base
         }
         if ($name == 'Symbol') {
             if ($this->ParentID == 0) {
-                return;
+                return '';
             } else {
                 $l = $this->Level;
 

@@ -249,7 +249,7 @@ function MakeTopMenu($requireAction, $strName, $strUrl, $strTarget, $strLiId, $s
 
     static $AdminTopMenuCount = 0;
     if ($zbp->CheckRights($requireAction) == false) {
-        return;
+        return '';
     }
 
     $tmp = null;
@@ -284,7 +284,7 @@ function MakeLeftMenu($requireAction, $strName, $strUrl, $strLiId, $strAId, $str
 
     static $AdminLeftMenuCount = 0;
     if ($zbp->CheckRights($requireAction) == false) {
-        return;
+        return '';
     }
 
     $AdminLeftMenuCount = ($AdminLeftMenuCount + 1);

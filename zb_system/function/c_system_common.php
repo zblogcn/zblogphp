@@ -565,7 +565,7 @@ function GetHttpContent($url)
 {
     $ajax = Network::Create();
     if (!$ajax) {
-        return;
+        return '';
     }
 
     $ajax->open('GET', $url);
@@ -1028,7 +1028,7 @@ function GetFileExt($f)
 function GetFilePermsOct($f)
 {
     if (!file_exists($f)) {
-        return;
+        return '';
     }
 
     return substr(sprintf('%o', fileperms($f)), -4);
@@ -1044,7 +1044,7 @@ function GetFilePermsOct($f)
 function GetFilePerms($f)
 {
     if (!file_exists($f)) {
-        return;
+        return '';
     }
 
     $perms = fileperms($f);

@@ -141,7 +141,7 @@ class PageBar
     {
         global $zbp;
         if ($this->PageCount == 0) {
-            return;
+            return '';
         }
 
         $this->PageAll = ceil($this->Count / $this->PageCount);
