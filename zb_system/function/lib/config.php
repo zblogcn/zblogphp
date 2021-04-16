@@ -394,7 +394,7 @@ class Config implements Iterator
         }
 
         if ($this->db->type == 'sqlite') {
-            $old = @$this->db->Query('PRAGMA table_info([zbp_config])');
+            $old = @$this->db->Query('PRAGMA table_info([' . $this->table . '])');
             $old = serialize($old);
             if (stripos($old, '"' . $this->datainfo['Key'][0] . '"') !== false) {
                 $old = array();
