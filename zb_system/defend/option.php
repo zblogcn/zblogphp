@@ -199,7 +199,7 @@ return array(
     // '源码编辑高亮
     'ZC_CODEMIRROR_ENABLE' => true,
     'ZC_ALLOW_AUDITTING_MEMBER_VISIT_MANAGE' => false,
-    'ZC_CATEGORY_MANAGE_LEGACY_DISPLAY' => false,
+    'ZC_CATEGORY_MANAGE_LEGACY_DISPLAY' => true,
     'ZC_GZIP_ENABLE'                 => false,
     'ZC_ADMIN_HTML5_ENABLE'          => true,
     'ZC_LOADMEMBERS_LEVEL'           => 1,

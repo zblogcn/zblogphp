@@ -146,7 +146,7 @@ function ViewAuto()
             }
         }
     }
-//die;
+
     //都不能匹配时，进入一次默认路由
     foreach ($default_routes as $key => $route) {
         $b = ViewAuto_Check_Get_And_Not_Get_And_Must_Get(GetValueInArray($route, 'get', array()), GetValueInArray($route, 'not_get', array()), GetValueInArray($route, 'must_get', array()));
