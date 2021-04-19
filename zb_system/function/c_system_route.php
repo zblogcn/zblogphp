@@ -629,8 +629,8 @@ function ViewFeed()
 function ViewSearch()
 {
     global $zbp;
+    $fpargs = func_get_args();
 
-    $fpargs = call_user_func('func_get_args');
     foreach ($GLOBALS['hooks']['Filter_Plugin_ViewSearch_Begin'] as $fpname => &$fpsignal) {
         $fpreturn = call_user_func_array($fpname, $fpargs);
         if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
@@ -815,8 +815,8 @@ function ViewSearch()
 function ViewList($page = null, $cate = null, $auth = null, $date = null, $tags = null, $isrewrite = false, $object = array())
 {
     global $zbp;
+    $fpargs = func_get_args();
 
-    $fpargs = call_user_func('func_get_args');
     $fpargs_count = count($fpargs);
 
     //新版本的函数V2 (v2版本传入的第一个参数是array且只传一个array)
@@ -1277,8 +1277,8 @@ function ViewList($page = null, $cate = null, $auth = null, $date = null, $tags 
 function ViewPost($id = null, $alias = null, $isrewrite = false, $object = array())
 {
     global $zbp;
+    $fpargs = func_get_args();
 
-    $fpargs = call_user_func('func_get_args');
     $fpargs_count = count($fpargs);
 
     //新版本的函数V2 (v2版本传入的第一个参数是array且只传一个array)
