@@ -434,8 +434,8 @@ class Config implements Iterator
             $mod = array();
             $add = $this->kvdata;
 
-            $sql = $this->db->sql->Delete($this->table, array(array('=', $this->datainfo['Name'][0], $name), array('=', $this->datainfo['Key'][0], '')));
-            $this->db->Delete($sql);
+            $sql1 = $this->db->sql->Delete($this->table, array(array('=', $this->datainfo['Name'][0], $name), array('=', $this->datainfo['Key'][0], '')));
+            $this->db->Delete($sql1);
         }
         if (($add + $del + $mod) == array()) {
             return true;
@@ -460,16 +460,16 @@ class Config implements Iterator
         }
         //mod
         foreach ($mod as $key4 => $value4) {
-            $kv3 = array($this->datainfo['Name'][0] => $name, $this->datainfo['Key'][0] => $key4, $this->datainfo['Value'][0] => $this->SerializeSingle($value4));
-            $sql4 = $this->db->sql->Insert($this->table, $kv3);
+            $kv4 = array($this->datainfo['Name'][0] => $name, $this->datainfo['Key'][0] => $key4, $this->datainfo['Value'][0] => $this->SerializeSingle($value4));
+            $sql4 = $this->db->sql->Insert($this->table, $kv4);
             $old5 = $this->db->Query($this->db->sql->Select($this->table, '*', array(array('=', $this->datainfo['Name'][0], $name), array('=', $this->datainfo['Key'][0], $key4))));
             if (count($old5) == 0) {
                 $this->db->Insert($sql4);
             } else {
                 $key5 = $key4;
                 $value5 = $value4;
-                $kv3 = array($this->datainfo['Value'][0] => $this->SerializeSingle($value5));
-                $sql5 = $this->db->sql->Update($this->table, $kv3, array(array('=', $this->datainfo['Name'][0], $name), array('=', $this->datainfo['Key'][0], $key5)));
+                $kv5 = array($this->datainfo['Value'][0] => $this->SerializeSingle($value5));
+                $sql5 = $this->db->sql->Update($this->table, $kv5, array(array('=', $this->datainfo['Name'][0], $name), array('=', $this->datainfo['Key'][0], $key5)));
                 $this->db->Update($sql5);
             }
         }
