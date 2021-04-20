@@ -22,6 +22,8 @@ For security vulnerabilities, please contact us via ``contact#rainbowsoft.org`` 
 1. 提交功能 BUG，请在论坛内，或直接在 GitHub Issue 内提交；
 1. 欢迎 Pull Request，如果你喜欢，请为我们点一个 Star :)
 
+## 免责申明
+[链接](https://www.zblogcn.com/disclaimer/)
 
 ## 运行环境
 - Windows / Linux / macOS and so on...

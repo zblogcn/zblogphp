@@ -3,6 +3,12 @@
 GitHub: https://github.com/zblogcn/zblogphp
 
 =============================
+          免责申明
+=============================
+https://www.zblogcn.com/disclaimer/
+
+
+=============================
           社区说明
 =============================
 1. 使用交流及开发建议，请转向：Z-Blog 论坛 https://bbs.zblogcn.com/；
