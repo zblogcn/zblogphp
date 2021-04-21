@@ -802,6 +802,7 @@ function ViewSearch()
  * @param mixed $date           日期
  * @param mixed $tags           tags id或alias
  * @param mixed $isrewrite      是否启用urlrewrite
+ * @param int   $posttype       Post的类型
  * @param array $object         把1.7里新增array型参数传给旧版本的接口
  *
  * @api Filter_Plugin_ViewList_Begin
@@ -812,7 +813,7 @@ function ViewSearch()
  *
  * @return string
  */
-function ViewList($page = null, $cate = null, $auth = null, $date = null, $tags = null, $isrewrite = false, $object = array())
+function ViewList($page = null, $cate = null, $auth = null, $date = null, $tags = null, $isrewrite = false, $posttype = 0, $object = array())
 {
     global $zbp;
     $fpargs = func_get_args();
@@ -843,14 +844,13 @@ function ViewList($page = null, $cate = null, $auth = null, $date = null, $tags 
         $page = GetValueInArray($page, 'page', null);
     } else {
         $object = array();
-        $posttype = 0;
         $canceldisplay = false;
         $route = array();
     }
 
     //老版本的兼容接口
     foreach ($GLOBALS['hooks']['Filter_Plugin_ViewList_Begin'] as $fpname => &$fpsignal) {
-        $fpargs_v1 = array($page, $cate, $auth, $date, $tags, $isrewrite, $object);
+        $fpargs_v1 = array($page, $cate, $auth, $date, $tags, $isrewrite, $posttype, $object);
         $fpreturn = call_user_func_array($fpname, $fpargs_v1);
         if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
             $fpsignal = PLUGIN_EXITSIGNAL_NONE;
@@ -1264,6 +1264,7 @@ function ViewList($page = null, $cate = null, $auth = null, $date = null, $tags 
  * @param array|int|string $id         文章ID/ ID/别名对象 (1.7起做为主要array型参数，后续的都作废了)
  * @param string           $alias     （如果有的话）文章别名
  * @param bool             $isrewrite  是否启用urlrewrite
+ * @param int              $posttype   Post的类型
  * @param array            $object     把1.7里新增array型参数传给旧版本的接口
  *
  * @api Filter_Plugin_ViewPost_Begin
@@ -1274,7 +1275,7 @@ function ViewList($page = null, $cate = null, $auth = null, $date = null, $tags 
  *
  * @return string
  */
-function ViewPost($id = null, $alias = null, $isrewrite = false, $object = array())
+function ViewPost($id = null, $alias = null, $isrewrite = false, $posttype = 0, $object = array())
 {
     global $zbp;
     $fpargs = func_get_args();
@@ -1313,8 +1314,8 @@ function ViewPost($id = null, $alias = null, $isrewrite = false, $object = array
             }
         }
     } else {
-        $object = array();
-        $posttype = 0;
+        //$object = array();
+        //$posttype = 0;
         $canceldisplay = false;
         $route = array();
         if (is_array($id)) {
@@ -1330,7 +1331,7 @@ function ViewPost($id = null, $alias = null, $isrewrite = false, $object = array
 
     //兼容老版本的接口
     foreach ($GLOBALS['hooks']['Filter_Plugin_ViewPost_Begin'] as $fpname => &$fpsignal) {
-        $fpargs_v1 = array($id, $alias, $isrewrite, $object);
+        $fpargs_v1 = array($id, $alias, $isrewrite, $posttype, $object);
         $fpreturn = call_user_func_array($fpname, $fpargs_v1);
         if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
             $fpsignal = PLUGIN_EXITSIGNAL_NONE;
