@@ -1385,7 +1385,7 @@ DefinePluginFilter('Filter_Plugin_ViewAuto_End');
 '**************************************************<
 '类型:Filter
 '名称:Filter_Plugin_ViewList_Begin
-'参数:&$page,&$cate,&$auth,&$date,&$tags,&$isrewrite,&$posttype,&$object
+'参数:&$page,&$cate,&$auth,&$date,&$tags,&$isrewrite,&$object
 '说明:定义列表输出接口
 '调用:
 '**************************************************>
@@ -1451,7 +1451,7 @@ DefinePluginFilter('Filter_Plugin_ViewFeed_End');
 '**************************************************<
 '类型:Filter
 '名称:Filter_Plugin_ViewPost_Begin
-'参数:&$id, $alias, $isrewrite, $posttype, $object
+'参数:&$id, $alias, $isrewrite, $object
 '说明:定义POST显示输出begin接口
 '调用:
 '**************************************************>

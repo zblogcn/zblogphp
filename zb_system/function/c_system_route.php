@@ -852,7 +852,7 @@ function ViewList($page = null, $cate = null, $auth = null, $date = null, $tags 
 
     //老版本的兼容接口
     foreach ($GLOBALS['hooks']['Filter_Plugin_ViewList_Begin'] as $fpname => &$fpsignal) {
-        $fpargs_v1 = array($page, $cate, $auth, $date, $tags, $isrewrite, $posttype, $object);
+        $fpargs_v1 = array($page, $cate, $auth, $date, $tags, $isrewrite, $object);
         $fpreturn = call_user_func_array($fpname, $fpargs_v1);
         if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
             $fpsignal = PLUGIN_EXITSIGNAL_NONE;
@@ -1334,7 +1334,7 @@ function ViewPost($id = null, $alias = null, $isrewrite = false, $object = array
 
     //兼容老版本的接口
     foreach ($GLOBALS['hooks']['Filter_Plugin_ViewPost_Begin'] as $fpname => &$fpsignal) {
-        $fpargs_v1 = array($id, $alias, $isrewrite, $posttype, $object);
+        $fpargs_v1 = array($id, $alias, $isrewrite, $object);
         $fpreturn = call_user_func_array($fpname, $fpargs_v1);
         if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
             $fpsignal = PLUGIN_EXITSIGNAL_NONE;
