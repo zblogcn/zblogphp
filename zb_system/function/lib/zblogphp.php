@@ -867,8 +867,6 @@ class ZBlogPHP
                 }
             }
         }
-        //var_export($this->posttype);
-        //var_export($this->routes);
     }
 
     /**
