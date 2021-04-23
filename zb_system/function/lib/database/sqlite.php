@@ -238,4 +238,26 @@ class Database__SQLite implements Database__Interface
         return $this->Query($this->sql->Transaction($query));
     }
 
+    /**
+     * 判断数据表的字段是否存在.
+     *
+     * @param string $table 表名
+     * @param string $field 字段名
+     *
+     * @return bool
+     */
+    public function ExistColumn($table, $field)
+    {
+        $r = null;
+        ZBlogException::SuspendErrorHook();
+        $r = @$this->Query("PRAGMA table_info([$table])");
+        ZBlogException::ResumeErrorHook();
+        $r = serialize($r);
+        if (stripos($r, '"' . $field . '"') !== false) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
 }

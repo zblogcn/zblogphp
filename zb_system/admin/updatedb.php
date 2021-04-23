@@ -22,19 +22,7 @@ function updatedb_checkexist($table, $field)
 {
     global $zbp;
 
-    if ($zbp->db->type == 'sqlite') {
-        $old = @$zbp->db->Query('PRAGMA table_info([' . $table . '])');
-        $old = serialize($old);
-        if (stripos($old, '"' . $field . '"') !== false) {
-            $old = array();
-        } else {
-            $old = array(false);
-        }
-    } else {
-        $old = @$zbp->db->Query($zbp->db->sql->Select($table, $field, null, null, 1));
-    }
-
-    return $old;
+    return $zbp->db->ExistColumn($table, $field);
 
 }
 
@@ -47,7 +35,7 @@ function updatedb()
 
     //162090
     $old = updatedb_checkexist($t['Tag'], $d['Tag']['Type'][0]);
-    if (count($old) == 1 && $old[0] === false) {
+    if ($old === false) {
         @$db->Query("ALTER TABLE {$table['Tag']} ADD  {$d['Tag']['Type'][0]} integer NOT NULL DEFAULT 0;");
     }
     $old = updatedb_checkexist($t['Category'], $d['Category']['Type'][0]);
@@ -57,15 +45,15 @@ function updatedb()
 
     //172300
     $old = updatedb_checkexist($t['Config'], $d['Config']['Key'][0]);
-    if (count($old) == 1 && $old[0] === false) {
+    if ($old === false) {
         @$db->Query("ALTER TABLE {$table['Config']} ADD {$d['Config']['Key'][0]} VARCHAR(250) NOT NULL DEFAULT '';");
     }
     $old = updatedb_checkexist($t['Post'], $d['Post']['CreateTime'][0]);
-    if (count($old) == 1 && $old[0] === false) {
+    if ($old === false) {
         @$db->Query("ALTER TABLE {$t['Post']} ADD {$d['Post']['CreateTime'][0]} integer NOT NULL DEFAULT 0;");
     }
     $old = updatedb_checkexist($t['Post'], $d['Post']['UpdateTime'][0]);
-    if (count($old) == 1 && $old[0] === false) {
+    if ($old === false) {
         @$db->Query("ALTER TABLE {$t['Post']} ADD {$d['Post']['UpdateTime'][0]} integer NOT NULL DEFAULT 0;");
     }
 
@@ -77,21 +65,21 @@ function updatedb()
 
     //172315
     $old = updatedb_checkexist($t['Tag'], $d['Tag']['Group'][0]);
-    if (count($old) == 1 && $old[0] === false) {
+    if ($old === false) {
         @$db->Query("ALTER TABLE {$table['Tag']} ADD  {$d['Tag']['Group'][0]} VARCHAR(250) NOT NULL DEFAULT '';");
     }
     $old = updatedb_checkexist($t['Category'], $d['Category']['Group'][0]);
-    if (count($old) == 1 && $old[0] === false) {
+    if ($old === false) {
         @$db->Query("ALTER TABLE {$table['Category']} ADD  {$d['Category']['Group'][0]} VARCHAR(250) NOT NULL DEFAULT '';");
     }
 
     //172330
     $old = updatedb_checkexist($t['Member'], $d['Member']['CreateTime'][0]);
-    if (count($old) == 1 && $old[0] === false) {
+    if ($old === false) {
         @$db->Query("ALTER TABLE {$t['Member']} ADD {$d['Member']['CreateTime'][0]} integer NOT NULL DEFAULT 0;");
     }
     $old = updatedb_checkexist($t['Member'], $d['Member']['UpdateTime'][0]);
-    if (count($old) == 1 && $old[0] === false) {
+    if ($old === false) {
         @$db->Query("ALTER TABLE {$t['Member']} ADD {$d['Member']['UpdateTime'][0]} integer NOT NULL DEFAULT 0;");
     }
 

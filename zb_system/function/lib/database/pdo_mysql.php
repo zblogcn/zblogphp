@@ -339,4 +339,25 @@ class Database__PDO_MySQL implements Database__Interface
         }
     }
 
+    /**
+     * 判断数据表的字段是否存在.
+     *
+     * @param string $table 表名
+     * @param string $field 字段名
+     *
+     * @return bool
+     */
+    public function ExistColumn($table, $field)
+    {
+        $r = null;
+        ZBlogException::SuspendErrorHook();
+        $s = "SELECT column_name FROM information_schema.columns WHERE table_schema='$this->dbname' AND table_name = '$table' AND column_name = '$field'";
+        $r = @$this->Query($s);
+        ZBlogException::ResumeErrorHook();
+        if (is_array($r) && count($r) == 0) {
+            return false;
+        }
+        return true;
+    }
+
 }

@@ -394,20 +394,10 @@ class Config implements Iterator
             return true;
         }
 
-        if ($this->db->type == 'sqlite') {
-            $old = @$this->db->Query('PRAGMA table_info([' . $this->table . '])');
-            $old = serialize($old);
-            if (stripos($old, '"' . $this->datainfo['Key'][0] . '"') !== false) {
-                $old = array();
-            } else {
-                $old = array(false);
-            }
-        } else {
-            $old = @$this->db->Query($this->db->sql->Select($this->table, $this->datainfo['Key'][0], null, null, 1));
-        }
+        $hasKey = $this->db->ExistColumn($this->table, $this->datainfo['Key'][0]);
 
         //没有这个字段：array(1) { [0]=> bool(false) }
-        if (count($old) == 1 && $old[0] === false) { //如果还没有建conf_Key字段就不要原子化存储
+        if ($hasKey == false) { //如果还没有建conf_Key字段就不要原子化存储
             $value = $this->Serialize();
 
             $kv = array($this->datainfo['Name'][0] => $name, $this->datainfo['Value'][0] => $value);

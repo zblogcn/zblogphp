@@ -983,7 +983,7 @@ function Setup4()
                 $zbp->option['ZC_PGSQL_CHARSET'] = 'utf8';
                 $zbp->option['ZC_PGSQL_USERNAME'] = trim(GetVars('dbpgsql_username', 'POST'));
                 $zbp->option['ZC_PGSQL_PASSWORD'] = trim(GetVars('dbpgsql_password', 'POST'));
-                $zbp->option['ZC_PGSQL_NAME'] = trim(str_replace(array('\'', '"'), array('', ''), GetVars('dbpgsql_name', 'POST')));
+                $zbp->option['ZC_PGSQL_NAME'] = strtolower(trim(str_replace(array('\'', '"'), array('', ''), GetVars('dbpgsql_name', 'POST'))));
                 $zbp->option['ZC_PGSQL_PRE'] = trim(str_replace(array('\'', '"'), array('', ''), GetVars('dbpgsql_pre', 'POST')));
                 if ($zbp->option['ZC_PGSQL_PRE'] == '') {
                     $zbp->option['ZC_PGSQL_PRE'] == 'zbp_';

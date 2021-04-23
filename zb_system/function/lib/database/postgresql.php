@@ -82,6 +82,7 @@ class Database__PostgreSQL implements Database__Interface
      */
     public function Open($array)
     {
+        $array[3] = strtolower($array[3]);
         $s = "host={$array[0]} port={$array[5]} dbname={$array[3]} user={$array[1]} password={$array[2]} options='--client_encoding=UTF8'";
         if (false == $array[5]) {
             $db_link = pg_connect($s);
@@ -92,8 +93,9 @@ class Database__PostgreSQL implements Database__Interface
         if (!$db_link) {
             return false;
         } else {
-            $this->dbpre = $array[4];
             $this->db = $db_link;
+            $this->dbpre = $array[4];
+            $this->dbname = $array[3];
             $v = pg_version($db_link);
             if (isset($v['client'])) {
                 $this->version = $v['client'];
@@ -115,6 +117,7 @@ class Database__PostgreSQL implements Database__Interface
      */
     public function CreateDB($dbpgsql_server, $dbpgsql_port, $dbpgsql_username, $dbpgsql_password, $dbpgsql_name)
     {
+        $dbpgsql_name = strtolower($dbpgsql_name);
         $s = "host={$dbpgsql_server} port={$dbpgsql_port} user={$dbpgsql_username} password={$dbpgsql_password} options='--client_encoding=UTF8'";
         $this->db = pg_connect($s);
         $this->dbname = $dbpgsql_name;
@@ -295,14 +298,7 @@ class Database__PostgreSQL implements Database__Interface
 
     private function LogsError()
     {
-        if (is_resource($r)) {
-            $st = pg_result_status($r);
-            if ($st == PGSQL_BAD_RESPONSE || $st == PGSQL_NONFATAL_ERROR || $st == PGSQL_FATAL_ERROR) {
-                $this->error[] = array($st, pg_result_error($r));
-            }
-        } else {
-            $this->error[] = array(PGSQL_BAD_RESPONSE, pg_last_error($this->db));
-        }
+        $this->error[] = array(PGSQL_BAD_RESPONSE, pg_last_error($this->db));
     }
 
     /**
@@ -315,6 +311,29 @@ class Database__PostgreSQL implements Database__Interface
     public function Transaction($query)
     {
         return $this->Query($this->sql->Transaction($query));
+    }
+
+    /**
+     * 判断数据表的字段是否存在.
+     *
+     * @param string $table 表名
+     * @param string $field 字段名
+     *
+     * @return bool
+     */
+    public function ExistColumn($table, $field)
+    {
+        $r = null;
+        $table = strtolower($table);
+        $field = strtolower($field);
+        ZBlogException::SuspendErrorHook();
+        $s = "SELECT * FROM information_schema.columns WHERE table_catalog='$this->dbname' AND table_name = '$table' AND column_name = '$field'";
+        $r = @$this->Query($s);
+        ZBlogException::ResumeErrorHook();
+        if (is_array($r) && count($r) == 0) {
+            return false;
+        }
+        return true;
     }
 
 }
