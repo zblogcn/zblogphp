@@ -39,7 +39,7 @@ function updatedb()
         @$db->Query("ALTER TABLE {$table['Tag']} ADD  {$d['Tag']['Type'][0]} integer NOT NULL DEFAULT 0;");
     }
     $old = updatedb_checkexist($t['Category'], $d['Category']['Type'][0]);
-    if (count($old) == 1 && $old[0] === false) {
+    if ($old === false) {
         @$db->Query("ALTER TABLE {$table['Category']} ADD  {$d['Category']['Type'][0]} integer NOT NULL DEFAULT 0;");
     }
 
