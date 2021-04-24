@@ -768,7 +768,17 @@ function Setup3()
                     <?php
                     echo '&nbsp;&nbsp;&nbsp;&nbsp;';
             }
-            if ($CheckResult['sqlite'][0]) {
+            $not_use_sqlite2 = false;
+            if (extension_loaded('pdo_sqlite')) {
+                $a = PDO::getAvailableDrivers();
+                if (in_array('sqlite', $a)) {
+                  $not_use_sqlite2 = true;
+                }
+            }
+            if (class_exists('SQLite3', false)) {
+              $not_use_sqlite2 = true;
+            }
+            if ($CheckResult['sqlite'][0] && $not_use_sqlite2 == false) {
                 ?>
                 <label>
                   <input value="sqlite" type="radio" name="dbtype" /> sqlite</label>
@@ -1133,7 +1143,14 @@ function CheckServer()
 
         if (extension_loaded('pdo_sqlite')) {
             //$pdo = new PDO('sqlite::memory:');
-            $v = ' '; //$pdo->getAttribute(PDO::ATTR_CLIENT_VERSION);
+            $a = PDO::getAvailableDrivers();
+            $v = '';
+            if (in_array('sqlite', $a)) {
+              $v .= 'sqlite3';
+            }
+            if (in_array('sqlite2', $a)) {
+              $v .= ' sqlite2';
+            }
             $pdo = null;
             $CheckResult['pdo_sqlite'][0] = $v;
             $CheckResult['pdo_sqlite'][1] = $CheckResult['pdo_sqlite'][0] ? BINGO : ERROR;
