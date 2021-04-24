@@ -108,6 +108,7 @@ class Database__PDO_MySQL implements Database__Interface
             $db_link->query("SET NAMES {$u} COLLATE {$c}");
             $this->charset = $u;
             $this->collate = $c;
+            $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_SILENT);
 
             return true;
         } catch (PDOException $e) {

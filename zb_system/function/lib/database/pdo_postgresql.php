@@ -90,6 +90,7 @@ class Database__PDO_PostgreSQL implements Database__Interface
         $this->dbname = $array[3];
         $myver = $this->db->getAttribute(PDO::ATTR_SERVER_VERSION);
         $this->version = SplitAndGet($myver, '-', 0);
+        $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_SILENT);
 
         return true;
     }
