@@ -1491,19 +1491,27 @@ function SaveConfig()
 
     $zbp->LoadCache();
     $app = $zbp->LoadApp('theme', 'default');
-    $app->SaveSideBars();
+    if ($app->isloaded == true) {
+      $app->SaveSideBars();
+    }
 
     $app = $zbp->LoadApp('theme', 'Zit');
-    $app->LoadSideBars();
-    $app->SaveSideBars();
+    if ($app->isloaded == true) {
+      $app->LoadSideBars();
+      $app->SaveSideBars();
+    }
 
     $app = $zbp->LoadApp('theme', 'tpure');
-    $app->LoadSideBars();
-    $app->SaveSideBars();
+    if ($app->isloaded == true) {
+      $app->LoadSideBars();
+      $app->SaveSideBars();
+    }
 
     $app = $zbp->LoadApp('theme', 'WhitePage');
-    $app->LoadSideBars();
-    $app->SaveSideBars();
+    if ($app->isloaded == true) {
+      $app->LoadSideBars();
+      $app->SaveSideBars();
+    }
 
     $app = $zbp->LoadApp('theme', $zbp->option['ZC_BLOG_THEME']);
     $app->LoadSideBars();

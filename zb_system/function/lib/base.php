@@ -249,6 +249,10 @@ class Base
     public function LoadInfoByAssoc($array)
     {
         global $bloghost;
+        if (!is_array($array)) {
+            return false;
+        }
+
         foreach ($this->datainfo as $key => $value) {
             if (!array_key_exists($value[0], $array)) {
                 continue;
@@ -340,6 +344,9 @@ class Base
     public function LoadInfoByArray($array)
     {
         global $bloghost;
+        if (!is_array($array)) {
+            return false;
+        }
 
         $i = 0;
         foreach ($this->datainfo as $key => $value) {
@@ -381,6 +388,9 @@ class Base
     public function LoadInfoByDataArray($array)
     {
         global $bloghost;
+        if (!is_array($array)) {
+            return false;
+        }
 
         $array = array_change_key_case($array, CASE_LOWER);
         foreach ($this->datainfo as $key => $value) {
