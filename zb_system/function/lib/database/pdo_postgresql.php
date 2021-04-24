@@ -298,7 +298,7 @@ class Database__PDO_PostgreSQL implements Database__Interface
         $table = strtolower($table);
         $field = strtolower($field);
         ZBlogException::SuspendErrorHook();
-        $s = "SELECT * FROM information_schema.columns WHERE table_catalog='$this->dbname' AND table_name = '$table' AND column_name = '$field'";
+        $s = "SELECT * FROM information_schema.columns WHERE table_schema = 'public' AND table_name = '$table' AND column_name = '$field'";
         $r = @$this->Query($s);
         ZBlogException::ResumeErrorHook();
         if (is_array($r) && count($r) == 0) {

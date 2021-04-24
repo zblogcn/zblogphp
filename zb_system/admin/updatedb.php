@@ -23,7 +23,6 @@ function updatedb_checkexist($table, $field)
     global $zbp;
 
     return $zbp->db->ExistColumn($table, $field);
-
 }
 
 function updatedb()
