@@ -1182,6 +1182,11 @@ class ZBlogPHP
             /* @var Config[] $array */
             $this->prvConfigList = $this->GetListOrigin($sql);
         }
+        if (is_array($this->prvConfigList)) {
+            if (count($this->prvConfigList) == 1 && $this->prvConfigList[0] === false) {
+                return;
+            }
+        }
 
         $type = 'Config';
 
