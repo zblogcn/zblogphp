@@ -2159,3 +2159,16 @@ function UrlHostToPath($url)
 
     return ZBP_PATH . substr($url, strlen($zbp->host));
 }
+
+/**
+ * rawurlencode转义但不转义/
+ *
+ * @param string $url
+ * @return string
+ */
+function rawurlencode_without_backslash($s)
+{
+    $s = rawurlencode($s);
+    $s = str_replace('%2F', '/', $s);
+    return $s;
+}
