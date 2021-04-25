@@ -87,7 +87,7 @@ function misc_statistic()
     $r .= "<tr><td class='td20'>{$zbp->lang['msg']['current_theme']}</td><td>{$current_theme}/{$current_style} {$current_theme_version}</td><td>{$zbp->lang['msg']['all_members']}</td><td>{$all_members}</td></tr>";
     $r .= '<!--debug_mode_moreinfo-->';
     $r .= "<tr><td class='td20'>{$zbp->lang['msg']['protocol_address']}</td><td>{$api_address} , {$xmlrpc_address}</td><td>{$zbp->lang['msg']['system_environment']}</td><td><a href='../cmd.php?act=misc&type=phpinfo' target='_blank'>{$system_environment}</a></td></tr>";
-    $r .= "<script type=\"text/javascript\">$('#statistic').attr('title','" . date("c", $zbp->cache->reload_statistic_time) . "');</script>";
+    $r .= "<script type=\"text/javascript\">$('#statistic').attr('title','" . date("c", (int) $zbp->cache->reload_statistic_time) . "');</script>";
 
     $zbp->cache->reload_statistic = $r;
     $zbp->cache->reload_statistic_time = time();
