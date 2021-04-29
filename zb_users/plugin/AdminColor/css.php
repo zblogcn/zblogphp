@@ -6,6 +6,8 @@ $id = (int) $zbp->Config('AdminColor')->ColorID;
 $c = '/*admincolor*/';
 if($zbp->Config('AdminColor')->FontSize >= 12 && $zbp->Config('AdminColor')->FontSize <= 14){
     $c .= "body{font-size:{$zbp->Config('AdminColor')->FontSize}px}";
+}else{
+    $zbp->Config('AdminColor')->FontSize = '13';
 }
 $c .= '
   .ui-tooltip, .arrow_leftmenu:after {
