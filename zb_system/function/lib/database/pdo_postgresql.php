@@ -159,8 +159,8 @@ class Database__PDO_PostgreSQL implements Database__Interface
         //$query=str_replace('%pre%', $this->dbpre, $query);
         // 遍历出来
         $results = $this->db->query($this->sql->Filter($query));
-        $e = $this->db->errorCode();
-        if ($e > 0) {
+        $e = trim($this->db->errorCode(), '0');
+        if ($e != '') {
             trigger_error(implode(' ', $this->db->errorInfo()), E_USER_NOTICE);
         }
         $this->LogsError();
@@ -258,8 +258,8 @@ class Database__PDO_PostgreSQL implements Database__Interface
 
     private function LogsError()
     {
-        $e = $this->db->errorCode();
-        if ($e > 0) {
+        $e = trim($this->db->errorCode(), '0');
+        if ($e != '') {
             $this->error[] = array($e, $this->db->errorInfo());
         }
     }

@@ -131,7 +131,7 @@ class Database__PDO_SQLite implements Database__Interface
         // 遍历出来
         $results = $this->db->query($this->sql->Filter($query));
         $e = trim($this->db->errorCode(), '0');
-        if ($e != null) {
+        if ($e != '') {
             trigger_error(implode(' ', $this->db->errorInfo()), E_USER_NOTICE);
         }
         $this->LogsError();
@@ -227,7 +227,7 @@ class Database__PDO_SQLite implements Database__Interface
     private function LogsError()
     {
         $e = trim($this->db->errorCode(), '0');
-        if ($e != null) {
+        if ($e != '') {
             $this->error[] = array($e, $this->db->errorInfo());
         }
     }
