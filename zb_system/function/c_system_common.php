@@ -369,10 +369,10 @@ function GetValueInArray($array, $name, $default = null)
     if (is_array($array)) {
         if (array_key_exists($name, $array)) {
             return $array[$name];
-        } else {
-            return $default;
         }
+        return $default;
     }
+    return $default;
 }
 
 /**
