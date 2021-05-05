@@ -842,9 +842,6 @@ class ZBlogPHP
                     if ($value2['name'] == 'post_' . $postname . '_list') {
                         $value2['urlrule'] = $this->GetPostType($postid, 'list_urlrule');
                     }
-                    if ($value2['name'] == 'post_' . $postname . '_list_only_active') {
-                        $value2['urlrule'] = $this->GetPostType($postid, 'list_urlrule');
-                    }
                     if ($value2['name'] == 'post_' . $postname . '_list_category') {
                         $value2['urlrule'] = $this->GetPostType($postid, 'list_category_urlrule');
                     }
@@ -862,8 +859,22 @@ class ZBlogPHP
                     }
                 }
                 $this->routes[$key2] = $value2;
-                if ($value2['type'] != 'rewrite' || ($this->option['ZC_STATIC_MODE'] == 'REWRITE' && $value2['type'] == 'rewrite')) {
-                    $this->SetPostType_Sub($postid, 'routes', $value2['name'], array($value2['type'] => $value2['name']));
+                if ($value2['type'] != 'default') {
+                    if ($value2['type'] != 'rewrite' || ($this->option['ZC_STATIC_MODE'] == 'REWRITE' && $value2['type'] == 'rewrite')) {
+                        $this->SetPostType_Sub($postid, 'routes', $value2['name'], array($value2['type'] => $value2['name']));
+                    }
+                } else {
+                    if (isset($value2['only_active']) && $value2['only_active'] == true) {
+                        if ($this->option['ZC_STATIC_MODE'] == 'ACTIVE') {
+                            $this->SetPostType_Sub($postid, 'routes', $value2['name'], array($value2['type'] => $value2['name']));
+                        }
+                    }elseif (isset($value2['only_rewrite']) && $value2['only_rewrite'] == true) {
+                        if ($this->option['ZC_STATIC_MODE'] == 'REWRITE') {
+                            $this->SetPostType_Sub($postid, 'routes', $value2['name'], array($value2['type'] => $value2['name']));
+                        }
+                    } else {
+                        $this->SetPostType_Sub($postid, 'routes', $value2['name'], array($value2['type'] => $value2['name']));
+                    }
                 }
             }
         }

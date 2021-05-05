@@ -70,7 +70,7 @@ class Totoro_Class
             foreach ($matches[0] as $value) {
                 $value = preg_quote($value);
                 if ($value != '' && preg_match("/" . $black_list . "/si", $content) == 0) {
-                    if (strpos($zbp->host, $value) === false) {
+                    if (stripos(preg_quote($zbp->host), $value) === false) {
                         $black_list .= '|' . $value;
                         $zbp->SetHint('good', '新黑词被加入：' . $value);
                     }
