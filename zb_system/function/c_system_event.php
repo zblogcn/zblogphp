@@ -286,6 +286,8 @@ function DelPost()
 
         $post->Del();
 
+        DelArticle_Comments($post->ID);
+
         $zbp->DelItemToNavbar($zbp->GetPostType($post->Type, 'name'), $post->ID);
 
         foreach ($GLOBALS['hooks']['Filter_Plugin_DelPost_Succeed'] as $fpname => &$fpsignal) {
