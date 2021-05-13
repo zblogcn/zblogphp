@@ -868,7 +868,7 @@ class ZBlogPHP
                         if ($this->option['ZC_STATIC_MODE'] == 'ACTIVE') {
                             $this->SetPostType_Sub($postid, 'routes', $value2['name'], array($value2['type'] => $value2['name']));
                         }
-                    }elseif (isset($value2['only_rewrite']) && $value2['only_rewrite'] == true) {
+                    } elseif (isset($value2['only_rewrite']) && $value2['only_rewrite'] == true) {
                         if ($this->option['ZC_STATIC_MODE'] == 'REWRITE') {
                             $this->SetPostType_Sub($postid, 'routes', $value2['name'], array($value2['type'] => $value2['name']));
                         }
@@ -1042,11 +1042,13 @@ class ZBlogPHP
             case 'sqlite3':
             case 'pdo_sqlite':
                 $this->db = self::InitializeDB($this->option['ZC_DATABASE_TYPE']);
-                if ($this->db->Open(
-                    array($this->datadir . '' . $this->option['ZC_SQLITE_NAME'],
-                        $this->option['ZC_SQLITE_PRE'],
-                    )
-                ) == false
+                if (
+                    $this->db->Open(
+                        array(
+                            $this->datadir . '' . $this->option['ZC_SQLITE_NAME'],
+                            $this->option['ZC_SQLITE_PRE'],
+                        )
+                    ) == false
                 ) {
                     $this->ShowError(69, __FILE__, __LINE__);
                 }
@@ -1054,16 +1056,18 @@ class ZBlogPHP
             case 'postgresql':
             case 'pdo_postgresql':
                 $this->db = self::InitializeDB($this->option['ZC_DATABASE_TYPE']);
-                if ($this->db->Open(
-                    array($this->option['ZC_PGSQL_SERVER'],
-                        $this->option['ZC_PGSQL_USERNAME'],
-                        $this->option['ZC_PGSQL_PASSWORD'],
-                        $this->option['ZC_PGSQL_NAME'],
-                        $this->option['ZC_PGSQL_PRE'],
-                        $this->option['ZC_PGSQL_PORT'],
-                        $this->option['ZC_PGSQL_PERSISTENT'],
-                    )
-                ) == false
+                if (
+                    $this->db->Open(
+                        array(
+                            $this->option['ZC_PGSQL_SERVER'],
+                            $this->option['ZC_PGSQL_USERNAME'],
+                            $this->option['ZC_PGSQL_PASSWORD'],
+                            $this->option['ZC_PGSQL_NAME'],
+                            $this->option['ZC_PGSQL_PRE'],
+                            $this->option['ZC_PGSQL_PORT'],
+                            $this->option['ZC_PGSQL_PERSISTENT'],
+                        )
+                    ) == false
                 ) {
                     $this->ShowError(67, __FILE__, __LINE__);
                 }
@@ -1080,18 +1084,19 @@ class ZBlogPHP
                     }
                 }
                 $this->db = self::InitializeDB($this->option['ZC_DATABASE_TYPE']);
-                if ($this->db->Open(
-                    array(
-                        $this->option['ZC_MYSQL_SERVER'],
-                        $this->option['ZC_MYSQL_USERNAME'],
-                        $this->option['ZC_MYSQL_PASSWORD'],
-                        $this->option['ZC_MYSQL_NAME'],
-                        $this->option['ZC_MYSQL_PRE'],
-                        $this->option['ZC_MYSQL_PORT'],
-                        $this->option['ZC_MYSQL_PERSISTENT'],
-                        $this->option['ZC_MYSQL_ENGINE'],
-                    )
-                ) == false
+                if (
+                    $this->db->Open(
+                        array(
+                            $this->option['ZC_MYSQL_SERVER'],
+                            $this->option['ZC_MYSQL_USERNAME'],
+                            $this->option['ZC_MYSQL_PASSWORD'],
+                            $this->option['ZC_MYSQL_NAME'],
+                            $this->option['ZC_MYSQL_PRE'],
+                            $this->option['ZC_MYSQL_PORT'],
+                            $this->option['ZC_MYSQL_PERSISTENT'],
+                            $this->option['ZC_MYSQL_ENGINE'],
+                        )
+                    ) == false
                 ) {
                     $this->ShowError(67, __FILE__, __LINE__);
                 }
@@ -1713,7 +1718,7 @@ class ZBlogPHP
     public function LoadMembersInList($list, $mem_id_field = 'AuthorID')
     {
         $mem_ids_need_load = array();
-        
+
         foreach ($list as $obj) {
             if (!isset($obj->$mem_id_field) || ($obj->$mem_id_field == null)) {
                 continue;
@@ -3330,13 +3335,13 @@ class ZBlogPHP
      */
     public function GetTagByAlias($name, $type = 0)
     {
-        $ret = $this->GetSomeThingByAttr($this->tags, 'Tag', array('Alias','Type'), array($name, $type));
+        $ret = $this->GetSomeThingByAttr($this->tags, 'Tag', array('Alias', 'Type'), array($name, $type));
         if (is_object($ret) && $ret->ID >= 0) {
             return $ret;
         }
 
         $a = array();
-        $a[] = array('=','tag_Alias', $name);
+        $a[] = array('=', 'tag_Alias', $name);
         $a[] = array('=', 'tag_Type', $type);
         $array = $this->GetTagList('*', array($a), '', 1, '');
         if (count($array) == 0) {
@@ -3356,7 +3361,7 @@ class ZBlogPHP
      */
     public function GetTagByName($name, $type = 0)
     {
-        $ret = $this->GetSomeThingByAttr($this->tags, 'Tag', array('Name','Type'), array($name, $type));
+        $ret = $this->GetSomeThingByAttr($this->tags, 'Tag', array('Name', 'Type'), array($name, $type));
         if (is_object($ret) && $ret->ID >= 0) {
             return $ret;
         }
