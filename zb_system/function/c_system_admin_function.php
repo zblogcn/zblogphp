@@ -495,10 +495,11 @@ function OutputOptionItemsOfMember($default, $posttype = 0)
     global $zbp;
 
     $s = null;
+    $action = 'edit';
     $tz = array();
 
     foreach ($GLOBALS['hooks']['Filter_Plugin_OutputOptionItemsOfMember_Begin'] as $fpname => &$fpsignal) {
-        $fpreturn = $fpname($default, $posttype, $tz);
+        $fpreturn = $fpname($default, $posttype, $action, $tz);
         if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
             $fpsignal = PLUGIN_EXITSIGNAL_NONE;
             return $fpreturn;
@@ -515,7 +516,7 @@ function OutputOptionItemsOfMember($default, $posttype = 0)
         }
     } else {
         for ($i = 1; $i < (count($zbp->lang['user_level_name']) + 1); $i++) {
-            if ($zbp->CheckRightsByLevel($actions['edit'], $i) == false) {
+            if ($zbp->CheckRightsByLevel($actions[$action], $i) == false) {
                 $i = $i - 1;
                 break;
             }
@@ -523,7 +524,7 @@ function OutputOptionItemsOfMember($default, $posttype = 0)
         $zbp->LoadMembers($i);
         $memberbyname = array();
         foreach ($zbp->members as $key => $value) {
-            if ($zbp->CheckRightsByLevel($actions['edit'], $zbp->members[$key]->Level)) {
+            if ($zbp->CheckRightsByLevel($actions[$action], $zbp->members[$key]->Level)) {
                 $memberbyname[$zbp->members[$key]->Name] = $zbp->members[$key]->ID;
             }
         }
