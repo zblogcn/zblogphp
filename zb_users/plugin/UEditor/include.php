@@ -18,11 +18,43 @@ function ueditor_SyntaxHighlighter_print()
     if (!$zbp->option['ZC_SYNTAXHIGHLIGHTER_ENABLE']) {
         return;
     }
-
-    echo "\r\n" . 'document.writeln("<script src=\'' . $zbp->host . 'zb_users/plugin/UEditor/third-party/prism/prism.js\' type=\'text/javascript\'></script><link rel=\'stylesheet\' type=\'text/css\' href=\'' . $zbp->host . 'zb_users/plugin/UEditor/third-party/prism/prism.css\'/>");';
-    echo '$(function(){var compatibility={as3:"actionscript","c#":"csharp",delphi:"pascal",html:"markup",xml:"markup",vb:"basic",js:"javascript",plain:"markdown",pl:"perl",ps:"powershell"};var runFunction=function(doms,callback){doms.each(function(index,unwrappedDom){var dom=$(unwrappedDom);var codeDom=$("<code>");if(callback)callback(dom);var languageClass="prism-language-"+function(classObject){if(classObject===null)return"markdown";var className=classObject[1];return compatibility[className]?compatibility[className]:className}(dom.attr("class").match(/prism-language-([0-9a-zA-Z]+)/));codeDom.html(dom.html()).addClass("prism-line-numbers").addClass(languageClass);dom.html("").addClass(languageClass).append(codeDom)})};runFunction($("pre.prism-highlight"));runFunction($(\'pre[class*="brush:"]\'),function(preDom){var original;if((original=preDom.attr("class").match(/brush:([a-zA-Z0-9\#]+);/))!==null){preDom.get(0).className="prism-highlight prism-language-"+original[1]}});Prism.highlightAll()});';
-    echo "\r\n";
-}
+    echo "document.addEventListener('readystatechange',y=>{
+                let e = document,
+                    l = l => e.querySelectorAll(l),
+                    s = l => e.createElement(l),
+                    z = l('pre.prism-highlight'),
+                    X = {as3:'actionscript','c#':'csharp',delphi:'pascal',html:'markup',xml:'markup',vb:'basic',js:'javascript',plain:'markdown',pl:'perl',ps:'powershell'};
+                    /**
+                     * SyntaxHighlighter
+                     * X = {markup:'html'}
+                    */
+                    if(z.length<1) return;
+                    z.forEach(l => {
+                            l.classList;
+                            let s = l.className.match(/prism-language-([0-9a-zA-Z]+)/)[1],
+                                a = X[s]||s;
+                            l.className = '';
+                            /*l.className='line-numbers';显示代码行数有BUG*/
+                            l.innerHTML = '<code class=\"language-'+a+'\">'+l.innerHTML+'</code>';
+                            /**
+                             * SyntaxHighlighter
+                             * l.className='brush: '+a.toLowerCase();
+                            */
+                        });
+                let a = s('script'),
+                    r = s('link'),
+                    i = '".$zbp->host."zb_users/plugin/UEditor/third-party/prism/prism',
+                    h = h=>e.head.appendChild(h);
+                    a.src = i + '.js',
+                    r.href = i + '.css',
+                    r.rel = 'stylesheet',
+                    r.type = 'text/css',
+                    h(r),
+                    h(a);
+                    /**
+                     * SyntaxHighlighter
+                     * a.onload = (n=> {SyntaxHighlighter.highlight();});*/
+            },false);";
 
 function InstallPlugin_UEditor()
 {
