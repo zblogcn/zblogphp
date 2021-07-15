@@ -78,13 +78,17 @@ class Metas
     }
 
     /**
-     * 获取Data数据.
+     * 获取Data数据(不设$key就返回整个data数组).
      *
      * @return array
      */
-    public function GetData()
+    public function GetData($key = null)
     {
-        return $this->p_data;
+        if (null == $key) {
+            return $this->p_data;
+        } else {
+            return $this->p_data[$key];
+        }
     }
 
     /**
@@ -94,7 +98,7 @@ class Metas
      *
      * @return string
      */
-    public static function ReplaceTag2Host($value)
+    private static function ReplaceTag2Host($value)
     {
         global $bloghost;
 
@@ -108,11 +112,31 @@ class Metas
      *
      * @return string
      */
-    public static function ReplaceHost2Tag($value)
+    private static function ReplaceHost2Tag($value)
     {
         global $bloghost;
 
         return str_replace($bloghost, '{#ZC_BLOG_HOST#}', $value);
+    }
+
+    /**
+     * 多维数组替换host值为签标.
+     *
+     * @param array $array
+     * @param method $method
+     *
+     * @return array
+     */
+    public static function ReplaceTagArray($array, $method)
+    {
+        foreach ($array as &$value) {
+            if (is_array($value)) {
+                $value = self::ReplaceTagArray($value, $method);
+            } elseif (is_string($value)) {
+                $value = self::$method($value);
+            }
+        }
+        return $array;
     }
 
     /**
@@ -158,15 +182,10 @@ class Metas
             return '';
         }
 
-        $data = $this->p_data;
-        foreach ($data as $key => $value) {
-            if (is_string($value)) {
-                $data[$key] = self::ReplaceHost2Tag($value);
-            }
-        }
+        $this->p_data = self::ReplaceTagArray($this->p_data, 'ReplaceHost2Tag');
 
         //return json_encode($data);
-        return serialize($data);
+        return serialize($this->p_data);
     }
 
     /**
@@ -191,12 +210,7 @@ class Metas
             if (count($this->p_data) == 0) {
                 return true;
             }
-
-            foreach ($this->p_data as $key => $value) {
-                if (is_string($value)) {
-                    $this->p_data[$key] = self::ReplaceTag2Host($value);
-                }
-            }
+            $this->p_data = self::ReplaceTagArray($this->p_data, 'ReplaceTag2Host');
         } else {
             $this->p_data = array();
 

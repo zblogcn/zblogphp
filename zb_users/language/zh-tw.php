@@ -281,6 +281,7 @@ return array(
         'clear_thumb_cache'                 => '清空縮略圖緩存',
         'confirm_clear_thumb_cache'         => '確定清空縮略圖緩存？',
         'category_legacy_display'           => '分類管理按傳統模式顯示',
+        'change_default_password'           => '請立即更改默認密碼！',
         ''                                  => '',
     ),
 

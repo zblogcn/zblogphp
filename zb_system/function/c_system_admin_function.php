@@ -105,6 +105,24 @@ function Include_Admin_UpdateDB()
 }
 
 /**
+ * Check Weak PassWord
+ */
+function Include_Admin_CheckWeakPassWord()
+{
+    global $zbp, $action;
+
+    if ($zbp->user->Password != Member::GetPassWordByGuid('zblogger', $zbp->user->Guid)) {
+        return;
+    }
+
+    if ($action !== 'MemberEdt') {
+        Redirect($zbp->host . 'zb_system/cmd.php?act=MemberEdt&id=' . $zbp->user->ID);
+    }
+
+    echo $zbp->ShowHint('tips', $zbp->langs->msg->change_default_password, 9999);
+}
+
+/**
  * Check Http 304OK
  */
 function Include_Admin_CheckHttp304OK()
