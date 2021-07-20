@@ -1035,13 +1035,14 @@ function ViewList($page = null, $cate = null, $auth = null, $date = null, $tags 
 
             $datetime_txt = $datetime;
             $datetime = null;
+
             if (function_exists('date_create_from_format')) {
                 $objdate = date_create_from_format($zbp->option['ZC_DATETIME_WITHDAY_RULE'], $datetime_txt);
                 if ($objdate !== false) {
                     $datetime = strtotime($objdate->format('Y-n-j'));
                     $hasDay = true;
                 } else {
-                    $objdate = date_create_from_format($zbp->option['ZC_DATETIME_RULE'], $datetime_txt);
+                    $objdate = date_create_from_format($zbp->option['ZC_DATETIME_RULE'] . '-j', $datetime_txt . '-1');
                     if ($objdate !== false) {
                         $datetime = strtotime($objdate->format('Y-n'));
                     }
