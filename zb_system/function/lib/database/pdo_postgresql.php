@@ -109,7 +109,21 @@ class Database__PDO_PostgreSQL implements Database__Interface
         $this->db = $db_link;
         $this->dbname = $dbpgsql_name;
 
-        $db_link->query("SET client_encoding='UTF-8';");
+        //$db_link->query("SET client_encoding='UTF-8';");
+
+        $isExists = @$this->Query("select count(*) from pg_catalog.pg_database where datname = '$dbpgsql_name';");
+        $hasDB = false;
+        if (is_array($isExists) && is_array($isExists[0]) && isset($isExists[0]['count'])) {
+            if ($isExists[0]['count'] == '0') {
+                $hasDB = false;
+            } else {
+                $hasDB = true;
+            }
+        }
+
+        if ($hasDB == true) {
+            return false;
+        }
 
         $r = $this->db->exec($this->sql->Filter('CREATE DATABASE ' . $dbpgsql_name));
         $this->LogsError();

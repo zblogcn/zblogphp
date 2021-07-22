@@ -122,6 +122,21 @@ class Database__PostgreSQL implements Database__Interface
         $this->db = pg_connect($s);
         $this->dbname = $dbpgsql_name;
 
+
+        $isExists = @$this->Query("select count(*) from pg_catalog.pg_database where datname = '$dbpgsql_name';");
+        $hasDB = false;
+        if (is_array($isExists) && is_array($isExists[0]) && isset($isExists[0]['count'])) {
+            if ($isExists[0]['count'] == '0') {
+                $hasDB = false;
+            } else {
+                $hasDB = true;
+            }
+        }
+
+        if ($hasDB == true) {
+            return false;
+        }
+
         $r = @pg_query($this->db, $this->sql->Filter('CREATE DATABASE ' . $dbpgsql_name));
         $this->LogsError();
         return true;
