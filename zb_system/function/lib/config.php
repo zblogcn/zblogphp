@@ -478,25 +478,25 @@ class Config implements Iterator
         }
         //var_dump($add,$del,$mod);die;
 
-        try {  
-          $this->db->Transaction('begin');
+        try {
+            $this->db->Transaction('begin');
 
-          foreach ($sqls['insert'] as $key => $sql) {
-              $this->db->Insert($sql);
-          }
-          foreach ($sqls['update'] as $key => $sql) {
-              $this->db->Update($sql);
-          }
-          foreach ($sqls['delete'] as $key => $sql) {
-              $this->db->Delete($sql);
-          }
+            foreach ($sqls['insert'] as $key => $sql) {
+                $this->db->Insert($sql);
+            }
+            foreach ($sqls['update'] as $key => $sql) {
+                $this->db->Update($sql);
+            }
+            foreach ($sqls['delete'] as $key => $sql) {
+                $this->db->Delete($sql);
+            }
 
-          $this->db->Transaction('commit');
+            $this->db->Transaction('commit');
         } catch (Exception $e) {
-          $this->db->Transaction('rollback');
-          //echo "Failed: " . $e->getMessage();
+            $this->db->Transaction('rollback');
+            //echo "Failed: " . $e->getMessage();
         }
-     
+
         //存储成功后重置origkvdata
         $this->origkvdata = $this->kvdata;
 
