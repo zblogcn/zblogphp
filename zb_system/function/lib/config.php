@@ -431,7 +431,10 @@ class Config implements Iterator
             return true;
         }
 
-        $this->db->Transaction('begin');
+        $sqls = array();
+        $sqls['insert'] = array();
+        $sqls['update'] = array();
+        $sqls['delete'] = array();
 
         //add
         foreach ($add as $key2 => $value2) {
@@ -439,13 +442,15 @@ class Config implements Iterator
             $sql2 = $this->db->sql->Insert($this->table, $kv2);
             $old4 = $this->db->Query($this->db->sql->Select($this->table, '*', array(array('=', $this->datainfo['Name'][0], $name), array('=', $this->datainfo['Key'][0], $key2))));
             if (count($old4) == 0) {
-                $this->db->Insert($sql2);
+                //$this->db->Insert($sql2);
+                $sqls['insert'][] = $sql2;
             } else {
                 $key3 = $key2;
                 $value3 = $value2;
                 $kv3 = array($this->datainfo['Value'][0] => $this->SerializeSingle($value3));
                 $sql3 = $this->db->sql->Update($this->table, $kv3, array(array('=', $this->datainfo['Name'][0], $name), array('=', $this->datainfo['Key'][0], $key3)));
-                $this->db->Update($sql3);
+                //$this->db->Update($sql3);
+                $sqls['update'][] = $sql3;
             }
         }
         //mod
@@ -454,22 +459,44 @@ class Config implements Iterator
             $sql4 = $this->db->sql->Insert($this->table, $kv4);
             $old5 = $this->db->Query($this->db->sql->Select($this->table, '*', array(array('=', $this->datainfo['Name'][0], $name), array('=', $this->datainfo['Key'][0], $key4))));
             if (count($old5) == 0) {
-                $this->db->Insert($sql4);
+                //$this->db->Insert($sql4);
+                $sqls['insert'][] = $sql4;
             } else {
                 $key5 = $key4;
                 $value5 = $value4;
                 $kv5 = array($this->datainfo['Value'][0] => $this->SerializeSingle($value5));
                 $sql5 = $this->db->sql->Update($this->table, $kv5, array(array('=', $this->datainfo['Name'][0], $name), array('=', $this->datainfo['Key'][0], $key5)));
-                $this->db->Update($sql5);
+                //$this->db->Update($sql5);
+                $sqls['update'][] = $sql5;
             }
         }
         //del
         foreach ($del as $key6 => $value6) {
             $sql6 = $this->db->sql->Delete($this->table, array(array('=', $this->datainfo['Name'][0], $name), array('=', $this->datainfo['Key'][0], $key6)));
-            $this->db->Delete($sql6);
+            //$this->db->Delete($sql6);
+            $sqls['delete'][] = $sql6;
         }
         //var_dump($add,$del,$mod);die;
-        $this->db->Transaction('commit');
+
+        try {  
+          $this->db->Transaction('begin');
+
+          foreach ($sqls['insert'] as $key => $sql) {
+              $this->db->Insert($sql);
+          }
+          foreach ($sqls['update'] as $key => $sql) {
+              $this->db->Update($sql);
+          }
+          foreach ($sqls['delete'] as $key => $sql) {
+              $this->db->Delete($sql);
+          }
+
+          $this->db->Transaction('commit');
+        } catch (Exception $e) {
+          $this->db->Transaction('rollback');
+          //echo "Failed: " . $e->getMessage();
+        }
+     
         //存储成功后重置origkvdata
         $this->origkvdata = $this->kvdata;
 
