@@ -55,11 +55,11 @@ function ActivePlugin_WhitePage()
             $s .= "#divAll{box-shadow: none;border-radius: 1em;}";
             $s .= "#divAll{background:#" . $zbp->Config('WhitePage')->custom_pagecolor . ";}#divMiddle{background:none;}";
         } else {
-            $s .= "#divAll{background:#" . $zbp->Config('WhitePage')->custom_pagecolor . ";}#divMiddle{background:none;}";
+            $s .= "#divAll{background:none;}#divMiddle{background:none;}";
         }
     }
 
-    $zbp->header .= '   <style>' . $s . '</style>' . "\r\n";
+    $zbp->header .= '    <style>' . $s . '</style>' . "\r\n";
     $zbp->lang['msg']['first_button'] = '&lt;&lt;';
     $zbp->lang['msg']['prev_button'] = '&lt;';
     $zbp->lang['msg']['next_button'] = '&gt;';

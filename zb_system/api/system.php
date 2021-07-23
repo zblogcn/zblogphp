@@ -71,6 +71,8 @@ function api_system_basic_info()
             'comment_turnoff' => $zbp->option['ZC_COMMENT_TURNOFF'],
             'comment_verify_enable' => $zbp->option['ZC_COMMENT_VERIFY_ENABLE'],
             'comment_reverse_order' => $zbp->option['ZC_COMMENT_REVERSE_ORDER'],
+            'copyright' => $zbp->option['ZC_BLOG_COPYRIGHT'],
+            'zblogphp' => $zbp->option['ZC_BLOG_PRODUCT_FULL'],
         ),
         'is_logged_in' => $zbp->islogin,
         'current_member' => $zbp->islogin ? ApiGetObjectArray(

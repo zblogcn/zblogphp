@@ -386,11 +386,6 @@ $GLOBALS['datainfo'] = array(
 );
 
 /*
- * 默认路由url数组
- */
-$GLOBALS['routes'] = array();
-
-/*
  * 初始化统计信息
  */
 $_SERVER['_start_time'] = microtime(true); //RunTime
@@ -445,6 +440,12 @@ if (IS_CLI) {
 /*
  * 定义系统全局变量
  */
+
+/*
+ * 默认路由url数组
+ */
+$GLOBALS['routes'] = array();
+
 /*
  * 当前动作命令
  */

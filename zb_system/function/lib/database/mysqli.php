@@ -97,7 +97,7 @@ class Database__MySQLi implements Database__Interface
             $this->version = SplitAndGet($myver, '-', 0);
             if (version_compare($this->version, '5.5.3') >= 0) {
                 $u = "utf8mb4";
-                $c = 'utf8mb4_unicode_ci';
+                $c = 'utf8mb4_general_ci';
             } else {
                 $u = "utf8";
                 $c = 'utf8_general_ci';
@@ -345,6 +345,27 @@ class Database__MySQLi implements Database__Interface
     public function Transaction($query)
     {
         return $this->Query($this->sql->Transaction($query));
+    }
+
+    /**
+     * 判断数据表的字段是否存在.
+     *
+     * @param string $table 表名
+     * @param string $field 字段名
+     *
+     * @return bool
+     */
+    public function ExistColumn($table, $field)
+    {
+        $r = null;
+        ZBlogException::SuspendErrorHook();
+        $s = "SELECT column_name FROM information_schema.columns WHERE table_schema='$this->dbname' AND table_name = '$table' AND column_name = '$field'";
+        $r = @$this->Query($s);
+        ZBlogException::ResumeErrorHook();
+        if (is_array($r) && count($r) == 0) {
+            return false;
+        }
+        return true;
     }
 
 }

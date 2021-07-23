@@ -854,9 +854,6 @@ class ZBlogPHP
                     if ($value2['name'] == 'post_' . $postname . '_list') {
                         $value2['urlrule'] = $this->GetPostType($postid, 'list_urlrule');
                     }
-                    if ($value2['name'] == 'post_' . $postname . '_list_only_active') {
-                        $value2['urlrule'] = $this->GetPostType($postid, 'list_urlrule');
-                    }
                     if ($value2['name'] == 'post_' . $postname . '_list_category') {
                         $value2['urlrule'] = $this->GetPostType($postid, 'list_category_urlrule');
                     }
@@ -874,13 +871,25 @@ class ZBlogPHP
                     }
                 }
                 $this->routes[$key2] = $value2;
-                if ($value2['type'] != 'rewrite' || ($this->option['ZC_STATIC_MODE'] == 'REWRITE' && $value2['type'] == 'rewrite')) {
-                    $this->SetPostType_Sub($postid, 'routes', $value2['name'], array($value2['type'] => $value2['name']));
+                if ($value2['type'] != 'default') {
+                    if ($value2['type'] != 'rewrite' || ($this->option['ZC_STATIC_MODE'] == 'REWRITE' && $value2['type'] == 'rewrite')) {
+                        $this->SetPostType_Sub($postid, 'routes', $value2['name'], array($value2['type'] => $value2['name']));
+                    }
+                } else {
+                    if (isset($value2['only_active']) && $value2['only_active'] == true) {
+                        if ($this->option['ZC_STATIC_MODE'] == 'ACTIVE') {
+                            $this->SetPostType_Sub($postid, 'routes', $value2['name'], array($value2['type'] => $value2['name']));
+                        }
+                    } elseif (isset($value2['only_rewrite']) && $value2['only_rewrite'] == true) {
+                        if ($this->option['ZC_STATIC_MODE'] == 'REWRITE') {
+                            $this->SetPostType_Sub($postid, 'routes', $value2['name'], array($value2['type'] => $value2['name']));
+                        }
+                    } else {
+                        $this->SetPostType_Sub($postid, 'routes', $value2['name'], array($value2['type'] => $value2['name']));
+                    }
                 }
             }
         }
-        //var_export($this->posttype);
-        //var_export($this->routes);
     }
 
     /**
@@ -997,6 +1006,7 @@ class ZBlogPHP
         Add_Filter_Plugin('Filter_Plugin_Admin_SettingMng_SubMenu', 'Include_Admin_Addsettingsubmenu');
         Add_Filter_Plugin('Filter_Plugin_Zbp_LoadManage', 'Include_Admin_UpdateDB');
         Add_Filter_Plugin('Filter_Plugin_Admin_End', 'Include_Admin_CheckHttp304OK');
+        Add_Filter_Plugin('Filter_Plugin_Admin_Hint', 'Include_Admin_CheckWeakPassWord');
 
         if (isset($GLOBALS['zbpvers'])) {
             $GLOBALS['zbpvers'][$GLOBALS['blogversion']] = ZC_VERSION_DISPLAY . ' Build ' . $GLOBALS['blogversion'];
@@ -1045,11 +1055,13 @@ class ZBlogPHP
             case 'sqlite3':
             case 'pdo_sqlite':
                 $this->db = self::InitializeDB($this->option['ZC_DATABASE_TYPE']);
-                if ($this->db->Open(
-                    array($this->datadir . '' . $this->option['ZC_SQLITE_NAME'],
-                        $this->option['ZC_SQLITE_PRE'],
-                    )
-                ) == false
+                if (
+                    $this->db->Open(
+                        array(
+                            $this->datadir . '' . $this->option['ZC_SQLITE_NAME'],
+                            $this->option['ZC_SQLITE_PRE'],
+                        )
+                    ) == false
                 ) {
                     $this->ShowError(69, __FILE__, __LINE__);
                 }
@@ -1057,16 +1069,18 @@ class ZBlogPHP
             case 'postgresql':
             case 'pdo_postgresql':
                 $this->db = self::InitializeDB($this->option['ZC_DATABASE_TYPE']);
-                if ($this->db->Open(
-                    array($this->option['ZC_PGSQL_SERVER'],
-                        $this->option['ZC_PGSQL_USERNAME'],
-                        $this->option['ZC_PGSQL_PASSWORD'],
-                        $this->option['ZC_PGSQL_NAME'],
-                        $this->option['ZC_PGSQL_PRE'],
-                        $this->option['ZC_PGSQL_PORT'],
-                        $this->option['ZC_PGSQL_PERSISTENT'],
-                    )
-                ) == false
+                if (
+                    $this->db->Open(
+                        array(
+                            $this->option['ZC_PGSQL_SERVER'],
+                            $this->option['ZC_PGSQL_USERNAME'],
+                            $this->option['ZC_PGSQL_PASSWORD'],
+                            $this->option['ZC_PGSQL_NAME'],
+                            $this->option['ZC_PGSQL_PRE'],
+                            $this->option['ZC_PGSQL_PORT'],
+                            $this->option['ZC_PGSQL_PERSISTENT'],
+                        )
+                    ) == false
                 ) {
                     $this->ShowError(67, __FILE__, __LINE__);
                 }
@@ -1083,18 +1097,19 @@ class ZBlogPHP
                     }
                 }
                 $this->db = self::InitializeDB($this->option['ZC_DATABASE_TYPE']);
-                if ($this->db->Open(
-                    array(
-                        $this->option['ZC_MYSQL_SERVER'],
-                        $this->option['ZC_MYSQL_USERNAME'],
-                        $this->option['ZC_MYSQL_PASSWORD'],
-                        $this->option['ZC_MYSQL_NAME'],
-                        $this->option['ZC_MYSQL_PRE'],
-                        $this->option['ZC_MYSQL_PORT'],
-                        $this->option['ZC_MYSQL_PERSISTENT'],
-                        $this->option['ZC_MYSQL_ENGINE'],
-                    )
-                ) == false
+                if (
+                    $this->db->Open(
+                        array(
+                            $this->option['ZC_MYSQL_SERVER'],
+                            $this->option['ZC_MYSQL_USERNAME'],
+                            $this->option['ZC_MYSQL_PASSWORD'],
+                            $this->option['ZC_MYSQL_NAME'],
+                            $this->option['ZC_MYSQL_PRE'],
+                            $this->option['ZC_MYSQL_PORT'],
+                            $this->option['ZC_MYSQL_PERSISTENT'],
+                            $this->option['ZC_MYSQL_ENGINE'],
+                        )
+                    ) == false
                 ) {
                     $this->ShowError(67, __FILE__, __LINE__);
                 }
@@ -1195,6 +1210,11 @@ class ZBlogPHP
             $sql = $this->db->sql->get()->select($this->table['Config']);
             /* @var Config[] $array */
             $this->prvConfigList = $this->GetListOrigin($sql);
+        }
+        if (is_array($this->prvConfigList)) {
+            if (count($this->prvConfigList) == 1 && $this->prvConfigList[0] === false) {
+                return;
+            }
         }
 
         $type = 'Config';
@@ -2403,15 +2423,16 @@ class ZBlogPHP
         }
 
         foreach ($array as $a) {
-            /** @var Base $l */
-            $l = new $type();
-            $l->LoadInfoByAssoc($a);
-            $id = $l->GetIdName();
-            if ($this->CheckCache($type, $l->$id) == false) {
-                $this->AddCache($l);
+            if (is_array($a)) {
+                /** @var Base $l */
+                $l = new $type();
+                $l->LoadInfoByAssoc($a);
+                $id = $l->GetIdName();
+                if ($this->CheckCache($type, $l->$id) == false) {
+                    $this->AddCache($l);
+                }
+                $list[] = $l;
             }
-
-            $list[] = $l;
         }
 
         return $list;
@@ -3327,13 +3348,13 @@ class ZBlogPHP
      */
     public function GetTagByAlias($name, $type = 0)
     {
-        $ret = $this->GetSomeThingByAttr($this->tags, 'Tag', array('Alias','Type'), array($name, $type));
+        $ret = $this->GetSomeThingByAttr($this->tags, 'Tag', array('Alias', 'Type'), array($name, $type));
         if (is_object($ret) && $ret->ID >= 0) {
             return $ret;
         }
 
         $a = array();
-        $a[] = array('=','tag_Alias', $name);
+        $a[] = array('=', 'tag_Alias', $name);
         $a[] = array('=', 'tag_Type', $type);
         $array = $this->GetTagList('*', array($a), '', 1, '');
         if (count($array) == 0) {
@@ -3353,7 +3374,7 @@ class ZBlogPHP
      */
     public function GetTagByName($name, $type = 0)
     {
-        $ret = $this->GetSomeThingByAttr($this->tags, 'Tag', array('Name','Type'), array($name, $type));
+        $ret = $this->GetSomeThingByAttr($this->tags, 'Tag', array('Name', 'Type'), array($name, $type));
         if (is_object($ret) && $ret->ID >= 0) {
             return $ret;
         }
@@ -3596,9 +3617,14 @@ class ZBlogPHP
      */
     public function GetCSRFToken($id = '')
     {
+        $oldZone = date_default_timezone_get();
+        date_default_timezone_set($this->option['ZC_TIME_ZONE_NAME']);
+
+        $time = date('Ymdh');
         $s = $this->user->ID . $this->user->Password . $this->user->Status;
 
-        return md5($this->guid . $s . $id . date('Ymdh'));
+        date_default_timezone_set($oldZone);
+        return md5($this->guid . $s . $id . $time);
     }
 
     /**
@@ -3611,15 +3637,20 @@ class ZBlogPHP
      */
     public function VerifyCSRFToken($token, $id = '')
     {
+        $oldZone = date_default_timezone_get();
+        date_default_timezone_set($this->option['ZC_TIME_ZONE_NAME']);
+
         $userString = $this->user->ID . $this->user->Password . $this->user->Status;
         $tokenString = $this->guid . $userString . $id;
 
         for ($i = 0; $i <= $this->csrfExpiration; $i++) {
             if ($token === md5($tokenString . date('Ymdh', (time() - (3600 * $i))))) {
+                date_default_timezone_set($oldZone);
                 return true;
             }
         }
 
+        date_default_timezone_set($oldZone);
         return false;
     }
 

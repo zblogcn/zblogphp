@@ -91,7 +91,7 @@ class Tag extends Base
             }
             $u->RulesObject = &$this;
             $u->Rules['{%id%}'] = $this->ID;
-            $u->Rules['{%alias%}'] = rawurlencode($this->Alias == '' ? $this->$backAttr : $this->Alias);
+            $u->Rules['{%alias%}'] = rawurlencode_without_backslash($this->Alias == '' ? $this->$backAttr : $this->Alias);
 
             return $u->Make();
         }

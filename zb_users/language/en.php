@@ -281,6 +281,7 @@ return array(
         'clear_thumb_cache'                 => 'Clear thumb cache',
         'confirm_clear_thumb_cache'         => 'Confirm to clear thumb cache.',
         'category_legacy_display'           => 'Category manage legacy display',
+        'change_default_password'           => 'Please change the default password immediately.',
         ''                                  => '',
     ),
 

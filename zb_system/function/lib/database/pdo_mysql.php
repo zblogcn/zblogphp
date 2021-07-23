@@ -100,7 +100,7 @@ class Database__PDO_MySQL implements Database__Interface
             $this->version = SplitAndGet($myver, '-', 0);
             if (version_compare($this->version, '5.5.3') >= 0) {
                 $u = "utf8mb4";
-                $c = 'utf8mb4_unicode_ci';
+                $c = 'utf8mb4_general_ci';
             } else {
                 $u = "utf8";
                 $c = 'utf8_general_ci';
@@ -108,6 +108,7 @@ class Database__PDO_MySQL implements Database__Interface
             $db_link->query("SET NAMES {$u} COLLATE {$c}");
             $this->charset = $u;
             $this->collate = $c;
+            $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_SILENT);
 
             return true;
         } catch (PDOException $e) {
@@ -195,8 +196,8 @@ class Database__PDO_MySQL implements Database__Interface
         //$query=str_replace('%pre%', $this->dbpre, $query);
         // 遍历出来
         $results = $this->db->query($this->sql->Filter($query));
-        $e = $this->db->errorCode();
-        if ($e > 0) {
+        $e = trim($this->db->errorCode(), '0');
+        if ($e != '') {
             trigger_error(implode(' ', $this->db->errorInfo()), E_USER_NOTICE);
         }
         $this->LogsError();
@@ -313,8 +314,8 @@ class Database__PDO_MySQL implements Database__Interface
 
     private function LogsError()
     {
-        $e = $this->db->errorCode();
-        if ($e > 0) {
+        $e = trim($this->db->errorCode(), '0');
+        if ($e != '') {
             $this->error[] = array($e, $this->db->errorInfo());
         }
     }
@@ -337,6 +338,27 @@ class Database__PDO_MySQL implements Database__Interface
         if (strcasecmp($query, 'rollback ') === 0) {
             return $this->db->rollBack();
         }
+    }
+
+    /**
+     * 判断数据表的字段是否存在.
+     *
+     * @param string $table 表名
+     * @param string $field 字段名
+     *
+     * @return bool
+     */
+    public function ExistColumn($table, $field)
+    {
+        $r = null;
+        ZBlogException::SuspendErrorHook();
+        $s = "SELECT column_name FROM information_schema.columns WHERE table_schema='$this->dbname' AND table_name = '$table' AND column_name = '$field'";
+        $r = @$this->Query($s);
+        ZBlogException::ResumeErrorHook();
+        if (is_array($r) && count($r) == 0) {
+            return false;
+        }
+        return true;
     }
 
 }

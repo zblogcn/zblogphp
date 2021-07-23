@@ -1,4 +1,5 @@
 <?php
+
 /**
  * 后台管理辅助函数相关
  * @package Z-BlogPHP
@@ -101,6 +102,24 @@ function Include_Admin_UpdateDB()
             $zbp->SetHint('tips', '<a href="#" onclick="$.get(bloghost+\'zb_system/admin/updatedb.php\', function(data){alert(JSON.parse(data).data);window.location.reload();});">' . @$zbp->langs->msg->update_db . '</a>', 10000);
         }
     }
+}
+
+/**
+ * Check Weak PassWord
+ */
+function Include_Admin_CheckWeakPassWord()
+{
+    global $zbp, $action;
+
+    if ($zbp->user->Password != Member::GetPassWordByGuid('zblogger', $zbp->user->Guid)) {
+        return;
+    }
+
+    if ($action !== 'MemberEdt') {
+        Redirect($zbp->host . 'zb_system/cmd.php?act=MemberEdt&id=' . $zbp->user->ID);
+    }
+
+    echo $zbp->ShowHint('tips', $zbp->langs->msg->change_default_password, 9999);
 }
 
 /**
@@ -249,7 +268,7 @@ function MakeTopMenu($requireAction, $strName, $strUrl, $strTarget, $strLiId, $s
 
     static $AdminTopMenuCount = 0;
     if ($zbp->CheckRights($requireAction) == false) {
-        return;
+        return '';
     }
 
     $tmp = null;
@@ -284,12 +303,12 @@ function MakeLeftMenu($requireAction, $strName, $strUrl, $strLiId, $strAId, $str
 
     static $AdminLeftMenuCount = 0;
     if ($zbp->CheckRights($requireAction) == false) {
-        return;
+        return '';
     }
 
     $AdminLeftMenuCount = ($AdminLeftMenuCount + 1);
     $tmp = null;
-    
+
     if ($strIconClass != "") {
         $tmp = "<li id=\"" . $strLiId . "\"><a id=\"" . $strAId . "\" href=\"" . $strUrl . "\" title=\"" . strip_tags($strName) . "\"><span><i class=\"" . $strIconClass . "\"></i>" . $strName . "</span></a></li>";
     } elseif ($strImgUrl != "") {
@@ -405,7 +424,7 @@ function OutputOptionItemsOfTemplate($default, $refuse_file_filter = array(), $a
         }
 
         //判断主题是否对模板进行了Template Type标注
-        if ($zbp->template->isuse_nameandtype == true) {//用$accept_type去检查$typeArray，为真$c就是true就可以放入列表
+        if ($zbp->template->isuse_nameandtype == true) { //用$accept_type去检查$typeArray，为真$c就是true就可以放入列表
             $c = false;
             foreach ($accept_type as $k1 => $v1) {
                 foreach ($typeArray as $k2 => $v2) {
@@ -490,22 +509,25 @@ function OutputOptionItemsOfMemberLevel($default)
  *
  * @return null|string
  */
-function OutputOptionItemsOfMember($default)
+function OutputOptionItemsOfMember($default, $posttype = 0, $checkaction = 'edit')
 {
     global $zbp;
 
     $s = null;
     $tz = array();
+    $max_level = (int) $zbp->option['ZC_OUTPUT_OPTION_MEMBER_MAX_LEVEL'];
 
     foreach ($GLOBALS['hooks']['Filter_Plugin_OutputOptionItemsOfMember_Begin'] as $fpname => &$fpsignal) {
-        $fpreturn = $fpname($default, $tz);
+        $fpreturn = $fpname($default, $posttype, $checkaction, $tz);
         if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
             $fpsignal = PLUGIN_EXITSIGNAL_NONE;
             return $fpreturn;
         }
     }
 
-    if (!$zbp->CheckRights('ArticleAll')) {
+    $actions = $zbp->GetPostType($posttype, 'actions');
+
+    if (!$zbp->CheckRights($actions['all'])) {
         if (!isset($zbp->members[$default])) {
             $tz[0] = '';
         } else {
@@ -513,15 +535,27 @@ function OutputOptionItemsOfMember($default)
         }
     } else {
         for ($i = 1; $i < (count($zbp->lang['user_level_name']) + 1); $i++) {
-            if ($zbp->CheckRightsByLevel('ArticleEdt', $i) == false) {
+            if ($zbp->CheckRightsByLevel($actions[$checkaction], $i) == false) {
+                $i = ($i - 1);
                 break;
             }
         }
-        $zbp->LoadMembers($i);
+        if ($max_level > 0 && $i > $max_level) {
+            $i = $max_level;
+        }
+        if ($i > 0) {
+            $zbp->LoadMembers($i);
+        }
         $memberbyname = array();
         foreach ($zbp->members as $key => $value) {
-            if ($zbp->CheckRightsByLevel('ArticleEdt', $zbp->members[$key]->Level)) {
+            if ($zbp->CheckRightsByLevel($actions[$checkaction], $zbp->members[$key]->Level)) {
                 $memberbyname[$zbp->members[$key]->Name] = $zbp->members[$key]->ID;
+            }
+        }
+        if (!empty($default)) {
+            $m = $zbp->GetMemberByID($default);
+            if (!empty($m->ID)) {
+                $memberbyname[$m->Name] = $m->ID;
             }
         }
         ksort($memberbyname);
@@ -634,7 +668,7 @@ function CreateModuleDiv($m, $button = true)
         echo '<span class="widget-action"><a href="../cmd.php?act=ModuleEdt&amp;id=' . $m->ID . '"><i class="icon-pencil-square"></i></a>';
 
         if ($m->SourceType == 'user' || $m->SourceType == 'themeinclude') {
-            echo '&nbsp;<a onclick="return window.confirm(\'' . str_replace(array('"','\''), '', $zbp->lang['msg']['confirm_operating']) . '\');" href="' . BuildSafeCmdURL('act=ModuleDel&amp;id=' . $m->ID) . '"><i class="icon-trash"></i></a>';
+            echo '&nbsp;<a onclick="return window.confirm(\'' . str_replace(array('"', '\''), '', $zbp->lang['msg']['confirm_operating']) . '\');" href="' . BuildSafeCmdURL('act=ModuleDel&amp;id=' . $m->ID) . '"><i class="icon-trash"></i></a>';
         }
         echo '</span>';
     }

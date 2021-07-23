@@ -78,6 +78,7 @@ class Database__PDO_PostgreSQL implements Database__Interface
      */
     public function Open($array)
     {
+        $array[3] = strtolower($array[3]);
         $s = "pgsql:host={$array[0]};port={$array[5]};dbname={$array[3]};user={$array[1]};password={$array[2]};options='--client_encoding=UTF8'";
         if (false == $array[5]) {
             $db_link = new PDO($s);
@@ -86,8 +87,10 @@ class Database__PDO_PostgreSQL implements Database__Interface
         }
         $this->db = $db_link;
         $this->dbpre = $array[4];
+        $this->dbname = $array[3];
         $myver = $this->db->getAttribute(PDO::ATTR_SERVER_VERSION);
         $this->version = SplitAndGet($myver, '-', 0);
+        $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_SILENT);
 
         return true;
     }
@@ -101,11 +104,26 @@ class Database__PDO_PostgreSQL implements Database__Interface
      */
     public function CreateDB($dbpgsql_server, $dbpgsql_port, $dbpgsql_username, $dbpgsql_password, $dbpgsql_name)
     {
+        $dbpgsql_name = strtolower($dbpgsql_name);
         $db_link = new PDO('pgsql:host=' . $dbpgsql_server . ';port=' . $dbpgsql_port, $dbpgsql_username, $dbpgsql_password);
         $this->db = $db_link;
         $this->dbname = $dbpgsql_name;
 
-        $db_link->query("SET client_encoding='UTF-8';");
+        //$db_link->query("SET client_encoding='UTF-8';");
+
+        $isExists = @$this->Query("select count(*) from pg_catalog.pg_database where datname = '$dbpgsql_name';");
+        $hasDB = false;
+        if (is_array($isExists) && is_array($isExists[0]) && isset($isExists[0]['count'])) {
+            if ($isExists[0]['count'] == '0') {
+                $hasDB = false;
+            } else {
+                $hasDB = true;
+            }
+        }
+
+        if ($hasDB == true) {
+            return false;
+        }
 
         $r = $this->db->exec($this->sql->Filter('CREATE DATABASE ' . $dbpgsql_name));
         $this->LogsError();
@@ -155,8 +173,8 @@ class Database__PDO_PostgreSQL implements Database__Interface
         //$query=str_replace('%pre%', $this->dbpre, $query);
         // 遍历出来
         $results = $this->db->query($this->sql->Filter($query));
-        $e = $this->db->errorCode();
-        if ($e > 0) {
+        $e = trim($this->db->errorCode(), '0');
+        if ($e != '') {
             trigger_error(implode(' ', $this->db->errorInfo()), E_USER_NOTICE);
         }
         $this->LogsError();
@@ -254,8 +272,8 @@ class Database__PDO_PostgreSQL implements Database__Interface
 
     private function LogsError()
     {
-        $e = $this->db->errorCode();
-        if ($e > 0) {
+        $e = trim($this->db->errorCode(), '0');
+        if ($e != '') {
             $this->error[] = array($e, $this->db->errorInfo());
         }
     }
@@ -278,6 +296,29 @@ class Database__PDO_PostgreSQL implements Database__Interface
         if (strcasecmp($query, 'rollback ') === 0) {
             return $this->db->rollBack();
         }
+    }
+
+    /**
+     * 判断数据表的字段是否存在.
+     *
+     * @param string $table 表名
+     * @param string $field 字段名
+     *
+     * @return bool
+     */
+    public function ExistColumn($table, $field)
+    {
+        $r = null;
+        $table = strtolower($table);
+        $field = strtolower($field);
+        ZBlogException::SuspendErrorHook();
+        $s = "SELECT * FROM information_schema.columns WHERE table_schema = 'public' AND table_name = '$table' AND column_name = '$field'";
+        $r = @$this->Query($s);
+        ZBlogException::ResumeErrorHook();
+        if (is_array($r) && count($r) == 0) {
+            return false;
+        }
+        return true;
     }
 
 }

@@ -137,13 +137,13 @@ function api_category_list()
     global $zbp;
 
     $type = (int) GetVars('type');
-    $mng = strtolower((string) GetVars('manage')); //&manage=1
+    $mng = (int) strtolower((string) GetVars('manage')); //&manage=1
 
     $limitCount = $zbp->option['ZC_MANAGE_COUNT'];
 
     // 权限验证
     //检查管理模式权限
-    if (!empty($mng)) {
+    if ($mng != 0) {
         //检查管理模式权限
         ApiCheckAuth(true, 'CategoryMng');
         //ApiCheckAuth(true, 'CategoryAll');
@@ -151,7 +151,7 @@ function api_category_list()
         $limitCount = $zbp->option['ZC_MANAGE_COUNT'];
     } else {
         // 默认非管理模式
-        ApiCheckAuth(true, 'view');
+        ApiCheckAuth(false, 'view');
         $limitCount = $zbp->option['ZC_MANAGE_COUNT'];
     }
 

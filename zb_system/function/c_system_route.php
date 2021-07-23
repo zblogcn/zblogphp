@@ -129,8 +129,8 @@ function ViewAuto()
 
             $m = array();
             //如果条件符合就组合参数数组并调用函数
-            //var_dump($match_with_page_value, $route['urlrule'], $r, $url, $m);//die;
-            //var_dump(preg_match($r, $url, $m));
+            //var_dump($route['name'],$match_with_page_value, $route['urlrule'], $r, $url, $m);//die;
+            //if($r != '')var_dump(preg_match($r, $url, $m));
             $b = $b && (($r != '' && preg_match($r, $url, $m) == 1) || ($r == '' && $url == '') || ($r == '' && $url == 'index.php') || ($r == '/(?J)^index\.php\/$/' && $url == ''));
             if ($b) {
                 $array = $m;
@@ -629,8 +629,8 @@ function ViewFeed()
 function ViewSearch()
 {
     global $zbp;
+    $fpargs = func_get_args();
 
-    $fpargs = call_user_func('func_get_args');
     foreach ($GLOBALS['hooks']['Filter_Plugin_ViewSearch_Begin'] as $fpname => &$fpsignal) {
         $fpreturn = call_user_func_array($fpname, $fpargs);
         if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
@@ -656,7 +656,7 @@ function ViewSearch()
     } else {
         $canceldisplay = false;
         $posttype = 0;
-        $route = array('urlrule' => $zbp->option['ZC_SEARCH_REGEX']);
+        $route = array('urlrule' => $zbp->GetPostType(0, 'search_urlrule'));
         $disablebot = true;
     }
 
@@ -815,8 +815,8 @@ function ViewSearch()
 function ViewList($page = null, $cate = null, $auth = null, $date = null, $tags = null, $isrewrite = false, $object = array())
 {
     global $zbp;
+    $fpargs = func_get_args();
 
-    $fpargs = call_user_func('func_get_args');
     $fpargs_count = count($fpargs);
 
     //新版本的函数V2 (v2版本传入的第一个参数是array且只传一个array)
@@ -830,7 +830,7 @@ function ViewList($page = null, $cate = null, $auth = null, $date = null, $tags 
     }
 
     //修正首个参数使用array而不传入后续参数的情况
-    if (is_array($page) && isset($page['route']) && $fpargs_count == 1) {
+    if (is_array($page) && $fpargs_count == 1) {
         $object = $page;
         $isrewrite = true;
         $cate = GetValueInArray($page, 'cate', null);
@@ -842,10 +842,12 @@ function ViewList($page = null, $cate = null, $auth = null, $date = null, $tags 
         $route = GetValueInArray($page, 'route', array());
         $page = GetValueInArray($page, 'page', null);
     } else {
-        $object = array();
-        $posttype = 0;
-        $canceldisplay = false;
-        $route = array();
+        if (!is_array($object)) {
+            $object = array();
+        }
+        $canceldisplay = GetValueInArray($object, 'canceldisplay', false);
+        $route = GetValueInArray($object, 'route', array());
+        $posttype = GetValueInArray($object, 'posttype', 0);
     }
 
     //老版本的兼容接口
@@ -897,7 +899,7 @@ function ViewList($page = null, $cate = null, $auth = null, $date = null, $tags 
             if (!empty($route)) {
                 $pagebar = new Pagebar($route);
             } else {
-                $pagebar = new Pagebar($zbp->option['ZC_INDEX_REGEX'], true, true);
+                $pagebar = new Pagebar($zbp->GetPostType($posttype, 'list_urlrule'), true, true);
             }
             if (0 == $posttype) {
                 $pagebar->Count = $zbp->cache->normal_article_nums;
@@ -914,17 +916,17 @@ function ViewList($page = null, $cate = null, $auth = null, $date = null, $tags 
             if (!empty($route)) {
                 $pagebar = new Pagebar($route);
             } else {
-                $pagebar = new Pagebar($zbp->option['ZC_CATEGORY_REGEX']);
+                $pagebar = new Pagebar($zbp->GetPostType($posttype, 'list_category_urlrule'));
             }
             $category = new Category();
 
             if (!is_array($cate)) {
                 $cateId = $cate;
                 $cate = array();
-                if (strpos($zbp->option['ZC_CATEGORY_REGEX'], '{%id%}') !== false) {
+                if (strpos($zbp->GetPostType($posttype, 'list_category_urlrule'), '{%id%}') !== false) {
                     $cate['id'] = $cateId;
                 }
-                if (strpos($zbp->option['ZC_CATEGORY_REGEX'], '{%alias%}') !== false) {
+                if (strpos($zbp->GetPostType($posttype, 'list_category_urlrule'), '{%alias%}') !== false) {
                     $cate['alias'] = $cateId;
                 }
             }
@@ -932,12 +934,12 @@ function ViewList($page = null, $cate = null, $auth = null, $date = null, $tags 
                 $category = $zbp->GetCategoryByID($cate['id']);
             } else {
                 $category = $zbp->GetCategoryByAlias($cate['alias'], $posttype);
-                if ($category->ID == '') {
+                if (empty($category->ID)) {
                     $category = $zbp->GetCategoryByAliasOrName($cate['alias'], $posttype);
                 }
             }
 
-            if ($category->ID == '') {
+            if (empty($category->ID)) {
                 if (!empty($route) || $isrewrite == true) {
                     return false;
                 }
@@ -974,17 +976,17 @@ function ViewList($page = null, $cate = null, $auth = null, $date = null, $tags 
             if (!empty($route)) {
                 $pagebar = new Pagebar($route);
             } else {
-                $pagebar = new Pagebar($zbp->option['ZC_AUTHOR_REGEX']);
+                $pagebar = new Pagebar($zbp->GetPostType($posttype, 'list_author_urlrule'));
             }
             $author = new Member();
 
             if (!is_array($auth)) {
                 $authId = $auth;
                 $auth = array();
-                if (strpos($zbp->option['ZC_AUTHOR_REGEX'], '{%id%}') !== false) {
+                if (strpos($zbp->GetPostType($posttype, 'list_author_urlrule'), '{%id%}') !== false) {
                     $auth['id'] = $authId;
                 }
-                if (strpos($zbp->option['ZC_AUTHOR_REGEX'], '{%alias%}') !== false) {
+                if (strpos($zbp->GetPostType($posttype, 'list_author_urlrule'), '{%alias%}') !== false) {
                     $auth['alias'] = $authId;
                 }
             }
@@ -996,7 +998,7 @@ function ViewList($page = null, $cate = null, $auth = null, $date = null, $tags 
                 $author = $zbp->GetMemberByNameOrAlias($auth['alias']);
             }
 
-            if ($author->ID == '') {
+            if (empty($author->ID)) {
                 if (!empty($route) || $isrewrite == true) {
                     return false;
                 }
@@ -1020,7 +1022,7 @@ function ViewList($page = null, $cate = null, $auth = null, $date = null, $tags 
             if (!empty($route)) {
                 $pagebar = new Pagebar($route);
             } else {
-                $pagebar = new Pagebar($zbp->option['ZC_DATE_REGEX']);
+                $pagebar = new Pagebar($zbp->GetPostType($posttype, 'list_date_urlrule'));
             }
 
             if (!is_array($date)) {
@@ -1033,13 +1035,14 @@ function ViewList($page = null, $cate = null, $auth = null, $date = null, $tags 
 
             $datetime_txt = $datetime;
             $datetime = null;
+
             if (function_exists('date_create_from_format')) {
                 $objdate = date_create_from_format($zbp->option['ZC_DATETIME_WITHDAY_RULE'], $datetime_txt);
                 if ($objdate !== false) {
                     $datetime = strtotime($objdate->format('Y-n-j'));
                     $hasDay = true;
                 } else {
-                    $objdate = date_create_from_format($zbp->option['ZC_DATETIME_RULE'], $datetime_txt);
+                    $objdate = date_create_from_format($zbp->option['ZC_DATETIME_RULE'] . '-j', $datetime_txt . '-1');
                     if ($objdate !== false) {
                         $datetime = strtotime($objdate->format('Y-n'));
                     }
@@ -1093,17 +1096,17 @@ function ViewList($page = null, $cate = null, $auth = null, $date = null, $tags 
             if (!empty($route)) {
                 $pagebar = new Pagebar($route);
             } else {
-                $pagebar = new Pagebar($zbp->option['ZC_TAGS_REGEX']);
+                $pagebar = new Pagebar($zbp->GetPostType($posttype, 'list_tag_urlrule'));
             }
             $tag = new Tag();
 
             if (!is_array($tags)) {
                 $tagId = $tags;
                 $tags = array();
-                if (strpos($zbp->option['ZC_TAGS_REGEX'], '{%id%}') !== false) {
+                if (strpos($zbp->GetPostType($posttype, 'list_tag_urlrule'), '{%id%}') !== false) {
                     $tags['id'] = $tagId;
                 }
-                if (strpos($zbp->option['ZC_TAGS_REGEX'], '{%alias%}') !== false) {
+                if (strpos($zbp->GetPostType($posttype, 'list_tag_urlrule'), '{%alias%}') !== false) {
                     $tags['alias'] = $tagId;
                 }
             }
@@ -1277,8 +1280,8 @@ function ViewList($page = null, $cate = null, $auth = null, $date = null, $tags 
 function ViewPost($id = null, $alias = null, $isrewrite = false, $object = array())
 {
     global $zbp;
+    $fpargs = func_get_args();
 
-    $fpargs = call_user_func('func_get_args');
     $fpargs_count = count($fpargs);
 
     //新版本的函数V2 (v2版本传入的第一个参数是array且只传一个array)
@@ -1292,7 +1295,7 @@ function ViewPost($id = null, $alias = null, $isrewrite = false, $object = array
     }
 
     //修正首个参数使用array而不传入后续参数的情况
-    if (is_array($id) && isset($id['route']) && $fpargs_count == 1) {
+    if (is_array($id) && $fpargs_count == 1) {
         $object = $id;
         $isrewrite = true;
         $posttype = GetValueInArray($object, 'posttype', 0);
@@ -1313,16 +1316,18 @@ function ViewPost($id = null, $alias = null, $isrewrite = false, $object = array
             }
         }
     } else {
-        $object = array();
-        $posttype = 0;
-        $canceldisplay = false;
-        $route = array();
+        if (!is_array($object)) {
+            $object = array();
+        }
+        $canceldisplay = GetValueInArray($object, 'canceldisplay', false);
+        $route = GetValueInArray($object, 'route', array());
+        $posttype = GetValueInArray($object, 'posttype', 0);
         if (is_array($id)) {
-            $object = $id;
+            $object = array_merge($object, $id);
             $id = isset($object['id']) ? $object['id'] : null;
             $alias = isset($object['alias']) ? $object['alias'] : null;
         } else {
-            $object = array('id' => $id);
+            $object['id'] = $id;
             $object['alias'] = $alias;
             $object[0] = empty($alias) ? $id : $alias;
         }

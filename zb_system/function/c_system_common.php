@@ -369,10 +369,10 @@ function GetValueInArray($array, $name, $default = null)
     if (is_array($array)) {
         if (array_key_exists($name, $array)) {
             return $array[$name];
-        } else {
-            return $default;
         }
+        return $default;
     }
+    return $default;
 }
 
 /**
@@ -565,7 +565,7 @@ function GetHttpContent($url)
 {
     $ajax = Network::Create();
     if (!$ajax) {
-        return;
+        return '';
     }
 
     $ajax->open('GET', $url);
@@ -1028,7 +1028,7 @@ function GetFileExt($f)
 function GetFilePermsOct($f)
 {
     if (!file_exists($f)) {
-        return;
+        return '';
     }
 
     return substr(sprintf('%o', fileperms($f)), -4);
@@ -1044,7 +1044,7 @@ function GetFilePermsOct($f)
 function GetFilePerms($f)
 {
     if (!file_exists($f)) {
-        return;
+        return '';
     }
 
     $perms = fileperms($f);
@@ -1380,17 +1380,17 @@ function SubStrUTF8_Start($sourcestr, $start)
     $args = func_get_args();
     if (function_exists('mb_substr') && function_exists('mb_internal_encoding')) {
         mb_internal_encoding('UTF-8');
-        return call_user_func_array('mb_substr', $args);
+        return (string) call_user_func_array('mb_substr', $args);
     }
 
     if (function_exists('iconv_substr') && function_exists('iconv_set_encoding')) {
         call_user_func('iconv_set_encoding', 'internal_encoding', "UTF-8");
         call_user_func('iconv_set_encoding', 'output_encoding', "UTF-8");
 
-        return call_user_func_array('iconv_substr', $args);
+        return (string) call_user_func_array('iconv_substr', $args);
     }
 
-    return call_user_func_array('substr', $args);
+    return (string) call_user_func_array('substr', $args);
 }
 
 /**
@@ -1406,14 +1406,14 @@ function SubStrUTF8($sourcestr, $cutlength)
     if (function_exists('mb_substr') && function_exists('mb_internal_encoding')) {
         mb_internal_encoding('UTF-8');
 
-        return mb_substr($sourcestr, 0, $cutlength);
+        return (string) mb_substr($sourcestr, 0, $cutlength);
     }
 
     if (function_exists('iconv_substr') && function_exists('iconv_set_encoding')) {
         call_user_func('iconv_set_encoding', 'internal_encoding', "UTF-8");
         call_user_func('iconv_set_encoding', 'output_encoding', "UTF-8");
 
-        return iconv_substr($sourcestr, 0, $cutlength);
+        return (string) iconv_substr($sourcestr, 0, $cutlength);
     }
 
     $ret = '';
@@ -1451,7 +1451,7 @@ function SubStrUTF8($sourcestr, $cutlength)
         */
     }
 
-    return $ret;
+    return (string) $ret;
 }
 
 /**
@@ -1565,7 +1565,7 @@ function SubStrUTF8_Html($source, $length)
             }
         }
 
-        return $s;
+        return (string) $s;
     }
 
     if (function_exists('iconv_substr') && function_exists('iconv_set_encoding')) {
@@ -1584,7 +1584,7 @@ function SubStrUTF8_Html($source, $length)
             }
         }
 
-        return $s;
+        return (string) $s;
     }
 
     $j = strlen($source);
@@ -1600,7 +1600,7 @@ function SubStrUTF8_Html($source, $length)
         }
     }
 
-    return $s;
+    return (string) $s;
 }
 
 /**
@@ -2158,4 +2158,17 @@ function UrlHostToPath($url)
     }
 
     return ZBP_PATH . substr($url, strlen($zbp->host));
+}
+
+/**
+ * rawurlencode转义但不转义/
+ *
+ * @param string $url
+ * @return string
+ */
+function rawurlencode_without_backslash($s)
+{
+    $s = rawurlencode($s);
+    $s = str_replace('%2F', '/', $s);
+    return $s;
 }

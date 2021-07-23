@@ -147,14 +147,14 @@ function api_comment_list()
 {
     global $zbp;
 
-    $mng = (string) trim(GetVars('manage')); //&manage=1
+    $mng = (int) trim(GetVars('manage')); //&manage=1
     $postId = (int) GetVars('post_id');
     $authId = (int) GetVars('auth_id');
     $ischecking = (int) GetVars('ischecking');
     $listArr = array();
     $where = array();
 
-    if ($mng == 1) {
+    if ($mng != 0) {
         // 列出所有评论
         ApiCheckAuth(true, 'CommentMng');
         $limitCount = $zbp->option['ZC_MANAGE_COUNT'];
@@ -201,7 +201,7 @@ function api_comment_list()
         $parentId = (int) GetVars('parent_id');
         $where[] = array('=', 'comm_ParentID', $parentId);
     }
-    $w[] = array('=', 'comm_Ischecking', (int) $ischecking);
+    $where[] = array('=', 'comm_Ischecking', (int) $ischecking);
 
     $listArr = ApiGetObjectArrayList(
         $zbp->GetCommentList('*', $where, $order, $limit, $option),

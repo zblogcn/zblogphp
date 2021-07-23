@@ -125,14 +125,14 @@ function api_tag_list()
     global $zbp;
 
     $type = (int) GetVars('type');
-    $mng = strtolower((string) GetVars('manage')); //&manage=1
+    $mng = (int) strtolower((string) GetVars('manage')); //&manage=1
 
     $where = array();
     $where[] = array('=', 'tag_Type', $type);
 
     // 权限验证
     //检查管理模式权限
-    if (!empty($mng)) {
+    if ($mng != 0) {
         //检查管理模式权限
         ApiCheckAuth(true, 'TagMng');
         //ApiCheckAuth(true, 'TagAll');

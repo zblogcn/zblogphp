@@ -582,4 +582,6 @@ function ApiThrottle($name = 'default', $max_reqs = 60, $period = 60)
 
     $cached_req['hits']++;
     $zbpcache->Set($cache_key, json_encode($cached_req), ($cached_req['expire_time'] - time()));
+
+    return true;
 }

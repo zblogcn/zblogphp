@@ -286,6 +286,8 @@ function DelPost()
 
         $post->Del();
 
+        DelArticle_Comments($post->ID);
+
         $zbp->DelItemToNavbar($zbp->GetPostType($post->Type, 'name'), $post->ID);
 
         foreach ($GLOBALS['hooks']['Filter_Plugin_DelPost_Succeed'] as $fpname => &$fpsignal) {
@@ -327,7 +329,6 @@ function PostArticle()
     }
     if (isset($_POST['Content'])) {
         $_POST['Content'] = preg_replace("/<hr class=\"more\"\s*\/>/i", '<!--more-->', $_POST['Content']);
-        $intro = isset($_POST['Intro']) ? $_POST['Intro'] : '';
 
         if (isset($_POST['Intro'])) {
             if (stripos($_POST['Content'], '<!--more-->') !== false) {
@@ -529,7 +530,6 @@ function DelArticle()
 
     $id = (int) GetVars('id');
 
-    $article = new Post();
     $article = $zbp->GetPostByID($id);
     if ($article->ID > 0) {
         if (!$zbp->CheckRights('ArticleDel')) {
@@ -786,7 +786,6 @@ function DelPage()
 
     $id = (int) GetVars('id');
 
-    $article = new Post();
     $article = $zbp->GetPostByID($id);
     if ($article->ID > 0) {
         if (!$zbp->CheckRights('PageDel')) {

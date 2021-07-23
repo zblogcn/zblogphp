@@ -295,7 +295,7 @@ Z-BlogPHP官方网址：https://www.zblogcn.com/
 
 (一)、ZBLOGCN.COM提供免费开源的建站程序Z-Blog和Z-BlogPHP，不提供网站相关的内容服务，该建站程序之著作权归ZBLOGCN.COM所有。
 
-(二)、任何人均可自由使用我们的建站程序建立网站，ZBLOGCN.COM与用户使用我们的建站程序所建立之网站无任何关联，ZBLOGCN.COM对用户及其网站不承担任何责任。
+(二)、用户可自由选择是否使用我们的建站程序，ZBLOGCN.COM与用户使用我们的建站程序所建立的网站无任何关联，ZBLOGCN.COM对用户及其网站不承担任何责任。
 
 (三)、用户下载、安装、使用本建站程序，即表明用户信任ZBLOGCN.COM，ZBLOGCN.COM对任何原因在使用本建站程序时可能对用户自己或他人造成的任何形式的损失和伤害不承担责任。
 
@@ -768,7 +768,17 @@ function Setup3()
                     <?php
                     echo '&nbsp;&nbsp;&nbsp;&nbsp;';
             }
-            if ($CheckResult['sqlite'][0]) {
+            $not_use_sqlite2 = false;
+            if (extension_loaded('pdo_sqlite')) {
+                $a = PDO::getAvailableDrivers();
+                if (in_array('sqlite', $a)) {
+                  $not_use_sqlite2 = true;
+                }
+            }
+            if (class_exists('SQLite3', false)) {
+              $not_use_sqlite2 = true;
+            }
+            if ($CheckResult['sqlite'][0] && $not_use_sqlite2 == false) {
                 ?>
                 <label>
                   <input value="sqlite" type="radio" name="dbtype" /> sqlite</label>
@@ -983,7 +993,7 @@ function Setup4()
                 $zbp->option['ZC_PGSQL_CHARSET'] = 'utf8';
                 $zbp->option['ZC_PGSQL_USERNAME'] = trim(GetVars('dbpgsql_username', 'POST'));
                 $zbp->option['ZC_PGSQL_PASSWORD'] = trim(GetVars('dbpgsql_password', 'POST'));
-                $zbp->option['ZC_PGSQL_NAME'] = trim(str_replace(array('\'', '"'), array('', ''), GetVars('dbpgsql_name', 'POST')));
+                $zbp->option['ZC_PGSQL_NAME'] = strtolower(trim(str_replace(array('\'', '"'), array('', ''), GetVars('dbpgsql_name', 'POST'))));
                 $zbp->option['ZC_PGSQL_PRE'] = trim(str_replace(array('\'', '"'), array('', ''), GetVars('dbpgsql_pre', 'POST')));
                 if ($zbp->option['ZC_PGSQL_PRE'] == '') {
                     $zbp->option['ZC_PGSQL_PRE'] == 'zbp_';
@@ -1133,7 +1143,14 @@ function CheckServer()
 
         if (extension_loaded('pdo_sqlite')) {
             //$pdo = new PDO('sqlite::memory:');
-            $v = ' '; //$pdo->getAttribute(PDO::ATTR_CLIENT_VERSION);
+            $a = PDO::getAvailableDrivers();
+            $v = '';
+            if (in_array('sqlite', $a)) {
+              $v .= 'sqlite3';
+            }
+            if (in_array('sqlite2', $a)) {
+              $v .= ' sqlite2';
+            }
             $pdo = null;
             $CheckResult['pdo_sqlite'][0] = $v;
             $CheckResult['pdo_sqlite'][1] = $CheckResult['pdo_sqlite'][0] ? BINGO : ERROR;
@@ -1474,19 +1491,27 @@ function SaveConfig()
 
     $zbp->LoadCache();
     $app = $zbp->LoadApp('theme', 'default');
-    $app->SaveSideBars();
+    if ($app->isloaded == true) {
+      $app->SaveSideBars();
+    }
 
     $app = $zbp->LoadApp('theme', 'Zit');
-    $app->LoadSideBars();
-    $app->SaveSideBars();
+    if ($app->isloaded == true) {
+      $app->LoadSideBars();
+      $app->SaveSideBars();
+    }
 
     $app = $zbp->LoadApp('theme', 'tpure');
-    $app->LoadSideBars();
-    $app->SaveSideBars();
+    if ($app->isloaded == true) {
+      $app->LoadSideBars();
+      $app->SaveSideBars();
+    }
 
     $app = $zbp->LoadApp('theme', 'WhitePage');
-    $app->LoadSideBars();
-    $app->SaveSideBars();
+    if ($app->isloaded == true) {
+      $app->LoadSideBars();
+      $app->SaveSideBars();
+    }
 
     $app = $zbp->LoadApp('theme', $zbp->option['ZC_BLOG_THEME']);
     $app->LoadSideBars();
