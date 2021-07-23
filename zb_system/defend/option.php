@@ -99,6 +99,7 @@ return array(
 
     // '页面各项列数
     'ZC_DISPLAY_COUNT'          => 10,
+    'ZC_DISPLAY_ORDER'          => 'log_PostTime',
     'ZC_PAGEBAR_COUNT'          => 10,
     'ZC_COMMENTS_DISPLAY_COUNT' => 100,
 
@@ -110,6 +111,7 @@ return array(
 
     // '后台管理
     'ZC_MANAGE_COUNT' => 50,
+    'ZC_MANAGE_ORDER' => 'log_PostTime',
 
     // '表情相关
     'ZC_EMOTICONS_FILENAME' => 'face',
