@@ -45,7 +45,7 @@ For security vulnerabilities, please contact us via ``contact#rainbowsoft.org`` 
 4. 填写你为站点设置的管理员账号密码，务必使用强口令账号
 5. 点击下一步，安装成功，进入网站
 
-安装完成后请删除 zb_install 文件夹。对于 GitHub 上的开发版本，请删除 standards、tests、utils 等文件夹。
+安装完成后请删除 zb_install 文件夹。对于 GitHub 上的开发版本，请删除 `standards`、`tests`、`utils` 等文件夹。
 
 ## 代码标准及说明
 
@@ -53,4 +53,4 @@ For security vulnerabilities, please contact us via ``contact#rainbowsoft.org`` 
 
 ## 开源协议
 
-Z-BlogPHP 项目，基于[The MIT License](http://opensource.org/licenses/mit-license.php)协议开放源代码。
+Z-BlogPHP 项目，基于 [The MIT License](http://opensource.org/licenses/mit-license.php) 协议开放源代码。
