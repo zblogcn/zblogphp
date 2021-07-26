@@ -146,6 +146,10 @@ function ApiListCheck(&$mods_allow, &$mods_disallow)
  */
 function ApiResponse($data = null, $error = null, $code = 200, $message = null)
 {
+    foreach ($GLOBALS['hooks']['Filter_Plugin_API_Pre_Response'] as $fpname => &$fpsignal) {
+        $fpname($data, $error, $code, $message);
+    }
+
     if (!empty($error)) {
         $error_info = array(
             'code' => ZBlogException::$error_id,
