@@ -207,7 +207,7 @@ class Template
         global $zbp;
 
         foreach ($this->dirs as $key => $value) {
-            $value = str_ireplace($zbp->usersdir . 'theme/' . $this->theme . '/template/', $this->path, $value);
+            $value = str_ireplace($zbp->usersdir . 'theme/' . $this->theme . '/' . $this->template_dirname . '/', $this->path, $value);
             if (!file_exists($value)) {
                 mkdir($value, 0755, true);
             }
@@ -244,7 +244,7 @@ class Template
             }
             $this->dirs = array_reverse($this->dirs);
             foreach ($this->dirs as $key => $value) {
-                $s = str_replace($zbp->usersdir . 'theme/' . $this->theme . '/template/', $this->path, $value);
+                $s = str_replace($zbp->usersdir . 'theme/' . $this->theme . '/' . $this->template_dirname . '/', $this->path, $value);
                 if (file_exists($s)) {
                     foreach (GetFilesInDir($s, 'php') as $t) {
                         if (file_exists($t)) {
