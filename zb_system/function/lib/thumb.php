@@ -163,7 +163,7 @@ class Thumb
                 continue;
             }
 
-            $thumb_name = md5($image) . '-' . $width . '-' . $height . '-' . ($clip === true ? '1' : '0') . '.' . $ext;
+            $thumb_name = md5(RemoveProtocolFromUrl($image)) . '-' . $width . '-' . $height . '-' . ($clip === true ? '1' : '0') . '.' . $ext;
             $thumb_path = $thumb_dir . $thumb_name;
             $thumb_url = $zbp->host . 'zb_users/cache/thumbs/' . $thumb_name;
 

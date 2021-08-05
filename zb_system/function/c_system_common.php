@@ -2132,6 +2132,23 @@ function GetImagesFromHtml($html)
 }
 
 /**
+ * 把 Url 前的 https:// 和 http:// 替换成 //.
+ *
+ * @param string $url
+ * @return string
+ */
+function RemoveProtocolFromUrl($url)
+{
+    if (substr($url, 0, 7) === 'http://') {
+        $new_url = '//' . substr($url, 7);
+    } elseif (substr($url, 0, 8) === 'https://') {
+        $new_url = '//' . substr($url, 8);
+    }
+
+    return $new_url;
+}
+
+/**
  * 判断 URL 是否为本地.
  *
  * @return array
@@ -2140,7 +2157,10 @@ function CheckUrlIsLocal($url)
 {
     global $zbp;
 
-    return substr($url, 0, strlen($zbp->host)) === $zbp->host;
+    $url = RemoveProtocolFromUrl($url);
+    $host = RemoveProtocolFromUrl($zbp->host);
+
+    return substr($url, 0, strlen($host)) === $host;
 }
 
 /**
@@ -2157,7 +2177,7 @@ function UrlHostToPath($url)
         return $url;
     }
 
-    return ZBP_PATH . substr($url, strlen($zbp->host));
+    return ZBP_PATH . substr(RemoveProtocolFromUrl($url), strlen(RemoveProtocolFromUrl($zbp->host)));
 }
 
 /**
