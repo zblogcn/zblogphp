@@ -213,6 +213,15 @@ function api_post_list()
     $actions = $zbp->GetPostType($type, 'actions');
     $search = (string) GetVars('search');
 
+    if (GetVars('cate_alias') !== null) {
+        $category = $zbp->GetCategoryByAlias(GetVars('cate_alias'));
+        $cateId = $category->ID;
+    }
+    if (GetVars('auth_name') !== null) {
+        $member = $zbp->GetMemberByName(GetVars('auth_name'));
+        $authId = $member->ID;
+    }
+
     // 组织查询条件
     $where = array();
     if ($cateId > 0) {
