@@ -55,6 +55,7 @@ function api_member_login()
             'data' => array(
                 'user' => $member_array,
                 'token' => $zbp->GenerateApiToken($member, $sdt),
+                'expire_time' => $sdt,
             ),
             'message' => $GLOBALS['lang']['msg']['operation_succeed'],
         );
