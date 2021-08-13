@@ -2140,12 +2140,12 @@ function GetImagesFromHtml($html)
 function RemoveProtocolFromUrl($url)
 {
     if (substr($url, 0, 7) === 'http://') {
-        $new_url = '//' . substr($url, 7);
+        $url = '//' . substr($url, 7);
     } elseif (substr($url, 0, 8) === 'https://') {
-        $new_url = '//' . substr($url, 8);
+        $url = '//' . substr($url, 8);
     }
 
-    return $new_url;
+    return $url;
 }
 
 /**

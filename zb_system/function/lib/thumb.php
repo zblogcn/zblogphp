@@ -157,6 +157,11 @@ class Thumb
             if (! in_array($ext, array('jpeg', 'jpg', 'png', 'gif', 'bmp'))) {
                 continue;
             }
+            if (count($parsed_url = parse_url($image)) === 1 && isset($parsed_url['path'])) {
+                // 是相对地址
+                // 特殊处理相对地址，但不包括所有情况，仍又失败的可能
+                static::handleRelativeUrl($image);
+            }
 
             $img_path = UrlHostToPath($image);
             if (self::checkIsExcluded($img_path)) {
@@ -215,6 +220,25 @@ class Thumb
         }
 
         return false;
+    }
+
+    /**
+     * 相对地址处理.
+     *
+     * @param string $url
+     * @return string
+     */
+    protected static function handleRelativeUrl(&$url)
+    {
+        global $zbp;
+
+        $parsed_host = parse_url($zbp->host);
+
+        if (substr($url, 0, 1) === '/') {
+            $url = $parsed_host['scheme'] . '://' . $parsed_host['host'] . $url;
+        } else {
+            $url = $zbp->host . $url;
+        }
     }
 
     /**
