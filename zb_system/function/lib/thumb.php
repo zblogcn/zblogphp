@@ -160,7 +160,7 @@ class Thumb
             if (count($parsed_url = parse_url($image)) === 1 && isset($parsed_url['path'])) {
                 // 是相对地址
                 // 特殊处理相对地址，但不包括所有情况，仍又失败的可能
-                static::handleRelativeUrl($image);
+                self::handleRelativeUrl($image);
             }
 
             $img_path = UrlHostToPath($image);
