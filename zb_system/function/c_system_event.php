@@ -2039,6 +2039,9 @@ function SetTheme($theme, $style)
             $zbp->cache->DelKey('sidebars_' . $a->id);
         }
     }
+
+    $zbp->cache->templates_md5_array = '';
+    $zbp->cache->templates_md5 = '';
     $zbp->SaveCache();
 
     if ($oldTheme != $theme) {
