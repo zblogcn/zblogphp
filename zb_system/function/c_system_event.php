@@ -1654,7 +1654,12 @@ function DelMember_AllData($id)
     /* @var Post[] $articles */
     $articles = $zbp->GetPostList('*', $w);
     foreach ($articles as $a) {
-        $a->Del();
+        if ($zbp->option['ZC_DELMEMBER_WITH_ALLDATA'] == true) {
+            $a->Del();
+        } else {
+            $a->AuthorID = 0;
+            $a->Save();
+        }
     }
 
     $w = array();
@@ -1662,8 +1667,12 @@ function DelMember_AllData($id)
     /* @var Comment[] $comments */
     $comments = $zbp->GetCommentList('*', $w);
     foreach ($comments as $c) {
-        $c->AuthorID = 0;
-        $c->Save();
+        if ($zbp->option['ZC_DELMEMBER_WITH_ALLDATA'] == true) {
+            $c->Del();
+        } else {
+            $c->AuthorID = 0;
+            $c->Save();
+        }
     }
 
     $w = array();

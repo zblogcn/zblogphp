@@ -1664,6 +1664,7 @@ function changeDomain(newurl){
                     echo '<tr><td><p><b>' . @$zbp->langs->msg->get_text_intro . '</b></p></td><td><p><input id="ZC_ARTICLE_INTRO_WITH_TEXT" name="ZC_ARTICLE_INTRO_WITH_TEXT" type="text" value="' . $zbp->option['ZC_ARTICLE_INTRO_WITH_TEXT'] . '" class="checkbox"/></p></td></tr>';
                     echo '<tr><td><p><b>' . $zbp->lang['msg']['manage_count'] . '</b></p></td><td><p><input id="ZC_MANAGE_COUNT" name="ZC_MANAGE_COUNT" style="width:600px;" type="text" value="' . $zbp->option['ZC_MANAGE_COUNT'] . '" /></p></td></tr>';
                     echo '<tr><td><p><b>' . @$zbp->langs->msg->enable_post_batch_delete . '</b></p></td><td><p><input id="ZC_POST_BATCH_DELETE" name="ZC_POST_BATCH_DELETE" type="text" value="' . $zbp->option['ZC_POST_BATCH_DELETE'] . '" class="checkbox"/></p></td></tr>';
+                    echo '<tr><td><p><b>' . @$zbp->langs->msg->delete_member_with_alldata . '</b></p></td><td><p><input id="ZC_DELMEMBER_WITH_ALLDATA" name="ZC_DELMEMBER_WITH_ALLDATA" type="text" value="' . $zbp->option['ZC_DELMEMBER_WITH_ALLDATA'] . '" class="checkbox"/></p></td></tr>';
                     echo '<tr><td><p><b>' . @$zbp->langs->msg->category_legacy_display . '</b></p></td><td><p><input id="ZC_CATEGORY_MANAGE_LEGACY_DISPLAY" name="ZC_CATEGORY_MANAGE_LEGACY_DISPLAY" type="text" value="' . $zbp->option['ZC_CATEGORY_MANAGE_LEGACY_DISPLAY'] . '" class="checkbox"/></p></td></tr>';
                     echo '</table>';
                     echo '</div>';

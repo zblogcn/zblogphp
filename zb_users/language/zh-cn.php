@@ -278,6 +278,7 @@ return array(
         'confirm_clear_thumb_cache'         => '确定要清空缩略图缓存吗？强烈建议仅在更换主题等操作后清空。',
         'category_legacy_display'           => '分类管理按传统模式显示',
         'change_default_password'           => '请立即更改默认密码！',
+        'delete_member_with_alldata'        => '删除用户同时删除其文章和评论',
         ''                                  => '',
     ),
 
