@@ -196,6 +196,28 @@ class Base
     }
 
     /**
+     * 放弃修改.
+     *
+     * @param null|string $key
+     * 
+     * @return boolean
+     */
+    public function RevertChanges($key = null)
+    {
+        if (null == $key) {
+            $this->data = $this->original;
+            return true;
+        }
+
+        if (array_key_exists($key, $this->data) && array_key_exists($key, $this->original)) {
+            $this->data[$key] = $this->original[$key];
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
      * 获取数据表.
      *
      * @return string
