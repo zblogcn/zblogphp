@@ -199,7 +199,7 @@ class Base
      * 放弃修改.
      *
      * @param null|string $key
-     * 
+     *
      * @return boolean
      */
     public function RevertChanges($key = null)
