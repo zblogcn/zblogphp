@@ -282,6 +282,7 @@ return array(
         'confirm_clear_thumb_cache'         => '確定清空縮略圖緩存？',
         'category_legacy_display'           => '分類管理按傳統模式顯示',
         'change_default_password'           => '請立即更改默認密碼！',
+        'delete_member_with_alldata'        => '刪除用戶同時刪除其文章和評論',
         ''                                  => '',
     ),
 

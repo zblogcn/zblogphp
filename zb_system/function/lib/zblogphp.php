@@ -2108,6 +2108,15 @@ class ZBlogPHP
                 $defend_en = include $this->systemdir . 'defend/en.php';
                 $nowlang = $languagePtr;
                 $this->lang = array_merge($defend_en, $nowlang);
+                foreach ($nowlang as $key => $value) {
+                    if (isset($defend_en[$key]) && is_array($value) && is_array($defend_en[$key])) {
+                        foreach ($defend_en[$key] as $key2 => $value2) {
+                            if (!isset($this->lang[$key][$key2])) {
+                                $this->lang[$key][$key2] = $value2;
+                            }
+                        }
+                    }
+                }
             }
             $this->langs = json_decode(json_encode($this->lang));
         } else {
@@ -2245,6 +2254,36 @@ class ZBlogPHP
         //本函数的返回值很有意思，为false表示需要rebuild 为true表示已重建完成或是不需要rebuild
         //$zbp->CheckTemplate(true) == false 的意思，就是判断模板需需要重刷新吗？
 
+        $array_md5 = unserialize($this->cache->templates_md5_array);
+        if (!is_array($array_md5)) {
+            $array_md5 = array();
+        }
+
+        //如果对比不一样,$onlycheck就有用了
+        if ($md5 != GetValueInArray($array_md5, $this->template->template_dirname)) {
+            if ($onlycheck == true && $forcebuild == false) {
+                return false;
+            }
+            $this->BuildTemplate();
+            $array_md5[$this->template->template_dirname] = $md5;
+            $this->cache->templates_md5_array = serialize($array_md5);
+            $this->SaveCache();
+
+            return true;
+        }
+        //如果对比一样的话，$forcebuild就有用了
+        if ($md5 == GetValueInArray($array_md5, $this->template->template_dirname)) {
+            if ($forcebuild == true) {
+                $this->BuildTemplate();
+                $array_md5[$this->template->template_dirname] = $md5;
+                $this->cache->templates_md5_array = serialize($array_md5);
+                $this->SaveCache();
+            }
+        }
+
+        return true;
+
+        /*
         //如果对比不一样,$onlycheck就有用了
         if ($md5 != $this->cache->templates_md5) {
             if ($onlycheck == true && $forcebuild == false) {
@@ -2266,6 +2305,7 @@ class ZBlogPHP
         }
 
         return true;
+        */
     }
 
     /**

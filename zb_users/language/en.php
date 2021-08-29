@@ -282,6 +282,7 @@ return array(
         'confirm_clear_thumb_cache'         => 'Confirm to clear thumb cache.',
         'category_legacy_display'           => 'Category manage legacy display',
         'change_default_password'           => 'Please change the default password immediately.',
+        'delete_member_with_alldata'        => 'Delete user and delete user\'s data',
         ''                                  => '',
     ),
 

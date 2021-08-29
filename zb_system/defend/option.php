@@ -224,6 +224,7 @@ return array(
     'ZC_USING_CDN_GUESTIP_TYPE'      => 'REMOTE_ADDR',
     'ZC_POST_BATCH_DELETE'           => false,
     'ZC_JS_304_ENABLE'               => true,
+    'ZC_DELMEMBER_WITH_ALLDATA'      => false,
 
     // API 相关
     'ZC_API_ENABLE'                     => false,

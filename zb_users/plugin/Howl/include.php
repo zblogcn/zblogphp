@@ -33,7 +33,7 @@ function Howl_GetRightName($key)
     }
 }
 
-function Howl_CheckRights(&$action)
+function Howl_CheckRights(&$action, &$level)
 {
     global $zbp;
 
@@ -48,7 +48,12 @@ function Howl_CheckRights(&$action)
         $a[$key] = array();
     }
 
-    $g = $zbp->user->Level;
+    if ($level === null) {
+        $g = $zbp->user->Level;
+    } else {
+        $g = $level;
+    }
+
     foreach ($group_key as $key) {
         $name = 'Group' . $key;
         if ($zbp->Config('Howl')->HasKey($name)) {

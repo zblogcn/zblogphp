@@ -29,9 +29,7 @@ For security vulnerabilities, please contact us via ``contact#rainbowsoft.org`` 
 - Windows / Linux / macOS and so on...
 - IIS / Apache / nginx / Lighttpd / Kangle / Tengine / Caddy and so on...
 - PHP 5.2 - 8.0
-- MySQL 5+ / MariaDB 10+ / SQLite 3
-
-另：开发版内有 PostgreSQL 支持，需要手动启动，欢迎测试。
+- MySQL 5+ / MariaDB 10+ / SQLite 3 / PostgreSQL
 
 ## 安装说明
 首先请确保网站目录拥有 755 权限。若要使用 GitHub 内的开发版本，请先[下载稳定版](http://www.zblogcn.com/zblogphp/)并安装，然后再用 GitHub 内的文件进行覆盖，方可使用。
