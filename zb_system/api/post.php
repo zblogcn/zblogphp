@@ -283,7 +283,7 @@ function api_post_list()
     $listArr = ApiGetObjectArrayList(
         $zbp->GetPostList('*', $where, $order, $limit, $option),
         array('Url', 'TagsCount', 'TagsName', 'CommentPostKey', 'ValidCodeUrl'),
-        array(),
+        (GetVars('without_content') != 0) ? array('Content') : array(),
         ApiGetAndFilterRelationQuery(
             array(
                 'Category' => array(
