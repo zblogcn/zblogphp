@@ -2024,6 +2024,7 @@ function GetBackendCSPHeader()
  */
 function CheckIncludedFiles($file)
 {
+    $file = realpath($file);
     $a = get_included_files();
     $file = str_replace('\\', '/', $file);
     foreach ($a as $key => $value) {
