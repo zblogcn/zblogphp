@@ -49,6 +49,7 @@ function Admin_SiteInfo()
             $a = explode('<!--debug_mode_moreinfo-->', $r);
             $r = $a[0];
         }
+        $r = str_replace('{$zbp->user->IsGod}', ($zbp->user->IsGod ? '<span title="root">#</span>' : '<span>~</span>'), $r);
         $r = str_replace('{$zbp->user->Name}', $zbp->user->Name, $r);
         $r = str_replace('{$zbp->theme}', $zbp->theme, $r);
         $r = str_replace('{$zbp->style}', $zbp->style, $r);
@@ -867,7 +868,7 @@ function Admin_MemberMng()
         $tabletds = array(); //table string
         $tabletds[] = '<tr>';
         $tabletds[] = '<td class="td5">' . $member->ID . '</td>';
-        $tabletds[] = '<td class="td10">' . $member->LevelName . ($member->Status > 0 ? '(' . $zbp->lang['user_status_name'][$member->Status] . ')' : '') . '</td>';
+        $tabletds[] = '<td class="td10">' . $member->LevelName . ($member->Status > 0 ? '(' . $zbp->lang['user_status_name'][$member->Status] . ')' : '') . ($member->IsGod ? ' <span title="root">#</span>' : '') . '</td>';
         $tabletds[] = '<td><a href="' . $member->Url . '" target="_blank"><i class="icon-link-45deg"></i></a> ' . $member->Name . '</td>';
         $tabletds[] = '<td class="td15">' . $member->Alias . '</td>';
         $tabletds[] = '<td class="td10">' . $member->Articles . '</td>';

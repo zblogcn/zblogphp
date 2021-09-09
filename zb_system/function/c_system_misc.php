@@ -76,11 +76,12 @@ function misc_statistic()
     $current_style = '{$zbp->style}';
     $current_member = '{$zbp->user->Name}';
     $current_version = '{$zbp->version}';
+    $current_isroot = '{$zbp->user->IsGod}';
     $system_environment = '{$system_environment}';
     $current_theme_version = '{$theme_version}';
 
     $r .= '<!--debug_mode_note-->';
-    $r .= "<tr><td class='td20'>{$zbp->lang['msg']['current_member']}</td><td class='td30'><a href='../cmd.php?act=misc&type=vrs' target='_blank'>{$current_member}</a></td><td class='td20'>{$zbp->lang['msg']['current_version']}</td><td class='td30'>{$current_version}</td></tr>";
+    $r .= "<tr><td class='td20'>{$zbp->lang['msg']['current_member']}</td><td class='td30'>{$current_isroot}<a href='../cmd.php?act=misc&type=vrs' target='_blank'>{$current_member}</a></td><td class='td20'>{$zbp->lang['msg']['current_version']}</td><td class='td30'>{$current_version}</td></tr>";
     $r .= "<tr><td class='td20'>{$zbp->lang['msg']['all_artiles']}</td><td>{$all_articles}</td><td>{$zbp->lang['msg']['all_categorys']}</td><td>{$all_categories}</td></tr>";
     $r .= "<tr><td class='td20'>{$zbp->lang['msg']['all_pages']}</td><td>{$all_pages}</td><td>{$zbp->lang['msg']['all_tags']}</td><td>{$all_tags}</td></tr>";
     $r .= "<tr><td class='td20'>{$zbp->lang['msg']['all_comments']}</td><td>{$all_comments}</td><td>{$zbp->lang['msg']['all_views']}</td><td>{$all_views}</td></tr>";
@@ -105,6 +106,7 @@ function misc_statistic()
 
     $r = str_replace('{#ZC_BLOG_HOST#}', $zbp->host, $r);
     $r = str_replace('{$zbp->user->Name}', $zbp->user->Name, $r);
+    $r = str_replace('{$zbp->user->IsGod}', ($zbp->user->IsGod ? '<span title="root">#</span>' : '<span>~</span>'), $r);
     $r = str_replace('{$zbp->theme}', $zbp->theme, $r);
     $r = str_replace('{$zbp->style}', $zbp->style, $r);
     $app = $zbp->LoadApp('plugin', 'AppCentre');
