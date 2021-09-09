@@ -1559,6 +1559,11 @@ function PostMember()
         if ($key == 'ID' || $key == 'Meta') {
             continue;
         }
+        if ($mem->IsGod) {
+            if ($key == 'Level') {
+                continue;
+            }
+        }
         if (isset($data[$key])) {
             $mem->$key = $data[$key];
         }
