@@ -1608,6 +1608,12 @@ function changeDomain(newurl){
       });
 }
     </script>';
+                    } else {
+                        echo '<script>
+function checkDomain(){
+    return true;
+}
+    </script>';
                     };
                     echo '</td></tr>';
                     echo '<tr><td><p><b>' . $zbp->lang['msg']['blog_name'] . '</b></p></td><td><p><input id="ZC_BLOG_NAME" name="ZC_BLOG_NAME" style="width:600px;" type="text" value="' . htmlspecialchars($zbp->option['ZC_BLOG_NAME']) . '" /></p></td></tr>';

@@ -180,6 +180,11 @@ class BaseMember extends Base
             if ($this->private_isgod === true || $this->private_isgod === false) {
                 return $this->private_isgod;
             } else {
+                if ($this->Level != 1) {
+                    $this->private_isgod = false;
+                    return $this->private_isgod;
+                }
+
                 $sql = $zbp->db->sql->Select($zbp->table['Member'], '*', array(array('=', 'mem_Level', 1)), 'mem_ID ASC', 1, null);
                 $am = $zbp->GetListType('Member', $sql);
                 if ($am[0]->ID == $this->ID) {
