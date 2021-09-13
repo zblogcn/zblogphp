@@ -1555,14 +1555,16 @@ function PostMember()
         }
     }
 
+    if ($mem->IsGod == true) {
+        if ($zbp->user->IsGod == false) {
+            unset($data['Password']);
+        }
+        unset($data['Level']);
+    }
+
     foreach ($zbp->datainfo['Member'] as $key => $value) {
         if ($key == 'ID' || $key == 'Meta') {
             continue;
-        }
-        if ($mem->IsGod) {
-            if ($key == 'Level') {
-                continue;
-            }
         }
         if (isset($data[$key])) {
             $mem->$key = $data[$key];
