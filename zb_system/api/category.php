@@ -138,6 +138,14 @@ function api_category_list()
 
     $type = (int) GetVars('type');
     $mng = (int) strtolower((string) GetVars('manage')); //&manage=1
+    $rootid = GetVars('rootid');
+    if (!is_null($rootid)) {
+        $rootid = (int) $rootid;
+    }
+    $parentid = GetVars('parentid');
+    if (!is_null($parentid)) {
+        $parentid = (int) $parentid;
+    }
 
     $limitCount = $zbp->option['ZC_MANAGE_COUNT'];
 
@@ -166,6 +174,12 @@ function api_category_list()
     );
 
     $where[] = array('=', 'cate_Type', $type);
+    if (!is_null($rootid)) {
+        $where[] = array('=', 'cate_RootID', $rootid);
+    }
+    if (!is_null($parentid)) {
+        $where[] = array('=', 'cate_ParentID', $parentid);
+    }
     $order = $filter['order'];
     $limit = $filter['limit'];
     $option = $filter['option'];
