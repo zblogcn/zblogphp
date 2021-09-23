@@ -49,7 +49,7 @@ function Admin_SiteInfo()
             $a = explode('<!--debug_mode_moreinfo-->', $r);
             $r = $a[0];
         }
-        $r = str_replace('{$zbp->user->IsGod}', ($zbp->user->IsGod ? '<span title="root">#</span>' : '<span>~</span>'), $r);
+        $r = str_replace('{$zbp->user->IsGod}', '', $r);
         $r = str_replace('{$zbp->user->Name}', $zbp->user->Name, $r);
         $r = str_replace('{$zbp->theme}', $zbp->theme, $r);
         $r = str_replace('{$zbp->style}', $zbp->style, $r);

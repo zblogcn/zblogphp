@@ -623,14 +623,17 @@ class ZBlogException
 
         $errorId = urlencode(self::$error_id);
         $errorMessage = urlencode($this->message);
-        $moreHelp = $lang['offical_urls']['more_help'];
+        $moreHelp = $lang['offical_urls']['bing_help'];
+        $office_docs = $lang['offical_urls']['office_docs'];
+        $office_bbs = $lang['offical_urls']['office_bbs'];
         $moreHelp = str_replace('{%id%}', $errorId, $moreHelp);
         $moreHelp = str_replace('{%message%}', $errorMessage, $moreHelp);
 
         $result .= $lang['error_reasons']['end'];
         $result = str_replace('{%bloghost%}', $bloghost, $result);
         $result = str_replace('{%morehelp%}', $moreHelp, $result);
-
+        $result = str_replace('{%officedocs%}', $office_docs, $result);
+        $result = str_replace('{%officebbs%}', $office_bbs, $result);
         return $result;
     }
 

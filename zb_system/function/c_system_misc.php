@@ -106,7 +106,7 @@ function misc_statistic()
 
     $r = str_replace('{#ZC_BLOG_HOST#}', $zbp->host, $r);
     $r = str_replace('{$zbp->user->Name}', $zbp->user->Name, $r);
-    $r = str_replace('{$zbp->user->IsGod}', ($zbp->user->IsGod ? '<span title="root">#</span>' : '<span>~</span>'), $r);
+    $r = str_replace('{$zbp->user->IsGod}', '', $r);
     $r = str_replace('{$zbp->theme}', $zbp->theme, $r);
     $r = str_replace('{$zbp->style}', $zbp->style, $r);
     $app = $zbp->LoadApp('plugin', 'AppCentre');

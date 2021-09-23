@@ -552,6 +552,9 @@ return array(
 
     'offical_urls' => array(
         'more_help' => 'https://www.zblogcn.com/help/?id={%id%}&message={%message%}',
+        'bing_help' => 'https://cn.bing.com/search?q={%message%}',
+        'office_docs' => 'https://docs.zblogcn.com/php/#/books/start-faq',
+        'office_bbs' => 'https://bbs.zblogcn.com/',
     ),
 
     // Possible causes of the error
@@ -609,8 +612,14 @@ return array(
         ),
 
         'end' => '
-            如果您是访客，这说明网站程序可能出现了一些错误。请您稍后再试，或联系站长。<br/>
-            如果您是站长，您可以点击<a href="{%morehelp%}" target="_blank">【更多信息】</a>来查看Z-Blog官方关于这个错误的说明，也可以到<a href="https://bbs.zblogcn.com/" target="_blank">Z-Blog官方论坛</a>，附上错误详细截图与描述寻求帮助。
+请复制上方错误信息到搜索引擎以获取关于该错误的说明，或点击<a href="{%morehelp%}" rel="nofollow" target="_blank">「使用必应搜索」。</a><br/><br/>
+
+如果您是访客，这说明网站程序可能出现了一些错误。请您稍后再试，或联系站长。<br/><br/>
+
+如果您是站长，可以<a href="{%officedocs%}" rel="nofollow" target="_blank">「点击这里」</a>查看 Z-Blog 官方对于【部分常见错误 】的说明,，以及<a href="{%officedocs%}" rel="nofollow" target="_blank">「通用排查指南」</a>。<br/>
+
+如果仍然无法解决，也可以到 <a href="{%officebbs%}" rel="nofollow" target="_blank">Z-Blog 官方论坛</a>，附上当前错误信息与描述寻求帮助。
+注：请将"当前错误信息"复制进标题或正文中。<br/>
         ',
     ),
 

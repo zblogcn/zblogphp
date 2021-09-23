@@ -284,6 +284,7 @@ class Database__PDO_MySQL implements Database__Interface
      */
     public function DelTable($table)
     {
+        $table = str_replace('%pre%', $this->dbpre, $table);
         $this->QueryMulit($this->sql->DelTable($table));
     }
 
@@ -294,6 +295,7 @@ class Database__PDO_MySQL implements Database__Interface
      */
     public function ExistTable($table)
     {
+        $table = str_replace('%pre%', $this->dbpre, $table);
         $a = $this->Query($this->sql->ExistTable($table, $this->dbname));
         if (!is_array($a)) {
             return false;
