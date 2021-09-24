@@ -847,6 +847,7 @@ class ZBlogPHP
             }
             $route = include $file;
             foreach ($route as $key2 => $value2) {
+                //从PostType数组读取urlrule值，如果urlrule为空的
                 if (empty($value2['urlrule'])) {
                     if ($value2['name'] == 'post_' . $postname . '_single') {
                         $value2['urlrule'] = $this->GetPostType($postid, 'single_urlrule');
@@ -870,24 +871,7 @@ class ZBlogPHP
                         $value2['urlrule'] = $this->GetPostType($postid, 'search_urlrule');
                     }
                 }
-                $this->routes[$key2] = $value2;
-                if ($value2['type'] != 'default') {
-                    if ($value2['type'] != 'rewrite' || ($this->option['ZC_STATIC_MODE'] == 'REWRITE' && $value2['type'] == 'rewrite')) {
-                        $this->SetPostType_Sub($postid, 'routes', $value2['name'], array($value2['type'] => $value2['name']));
-                    }
-                } else {
-                    if (isset($value2['only_active']) && $value2['only_active'] == true) {
-                        if ($this->option['ZC_STATIC_MODE'] == 'ACTIVE') {
-                            $this->SetPostType_Sub($postid, 'routes', $value2['name'], array($value2['type'] => $value2['name']));
-                        }
-                    } elseif (isset($value2['only_rewrite']) && $value2['only_rewrite'] == true) {
-                        if ($this->option['ZC_STATIC_MODE'] == 'REWRITE') {
-                            $this->SetPostType_Sub($postid, 'routes', $value2['name'], array($value2['type'] => $value2['name']));
-                        }
-                    } else {
-                        $this->SetPostType_Sub($postid, 'routes', $value2['name'], array($value2['type'] => $value2['name']));
-                    }
-                }
+                $this->RegRoute($value2);
             }
         }
     }
@@ -4313,6 +4297,11 @@ class ZBlogPHP
             unset($routes[$new_name]);
             $new_array = array($new_name => $array);
             $routes = array_merge($new_array, $routes);
+        }
+        //将路由规则写入PostType数组里
+        $postid = GetValueInArray($array, 'posttype', 0);
+        if (!is_null($postid)) {
+            $this->SetPostType_Sub($postid, 'routes', $array['name'], array($array['type'] => $array['name']));
         }
         return true;
     }

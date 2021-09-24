@@ -4,6 +4,7 @@ return array (
 //  添加 文章页单页 动态路由
   'active_post_article_single' => 
   array (
+    'posttype' => 0,
     'type' => 'active',
     'name' => 'post_article_single',
     'call' => 'ViewPost',
@@ -25,6 +26,7 @@ return array (
 //  添加 文章cate页列表(带参数) 动态路由
   'active_post_article_list_category' => 
   array (
+    'posttype' => 0,
     'type' => 'active',
     'name' => 'post_article_list_category',
     'call' => 'ViewList',
@@ -46,6 +48,7 @@ return array (
 //  添加 文章auth页列表(带参数) 动态路由
   'active_post_article_list_author' => 
   array (
+    'posttype' => 0,
     'type' => 'active',
     'name' => 'post_article_list_author',
     'call' => 'ViewList',
@@ -67,6 +70,7 @@ return array (
 //  添加 文章date页列表(带参数) 动态路由
   'active_post_article_list_date' => 
   array (
+    'posttype' => 0,
     'type' => 'active',
     'name' => 'post_article_list_date',
     'call' => 'ViewList',
@@ -88,6 +92,7 @@ return array (
 //  添加 文章tags页列表(带参数) 动态路由
   'active_post_article_list_tag' => 
   array (
+    'posttype' => 0,
     'type' => 'active',
     'name' => 'post_article_list_tag',
     'call' => 'ViewList',
@@ -109,6 +114,7 @@ return array (
 //  添加 文章页单页 伪静路由
   'rewrite_post_article_single' => 
   array (
+    'posttype' => 0,
     'type' => 'rewrite',
     'name' => 'post_article_single',
     'call' => 'ViewPost',
@@ -122,6 +128,7 @@ return array (
 //  添加 文章index列表 伪静路由
   'rewrite_post_article_list' => 
   array (
+    'posttype' => 0,
     'type' => 'rewrite',
     'name' => 'post_article_list',
     'call' => 'ViewList',
@@ -138,6 +145,7 @@ return array (
 //  添加 文章category列表 伪静路由
   'rewrite_post_article_list_category' => 
   array (
+    'posttype' => 0,
     'type' => 'rewrite',
     'name' => 'post_article_list_category',
     'call' => 'ViewList',
@@ -152,6 +160,7 @@ return array (
 //  添加 文章author列表 伪静路由
   'rewrite_post_article_list_author' => 
   array (
+    'posttype' => 0,
     'type' => 'rewrite',
     'name' => 'post_article_list_author',
     'call' => 'ViewList',
@@ -166,6 +175,7 @@ return array (
 //  添加 文章date列表 伪静路由
   'rewrite_post_article_list_date' => 
   array (
+    'posttype' => 0,
     'type' => 'rewrite',
     'name' => 'post_article_list_date',
     'call' => 'ViewList',
@@ -179,6 +189,7 @@ return array (
 //  添加 文章tag列表 伪静路由
   'rewrite_post_article_list_tag' => 
   array (
+    'posttype' => 0,
     'type' => 'rewrite',
     'name' => 'post_article_list_tag',
     'call' => 'ViewList',
@@ -194,6 +205,7 @@ return array (
 /*
   'rewrite_post_article_search' => 
   array (
+    'posttype' => 0,
     'type' => 'rewrite',
     'name' => 'post_article_search',
     'call' => 'ViewSearch',
@@ -206,7 +218,6 @@ return array (
     ),
     'args_with' => 
     array (
-      'posttype' => 0,
     ),
     'request_method' => 
     array (
@@ -219,6 +230,7 @@ return array (
 //  添加 默认路由 （文章页列表的首页路由，只在没有开启伪静下启用）
   'default_post_article_list' => 
   array (
+    'posttype' => 0,
     'type' => 'default',
     'name' => 'post_article_list',
     'call' => 'ViewList',

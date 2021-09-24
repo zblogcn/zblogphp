@@ -4,6 +4,7 @@ return array (
 //  添加 页面页单页 动态路由
   'active_post_page_single' => 
   array (
+    'posttype' => 1,
     'type' => 'active',
     'name' => 'post_page_single',
     'call' => 'ViewPost',
@@ -22,13 +23,13 @@ return array (
     'urlrule' => '',
     'args_with' => 
     array (
-      'posttype' => 1,
     ),
     'to_permalink' => true,
   ),
 //  添加 页面页单页 伪静路由
   'rewrite_post_page_single' => 
   array (
+    'posttype' => 1,
     'type' => 'rewrite',
     'name' => 'post_page_single',
     'call' => 'ViewPost',
@@ -41,7 +42,6 @@ return array (
     ),
     'args_with' => 
     array (
-      'posttype' => 1,
     ),
   ),
 );

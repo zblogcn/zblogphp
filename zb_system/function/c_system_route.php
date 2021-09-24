@@ -235,6 +235,9 @@ function ViewAuto_Process_Args_with(&$array, $args_with, $route)
             }
         }
     }
+    if (isset($route['posttype']) && !is_null($route['posttype'])) {
+        $array['posttype'] = $route['posttype'];
+    }
     return $array;
 }
 

@@ -53,7 +53,7 @@ $replace_array = array(
     '\'type\' =' => "//路由类型\r\n" . '\'type\' =',
     '\'name\' =' => "//路由名称(同类型下不可重复，否则会覆盖)\r\n" . '\'name\' =',
     '\'call\' =' => "//路由调用的函数(可以为'函数名'或是'变量名@方法名'或是'变量名::静态方法')\r\n" . '\'call\' =',
-    '\'posttype\' =' => "//Post类型(文章为0，页面为1等，如果不是用于Post类型可以设为null或删除该项)\r\n" . '\'posttype\' =',
+    '\'posttype\' =' => "//Post类型(必须，文章为0，页面为1等，必须是路由所属的PostType的ID值)\r\n" . '\'posttype\' =',
     '\'prefix\' =' => "//prefix如指定的话，可以让不同规则在不同的prefix前缀目录下被访问到\r\n" . '\'prefix\' =',
     '\'get\' =' => "//指定2个或2个以上参数如array('id','alias')那么只要有id或alias存在就可以,指定1个参数如array('page')则page可存在可不存在\r\n" . '\'get\' =',
     '\'not_get\' =' => "//必须排除的\$_GET参数(可以为空数组),如果是array('/.+/')就会禁止任何参数传入\r\n" . '\'not_get\' =',

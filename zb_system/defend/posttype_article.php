@@ -1,6 +1,7 @@
 <?php
 
 return array (
+    'id' => 0,
     'name' => 'article',
     'classname' => 'Post',
     //  自己的模板 列表的模板 对应分类的模板 对应Tag的模板 对应作者的模板 日期列表的模板 搜索页的模板
