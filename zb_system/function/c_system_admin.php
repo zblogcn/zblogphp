@@ -1394,7 +1394,7 @@ function Admin_ModuleMng()
                 start: function(event, ui) {
                     showWidget(ui.item.parent().prev());
                     var c = ui.item.find(".funid").html();
-                    if (ui.item.parent().find(".widget:contains(" + c + ")").length > 1) {
+                    if (ui.item.parent().find(".widget:contains(" + c + ")[innerHTML=" + c + "]").length > 1) {
                         ui.item.remove();
                     };
                 },
