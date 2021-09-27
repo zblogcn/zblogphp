@@ -1394,7 +1394,16 @@ function Admin_ModuleMng()
                 start: function(event, ui) {
                     showWidget(ui.item.parent().prev());
                     var c = ui.item.find(".funid").html();
-                    if (ui.item.parent().find(".widget:contains(" + c + ")").length > 1) {
+                    var siderbarName = [];
+                    ui.item.parent().find(".funid").each(function(item, element) {
+                        var c = $(element).html();
+                        if (siderbarName[c] !== undefined) {
+                            siderbarName[c] += 1
+                        } else {
+                            siderbarName[c] = 1
+                        }
+                    })
+                    if (siderbarName[c] > 1) {
                         ui.item.remove();
                     };
                 },
