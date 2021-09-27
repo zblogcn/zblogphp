@@ -4298,10 +4298,26 @@ class ZBlogPHP
             $new_array = array($new_name => $array);
             $routes = array_merge($new_array, $routes);
         }
-        //将路由规则写入PostType数组里
+        //将路由规则写入PostType数组里 //还需要判断条件选择写入
         $postid = GetValueInArray($array, 'posttype', 0);
         if (!is_null($postid)) {
-            $this->SetPostType_Sub($postid, 'routes', $array['name'], array($array['type'] => $array['name']));
+            if ($array['type'] != 'default') {
+                if ($array['type'] != 'rewrite' || ($this->option['ZC_STATIC_MODE'] == 'REWRITE' && $array['type'] == 'rewrite')) {
+                    $this->SetPostType_Sub($postid, 'routes', $array['name'], array($array['type'] => $array['name']));
+                }
+            } else {
+                if (isset($array['only_active']) && $array['only_active'] == true) {
+                    if ($this->option['ZC_STATIC_MODE'] == 'ACTIVE') {
+                        $this->SetPostType_Sub($postid, 'routes', $array['name'], array($array['type'] => $array['name']));
+                    }
+                } elseif (isset($array['only_rewrite']) && $array['only_rewrite'] == true) {
+                    if ($this->option['ZC_STATIC_MODE'] == 'REWRITE') {
+                        $this->SetPostType_Sub($postid, 'routes', $array['name'], array($array['type'] => $array['name']));
+                    }
+                } else {
+                    $this->SetPostType_Sub($postid, 'routes', $array['name'], array($array['type'] => $array['name']));
+                }
+            }
         }
         return true;
     }
