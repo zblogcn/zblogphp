@@ -13,13 +13,13 @@ return array (
     'date_template' => 'index',
     'search_template' => 'search',
     //  自身规则 列表规则 分类列表规则 作者列表规则 日期列表规则 Tag列表规则 搜索列表规则
-    'single_urlrule' => '',
-    'list_urlrule' => '',
-    'list_category_urlrule' => '',
-    'list_author_urlrule' => '',
-    'list_date_urlrule' => '',
-    'list_tag_urlrule' => '',
-    'search_urlrule' => '',
+    'single_urlrule' => $GLOBALS['zbp']->option['ZC_ARTICLE_REGEX'],
+    'list_urlrule' => $GLOBALS['zbp']->option['ZC_INDEX_REGEX'],
+    'list_category_urlrule' => $GLOBALS['zbp']->option['ZC_CATEGORY_REGEX'],
+    'list_author_urlrule' => $GLOBALS['zbp']->option['ZC_AUTHOR_REGEX'],
+    'list_date_urlrule' => $GLOBALS['zbp']->option['ZC_DATE_REGEX'],
+    'list_tag_urlrule' => $GLOBALS['zbp']->option['ZC_TAGS_REGEX'],
+    'search_urlrule' => $GLOBALS['zbp']->option['ZC_SEARCH_REGEX'],
     //  权限名称分别是 新建 编辑 删除 提交 公开发布 管理 全部管理 查看 搜索
     'actions' => 
     array (

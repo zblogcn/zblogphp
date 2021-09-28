@@ -1,6 +1,6 @@
 <?php
 
-return  array (
+return array (
     'id' => 1,
     'name' => 'page',
     'classname' => 'Post',
@@ -11,7 +11,7 @@ return  array (
     'author_template' => 'index',
     'date_template' => 'index',
     'search_template' => 'search',
-    'single_urlrule' => '',
+    'single_urlrule' => $GLOBALS['zbp']->option['ZC_PAGE_REGEX'],
     'list_urlrule' => '',
     'list_category_urlrule' => '',
     'list_author_urlrule' => '',
