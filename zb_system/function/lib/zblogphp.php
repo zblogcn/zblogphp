@@ -4209,27 +4209,12 @@ class ZBlogPHP
 
         $postid = GetValueInArray($array, 'posttype', 0);
         $postname = $this->GetPostType($postid, 'name');
-        if (!is_null($postid) && empty($array['urlrule'])) {            
-            if ($array['name'] == 'post_' . $postname . '_single') {
-                $array['urlrule'] = $this->GetPostType($postid, 'single_urlrule');
-            }
-            if ($array['name'] == 'post_' . $postname . '_list') {
-                $array['urlrule'] = $this->GetPostType($postid, 'list_urlrule');
-            }
-            if ($array['name'] == 'post_' . $postname . '_list_category') {
-                $array['urlrule'] = $this->GetPostType($postid, 'list_category_urlrule');
-            }
-            if ($array['name'] == 'post_' . $postname . '_list_author') {
-                $array['urlrule'] = $this->GetPostType($postid, 'list_author_urlrule');
-            }
-            if ($array['name'] == 'post_' . $postname . '_list_date') {
-                $array['urlrule'] = $this->GetPostType($postid, 'list_date_urlrule');
-            }
-            if ($array['name'] == 'post_' . $postname . '_list_tag') {
-                $array['urlrule'] = $this->GetPostType($postid, 'list_tag_urlrule');
-            }
-            if ($array['name'] == 'post_' . $postname . '_search') {
-                $array['urlrule'] = $this->GetPostType($postid, 'search_urlrule');
+        if (!is_null($postid) && empty($array['urlrule'])) {
+            $prefix_name = 'post_' . $postname . '_';
+            $prefix_rulename = str_ireplace($prefix_name, '', $array['name']);
+            $rulename = $prefix_rulename . '_urlrule';
+            if (isset($this->posttype[$postid][$rulename])) {
+                $array['urlrule'] = $this->posttype[$postid][$rulename];
             }
         }
 
@@ -4264,27 +4249,10 @@ class ZBlogPHP
                 $this->SetPostType_Sub($postid, 'routes', $array['name'], array($array['type'] => $array['name']));
 
                 if (!empty($array['urlrule'])) {            
-                    if ($array['name'] == 'post_' . $postname . '_single') {
-                        $this->SetPostType($postid, 'single_urlrule', $array['urlrule']);
-                    }
-                    if ($array['name'] == 'post_' . $postname . '_list') {
-                        $this->SetPostType($postid, 'list_urlrule', $array['urlrule']);
-                    }
-                    if ($array['name'] == 'post_' . $postname . '_list_category') {
-                        $this->SetPostType($postid, 'list_category_urlrule', $array['urlrule']);
-                    }
-                    if ($array['name'] == 'post_' . $postname . '_list_author') {
-                        $this->SetPostType($postid, 'list_author_urlrule', $array['urlrule']);
-                    }
-                    if ($array['name'] == 'post_' . $postname . '_list_date') {
-                        $this->SetPostType($postid, 'list_date_urlrule', $array['urlrule']);
-                    }
-                    if ($array['name'] == 'post_' . $postname . '_list_tag') {
-                        $this->SetPostType($postid, 'list_tag_urlrule', $array['urlrule']);
-                    }
-                    if ($array['name'] == 'post_' . $postname . '_search') {
-                        $this->SetPostType($postid, 'search_urlrule', $array['urlrule']);
-                    }
+                    $prefix_name = 'post_' . $postname . '_';
+                    $prefix_rulename = str_ireplace($prefix_name, '', $array['name']);
+                    $rulename = $prefix_rulename . '_urlrule';
+                    $this->SetPostType($postid, $rulename, $array['urlrule']);
                 }
             }
         }

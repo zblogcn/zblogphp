@@ -214,7 +214,7 @@ switch ($zbp->action) {
         } else {
             $zbp->SetHint('bad');
         }
-            Redirect('cmd.php?act=MemberMng');
+        Redirect('cmd.php?act=MemberMng');
         break;
     case 'UploadMng':
         Redirect('admin/index.php?' . GetVars('QUERY_STRING', 'SERVER'));
