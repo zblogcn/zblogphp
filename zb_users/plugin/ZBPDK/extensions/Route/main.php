@@ -63,12 +63,12 @@ $replace_array = array(
     '\'args_with\' =' => "//固定传的call参数(先从\$_GET取值再从本条路由规则中取值并覆盖)\r\n" . '\'args_with\' =',
     '\'urlrule\' =' => "//动态路由和伪静路由的原始规则(必须)\r\n" . '\'urlrule\' =',
     '\'abbr_url\' =' => "//指示规则可以被缩写为'域名/'或是'域名/目录/'\r\n" . '\'abbr_url\' =',
-    '\'only_match_page\' =' => "//设为ture将强制匹配带page参数的url(不设或设为false的将会匹配一次带page一次不带page的)\r\n" . '\'match_without_page\' =',
+    '\'only_match_page\' =' => "//设为ture将强制匹配带page参数的url(不设或设为false的将会匹配一次带page一次不带page的)\r\n" . '\'only_match_page\' =',
     '\'request_method\' =' => "//Request Method为Http的请求访问，一般不设或是设为array('GET', 'POST')或是'GET'(只能GET不能POST)\r\n" . '\'request_method\' =',
     '\'to_permalink\' =' => "//如果是在动态路由下被访问到，允许跳转到Call里返回的固定链接url\r\n" . '\'to_permalink\' =',
     '\'suspended\' =' => "//为true时将挂起这条路由使路由系统忽略它\r\n" . '\'suspended\' =',
-    '\'only_active\' =' => "//为true时只在动态模式下生效\r\n" . '\'only_active\' =',
-    '\'only_rewrite\' =' => "//为true时只在伪静模式下生效\r\n" . '\'only_rewrite\' =',
+    '\'only_active\' =' => "//default类型的路由，为true时只在动态模式下生效\r\n" . '\'only_active\' =',
+    '\'only_rewrite\' =' => "//default类型的路由，为true时只在伪静模式下生效\r\n" . '\'only_rewrite\' =',
 );
 
 foreach ($defined_route as $route_type => $route_note) {
