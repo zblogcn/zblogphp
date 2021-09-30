@@ -51,7 +51,7 @@ require $blogpath . 'zb_system/admin/admin_top.php';
 $defined_route = array("active"=>'Active动态路由',"rewrite"=>'Rewrite伪静路由',"default"=>'Default默认路由');
 $replace_array = array(
     '\'type\' =' => "//路由类型\r\n" . '\'type\' =',
-    '\'name\' =' => "//路由名称(同类型下不可重复，否则会覆盖)\r\n" . '\'name\' =',
+    '\'name\' =' => "//路由名称(同类型下不可重复否则会覆盖，名称必须是post_类型名_打头，后面接路由作用名)\r\n" . '\'name\' =',
     '\'call\' =' => "//路由调用的函数(可以为'函数名'或是'变量名@方法名'或是'变量名::静态方法')\r\n" . '\'call\' =',
     '\'posttype\' =' => "//Post类型(必须，文章为0，页面为1等，必须是路由所属的PostType的ID值)\r\n" . '\'posttype\' =',
     '\'prefix\' =' => "//prefix如指定的话，可以让不同规则在不同的prefix前缀目录下被访问到\r\n" . '\'prefix\' =',
@@ -66,9 +66,9 @@ $replace_array = array(
     '\'only_match_page\' =' => "//设为ture将强制匹配带page参数的url(不设或设为false的将会匹配一次带page一次不带page的)\r\n" . '\'match_without_page\' =',
     '\'request_method\' =' => "//Request Method为Http的请求访问，一般不设或是设为array('GET', 'POST')或是'GET'(只能GET不能POST)\r\n" . '\'request_method\' =',
     '\'to_permalink\' =' => "//如果是在动态路由下被访问到，允许跳转到Call里返回的固定链接url\r\n" . '\'to_permalink\' =',
-    '\'suspended\' =' => "//为ture时将挂起这条路由使路由系统忽略它\r\n" . '\'suspended\' =',
-    '\'only_active\' =' => "//只在动态模式下生效\r\n" . '\'only_active\' =',
-    '\'only_rewrite\' =' => "//只在伪静模式下生效\r\n" . '\'only_rewrite\' =',
+    '\'suspended\' =' => "//为true时将挂起这条路由使路由系统忽略它\r\n" . '\'suspended\' =',
+    '\'only_active\' =' => "//为true时只在动态模式下生效\r\n" . '\'only_active\' =',
+    '\'only_rewrite\' =' => "//为true时只在伪静模式下生效\r\n" . '\'only_rewrite\' =',
 );
 
 foreach ($defined_route as $route_type => $route_note) {
