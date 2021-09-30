@@ -165,7 +165,7 @@ function ViewAuto()
     }
 
     foreach ($GLOBALS['hooks']['Filter_Plugin_ViewAuto_End'] as $fpname => &$fpsignal) {
-        $fpreturn = $fpname($url);
+        $fpreturn = $fpname($url, $original_url);
         if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
             $fpsignal = PLUGIN_EXITSIGNAL_NONE;
 

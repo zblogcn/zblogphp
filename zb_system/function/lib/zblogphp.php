@@ -812,30 +812,51 @@ class ZBlogPHP
     }
 
     /**
-     * 读取文件里的PostType配置(以后可能会放进数据库里)
+     * 读取系统预设文件里的PostType配置
      */
     public function LoadPostType()
     {
         foreach (array(0 => 'article', 1 => 'page') as $postid => $postname) {
-            $posttype = include ZBP_PATH . 'zb_system/defend/posttype_' . $postname . '.php';
+            $file = ZBP_PATH . 'zb_system/defend/posttype_' . $postname . '.php';
+            $this->LoadPostType_File($file);
+        }
+    }
 
+
+    /**
+     * 读取指定文件里的PostType配置
+     */
+    public function LoadPostType_File($file)
+    {
+        if (is_readable($file)) {
+            $posttype = include $file;
             $this->RegPostType($posttype);
+            return true;
         }
     }
 
     /**
-     * 读取文件里的路由配置(以后可能会放进数据库里)
+     * 读取系统预设文件里的路由配置
      */
     public function LoadRoutes()
     {
         foreach (array(0 => 'article', 1 => 'page') as $postid => $postname) {
-            if (!is_readable($file = ZBP_PATH . 'zb_system/defend/routes_post_' . $postname . '.php')) {
-                continue;
-            }
+            $file =  ZBP_PATH . 'zb_system/defend/routes_post_' . $postname . '.php';
+            $this->LoadRoutes_File($file);
+        }
+    }
+
+    /**
+     * 读取指定文件里的路由配置
+     */
+    public function LoadRoutes_File($file)
+    {
+        if (is_readable($file)) {
             $route = include $file;
-            foreach ($route as $key2 => $value2) {
-                $this->RegRoute($value2);
+            foreach ($route as $key => $value) {
+                $this->RegRoute($value);
             }
+            return true;
         }
     }
 

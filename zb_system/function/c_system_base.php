@@ -105,18 +105,19 @@ define('ZC_POST_TYPE_ALBUM', 8); // 相册
 
 /*
  * 定义类型序列
- * @param  id=>{name,url,template,classname}
+ * @param  id=>{id,name,url,template,classname}
+ * id = 0 ~ 255是系统预留的类型，非系统自定义类型id > 255
  */
 $GLOBALS['posttype'] = array(
-    array('name' => 'article', 'classname' => 'Post', 'actions' => array(), 'routes' => array()), //0
-    array('name' => 'page', 'classname' => 'Post', 'actions' => array(), 'routes' => array()), //1
-    array('name' => 'tweet', 'classname' => 'Post', 'actions' => array(), 'routes' => array()), //2
-    array('name' => 'discussion', 'classname' => 'Post', 'actions' => array(), 'routes' => array()), //3
-    array('name' => 'link', 'classname' => 'Post', 'actions' => array(), 'routes' => array()), //4
-    array('name' => 'music', 'classname' => 'Post', 'actions' => array(), 'routes' => array()), //5
-    array('name' => 'video', 'classname' => 'Post', 'actions' => array(), 'routes' => array()), //6
-    array('name' => 'photo', 'classname' => 'Post', 'actions' => array(), 'routes' => array()), //7
-    array('name' => 'album', 'classname' => 'Post', 'actions' => array(), 'routes' => array()), //8
+    array('id' => 0, 'name' => 'article', 'classname' => 'Post', 'actions' => array(), 'routes' => array()), //0
+    array('id' => 1, 'name' => 'page', 'classname' => 'Post', 'actions' => array(), 'routes' => array()), //1
+    array('id' => 2, 'name' => 'tweet', 'classname' => 'Post', 'actions' => array(), 'routes' => array()), //2
+    array('id' => 3, 'name' => 'discussion', 'classname' => 'Post', 'actions' => array(), 'routes' => array()), //3
+    array('id' => 4, 'name' => 'link', 'classname' => 'Post', 'actions' => array(), 'routes' => array()), //4
+    array('id' => 5, 'name' => 'music', 'classname' => 'Post', 'actions' => array(), 'routes' => array()), //5
+    array('id' => 6, 'name' => 'video', 'classname' => 'Post', 'actions' => array(), 'routes' => array()), //6
+    array('id' => 7, 'name' => 'photo', 'classname' => 'Post', 'actions' => array(), 'routes' => array()), //7
+    array('id' => 8, 'name' => 'album', 'classname' => 'Post', 'actions' => array(), 'routes' => array()), //8
 );
 
 /*
