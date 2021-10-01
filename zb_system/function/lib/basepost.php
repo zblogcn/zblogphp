@@ -357,9 +357,9 @@ class BasePost extends Base
             case 'PostDate':
                 return new ZbpDate($this->PostTime);
             case 'CreateDate':
-                return new ZbpDate($this->PostTime);
+                return new ZbpDate($this->CreateTime);
             case 'UpdateDate':
-                return new ZbpDate($this->PostTime);
+                return new ZbpDate($this->UpdateTime);
             case 'AliasFirst':
                 if ($this->Alias) {
                     return $this->Alias;
