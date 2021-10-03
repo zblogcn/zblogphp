@@ -90,10 +90,7 @@ function ViewAuto()
                 ViewAuto_Process_Args_get($array, GetValueInArray($route, 'args_get', array()), $route);
                 ViewAuto_Process_Args_with($array, GetValueInArray($route, 'args_with', array()), $route);
                 ViewAuto_Process_Args_Merge($route);
-                $b_redirect = ViewAuto_Check_To_Permalink($route);
-                if ($b_redirect) {
-                    $array['canceldisplay'] = true;
-                }
+                $b_redirect = ViewAuto_Check_To_Permalink($route, $array);
                 $result = ViewAuto_Call_Auto($route, $array);
                 if ($result === false) {
                     continue;
@@ -313,7 +310,7 @@ function ViewAuto_Call_Auto($route, $array)
 /**
  * ViewAuto的辅助函数
  */
-function ViewAuto_Check_To_Permalink($route)
+function ViewAuto_Check_To_Permalink($route, &$array)
 {
     global $zbp;
     if (GetValueInArray($route, 'to_permalink', false) == false) {
@@ -343,6 +340,7 @@ function ViewAuto_Check_To_Permalink($route)
     }
     $r = UrlRule::OutputUrlRegEx_Route($route, $match_with_page);
     if ($r != '') {
+        $array['return_url'] = true;
         return true;
     }
     return false;
@@ -647,7 +645,7 @@ function ViewSearch()
 
     $args = GetValueInArray($fpargs, 0, null);
     if (is_array($args)) {
-        $canceldisplay = GetValueInArray($args, 'canceldisplay', false);
+        $return_url = GetValueInArray($args, 'return_url', false);
         $posttype = GetValueInArray($args, 'posttype', 0);
         $q = GetValueInArray($args, 'q', '');
         if (isset($args['search']) && $args['search']) {
@@ -657,7 +655,7 @@ function ViewSearch()
         $route = GetValueInArray($args, 'route', array());
         $disablebot = GetValueInArray($args, 'disablebot', true);
     } else {
-        $canceldisplay = false;
+        $return_url = false;
         $posttype = 0;
         $route = array('urlrule' => $zbp->GetPostType(0, 'search_urlrule'));
         $disablebot = true;
@@ -785,12 +783,11 @@ function ViewSearch()
         }
     }
 
-    if ($canceldisplay == false) {
-        $zbp->template->Display();
-    } else {
+    if ($return_url == true) {
         return $zbp->template->GetTags('url');
     }
 
+    $zbp->template->Display();
     return true;
 }
 
@@ -841,14 +838,14 @@ function ViewList($page = null, $cate = null, $auth = null, $date = null, $tags 
         $date = GetValueInArray($page, 'date', null);
         $tags = GetValueInArray($page, 'tags', null);
         $posttype = GetValueInArray($page, 'posttype', 0);
-        $canceldisplay = GetValueInArray($page, 'canceldisplay', false);
+        $return_url = GetValueInArray($page, 'return_url', false);
         $route = GetValueInArray($page, 'route', array());
         $page = GetValueInArray($page, 'page', null);
     } else {
         if (!is_array($object)) {
             $object = array();
         }
-        $canceldisplay = GetValueInArray($object, 'canceldisplay', false);
+        $return_url = GetValueInArray($object, 'return_url', false);
         $route = GetValueInArray($object, 'route', array());
         $posttype = GetValueInArray($object, 'posttype', 0);
     }
@@ -1255,12 +1252,11 @@ function ViewList($page = null, $cate = null, $auth = null, $date = null, $tags 
         }
     }
 
-    if ($canceldisplay == false) {
-        $zbp->template->Display();
-    } else {
+    if ($return_url == true) {
         return $zbp->template->GetTags('url');
     }
 
+    $zbp->template->Display();
     return true;
 }
 
@@ -1302,7 +1298,7 @@ function ViewPost($id = null, $alias = null, $isrewrite = false, $object = array
         $object = $id;
         $isrewrite = true;
         $posttype = GetValueInArray($object, 'posttype', 0);
-        $canceldisplay = GetValueInArray($object, 'canceldisplay', false);
+        $return_url = GetValueInArray($object, 'return_url', false);
         $route = GetValueInArray($object, 'route', array());
         $alias = GetValueInArray($object, 'alias', null);
         $id = GetValueInArray($object, 'id', null);
@@ -1322,7 +1318,7 @@ function ViewPost($id = null, $alias = null, $isrewrite = false, $object = array
         if (!is_array($object)) {
             $object = array();
         }
-        $canceldisplay = GetValueInArray($object, 'canceldisplay', false);
+        $return_url = GetValueInArray($object, 'return_url', false);
         $route = GetValueInArray($object, 'route', array());
         $posttype = GetValueInArray($object, 'posttype', 0);
         if (is_array($id)) {
@@ -1406,7 +1402,7 @@ function ViewPost($id = null, $alias = null, $isrewrite = false, $object = array
     }
 
     if (!empty($route) || $isrewrite == true) {
-        if (isset($object[0]) && !isset($object['page']) && (!isset($object['compare_permalink']) || (isset($object['compare_permalink']) && $object['compare_permalink'] != false))) {
+        if (isset($object[0]) && !isset($object['page']) && (!isset($object['verify_permalink']) || (isset($object['verify_permalink']) && $object['verify_permalink'] != false))) {
             if (!(stripos(urldecode($article->Url), $object[0]) !== false)) {
                 //$zbp->ShowError(2, __FILE__, __LINE__);
                 return false;
@@ -1513,12 +1509,11 @@ function ViewPost($id = null, $alias = null, $isrewrite = false, $object = array
         }
     }
 
-    if ($canceldisplay == false) {
-        $zbp->template->Display();
-    } else {
+    if ($return_url == true) {
         return $zbp->template->GetTags('url');
     }
 
+    $zbp->template->Display();
     return true;
 }
 
