@@ -1202,15 +1202,6 @@ function ViewList($page = null, $cate = null, $auth = null, $date = null, $tags 
     }
     $zbp->LoadTagsByIDString($tagstring);
 
-    foreach ($articles as $key => &$article) {
-        $classname = $zbp->GetPostType($posttype, 'classname');
-        if (strcasecmp(get_class($article), $classname) != 0) {
-            $newarticle = $article->Cloned(false, $classname);
-            $article = $newarticle;
-            $zbp->AddPostCache($article);
-        }
-    }
-
     $zbp->LoadMembersInList($articles);
 
     $zbp->template->SetTags('title', $zbp->title);
@@ -1388,13 +1379,6 @@ function ViewPost($id = null, $alias = null, $isrewrite = false, $object = array
 
     if ($posttype != $article->Type) {
         return false;
-    } else {
-        $classname = $zbp->GetPostType($posttype, 'classname');
-        if (strcasecmp(get_class($article), $classname) != 0) {
-            $newarticle = $article->Cloned(false, $classname);
-            $article = $newarticle;
-            $zbp->AddPostCache($article);
-        }
     }
 
     if ($article->Status != 0 && !$zbp->CheckRights($article->TypeActions['all']) && ($article->AuthorID != $zbp->user->ID)) {
