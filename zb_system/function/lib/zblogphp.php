@@ -2432,6 +2432,14 @@ class ZBlogPHP
                 /** @var Base $l */
                 $l = new $type();
                 $l->LoadInfoByAssoc($a);
+                if (is_subclass_of($type, 'BasePost') == true) {
+                    $newtype = $this->GetPostType_ClassName($l->Type);
+                    if ($newtype != $type) {
+                        unset($l);
+                        $l = new $newtype;
+                        $l->LoadInfoByAssoc($a);
+                    }
+                }
                 $id = $l->GetIdName();
                 if ($this->CheckCache($type, $l->$id) == false) {
                     $this->AddCache($l);
@@ -2499,6 +2507,14 @@ class ZBlogPHP
             /** @var Base $l */
             $l = new $type();
             $l->LoadInfoByAssoc($a);
+            if (is_subclass_of($type, 'BasePost') == true) {
+                $newtype = $this->GetPostType_ClassName($l->Type);
+                if ($newtype != $type) {
+                    unset($l);
+                    $l = new $newtype;
+                    $l->LoadInfoByAssoc($a);
+                }
+            }
             $id = $l->GetIdName();
             if ($this->CheckCache($type, $l->$id) == false) {
                 $this->AddCache($l);
@@ -2904,6 +2920,12 @@ class ZBlogPHP
         } else {
             $p = new $className();
             if ($p->LoadInfoByID($id)) {
+                if (is_subclass_of($className, 'BasePost') == true) {
+                    $newtype = $this->GetPostType_ClassName($p->Type);
+                    if ($newtype != $className) {
+                        $p = $p->Cloned(true, $newtype);
+                    }
+                }
                 $this->AddCache($p);
             }
 
@@ -4155,7 +4177,7 @@ class ZBlogPHP
             return $this->posttype[$typeid]['classname'];
         }
 
-        return '';
+        return 'Post';
     }
 
     public function GetPostType_UrlRule($typeid)
@@ -4362,35 +4384,39 @@ class ZBlogPHP
      */
     public function AddCache(&$object)
     {
-        if (is_subclass_of($object, 'Base') == false && get_class($object) != 'Base') {
+        $classname = get_class($object);
+        if (is_subclass_of($object, 'Base') == false && $classname != 'Base') {
             return;
         }
         $cacheobject = &$this->cacheobject;
-        if (!isset($cacheobject[get_class($object)])) {
-            $cacheobject[get_class($object)] = array();
+        if (is_subclass_of($classname, 'BasePost') == true) {
+            $classname = 'Post';
+        }
+        if (!isset($cacheobject[$classname])) {
+            $cacheobject[$classname] = array();
         }
         if (empty($object->ID)) {
             return;
         }
 
-        $cacheobject[get_class($object)][$object->ID] = $object;
+        $cacheobject[$classname][$object->ID] = $object;
 
-        switch (get_class($object)) {
+        switch ($classname) {
             case 'Module':
-                $this->modulesbyfilename[$object->FileName] = &$cacheobject[get_class($object)][$object->ID];
+                $this->modulesbyfilename[$object->FileName] = &$cacheobject[$classname][$object->ID];
                 break;
             case 'Tag':
                 //isset($this->tags_type[$object->Type]) || $this->tags_type[$object->Type] = array();
-                $this->tags_type[$object->Type][$object->ID] = &$cacheobject[get_class($object)][$object->ID];
+                $this->tags_type[$object->Type][$object->ID] = &$cacheobject[$classname][$object->ID];
                 //isset($this->tagsbyname_type[$object->Type]) || $this->tagsbyname_type[$object->Type] = array();
-                $this->tagsbyname_type[$object->Type][$object->Name] = &$cacheobject[get_class($object)][$object->ID];
+                $this->tagsbyname_type[$object->Type][$object->Name] = &$cacheobject[$classname][$object->ID];
                 break;
             case 'Category':
                 //isset($this->categories_type[$object->Type]) || $this->categories_type[$object->Type] = array();
-                $this->categories_type[$object->Type][$object->ID] = &$cacheobject[get_class($object)][$object->ID];
+                $this->categories_type[$object->Type][$object->ID] = &$cacheobject[$classname][$object->ID];
                 break;
             case 'Member':
-                $this->membersbyname[$object->Name] = &$cacheobject[get_class($object)][$object->ID];
+                $this->membersbyname[$object->Name] = &$cacheobject[$classname][$object->ID];
                 break;
         }
         return true;
@@ -4401,18 +4427,22 @@ class ZBlogPHP
      */
     public function RemoveCache(&$object)
     {
-        if (is_subclass_of($object, 'Base') == false && get_class($object) != 'Base') {
+        $classname = get_class($object);
+        if (is_subclass_of($object, 'Base') == false && $classname != 'Base') {
             return;
         }
         $cacheobject = &$this->cacheobject;
-        if (!isset($cacheobject[get_class($object)])) {
-            $cacheobject[get_class($object)] = array();
+        if (is_subclass_of($classname, 'BasePost') == true) {
+            $classname = 'Post';
+        }
+        if (!isset($cacheobject[$classname])) {
+            $cacheobject[$classname] = array();
         }
         if (empty($object->ID)) {
             return;
         }
 
-        switch (get_class($object)) {
+        switch ($classname) {
             case 'Module':
                 unset($this->modulesbyfilename[$object->FileName]);
                 break;
@@ -4427,7 +4457,7 @@ class ZBlogPHP
                 unset($this->categories_type[$object->Type][$object->ID]);
                 break;
         }
-        unset($cacheobject[get_class($object)][$object->ID]);
+        unset($cacheobject[$classname][$object->ID]);
 
         return true;
     }
@@ -4441,7 +4471,11 @@ class ZBlogPHP
             return;
         }
         $cacheobject = &$this->cacheobject;
+        if (!isset($cacheobject['Post'])) {
+            $cacheobject['Post'] = array();
+        }
         $cacheobject['Post'][$object->ID] = $object;
+        return true;
     }
 
     /**
@@ -4453,15 +4487,34 @@ class ZBlogPHP
             return;
         }
         $cacheobject = &$this->cacheobject;
+        if (!isset($cacheobject['Post'])) {
+            $cacheobject['Post'] = array();
+        }
         unset($cacheobject['Post'][$object->ID]);
+        return true;
     }
 
     /**
      * 查询对象的ID的值是否存在于总缓存对象上.
      */
-    public function CheckCache($classname, $idvalue)
+    public function CheckCache($classname, $idvalue = null)
     {
+        //如果只给了第一个参数，且是object的话
+        if (is_object($classname)) {
+            if (is_subclass_of($classname, 'Base') == false && get_class($classname) != 'Base') {
+                return false;
+            }
+            $idname = $classname->GetIdName();
+            $idvalue = $classname->$idname;
+            $classname = get_class($classname);
+        }
+        if (is_subclass_of($classname, 'Base') == false && $classname != 'Base') {
+            return false;
+        }
         $cacheobject = &$this->cacheobject;
+        if (is_subclass_of($classname, 'BasePost') == true) {
+            $classname = 'Post';
+        }
         if (!isset($cacheobject[$classname])) {
             return false;
         }
