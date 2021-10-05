@@ -272,31 +272,31 @@ class DbSql
     public function Export($table, $keyvalue, $type = 'mysql')
     {
         if ($type == 'mysql' && $this->pri_explort_db === null) {
-            $this->pri_explort_db = new Database_MySQL();
+            $this->pri_explort_db = new Database__MySQL();
         }
 
         if ($type == 'mysqli' && $this->pri_explort_db === null) {
-            $this->pri_explort_db = new Database_MySQLi();
+            $this->pri_explort_db = new Database__MySQLi();
         }
 
         if ($type == 'pdo_mysql' && $this->pri_explort_db === null) {
-            $this->pri_explort_db = new Database_PDOMySQL();
+            $this->pri_explort_db = new Database__PDOMySQL();
         }
 
         if ($type == 'sqlite' && $this->pri_explort_db === null) {
-            $this->pri_explort_db = new Database_SQLite();
+            $this->pri_explort_db = new Database__SQLite();
         }
 
         if ($type == 'sqlite3' && $this->pri_explort_db === null) {
-            $this->pri_explort_db = new Database_SQLite();
+            $this->pri_explort_db = new Database__SQLite();
         }
 
         if ($type == 'pdo_sqlite' && $this->pri_explort_db === null) {
-            $this->pri_explort_db = new Database_SQLite3();
+            $this->pri_explort_db = new Database__SQLite3();
         }
 
         if ($this->pri_explort_db === null) {
-            $this->pri_explort_db = new Database_MySQL();
+            $this->pri_explort_db = new Database__MySQL();
         }
 
         $sql = "INSERT INTO $table ";
