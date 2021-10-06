@@ -205,8 +205,9 @@ class BasePost extends Base
                     }
                 }
                 $routes = $zbp->GetPostType($this->Type, 'routes');
-                if (isset($routes['post_' . $zbp->GetPostType($this->Type, 'name') . '_single'])) {
-                    $u = new UrlRule($zbp->GetRoute($routes['post_' . $zbp->GetPostType($this->Type, 'name') . '_single']));
+                $routename = 'post_' . $zbp->GetPostType($this->Type, 'name') . '_single';
+                if (isset($routes[$routename]) && !is_null($zbp->GetRoute($routes[$routename]))) {
+                    $u = new UrlRule($zbp->GetRoute($routes[$routename]));
                 } else {
                     $u = new UrlRule($zbp->GetPostType($this->Type, 'single_urlrule'));
                 }

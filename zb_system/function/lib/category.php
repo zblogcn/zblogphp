@@ -125,8 +125,9 @@ class Category extends Base
             $backAttr = $zbp->option['ZC_ALIAS_BACK_ATTR'];
 
             $routes = $zbp->GetPostType($this->Type, 'routes');
-            if (isset($routes['post_' . $zbp->GetPostType($this->Type, 'name') . '_list_category'])) {
-                $u = new UrlRule($zbp->GetRoute($routes['post_' . $zbp->GetPostType($this->Type, 'name') . '_list_category']));
+            $routename = 'post_' . $zbp->GetPostType($this->Type, 'name') . '_list_category';
+            if (isset($routes[$routename]) && !is_null($zbp->GetRoute($routes[$routename]))) {
+                $u = new UrlRule($zbp->GetRoute($routes[$routename]));
             } else {
                 $u = new UrlRule($zbp->GetPostType($this->Type, 'list_category_urlrule'));
             }

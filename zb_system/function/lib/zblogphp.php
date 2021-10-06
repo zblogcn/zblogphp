@@ -4330,10 +4330,23 @@ class ZBlogPHP
      *
      * @return mixed
      */
-    public function RemoveRoute($type, $name)
+    public function RemoveRoute($type, $name = null)
     {
         $routes = &$this->routes;
+        if (is_array($type)) {
+            $name = current($type);
+            $type = key($type);
+        }
         unset($routes[$type . '_' . $name]);
+        return true;
+    }
+
+    /**
+     * 清空整个路由
+     */
+    public function ClearRoute()
+    {
+        $this->routes = array();
         return true;
     }
 
