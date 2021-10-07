@@ -403,9 +403,9 @@ require ZBP_PATH . 'zb_system/admin/admin_top.php';
                     },
                     barBtn: function(name, icon, callback) {
                         contentBarBtn.push({
-                            name,
-                            icon,
-                            callback
+                            name:name,
+                            icon:icon,
+                            callback:callback
                         });
                     },
                     ready: function(f){
@@ -428,9 +428,9 @@ require ZBP_PATH . 'zb_system/admin/admin_top.php';
                     },
                     barBtn: function(name, icon, callback) {
                         introBarBtn.push({
-                            name,
-                            icon,
-                            callback
+                            name:name,
+                            icon:icon,
+                            callback:callback
                         });
                     },
                     ready: function(f){
