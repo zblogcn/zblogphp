@@ -2202,6 +2202,8 @@ class ZBlogPHP
             $fpname($this->template->templates);
         }
 
+        $zbp->template->LoadTemplateInfos();
+
         return $this->template->BuildTemplate();
     }
 

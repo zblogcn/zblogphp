@@ -284,11 +284,11 @@ function ViewAuto_Process_Args_Merge(&$route)
  */
 function ViewAuto_Call_Auto($route, $array)
 {
-    if (isset($route['redirect_to']) && !empty(trim($route['redirect_to']))) {
+    if (isset($route['redirect_to'])) {
         Redirect($route['redirect_to']);
         return;
     }
-    if (isset($route['redirect301_to']) && !empty(trim($route['redirect301_to']))) {
+    if (isset($route['redirect301_to'])) {
         Redirect301($route['redirect301_to']);
         return;
     }

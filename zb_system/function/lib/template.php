@@ -755,8 +755,6 @@ class Template
 
         $theme = $this->theme;
         $templates = array();
-        $templates_Name = array();
-        $templates_Type = array();
 
         // 读取预置模板
         $files = GetFilesInDir($zbp->systemdir . 'defend/default/', 'php');
@@ -785,14 +783,25 @@ class Template
             }
         }
 
+        $this->templates = $templates;
+        $this->LoadTemplateInfos();
+
+        return true;
+    }
+
+    /**
+     * 读取模板 Name 及 Type
+     */
+    public function LoadTemplateInfos()
+    {
+        $templates_Name = array();
+        $templates_Type = array();
         $this->template_json_file = null;
-        foreach ($templates as $key => $value) {
+        foreach ($this->templates as $key => $value) {
             $a = $this->GetTemplateNameAndType($key, $value);
             $templates_Name[$key] = $a[0];
             $templates_Type[$key] = $a[1];
         }
-
-        $this->templates = $templates;
         $this->templates_Name = $templates_Name;
         $this->templates_Type = $templates_Type;
 
