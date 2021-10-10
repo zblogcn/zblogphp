@@ -70,13 +70,17 @@ class BasePost extends Base
     }
 
     /**
-     * @param string $s
+     * @param string $s|string
+     * @param type|string 1.7.1后可以与$s前后调换
      *
-     * @return type|string
      * @return bool|string
      */
     public function Time($type = 'PostTime', $s = 'Y-m-d H:i:s')
     {
+        //1.7.1增加了参数调换
+        if (stripos($s, 'Post') !== false || stripos($s, 'Create') !== false || stripos($s, 'Update') !== false) {
+            list($type, $s) = array($s, $type);
+        }
         if (stripos($type, 'Post') !== false) {
             return date($s, (int) $this->PostTime);
         } elseif (stripos($type, 'Create') !== false) {
