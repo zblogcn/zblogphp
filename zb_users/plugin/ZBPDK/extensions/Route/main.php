@@ -53,7 +53,7 @@ $replace_array = array(
     '\'type\' =' => "//路由类型\r\n" . '\'type\' =',
     '\'name\' =' => "//路由名称(同类型下不可重复否则会覆盖，名称必须是post_类型名_打头，后面接路由作用名)\r\n" . '\'name\' =',
     '\'call\' =' => "//路由调用的函数(可以为'函数名'或是'变量名@方法名'或是'变量名::静态方法')\r\n" . '\'call\' =',
-    '\'posttype\' =' => "//Post类型(必须，文章为0，页面为1等，必须是路由所属的PostType的ID值)\r\n" . '\'posttype\' =',
+    '\'posttype\' =' => "//Post类型(必须，文章为0，页面为1等，必须是路由所属的PostType的ID值，如果不归属于某Post类型请设为null)\r\n" . '\'posttype\' =',
     '\'prefix\' =' => "//prefix如指定的话，可以让不同规则在不同的prefix前缀目录下被访问到\r\n" . '\'prefix\' =',
     '\'get\' =' => "//指定2个或2个以上参数如array('id','alias')那么只要有id或alias存在就可以,指定1个参数如array('page')则page可存在可不存在\r\n" . '\'get\' =',
     '\'not_get\' =' => "//必须排除的\$_GET参数(可以为空数组),如果是array('/.+/')就会禁止任何参数传入\r\n" . '\'not_get\' =',
@@ -69,6 +69,7 @@ $replace_array = array(
     '\'suspended\' =' => "//为true时将挂起这条路由使路由系统忽略它\r\n" . '\'suspended\' =',
     '\'only_active\' =' => "//default类型的路由，为true时只在动态模式下生效\r\n" . '\'only_active\' =',
     '\'only_rewrite\' =' => "//default类型的路由，为true时只在伪静模式下生效\r\n" . '\'only_rewrite\' =',
+    '\'verify_permalink\' =' => "//设为false时会跳过对比当前url和目标url是否一致\r\n" . '\'verify_permalink\' =',
 );
 
 foreach ($defined_route as $route_type => $route_note) {
