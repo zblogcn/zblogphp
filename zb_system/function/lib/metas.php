@@ -182,10 +182,12 @@ class Metas
             return '';
         }
 
-        $this->p_data = self::ReplaceTagArray($this->p_data, 'ReplaceHost2Tag');
+        $data = $this->p_data;
+
+        $data = self::ReplaceTagArray($data, 'ReplaceHost2Tag');
 
         //return json_encode($data);
-        return serialize($this->p_data);
+        return serialize($data);
     }
 
     /**
