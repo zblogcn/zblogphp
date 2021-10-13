@@ -1980,7 +1980,8 @@ function GetIDArrayByList($array, $keyname = null)
     $ids = array();
     foreach ($array as $key => $value) {
         if ($keyname == null) {
-            $ids[] = reset($value->GetData());
+            $a = $value->GetData();
+            $ids[] = reset($a);
         } else {
             $a = $value->GetData();
             $ids[] = $a[$keyname];
