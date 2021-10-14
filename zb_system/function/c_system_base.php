@@ -531,6 +531,10 @@ AutoloadClass('Config');
 $GLOBALS['zbp'] = ZBlogPHP::GetInstance();
 $GLOBALS['zbp']->Initialize();
 
+if (is_readable($file_base = $GLOBALS['blogpath'] . 'vendor/autoload.php')) {
+    include $file_base;
+}
+
 /*
  * 加载主题和插件APP
  */
