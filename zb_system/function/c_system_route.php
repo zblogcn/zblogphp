@@ -91,6 +91,7 @@ function ViewAuto()
                 ViewAuto_Process_Args_with($array, GetValueInArray($route, 'args_with', array()), $route);
                 ViewAuto_Process_Args_Merge($route);
                 $b_redirect = ViewAuto_Check_To_Permalink($route, $array);
+                ViewAuto_Check_Redirect_To($route);
                 $result = ViewAuto_Call_Auto($route, $array);
                 if ($result === false) {
                     continue;
@@ -135,6 +136,7 @@ function ViewAuto()
                 ViewAuto_Process_Args_with($array, GetValueInArray($route, 'args_with', array()), $route);
                 ViewAuto_Process_Args_Merge($route);
                 //var_dump($match_with_page_value, $route['urlrule'], $r, $url, $m, $array);//die;
+                ViewAuto_Check_Redirect_To($route);
                 $result = ViewAuto_Call_Auto($route, $array);
                 if ($result === false) {
                     continue;
@@ -153,6 +155,7 @@ function ViewAuto()
             ViewAuto_Process_Args_get($array, GetValueInArray($route, 'args_get', array()), $route);
             ViewAuto_Process_Args_with($array, GetValueInArray($route, 'args_with', array()), $route);
             ViewAuto_Process_Args_Merge($route);
+            ViewAuto_Check_Redirect_To($route);
             $result = ViewAuto_Call_Auto($route, $array);
             if ($result === false) {
                 continue;
@@ -282,7 +285,7 @@ function ViewAuto_Process_Args_Merge(&$route)
 /**
  * ViewAuto的辅助函数
  */
-function ViewAuto_Call_Auto($route, $array)
+function ViewAuto_Check_Redirect_To($route)
 {
     if (isset($route['redirect_to'])) {
         Redirect($route['redirect_to']);
@@ -292,6 +295,13 @@ function ViewAuto_Call_Auto($route, $array)
         Redirect301($route['redirect301_to']);
         return;
     }
+}
+
+/**
+ * ViewAuto的辅助函数
+ */
+function ViewAuto_Call_Auto($route, $array)
+{
     $function = $route['call'];
     $array['route'] = $route;
     if (strpos($function, '::') !== false) {
