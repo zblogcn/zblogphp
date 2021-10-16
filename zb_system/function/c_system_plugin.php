@@ -587,6 +587,17 @@ DefinePluginFilter('Filter_Plugin_Cmd_Ajax');
 /*
 '**************************************************<
 '类型:Filter
+'名称:Filter_Plugin_Cmd_Redirect
+'参数:$action, $url
+'说明:cmd.php的最后跳转接口,用于修改url跳转值
+'调用:
+'**************************************************>
+ */
+DefinePluginFilter('Filter_Plugin_Cmd_Redirect');
+
+/*
+'**************************************************<
+'类型:Filter
 '名称:Filter_Plugin_Misc_Begin
 '参数:$type 类型
 '说明:c_system_misc.php的启动接口,可以在这里拦截各种type

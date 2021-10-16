@@ -1,4 +1,5 @@
 <?php
+
 /**
  * 事件操作相关函数.
  */
@@ -98,9 +99,9 @@ function Logout()
 
 //###############################################################################################################
 
-function Redirect_to_search()
+function Redirect_cmd_to_search()
 {
-    global $zbp;
+    global $zbp, $action;
     //$q = rawurlencode(trim(strip_tags(GetVars('q', 'POST'))));
     //Redirect($zbp->searchurl . '?q=' . $q);
 
@@ -119,10 +120,14 @@ function Redirect_to_search()
 
     $url = $r->Make();
 
+    foreach ($GLOBALS['hooks']['Filter_Plugin_Cmd_Redirect'] as $fpname => &$fpsignal) {
+        $fpname($action, $url);
+    }
+
     Redirect($url);
 }
 
-function Redirect_to_inside($url)
+function Redirect_cmd_from_args($url)
 {
     global $zbp;
     if (empty($zbp->user->ID)) {
@@ -136,6 +141,33 @@ function Redirect_to_inside($url)
     if (isset($a['host']) && isset($b['host']) && strtolower($a['host']) == strtolower($b['host'])) {
         Redirect($url);
     }
+}
+
+/**
+ * CMD页面结束前的跳转函数.
+ *
+ * @api Filter_Plugin_Cmd_Redirect
+ */
+function Redirect_cmd_end($url)
+{
+    global $zbp, $action;
+
+    foreach ($GLOBALS['hooks']['Filter_Plugin_Cmd_Redirect'] as $fpname => &$fpsignal) {
+        $fpname($action, $url);
+    }
+
+    Redirect($url);
+}
+
+function Redirect_cmd_end_by_script($url)
+{
+    global $zbp, $action;
+
+    foreach ($GLOBALS['hooks']['Filter_Plugin_Cmd_Redirect'] as $fpname => &$fpsignal) {
+        $fpname($action, $url);
+    }
+
+    RedirectByScript($url);
 }
 
 //###############################################################################################################
