@@ -78,15 +78,11 @@ class BasePost extends Base
     public function Time($type = 'PostTime', $s = 'Y-m-d H:i:s')
     {
         //1.7.1增加了参数调换
-        if (stripos($s, 'Post') !== false || stripos($s, 'Create') !== false || stripos($s, 'Update') !== false) {
+        if (array_key_exists($s, $this->data)) {
             list($type, $s) = array($s, $type);
         }
-        if (stripos($type, 'Post') !== false) {
-            return date($s, (int) $this->PostTime);
-        } elseif (stripos($type, 'Create') !== false) {
-            return date($s, (int) $this->CreateTime);
-        } elseif (stripos($type, 'Update') !== false) {
-            return date($s, (int) $this->UpdateTime);
+        if (array_key_exists($type, $this->data)) {
+            return date($s, (int) $this->$type);
         } else {
             // 1.7改为2个参数了($type加在第一个前)，为了兼容之前的写法
             return date($type, (int) $this->PostTime);
