@@ -299,12 +299,11 @@ function ViewAuto_Call_Auto($route, $array)
         return call_user_func(array($func[0], $func[1]), $array);
     } elseif (strpos($function, '@') !== false) {
         $func = explode('@', $function);
-        if (version_compare(PHP_VERSION, '7.0.0') >= 0) {
-            return call_user_func(array($func[0], $func[1]), $array);
-        } else {
-            $o = new $func[0];
-            return call_user_func(array($o, $func[1]), $array);
+        if (array_key_exists($func[0], $GLOBALS)) {
+            return call_user_func(array($GLOBALS[$func[0]], $func[1]), $array);
         }
+        $o = new $func[0];
+        return call_user_func(array($o, $func[1]), $array);
     } else {
         return call_user_func($function, $array);
     }
