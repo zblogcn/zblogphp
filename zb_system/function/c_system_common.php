@@ -202,11 +202,14 @@ function Logs($logString, $level = 'INFO', $source = 'system')
             $f = $zbp->logsdir . '' . md5($zbp->path) . '.txt';
         }
     }
+
+    $ip = GetGuestIP();
+
     ZBlogException::SuspendErrorHook();
     $handle = @fopen($f, 'a+');
     if ($handle) {
         $t = $time;
-        @fwrite($handle, '[' . $t . ']' . " " . $level . " " . $source . "\r\n" . $logString . "\r\n");
+        @fwrite($handle, '[' . $t . ']' . " " . $level . " " . $source . " " . $ip . "\r\n" . $logString . "\r\n");
         @fclose($handle);
     }
     ZBlogException::ResumeErrorHook();
@@ -942,6 +945,9 @@ function GetGuestIP()
     global $zbp;
     if (isset($zbp->option['ZC_USING_CDN_GUESTIP_TYPE']) && $zbp->option['ZC_USING_CDN_GUESTIP_TYPE'] != '') {
         $user_ip = GetVars($zbp->option['ZC_USING_CDN_GUESTIP_TYPE'], "SERVER");
+        if (is_null($user_ip)) {
+            $user_ip = GetVars("REMOTE_ADDR", "SERVER");
+        }
     } else {
         $user_ip = GetVars("REMOTE_ADDR", "SERVER");
     }

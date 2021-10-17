@@ -84,6 +84,9 @@ class BasePost extends Base
         if (array_key_exists($type, $this->data)) {
             return date($s, (int) $this->$type);
         } else {
+            if (func_num_args() == 2) {
+                return date($s, (int) $this->$type);
+            }
             // 1.7改为2个参数了($type加在第一个前)，为了兼容之前的写法
             return date($type, (int) $this->PostTime);
         }
