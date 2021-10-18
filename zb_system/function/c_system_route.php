@@ -96,11 +96,9 @@ function ViewAuto()
                 if ($result === false) {
                     continue;
                 }
-                if ($result == true) {
-                    //如果开启伪静且$b_redirect，那么通过原动态访问的会跳转至$result
-                    if ($b_redirect && is_string($result)) {
-                        Redirect($result);
-                    }
+                //如果开启伪静且$b_redirect=true和返回string，那么通过原动态访问的会跳转至$result
+                if ($result == true && $b_redirect == true && is_string($result)) {
+                    Redirect($result);
                 }
                 return $result;
             }

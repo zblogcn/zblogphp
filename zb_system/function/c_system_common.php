@@ -138,6 +138,7 @@ function GetPHPVersion()
  */
 function AutoloadClass($className)
 {
+    global $autoload_class_dirs;
     foreach ($GLOBALS['hooks']['Filter_Plugin_Autoload'] as $fpname => &$fpsignal) {
         $fpreturn = $fpname($className);
         if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
@@ -147,14 +148,33 @@ function AutoloadClass($className)
         }
     }
     $className = str_replace('__', '/', $className);
-    $fileName = ZBP_PATH . 'zb_system/function/lib/' . strtolower($className) . '.php';
-    if (is_readable($fileName)) {
-        include $fileName;
 
-        return true;
+    //$fileName = ZBP_PATH . 'zb_system/function/lib/' . strtolower($className) . '.php';
+    foreach ($autoload_class_dirs as $dir) {
+        $fileName = $dir . strtolower($className) . '.php';
+        if (is_readable($fileName)) {
+            include $fileName;
+            return true;
+        }
     }
 
     return false;
+}
+
+/**
+ * 管理自动加载类文件的目录.
+ */
+function SetAutoloadClassDir($dir, $prepend = false)
+{
+    global $autoload_class_dirs;
+    $dir = trim($dir);
+    $dir = str_replace('\\', '/', $dir);
+    $dir = rtrim($dir, '/') . '/';
+    if ($prepend == false) {
+        $autoload_class_dirs[] = $dir;
+    } else {
+        array_unshift($autoload_class_dirs, $dir);
+    }
 }
 
 /**
