@@ -164,7 +164,7 @@ function AutoloadClass($className)
 /**
  * 管理自动加载类文件的目录.
  */
-function SetAutoloadClassDir($dir, $prepend = false)
+function AddAutoloadClassDir($dir, $prepend = false)
 {
     global $autoload_class_dirs;
     $dir = trim($dir);

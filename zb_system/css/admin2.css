@@ -7,7 +7,7 @@
      xinxr@msn.com
 */
 * { padding: 0; margin: 0; box-sizing: border-box; }
-body { min-width: 980px; padding: 0; margin: 0; font-family: "Microsoft YaHei", STHeiti, "Hiragino Sans GB", "WenQuanYi Micro Hei", "Heiti SC", NSimSun, SimSun, Arial, Helvetica, sans-serif; color: #333333; font-size: 14px; }
+body { min-width: 640px; width: 100%; padding: 0; margin: 0; font-family: "Microsoft YaHei", STHeiti, "Hiragino Sans GB", "WenQuanYi Micro Hei", "Heiti SC", NSimSun, SimSun, Arial, Helvetica, sans-serif; color: #333333; font-size: 14px; }
 div,
 h1,
 h2,
@@ -292,7 +292,7 @@ span.note { font-size: 0.9em; }
 .SubMenu span.m-left,
 .SubMenu span.m-right { float: left; }
 .SubMenu a:hover { background: #b0cdee; text-decoration: none; color: black; }
-.SubMenu a { color: black; background: #e0e1e2; margin: 0 5px 0 0; float: left; }
+.SubMenu a { color: black; background: #e0e1e2; margin: 0 5px 10px 0; float: left; }
 .SubMenu span.m-now { background: #3399cc; color: white; }
 
 /* 插件管理 */
@@ -367,7 +367,7 @@ span.button:hover { box-shadow: 0 0 1px #000; border-radius: 2px; padding: 2px 3
 
 /*侧栏管理*/
 .widget-left { float: left; clear: left; width: 100%; margin-right: -290px; overflow: hidden; }
-.widget-list { min-width: 530px; margin-right: 290px; border: 2px solid #EEE; }
+.widget-list { min-width: 300px; margin-right: 290px; border: 2px solid #EEE; }
 .siderbar-list { float: right; width: 290px; margin-left: 0; }
 .widget-list-header,
 .siderbar-header,
@@ -439,3 +439,9 @@ i.icon-arrow-repeat.loading-status:before { animation: refreshloading 1.5s linea
 
 .blodcolor{color:#1d4c7d}.normalcolor{color:#3a6ea5}.lightcolor{color:#b0cdee}.highcolor{color:#3399cc}.anticolor{color:#d60000}
 .bg-blodcolor{background-color:#1d4c7d}.bg-normalcolor{background-color:#3a6ea5}.bg-lightcolor{background-color:#b0cdee}.bg-highcolor{background-color:#3399cc}.bg-anticolor{background-color:#d60000}
+
+@media screen and (max-width: 800px) {
+    .editmod2 {padding-right: 115px;}
+    #divEditRight {width: 110px;margin-left: -140px;}
+
+}

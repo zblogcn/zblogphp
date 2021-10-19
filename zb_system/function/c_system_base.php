@@ -35,7 +35,7 @@ require ZBP_PATH . 'zb_system/function/c_system_api.php';
  * 指定加载类的目录并注册加载函数到系统
  */
 $GLOBALS['autoload_class_dirs'] = array();
-SetAutoloadClassDir(ZBP_PATH . 'zb_system/function/lib');
+AddAutoloadClassDir(ZBP_PATH . 'zb_system/function/lib');
 spl_autoload_register('AutoloadClass');
 
 /*

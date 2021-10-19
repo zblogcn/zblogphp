@@ -17,6 +17,7 @@ if ($zbp->option['ZC_ADDITIONAL_SECURITY']) {
 <meta name="generator" content="Z-BlogPHP <?php echo ZC_VERSION_DISPLAY; ?>" />
 <meta name="robots" content="none" />
 <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width" />
 <meta name="csrfToken" content="<?php echo $zbp->GetCSRFToken(); ?>" />
 <meta name="csrfExpiration" content="<?php echo $zbp->csrfExpiration; ?>" />
 <title><?php echo $blogname . ' - ' . $blogtitle; ?></title>
