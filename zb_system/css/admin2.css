@@ -236,7 +236,7 @@ form.search .button, form.search .reset { height:33px; }
 #divFloat select,#divFloat #edtDateTime { height:33px; padding:5px 10px; outline:0; }
 #divFloat label { vertical-align:middle; }
 .boxfloat { position: fixed; _position: absolute; top: 0px; z-index: 295; }
-.editmod2 { margin: 0.2em 0; padding-right: 275px; }
+.editmod2 { margin: 0.2em 0; padding-right: 245px; }
 #divIntro { padding-bottom: 20px; }
 .editmod { margin: 1em 0; }
 .editmod3 { margin: 0; width: 99%; }
@@ -441,7 +441,8 @@ i.icon-arrow-repeat.loading-status:before { animation: refreshloading 1.5s linea
 .bg-blodcolor{background-color:#1d4c7d}.bg-normalcolor{background-color:#3a6ea5}.bg-lightcolor{background-color:#b0cdee}.bg-highcolor{background-color:#3399cc}.bg-anticolor{background-color:#d60000}
 
 @media screen and (max-width: 800px) {
-    .editmod2 {padding-right: 115px;}
-    #divEditRight {width: 110px;margin-left: -140px;}
-
+    .editmod2 {padding-right: 170px;}
+    #divEditRight {width: 170px;margin-left: -170px;text-align: left;}
+    #divEditPost {overflow: hidden;margin-top: 17px;}
+    form.search p {line-height: 3em;}
 }

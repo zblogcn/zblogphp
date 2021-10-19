@@ -152,9 +152,14 @@ if ($id == 10) {
     $c .= '
 .header .menu {
     height: 60px;
-    position: relative;
+    position: absolute;
     float:left;
-    left:0px;
+    left:56px;
+    top: 0px;
+    overflow: hidden;
+}
+.header .menu ul {
+    float: left;
 }
 header div.logo {
     border-right: 1px solid #444;
@@ -173,7 +178,14 @@ header div.logo {
     background: none;
     vertical-align: middle;
 }
-
+.header .user{
+    z-index:2;
+    background-color:#262f3e;
+    width:220px;
+    top:0;
+    height:60px;
+    padding-top:10px;
+}
 .header {
     height:60px;
     margin-bottom: 0px;
