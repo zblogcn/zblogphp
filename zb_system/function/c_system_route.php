@@ -115,14 +115,8 @@ function ViewAuto()
         foreach ($match_with_page as $match_with_page_key => $match_with_page_value) {
             $b = ViewAuto_Check_Get_And_Not_Get_And_Must_Get(GetValueInArray($route, 'get', array()), GetValueInArray($route, 'not_get', array()), GetValueInArray($route, 'must_get', array()));
             $b = $b && ViewAuto_Check_Request_Method(GetValueInArray($route, 'request_method', ''));
-            //如果直接指定了$route['urlrule_regex']，就不调用UrlRule::OutputUrlRegEx，直接preg_match
-            if (isset($route['urlrule_regex']) && trim($route['urlrule_regex']) != '') {
-                $r = trim($route['urlrule_regex']);
-            } else {
-                //$r = UrlRule::OutputUrlRegEx_V2($zbp->GetPostType(0, 'list_urlrule'), 'list', $match_with_page_value);
-                $r = UrlRule::OutputUrlRegEx_Route($route, $match_with_page_value);
-            }
 
+            $r = ViewAuto_Get_Compiled_Urlrule($route, $match_with_page_value);
             $m = array();
             //如果条件符合就组合参数数组并调用函数
             //var_dump($route['name'],$match_with_page_value, $route['urlrule'], $r, $url, $m);//die;
@@ -149,16 +143,23 @@ function ViewAuto()
         $b = ViewAuto_Check_Get_And_Not_Get_And_Must_Get(GetValueInArray($route, 'get', array()), GetValueInArray($route, 'not_get', array()), GetValueInArray($route, 'must_get', array()));
         $b = $b && ViewAuto_Check_Request_Method(GetValueInArray($route, 'request_method', ''));
         if ($b) {
-            $array = array();
-            ViewAuto_Process_Args_get($array, GetValueInArray($route, 'args_get', array()), $route);
-            ViewAuto_Process_Args_with($array, GetValueInArray($route, 'args_with', array()), $route);
-            ViewAuto_Process_Args_Merge($route);
-            ViewAuto_Check_Redirect_To($route);
-            $result = ViewAuto_Call_Auto($route, $array);
-            if ($result === false) {
-                continue;
+            $r = ViewAuto_Get_Compiled_Urlrule($route, false);
+            $m = array();
+            $a = ((isset($route['urlrule_regex']) && trim($route['urlrule_regex']) != '') || (isset($route['urlrule']) && trim($route['urlrule']) != ''));
+            //var_dump($r,preg_match($r, $url, $m));die;
+            $c = ($r != '' && preg_match($r, $url, $m) == 1) || ($r == '' && $url == '') || ($r == '' && $url == 'index.php') || ($r == '/(?J)^index\.php\/$/' && $url == '');
+            if ($a == false || ($a == true && $c == true)) {
+                $array = $m;
+                ViewAuto_Process_Args_get($array, GetValueInArray($route, 'args_get', array()), $route);
+                ViewAuto_Process_Args_with($array, GetValueInArray($route, 'args_with', array()), $route);
+                ViewAuto_Process_Args_Merge($route);
+                ViewAuto_Check_Redirect_To($route);
+                $result = ViewAuto_Call_Auto($route, $array);
+                if ($result === false) {
+                    continue;
+                }
+                return $result;
             }
-            return $result;
         }
     }
 
@@ -361,6 +362,12 @@ function ViewAuto_Check_To_Permalink($route, &$array)
  */
 function ViewAuto_Get_Parameters_And_Match_with_page($route, &$parameters, &$match_with_page)
 {
+    //如果指定了无需编译的正则式的规则，就强定指定一次且只有false
+    if (isset($route['urlrule_regex']) && trim($route['urlrule_regex']) != '') {
+        $match_with_page = array('remove_page' => false);
+        return true;
+    }
+
     if (isset($route['args']) && is_array($route['args'])) {
         $parameters = UrlRule::ProcessParameters($route);
     } else {
@@ -383,6 +390,21 @@ function ViewAuto_Get_Parameters_And_Match_with_page($route, &$parameters, &$mat
         unset($match_with_page['remove_page']);
     }
     $match_with_page['keep_page'] = true;
+
+    return true;
+}
+
+/**
+ * ViewAuto的辅助函数
+ */
+function ViewAuto_Get_Compiled_Urlrule($route, $match_with_page_value){
+    //如果直接指定了$route['urlrule_regex']，就不调用UrlRule::OutputUrlRegEx，直接preg_match
+    if (isset($route['urlrule_regex']) && trim($route['urlrule_regex']) != '') {
+        $r = trim($route['urlrule_regex']);
+    } else {
+        //$r = UrlRule::OutputUrlRegEx_V2($zbp->GetPostType(0, 'list_urlrule'), 'list', $match_with_page_value);
+        $r = UrlRule::OutputUrlRegEx_Route($route, $match_with_page_value);
+    }
 }
 
 /**

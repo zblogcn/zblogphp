@@ -248,7 +248,7 @@ require ZBP_PATH . 'zb_system/admin/admin_top.php';
                     <div id="divBox">
                         <div id="divFloat">
                             <div id='post' class="editmod">
-                                <input class="button" style="width:180px;height:38px;" type="submit" value="<?php echo $lang['msg']['submit']; ?>" id="btnPost" onclick='return checkArticleInfo();' />
+                                <input class="button" style="" type="submit" value="<?php echo $lang['msg']['submit']; ?>" id="btnPost" onclick='return checkArticleInfo();' />
                             </div>
                             <!-- cate -->
                             <?php
@@ -258,7 +258,7 @@ require ZBP_PATH . 'zb_system/admin/admin_top.php';
                                     <label for="cmbCateID" class="editinputname" style="max-width:65px;text-overflow:ellipsis;">
                                         <?php echo $lang['msg']['category']; ?>
                                     </label>
-                                    <select style="width:180px;" class="edit" size="1" name="CateID" id="cmbCateID">
+                                    <select style="" class="edit" size="1" name="CateID" id="cmbCateID">
                                         <?php echo OutputOptionItemsOfCategories($article->CateID, $article->Type); ?>
                                     </select>
                                 </div>
@@ -272,7 +272,7 @@ require ZBP_PATH . 'zb_system/admin/admin_top.php';
                                 <label for="cmbPostStatus" class="editinputname" style="max-width:65px;text-overflow:ellipsis;">
                                     <?php echo $lang['msg']['status']; ?>
                                 </label>
-                                <select class="edit" style="width:180px;" size="1" name="Status" id="cmbPostStatus" onChange="cmbPostStatus.value=this.options[this.selectedIndex].value">
+                                <select class="edit" style="" size="1" name="Status" id="cmbPostStatus" onChange="cmbPostStatus.value=this.options[this.selectedIndex].value">
                                     <?php echo OutputOptionItemsOfPostStatus($article->Status); ?>
                                 </select>
                             </div>
@@ -283,7 +283,7 @@ require ZBP_PATH . 'zb_system/admin/admin_top.php';
                                 <label for="cmbTemplate" class="editinputname" style="max-width:65px;text-overflow:ellipsis;">
                                     <?php echo $lang['msg']['template']; ?>
                                 </label>
-                                <select style="width:180px;" class="edit" size="1" name="Template" id="cmbTemplate" onChange="cmbTemplate.value=this.options[this.selectedIndex].value">
+                                <select style="" class="edit" size="1" name="Template" id="cmbTemplate" onChange="cmbTemplate.value=this.options[this.selectedIndex].value">
                                     <?php echo OutputOptionItemsOfTemplate($article->Template, array('index', '404', 'module', 'search', 'lm-'), array('single', $zbp->GetPostType($article->Type, 'name'))); ?>
                                 </select>
                             </div>
@@ -294,7 +294,7 @@ require ZBP_PATH . 'zb_system/admin/admin_top.php';
                                 <label for="cmbUser" class="editinputname" style="max-width:65px;text-overflow:ellipsis;">
                                     <?php echo $lang['msg']['author']; ?>
                                 </label>
-                                <select style="width:180px;" size="1" name="AuthorID" id="cmbUser" onChange="cmbUser.value=this.options[this.selectedIndex].value">
+                                <select style="" size="1" name="AuthorID" id="cmbUser" onChange="cmbUser.value=this.options[this.selectedIndex].value">
                                     <?php echo OutputOptionItemsOfMember($article->AuthorID, $article->Type); ?>
                                 </select>
                             </div>
@@ -305,7 +305,7 @@ require ZBP_PATH . 'zb_system/admin/admin_top.php';
                                 <label for="edtDateTime" class="editinputname" style="max-width:65px;text-overflow:ellipsis;">
                                     <?php echo $lang['msg']['date']; ?>
                                 </label>
-                                <input type="text" name="PostTime" id="edtDateTime" value="<?php echo $article->Time(); ?>" style="width:180px;" />
+                                <input type="text" name="PostTime" id="edtDateTime" value="<?php echo $article->Time(); ?>" style="" />
                             </div>
 
                             <!-- )newdatetime -->

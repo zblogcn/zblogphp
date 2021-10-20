@@ -229,6 +229,8 @@ form.search .button, form.search .reset { height:33px; }
 #divEditLeft { float: left; width: 100%; }
 #divEditLeft label { vertical-align:middle; }
 
+#divEditRight .editmod>select,#divEditRight .editmod>input[type=text], #btnPost{width: 180px;height:38px;}
+
 /*文章编辑提交区随动*/
 #divBox { width: 270px; position: relative; }
 #divFloat { width: 258px; }
@@ -445,4 +447,6 @@ i.icon-arrow-repeat.loading-status:before { animation: refreshloading 1.5s linea
     #divEditRight {width: 170px;margin-left: -170px;text-align: left;}
     #divEditPost {overflow: hidden;margin-top: 17px;}
     form.search p {line-height: 3em;}
+    #divEditRight .editmod>select,#divEditRight .editmod>input[type=text]{width: 130px;}
+    #btnPost{width: 170px;}
 }
