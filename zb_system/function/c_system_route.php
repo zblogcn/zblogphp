@@ -405,6 +405,7 @@ function ViewAuto_Get_Compiled_Urlrule($route, $match_with_page_value){
         //$r = UrlRule::OutputUrlRegEx_V2($zbp->GetPostType(0, 'list_urlrule'), 'list', $match_with_page_value);
         $r = UrlRule::OutputUrlRegEx_Route($route, $match_with_page_value);
     }
+    return $r;
 }
 
 /**
