@@ -97,7 +97,7 @@ function ViewAuto()
                     continue;
                 }
                 //如果开启伪静且$b_redirect=true和返回string，那么通过原动态访问的会跳转至$result
-                if ($result == true && $b_redirect == true && is_string($result)) {
+                if (is_string($result) && $result == true && $b_redirect == true) {
                     Redirect($result);
                 }
                 return $result;
@@ -107,22 +107,24 @@ function ViewAuto()
 
     //匹配伪静路由
     foreach ($rewrite_routes as $key => $route) {
-        //$match_with_page 默认匹配1次 (true)，有page参数可以匹配2次 [false=(remove page), true=(keep page)]
-        $parameters = array();
-        $match_with_page = array();
-        ViewAuto_Get_Parameters_And_Match_with_page($route, $parameters, $match_with_page);
-
-        foreach ($match_with_page as $match) {
-            $b = ViewAuto_Check_Get_And_Not_Get_And_Must_Get(GetValueInArray($route, 'get', array()), GetValueInArray($route, 'not_get', array()), GetValueInArray($route, 'must_get', array()));
-            $b = $b && ViewAuto_Check_Request_Method(GetValueInArray($route, 'request_method', ''));
-
-            $r = ViewAuto_Get_Compiled_Urlrule($route, $match);
-            $m = array();
-            //如果条件符合就组合参数数组并调用函数
+        //如果条件符合就组合参数数组并调用函数
+        $b = ViewAuto_Check_Get_And_Not_Get_And_Must_Get(GetValueInArray($route, 'get', array()), GetValueInArray($route, 'not_get', array()), GetValueInArray($route, 'must_get', array()));
+        $b = $b && ViewAuto_Check_Request_Method(GetValueInArray($route, 'request_method', ''));
+        if ($b) {
+            $c = false;
+            //$match_with_page 默认匹配1次 (false)，有page参数可以匹配2次 [false=(remove page), true=(keep page)]
+            $match_with_page = $parameters = $m = array();
+            ViewAuto_Get_Parameters_And_Match_with_page($route, $parameters, $match_with_page);
+            foreach ($match_with_page as $match) {
+                $r = ViewAuto_Get_Compiled_Urlrule($route, $match);
+                if (($r != '' && preg_match($r, $url, $m) == 1) || ($r == '' && $url == '') || ($r == '' && $url == 'index.php') || ($r == '/(?J)^index\.php\/$/' && $url == '')) {
+                    $c = true;
+                    break;
+                }
+            }
             //var_dump($route['name'],$match, $route['urlrule'], $r, $url, $m);//die;
             //if($r != '')var_dump(preg_match($r, $url, $m));
-            $b = $b && (($r != '' && preg_match($r, $url, $m) == 1) || ($r == '' && $url == '') || ($r == '' && $url == 'index.php') || ($r == '/(?J)^index\.php\/$/' && $url == ''));
-            if ($b) {
+            if ($c) {
                 $array = $m;
                 ViewAuto_Process_Args($array, $parameters, $m);
                 ViewAuto_Process_Args_with($array, GetValueInArray($route, 'args_with', array()), $route);
@@ -144,15 +146,12 @@ function ViewAuto()
         $b = $b && ViewAuto_Check_Request_Method(GetValueInArray($route, 'request_method', ''));
         if ($b) {
             $c = false;
-            $m = array();
+            $match_with_page = $parameters = $m = array();
             //如果指定了规则就检查匹配，没有指定就任意匹配生效
             if ((isset($route['urlrule_regex']) && trim($route['urlrule_regex']) != '') || (isset($route['urlrule']) && trim($route['urlrule']) != '')) {
-                $match_with_page = $parameters = $r_array = array();
                 ViewAuto_Get_Parameters_And_Match_with_page($route, $parameters, $match_with_page);
                 foreach ($match_with_page as $match) {
-                    $r_array[] = ViewAuto_Get_Compiled_Urlrule($route, $match);
-                }
-                foreach ($r_array as $r) {
+                    $r = ViewAuto_Get_Compiled_Urlrule($route, $match);
                     if (($r != '' && preg_match($r, $url, $m) == 1) || ($r == '' && $url == '') || ($r == '' && $url == 'index.php') || ($r == '/(?J)^index\.php\/$/' && $url == '')) {
                         $c = true;
                         break;
@@ -161,7 +160,7 @@ function ViewAuto()
             } else {
                 $c = true;
             }
-            if ($c == true) {
+            if ($c) {
                 $array = $m;
                 ViewAuto_Process_Args_get($array, GetValueInArray($route, 'args_get', array()), $route);
                 ViewAuto_Process_Args_with($array, GetValueInArray($route, 'args_with', array()), $route);
