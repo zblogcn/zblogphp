@@ -112,14 +112,14 @@ function ViewAuto()
         $match_with_page = array();
         ViewAuto_Get_Parameters_And_Match_with_page($route, $parameters, $match_with_page);
 
-        foreach ($match_with_page as $match_with_page_key => $match_with_page_value) {
+        foreach ($match_with_page as $match) {
             $b = ViewAuto_Check_Get_And_Not_Get_And_Must_Get(GetValueInArray($route, 'get', array()), GetValueInArray($route, 'not_get', array()), GetValueInArray($route, 'must_get', array()));
             $b = $b && ViewAuto_Check_Request_Method(GetValueInArray($route, 'request_method', ''));
 
-            $r = ViewAuto_Get_Compiled_Urlrule($route, $match_with_page_value);
+            $r = ViewAuto_Get_Compiled_Urlrule($route, $match);
             $m = array();
             //如果条件符合就组合参数数组并调用函数
-            //var_dump($route['name'],$match_with_page_value, $route['urlrule'], $r, $url, $m);//die;
+            //var_dump($route['name'],$match, $route['urlrule'], $r, $url, $m);//die;
             //if($r != '')var_dump(preg_match($r, $url, $m));
             $b = $b && (($r != '' && preg_match($r, $url, $m) == 1) || ($r == '' && $url == '') || ($r == '' && $url == 'index.php') || ($r == '/(?J)^index\.php\/$/' && $url == ''));
             if ($b) {
@@ -127,7 +127,7 @@ function ViewAuto()
                 ViewAuto_Process_Args($array, $parameters, $m);
                 ViewAuto_Process_Args_with($array, GetValueInArray($route, 'args_with', array()), $route);
                 ViewAuto_Process_Args_Merge($route);
-                //var_dump($match_with_page_value, $route['urlrule'], $r, $url, $m, $array);//die;
+                //var_dump($match, $route['urlrule'], $r, $url, $m, $array);//die;
                 ViewAuto_Check_Redirect_To($route);
                 $result = ViewAuto_Call_Auto($route, $array);
                 if ($result === false) {
@@ -143,12 +143,25 @@ function ViewAuto()
         $b = ViewAuto_Check_Get_And_Not_Get_And_Must_Get(GetValueInArray($route, 'get', array()), GetValueInArray($route, 'not_get', array()), GetValueInArray($route, 'must_get', array()));
         $b = $b && ViewAuto_Check_Request_Method(GetValueInArray($route, 'request_method', ''));
         if ($b) {
-            $r = ViewAuto_Get_Compiled_Urlrule($route, false);
+            $c = false;
             $m = array();
-            $a = ((isset($route['urlrule_regex']) && trim($route['urlrule_regex']) != '') || (isset($route['urlrule']) && trim($route['urlrule']) != ''));
-            //var_dump($r,preg_match($r, $url, $m));die;
-            $c = ($r != '' && preg_match($r, $url, $m) == 1) || ($r == '' && $url == '') || ($r == '' && $url == 'index.php') || ($r == '/(?J)^index\.php\/$/' && $url == '');
-            if ($a == false || ($a == true && $c == true)) {
+            //如果指定了规则就检查匹配，没有指定就任意匹配生效
+            if ((isset($route['urlrule_regex']) && trim($route['urlrule_regex']) != '') || (isset($route['urlrule']) && trim($route['urlrule']) != '')) {
+                $match_with_page = $parameters = $r_array = array();
+                ViewAuto_Get_Parameters_And_Match_with_page($route, $parameters, $match_with_page);
+                foreach ($match_with_page as $match) {
+                    $r_array[] = ViewAuto_Get_Compiled_Urlrule($route, $match);
+                }
+                foreach ($r_array as $r) {
+                    if (($r != '' && preg_match($r, $url, $m) == 1) || ($r == '' && $url == '') || ($r == '' && $url == 'index.php') || ($r == '/(?J)^index\.php\/$/' && $url == '')) {
+                        $c = true;
+                        break;
+                    }
+                }
+            } else {
+                $c = true;
+            }
+            if ($c == true) {
                 $array = $m;
                 ViewAuto_Process_Args_get($array, GetValueInArray($route, 'args_get', array()), $route);
                 ViewAuto_Process_Args_with($array, GetValueInArray($route, 'args_with', array()), $route);
@@ -381,15 +394,14 @@ function ViewAuto_Get_Parameters_And_Match_with_page($route, &$parameters, &$mat
             $haspage = true;
         }
     }
-    if ($haspage == false) {
-        unset($match_with_page['remove_page']);
+    if ($haspage == true) {
+        $match_with_page['keep_page'] = true;
     }
 
     $only_match_page = GetValueInArray($route, 'only_match_page', false);
     if ($only_match_page == true) {
         unset($match_with_page['remove_page']);
     }
-    $match_with_page['keep_page'] = true;
 
     return true;
 }
@@ -397,13 +409,13 @@ function ViewAuto_Get_Parameters_And_Match_with_page($route, &$parameters, &$mat
 /**
  * ViewAuto的辅助函数
  */
-function ViewAuto_Get_Compiled_Urlrule($route, $match_with_page_value){
+function ViewAuto_Get_Compiled_Urlrule($route, $match){
     //如果直接指定了$route['urlrule_regex']，就不调用UrlRule::OutputUrlRegEx，直接preg_match
     if (isset($route['urlrule_regex']) && trim($route['urlrule_regex']) != '') {
         $r = trim($route['urlrule_regex']);
     } else {
-        //$r = UrlRule::OutputUrlRegEx_V2($zbp->GetPostType(0, 'list_urlrule'), 'list', $match_with_page_value);
-        $r = UrlRule::OutputUrlRegEx_Route($route, $match_with_page_value);
+        //$r = UrlRule::OutputUrlRegEx_V2($zbp->GetPostType(0, 'list_urlrule'), 'list', $match);
+        $r = UrlRule::OutputUrlRegEx_Route($route, $match);
     }
     return $r;
 }

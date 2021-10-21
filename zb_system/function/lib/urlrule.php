@@ -444,6 +444,7 @@ class UrlRule
         $url = str_replace('{%host%}', $prefix, $url);
         $url = str_replace('.', '\\.', $url);
         $url = str_replace('/', '\\/', $url);
+        $url = str_replace('?', '\\?', $url);
 
         //把page传进$newargs
         $newargs[] = array('name'  => 'page', 'regex' => '[0-9]+');
@@ -519,6 +520,7 @@ class UrlRule
         $url = str_replace('{%host%}/', '{%host%}', $url);
         $url = str_replace('.', '\\.', $url);
         $url = str_replace('/', '\\/', $url);
+        $url = str_replace('?', '\\?', $url);
 
         $array = array();
         $array[] = array('{%page%}' => '(?P<page>[0-9]+)');

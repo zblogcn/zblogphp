@@ -25,6 +25,17 @@ class Class_UrlRuleTest extends PHPUnit\Framework\TestCase
         $this->assertEquals($s0, $s1);
         $this->assertEquals($s00, $s2);
 
+        $s = '{%host%}?page={%page%}';
+        $s0 = '/(?J)^?page=(?P<page>[0-9]*)$/';
+        $s02 = '/(?J)^\?page=(?P<page>[0-9]+)$/';
+        $s03 = '/(?J)^\?page=(?P<page>[0-9]+)$/';
+        $s1 = UrlRule::OutputUrlRegEx($s, 'list', true);
+        $s2 = UrlRule::OutputUrlRegEx_V2($s, 'list', true, false);
+        $s3 = UrlRule::OutputUrlRegEx_Route(array('urlrule'=>$s), true);
+        $this->assertEquals($s0, $s1);
+        $this->assertEquals($s02, $s2);
+        $this->assertEquals($s03, $s3);
+
         $s = '';
         $s0 = '';
         $s00 = '/(?J)$/';
