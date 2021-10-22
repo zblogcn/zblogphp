@@ -82,7 +82,6 @@ function ViewAuto()
         $prefix = empty($prefix) ? '' : ($prefix . '/');
         if (($url == $prefix . '') || ($url == $prefix . 'index.php') || (($zbp->option['ZC_STATIC_MODE'] == 'REWRITE') && GetValueInArray($_GET, 'rewrite', null) == true)) {
             $b = ViewAuto_Check_Get_And_Not_Get_And_Must_Get(GetValueInArray($route, 'get', array()), GetValueInArray($route, 'not_get', array()), GetValueInArray($route, 'must_get', array()));
-
             $b = $b && ViewAuto_Check_Request_Method(GetValueInArray($route, 'request_method', ''));
             //如果条件符合就组合参数数组并调用函数
             if ($b) {
@@ -162,6 +161,7 @@ function ViewAuto()
             }
             if ($c) {
                 $array = $m;
+                ViewAuto_Process_Args($array, $parameters, $m);
                 ViewAuto_Process_Args_get($array, GetValueInArray($route, 'args_get', array()), $route);
                 ViewAuto_Process_Args_with($array, GetValueInArray($route, 'args_with', array()), $route);
                 ViewAuto_Process_Args_Merge($route);
@@ -374,12 +374,6 @@ function ViewAuto_Check_To_Permalink($route, &$array)
  */
 function ViewAuto_Get_Parameters_And_Match_with_page($route, &$parameters, &$match_with_page)
 {
-    //如果指定了无需编译的正则式的规则，就强定指定一次且只有false
-    if (isset($route['urlrule_regex']) && trim($route['urlrule_regex']) != '') {
-        $match_with_page = array('remove_page' => false);
-        return true;
-    }
-
     if (isset($route['args']) && is_array($route['args'])) {
         $parameters = UrlRule::ProcessParameters($route);
     } else {
@@ -387,6 +381,12 @@ function ViewAuto_Get_Parameters_And_Match_with_page($route, &$parameters, &$mat
     }
 
     $match_with_page = array('remove_page' => false);
+
+    //如果指定了无需编译的正则式的规则，就强定指定一次且只有false
+    if (isset($route['urlrule_regex']) && trim($route['urlrule_regex']) != '') {
+        return true;
+    }
+
     $haspage = false;
     foreach ($parameters as $key => $value) {
         if ($value['name'] == 'page') {
@@ -400,6 +400,10 @@ function ViewAuto_Get_Parameters_And_Match_with_page($route, &$parameters, &$mat
     $only_match_page = GetValueInArray($route, 'only_match_page', false);
     if ($only_match_page == true) {
         unset($match_with_page['remove_page']);
+    }
+
+    if (empty($match_with_page)) {
+        $match_with_page = array('remove_page' => false);
     }
 
     return true;

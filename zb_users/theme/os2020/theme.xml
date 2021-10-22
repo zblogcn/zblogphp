@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <theme version="php">
 <id>os2020</id>
-<name>OS2020</name>
+<name>OS2020-Vue</name>
 <url>https://www.inull.cn</url>
 <note>橙色阳光经典系列，OS2020，Z-BlogPHP 1.7 的 API 试水之作。</note>
 <description>Vue模板源码：https://github.com/ossso/os2020-vue-theme</description>
@@ -18,10 +18,10 @@
   <email></email>
   <url></url>
 </source>
-<adapted>172900</adapted>
-<version>1.1.0</version>
+<adapted>172980</adapted>
+<version>1.2.0</version>
 <pubdate>2021-02-19</pubdate>
-<modified>2021-04-23</modified>
+<modified>2021-10-22</modified>
 <price>0</price>
 <phpver>5.2</phpver>
 <advanced>

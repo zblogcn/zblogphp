@@ -4,16 +4,38 @@ RegisterPlugin("os2020", "ActivePlugin_os2020");
 
 function ActivePlugin_os2020()
 {
-    //Add_Filter_Plugin('Filter_Plugin_Zbp_PreLoad', 'os2020_Change_Url');
+    Add_Filter_Plugin('Filter_Plugin_Zbp_PreLoad', 'os2020_Change_Url');
     Add_Filter_Plugin('Filter_Plugin_API_Begin', 'os2020_Refresh_ControlPanel_Content');
 }
 
 function os2020_Change_Url()
 {
-    //global $zbp;
+    global $zbp;
 
-    //$zbp->LoadPostType();
-    //$zbp->LoadRoutes();
+    $zbp->routes['active_post_article_single']['urlrule'] = '{%host%}?type=acticle&id={%id%}';
+    $zbp->routes['active_post_page_single']['urlrule'] = '{%host%}?type=page&id={%id%}';
+    $zbp->routes['default_post_article_list']['urlrule'] = '{%host%}?page={%page%}';
+    $zbp->routes['active_post_article_list_category']['urlrule'] = '{%host%}?cate={%id%}&page={%page%}';
+    $zbp->routes['active_post_article_list_tag']['urlrule'] = '{%host%}?tags={%id%}&page={%page%}';
+    $zbp->routes['active_post_article_list_date']['urlrule'] = '{%host%}?date={%date%}&page={%page%}';
+    $zbp->routes['active_post_article_list_author']['urlrule'] = '{%host%}?auth={%id%}&page={%page%}';
+
+    $zbp->RegRoute(
+      array(
+        'posttype' => 0,
+        'type' => 'active',
+        'name' => 'post_article_search',
+        'call' => 'ViewSearch',
+        'get' => 
+        array (
+          'q' => '[^\\/_]+',
+        ),
+        'urlrule' => '{%host%}?search={%q%}',
+      )
+    );
+
+    $zbp->option['ZC_STATIC_MODE']= 'ACTIVE';
+
 }
 
 function os2020_Refresh_ControlPanel_Content()
@@ -39,77 +61,9 @@ function os2020_Refresh_ControlPanel_Content()
 function InstallPlugin_os2020()
 {
     global $zbp;
-
-    if ($zbp->Config('os2020')->IsActived == true){
-        return true;
-    }
-
-    $zbp->Config('os2020')->BAK_ZC_STATIC_MODE = $zbp->option['ZC_STATIC_MODE'];
-    $zbp->Config('os2020')->BAK_ZC_ARTICLE_REGEX = $zbp->option['ZC_ARTICLE_REGEX'];
-    $zbp->Config('os2020')->BAK_ZC_PAGE_REGEX = $zbp->option['ZC_PAGE_REGEX'];
-    $zbp->Config('os2020')->BAK_ZC_INDEX_REGEX = $zbp->option['ZC_INDEX_REGEX'];
-    $zbp->Config('os2020')->BAK_ZC_CATEGORY_REGEX = $zbp->option['ZC_CATEGORY_REGEX'];
-    $zbp->Config('os2020')->BAK_ZC_TAGS_REGEX = $zbp->option['ZC_TAGS_REGEX'];
-    $zbp->Config('os2020')->BAK_ZC_DATE_REGEX = $zbp->option['ZC_DATE_REGEX'];
-    $zbp->Config('os2020')->BAK_ZC_AUTHOR_REGEX = $zbp->option['ZC_AUTHOR_REGEX'];
-    $zbp->Config('os2020')->BAK_ZC_SEARCH_REGEX = $zbp->option['ZC_SEARCH_REGEX'];
-
-    $zbp->option['ZC_STATIC_MODE'] = 'ACTIVE';
-    $zbp->option['ZC_ARTICLE_REGEX'] = '{%host%}?type=acticle&id={%id%}';
-    $zbp->option['ZC_PAGE_REGEX'] = '{%host%}?type=page&id={%id%}';
-    $zbp->option['ZC_INDEX_REGEX'] = '{%host%}?page={%page%}';
-    $zbp->option['ZC_CATEGORY_REGEX'] = '{%host%}?cate={%id%}&page={%page%}';
-    $zbp->option['ZC_TAGS_REGEX'] = '{%host%}?tags={%id%}&page={%page%}';
-    $zbp->option['ZC_DATE_REGEX'] = '{%host%}?date={%date%}&page={%page%}';
-    $zbp->option['ZC_AUTHOR_REGEX'] = '{%host%}?auth={%id%}&page={%page%}';
-    $zbp->option['ZC_SEARCH_REGEX'] = '{%host%}?search={%q%}';
-
-    $zbp->Config('os2020')->IsActived = true;
-    $zbp->Config('os2020')->Save();
-
-    $zbp->SaveOption();
 }
 
 function UninstallPlugin_os2020()
 {
     global $zbp;
-
-    $zbp->option['ZC_STATIC_MODE'] = $zbp->Config('os2020')->BAK_ZC_STATIC_MODE;
-    if(trim($zbp->option['ZC_STATIC_MODE'])==''){
-        $zbp->option['ZC_STATIC_MODE'] = 'ACTIVE';
-    }
-    $zbp->option['ZC_ARTICLE_REGEX'] = $zbp->Config('os2020')->BAK_ZC_ARTICLE_REGEX;
-    if(trim($zbp->option['ZC_ARTICLE_REGEX'])==''){
-        $zbp->option['ZC_ARTICLE_REGEX'] = '{%host%}?id={%id%}';
-    }
-    $zbp->option['ZC_PAGE_REGEX'] = $zbp->Config('os2020')->BAK_ZC_PAGE_REGEX;
-    if(trim($zbp->option['ZC_PAGE_REGEX'])==''){
-        $zbp->option['ZC_PAGE_REGEX'] = '{%host%}?id={%id%}';
-    }
-    $zbp->option['ZC_INDEX_REGEX'] = $zbp->Config('os2020')->BAK_ZC_INDEX_REGEX;
-    if(trim($zbp->option['ZC_INDEX_REGEX'])==''){
-        $zbp->option['ZC_INDEX_REGEX'] = '{%host%}?page={%page%}';
-    }
-    $zbp->option['ZC_CATEGORY_REGEX'] = $zbp->Config('os2020')->BAK_ZC_CATEGORY_REGEX;
-    if(trim($zbp->option['ZC_CATEGORY_REGEX'])==''){
-        $zbp->option['ZC_CATEGORY_REGEX'] = '{%host%}?cate={%id%}&page={%page%}';
-    }
-    $zbp->option['ZC_TAGS_REGEX'] = $zbp->Config('os2020')->BAK_ZC_TAGS_REGEX;
-    if(trim($zbp->option['ZC_TAGS_REGEX'])==''){
-        $zbp->option['ZC_TAGS_REGEX'] = '{%host%}?tags={%id%}&page={%page%}';
-    }
-    $zbp->option['ZC_DATE_REGEX'] = $zbp->Config('os2020')->BAK_ZC_DATE_REGEX;
-    if(trim($zbp->option['ZC_DATE_REGEX'])==''){
-        $zbp->option['ZC_DATE_REGEX'] = '{%host%}?date={%date%}&page={%page%}';
-    }
-    $zbp->option['ZC_AUTHOR_REGEX'] = $zbp->Config('os2020')->BAK_ZC_AUTHOR_REGEX;
-    if(trim($zbp->option['ZC_AUTHOR_REGEX'])==''){
-        $zbp->option['ZC_AUTHOR_REGEX'] = '{%host%}?auth={%id%}&page={%page%}';
-    }
-    $zbp->option['ZC_SEARCH_REGEX'] = $zbp->Config('os2020')->BAK_ZC_SEARCH_REGEX;
-    if(trim($zbp->option['ZC_SEARCH_REGEX'])==''){
-        $zbp->option['ZC_SEARCH_REGEX'] = '{%host%}search.php?q={%q%}&page={%page%}';
-    }
-    $zbp->Config('os2020')->Delete();
-    $zbp->SaveOption();
 }
