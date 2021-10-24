@@ -43,9 +43,8 @@ function ViewAuto()
     }
 
     $url = urldecode($url);
-    $active_routes = array();
-    $rewrite_routes = array();
-    $default_routes = array();
+    $active_routes = $rewrite_routes = $default_routes = array();
+
     foreach ($zbp->routes as $key => $route) {
         $route['original_url'] = $original_url;
         $route['url'] = $url;
@@ -53,13 +52,11 @@ function ViewAuto()
             if (GetValueInArray($route, 'suspended', false) == false) {
                 $active_routes[] = $route;
             }
-        }
-        if ($route['type'] == 'rewrite') {
+        } elseif ($route['type'] == 'rewrite') {
             if ($zbp->option['ZC_STATIC_MODE'] == 'REWRITE' && GetValueInArray($route, 'suspended', false) == false) {
                 $rewrite_routes[] = $route;
             }
-        }
-        if ($route['type'] == 'default') {
+        } elseif ($route['type'] == 'default') {
             if (GetValueInArray($route, 'suspended', false) == false) {
                 if (GetValueInArray($route, 'only_rewrite', false) == true) {
                     if ($zbp->option['ZC_STATIC_MODE'] == 'REWRITE') {
@@ -122,7 +119,6 @@ function ViewAuto()
                 }
             }
             //var_dump($route['name'],$match, $route['urlrule'], $r, $url, $m);//die;
-            //if($r != '')var_dump(preg_match($r, $url, $m));
             if ($c) {
                 $array = $m;
                 ViewAuto_Process_Args($array, $parameters, $m);
@@ -147,17 +143,24 @@ function ViewAuto()
             $c = false;
             $match_with_page = $parameters = $m = array();
             //如果指定了规则就检查匹配，没有指定就任意匹配生效
-            if ((isset($route['urlrule_regex']) && trim($route['urlrule_regex']) != '') || (isset($route['urlrule']) && trim($route['urlrule']) != '')) {
+            if (((isset($route['urlrule_regex']) && trim($route['urlrule_regex']) != '') || (isset($route['urlrule']) && trim($route['urlrule']) != ''))) {
                 ViewAuto_Get_Parameters_And_Match_with_page($route, $parameters, $match_with_page);
                 foreach ($match_with_page as $match) {
                     $r = ViewAuto_Get_Compiled_Urlrule($route, $match);
+                    if (stristr($r, 'index\.php') === false) {
+                        $url = str_ireplace('index.php', '', $url);
+                    }
                     if (($r != '' && preg_match($r, $url, $m) == 1) || ($r == '' && $url == '') || ($r == '' && $url == 'index.php') || ($r == '/(?J)^index\.php\/$/' && $url == '')) {
                         $c = true;
                         break;
                     }
                 }
             } else {
-                $c = true;
+                $prefix = GetValueInArray($route, 'prefix', '');
+                $prefix = empty($prefix) ? '' : ($prefix . '/');
+                if ($prefix == '' || ($prefix == substr($url, 0, strlen($prefix)))) {
+                    $c = true;
+                }
             }
             if ($c) {
                 $array = $m;

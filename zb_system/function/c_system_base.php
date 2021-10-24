@@ -536,7 +536,7 @@ AutoloadClass('Config');
 $GLOBALS['zbp'] = ZBlogPHP::GetInstance();
 $GLOBALS['zbp']->Initialize();
 
-if (is_readable($file_base = $GLOBALS['blogpath'] . 'vendor/autoload.php')) {
+if (is_readable($file_base = $GLOBALS['blogpath'] . 'vendor/autoload.php') && PHP_VERSION_ID >= 50300) {
     include_once $file_base;
 }
 
