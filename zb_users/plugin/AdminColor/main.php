@@ -55,7 +55,7 @@ if (GetVars('act') == 'save') {
     $zbp->Config('AdminColor')->TableShadow = (bool) GetVars("ac_TableShadow");
     $zbp->Config('AdminColor')->FontSize = (int) GetVars("ac_FontSize");
     $zbp->Config('AdminColor')->LeftWidth = (int) GetVars("ac_LeftWidth");
-    if($zbp->Config('AdminColor')->LeftWidth<140)$zbp->Config('AdminColor')->LeftWidth=140;
+    if($zbp->Config('AdminColor')->LeftWidth<80)$zbp->Config('AdminColor')->LeftWidth=80;
     //if ( $zbp->Config('AdminColor')->ColorID == 10 )
     //    $zbp->Config('AdminColor')->HeaderPathUse = true;
     $zbp->SaveConfig('AdminColor');

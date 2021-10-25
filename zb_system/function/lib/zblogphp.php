@@ -734,8 +734,8 @@ class ZBlogPHP
         $this->option['ZC_BLOG_VERSION'] = ZC_BLOG_VERSION;
         $this->option['ZC_NOW_VERSION'] = $this->version;  //ZC_LAST_VERSION
         $this->option['ZC_BLOG_PRODUCT_FULL'] = $this->option['ZC_BLOG_PRODUCT'] . ' ' . ZC_VERSION_DISPLAY;
-        $this->option['ZC_BLOG_PRODUCT_FULLHTML'] = '<a href="https://www.zblogcn.com/" title="Z-BlogPHP ' . ZC_BLOG_VERSION . '" target="_blank">' . $this->option['ZC_BLOG_PRODUCT_FULL'] . '</a>';
-        $this->option['ZC_BLOG_PRODUCT_HTML'] = '<a href="https://www.zblogcn.com/" title="Z-BlogPHP ' . ZC_BLOG_VERSION . '" target="_blank">' . $this->option['ZC_BLOG_PRODUCT'] . '</a>';
+        $this->option['ZC_BLOG_PRODUCT_FULLHTML'] = '<a href="https://www.zblogcn.com/" title="Z-BlogPHP ' . ZC_BLOG_VERSION . '" target="_blank" rel="noopener norefferrer">' . $this->option['ZC_BLOG_PRODUCT_FULL'] . '</a>';
+        $this->option['ZC_BLOG_PRODUCT_HTML'] = '<a href="https://www.zblogcn.com/" title="Z-BlogPHP ' . ZC_BLOG_VERSION . '" target="_blank" rel="noopener norefferrer">' . $this->option['ZC_BLOG_PRODUCT'] . '</a>';
 
         if ($oldZone != $this->option['ZC_TIME_ZONE_NAME']) {
             date_default_timezone_set($this->option['ZC_TIME_ZONE_NAME']);
@@ -2208,7 +2208,7 @@ class ZBlogPHP
     /**
      * 更新模板缓存.
      *
-     * @param bool $onlycheck  为真的话，只判断是否需要而不Build
+     * @param bool $onlycheck  为真的且$forcebuild为假的话，只判断是否需要而不Build，返回false就是需要更新，为true就不需要
      * @param bool $forcebuild
      *
      * @return true or false
@@ -2227,8 +2227,10 @@ class ZBlogPHP
             $array_md5 = array();
         }
 
+        $new_md5 = GetValueInArray($array_md5, $this->template->template_dirname);
+
         //如果对比不一样,$onlycheck就有用了
-        if ($md5 != GetValueInArray($array_md5, $this->template->template_dirname)) {
+        if ($md5 != $new_md5) {
             if ($onlycheck == true && $forcebuild == false) {
                 return false;
             }
@@ -2240,7 +2242,10 @@ class ZBlogPHP
             return true;
         }
         //如果对比一样的话，$forcebuild就有用了
-        if ($md5 == GetValueInArray($array_md5, $this->template->template_dirname)) {
+        if ($md5 == $new_md5) {
+            if ($onlycheck == true && $forcebuild == false) {
+                return true;
+            }
             if ($forcebuild == true) {
                 $this->BuildTemplate();
                 $array_md5[$this->template->template_dirname] = $md5;

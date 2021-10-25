@@ -12,7 +12,7 @@
       <div id="divMiddle">
         <div id="divTop">
           <h1 id="BlogTitle"><a href="{$host}">{$name}</a></h1>
-          <h3 id="BlogSubTitle">{$subname}</h3>
+          <h2 id="BlogSubTitle">{$subname}</h2>
         </div>
         <div id="divNavBar">
           <ul>

@@ -583,6 +583,7 @@ div.post-body h6{
     padding:0;
     text-align:left;
     font-weight:normal;
+    clear: both;
 }
 #BlogCopyRight{
     font-size:0.9em;
@@ -591,6 +592,7 @@ div.post-body h6{
     padding:0;
     text-align:left;
     font-weight:normal;
+    clear: both;
 }
 #BlogPowerBy a,#BlogCopyRight a{
     color:#333;

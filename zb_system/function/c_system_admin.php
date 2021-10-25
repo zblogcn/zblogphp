@@ -40,7 +40,7 @@ function Admin_SiteInfo()
     }
     echo ' </th></tr>';
 
-    if ((time() - (int) $zbp->cache->reload_statistic_time) > (6 * 24 * 60 * 60)) {
+    if ((time() - (int) $zbp->cache->reload_statistic_time) > (23 * 60 * 60)) {
         echo '<script>$(document).ready(function(){ statistic(\'' . BuildSafeCmdURL('act=misc&type=statistic') . '\'); });</script>';
     } else {
         $echoStatistic = true;
