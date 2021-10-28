@@ -157,7 +157,7 @@ function ApiResponse($data = null, $error = null, $code = 200, $message = null)
             'message' => $error->message,
         );
 
-        if ($GLOBALS['option']['ZC_DEBUG_MODE']) {
+        if ($GLOBALS['zbp']->isdebug) {
             $error_info['message_full'] = $error->messagefull;
             $error_info['file'] = $error->file;
             $error_info['line'] = $error->line;

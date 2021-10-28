@@ -710,6 +710,10 @@ class ZBlogPHP
             ZBlogException::$islogerror = (bool) $this->option['ZC_DEBUG_LOG_ERROR'];
         }
 
+        if (defined('ZBP_DEBUGMODE') && ZBP_DEBUGMODE == true) {
+            ZBlogException::$iswarning = true;
+        }
+
         //ZC_PERMANENT_DOMAIN_WHOLE_DISABLE不存在 或是 ZC_PERMANENT_DOMAIN_WHOLE_DISABLE存在但为假
         $domain_disable = GetValueInArray($this->option, 'ZC_PERMANENT_DOMAIN_WHOLE_DISABLE');
         if ($domain_disable == false) {
@@ -791,7 +795,9 @@ class ZBlogPHP
         !defined('ZBP_IN_CMD') || $this->iscmd = true;
         !defined('ZBP_IN_AJAX') || $this->isajax = true;
         !defined('ZBP_IN_XMLRPC') || $this->isxmlrpc = true;
-        !$this->option['ZC_DEBUG_MODE'] || $this->isdebug = true;
+        if ($this->option['ZC_DEBUG_MODE'] || (defined('ZBP_DEBUGMODE') && ZBP_DEBUGMODE == true)) {
+            $this->isdebug = true;
+        }
 
         $this->LoadPostType();
         $this->LoadRoutes();

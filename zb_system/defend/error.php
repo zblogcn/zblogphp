@@ -44,7 +44,7 @@ unset($post_data['token']);
         <div class="login loginw">
             <form id="frmLogin" method="post" action="#">
                 <?php
-                if (!$GLOBALS['option']['ZC_DEBUG_MODE']) {
+                if (!$GLOBALS['zbp']->isdebug) {
                     ?>
                     <div class="divHeader lessinfo" style="margin-bottom:10px;">
                         <b><?php echo FormatString($error->message, '[noscript]'); ?></b></div>
@@ -58,7 +58,7 @@ unset($post_data['token']);
                 }
                 ?>
     <?php
-    if ($GLOBALS['option']['ZC_DEBUG_MODE']) {
+    if ($GLOBALS['zbp']->isdebug) {
         ?>
                     <div class="divHeader moreinfo"
                          style="margin-bottom:10px;"><?php echo $GLOBALS['lang']['msg']['error_tips']; ?></div>
