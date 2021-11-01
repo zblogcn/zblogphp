@@ -1716,6 +1716,8 @@ class ZBlogPHP
             $mem_ids_need_load[] = $obj->$mem_id_field;
         }
 
+        $mem_ids_need_load = array_unique($mem_ids_need_load);
+
         if (count($mem_ids_need_load) === 0) {
             return true;
         }

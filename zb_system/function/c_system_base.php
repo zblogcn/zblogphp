@@ -260,7 +260,6 @@ $GLOBALS['actions'] = array(
  *定义数据表
  */
 $GLOBALS['table'] = array(
-
     'Post'     => '%pre%post',
     'Category' => '%pre%category',
     'Comment'  => '%pre%comment',

@@ -30,7 +30,7 @@ if ($zbp->option['ZC_ADDITIONAL_SECURITY']) {
 <script src="<?php echo $bloghost; ?>zb_system/script/jquery-ui.custom.min.js?v=<?php echo $blogversion; ?>"></script>
 <script>if (!window.bloghost && window.confirm("<?php echo $lang['msg']['error_load_js']; ?>")) window.open('<?php echo str_replace('{%message%}', '', str_replace('{%id%}', 89, $lang['offical_urls']['more_help'])); ?>');</script>
 <?php
-if (preg_match("/(Android|iPad|iPhone)/", GetGuestAgent())){
+if (CheckIsMoblie()){
     echo '<style>@media screen and (max-width: 800px) {body{font-size:14px}}@media screen and (max-width: 500px) {body{font-size:16px}}</style>';
 }
 

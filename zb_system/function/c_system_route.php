@@ -415,7 +415,8 @@ function ViewAuto_Get_Parameters_And_Match_with_page($route, &$parameters, &$mat
 /**
  * ViewAuto的辅助函数
  */
-function ViewAuto_Get_Compiled_Urlrule($route, $match){
+function ViewAuto_Get_Compiled_Urlrule($route, $match)
+{
     //如果直接指定了$route['urlrule_regex']，就不调用UrlRule::OutputUrlRegEx，直接preg_match
     if (isset($route['urlrule_regex']) && trim($route['urlrule_regex']) != '') {
         $r = trim($route['urlrule_regex']);

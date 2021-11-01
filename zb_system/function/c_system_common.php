@@ -147,8 +147,8 @@ function AutoloadClass($className)
             return $fpreturn;
         }
     }
-    $className = str_replace('__', '/', $className);
 
+    $className = str_replace('__', '/', $className);
     //$fileName = ZBP_PATH . 'zb_system/function/lib/' . strtolower($className) . '.php';
     foreach ($autoload_class_dirs as $dir) {
         $fileName = $dir . strtolower($className) . '.php';
@@ -168,6 +168,9 @@ function AddAutoloadClassDir($dir, $prepend = false)
 {
     global $autoload_class_dirs;
     $dir = trim($dir);
+    if (empty($dir)) {
+        return false;
+    }
     $dir = str_replace('\\', '/', $dir);
     $dir = rtrim($dir, '/') . '/';
     if ($prepend == false) {
@@ -175,6 +178,7 @@ function AddAutoloadClassDir($dir, $prepend = false)
     } else {
         array_unshift($autoload_class_dirs, $dir);
     }
+    return true;
 }
 
 /**
@@ -235,6 +239,18 @@ function Logs($logString, $level = 'INFO', $source = 'system')
     ZBlogException::ResumeErrorHook();
 
     return true;
+}
+
+/**
+ * Logs指定的变量的值
+ */
+function Logs_Dump()
+{
+    $a = func_get_args();
+    foreach ($a as $key => $value) {
+        $s = var_export($value, true);
+        Logs($s);
+    }
 }
 
 /**
@@ -2062,18 +2078,6 @@ function CheckIncludedFiles($file)
 }
 
 /**
- * Logs指定的变量的值
- */
-function Logs_Dump()
-{
-    $a = func_get_args();
-    foreach ($a as $key => $value) {
-        $s = var_export($value, true);
-        Logs($s);
-    }
-}
-
-/**
  * 中文与特殊字符友好的 JSON 编码.
  *
  * @param array $arr
@@ -2219,4 +2223,18 @@ function rawurlencode_without_backslash($s)
     $s = rawurlencode($s);
     $s = str_replace('%2F', '/', $s);
     return $s;
+}
+
+/**
+ * 检查移动端
+ *
+ * @return boolean
+ */
+function CheckIsMoblie()
+{
+    $ua = GetGuestAgent();
+    if (preg_match('/(Android|Web0S|webOS|iPad|iPhone|Mobile|Windows\sPhone|Kindle|BlackBerry|Opera\sMini)/', $ua)) {
+        return true;
+    }
+    return false;
 }

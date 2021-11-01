@@ -33,7 +33,6 @@ require 'zb_system/function/c_system_base.php';
 
 $zbp->RedirectInstall();
 $zbp->Load();
-$zbp->CheckSiteClosed();
 
 foreach ($GLOBALS['hooks']['Filter_Plugin_Index_Begin'] as $fpname => &$fpsignal) {
     $fpname();
