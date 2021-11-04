@@ -828,7 +828,6 @@ class ZBlogPHP
         }
     }
 
-
     /**
      * 读取指定文件里的PostType配置
      */
@@ -847,7 +846,7 @@ class ZBlogPHP
     public function LoadRoutes()
     {
         foreach (array(0 => 'article', 1 => 'page') as $postid => $postname) {
-            $file =  ZBP_PATH . 'zb_system/defend/routes_post_' . $postname . '.php';
+            $file = ZBP_PATH . 'zb_system/defend/routes_post_' . $postname . '.php';
             $this->LoadRoutes_File($file);
         }
     }
@@ -4311,7 +4310,7 @@ class ZBlogPHP
             if ($b) {
                 $this->SetPostType_Sub($postid, 'routes', $array['name'], array($array['type'] => $array['name']));
 
-                if (!empty($array['urlrule'])) {            
+                if (!empty($array['urlrule'])) {
                     $prefix_name = 'post_' . $postname . '_';
                     $prefix_rulename = str_ireplace($prefix_name, '', $array['name']);
                     $rulename = $prefix_rulename . '_urlrule';
