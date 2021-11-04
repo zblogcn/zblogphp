@@ -518,7 +518,9 @@ function ApiDispatch($mods, $mod, $act)
         $func = 'api_' . $mod . '_' . $act;
         if (function_exists($func)) {
             $result = call_user_func($func);
-    
+
+            ApiResultData($result);
+
             ApiResponse(
                 isset($result['data']) ? $result['data'] : null,
                 isset($result['error']) ? $result['error'] : null,
@@ -588,4 +590,16 @@ function ApiThrottle($name = 'default', $max_reqs = 60, $period = 60)
     $zbpcache->Set($cache_key, json_encode($cached_req), ($cached_req['expire_time'] - time()));
 
     return true;
+}
+
+/**
+ * API 返回数据处理函数
+ */
+function ApiResultData(&$data)
+{
+    global $mod, $act;
+
+    foreach ($GLOBALS['hooks']['Filter_Plugin_API_Result_Data'] as $fpname => &$fpsignal) {
+        $fpname($data, $mod, $act);
+    }
 }

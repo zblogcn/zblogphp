@@ -1002,6 +1002,13 @@ class ZBlogPHP
             }
 
             $this->CloseConnect();
+
+            if (ZBlogException::$islogerror && is_array($this->db->error) && !empty($this->db->error)) {
+                foreach ($this->db->error as $e) {
+                    Logs($this->db->type . ' error id:' . PHP_EOL . var_export($e, true), 'ERROR');
+                }
+            }
+
             unset($this->db);
             $this->isinitialized = false;
         }
