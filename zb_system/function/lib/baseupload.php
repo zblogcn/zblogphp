@@ -232,8 +232,6 @@ class BaseUpload extends Base
      */
     public function Del()
     {
-        global $zbp;
-
         foreach ($GLOBALS['hooks']['Filter_Plugin_Upload_Del'] as $fpname => &$fpsignal) {
             $fpreturn = $fpname($this);
             if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
@@ -242,8 +240,6 @@ class BaseUpload extends Base
                 return $fpreturn;
             }
         }
-
-        $zbp->RemoveCache($this);
 
         return parent::Del();
     }

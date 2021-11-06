@@ -169,8 +169,6 @@ class BaseModule extends Base
             }
         }
 
-        $zbp->RemoveCache($this);
-
         if ($this->SourceType == 'themeinclude') {
             if (empty($this->FileName)) {
                 return true;
@@ -181,6 +179,7 @@ class BaseModule extends Base
                 @unlink($f);
             }
 
+            $zbp->RemoveCache($this);
             return true;
         }
 

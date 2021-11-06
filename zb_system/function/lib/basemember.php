@@ -284,8 +284,6 @@ class BaseMember extends Base
      */
     public function Del()
     {
-        global $zbp;
-
         foreach ($GLOBALS['hooks']['Filter_Plugin_Member_Del'] as $fpname => &$fpsignal) {
             $fpsignal = PLUGIN_EXITSIGNAL_NONE;
             $fpreturn = $fpname($this);
@@ -293,8 +291,6 @@ class BaseMember extends Base
                 return $fpreturn;
             }
         }
-
-        $zbp->RemoveCache($this);
 
         return parent::Del();
     }

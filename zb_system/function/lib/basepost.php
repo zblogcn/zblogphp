@@ -443,8 +443,6 @@ class BasePost extends Base
      */
     public function Del()
     {
-        global $zbp;
-
         foreach ($GLOBALS['hooks']['Filter_Plugin_Post_Del'] as $fpname => &$fpsignal) {
             $fpreturn = $fpname($this);
             if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
@@ -453,9 +451,6 @@ class BasePost extends Base
                 return $fpreturn;
             }
         }
-
-        $zbp->RemoveCache($this);
-        $zbp->RemovePostCache($this);
 
         return parent::Del();
     }

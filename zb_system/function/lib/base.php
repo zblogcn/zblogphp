@@ -513,7 +513,7 @@ class Base
         $id_field = $this->datainfo[$id_name][0];
         $sql = $this->db->sql->Delete($this->table, array(array('=', $id_field, $this->$id_name)));
         $this->db->Delete($sql);
-
+        $GLOBALS['zbp']->RemoveCache($this);
         return true;
     }
 

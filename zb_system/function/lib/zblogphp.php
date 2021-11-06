@@ -2398,6 +2398,8 @@ class ZBlogPHP
             $id = $l->GetIdName();
             if ($this->CheckCache('Base', $l->$id) == false) {
                 $this->AddCache($l);
+            } else {
+                $l = $this->GetCache('Base', $l->$id);
             }
             $list[] = $l;
         }
@@ -2439,6 +2441,8 @@ class ZBlogPHP
             $id = $l->GetIdName();
             if ($this->CheckCache('Base', $l->$id) == false) {
                 $this->AddCache($l);
+            } else {
+                $l = $this->GetCache('Base', $l->$id);
             }
             $list[] = $l;
         }
@@ -2482,6 +2486,8 @@ class ZBlogPHP
                 $id = $l->GetIdName();
                 if ($this->CheckCache($type, $l->$id) == false) {
                     $this->AddCache($l);
+                } else {
+                    $l = $this->GetCache($type, $l->$id);
                 }
                 $list[] = $l;
             }
@@ -2581,6 +2587,8 @@ class ZBlogPHP
             $id = $l->GetIdName();
             if ($this->CheckCache($type, $l->$id) == false) {
                 $this->AddCache($l);
+            } else {
+                $l = $this->GetCache($type, $l->$id);
             }
             $list[] = $l;
         }
@@ -2593,11 +2601,11 @@ class ZBlogPHP
      */
     protected function GetListWithBaseObject($classname, $select = null, $where = null, $order = null, $limit = null, $option = null)
     {
-        $o = new $classname;
-        $table = $o->GetTable();
         if (is_object($select) && get_parent_class($select) == 'SQL__Global') {
             $sql = $select->sql;
         } else {
+            $o = new $classname;
+            $table = $o->GetTable();
             $sql = $this->db->sql->Select($table, $select, $where, $order, $limit, $option);
         }
 
@@ -4377,7 +4385,7 @@ class ZBlogPHP
     {
         $classname = get_class($object);
         if (is_subclass_of($object, 'Base') == false && $classname != 'Base') {
-            return;
+            return false;
         }
         $cacheobject = &$this->cacheobject;
         if (is_subclass_of($classname, 'BasePost') == true) {
@@ -4387,7 +4395,7 @@ class ZBlogPHP
             $cacheobject[$classname] = array();
         }
         if (empty($object->ID)) {
-            return;
+            return false;
         }
 
         $cacheobject[$classname][$object->ID] = $object;
@@ -4420,7 +4428,7 @@ class ZBlogPHP
     {
         $classname = get_class($object);
         if (is_subclass_of($object, 'Base') == false && $classname != 'Base') {
-            return;
+            return false;
         }
         $cacheobject = &$this->cacheobject;
         if (is_subclass_of($classname, 'BasePost') == true) {
@@ -4430,7 +4438,7 @@ class ZBlogPHP
             $cacheobject[$classname] = array();
         }
         if (empty($object->ID)) {
-            return;
+            return false;
         }
 
         switch ($classname) {
@@ -4458,15 +4466,7 @@ class ZBlogPHP
      */
     public function AddPostCache(&$object)
     {
-        if (is_subclass_of($object, 'BasePost') == false) {
-            return;
-        }
-        $cacheobject = &$this->cacheobject;
-        if (!isset($cacheobject['Post'])) {
-            $cacheobject['Post'] = array();
-        }
-        $cacheobject['Post'][$object->ID] = $object;
-        return true;
+        return $this->AddCache($object);
     }
 
     /**
@@ -4474,15 +4474,7 @@ class ZBlogPHP
      */
     public function RemovePostCache(&$object)
     {
-        if (is_subclass_of($object, 'BasePost') == false) {
-            return;
-        }
-        $cacheobject = &$this->cacheobject;
-        if (!isset($cacheobject['Post'])) {
-            $cacheobject['Post'] = array();
-        }
-        unset($cacheobject['Post'][$object->ID]);
-        return true;
+        return $this->RemoveCache($object);
     }
 
     /**
