@@ -159,6 +159,11 @@ class ZBlogPHP
     public $cmdurl = null;
 
     /**
+     * @var Config[] 配置选项
+     */
+    public $configs = array();
+
+    /**
      * @var Member[] 用户数组
      */
     public $members = array();
@@ -169,7 +174,7 @@ class ZBlogPHP
     public $membersbyname = array();
 
     /**
-     * @var Category[] 分类数组 ($categorys已废弃)
+     * @var Category[] 分类数组 ($categorys已废弃) ，现引用自$categoriesbyorder_type[0]
      */
     public $categorys = array();
 
@@ -181,7 +186,7 @@ class ZBlogPHP
     public $categories_all = array();
 
     /**
-     * @var Category[] 分类数组（已排序） ($categorysbyorder已废弃)  categories引用
+     * @var Category[] 分类数组（已排序） ($categorysbyorder已废弃) ，现引用自$categoriesbyorder_type[0]
      */
     public $categorysbyorder = array();
 
@@ -193,7 +198,7 @@ class ZBlogPHP
     public $categories_type = array();
 
     /**
-     * @var Category[] 按类型分类2维数组（已排序）categories_type引用
+     * @var Category[] 按类型分类2维数组（已排序）被categories_type引用
      */
     public $categoriesbyorder_type = array();
 
@@ -206,11 +211,6 @@ class ZBlogPHP
      * @var Module[] 模块数组（以文件名为键）
      */
     public $modulesbyfilename = array();
-
-    /**
-     * @var Config[] 配置选项
-     */
-    public $configs = array();
 
     /**
      * @var Tag[] 标签数组
@@ -609,7 +609,30 @@ class ZBlogPHP
                 return $fpreturn;
             }
         }
-        trigger_error($this->lang['error'][81], E_USER_WARNING);
+
+        if (preg_match('/Get([a-zA-Z][a-zA-Z0-9_]+)List/', $method, $m) == 1) {
+            $classname = $m[1];
+            array_unshift($args, $classname);
+            if (is_subclass_of($classname, 'Base') == true) {
+                return call_user_func_array(array($this, 'GetListWithBaseObject'), $args);
+            }
+        }
+        if (preg_match('/Get([a-zA-Z][a-zA-Z0-9_]+)ByArray/', $method, $m) == 1) {
+            $classname = $m[1];
+            array_unshift($args, $classname);
+            if (is_subclass_of($classname, 'Base') == true) {
+                return call_user_func_array(array($this, 'GetListByArrayWithBaseObject'), $args);
+            }
+        }
+        if (preg_match('/Get([a-zA-Z][a-zA-Z0-9_]+)ByID/', $method, $m) == 1) {
+            $classname = $m[1];
+            array_unshift($args, $classname);
+            if (is_subclass_of($classname, 'Base') == true) {
+                return call_user_func_array(array($this, 'GetSingleByIDWithBaseObject'), $args);
+            }
+        }
+
+        trigger_error(get_class($this) . $this->lang['error'][81] . " '$method' ", E_USER_WARNING);
     }
 
     /**
@@ -630,7 +653,7 @@ class ZBlogPHP
                 return $fpreturn;
             }
         }
-        trigger_error($this->lang['error'][81], E_USER_WARNING);
+        trigger_error(get_class($this) . $this->lang['error'][81] . " '$name' ", E_USER_WARNING);
     }
 
     /**
@@ -650,7 +673,7 @@ class ZBlogPHP
                 return $fpreturn;
             }
         }
-        trigger_error($this->lang['error'][81], E_USER_WARNING);
+        trigger_error(get_class($this) . $this->lang['error'][81] . " '$name' ", E_USER_WARNING);
     }
 
     /**
@@ -710,8 +733,10 @@ class ZBlogPHP
             ZBlogException::$islogerror = (bool) $this->option['ZC_DEBUG_LOG_ERROR'];
         }
 
-        if (defined('ZBP_DEBUGMODE') && ZBP_DEBUGMODE == true) {
+        if (defined('ZBP_DEBUGMODE') && constant('ZBP_DEBUGMODE') == true) {
             ZBlogException::$iswarning = true;
+            ZBlogException::$isstrict = true;
+            ZBlogException::$islogerror = true;
         }
 
         //ZC_PERMANENT_DOMAIN_WHOLE_DISABLE不存在 或是 ZC_PERMANENT_DOMAIN_WHOLE_DISABLE存在但为假
@@ -795,7 +820,7 @@ class ZBlogPHP
         !defined('ZBP_IN_CMD') || $this->iscmd = true;
         !defined('ZBP_IN_AJAX') || $this->isajax = true;
         !defined('ZBP_IN_XMLRPC') || $this->isxmlrpc = true;
-        if ($this->option['ZC_DEBUG_MODE'] || (defined('ZBP_DEBUGMODE') && ZBP_DEBUGMODE == true)) {
+        if ($this->option['ZC_DEBUG_MODE'] || (defined('ZBP_DEBUGMODE') && constant('ZBP_DEBUGMODE') == true)) {
             $this->isdebug = true;
         }
 
@@ -1847,9 +1872,9 @@ class ZBlogPHP
 
         $this->categories_type = &$this->categoriesbyorder_type;
         $this->categoriesbyorder = &$this->categoriesbyorder_type[0];
-        $this->categories = &$this->categoriesbyorder;
-        $this->categorys = &$this->categories;
-        $this->categorysbyorder = &$this->categoriesbyorder;
+        $this->categories = &$this->categoriesbyorder_type[0];
+        $this->categorys = &$this->categoriesbyorder_type[0];
+        $this->categorysbyorder = &$this->categoriesbyorder_type[0];
 
         return true;
     }
@@ -2331,6 +2356,10 @@ class ZBlogPHP
         $this->RegBuildModule('tags', 'ModuleBuilder::TagList');
         $this->RegBuildModule('statistics', 'ModuleBuilder::Statistics');
         $this->RegBuildModule('authors', 'ModuleBuilder::Authors');
+
+        foreach ($GLOBALS['hooks']['Filter_Plugin_Zbp_RegBuildModules'] as $fpname => &$fpsignal) {
+            $fpname();
+        }
     }
 
     /**
@@ -2394,7 +2423,7 @@ class ZBlogPHP
      *
      * @return Base[]
      */
-    public function GetListCustomByArray($table, $datainfo, $array)
+    public function GetListCustomByArray($table, $datainfo, $array, $field_name = 'ID')
     {
         if (!is_array($array)) {
             return array();
@@ -2405,7 +2434,7 @@ class ZBlogPHP
         }
 
         $where = array();
-        $where[] = array('IN', $datainfo['ID'][0], implode(',', $array));
+        $where[] = array('IN', $datainfo[$field_name][0], implode(',', $array));
         $sql = $this->db->sql->Select($table, '*', $where);
         $array = null;
         $list = array();
@@ -2503,7 +2532,7 @@ class ZBlogPHP
      *
      * @return Base[]
      */
-    public function GetListTypeByArray($type, $array)
+    public function GetListTypeByArray($type, $array, $field_name = 'ID')
     {
         if (!is_array($array)) {
             return array();
@@ -2513,8 +2542,10 @@ class ZBlogPHP
             return array();
         }
 
+        //$array如果是BaseObject数组的话，可以重组生成新$array
+
         $where = array();
-        $where[] = array('IN', $this->datainfo[$type]['ID'][0], implode(',', $array));
+        $where[] = array('IN', $this->datainfo[$type][$field_name][0], implode(',', $array));
         $sql = $this->db->sql->Select($this->table[$type], '*', $where);
         $array = null;
         $list = array();
@@ -2542,6 +2573,44 @@ class ZBlogPHP
         }
 
         return $list;
+    }
+
+    /**
+     * 魔术方法指定的读取List的私有方法
+     */
+    private function GetListWithBaseObject($classname, $select = null, $where = null, $order = null, $limit = null, $option = null)
+    {
+        $o = new $classname;
+        $table = $o->GetTable();
+        if (is_object($select) && get_parent_class($select) == 'SQL__Global') {
+            $sql = $select->sql;
+        } else {
+            $sql = $this->db->sql->Select($table, $select, $where, $order, $limit, $option);
+        }
+
+        /** @var BaseObjects[] $array */
+        $array = $this->GetListType($classname, $sql, $option);
+        if (isset($option['pagebar']) && is_object($option['pagebar'])) {
+            $option['pagebar']->CurrentCount = count($array);
+        }
+
+        return $array;
+    }
+
+    /**
+     * 魔术方法指定的读取ListByArray的私有方法
+     */
+    private function GetListByArrayWithBaseObject($classname, $array, $field_name = 'ID')
+    {
+        return $this->GetListTypeByArray($classname, $array, $field_name);
+    }
+
+    /**
+     * 魔术方法指定的读取SingleByID的私有方法
+     */
+    private function GetSingleByIDWithBaseObject($classname, $id)
+    {
+        return $this->GetSomeThing($this->GetCache($classname), 'ID', $id, $classname);
     }
 
     /**
@@ -2805,9 +2874,9 @@ class ZBlogPHP
      *
      * @return Post[]|Base[] Posts
      */
-    public function GetPostByArray($array)
+    public function GetPostByArray($array, $field_name = 'ID')
     {
-        $posts = $this->GetListTypeByArray('Post', $array);
+        $posts = $this->GetListTypeByArray('Post', $array, $field_name);
 
         return $posts;
     }
@@ -2815,9 +2884,9 @@ class ZBlogPHP
     /**
      * 通过ID数组获取评论实例.
      */
-    public function GetCommentByArray($array)
+    public function GetCommentByArray($array, $field_name = 'ID')
     {
-        $posts = $this->GetListTypeByArray('Comment', $array);
+        $posts = $this->GetListTypeByArray('Comment', $array, $field_name);
 
         return $posts;
     }
@@ -2825,9 +2894,9 @@ class ZBlogPHP
     /**
      * 通过ID数组获取Member实例.
      */
-    public function GetMemberByArray($array)
+    public function GetMemberByArray($array, $field_name = 'ID')
     {
-        $posts = $this->GetListTypeByArray('Member', $array);
+        $posts = $this->GetListTypeByArray('Member', $array, $field_name);
 
         return $posts;
     }
@@ -2835,9 +2904,9 @@ class ZBlogPHP
     /**
      * 通过ID数组获取Category实例.
      */
-    public function GetCategoryByArray($array)
+    public function GetCategoryByArray($array, $field_name = 'ID')
     {
-        $posts = $this->GetListTypeByArray('Category', $array);
+        $posts = $this->GetListTypeByArray('Category', $array, $field_name);
 
         return $posts;
     }
@@ -2845,9 +2914,9 @@ class ZBlogPHP
     /**
      * 通过ID数组获取Tag实例.
      */
-    public function GetTagByArray($array)
+    public function GetTagByArray($array, $field_name = 'ID')
     {
-        $posts = $this->GetListTypeByArray('Tag', $array);
+        $posts = $this->GetListTypeByArray('Tag', $array, $field_name);
 
         return $posts;
     }
@@ -2855,9 +2924,9 @@ class ZBlogPHP
     /**
      * 通过ID数组获取Module实例.
      */
-    public function GetModuleByArray($array)
+    public function GetModuleByArray($array, $field_name = 'ID')
     {
-        $posts = $this->GetListTypeByArray('Module', $array);
+        $posts = $this->GetListTypeByArray('Module', $array, $field_name);
 
         return $posts;
     }
@@ -2865,9 +2934,9 @@ class ZBlogPHP
     /**
      * 通过ID数组获取Upload实例.
      */
-    public function GetUploadByArray($array)
+    public function GetUploadByArray($array, $field_name = 'ID')
     {
-        $posts = $this->GetListTypeByArray('Upload', $array);
+        $posts = $this->GetListTypeByArray('Upload', $array, $field_name);
 
         return $posts;
     }
@@ -2922,18 +2991,6 @@ class ZBlogPHP
             return;
         }
 
-        //$modules非ID为key
-        //if ($className == "Module") {
-        //    foreach ($object as $key => $value) {
-        //        if ($value->ID == $id) {
-        //            return $value;
-        //        }
-        //    }
-        //    $m = new Module();
-
-        //    return $m;
-        //}
-
         if (array_key_exists($id, $object)) {
             return $object[$id];
         } else {
@@ -2968,10 +3025,7 @@ class ZBlogPHP
         if (is_array($object)) {
             $cacheObject = &$object;
         } elseif ($className != '') {
-            if (!isset($this->cacheobject[$className])) {
-                $this->cacheobject[$className] = array();
-            }
-            $cacheObject = &$this->cacheobject[$className];
+            $cacheObject = &$this->GetCache($className);
         }
 
         //如果是多重属性和值查询
@@ -3019,12 +3073,11 @@ class ZBlogPHP
     {
         $cacheObject = null;
         if (is_array($object)) {
-            $cacheObject = $object;
+            $cacheObject = &$object;
+        } elseif (property_exists($this, $object)) {
+            $cacheObject = &$this->$object;
         } elseif ($className != '') {
-            if (!isset($this->cacheobject[$className])) {
-                $this->cacheobject[$className] = array();
-            }
-            $cacheObject = &$this->cacheobject[$className];
+            $cacheObject = &$this->GetCache($className);
         }
         if ($attr == "ID") {
             $ret = $this->GetSomeThingById($cacheObject, $className, $val);
@@ -3048,7 +3101,7 @@ class ZBlogPHP
      */
     public function GetPostByID($id)
     {
-        return $this->GetSomeThing('posts', 'ID', $id, 'Post');
+        return $this->GetSomeThing($this->GetCache('Post'), 'ID', $id, 'Post');
     }
 
     /**
@@ -3060,7 +3113,7 @@ class ZBlogPHP
      */
     public function GetCategoryByID($id)
     {
-        return $this->GetSomeThing('categories_all', 'ID', $id, 'Category');
+        return $this->GetSomeThing($this->GetCache('Category'), 'ID', $id, 'Category');
     }
 
     /**
@@ -3139,7 +3192,7 @@ class ZBlogPHP
      */
     public function GetModuleByID($id)
     {
-        return $this->GetSomeThing('modules', 'ID', $id, 'Module'); // What the fuck?
+        return $this->GetSomeThing($this->GetCache('Module'), 'ID', $id, 'Module'); // What the fuck?
     }
 
     /**
@@ -3164,7 +3217,7 @@ class ZBlogPHP
     public function GetMemberByID($id)
     {
         /** @var Member $ret */
-        $ret = $this->GetSomeThing('members', 'ID', $id, 'Member');
+        $ret = $this->GetSomeThing($this->GetCache('Member'), 'ID', $id, 'Member');
         if ($ret->ID == null) {
             $ret->Guid = GetGuid();
         }
@@ -3369,7 +3422,7 @@ class ZBlogPHP
      */
     public function GetCommentByID($id)
     {
-        return $this->GetSomeThing('comments', 'ID', $id, 'Comment');
+        return $this->GetSomeThing($this->GetCache('Comment'), 'ID', $id, 'Comment');
     }
 
     /**
@@ -3381,7 +3434,7 @@ class ZBlogPHP
      */
     public function GetUploadByID($id)
     {
-        return $this->GetSomeThing('Upload', 'ID', $id, 'Upload');
+        return $this->GetSomeThing($this->GetCache('Upload'), 'ID', $id, 'Upload');
     }
 
     /**
@@ -3394,7 +3447,7 @@ class ZBlogPHP
      */
     public function GetTagByAlias($name, $type = 0)
     {
-        $ret = $this->GetSomeThingByAttr($this->tags, 'Tag', array('Alias', 'Type'), array($name, $type));
+        $ret = $this->GetSomeThingByAttr($this->tags_all, 'Tag', array('Alias', 'Type'), array($name, $type));
         if (is_object($ret) && $ret->ID >= 0) {
             return $ret;
         }
@@ -3420,7 +3473,7 @@ class ZBlogPHP
      */
     public function GetTagByName($name, $type = 0)
     {
-        $ret = $this->GetSomeThingByAttr($this->tags, 'Tag', array('Name', 'Type'), array($name, $type));
+        $ret = $this->GetSomeThingByAttr($this->tags_all, 'Tag', array('Name', 'Type'), array($name, $type));
         if (is_object($ret) && $ret->ID >= 0) {
             return $ret;
         }
@@ -3467,7 +3520,7 @@ class ZBlogPHP
      */
     public function GetTagByID($id)
     {
-        $ret = $this->GetSomeThing('tags_all', 'ID', $id, 'Tag');
+        $ret = $this->GetSomeThing($this->GetCache('Tag'), 'ID', $id, 'Tag');
 
         return $ret;
     }
@@ -3571,60 +3624,8 @@ class ZBlogPHP
     }
 
     /**
-     * 通过数组array[111,333,444,555,666]转换成存储串.
-     *
-     * @param array $array 标签ID数组
-     *
-     * @return string
+     * 验证验,Token,Key相关**************************************************************.
      */
-    public function ConvertTagIDtoString($array)
-    {
-        $s = '';
-        foreach ($array as $a) {
-            $s .= '{' . $a . '}';
-        }
-
-        return $s;
-    }
-
-    public function GetTopArticle($type = 0)
-    {
-        return $this->GetTopPost($type);
-    }
-
-    /**
-     * 获取全部置顶文章（优先从cache里读数组）.
-     *
-     * @param int $type
-     *
-     * @return array
-     */
-    public function GetTopPost($type = 0)
-    {
-        $varname = 'top_post_array_' . $type;
-        if ($this->cache->HasKey($varname) == false) {
-            return array();
-        }
-        if (!is_string($this->cache->$varname)) {
-            return array();
-        }
-
-        @$articles_top_notorder_idarray = unserialize($this->cache->$varname);
-        if (!is_array($articles_top_notorder_idarray)) {
-            CountTopPost($type, null, null);
-            @$articles_top_notorder_idarray = unserialize($this->cache->$varname);
-        }
-
-        $articles_top_notorder = array();
-        if (is_array($articles_top_notorder_idarray)) {
-            $articles_top_notorder = $this->GetPostByArray($articles_top_notorder_idarray);
-        }
-
-        return $articles_top_notorder;
-    }
-
-    //###############################################################################################################
-    //验证相关
 
     /**
      * 获取评论key.
@@ -3777,45 +3778,8 @@ class ZBlogPHP
     }
 
     /**
-     * 删除导航菜单中相应条目.
-     *
-     * @param string $type
-     * @param $id
+     * 消息处理，错误处理的函数**************************************************************.
      */
-    public function DelItemToNavbar($type, $id)
-    {
-        if (!$type) {
-            $type = 'item';
-        }
-
-        $m = $this->modulesbyfilename['navbar'];
-        $s = $m->Content;
-
-        $s = preg_replace('/<li id="navbar-' . $type . '-' . $id . '">.*?<\/li>/', '', $s);
-
-        $m->Content = $s;
-        $m->Save();
-    }
-
-    /**
-     * 检查条目是否在导航菜单中.
-     *
-     * @param string $type
-     * @param $id
-     *
-     * @return bool
-     */
-    public function CheckItemToNavbar($type, $id)
-    {
-        if (!$type) {
-            $type = 'item';
-        }
-
-        $m = $this->modulesbyfilename['navbar'];
-        $s = $m->Content;
-
-        return (bool) strpos($s, 'id="navbar-' . $type . '-' . $id . '"');
-    }
 
     //$signal = good,bad,tips
     private $hints = array();
@@ -3958,30 +3922,8 @@ class ZBlogPHP
     }
 
     /**
-     * 检测网站关闭，如果关闭，则抛出错误.
-     *
-     * @throws Exception
+     * 类型注册，Action注册类的函数**************************************************************.
      */
-    public function CheckSiteClosed()
-    {
-        if ($this->option['ZC_CLOSE_SITE']) {
-            Http503();
-            $this->ShowError(82, __FILE__, __LINE__);
-            exit;
-        }
-    }
-
-    /**
-     * 跳转到安装页面.
-     */
-    public function RedirectInstall()
-    {
-        if (!$this->option['ZC_DATABASE_TYPE']) {
-            $s = $_SERVER['QUERY_STRING'];
-            $s = empty($s) ? '' : '?' . $s;
-            Redirect('./zb_install/index.php' . $s);
-        }
-    }
 
     /**
      * 注册PostType.
@@ -4257,6 +4199,10 @@ class ZBlogPHP
     }
 
     /**
+     * 路由处理函数**************************************************************.
+     */
+
+    /**
      * 注册路由函数
      *
      * @param $array 数据数组(详细结构在初始化中有说明)
@@ -4369,33 +4315,9 @@ class ZBlogPHP
         return true;
     }
 
-    //举例：backend-ui,,,
-    protected $protect_exclusive = array();
-
     /**
-     * 通知系统控制权.
+     * 缓存处理函数**************************************************************.
      */
-    public function SetExclusive($function, $appid)
-    {
-        if ($appid == false) {
-            return false;
-        }
-        $this->protect_exclusive[$function] = $appid;
-
-        return true;
-    }
-
-    /**
-     * 查询系统控制权.
-     */
-    public function IsExclusive($function)
-    {
-        if (isset($this->protect_exclusive[$function])) {
-            return $this->protect_exclusive[$function];
-        }
-
-        return false;
-    }
 
     /**
      * 绑定zbp之前独立的杂乱的全局对象数组到总缓存对象上.
@@ -4409,6 +4331,30 @@ class ZBlogPHP
         $cacheobject['Module'] = &$this->modules;
         $cacheobject['Comment'] = &$this->comments;
         $cacheobject['Post'] = &$this->posts;
+        $cacheobject['Upload'] = array();
+    }
+
+    /**
+     * 获取指定classname的缓存数组，指定了$idvalue就返回单个的object，不指定就返回objects
+     */
+    public function &GetCache($classname, $idvalue = null)
+    {
+        $cacheobject = &$this->cacheobject;
+        if (is_subclass_of($classname, 'BasePost') == true) {
+            $classname = 'Post';
+        }
+        if (!isset($cacheobject[$classname])) {
+            $cacheobject[$classname] = array();
+        }
+        if (!is_null($idvalue)) {
+            if (array_key_exists($idvalue, $cacheobject[$classname])) {
+                return $cacheobject[$classname][$idvalue];
+            } else {
+                $null = null;
+                return $null;
+            }
+        }
+        return $cacheobject[$classname];
     }
 
     /**
@@ -4552,6 +4498,158 @@ class ZBlogPHP
         }
 
         return array_key_exists($idvalue, $cacheobject[$classname]);
+    }
+
+    /**
+     * 杂项、未分类函数**************************************************************.
+     */
+
+    /**
+     * 检测网站关闭，如果关闭，则抛出错误.
+     *
+     * @throws Exception
+     */
+    public function CheckSiteClosed()
+    {
+        if ($this->option['ZC_CLOSE_SITE']) {
+            Http503();
+            $this->ShowError(82, __FILE__, __LINE__);
+            exit;
+        }
+    }
+
+    /**
+     * 跳转到安装页面.
+     */
+    public function RedirectInstall()
+    {
+        if (!$this->option['ZC_DATABASE_TYPE']) {
+            $s = $_SERVER['QUERY_STRING'];
+            $s = empty($s) ? '' : '?' . $s;
+            Redirect('./zb_install/index.php' . $s);
+        }
+    }
+
+    //举例：backend-ui,,,
+    protected $protect_exclusive = array();
+
+    /**
+     * 通知系统控制权.
+     */
+    public function SetExclusive($function, $appid)
+    {
+        if ($appid == false) {
+            return false;
+        }
+        $this->protect_exclusive[$function] = $appid;
+
+        return true;
+    }
+
+    /**
+     * 查询系统控制权.
+     */
+    public function IsExclusive($function)
+    {
+        if (isset($this->protect_exclusive[$function])) {
+            return $this->protect_exclusive[$function];
+        }
+
+        return false;
+    }
+
+    /**
+     * 删除导航菜单中相应条目.
+     *
+     * @param string $type
+     * @param $id
+     */
+    public function DelItemToNavbar($type, $id)
+    {
+        if (!$type) {
+            $type = 'item';
+        }
+
+        $m = $this->modulesbyfilename['navbar'];
+        $s = $m->Content;
+
+        $s = preg_replace('/<li id="navbar-' . $type . '-' . $id . '">.*?<\/li>/', '', $s);
+
+        $m->Content = $s;
+        $m->Save();
+    }
+
+    /**
+     * 检查条目是否在导航菜单中.
+     *
+     * @param string $type
+     * @param $id
+     *
+     * @return bool
+     */
+    public function CheckItemToNavbar($type, $id)
+    {
+        if (!$type) {
+            $type = 'item';
+        }
+
+        $m = $this->modulesbyfilename['navbar'];
+        $s = $m->Content;
+
+        return (bool) strpos($s, 'id="navbar-' . $type . '-' . $id . '"');
+    }
+
+    /**
+     * 通过数组array[111,333,444,555,666]转换成存储串.
+     *
+     * @param array $array 标签ID数组
+     *
+     * @return string
+     */
+    public function ConvertTagIDtoString($array)
+    {
+        $s = '';
+        foreach ($array as $a) {
+            $s .= '{' . $a . '}';
+        }
+
+        return $s;
+    }
+
+    public function GetTopArticle($type = 0)
+    {
+        return $this->GetTopPost($type);
+    }
+
+    /**
+     * 获取全部置顶文章（优先从cache里读数组）.
+     *
+     * @param int $type
+     *
+     * @return array
+     */
+    public function GetTopPost($type = 0)
+    {
+        $varname = 'top_post_array_' . $type;
+        if ($this->cache->HasKey($varname) == false) {
+            return array();
+        }
+        if (!is_string($this->cache->$varname)) {
+            return array();
+        }
+
+        @$articles_top_notorder_idarray = unserialize($this->cache->$varname);
+        if (!is_array($articles_top_notorder_idarray)) {
+            CountTopPost($type, null, null);
+            @$articles_top_notorder_idarray = unserialize($this->cache->$varname);
+        }
+
+        $articles_top_notorder = array();
+        if (is_array($articles_top_notorder_idarray)) {
+            $articles_top_notorder = $this->GetPostByArray($articles_top_notorder_idarray);
+        }
+
+        return $articles_top_notorder;
     }
 
     /**

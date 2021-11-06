@@ -55,7 +55,7 @@ class Base
     /**
      * @param string $table     数据表
      * @param array  $datainfo  数据表结构信息
-     * @param string $classname
+     * @param string $classname 已经无用但还是保留
      * @param bool   $hasmetas
      * @param null   $db
      */
@@ -72,13 +72,7 @@ class Base
         reset($this->datainfo);
         $this->idname = key($this->datainfo);
 
-        if (function_exists('get_called_class')) {
-            $this->classname = get_called_class();
-        } elseif (is_string($classname) && trim($classname)) {
-            $this->classname = trim($classname);
-        } else {
-            $this->classname = get_class($this);
-        }
+        $this->classname = get_class($this);
 
         if (true == $hasmetas) {
             $this->Metas = new Metas();

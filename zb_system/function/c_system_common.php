@@ -205,8 +205,11 @@ function Logs($logString, $level = 'INFO', $source = 'system')
         $isError = true;
     }
 
+    $ip = GetGuestIP();
+    $ua = GetGuestAgent();
+
     foreach ($GLOBALS['hooks']['Filter_Plugin_Logs'] as $fpname => &$fpsignal) {
-        $fpreturn = $fpname($logString, $level, $source, $time);
+        $fpreturn = $fpname($logString, $level, $source, $time, $ip, $ua);
         if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
             $fpsignal = PLUGIN_EXITSIGNAL_NONE;
 
@@ -226,8 +229,6 @@ function Logs($logString, $level = 'INFO', $source = 'system')
             $f = $zbp->logsdir . '' . md5($zbp->path) . '.txt';
         }
     }
-
-    $ip = GetGuestIP();
 
     ZBlogException::SuspendErrorHook();
     $handle = @fopen($f, 'a+');
