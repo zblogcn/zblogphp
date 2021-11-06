@@ -462,6 +462,99 @@ class ZBlogPHP
     const OPTION_RESERVE_KEYS = 'ZC_DATABASE_TYPE|ZC_SQLITE_NAME|ZC_SQLITE_PRE|ZC_MYSQL_SERVER|ZC_MYSQL_USERNAME|ZC_MYSQL_PASSWORD|ZC_MYSQL_NAME|ZC_MYSQL_CHARSET|ZC_MYSQL_COLLATE|ZC_MYSQL_PRE|ZC_MYSQL_ENGINE|ZC_MYSQL_PORT|ZC_MYSQL_PERSISTENT|ZC_MYSQL_PORT|ZC_PGSQL_SERVER|ZC_PGSQL_USERNAME|ZC_PGSQL_PASSWORD|ZC_PGSQL_NAME|ZC_PGSQL_CHARSET|ZC_PGSQL_PRE|ZC_PGSQL_PORT|ZC_PGSQL_PERSISTENT|ZC_CLOSE_WHOLE_SITE|ZC_PERMANENT_DOMAIN_FORCED_URL|ZC_PERMANENT_DOMAIN_WHOLE_DISABLE';
 
     /**
+     * ZBP魔术方法函数**************************************************************.
+     */
+
+    /**
+     * @api Filter_Plugin_Zbp_Call
+     *
+     * @param $method
+     * @param $args
+     *
+     * @return mixed
+     */
+    public function __call($method, $args)
+    {
+        foreach ($GLOBALS['hooks']['Filter_Plugin_Zbp_Call'] as $fpname => &$fpsignal) {
+            $fpreturn = $fpname($method, $args);
+            if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
+                $fpsignal = PLUGIN_EXITSIGNAL_NONE;
+
+                return $fpreturn;
+            }
+        }
+
+        if (preg_match('/Get([a-zA-Z][a-zA-Z0-9_]+)List/', $method, $m) == 1) {
+            $classname = $m[1];
+            array_unshift($args, $classname);
+            if (is_subclass_of($classname, 'Base') == true) {
+                return call_user_func_array(array($this, 'GetListWithBaseObject'), $args);
+            }
+        }
+        if (preg_match('/Get([a-zA-Z][a-zA-Z0-9_]+)ByArray/', $method, $m) == 1) {
+            $classname = $m[1];
+            array_unshift($args, $classname);
+            if (is_subclass_of($classname, 'Base') == true) {
+                return call_user_func_array(array($this, 'GetListByArrayWithBaseObject'), $args);
+            }
+        }
+        if (preg_match('/Get([a-zA-Z][a-zA-Z0-9_]+)ByID/', $method, $m) == 1) {
+            $classname = $m[1];
+            array_unshift($args, $classname);
+            if (is_subclass_of($classname, 'Base') == true) {
+                return call_user_func_array(array($this, 'GetSingleByIDWithBaseObject'), $args);
+            }
+        }
+
+        trigger_error(get_class($this) . $this->lang['error'][81] . " '$method' ", E_USER_WARNING);
+    }
+
+    /**
+     * 设置参数值
+     *
+     * @param $name
+     * @param $value
+     *
+     * @return mixed
+     */
+    public function __set($name, $value)
+    {
+        foreach ($GLOBALS['hooks']['Filter_Plugin_Zbp_Set'] as $fpname => &$fpsignal) {
+            $fpreturn = $fpname($name, $value);
+            if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
+                $fpsignal = PLUGIN_EXITSIGNAL_NONE;
+
+                return $fpreturn;
+            }
+        }
+        trigger_error(get_class($this) . $this->lang['error'][81] . " '$name' ", E_USER_WARNING);
+    }
+
+    /**
+     * 获取参数值
+     *
+     * @param $name
+     *
+     * @return mixed
+     */
+    public function __get($name)
+    {
+        foreach ($GLOBALS['hooks']['Filter_Plugin_Zbp_Get'] as $fpname => &$fpsignal) {
+            $fpreturn = $fpname($name);
+            if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
+                $fpsignal = PLUGIN_EXITSIGNAL_NONE;
+
+                return $fpreturn;
+            }
+        }
+        trigger_error(get_class($this) . $this->lang['error'][81] . " '$name' ", E_USER_WARNING);
+    }
+
+    /**
+     * ZBP系统初始化及数据库连接函数**************************************************************.
+     */
+
+    /**
      * 获取唯一实例.
      *
      * @return null|ZBlogPHP
@@ -589,91 +682,6 @@ class ZBlogPHP
     public function __destruct()
     {
         $this->Terminate();
-    }
-
-    /**
-     * @api Filter_Plugin_Zbp_Call
-     *
-     * @param $method
-     * @param $args
-     *
-     * @return mixed
-     */
-    public function __call($method, $args)
-    {
-        foreach ($GLOBALS['hooks']['Filter_Plugin_Zbp_Call'] as $fpname => &$fpsignal) {
-            $fpreturn = $fpname($method, $args);
-            if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
-                $fpsignal = PLUGIN_EXITSIGNAL_NONE;
-
-                return $fpreturn;
-            }
-        }
-
-        if (preg_match('/Get([a-zA-Z][a-zA-Z0-9_]+)List/', $method, $m) == 1) {
-            $classname = $m[1];
-            array_unshift($args, $classname);
-            if (is_subclass_of($classname, 'Base') == true) {
-                return call_user_func_array(array($this, 'GetListWithBaseObject'), $args);
-            }
-        }
-        if (preg_match('/Get([a-zA-Z][a-zA-Z0-9_]+)ByArray/', $method, $m) == 1) {
-            $classname = $m[1];
-            array_unshift($args, $classname);
-            if (is_subclass_of($classname, 'Base') == true) {
-                return call_user_func_array(array($this, 'GetListByArrayWithBaseObject'), $args);
-            }
-        }
-        if (preg_match('/Get([a-zA-Z][a-zA-Z0-9_]+)ByID/', $method, $m) == 1) {
-            $classname = $m[1];
-            array_unshift($args, $classname);
-            if (is_subclass_of($classname, 'Base') == true) {
-                return call_user_func_array(array($this, 'GetSingleByIDWithBaseObject'), $args);
-            }
-        }
-
-        trigger_error(get_class($this) . $this->lang['error'][81] . " '$method' ", E_USER_WARNING);
-    }
-
-    /**
-     * 设置参数值
-     *
-     * @param $name
-     * @param $value
-     *
-     * @return mixed
-     */
-    public function __set($name, $value)
-    {
-        foreach ($GLOBALS['hooks']['Filter_Plugin_Zbp_Set'] as $fpname => &$fpsignal) {
-            $fpreturn = $fpname($name, $value);
-            if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
-                $fpsignal = PLUGIN_EXITSIGNAL_NONE;
-
-                return $fpreturn;
-            }
-        }
-        trigger_error(get_class($this) . $this->lang['error'][81] . " '$name' ", E_USER_WARNING);
-    }
-
-    /**
-     * 获取参数值
-     *
-     * @param $name
-     *
-     * @return mixed
-     */
-    public function __get($name)
-    {
-        foreach ($GLOBALS['hooks']['Filter_Plugin_Zbp_Get'] as $fpname => &$fpsignal) {
-            $fpreturn = $fpname($name);
-            if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
-                $fpsignal = PLUGIN_EXITSIGNAL_NONE;
-
-                return $fpreturn;
-            }
-        }
-        trigger_error(get_class($this) . $this->lang['error'][81] . " '$name' ", E_USER_WARNING);
     }
 
     /**
@@ -1128,23 +1136,6 @@ class ZBlogPHP
     }
 
     /**
-     * 对表名和数据结构进行预转换.
-     */
-    public function ConvertTableAndDatainfo()
-    {
-        if ($this->db->dbpre) {
-            $this->table = str_replace('%pre%', $this->db->dbpre, $this->table);
-        }
-        if ($this->db->type === 'postgresql') {
-            foreach ($this->datainfo as $key => &$value) {
-                foreach ($value as $k2 => &$v2) {
-                    $v2[0] = strtolower($v2[0]);
-                }
-            }
-        }
-    }
-
-    /**
      * 关闭数据库连接.
      */
     public function CloseConnect()
@@ -1156,38 +1147,8 @@ class ZBlogPHP
     }
 
     /**
-     * 启用session.
-     *
-     * @return bool
+     * Configs配置类相关函数**************************************************************.
      */
-    public function StartSession()
-    {
-        if (session_status() == 1) {
-            session_start();
-            $this->issession = true;
-
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
-     * 终止session.
-     *
-     * @return bool
-     */
-    public function EndSession()
-    {
-        if (session_status() == 2) {
-            session_write_close();
-            $this->issession = false;
-
-            return true;
-        }
-
-        return false;
-    }
 
     /**
      * Load or ReLoad插件Configs表.
@@ -1323,7 +1284,10 @@ class ZBlogPHP
         return isset($this->configs[$name]) && $this->configs[$name]->CountItem() > 0;
     }
 
-    //###############################################################################################################
+    /**
+     * Option和Cache相关读取和保存函数**************************************************************.
+     */
+
     //Cache相关
     private $cache_hash = null;
 
@@ -1441,6 +1405,10 @@ class ZBlogPHP
 
         return true;
     }
+
+    /**
+     * 用户登录验证、权限检查函数**************************************************************.
+     */
 
     /**
      * 验证操作权限.
@@ -1695,6 +1663,9 @@ class ZBlogPHP
         return $this->VerifyUserToken($api_token_array[1], $api_token_array[0]);
     }
 
+    /**
+     * 系统加载用户、分类等的函数**************************************************************.
+     */
     private $loadmembers_level = 0;
 
     /**
@@ -1940,6 +1911,10 @@ class ZBlogPHP
     }
 
     /**
+     * 读取主题、插件等函数**************************************************************.
+     */
+
+    /**
      * 载入主题列表.
      *
      * @return App[]
@@ -2036,6 +2011,10 @@ class ZBlogPHP
 
         return $ap;
     }
+
+    /**
+     * 语言包处理类函数**************************************************************.
+     */
 
     /**
      * 载入指定应用语言包.
@@ -2159,6 +2138,10 @@ class ZBlogPHP
             $this->LoadLanguage($v[0], $v[1], $v[2]);
         }
     }
+
+    /**
+     * 模板处理类函数**************************************************************.
+     */
 
     /**
      * 创建模板对象，预加载已编译模板
@@ -2321,6 +2304,10 @@ class ZBlogPHP
     }
 
     /**
+     * 模块处理类函数**************************************************************.
+     */
+
+    /**
      * 生成所有进Ready List的模块的Content内容并保存.
      */
     public function BuildModule()
@@ -2383,6 +2370,10 @@ class ZBlogPHP
     {
         ModuleBuilder::Del($moduleFileName);
     }
+
+    /**
+     * 获取对象,List对象类函数**************************************************************.
+     */
 
     /**
      * 查询指定数据结构的sql并返回Base对象列表.
@@ -2529,6 +2520,7 @@ class ZBlogPHP
      *
      * @param string $type  类型
      * @param mixed  $array ID数组
+     * @param string $field_name 字段名 (如果$array是对象数据，那$field_name就变为string数组)
      *
      * @return Base[]
      */
@@ -2542,18 +2534,39 @@ class ZBlogPHP
             return array();
         }
 
-        //$array如果是BaseObject数组的话，可以重组生成新$array
+        //$array如果是BaseObject数组的话,可以重组生成新$array,$field_name此时可变成数组
+        //如果$field_name是数组，那么$field_name[0]是指$array的field_name,$field_name[1]指要查寻的field_name
+        $is_array_object = false;
+        foreach ($array as $any) {
+            if (is_object($any)) {
+                $is_array_object = true;
+                break;
+            }
+        }
+        if ($is_array_object) {
+            if (is_array($field_name)) {
+                $array_field_name = $field_name[0];
+                $field_name = $field_name[1];
+            } else {
+                $array_field_name = $field_name;
+                $field_name = 'ID';
+            }
+            $array2 = array();
+            foreach ($array as $any) {
+                $array2[] = $any->$array_field_name;
+            }
+            $array = $array2;
+        }
 
-        $where = array();
+        $array = array_unique($array);
+        $where = $list = array();
         $where[] = array('IN', $this->datainfo[$type][$field_name][0], implode(',', $array));
         $sql = $this->db->sql->Select($this->table[$type], '*', $where);
-        $array = null;
-        $list = array();
-        $array = $this->db->Query($sql);
-        if (!isset($array)) {
+        $objects = $this->db->Query($sql);
+        if (!isset($objects)) {
             return array();
         }
-        foreach ($array as $a) {
+        foreach ($objects as $a) {
             /** @var Base $l */
             $l = new $type();
             $l->LoadInfoByAssoc($a);
@@ -2578,7 +2591,7 @@ class ZBlogPHP
     /**
      * 魔术方法指定的读取List的私有方法
      */
-    private function GetListWithBaseObject($classname, $select = null, $where = null, $order = null, $limit = null, $option = null)
+    protected function GetListWithBaseObject($classname, $select = null, $where = null, $order = null, $limit = null, $option = null)
     {
         $o = new $classname;
         $table = $o->GetTable();
@@ -2600,7 +2613,7 @@ class ZBlogPHP
     /**
      * 魔术方法指定的读取ListByArray的私有方法
      */
-    private function GetListByArrayWithBaseObject($classname, $array, $field_name = 'ID')
+    protected function GetListByArrayWithBaseObject($classname, $array, $field_name = 'ID')
     {
         return $this->GetListTypeByArray($classname, $array, $field_name);
     }
@@ -2608,7 +2621,7 @@ class ZBlogPHP
     /**
      * 魔术方法指定的读取SingleByID的私有方法
      */
-    private function GetSingleByIDWithBaseObject($classname, $id)
+    protected function GetSingleByIDWithBaseObject($classname, $id)
     {
         return $this->GetSomeThing($this->GetCache($classname), 'ID', $id, $classname);
     }
@@ -4503,6 +4516,57 @@ class ZBlogPHP
     /**
      * 杂项、未分类函数**************************************************************.
      */
+
+    /**
+     * 对表名和数据结构进行预转换.
+     */
+    public function ConvertTableAndDatainfo()
+    {
+        if ($this->db->dbpre) {
+            $this->table = str_replace('%pre%', $this->db->dbpre, $this->table);
+        }
+        if ($this->db->type === 'postgresql') {
+            foreach ($this->datainfo as $key => &$value) {
+                foreach ($value as $k2 => &$v2) {
+                    $v2[0] = strtolower($v2[0]);
+                }
+            }
+        }
+    }
+
+    /**
+     * 启用session.
+     *
+     * @return bool
+     */
+    public function StartSession()
+    {
+        if (session_status() == 1) {
+            session_start();
+            $this->issession = true;
+
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * 终止session.
+     *
+     * @return bool
+     */
+    public function EndSession()
+    {
+        if (session_status() == 2) {
+            session_write_close();
+            $this->issession = false;
+
+            return true;
+        }
+
+        return false;
+    }
 
     /**
      * 检测网站关闭，如果关闭，则抛出错误.
