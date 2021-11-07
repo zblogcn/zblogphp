@@ -216,7 +216,7 @@ class Base
      *
      * @return string
      */
-    public function GetTable()
+    public function &GetTable()
     {
         return $this->table;
     }
@@ -226,7 +226,7 @@ class Base
      *
      * @return array
      */
-    public function GetDataInfo()
+    public function &GetDataInfo()
     {
         return $this->datainfo;
     }

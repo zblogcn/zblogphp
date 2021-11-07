@@ -1666,7 +1666,6 @@ class ZBlogPHP
     /**
      * 系统加载用户、分类等的函数**************************************************************.
      */
-    private $loadmembers_level = 0;
 
     /**
      * 载入用户列表.
@@ -1677,14 +1676,14 @@ class ZBlogPHP
      */
     public function LoadMembers($level = 0)
     {
-        $this->loadmembers_level = $level;
-        if ($this->loadmembers_level < 0) {
+        $loadmembers_level = $level;
+        if ($loadmembers_level < 0) {
             return false;
         }
 
         $where = null;
-        if ($this->loadmembers_level > 0) {
-            $where = array(array('<=', 'mem_Level', $this->loadmembers_level));
+        if ($loadmembers_level > 0) {
+            $where = array(array('<=', 'mem_Level', $loadmembers_level));
         }
         $this->members = array();
         $this->membersbyname = array();
@@ -2399,7 +2398,7 @@ class ZBlogPHP
             if ($this->CheckCache('Base', $l->$id) == false) {
                 $this->AddCache($l);
             } else {
-                $l = $this->GetCache('Base', $l->$id);
+                $l = &$this->GetCache('Base', $l->$id);
             }
             $list[] = $l;
         }
@@ -2410,9 +2409,10 @@ class ZBlogPHP
     /**
      * 查询ID数据的指定数据结构的sql并返回Base对象列表.
      *
-     * @param string|array $table    数据表
-     * @param array        $datainfo 数据字段
-     * @param array        $array    ID数组
+     * @param string       $table      数据表
+     * @param array        $datainfo   数据字段
+     * @param array        $array      ID数组
+     * @param string|array $field_name 字段名 (如果$array是对象数据，那$field_name就变为string数组)
      *
      * @return Base[]
      */
@@ -2426,23 +2426,58 @@ class ZBlogPHP
             return array();
         }
 
-        $where = array();
+        $where = $list = array();
+        $is_array_object = false;
+        foreach ($array as $any) {
+            if (is_object($any)) {
+                $is_array_object = true;
+                break;
+            }
+        }
+        if ($is_array_object) {
+            if (is_array($field_name)) {
+                $array_field_name = $field_name[0];
+                $field_name = $field_name[1];
+            } else {
+                $array_field_name = $field_name;
+                $field_name = 'ID';
+            }
+            $array2 = array();
+            foreach ($array as $any) {
+                $array2[] = $any->$array_field_name;
+            }
+            $array = array_unique($array2);
+            $cache = &$this->GetCache('Base');
+            foreach ($cache as $o) {
+                $v1 = $o->$field_name;
+                foreach ($array as $k2 => $v2) {
+                    if ($v1 == $v2) {
+                        unset($array[$k2]);
+                        $list[] = $o;
+                        break;
+                    }
+                }
+            }
+        }
+
+        $array = array_unique($array);
+        if (empty($array)) {
+            return $list;
+        }
         $where[] = array('IN', $datainfo[$field_name][0], implode(',', $array));
         $sql = $this->db->sql->Select($table, '*', $where);
-        $array = null;
-        $list = array();
-        $array = $this->db->Query($sql);
-        if (!isset($array)) {
-            return array();
+        $objects = $this->db->Query($sql);
+        if (!isset($objects)) {
+            return $list;
         }
-        foreach ($array as $a) {
+        foreach ($objects as $a) {
             $l = new Base($table, $datainfo);
             $l->LoadInfoByAssoc($a);
             $id = $l->GetIdName();
             if ($this->CheckCache('Base', $l->$id) == false) {
                 $this->AddCache($l);
             } else {
-                $l = $this->GetCache('Base', $l->$id);
+                $l = &$this->GetCache('Base', $l->$id);
             }
             $list[] = $l;
         }
@@ -2453,12 +2488,12 @@ class ZBlogPHP
     /**
      * 已改名GetListType,1.5版中扔掉有歧义的GetList.
      *
-     * @param $type
+     * @param $classname
      * @param $sql
      *
      * @return Base[]
      */
-    public function GetListType($type, $sql)
+    public function GetListType($classname, $sql)
     {
         if (is_object($sql) && get_parent_class($sql) == 'SQL__Global') {
             $sql = $sql->sql;
@@ -2473,21 +2508,21 @@ class ZBlogPHP
         foreach ($array as $a) {
             if (is_array($a)) {
                 /** @var Base $l */
-                $l = new $type();
+                $l = new $classname();
                 $l->LoadInfoByAssoc($a);
-                if (is_subclass_of($type, 'BasePost') == true) {
+                if (is_subclass_of($classname, 'BasePost') == true) {
                     $newtype = $this->GetPostType_ClassName($l->Type);
-                    if ($newtype != $type) {
+                    if ($newtype != $classname) {
                         unset($l);
                         $l = new $newtype;
                         $l->LoadInfoByAssoc($a);
                     }
                 }
                 $id = $l->GetIdName();
-                if ($this->CheckCache($type, $l->$id) == false) {
+                if ($this->CheckCache($classname, $l->$id) == false) {
                     $this->AddCache($l);
                 } else {
-                    $l = $this->GetCache($type, $l->$id);
+                    $l = &$this->GetCache($classname, $l->$id);
                 }
                 $list[] = $l;
             }
@@ -2524,13 +2559,13 @@ class ZBlogPHP
     /**
      * 查询ID数据的指定类型的sql并返回指定类型对象列表.
      *
-     * @param string $type  类型
+     * @param string $classname  类型
      * @param mixed  $array ID数组
      * @param string $field_name 字段名 (如果$array是对象数据，那$field_name就变为string数组)
      *
      * @return Base[]
      */
-    public function GetListTypeByArray($type, $array, $field_name = 'ID')
+    public function GetListTypeByArray($classname, $array, $field_name = 'ID')
     {
         if (!is_array($array)) {
             return array();
@@ -2540,6 +2575,7 @@ class ZBlogPHP
             return array();
         }
 
+        $where = $list = array();
         //$array如果是BaseObject数组的话,可以重组生成新$array,$field_name此时可变成数组
         //如果$field_name是数组，那么$field_name[0]是指$array的field_name,$field_name[1]指要查寻的field_name
         $is_array_object = false;
@@ -2561,34 +2597,50 @@ class ZBlogPHP
             foreach ($array as $any) {
                 $array2[] = $any->$array_field_name;
             }
-            $array = $array2;
+            $array = array_unique($array2);
+            $cache = &$this->GetCache($classname);
+            foreach ($cache as $o) {
+                $v1 = $o->$field_name;
+                foreach ($array as $k2 => $v2) {
+                    if ($v1 == $v2) {
+                        unset($array[$k2]);
+                        $list[] = $o;
+                        break;
+                    }
+                }
+            }
         }
 
         $array = array_unique($array);
-        $where = $list = array();
-        $where[] = array('IN', $this->datainfo[$type][$field_name][0], implode(',', $array));
-        $sql = $this->db->sql->Select($this->table[$type], '*', $where);
+        if (empty($array)) {
+            return $list;
+        }
+        $o = new $classname;
+        $table = &$o->GetTable();
+        $datainfo = &$o->GetDataInfo();
+        $where[] = array('IN', $datainfo[$field_name][0], implode(',', $array));
+        $sql = $this->db->sql->Select($table, '*', $where);
         $objects = $this->db->Query($sql);
         if (!isset($objects)) {
-            return array();
+            return $list;
         }
         foreach ($objects as $a) {
             /** @var Base $l */
-            $l = new $type();
+            $l = new $classname();
             $l->LoadInfoByAssoc($a);
-            if (is_subclass_of($type, 'BasePost') == true) {
+            if (is_subclass_of($classname, 'BasePost') == true) {
                 $newtype = $this->GetPostType_ClassName($l->Type);
-                if ($newtype != $type) {
+                if ($newtype != $classname) {
                     unset($l);
                     $l = new $newtype;
                     $l->LoadInfoByAssoc($a);
                 }
             }
             $id = $l->GetIdName();
-            if ($this->CheckCache($type, $l->$id) == false) {
+            if ($this->CheckCache($classname, $l->$id) == false) {
                 $this->AddCache($l);
             } else {
-                $l = $this->GetCache($type, $l->$id);
+                $l = &$this->GetCache($classname, $l->$id);
             }
             $list[] = $l;
         }
@@ -2605,7 +2657,7 @@ class ZBlogPHP
             $sql = $select->sql;
         } else {
             $o = new $classname;
-            $table = $o->GetTable();
+            $table = &$o->GetTable();
             $sql = $this->db->sql->Select($table, $select, $where, $order, $limit, $option);
         }
 
@@ -2645,17 +2697,7 @@ class ZBlogPHP
      */
     public function GetPostList($select = null, $where = null, $order = null, $limit = null, $option = null)
     {
-        if (is_object($select) && get_parent_class($select) == 'SQL__Global') {
-            $sql = $select->sql;
-        } else {
-            $sql = $this->db->sql->Select($this->table['Post'], $select, $where, $order, $limit, $option);
-        }
-
-        /** @var Post[] $array */
-        $array = $this->GetListType('Post', $sql, $option);
-        if (isset($option['pagebar']) && is_object($option['pagebar'])) {
-            $option['pagebar']->CurrentCount = count($array);
-        }
+        $array = $this->GetListWithBaseObject('Post', $select, $where, $order, $limit, $option);
 
         return $array;
     }
@@ -2675,23 +2717,11 @@ class ZBlogPHP
         if (empty($where)) {
             $where = array();
         }
-
         if (is_array($where)) {
             array_unshift($where, array('=', 'log_Type', '0'));
         }
 
-        if (is_object($select) && get_parent_class($select) == 'SQL__Global') {
-            $sql = $select->sql;
-        } else {
-            $sql = $this->db->sql->Select($this->table['Post'], $select, $where, $order, $limit, $option);
-        }
-
-
-        /** @var Post[] $array */
-        $array = $this->GetListType('Post', $sql, $option);
-        if (isset($option['pagebar']) && is_object($option['pagebar'])) {
-            $option['pagebar']->CurrentCount = count($array);
-        }
+        $array = $this->GetListWithBaseObject('Post', $select, $where, $order, $limit, $option);
 
         if ($readtags) {
             $tagstring = '';
@@ -2722,17 +2752,7 @@ class ZBlogPHP
             array_unshift($where, array('=', 'log_Type', '1'));
         }
 
-        if (is_object($select) && get_parent_class($select) == 'SQL__Global') {
-            $sql = $select->sql;
-        } else {
-            $sql = $this->db->sql->Select($this->table['Post'], $select, $where, $order, $limit, $option);
-        }
-
-        /** @var Post[] $array */
-        $array = $this->GetListType('Post', $sql);
-        if (isset($option['pagebar']) && is_object($option['pagebar'])) {
-            $option['pagebar']->CurrentCount = count($array);
-        }
+        $array = $this->GetListWithBaseObject('Post', $select, $where, $order, $limit, $option);
 
         return $array;
     }
@@ -2748,17 +2768,7 @@ class ZBlogPHP
      */
     public function GetCommentList($select = null, $where = null, $order = null, $limit = null, $option = null)
     {
-        if (is_object($select) && get_parent_class($select) == 'SQL__Global') {
-            $sql = $select->sql;
-        } else {
-            $sql = $this->db->sql->Select($this->table['Comment'], $select, $where, $order, $limit, $option);
-        }
-
-        /** @var Comment[] $array */
-        $array = $this->GetListType('Comment', $sql);
-        if (isset($option['pagebar']) && is_object($option['pagebar'])) {
-            $option['pagebar']->CurrentCount = count($array);
-        }
+        $array = $this->GetListWithBaseObject('Comment', $select, $where, $order, $limit, $option);
 
         return $array;
     }
@@ -2774,16 +2784,7 @@ class ZBlogPHP
      */
     public function GetMemberList($select = null, $where = null, $order = null, $limit = null, $option = null)
     {
-        if (is_object($select) && get_parent_class($select) == 'SQL__Global') {
-            $sql = $select->sql;
-        } else {
-            $sql = $this->db->sql->Select($this->table['Member'], $select, $where, $order, $limit, $option);
-        }
-
-        $array = $this->GetListType('Member', $sql);
-        if (isset($option['pagebar']) && is_object($option['pagebar'])) {
-            $option['pagebar']->CurrentCount = count($array);
-        }
+        $array = $this->GetListWithBaseObject('Member', $select, $where, $order, $limit, $option);
 
         return $array;
     }
@@ -2799,16 +2800,7 @@ class ZBlogPHP
      */
     public function GetTagList($select = null, $where = null, $order = null, $limit = null, $option = null)
     {
-        if (is_object($select) && get_parent_class($select) == 'SQL__Global') {
-            $sql = $select->sql;
-        } else {
-            $sql = $this->db->sql->Select($this->table['Tag'], $select, $where, $order, $limit, $option);
-        }
-
-        $array = $this->GetListType('Tag', $sql);
-        if (isset($option['pagebar']) && is_object($option['pagebar'])) {
-            $option['pagebar']->CurrentCount = count($array);
-        }
+        $array = $this->GetListWithBaseObject('Tag', $select, $where, $order, $limit, $option);
 
         return $array;
     }
@@ -2824,16 +2816,7 @@ class ZBlogPHP
      */
     public function GetCategoryList($select = null, $where = null, $order = null, $limit = null, $option = null)
     {
-        if (is_object($select) && get_parent_class($select) == 'SQL__Global') {
-            $sql = $select->sql;
-        } else {
-            $sql = $this->db->sql->Select($this->table['Category'], $select, $where, $order, $limit, $option);
-        }
-
-        $array = $this->GetListType('Category', $sql);
-        if (isset($option['pagebar']) && is_object($option['pagebar'])) {
-            $option['pagebar']->CurrentCount = count($array);
-        }
+        $array = $this->GetListWithBaseObject('Category', $select, $where, $order, $limit, $option);
 
         return $array;
     }
@@ -2849,16 +2832,7 @@ class ZBlogPHP
      */
     public function GetModuleList($select = null, $where = null, $order = null, $limit = null, $option = null)
     {
-        if (is_object($select) && get_parent_class($select) == 'SQL__Global') {
-            $sql = $select->sql;
-        } else {
-            $sql = $this->db->sql->Select($this->table['Module'], $select, $where, $order, $limit, $option);
-        }
-
-        $array = $this->GetListType('Module', $sql);
-        if (isset($option['pagebar']) && is_object($option['pagebar'])) {
-            $option['pagebar']->CurrentCount = count($array);
-        }
+        $array = $this->GetListWithBaseObject('Module', $select, $where, $order, $limit, $option);
 
         return $array;
     }
@@ -2874,16 +2848,7 @@ class ZBlogPHP
      */
     public function GetUploadList($select = null, $where = null, $order = null, $limit = null, $option = null)
     {
-        if (is_object($select) && get_parent_class($select) == 'SQL__Global') {
-            $sql = $select->sql;
-        } else {
-            $sql = $this->db->sql->Select($this->table['Upload'], $select, $where, $order, $limit, $option);
-        }
-
-        $array = $this->GetListType('Upload', $sql);
-        if (isset($option['pagebar']) && is_object($option['pagebar'])) {
-            $option['pagebar']->CurrentCount = count($array);
-        }
+        $array = $this->GetListWithBaseObject('Upload', $select, $where, $order, $limit, $option);
 
         return $array;
     }
@@ -2960,16 +2925,6 @@ class ZBlogPHP
         $posts = $this->GetListTypeByArray('Upload', $array, $field_name);
 
         return $posts;
-    }
-
-    /**
-     * @param $sql
-     *
-     * @return mixed
-     */
-    public function get_results($sql)
-    {
-        return $this->db->Query($sql);
     }
 
     /**
@@ -3803,7 +3758,7 @@ class ZBlogPHP
      */
 
     //$signal = good,bad,tips
-    private $hints = array();
+    protected $hints = array();
 
     /**
      * 设置提示消息并存入Cookie.
@@ -4508,6 +4463,16 @@ class ZBlogPHP
     /**
      * 杂项、未分类函数**************************************************************.
      */
+
+    /**
+     * @param $sql
+     *
+     * @return mixed
+     */
+    public function get_results($sql)
+    {
+        return $this->db->Query($sql);
+    }
 
     /**
      * 对表名和数据结构进行预转换.

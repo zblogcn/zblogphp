@@ -17,7 +17,7 @@ if (!defined('ZBP_PATH')) {
  * @property string MimeType
  * @property Member Author
  */
-class BaseUpload extends Base
+abstract class BaseUpload extends Base
 {
 
     public function __construct()

@@ -14,7 +14,7 @@ if (!defined('ZBP_PATH')) {
  * @property string Url
  * @property int|string Count 文章数量
  */
-class BaseTag extends Base
+abstract class BaseTag extends Base
 {
 
     public function __construct()
