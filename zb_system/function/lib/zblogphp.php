@@ -2436,8 +2436,13 @@ class ZBlogPHP
         }
         if ($is_array_object) {
             if (is_array($field_name)) {
-                $array_field_name = $field_name[0];
-                $field_name = $field_name[1];
+                if (count($field_name) == 1) {
+                    $array_field_name = key($field_name);
+                    $field_name = $field_name[$array_field_name];
+                } else {
+                    $array_field_name = $field_name[0];
+                    $field_name = $field_name[1];
+                }
             } else {
                 $array_field_name = $field_name;
                 $field_name = 'ID';
@@ -2446,24 +2451,25 @@ class ZBlogPHP
             foreach ($array as $any) {
                 $array2[] = $any->$array_field_name;
             }
-            $array = array_unique($array2);
-            $cache = &$this->GetCache('Base');
-            foreach ($cache as $o) {
-                $v1 = $o->$field_name;
-                foreach ($array as $k2 => $v2) {
-                    if ($v1 == $v2) {
-                        unset($array[$k2]);
-                        $list[] = $o;
-                        break;
-                    }
-                }
-            }
+            $array = $array2;
         }
 
         $array = array_unique($array);
+        $cache = &$this->GetCache('Base');
+        foreach ($cache as $o) {
+            $v1 = $o->$field_name;
+            foreach ($array as $k2 => $v2) {
+                if ($v1 == $v2) {
+                    unset($array[$k2]);
+                    $list[] = $o;
+                    break;
+                }
+            }
+        }
         if (empty($array)) {
             return $list;
         }
+
         $where[] = array('IN', $datainfo[$field_name][0], implode(',', $array));
         $sql = $this->db->sql->Select($table, '*', $where);
         $objects = $this->db->Query($sql);
@@ -2587,8 +2593,13 @@ class ZBlogPHP
         }
         if ($is_array_object) {
             if (is_array($field_name)) {
-                $array_field_name = $field_name[0];
-                $field_name = $field_name[1];
+                if (count($field_name) == 1) {
+                    $array_field_name = key($field_name);
+                    $field_name = $field_name[$array_field_name];
+                } else {
+                    $array_field_name = $field_name[0];
+                    $field_name = $field_name[1];
+                }
             } else {
                 $array_field_name = $field_name;
                 $field_name = 'ID';
@@ -2597,24 +2608,25 @@ class ZBlogPHP
             foreach ($array as $any) {
                 $array2[] = $any->$array_field_name;
             }
-            $array = array_unique($array2);
-            $cache = &$this->GetCache($classname);
-            foreach ($cache as $o) {
-                $v1 = $o->$field_name;
-                foreach ($array as $k2 => $v2) {
-                    if ($v1 == $v2) {
-                        unset($array[$k2]);
-                        $list[] = $o;
-                        break;
-                    }
-                }
-            }
+            $array = $array2;
         }
 
         $array = array_unique($array);
+        $cache = &$this->GetCache($classname);
+        foreach ($cache as $o) {
+            $v1 = $o->$field_name;
+            foreach ($array as $k2 => $v2) {
+                if ($v1 == $v2) {
+                    unset($array[$k2]);
+                    $list[] = $o;
+                    break;
+                }
+            }
+        }
         if (empty($array)) {
             return $list;
         }
+
         $o = new $classname;
         $table = &$o->GetTable();
         $datainfo = &$o->GetDataInfo();
@@ -2662,7 +2674,7 @@ class ZBlogPHP
         }
 
         /** @var BaseObjects[] $array */
-        $array = $this->GetListType($classname, $sql, $option);
+        $array = $this->GetListType($classname, $sql);
         if (isset($option['pagebar']) && is_object($option['pagebar'])) {
             $option['pagebar']->CurrentCount = count($array);
         }
@@ -2928,16 +2940,16 @@ class ZBlogPHP
     }
 
     /**
-     * 根据别名得到相应数据.
+     * 根据别名或名称或指定字段得到相应数据.
      *
      * @param Base[]|string &$object   缓存对象
-     * @param string        $val
-     * @param string        $backAttr
      * @param string        $className
+     * @param string        $val
+     * @param string        $backAttr  指定字段，如果为null，就用option['ZC_ALIAS_BACK_ATTR']
      *
      * @return Base|null
      */
-    private function GetSomeThingByAlias($object, $val, $backAttr = null, $className = null)
+    private function GetSomeThingByAliasOrName($object, $className, $val, $backAttr = null)
     {
         $ret = $this->GetSomeThing($object, 'Alias', $val, $className);
 
@@ -3055,7 +3067,7 @@ class ZBlogPHP
         } elseif ($className != '') {
             $cacheObject = &$this->GetCache($className);
         }
-        if ($attr == "ID") {
+        if ($attr == 'ID') {
             $ret = $this->GetSomeThingById($cacheObject, $className, $val);
         } else {
             $ret = $this->GetSomeThingByAttr($cacheObject, $className, $attr, $val);
@@ -4301,12 +4313,18 @@ class ZBlogPHP
     public function BindingCache()
     {
         $cacheobject = &$this->cacheobject;
-        $cacheobject['Member'] = &$this->members;
-        $cacheobject['Category'] = &$this->categories_all;
-        $cacheobject['Tag'] = &$this->tags_all;
-        $cacheobject['Module'] = &$this->modules;
-        $cacheobject['Comment'] = &$this->comments;
+        //post类及其派生类都同用这一个缓存
         $cacheobject['Post'] = &$this->posts;
+        $cacheobject['Member'] = &$this->members;
+        //同类缓存：$this->membersbyname
+        $cacheobject['Category'] = &$this->categories_all;
+        //同类缓存：$this->categories_type
+        $cacheobject['Tag'] = &$this->tags_all;
+        //同类缓存：$this->tags_type
+        //同类缓存：$this->tagsbyname_type
+        $cacheobject['Module'] = &$this->modules;
+        //同类缓存：$this->modulesbyfilename
+        $cacheobject['Comment'] = &$this->comments;
         $cacheobject['Upload'] = array();
     }
 

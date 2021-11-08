@@ -212,7 +212,12 @@ function ResponseAdmin_TopMenu()
         $fpname($topmenus);
     }
 
-    $topmenus[] = MakeTopMenu("misc", $zbp->lang['msg']['official_website'], "https://www.zblogcn.com/", "_blank", "", "icon-zblog-circle-fill");
+    $u = "https://www.zblogcn.com/";
+    if (defined('APPCENTRE_DOMAIN') && constant('APPCENTRE_DOMAIN') == 'app.zblogcn.net') {
+        $u = "https://www.zblogcn.net/";
+    }
+
+    $topmenus[] = MakeTopMenu("misc", $zbp->lang['msg']['official_website'], $u, "_blank", "", "icon-zblog-circle-fill");
 
     foreach ($topmenus as $m) {
         echo $m;

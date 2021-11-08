@@ -241,8 +241,9 @@ class Base
     public function LoadInfoByID($id)
     {
         $id = (int) $id;
-        $id_field = reset($this->datainfo);
-        $id_field = $id_field[0];
+        $id_name = $this->idname;
+        $id_field = $this->datainfo[$id_name][0];
+
         $s = $this->db->sql->Select($this->table, array('*'), array(array('=', $id_field, $id)), null, null, null);
 
         $array = $this->db->Query($s);

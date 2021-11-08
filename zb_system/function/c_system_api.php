@@ -33,6 +33,7 @@ function ApiTokenVerify()
             define('ZBP_IN_API_VERIFYBYTOKEN', true);
             $zbp->user = $user;
             $zbp->islogin = true;
+            return true;
         }
     }
 }
@@ -73,6 +74,7 @@ function ApiLoadMods(&$mods)
     foreach (GetFilesInDir(ZBP_PATH . 'zb_system/api/', 'php') as $mod => $file) {
         $mods[$mod] = $file;
     }
+    return true;
 }
 
 /**
@@ -134,6 +136,7 @@ function ApiListCheck(&$mods_allow, &$mods_disallow)
     if (!empty($mods_disallow) && $b == false) {
         $zbp->ShowError(96, __FILE__, __LINE__);
     }
+    return true;
 }
 
 /**
@@ -456,12 +459,7 @@ function ApiVerifyCSRF($force_check = false)
             );
 
             foreach ($GLOBALS['hooks']['Filter_Plugin_API_VerifyCSRF_Skip'] as $fpname => &$fpsignal) {
-                $fpreturn = $fpname($skip_acts, $csrf_token);
-                if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
-                    $fpsignal = PLUGIN_EXITSIGNAL_NONE;
-        
-                    return $fpreturn;
-                }
+                $fpname($skip_acts);
             }
 
             foreach ($skip_acts as $api_act) {
@@ -482,6 +480,8 @@ function ApiVerifyCSRF($force_check = false)
         if (! $zbp->VerifyCSRFToken($csrf_token, 'api')) {
             ApiResponse(null, null, 419, $GLOBALS['lang']['error']['5']);
         }
+
+        return true;
     }
 }
 

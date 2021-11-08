@@ -273,6 +273,19 @@ EOD;
 
 }
 
+if (!function_exists('CheckIsMoblie')) {
+
+function CheckIsMoblie()
+{
+    $ua = GetGuestAgent();
+    if (preg_match('/(Android|Web0S|webOS|iPad|iPhone|Mobile|Windows\sPhone|Kindle|BlackBerry|Opera\sMini)/', $ua)) {
+        return true;
+    }
+    return false;
+}
+
+}
+
 //深色 标准色 浅色 高光色 反色 标题 方块颜色
 $AdminColor_BlodColor[0] = '#1d4c7d';
 $AdminColor_NormalColor[0] = '#3a6ea5';
