@@ -9,6 +9,9 @@ if (!defined('ZBP_PATH')) {
 class ZBlogPHP
 {
 
+    /**
+     * @var object 单例模式下的ZBP唯一实例
+     */
     private static $private_zbp = null;
 
     /**
@@ -336,9 +339,9 @@ class ZBlogPHP
 
     public $isxmlrpc = false; //是否加载XML-RPC模式
 
-    public $ishttps = false; //链接至isHttps
+    public $ishttps = false; //是否HTTPS
 
-    public $isHttps = false; //是否HTTPS
+    public $isHttps = false; //链接至ishttps
 
     public $isdebug = false; //是否Debug Mode
 
@@ -551,7 +554,7 @@ class ZBlogPHP
     }
 
     /**
-     * ZBP系统初始化及数据库连接函数**************************************************************.
+     * ZBP系统初始化及加载**************************************************************.
      */
 
     /**
@@ -574,24 +577,6 @@ class ZBlogPHP
     }
 
     /**
-     * 初始化数据库连接.
-     *
-     * @param string $type 数据连接类型
-     *
-     * @return Database__Interface
-     */
-    public static function InitializeDB($type)
-    {
-        if (!trim($type)) {
-            return;
-        }
-
-        $newtype = 'Database__' . trim($type);
-
-        return new $newtype();
-    }
-
-    /**
      * 构造函数，加载基本配置到$zbp.
      */
     public function __construct()
@@ -600,6 +585,10 @@ class ZBlogPHP
             $table, $datainfo, $actions, $action, $blogversion, $blogtitle, $blogname, $blogsubname, $routes,
             $blogtheme, $blogstyle, $currenturl, $activedapps, $posttype, $fullcurrenturl,
             $usersdir, $systemdir, $admindir, $usersurl, $systemurl, $adminurl;
+
+        if ((defined('ZBP_DEBUGMODE') && constant('ZBP_DEBUGMODE') == true)) {
+            $this->isdebug = true;
+        }
 
         if (ZBP_HOOKERROR) {
             ZBlogException::SetErrorHook();
@@ -656,9 +645,9 @@ class ZBlogPHP
 
         $this->categoriesbyorder_type[0] = array();
         $this->categoriesbyorder = &$this->categoriesbyorder_type[0];
-        $this->categories = &$this->categoriesbyorder;
-        $this->categorys = &$this->categories;
-        $this->categorysbyorder = &$this->categoriesbyorder;
+        $this->categorysbyorder = &$this->categoriesbyorder_type[0];
+        $this->categories = &$this->categoriesbyorder_type[0];
+        $this->categorys = &$this->categoriesbyorder_type[0];
 
         $this->tags_type[0] = array();
         $this->tagsbyname_type[0] = array();
@@ -671,7 +660,7 @@ class ZBlogPHP
         }
         $this->user->Metas = new Metas();
 
-        $this->ishttps = &$this->isHttps;
+        $this->isHttps = &$this->ishttps;
 
         $this->BindingCache();
     }
@@ -804,12 +793,12 @@ class ZBlogPHP
 
         if (stripos($this->host, 'http') === 0) {
             if (stripos($this->host, 'https://') === 0) {
-                $this->isHttps = true;
+                $this->ishttps = true;
             }
         } else {
-            $this->isHttps = (HTTP_SCHEME === 'https://');
+            $this->ishttps = (HTTP_SCHEME === 'https://');
         }
-        //var_dump($this->isHttps);die;
+        //var_dump($this->ishttps);die;
 
         $this->verifyCodeUrl = $this->systemurl . 'script/c_validcode.php';
         $this->validcodeurl = &$this->verifyCodeUrl;
@@ -828,7 +817,7 @@ class ZBlogPHP
         !defined('ZBP_IN_CMD') || $this->iscmd = true;
         !defined('ZBP_IN_AJAX') || $this->isajax = true;
         !defined('ZBP_IN_XMLRPC') || $this->isxmlrpc = true;
-        if ($this->option['ZC_DEBUG_MODE'] || (defined('ZBP_DEBUGMODE') && constant('ZBP_DEBUGMODE') == true)) {
+        if ($this->option['ZC_DEBUG_MODE']) {
             $this->isdebug = true;
         }
 
@@ -839,63 +828,7 @@ class ZBlogPHP
         $this->themeinfo = $this->themeapp->GetInfoArray();
 
         $this->isinitialized = true;
-
-        if ($this->isapi) {
-            //挂载API错误显示
-            Add_Filter_Plugin('Filter_Plugin_Debug_Display', 'ApiDebugDisplay');
-            //挂载Token验证
-            Add_Filter_Plugin('Filter_Plugin_Zbp_PreLoad', 'ApiTokenVerify');
-        }
-
         return true;
-    }
-
-    /**
-     * 读取系统预设文件里的PostType配置
-     */
-    public function LoadPostType()
-    {
-        foreach (array(0 => 'article', 1 => 'page') as $postid => $postname) {
-            $file = ZBP_PATH . 'zb_system/defend/posttype_' . $postname . '.php';
-            $this->LoadPostType_File($file);
-        }
-    }
-
-    /**
-     * 读取指定文件里的PostType配置
-     */
-    public function LoadPostType_File($file)
-    {
-        if (is_readable($file)) {
-            $posttype = include $file;
-            $this->RegPostType($posttype);
-            return true;
-        }
-    }
-
-    /**
-     * 读取系统预设文件里的路由配置
-     */
-    public function LoadRoutes()
-    {
-        foreach (array(0 => 'article', 1 => 'page') as $postid => $postname) {
-            $file = ZBP_PATH . 'zb_system/defend/routes_post_' . $postname . '.php';
-            $this->LoadRoutes_File($file);
-        }
-    }
-
-    /**
-     * 读取指定文件里的路由配置
-     */
-    public function LoadRoutes_File($file)
-    {
-        if (is_readable($file)) {
-            $route = include $file;
-            foreach ($route as $key => $value) {
-                $this->RegRoute($value);
-            }
-            return true;
-        }
     }
 
     /**
@@ -910,6 +843,15 @@ class ZBlogPHP
         if (!$this->isinitialized || $this->ispreload) {
             return false;
         }
+
+        if ($this->isapi) {
+            //挂载API错误显示
+            Add_Filter_Plugin('Filter_Plugin_Debug_Display', 'ApiDebugDisplay');
+            //挂载Token验证
+            Add_Filter_Plugin('Filter_Plugin_Zbp_PreLoad', 'ApiTokenVerify');
+        }
+
+        $this->ConvertTableAndDatainfo();
 
         foreach ($GLOBALS['hooks']['Filter_Plugin_Zbp_PreLoad'] as $fpname => &$fpsignal) {
             $fpreturn = $fpname();
@@ -941,7 +883,6 @@ class ZBlogPHP
             header('Content-type: text/html; charset=utf-8');
         }
 
-        $this->ConvertTableAndDatainfo();
         if ($this->option['ZC_LOADMEMBERS_LEVEL'] == 0) {
             $this->option['ZC_LOADMEMBERS_LEVEL'] = 1;
         }
@@ -959,10 +900,6 @@ class ZBlogPHP
         //创建模板类
         $this->template = $this->PrepareTemplate();
 
-        if ($this->ismanage) {
-            $this->LoadManage();
-        }
-
         Add_Filter_Plugin('Filter_Plugin_Login_Header', 'Include_AddonAdminFont');
         Add_Filter_Plugin('Filter_Plugin_Other_Header', 'Include_AddonAdminFont');
         Add_Filter_Plugin('Filter_Plugin_Admin_Header', 'Include_AddonAdminFont');
@@ -979,11 +916,11 @@ class ZBlogPHP
             $fpname();
         }
 
-        if ($this->user->Status == ZC_MEMBER_STATUS_LOCKED) {
-            $this->ShowError(80, __FILE__, __LINE__);
+        if ($this->ismanage) {
+            $this->LoadManage();
         }
 
-        //进后台时已自动检测模板并自动重建了，所以这里只针对开调试后的前台的访问进行
+        //进后台或开调试后的前台的访问进行自动检测模板并自动重建
         if ($this->option['ZC_DEBUG_MODE'] || $this->ismanage) {
             $this->CheckTemplate();
         }
@@ -991,7 +928,11 @@ class ZBlogPHP
         $this->ReflushLanguages();
         $this->ConvertTableAndDatainfo();
 
+        if ($this->user->Status == ZC_MEMBER_STATUS_LOCKED) {
+            $this->ShowError(80, __FILE__, __LINE__);
+        }
         $this->islogin = empty($this->user->ID) ? false : true;
+
         $this->isload = true;
         return true;
     }
@@ -1045,6 +986,10 @@ class ZBlogPHP
             $this->isinitialized = false;
         }
     }
+
+    /**
+     * 数据库连接函数**************************************************************.
+     */
 
     /**
      * 连接数据库.
@@ -1147,6 +1092,24 @@ class ZBlogPHP
     }
 
     /**
+     * 初始化数据库连接对象.
+     *
+     * @param string $type 数据连接类型
+     *
+     * @return Database__Interface
+     */
+    public static function InitializeDB($type)
+    {
+        if (!trim($type)) {
+            return;
+        }
+
+        $newtype = 'Database__' . trim($type);
+
+        return new $newtype();
+    }
+
+    /**
      * Configs配置类相关函数**************************************************************.
      */
 
@@ -1162,27 +1125,27 @@ class ZBlogPHP
     /**
      * 载入插件Configs表 Only System Option.
      */
-    private $prvConfigList = null;
+    private $config_list = null;
 
     public function LoadConfigsOnlySystem($onlysystemoption = true)
     {
         if ($onlysystemoption == true) {
             $this->configs = array();
-            $this->prvConfigList = array();
+            $this->config_list = array();
 
             $sql = $this->db->sql->get()->select($this->table['Config']);
             /* @var Config[] $array */
-            $this->prvConfigList = $this->GetListOrigin($sql);
+            $this->config_list = $this->GetListOrigin($sql);
         }
-        if (is_array($this->prvConfigList)) {
-            if (count($this->prvConfigList) == 1 && $this->prvConfigList[0] === false) {
+        if (is_array($this->config_list)) {
+            if (count($this->config_list) == 1 && $this->config_list[0] === false) {
                 return;
             }
         }
 
         $type = 'Config';
 
-        foreach ($this->prvConfigList as $c) {
+        foreach ($this->config_list as $c) {
             $name = $c[$this->d['Config']['Name'][0]];
             if (($name == 'system' && $onlysystemoption == true) || ($name != 'system' && $onlysystemoption == false)) {
                 if (!isset($this->configs[$name])) {
@@ -1210,7 +1173,7 @@ class ZBlogPHP
         }
 
         if ($onlysystemoption == false) {
-            $this->prvConfigList = array();
+            $this->config_list = array();
         }
     }
 
@@ -1803,12 +1766,12 @@ class ZBlogPHP
         $this->categorys = &$this->categories;
         $this->categorysbyorder = &$this->categoriesbyorder;
 
-        foreach ($this->posttype as $key => $value) {
-            if (!isset($this->categories_type[$key])) {
-                $this->categories_type[$key] = array();
+        foreach ($this->posttype as $type => $value) {
+            if (!isset($this->categories_type[$type])) {
+                $this->categories_type[$type] = array();
             }
-            if (!isset($this->categoriesbyorder_type[$key])) {
-                $this->categoriesbyorder_type[$key] = array();
+            if (!isset($this->categoriesbyorder_type[$type])) {
+                $this->categoriesbyorder_type[$type] = array();
             }
         }
 
@@ -1817,14 +1780,14 @@ class ZBlogPHP
             return false;
         }
 
-        foreach ($this->posttype as $key => $value) {
+        foreach ($this->posttype as $type => $value) {
             $lv = array();
             for ($i = 0; $i < $this->category_recursion_level; $i++) {
                 $name = 'lv' . $i;
                 ${$name} = array();
                 $lv[$i] = &${$name};
             }
-            $categories = $this->categories_type[$key];
+            $categories = $this->categories_type[$type];
 
             foreach ($categories as $id => $c) {
                 $l = 'lv' . $c->Level;
@@ -1836,15 +1799,15 @@ class ZBlogPHP
             }
 
             foreach ($lv0[0] as $id0) {
-                $this->LoadCategories_Recursion(0, $id0, $lv, $key);
+                $this->LoadCategories_Recursion(0, $id0, $lv, $type);
             }
         }
 
         $this->categories_type = &$this->categoriesbyorder_type;
         $this->categoriesbyorder = &$this->categoriesbyorder_type[0];
+        $this->categorysbyorder = &$this->categoriesbyorder_type[0];
         $this->categories = &$this->categoriesbyorder_type[0];
         $this->categorys = &$this->categoriesbyorder_type[0];
-        $this->categorysbyorder = &$this->categoriesbyorder_type[0];
 
         return true;
     }
@@ -2397,10 +2360,12 @@ class ZBlogPHP
             $id = $l->GetIdName();
             if ($this->CheckCache('Base', $l->$id) == false) {
                 $this->AddCache($l);
+                $list[] = $l;
             } else {
-                $l = &$this->GetCache('Base', $l->$id);
+                $n = &$this->GetCache('Base', $l->$id);
+                $list[] = $n;
             }
-            $list[] = $l;
+            unset($l, $n);
         }
 
         return $list;
@@ -2482,10 +2447,12 @@ class ZBlogPHP
             $id = $l->GetIdName();
             if ($this->CheckCache('Base', $l->$id) == false) {
                 $this->AddCache($l);
+                $list[] = $l;
             } else {
-                $l = &$this->GetCache('Base', $l->$id);
+                $n = &$this->GetCache('Base', $l->$id);
+                $list[] = $n;
             }
-            $list[] = $l;
+            unset($l, $n);
         }
 
         return $list;
@@ -2527,10 +2494,12 @@ class ZBlogPHP
                 $id = $l->GetIdName();
                 if ($this->CheckCache($classname, $l->$id) == false) {
                     $this->AddCache($l);
+                    $list[] = $l;
                 } else {
-                    $l = &$this->GetCache($classname, $l->$id);
+                    $n = &$this->GetCache($classname, $l->$id);
+                    $list[] = $n;
                 }
-                $list[] = $l;
+                unset($l, $n);
             }
         }
 
@@ -2651,10 +2620,12 @@ class ZBlogPHP
             $id = $l->GetIdName();
             if ($this->CheckCache($classname, $l->$id) == false) {
                 $this->AddCache($l);
+                $list[] = $l;
             } else {
-                $l = &$this->GetCache($classname, $l->$id);
+                $n = &$this->GetCache($classname, $l->$id);
+                $list[] = $n;
             }
-            $list[] = $l;
+            unset($l, $n);
         }
 
         return $list;
@@ -3914,6 +3885,31 @@ class ZBlogPHP
      */
 
     /**
+     * 注册Action.
+     *
+     * @param $name
+     * @param $level
+     * @param $title
+     */
+    public function RegAction($name, $level, $title)
+    {
+        $this->actions[$name] = $level;
+        $this->lang['actions'][$name] = $title;
+    }
+
+    /**
+     * 获得Action权限的名称.
+     *
+     * @param $name
+     *
+     * @return mixed
+     */
+    public function GetActionName($name)
+    {
+        return GetValueInArray($this->lang['actions'], $name, $name);
+    }
+
+    /**
      * 注册PostType.
      *
      * @param $typeId
@@ -4162,33 +4158,56 @@ class ZBlogPHP
     }
 
     /**
-     * 注册Action.
-     *
-     * @param $name
-     * @param $level
-     * @param $title
+     * 读取系统预设文件里的PostType配置
      */
-    public function RegAction($name, $level, $title)
+    public function LoadPostType()
     {
-        $this->actions[$name] = $level;
-        $this->lang['actions'][$name] = $title;
+        foreach (array(0 => 'article', 1 => 'page') as $postid => $postname) {
+            $file = ZBP_PATH . 'zb_system/defend/posttype_' . $postname . '.php';
+            $this->LoadPostType_File($file);
+        }
     }
 
     /**
-     * 获得Action权限注释.
-     *
-     * @param $name
-     *
-     * @return mixed
+     * 读取指定文件里的PostType配置
      */
-    public function GetActionDescription($name)
+    public function LoadPostType_File($file)
     {
-        return GetValueInArray($this->lang['actions'], $name, $name);
+        if (is_readable($file)) {
+            $posttype = include $file;
+            $this->RegPostType($posttype);
+            return true;
+        }
     }
 
     /**
      * 路由处理函数**************************************************************.
      */
+
+    /**
+     * 读取系统预设文件里的路由配置
+     */
+    public function LoadRoutes()
+    {
+        foreach (array(0 => 'article', 1 => 'page') as $postid => $postname) {
+            $file = ZBP_PATH . 'zb_system/defend/routes_post_' . $postname . '.php';
+            $this->LoadRoutes_File($file);
+        }
+    }
+
+    /**
+     * 读取指定文件里的路由配置
+     */
+    public function LoadRoutes_File($file)
+    {
+        if (is_readable($file)) {
+            $route = include $file;
+            foreach ($route as $key => $value) {
+                $this->RegRoute($value);
+            }
+            return true;
+        }
+    }
 
     /**
      * 注册路由函数
@@ -4799,6 +4818,14 @@ class ZBlogPHP
     public function LoadCategorys()
     {
         return $this->LoadCategories();
+    }
+
+    /**
+     * @deprecated
+     */
+    public function GetActionDescription($name)
+    {
+        return $this->GetActionName($name);
     }
 
     /**

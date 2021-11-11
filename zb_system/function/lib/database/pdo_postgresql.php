@@ -91,7 +91,7 @@ class Database__PDO_PostgreSQL implements Database__Interface
         $myver = $this->db->getAttribute(PDO::ATTR_SERVER_VERSION);
         $this->version = SplitAndGet($myver, '-', 0);
         $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_SILENT);
-
+        //$this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         return true;
     }
 
@@ -222,9 +222,12 @@ class Database__PDO_PostgreSQL implements Database__Interface
         //$query=str_replace('%pre%', $this->dbpre, $query);
         $this->db->query($this->sql->Filter($query));
         $this->LogsError();
-        $seq = explode(' ', $query, 4);
-        $seq = $seq[2] . '_seq';
-        $id = $this->db->lastInsertId($seq);
+        $id = null;
+        if (preg_match('/[\s]*INSERT[\s]+INTO[\s]+([\S]+)[\s]+/i', $query, $m) == 1) {
+            $seq = $m[1];
+            $seq = str_replace(array('"',"'"), '', $seq) . '_seq';
+            $id = $this->db->lastInsertId($seq);
+        }
         return $id;
     }
 
@@ -289,6 +292,7 @@ class Database__PDO_PostgreSQL implements Database__Interface
      */
     public function Transaction($query)
     {
+        //return false;
         if (strcasecmp($query, 'begin') === 0) {
             return $this->db->beginTransaction();
         }

@@ -24,23 +24,19 @@ foreach ($GLOBALS['hooks']['Filter_Plugin_API_Begin'] as $fpname => &$fpsignal) 
 
 ApiCheckAuth(false, 'api');
 
-if ($GLOBALS['option']['ZC_API_THROTTLE_ENABLE']) {
-    ApiThrottle('default', $GLOBALS['option']['ZC_API_THROTTLE_MAX_REQS_PER_MIN'] ? $GLOBALS['option']['ZC_API_THROTTLE_MAX_REQS_PER_MIN'] : 60);
-}
+ApiCheckLimit();
 
 $mods = array();
+$mods_allow = array(); //格式为 array( array('模块名'=>'方法名') )
+$mods_disallow = array(); //如果是 array( array('模块名'=>'') )方法名为空将匹配整个模块
+$mod = strtolower(GetVars('mod', 'GET'));
+$act = strtolower(GetVars('act', 'GET'));
 
 // 载入系统和应用的 mod
 ApiLoadMods($mods);
 
-$mod = strtolower(GetVars('mod', 'GET'));
-$act = strtolower(GetVars('act', 'GET'));
-
-$mods_allow = array(); //格式为 [] = array('模块名'=>'方法名')
-$mods_disallow = array(); //如果是 [] = array('模块名'=>'') 方法名为空将匹配整个模块
-
 //进行Api白名单和黑名单的检查
-ApiListCheck($mods_allow, $mods_disallow);
+ApiCheckMods($mods_allow, $mods_disallow);
 
 ApiLoadPostData();
 

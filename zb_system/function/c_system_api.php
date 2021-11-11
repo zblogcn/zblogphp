@@ -1,4 +1,5 @@
 <?php
+
 /**
  * API相关函数.
  */
@@ -6,7 +7,6 @@
 if (!defined('ZBP_PATH')) {
     exit('Access denied');
 }
-
 
 //###############################################################################################################
 
@@ -65,7 +65,7 @@ function ApiLoadMods(&$mods)
             if (array_key_exists($mod, $mods)) {
                 continue;
             }
-    
+
             $mods[$mod] = $file;
         }
     }
@@ -89,13 +89,15 @@ function ApiRemoveMods($name)
 
 /**
  * 检查API Mods的白名单和黑名单.
+ * $mods_allow白名单请慎用，启用白名单后，不在白名单的mod都将被拒绝
+ * 如果只想关闭某些模块只需要对$mods_disallow黑名单进行添加
  */
-function ApiListCheck(&$mods_allow, &$mods_disallow)
+function ApiCheckMods(&$mods_allow, &$mods_disallow)
 {
     global $zbp, $mod, $act;
 
     //接口及对$mods_allow, $mods_disallow的添加
-    foreach ($GLOBALS['hooks']['Filter_Plugin_API_ListCheck'] as $fpname => &$fpsignal) {
+    foreach ($GLOBALS['hooks']['Filter_Plugin_API_CheckMods'] as $fpname => &$fpsignal) {
         $new_allow = $new_disallow = array();
         $fpname($new_allow, $new_disallow);
 
@@ -107,8 +109,14 @@ function ApiListCheck(&$mods_allow, &$mods_disallow)
 
     foreach ($mods_allow as $array) {
         if (!empty($array) && is_array($array)) {
-            foreach ($array as $m => $a) {
-                if ($mod == $m && ($a == '' || $act == $a)) {
+            foreach ($array as $k => $v) {
+                $list_mod = $k;
+                $list_act = $v;
+                if (is_integer($k)) {
+                    $list_mod = $v;
+                    $list_act = '';
+                }
+                if ($mod == $list_mod && ($list_act == '' || $act == $list_act)) {
                     $b = true;
                     break;
                 }
@@ -118,14 +126,21 @@ function ApiListCheck(&$mods_allow, &$mods_disallow)
 
     if (!empty($mods_allow) && $b == false) {
         $zbp->ShowError(96, __FILE__, __LINE__);
+        die;
     }
 
     $b = true;
 
     foreach ($mods_disallow as $array) {
         if (!empty($array) && is_array($array)) {
-            foreach ($array as $m => $a) {
-                if ($mod == $m && ($a == '' || $act == $a)) {
+            foreach ($array as $k => $v) {
+                $list_mod = $k;
+                $list_act = $v;
+                if (is_integer($k)) {
+                    $list_mod = $v;
+                    $list_act = '';
+                }
+                if ($mod == $list_mod && ($list_act == '' || $act == $list_act)) {
                     $b = false;
                     break;
                 }
@@ -135,6 +150,7 @@ function ApiListCheck(&$mods_allow, &$mods_disallow)
 
     if (!empty($mods_disallow) && $b == false) {
         $zbp->ShowError(96, __FILE__, __LINE__);
+        die;
     }
     return true;
 }
@@ -436,7 +452,7 @@ function ApiGetAndFilterRelationQuery($info)
 }
 
 /**
- * API 传统登录时的 CSRF 验证.
+ * API 传统登录时的POST方式下的 CSRF 验证.
  *
  * @param boolean $force_check 是否强制检查
  */
@@ -444,11 +460,11 @@ function ApiVerifyCSRF($force_check = false)
 {
     global $zbp, $mod, $act;
 
-    if (! defined('ZBP_IN_API_VERIFYBYTOKEN')) {
+    if (!defined('ZBP_IN_API_VERIFYBYTOKEN')) {
         $csrf_token = GetVars('csrf_token');
 
-        if (! $force_check) {
-            if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+        if (!$force_check) {
+            if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] !== 'POST') {
                 return;
             }
 
@@ -477,7 +493,7 @@ function ApiVerifyCSRF($force_check = false)
             }
         }
 
-        if (! $zbp->VerifyCSRFToken($csrf_token, 'api')) {
+        if (!$zbp->VerifyCSRFToken($csrf_token, 'api')) {
             ApiResponse(null, null, 419, $GLOBALS['lang']['error']['5']);
         }
 
@@ -529,7 +545,7 @@ function ApiDispatch($mods, $mod, $act)
             );
         }
     }
-    
+
     ApiResponse(null, null, 404, $GLOBALS['lang']['error']['96']);
 }
 
@@ -559,6 +575,16 @@ function ApiUrlGenerate($mod, $act = 'get', $query = array())
 }
 
 /**
+ * API 开启检测限流.
+ */
+function ApiCheckLimit()
+{
+    if ($GLOBALS['option']['ZC_API_THROTTLE_ENABLE']) {
+        ApiThrottle('default', $GLOBALS['option']['ZC_API_THROTTLE_MAX_REQS_PER_MIN'] ? $GLOBALS['option']['ZC_API_THROTTLE_MAX_REQS_PER_MIN'] : 60);
+    }
+}
+
+/**
  * API 限流.
  *
  * @param string  $name
@@ -570,7 +596,9 @@ function ApiThrottle($name = 'default', $max_reqs = 60, $period = 60)
     global $zbpcache;
 
     if (!isset($zbpcache)) {
-        return;
+        return false;
+    } else {
+        $zbpcache->Connect();
     }
 
     $user_id = md5(GetGuestIP());
@@ -601,5 +629,15 @@ function ApiResultData(&$data)
 
     foreach ($GLOBALS['hooks']['Filter_Plugin_API_Result_Data'] as $fpname => &$fpsignal) {
         $fpname($data, $mod, $act);
+    }
+}
+
+/**
+ * API 检查Http Method
+ */
+function ApiCheckHttpMethod($allow_method = 'GET|POST|PUT|DELETE')
+{
+    if (isset($_SERVER['REQUEST_METHOD']) && stripos($allow_method, $_SERVER['REQUEST_METHOD']) === false) {
+        ApiResponse(null, null, 405, $GLOBALS['lang']['error']['5']);
     }
 }

@@ -330,9 +330,9 @@ class Base
             if (strcasecmp($field_key, 'meta') === 0 && isset($this->datainfo['Meta'])) {
                 foreach ($field_value as $k => $v) {
                     if (is_numeric($k)) {
-                        $conditions[] = array('META_NAME',$this->datainfo['Meta'][0],$v);
+                        $conditions[] = array('META_NAME', $this->datainfo['Meta'][0], $v);
                     } else {
-                        $conditions[] = array('META_NAMEVALUE',$this->datainfo['Meta'][0],$k,$v);
+                        $conditions[] = array('META_NAMEVALUE', $this->datainfo['Meta'][0], $k, $v);
                     }
                 }
             } else {
@@ -570,6 +570,20 @@ class Base
     public function GetIdName()
     {
         return $this->idname;
+    }
+
+    /**
+     * DebugInfo >= php 5.6
+     */
+    public function __debugInfo()
+    {
+        foreach ($this as $key => $value) {
+            if ($key == 'datainfo' || $key == 'db') {
+                continue;
+            }
+            $array[$key] = $value;
+        }
+        return $array;
     }
 
 }

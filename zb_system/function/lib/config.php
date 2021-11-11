@@ -14,6 +14,7 @@ class Config implements Iterator
 
     private $array = array(); //存$key的数组，非$value
 
+    #[ReturnTypeWillChange]
     public function rewind()
     {
         //foreach ($this->kvdata as $key => $value) {
@@ -23,21 +24,25 @@ class Config implements Iterator
         $this->position = 0;
     }
 
+    #[ReturnTypeWillChange]
     public function current()
     {
         return $this->kvdata[$this->array[$this->position]];
     }
 
+    #[ReturnTypeWillChange]
     public function key()
     {
         return $this->array[$this->position];
     }
 
+    #[ReturnTypeWillChange]
     public function next()
     {
         ++$this->position;
     }
 
+    #[ReturnTypeWillChange]
     public function valid()
     {
         return array_key_exists($this->position, $this->array);
@@ -568,6 +573,20 @@ class Config implements Iterator
         unset($this->kvdata[$name]);
 
         return true;
+    }
+
+    /**
+     * DebugInfo >= php 5.6
+     */
+    public function __debugInfo()
+    {
+        foreach ($this as $key => $value) {
+            if ($key == 'datainfo' || $key == 'db') {
+                continue;
+            }
+            $array[$key] = $value;
+        }
+        return $array;
     }
 
 }

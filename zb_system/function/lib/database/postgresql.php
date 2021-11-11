@@ -188,22 +188,22 @@ class Database__PostgreSQL implements Database__Interface
     {
         //$query=str_replace('%pre%', $this->dbpre, $query);
         $results = @pg_query($this->db, $this->sql->Filter($query));
-        if (is_resource($results)) {
-            $st = pg_result_status($results);
-            if ($st == PGSQL_BAD_RESPONSE || $st == PGSQL_NONFATAL_ERROR || $st == PGSQL_FATAL_ERROR) {
-                trigger_error(pg_result_error($results), E_USER_NOTICE);
-            }
-        } else {
-            trigger_error(pg_last_error($this->db), E_USER_NOTICE);
+
+        $st = pg_result_status($results);
+        if ($st == PGSQL_BAD_RESPONSE || $st == PGSQL_NONFATAL_ERROR || $st == PGSQL_FATAL_ERROR) {
+            trigger_error(pg_result_error($results), E_USER_NOTICE);
         }
+
         $this->LogsError();
         $data = array();
-        if (is_resource($results)) {
+
+        if (!is_resource($results) && !is_object($results)) {
+            return $data;
+        }
+        if (is_resource($results) || is_object($results)) {
             while ($row = pg_fetch_assoc($results)) {
                 $data[] = $row;
             }
-        } else {
-            $data[] = $results;
         }
 
         return $data;
@@ -251,16 +251,15 @@ class Database__PostgreSQL implements Database__Interface
         //$query=str_replace('%pre%', $this->dbpre, $query);
         pg_query($this->db, $this->sql->Filter($query));
         $this->LogsError();
-        $seq = explode(' ', $query);
-        $seq = $seq[3];
-        $seq = trim($seq);
-        //$seq = 'select lastval();';
-        $seq = "select currval('{$seq}_seq'::regclass)";
-
-        $r = pg_query($this->db, $seq);
-        $id = pg_fetch_result($r, 0, 0);
-
-        return (int) $id;
+        $id = null;
+        if (preg_match('/[\s]*INSERT[\s]+INTO[\s]+([\S]+)[\s]+/i', $query, $m) == 1) {
+            $seq = $m[1];
+            $seq = str_replace(array('"',"'"), '', $seq) . '_seq';
+            $query = "select currval('{$seq}'::regclass)";
+            $r = pg_query($this->db, $query);
+            $id = (int) pg_fetch_result($r, 0, 0);
+        }
+        return $id;
     }
 
     /**
@@ -315,7 +314,10 @@ class Database__PostgreSQL implements Database__Interface
 
     private function LogsError()
     {
-        $this->error[] = array(PGSQL_BAD_RESPONSE, pg_last_error($this->db));
+        $e = pg_last_error($this->db);
+        if (!empty($e)) {
+            $this->error[] = array(PGSQL_BAD_RESPONSE, $e);
+        }
     }
 
     /**

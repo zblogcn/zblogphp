@@ -39,6 +39,7 @@ function api_member_login()
         $zbp->user = $member;
         $sd = (float) GetVars('savedate', 'POST');
         $sd = ($sd < 1) ? 1 : $sd;
+        $sd = ($sd > 365) ? 365 : $sd;
         $sdt = (time() + 3600 * 24 * $sd);
 
         foreach ($GLOBALS['hooks']['Filter_Plugin_VerifyLogin_Succeed'] as $fpname => &$fpsignal) {
@@ -287,7 +288,7 @@ function api_member_get_auth()
     foreach ($GLOBALS['actions'] as $key => $value) {
         if ($zbp->CheckRights($key)) {
             $authArr['auth'][$key] = array(
-                'description' => $zbp->GetActionDescription($key),
+                'name' => $zbp->GetActionName($key),
                 'checked' => $zbp->CheckRights($key) ? true : false
             );
         }
