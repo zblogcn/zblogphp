@@ -783,14 +783,15 @@ class App
     }
 
     /**
-     * @throws Exception
+     * @return true | Exception
      */
     public function CheckCompatibility()
     {
         global $zbp;
 
         if ((int) $this->adapted > (int) $zbp->version) {
-            $zbp->ShowError(str_replace('%s', $this->adapted, $zbp->lang['error'][78]), __FILE__, __LINE__);
+            //$zbp->ShowError(str_replace('%s', $this->adapted, $zbp->lang['error'][78]), __FILE__, __LINE__);
+            return new Exception(str_replace('%s', $this->adapted, $zbp->lang['error'][78]));
         }
 
         if (trim($this->phpver) == '') {
@@ -798,6 +799,7 @@ class App
         }
         if (version_compare($this->phpver, GetPHPVersion()) > 0) {
             $zbp->ShowError(str_replace('%s', $this->phpver, $zbp->lang['error'][91]), __FILE__, __LINE__);
+            return new Exception(str_replace('%s', $this->phpver, $zbp->lang['error'][91]));
         }
 
         $ae = explode('|', $this->advanced_existsfunctions);
@@ -808,7 +810,8 @@ class App
             }
 
             if (!function_exists($e)) {
-                $zbp->ShowError(str_replace('%s', $e, $zbp->lang['error'][92]), __FILE__, __LINE__);
+                //$zbp->ShowError(str_replace('%s', $e, $zbp->lang['error'][92]), __FILE__, __LINE__);
+                return new Exception(str_replace('%s', $e, $zbp->lang['error'][92]));
             }
         }
 
@@ -820,7 +823,8 @@ class App
 
             if (!in_array($d, $zbp->activedapps)) {
                 $d = '<a href="' . $zbp->host . 'zb_users/plugin/AppCentre/main.php?alias=' . $d . '">' . $d . '</a>';
-                $zbp->ShowError(str_replace('%s', $d, $zbp->lang['error'][83]), __FILE__, __LINE__);
+                //$zbp->ShowError(str_replace('%s', $d, $zbp->lang['error'][83]), __FILE__, __LINE__);
+                return new Exception(str_replace('%s', $d, $zbp->lang['error'][83]));
             }
         }
 
@@ -831,15 +835,18 @@ class App
             }
 
             if (in_array($c, $zbp->activedapps)) {
-                $zbp->ShowError(str_replace('%s', $c, $zbp->lang['error'][85]), __FILE__, __LINE__);
+                //$zbp->ShowError(str_replace('%s', $c, $zbp->lang['error'][85]), __FILE__, __LINE__);
+                return new Exception(str_replace('%s', $c, $zbp->lang['error'][85]));
             }
         }
+
+        return true;
     }
 
     /**
      * 从全局检查 依赖(关闭时) or 拒绝(开启时)
      * @param $action string (Enable|Disable)
-     * @throws Exception
+     * @return true | Exception
      */
     public function CheckCompatibility_Global($action)
     {
@@ -854,7 +861,8 @@ class App
                 $conflictList = explode('|', $app->advanced_conflict);
                 foreach ($conflictList as $conflict) {
                     if ($conflict == $this->id) {
-                        $zbp->ShowError(str_replace('%s', ' <b>' . $app->name . '</b> ', $zbp->lang['error'][85]), __FILE__, __LINE__);
+                        //$zbp->ShowError(str_replace('%s', ' <b>' . $app->name . '</b> ', $zbp->lang['error'][85]), __FILE__, __LINE__);
+                        return new Exception(str_replace('%s', ' <b>' . $app->name . '</b> ', $zbp->lang['error'][85]));
                     }
                 }
             }
@@ -869,11 +877,14 @@ class App
                 $dependList = explode('|', $app->advanced_dependency);
                 foreach ($dependList as $depend) {
                     if ($depend == $this->id) {
-                        $zbp->ShowError(str_replace('%s', ' <b>' . $app->name . '</b> ', $zbp->lang['error'][84]), __FILE__, __LINE__);
+                        //$zbp->ShowError(str_replace('%s', ' <b>' . $app->name . '</b> ', $zbp->lang['error'][84]), __FILE__, __LINE__);
+                        return new Exception(str_replace('%s', ' <b>' . $app->name . '</b> ', $zbp->lang['error'][84]));
                     }
                 }
             }
         }
+
+        return true;
     }
 
     /**

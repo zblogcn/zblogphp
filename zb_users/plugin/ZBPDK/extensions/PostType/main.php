@@ -29,7 +29,7 @@ require $blogpath . 'zb_system/admin/admin_header.php';
 if (isset($hooks)) {
     $zbpdk_allhooks = &$hooks;
 } else {
-    $zbpdk_allhooks = &$GLOBALS;
+    $zbpdk_allhooks = $GLOBALS;
 }
 
 ?>

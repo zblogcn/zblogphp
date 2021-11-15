@@ -347,6 +347,8 @@ class ZBlogPHP
 
     public $islogin = false; //是否Login
 
+    public $isloggedin = false; //链接至islogin
+
     /**
      * @var Template 当前模板
      */
@@ -590,9 +592,9 @@ class ZBlogPHP
             $this->isdebug = true;
         }
 
-        if (ZBP_HOOKERROR) {
-            ZBlogException::SetErrorHook();
-        }
+        //if (ZBP_HOOKERROR) {
+        //    ZBlogException::SetErrorHook();
+        //}
 
         //基本配置加载到$zbp内
         $this->version = &$blogversion;
@@ -661,6 +663,7 @@ class ZBlogPHP
         $this->user->Metas = new Metas();
 
         $this->isHttps = &$this->ishttps;
+        $this->isloggedin = &$this->islogin;
 
         $this->BindingCache();
     }
@@ -3252,7 +3255,7 @@ class ZBlogPHP
                     array('mem_Alias', $name),
                 )
             )
-        )->limit(1)->sql;
+        )->orderBy(array('mem_ID' => 'asc'))->limit(1)->sql;
 
         /** @var Member[] $am */
         $am = $this->GetListType('Member', $sql);
@@ -3291,7 +3294,7 @@ class ZBlogPHP
             array(
                 array('=', 'mem_Alias', $name)
             )
-        )->limit(1)->sql;
+        )->orderBy(array('mem_ID' => 'asc'))->limit(1)->sql;
 
         /** @var Member[] $am */
         $am = $this->GetListType('Member', $sql);
@@ -3708,35 +3711,6 @@ class ZBlogPHP
     }
 
     /**
-     * 向导航菜单添加相应条目.
-     *
-     * @param string $type $type=category,tag,page,item
-     * @param string $id
-     * @param string $name
-     * @param string $url
-     */
-    public function AddItemToNavbar($type, $id, $name, $url)
-    {
-        if (!$type) {
-            $type = 'item';
-        }
-
-        $m = $this->modulesbyfilename['navbar'];
-        $s = $m->Content;
-
-        $a = '<li id="navbar-' . $type . '-' . $id . '"><a href="' . $url . '">' . $name . '</a></li>';
-
-        if ($this->CheckItemToNavbar($type, $id)) {
-            $s = preg_replace('/<li id="navbar-' . $type . '-' . $id . '">.*?<\/li>/', $a, $s);
-        } else {
-            $s .= '<li id="navbar-' . $type . '-' . $id . '"><a href="' . $url . '">' . $name . '</a></li>';
-        }
-
-        $m->Content = $s;
-        $m->Save();
-    }
-
-    /**
      * 消息处理，错误处理的函数**************************************************************.
      */
 
@@ -3753,11 +3727,11 @@ class ZBlogPHP
     public function SetHint($signal, $content = '', $delay = 10)
     {
         if ($content == '') {
-            if (substr($signal, 0, 4) == 'good') {
+            if (substr($signal, 0, 4) == 'good' || substr($signal, 0, 7) == 'succeed') {
                 $content = $this->lang['msg']['operation_succeed'];
             }
 
-            if (substr($signal, 0, 3) == 'bad') {
+            if (substr($signal, 0, 3) == 'bad' || substr($signal, 0, 6) == 'failed') {
                 $content = $this->lang['msg']['operation_failed'];
             }
         }
@@ -3800,7 +3774,7 @@ class ZBlogPHP
     }
 
     /**
-     * 由提示消息获取HTML.
+     * 由提示消息输出HTML.
      *
      * @param string $signal  提示类型（good|bad|tips）
      * @param string $content 提示内容
@@ -3817,16 +3791,48 @@ class ZBlogPHP
         }
 
         if ($content == '') {
-            if (substr($signal, 0, 4) == 'good') {
+            if (substr($signal, 0, 4) == 'good' || substr($signal, 0, 7) == 'succeed') {
                 $content = $this->lang['msg']['operation_succeed'];
             }
 
-            if (substr($signal, 0, 3) == 'bad') {
+            if (substr($signal, 0, 3) == 'bad' || substr($signal, 0, 6) == 'failed') {
                 $content = $this->lang['msg']['operation_failed'];
             }
         }
         $delay = ($delay * 1000);
         echo "<div class=\"hint\"><p class=\"hint hint_$signal\" data-delay=\"$delay\">$content</p></div>";
+    }
+
+    /**
+     * 提示消息 JS版.
+     *
+     * @param string $signal  提示类型（good|bad|tips）
+     * @param string $content 提示内容
+     * @param int $delay 延时时间
+     */
+    public function ShowHint_JS($signal, $content = '', $delay = 10)
+    {
+        //1.7增加$signal为json类型
+        $hint = $signal;
+        if (is_object($hint)) {
+            $signal = $hint->signal;
+            $content = $hint->content;
+            $delay = $hint->delay;
+        }
+
+        if ($content == '') {
+            if (substr($signal, 0, 4) == 'good' || substr($signal, 0, 7) == 'succeed') {
+                $content = $this->lang['msg']['operation_succeed'];
+            }
+
+            if (substr($signal, 0, 3) == 'bad' || substr($signal, 0, 6) == 'failed') {
+                $content = $this->lang['msg']['operation_failed'];
+            }
+        }
+        $delay = ($delay * 10000);
+        echo "<script type='text/javascript'>$('.main').prepend('<div class=\"hint\"><p class=\"hint hint_" . $signal . "\" data-delay=\"" . $delay . "\">";
+        echo str_replace("'", "\'", $content);
+        echo "</p></div>');</script>";
     }
 
     /**
@@ -3932,6 +3938,10 @@ class ZBlogPHP
         //如果只有一个参数，且第一个参数是array()的话，那就直接赋值
         if (is_array($typeId)) {
             $id = $typeId['id'];
+            if (!isset($typeId['classname']) || $typeId['classname'] == '') {
+                $typeId['classname'] = 'Post';
+            }
+            $typeId['name'] = strtolower(trim($typeId['name']));
             $this->posttype[$id] = $typeId;
             if (!isset($this->tags_type[$id])) {
                 $this->tags_type[$id] = array();
@@ -3955,7 +3965,7 @@ class ZBlogPHP
         $urs['list_tag_urlrule'] = '';
         $urs['search_urlrule'] = '';
         if (!is_array($urlRule)) {
-            if ($urlRule != '') {
+            if (is_string($urlRule) && $urlRule != '') {
                 $urs['single_urlrule'] = $urlRule;
             }
         } else {
@@ -3979,7 +3989,7 @@ class ZBlogPHP
         $tps['search_template'] = $this->option['ZC_SEARCH_DEFAULT_TEMPLATE'];
 
         if (!is_array($template)) {
-            if ($template != '') {
+            if (is_string($template) && $template != '') {
                 $tps['template'] = $template;
             }
         } else {
@@ -4614,6 +4624,35 @@ class ZBlogPHP
         }
 
         return false;
+    }
+
+    /**
+     * 向导航菜单添加相应条目.
+     *
+     * @param string $type $type=category,tag,page,item
+     * @param string $id
+     * @param string $name
+     * @param string $url
+     */
+    public function AddItemToNavbar($type, $id, $name, $url)
+    {
+        if (!$type) {
+            $type = 'item';
+        }
+
+        $m = $this->modulesbyfilename['navbar'];
+        $s = $m->Content;
+
+        $a = '<li id="navbar-' . $type . '-' . $id . '"><a href="' . $url . '">' . $name . '</a></li>';
+
+        if ($this->CheckItemToNavbar($type, $id)) {
+            $s = preg_replace('/<li id="navbar-' . $type . '-' . $id . '">.*?<\/li>/', $a, $s);
+        } else {
+            $s .= '<li id="navbar-' . $type . '-' . $id . '"><a href="' . $url . '">' . $name . '</a></li>';
+        }
+
+        $m->Content = $s;
+        $m->Save();
     }
 
     /**

@@ -1976,8 +1976,12 @@ function EnablePlugin($name)
     global $zbp;
 
     $app = $zbp->LoadApp('plugin', $name);
-    $app->CheckCompatibility_Global('Enable');
-    $app->CheckCompatibility();
+    if (($result = $app->CheckCompatibility_Global('Enable')) !== true) {
+        $zbp->ShowError($result->getMessage(), __FILE__, __LINE__);
+    }
+    if (($result = $app->CheckCompatibility()) !== true) {
+        $zbp->ShowError($result->getMessage(), __FILE__, __LINE__);
+    }
 
     $zbp->option['ZC_USING_PLUGIN_LIST'] = AddNameInString($zbp->option['ZC_USING_PLUGIN_LIST'], $name);
 
@@ -2008,7 +2012,9 @@ function DisablePlugin($name)
     global $zbp;
 
     $app = $zbp->LoadApp('plugin', $name);
-    $app->CheckCompatibility_Global('Disable');
+    if (($result = $app->CheckCompatibility_Global('Disable')) !== true) {
+        $zbp->ShowError($result->getMessage(), __FILE__, __LINE__);
+    }
 
     UninstallPlugin($name);
     $zbp->option['ZC_USING_PLUGIN_LIST'] = DelNameInString($zbp->option['ZC_USING_PLUGIN_LIST'], $name);
@@ -2043,13 +2049,20 @@ function SetTheme($theme, $style)
     global $zbp;
 
     $app = $zbp->LoadApp('theme', $theme);
-    $app->CheckCompatibility_Global('Enable');
-    $app->CheckCompatibility();
+    if (($result = $app->CheckCompatibility_Global('Enable')) !== true) {
+        $zbp->ShowError($result->getMessage(), __FILE__, __LINE__);
+    }
+
+    if (($result = $app->CheckCompatibility()) !== true) {
+        $zbp->ShowError($result->getMessage(), __FILE__, __LINE__);
+    }
 
     $oldTheme = $zbp->option['ZC_BLOG_THEME'];
     $old = $zbp->LoadApp('theme', $oldTheme);
     if ($theme != $oldTheme) {
-        $old->CheckCompatibility_Global('Disable');
+        if (($result = $old->CheckCompatibility_Global('Disable')) !== true) {
+            $zbp->ShowError($result->getMessage(), __FILE__, __LINE__);
+        }
     }
 
     if ($theme != $oldTheme && $old->isloaded == true) {

@@ -200,7 +200,8 @@ function ApiResponse($data = null, $error = null, $code = 200, $message = null)
     // 显示 Runtime 调试信息
     if (!defined('ZBP_API_IN_TEST') && $GLOBALS['option']['ZC_RUNINFO_DISPLAY']) {
         $runtime = RunTime(false);
-        $runtime = array_slice($runtime, 0, 3);
+        unset($runtime['error_detail']);
+        //$runtime = array_slice($runtime, 0, 3);
         $response['runtime'] = $runtime;
     }
 

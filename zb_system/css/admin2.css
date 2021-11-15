@@ -1,6 +1,7 @@
 @charset "utf-8";
 
 /*
+后台 css
 作者：新鲜人
 地址：http://www.htmlit.com.cn
 邮箱：u2lei@yahoo.com.cn
@@ -207,10 +208,10 @@ div.hint { width: 100%; margin: 0 0 0.2em 0; }
 div.hint p { padding: 0.3em 0.5em 0.3em 0.8em; line-height: 1.5em; border:0px solid gray;border-radius:4px}
 div.hint font { color: black; }
 div.hint p:before { font-family: 'zblog'!important; speak: never; font-style: normal; font-weight: normal; font-variant: normal; text-transform: none; vertical-align: middle; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; margin-right: 8px; }
-div.hint p.hint_good { border-color:#a8de9e;background:#e9fde5; }
-div.hint p.hint_good:before { content: "\ea62"; color: #277723; }
-div.hint p.hint_bad { border-color:#e1a9a9;background:#fce0e0; }
-div.hint p.hint_bad:before { content: "\ed79"; color: #ec705b; }
+div.hint p.hint_good,div.hint p.hint_succeed { border-color:#a8de9e;background:#e9fde5; }
+div.hint p.hint_good:before,div.hint p.hint_succeed:before { content: "\ea62"; color: #277723; }
+div.hint p.hint_bad,div.hint p.hint_failed { border-color:#e1a9a9;background:#fce0e0; }
+div.hint p.hint_bad:before,div.hint p.hint_failed:before { content: "\ed79"; color: #ec705b; }
 div.hint p.hint_tips { border-color:#aab7e6;background:#e4eafd; }
 div.hint p.hint_tips:before { content: "\eaf9"; color: #4e6b9e; }
 

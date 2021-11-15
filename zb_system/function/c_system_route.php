@@ -313,22 +313,28 @@ function ViewAuto_Check_Redirect_To($route)
 
 /**
  * ViewAuto的辅助函数
+ * $route['call']参数，可以是1函数名 2类名::静态方法名 3全局变量名@动态方法名 4类名@动态方法名) 5全局匿名函数
  */
 function ViewAuto_Call_Auto($route, $array)
 {
     $function = $route['call'];
     $array['route'] = $route;
-    if (strpos($function, '::') !== false) {
+    if (function_exists($function)) {
+        return call_user_func($function, $array);
+    } elseif (strpos($function, '::') !== false) {
         $func = explode('::', $function);
         return call_user_func(array($func[0], $func[1]), $array);
     } elseif (strpos($function, '@') !== false) {
         $func = explode('@', $function);
-        if (array_key_exists($func[0], $GLOBALS)) {
+        if (array_key_exists($func[0], $GLOBALS) && is_object($GLOBALS[$func[0]])) {
             return call_user_func(array($GLOBALS[$func[0]], $func[1]), $array);
         }
-        $o = new $func[0];
-        return call_user_func(array($o, $func[1]), $array);
+        $newobject = new $func[0];
+        return call_user_func(array($newobject, $func[1]), $array);
     } else {
+        if (array_key_exists($function, $GLOBALS) && is_object($GLOBALS[$function]) && get_class($GLOBALS[$function]) == 'Closure') {
+            return call_user_func_array($GLOBALS[$function], $array);
+        }
         return call_user_func($function, $array);
     }
 }

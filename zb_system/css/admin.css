@@ -1,6 +1,7 @@
 ﻿@charset "utf-8";
 
 /*
+登录页，错误页 css
 作者：新鲜人
 地址：http://www.htmlit.com.cn
 邮箱：u2lei@yahoo.com.cn
@@ -53,6 +54,7 @@ label { line-height: 30px; float: left; vertical-align: text-bottom; padding: 0 
 .button:hover { color: #ffffff; background: #3399cc; cursor: pointer; }
 .divHeader { height: auto; font-weight: blod; line-height: 1.5em; font-size: 1.5em; padding: 0 0 10px 0; background: #FFF; text-align: center; }
 
+body.error {min-width: 640px; }
 body.short .bg { height: 160px; }
 body.short .logo { height: 70px; width:200px; margin: 60px auto 60px auto; }
 .loginw { width: 700px; margin-bottom: 120px; }
@@ -62,7 +64,7 @@ body.short .logo { height: 70px; width:200px; margin: 60px auto 60px auto; }
 .loginw div.goback a { font-size: 1.1em; }
 .loginw .content>div>div { padding: 0 10px; }
 
-@media only screen and (max-width:768px) {
+@media only screen and (max-width:800px) {
     .bg { height: 160px; }
     .logo { margin-top: 60px }
     .login { width: 310px; }
@@ -73,6 +75,8 @@ body.short .logo { height: 70px; width:200px; margin: 60px auto 60px auto; }
     .login dd.username label,.login dd.password label { width: 300px;clear:float;text-align: left;}
     .login input[type="text"],.login input[type="password"]{ float: right; width: 285px; }
     input[type="checkbox"] { margin: 8px 0 0 5px; }
+    .loginw { width: 90%; }
+    .content>div {overflow:hidden; }
 }
 
 table.table_hover > tbody > tr > td:hover,

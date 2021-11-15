@@ -62,7 +62,7 @@ $defined_interface = array(
 if (isset($hooks)) {
     $zbpdk_allhooks = &$hooks;
 } else {
-    $zbpdk_allhooks = &$GLOBALS;
+    $zbpdk_allhooks = $GLOBALS;
 }
 
 foreach ($zbpdk_allhooks as $temp_name => $temp_value) {

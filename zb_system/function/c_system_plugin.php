@@ -105,7 +105,7 @@ function ExistsPluginFilter($strPluginFilter)
 }
 
 /**
- * 调用插件接口(没用)
+ * 调用插件接口(php >= 5.5可以在接口调用处使用)
  *
  * @param $strPluginFilter 插件接口
  *
@@ -196,6 +196,43 @@ function Remove_Filter_Plugin($plugname, $functionname)
     }
 
     return false;
+}
+
+/**
+ * Callback Filter接口的某项挂载函数 (支持多种型式的function调用，已经玩出花了^_^)
+ *
+ * 要挂接的函数名 (可以是1函数名 2类名::静态方法名 3全局变量名@动态方法名 4类名@动态方法名 5全局匿名函数)
+ *
+ * @return var Callback的返回值
+ */
+function Callback_Filter_Plugin()
+{
+    $array = func_get_args();
+    $function = $array[0];
+    array_shift($array);
+
+    //php >= 5.6 函数参数由()改为(&...$args)，否则不支持传入引用
+    //array_shift($args);
+    //$array = &$args;
+
+    if (function_exists($function)) {
+        return call_user_func($function, $array);
+    } elseif (strpos($function, '::') !== false) {
+        $func = explode('::', $function);
+        return call_user_func_array(array($func[0], $func[1]), $array);
+    } elseif (strpos($function, '@') !== false) {
+        $func = explode('@', $function);
+        if (array_key_exists($func[0], $GLOBALS) && is_object($GLOBALS[$func[0]])) {
+            return call_user_func_array(array($GLOBALS[$func[0]], $func[1]), $array);
+        }
+        $newobject = new $func[0];
+        return call_user_func_array(array($newobject, $func[1]), $array);
+    } else {
+        if (array_key_exists($function, $GLOBALS) && is_object($GLOBALS[$function]) && get_class($GLOBALS[$function]) == 'Closure') {
+            return call_user_func_array($GLOBALS[$function], $array);
+        }
+        return call_user_func_array($function, $array);
+    }
 }
 
 //###############################################################################################################

@@ -270,6 +270,8 @@ function RunTime($isOutput = true)
     $rt['time'] = number_format((1000 * ($_end_time - $_SERVER['_start_time'])), 2);
     $rt['query'] = $_SERVER['_query_count'];
     $rt['memory'] = $_SERVER['_memory_usage'];
+    $rt['debug'] = $zbp->isdebug ? 1 : 0;
+    $rt['loggedin'] = $zbp->islogin ? 1 : 0;
     $rt['error'] = $_SERVER['_error_count'];
     $rt['error_detail'] = ZBlogException::$errors_msg;
     if (function_exists('memory_get_usage')) {
@@ -290,9 +292,9 @@ function RunTime($isOutput = true)
 
     if ($isOutput) {
         echo '<!--' . $rt['time'] . ' ms , ';
-        echo $rt['query'] . ' query';
+        echo $rt['query'] . ' queries';
         echo ' , ' . $rt['memory'] . 'kb memory';
-        echo ' , ' . $rt['error'] . ' error';
+        echo ' , ' . $rt['error'] . ' error' . ($rt['error'] > 1 ? 's' : '');
         echo '-->';
     }
 
@@ -342,7 +344,9 @@ function GetEnvironment()
         $a = explode(' ', OPENSSL_VERSION_TEXT);
         $system_environment .= '; ' . GetValueInArray($a, 0) . GetValueInArray($a, 1);
     }
-
+    //$um = ini_get('upload_max_filesize');
+    //$pm = ini_get('post_max_size');
+    //$system_environment .= '; UploadMax' . $um . ' PostMax' . $pm;
     return $system_environment;
 }
 

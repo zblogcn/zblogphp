@@ -57,9 +57,9 @@ function AdminColor_Css()
 {
     global $zbp;
 
-    if (stripos($zbp->currenturl, 'phpinfo') !== false) {
-        return;
-    }
+    //if (stripos($zbp->currenturl, 'phpinfo') !== false) {
+    //    return;
+    //}
     if(0 == (int)$zbp->Config('AdminColor')->FontSize)
         $zbp->Config('AdminColor')->FontSize = 14;
 

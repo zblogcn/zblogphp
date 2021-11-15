@@ -1,7 +1,9 @@
 <?php
 define('ZBP_ERRORPROCESSING', true);
 if (!isset($GLOBALS['zbp'])) {
-    exit;
+    //exit;
+    $GLOBALS['zbp'] = new stdClass();
+    $GLOBALS['zbp']->isdebug = (defined('ZBP_DEBUGMODE')) ? true : false;
 }
 $post_data = $_COOKIE;
 foreach ($post_data as $key => $value) {
@@ -26,6 +28,8 @@ unset($post_data['token']);
     <meta name="robots" content="noindex,nofollow,noarchive" />
     <meta name="generator" content="<?php echo $GLOBALS['option']['ZC_BLOG_PRODUCT_FULL']; ?>"/>
     <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+    <meta name="renderer" content="webkit" />
+    <meta name="viewport" content="width=device-width,viewport-fit=cover" />
     <title><?php echo $GLOBALS['blogname'] . '-' . $GLOBALS['lang']['msg']['error']; ?></title>
     <link rel="stylesheet" href="<?php echo $GLOBALS['bloghost']; ?>zb_system/css/admin.css?<?php echo $GLOBALS['blogversion']; ?>" type="text/css" media="screen"/>
     <script src="<?php echo $GLOBALS['bloghost']; ?>zb_system/script/common.js?<?php echo $GLOBALS['blogversion']; ?>"></script>
