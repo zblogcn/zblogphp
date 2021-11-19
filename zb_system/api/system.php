@@ -122,8 +122,7 @@ function api_system_get_info()
     );
 
 
-    if (ApiCheckAuth(true, 'root', false) === true){
-
+    if (ApiCheckAuth(true, 'root', false) === true) {
         $ajax = Network::Create();
         $ssl = '';
         if ($ajax) {
@@ -167,7 +166,6 @@ function api_system_get_info()
         );
 
         $info = array_merge($info, $info2);
-
     }
 
     return array(

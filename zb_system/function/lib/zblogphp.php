@@ -899,7 +899,7 @@ class ZBlogPHP
         $this->LoadModules();
         $this->RegBuildModules();
 
-        if (!(is_subclass_of($this->user, 'BaseMember') && $this->user->Level > 0 && !empty($this->user->ID))) {
+        if (!(is_subclass_of($this->user, 'Base__Member') && $this->user->Level > 0 && !empty($this->user->ID))) {
             $this->Verify();
             $this->islogin = empty($this->user->ID) ? false : true;
         }
@@ -2490,7 +2490,7 @@ class ZBlogPHP
                 /** @var Base $l */
                 $l = new $classname();
                 $l->LoadInfoByAssoc($a);
-                if (is_subclass_of($classname, 'BasePost') == true) {
+                if (is_subclass_of($classname, 'Base__Post') == true) {
                     $newtype = $this->GetPostType_ClassName($l->Type);
                     if ($newtype != $classname) {
                         unset($l);
@@ -2616,7 +2616,7 @@ class ZBlogPHP
             /** @var Base $l */
             $l = new $classname();
             $l->LoadInfoByAssoc($a);
-            if (is_subclass_of($classname, 'BasePost') == true) {
+            if (is_subclass_of($classname, 'Base__Post') == true) {
                 $newtype = $this->GetPostType_ClassName($l->Type);
                 if ($newtype != $classname) {
                     unset($l);
@@ -2962,7 +2962,7 @@ class ZBlogPHP
         } else {
             $p = new $className();
             if ($p->LoadInfoByID($id)) {
-                if (is_subclass_of($className, 'BasePost') == true) {
+                if (is_subclass_of($className, 'Base__Post') == true) {
                     $newtype = $this->GetPostType_ClassName($p->Type);
                     if ($newtype != $className) {
                         $p = $p->Cloned(true, $newtype);
@@ -4376,7 +4376,7 @@ class ZBlogPHP
     public function &GetCache($classname, $idvalue = null)
     {
         $cacheobject = &$this->cacheobject;
-        if (is_subclass_of($classname, 'BasePost') == true) {
+        if (is_subclass_of($classname, 'Base__Post') == true) {
             $classname = 'Post';
         }
         if (!isset($cacheobject[$classname])) {
@@ -4403,7 +4403,7 @@ class ZBlogPHP
             return false;
         }
         $cacheobject = &$this->cacheobject;
-        if (is_subclass_of($classname, 'BasePost') == true) {
+        if (is_subclass_of($classname, 'Base__Post') == true) {
             $classname = 'Post';
         }
         if (!isset($cacheobject[$classname])) {
@@ -4446,7 +4446,7 @@ class ZBlogPHP
             return false;
         }
         $cacheobject = &$this->cacheobject;
-        if (is_subclass_of($classname, 'BasePost') == true) {
+        if (is_subclass_of($classname, 'Base__Post') == true) {
             $classname = 'Post';
         }
         if (!isset($cacheobject[$classname])) {
@@ -4510,7 +4510,7 @@ class ZBlogPHP
             return false;
         }
         $cacheobject = &$this->cacheobject;
-        if (is_subclass_of($classname, 'BasePost') == true) {
+        if (is_subclass_of($classname, 'Base__Post') == true) {
             $classname = 'Post';
         }
         if (!isset($cacheobject[$classname])) {

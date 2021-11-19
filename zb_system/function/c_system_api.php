@@ -17,7 +17,7 @@ function ApiTokenVerify()
 {
     global $zbp;
 
-    if (!(is_subclass_of($zbp->user, 'BaseMember') && $zbp->user->Level > 0 && !empty($zbp->user->ID))) {
+    if (!(is_subclass_of($zbp->user, 'Base__Member') && $zbp->user->Level > 0 && !empty($zbp->user->ID))) {
         // 在 API 中
         if (($auth = GetVars('HTTP_AUTHORIZATION', 'SERVER')) && (substr($auth, 0, 7) === 'Bearer ')) {
             // 获取 Authorization 头
