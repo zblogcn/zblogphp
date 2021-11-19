@@ -7,7 +7,7 @@ if (!defined('ZBP_PATH')) {
 /**
  * 文章类.
  */
-class Post extends BasePost
+class Post extends Base__Post
 {
 
 }

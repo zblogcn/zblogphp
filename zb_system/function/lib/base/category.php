@@ -22,7 +22,7 @@ if (!defined('ZBP_PATH')) {
  * @property string SymbolName 层次标识符+名字
  * @property int AllCount 本分类及子孙分类下所有文章数量
  */
-abstract class BaseCategory extends Base
+abstract class Base__Category extends Base
 {
 
     /**

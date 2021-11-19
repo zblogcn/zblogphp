@@ -74,7 +74,7 @@ function Include_Admin_Addcmtsubmenu()
     if ($zbp->CheckRights('CommentAll')) {
         $n = ($zbp->cache->all_comment_nums - $zbp->cache->normal_comment_nums);
         if ($n != 0) {
-            $n = ' (' . $n . ')';
+            $n = ' (' . max(0, $n) . ')';
         } else {
             $n = '';
         }

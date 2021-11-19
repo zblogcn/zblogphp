@@ -319,15 +319,15 @@ class ZBlogPHP
      */
     public $action = null;
 
-    private $isinitialized = false; //是否初始化成功
+    protected $isinitialized = false; //是否初始化成功
 
-    private $isconnected = false; //是否连接成功
+    protected $isconnected = false; //是否连接成功
 
-    private $isload = false; //是否载入
+    protected $isload = false; //是否载入
 
-    private $ispreload = false; //是否预加载
+    protected $ispreload = false; //是否预加载
 
-    private $issession = false; //是否使用session
+    protected $issession = false; //是否使用session
 
     public $ismanage = false; //是否加载管理模式
 
@@ -583,7 +583,7 @@ class ZBlogPHP
      */
     public function __construct()
     {
-        global $option, $lang, $langs, $blogpath, $bloghost, $cookiespath,  $cachedir, $logsdir, $datadir,
+        global $option, $lang, $langs, $blogpath, $bloghost, $cookiespath, $cachedir, $logsdir, $datadir,
             $table, $datainfo, $actions, $action, $blogversion, $blogtitle, $blogname, $blogsubname, $routes,
             $blogtheme, $blogstyle, $currenturl, $activedapps, $posttype, $fullcurrenturl,
             $usersdir, $systemdir, $admindir, $usersurl, $systemurl, $adminurl;
@@ -592,9 +592,12 @@ class ZBlogPHP
             $this->isdebug = true;
         }
 
-        //if (ZBP_HOOKERROR) {
-        //    ZBlogException::SetErrorHook();
-        //}
+        /*$var_list_array = explode('|', $var_list);
+        foreach ($var_list_array as $var) {
+            $var = trim($var);
+            $zbpvar = str_replace('blog', '', $var);
+            $this->$zbpvar = &$GLOBALS[$var];
+        }*/
 
         //基本配置加载到$zbp内
         $this->version = &$blogversion;
@@ -620,22 +623,22 @@ class ZBlogPHP
 
         $this->table = &$table;
         $this->datainfo = &$datainfo;
-        $this->t = &$this->table;
-        $this->d = &$this->datainfo;
         $this->actions = &$actions;
         $this->posttype = &$posttype;
 
         $this->action = &$action;
         $this->activedapps = &$activedapps;
-        $this->activeapps = &$this->activedapps;
-
-        $this->guid = &$this->option['ZC_BLOG_CLSID'];
 
         $this->title = &$blogtitle;
         $this->name = &$blogname;
         $this->subname = &$blogsubname;
         $this->theme = &$blogtheme;
         $this->style = &$blogstyle;
+
+        $this->activeapps = &$this->activedapps;
+        $this->t = &$this->table;
+        $this->d = &$this->datainfo;
+        $this->guid = &$this->option['ZC_BLOG_CLSID'];
 
         $this->managecount = &$this->option['ZC_MANAGE_COUNT'];
         $this->manageorder = &$this->option['ZC_MANAGE_ORDER'];
@@ -761,7 +764,8 @@ class ZBlogPHP
 
         $this->option['ZC_BLOG_PRODUCT'] = 'Z-BlogPHP';
         $this->option['ZC_BLOG_VERSION'] = ZC_BLOG_VERSION;
-        $this->option['ZC_NOW_VERSION'] = $this->version;  //ZC_LAST_VERSION
+        $this->option['ZC_BLOG_COMMIT'] = ZC_BLOG_COMMIT;
+        $this->option['ZC_NOW_VERSION'] = $this->version;
         $this->option['ZC_BLOG_PRODUCT_FULL'] = $this->option['ZC_BLOG_PRODUCT'] . ' ' . ZC_VERSION_DISPLAY;
         $this->option['ZC_BLOG_PRODUCT_FULLHTML'] = '<a href="https://www.zblogcn.com/" title="Z-BlogPHP ' . ZC_BLOG_VERSION . '" target="_blank" rel="noopener norefferrer">' . $this->option['ZC_BLOG_PRODUCT_FULL'] . '</a>';
         $this->option['ZC_BLOG_PRODUCT_HTML'] = '<a href="https://www.zblogcn.com/" title="Z-BlogPHP ' . ZC_BLOG_VERSION . '" target="_blank" rel="noopener norefferrer">' . $this->option['ZC_BLOG_PRODUCT'] . '</a>';
@@ -3764,7 +3768,7 @@ class ZBlogPHP
         }
         for ($i = 1; $i <= 10; $i++) {
             $signal = GetVars('hint_signal' . $i, 'COOKIE');
-            $hint = json_decode($signal);
+            $hint = (empty($signal)) ? null : json_decode($signal);
             if ($hint !== null) {
                 $this->ShowHint($hint);
                 setcookie("hint_signal" . $i, '', (time() - 3600), $this->cookiespath);
@@ -3912,7 +3916,7 @@ class ZBlogPHP
      */
     public function GetActionName($name)
     {
-        return GetValueInArray($this->lang['actions'], $name, $name);
+        return GetValueInArray($this->lang['actions'], $name, ucfirst($name));
     }
 
     /**
@@ -4324,11 +4328,20 @@ class ZBlogPHP
     }
 
     /**
-     * 清空整个路由
+     * 清空整个路由 或 指定路由类型的
      */
-    public function ClearRoute()
+    public function ClearRoute($route_type = '')
     {
-        $this->routes = array();
+        if (!empty($route_type)) {
+            foreach ($this->routes as $name => $value) {
+                if (stripos($name, $route_type . '_') === 0) {
+                    unset($this->routes[$name]);
+                }
+            }
+        } else {
+            $this->routes = array();
+        }
+
         return true;
     }
 

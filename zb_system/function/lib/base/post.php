@@ -31,7 +31,7 @@ if (!defined('ZBP_PATH')) {
  * @property int ImageCount 图片数量
  * @property array AllImages 所有图片
  */
-abstract class BasePost extends Base
+abstract class Base__Post extends Base
 {
     
     private $private_prev = '';

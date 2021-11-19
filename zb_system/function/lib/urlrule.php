@@ -231,7 +231,8 @@ class UrlRule
         if (substr($url, -2) == '//') {
             $url = substr($url, 0, (strlen($url) - 1));
         }
-        $url = trim($url, '&');
+        $url = rtrim($url, '&');
+        $url = rtrim($url, '?');
 
         $this->Url = htmlspecialchars($url);
 

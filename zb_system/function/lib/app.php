@@ -916,7 +916,7 @@ class App
             $zbp->cache = new Config('cache');
         }
         $s = $zbp->cache->{'sidebars_' . $this->id};
-        $a = json_decode($s, true);
+        $a = (empty($s)) ? null : json_decode($s, true);
         if (is_array($a)) {
             foreach ($a as $key => $value) {
                 $zbp->option['ZC_SIDEBAR' . (($key > 1) ? $key : '') . '_ORDER'] = $value;

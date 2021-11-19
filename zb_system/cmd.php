@@ -13,7 +13,7 @@ if ((isset($_REQUEST['act']) && $_REQUEST['act'] == 'ajax') || (isset($_SERVER['
     define('ZBP_IN_AJAX', true);
 }
 
-require './function/c_system_base.php';
+require 'function/c_system_base.php';
 
 $action = GetVars('act', 'GET');
 

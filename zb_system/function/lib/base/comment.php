@@ -20,7 +20,7 @@ if (!defined('ZBP_PATH')) {
  * @property Comment[] Comments 子评论
  * @property string Content
  */
-abstract class BaseComment extends Base
+abstract class Base__Comment extends Base
 {
 
     /**

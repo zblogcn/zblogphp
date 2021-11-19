@@ -6,7 +6,7 @@
  * @author Z-BlogPHP Team
  */
 
-require './function/c_system_base.php';
+require 'function/c_system_base.php';
 
 $zbp->Load();
 if ($zbp->CheckRights('admin')) {

@@ -154,7 +154,7 @@ class DbSql
                 $option['pagebar']->Count = GetValueInArrayByCurrent($query, 'num');
             }
             $option['pagebar']->Count = (int) $option['pagebar']->Count;
-            $option['pagebar']->make();
+            $option['pagebar']->Make();
         }
 
         if (!is_array($select)) {
@@ -280,7 +280,7 @@ class DbSql
         }
 
         if ($type == 'pdo_mysql' && $this->pri_explort_db === null) {
-            $this->pri_explort_db = new Database__PDOMySQL();
+            $this->pri_explort_db = new Database__PDO_MySQL();
         }
 
         if ($type == 'sqlite' && $this->pri_explort_db === null) {
@@ -288,11 +288,19 @@ class DbSql
         }
 
         if ($type == 'sqlite3' && $this->pri_explort_db === null) {
-            $this->pri_explort_db = new Database__SQLite();
+            $this->pri_explort_db = new Database__SQLite3();
         }
 
         if ($type == 'pdo_sqlite' && $this->pri_explort_db === null) {
-            $this->pri_explort_db = new Database__SQLite3();
+            $this->pri_explort_db = new Database__PDO_SQLite();
+        }
+
+        if ($type == 'postgresql' && $this->pri_explort_db === null) {
+            $this->pri_explort_db = new Database__PostgreSQL();
+        }
+
+        if ($type == 'pdo_postgresql' && $this->pri_explort_db === null) {
+            $this->pri_explort_db = new Database__PDO_PostgreSQL();
         }
 
         if ($this->pri_explort_db === null) {

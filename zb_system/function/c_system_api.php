@@ -237,17 +237,26 @@ function ApiResponse($data = null, $error = null, $code = 200, $message = null)
  *
  * @param bool $loginRequire
  * @param string $action
+ * @param bool $throwException
  */
-function ApiCheckAuth($loginRequire = false, $action = 'view')
+function ApiCheckAuth($loginRequire = false, $action = 'view', $throwException = true)
 {
     // 登录认证
     if ($loginRequire && !$GLOBALS['zbp']->user->ID) {
-        ApiResponse(null, null, 401, $GLOBALS['lang']['error']['6']);
+        if ($throwException == true) {
+            ApiResponse(null, null, 401, $GLOBALS['lang']['error']['6']);
+        } else {
+            return false;
+        }
     }
 
     // 权限认证
     if (!$GLOBALS['zbp']->CheckRights($action)) {
-        ApiResponse(null, null, 403, $GLOBALS['lang']['error']['6']);
+        if ($throwException == true) {
+            ApiResponse(null, null, 403, $GLOBALS['lang']['error']['6']);
+        } else {
+            return false;
+        }
     }
 
     return true;
@@ -466,6 +475,10 @@ function ApiVerifyCSRF($force_check = false)
 
         if (!$force_check) {
             if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] !== 'POST') {
+                return;
+            }
+
+            if (php_sapi_name() == 'cli') {
                 return;
             }
 

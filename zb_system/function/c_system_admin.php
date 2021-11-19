@@ -871,10 +871,10 @@ function Admin_MemberMng()
         $tabletds[] = '<td class="td10">' . $member->LevelName . ($member->Status > 0 ? '(' . $zbp->lang['user_status_name'][$member->Status] . ')' : '') . ($member->IsGod ? ' <span title="root">#</span>' : '') . '</td>';
         $tabletds[] = '<td><a href="' . $member->Url . '" target="_blank"><i class="icon-link-45deg"></i></a> ' . $member->Name . '</td>';
         $tabletds[] = '<td class="td15">' . $member->Alias . '</td>';
-        $tabletds[] = '<td class="td10">' . $member->Articles . '</td>';
-        $tabletds[] = '<td class="td10">' . $member->Pages . '</td>';
-        $tabletds[] = '<td class="td10">' . $member->Comments . '</td>';
-        $tabletds[] = '<td class="td10">' . $member->Uploads . '</td>';
+        $tabletds[] = '<td class="td10">' . max(0, $member->Articles) . '</td>';
+        $tabletds[] = '<td class="td10">' . max(0, $member->Pages) . '</td>';
+        $tabletds[] = '<td class="td10">' . max(0, $member->Comments) . '</td>';
+        $tabletds[] = '<td class="td10">' . max(0, $member->Uploads) . '</td>';
         $tabletds[] = '<td class="td10 tdCenter">' .
             '<a href="../cmd.php?act=MemberEdt&amp;id=' . $member->ID . '"><i class="icon-pencil-square"></i></a>' .
             (($zbp->CheckRights('MemberDel') && ($member->IsGod !== true)) ? '&nbsp;&nbsp;&nbsp;&nbsp;' .

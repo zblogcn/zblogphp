@@ -7,7 +7,7 @@ if (!defined('ZBP_PATH')) {
  * 用户类.
  * 继承自BaseMember
  */
-class Member extends BaseMember
+class Member extends Base__Member
 {
 
 }

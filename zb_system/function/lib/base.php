@@ -150,7 +150,7 @@ class Base
     }
 
     /**
-     * 获取数据库数据.
+     * 设置Data数据.
      *
      * @param key 如果是array，就忽略$value
      *
@@ -229,6 +229,16 @@ class Base
     public function &GetDataInfo()
     {
         return $this->datainfo;
+    }
+
+    /**
+     * 获取Database__Interface.
+     *
+     * @return string
+     */
+    public function &GetDb()
+    {
+        return $this->db;
     }
 
     /**

@@ -4,7 +4,7 @@ if (!defined('ZBP_PATH')) {
     exit('Access denied');
 }
 
-class Comment extends BaseComment
+class Comment extends Base__Comment
 {
 
 }

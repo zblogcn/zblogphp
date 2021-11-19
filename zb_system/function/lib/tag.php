@@ -6,15 +6,8 @@ if (!defined('ZBP_PATH')) {
 
 /**
  * Tag类.
- *
- * @property string Template
- * @property string Name
- * @property string ID
- * @property string Alias
- * @property string Url
- * @property int|string Count 文章数量
  */
-class Tag extends BaseTag
+class Tag extends Base__Tag
 {
 
 }

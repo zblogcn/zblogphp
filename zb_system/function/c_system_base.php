@@ -73,17 +73,6 @@ $GLOBALS['table'] = include ZBP_PATH . 'zb_system/defend/table.php';
 $GLOBALS['datainfo'] = include ZBP_PATH . 'zb_system/defend/datainfo.php';
 
 /*
- * 初始化统计信息
- */
-$_SERVER['_start_time'] = microtime(true); //RunTime
-$_SERVER['_query_count'] = 0;
-$_SERVER['_memory_usage'] = 0;
-$_SERVER['_error_count'] = 0;
-if (function_exists('memory_get_usage')) {
-    $_SERVER['_memory_usage'] = memory_get_usage(true);
-}
-
-/*
  * CLI Mock 处理
  */
 if (IS_CLI) {
@@ -97,6 +86,7 @@ if (IS_CLI) {
     $_SERVER['SERVER_SOFTWARE'] = "CLI";
     $_GET = array();
     parse_str($_SERVER["QUERY_STRING"], $_GET);
+    parse_str($_SERVER["QUERY_STRING"], $_REQUEST);
     // $_POST = json_decode(file_get_contents('php://stdin'), true);
 }
 

@@ -3,6 +3,18 @@
 if (!defined('ZBP_PATH')) {
     exit('Access denied');
 }
+
+/*
+ * 初始化统计信息
+ */
+$_SERVER['_start_time'] = microtime(true); //RunTime
+$_SERVER['_query_count'] = 0;
+$_SERVER['_memory_usage'] = 0;
+$_SERVER['_error_count'] = 0;
+if (function_exists('memory_get_usage')) {
+    $_SERVER['_memory_usage'] = memory_get_usage();
+}
+
 /*
  * 定义版本号
 

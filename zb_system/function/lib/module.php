@@ -14,7 +14,7 @@ if (!defined('ZBP_PATH')) {
  * @property string Type 模块显示类型（div / ul）
  * @property bool NoRefresh 拒绝系统刷新该模块
  */
-class Module extends BaseModule
+class Module extends Base__Module
 {
 
 }

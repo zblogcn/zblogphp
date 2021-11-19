@@ -26,7 +26,7 @@ if (!defined('ZBP_PATH')) {
  * @property int|string Comments 评论数量
  * @property int|string Uploads 上传数量
  */
-abstract class BaseMember extends Base
+abstract class Base__Member extends Base
 {
 
     /**

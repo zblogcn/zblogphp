@@ -274,8 +274,8 @@ function RunTime($isOutput = true)
     $rt['loggedin'] = $zbp->islogin ? 1 : 0;
     $rt['error'] = $_SERVER['_error_count'];
     $rt['error_detail'] = ZBlogException::$errors_msg;
-    if (function_exists('memory_get_usage')) {
-        $rt['memory'] = (int) ((memory_get_usage() - $_SERVER['_memory_usage']) / 1024);
+    if (function_exists('memory_get_peak_usage')) {
+        $rt['memory'] = (int) ((memory_get_peak_usage() - $_SERVER['_memory_usage']) / 1024);
     }
 
     $_SERVER['_runtime_result'] = $rt;
@@ -558,8 +558,13 @@ function GetCurrentHost($blogpath, &$cookiesPath)
     }
 
     if (isset($_SERVER['SCRIPT_NAME']) && $_SERVER['SCRIPT_NAME']) {
-        $x = $_SERVER['SCRIPT_NAME'];
+        $x = str_replace('\\', '/', $_SERVER['SCRIPT_NAME']);
         $y = $blogpath;
+        if (strpos($x, $y) !== false) {
+            $x = str_replace($y, '', $x);
+            $x = ltrim($x, '/');
+            $x = '/' . $x;
+        }
         for ($i = 0; $i < strlen($x); $i++) {
             $f = $y . substr($x, ($i - strlen($x)));
             $z = substr($x, 0, $i);
@@ -1041,9 +1046,14 @@ function GetRequestUri()
             $url .= '?' . $_SERVER['REDIRECT_QUERY_STRIN'];
         }
     } else {
-        $url = $_SERVER['PHP_SELF'] . ($_SERVER['QUERY_STRING'] ? '?' . $_SERVER['QUERY_STRING'] : '');
+        $url = str_replace('\\', '/', $_SERVER['PHP_SELF']);
+        if (strpos($url, ZBP_PATH) !== false) {
+            $url = str_replace(ZBP_PATH, '/', $url);
+            $url = ltrim($url, '/');
+            $url = '/' . $url;
+        }
+        $url = $url . ($_SERVER['QUERY_STRING'] ? '?' . $_SERVER['QUERY_STRING'] : '');
     }
-
     return $url;
 }
 

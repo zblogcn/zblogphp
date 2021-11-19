@@ -5,7 +5,7 @@ if (!defined('ZBP_PATH')) {
 }
 
 
-class Upload extends BaseUpload
+class Upload extends Base__Upload
 {
 
 }

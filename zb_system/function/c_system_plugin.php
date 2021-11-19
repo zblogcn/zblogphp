@@ -74,9 +74,9 @@ function UninstallPlugin($strPluginName)
 }
 
 /**
- * 创建插件接口
+ * 创建插件接口Hook
  *
- * @param $strPluginFilter 插件接口
+ * @param $strPluginFilter 插件接口Hook
  *
  * @return boolean
  */
@@ -93,9 +93,9 @@ function DefinePluginFilter($strPluginFilter)
 }
 
 /**
- * 检查插件接口
+ * 检查插件接口Hook
  *
- * @param $strPluginFilter 插件接口
+ * @param $strPluginFilter 插件接口Hook
  *
  * @return boolean
  */
@@ -107,7 +107,7 @@ function ExistsPluginFilter($strPluginFilter)
 /**
  * 调用插件接口(php >= 5.5可以在接口调用处使用)
  *
- * @param $strPluginFilter 插件接口
+ * @param $strPluginFilter 插件接口Hook
  *
  * @return array
  */
@@ -121,9 +121,9 @@ function &UsingPluginFilter($strPluginFilter)
 }
 
 /**
- * 移除插件接口
+ * 移除插件Hook接口
  *
- * @param $strPluginFilter 插件接口
+ * @param $strPluginFilter 插件接口Hook
  *
  * @return boolean
  */
@@ -205,18 +205,15 @@ function Remove_Filter_Plugin($plugname, $functionname)
  *
  * @return var Callback的返回值
  */
-function Callback_Filter_Plugin()
+function Callback_Filter_Plugin($function)
 {
+    //php >= 5.6 函数参数由($function)改为($function, &...$args)，否则不支持传入引用
     $array = func_get_args();
-    $function = $array[0];
     array_shift($array);
-
-    //php >= 5.6 函数参数由()改为(&...$args)，否则不支持传入引用
-    //array_shift($args);
     //$array = &$args;
 
     if (function_exists($function)) {
-        return call_user_func($function, $array);
+        return call_user_func_array($function, $array);
     } elseif (strpos($function, '::') !== false) {
         $func = explode('::', $function);
         return call_user_func_array(array($func[0], $func[1]), $array);
@@ -225,13 +222,62 @@ function Callback_Filter_Plugin()
         if (array_key_exists($func[0], $GLOBALS) && is_object($GLOBALS[$func[0]])) {
             return call_user_func_array(array($GLOBALS[$func[0]], $func[1]), $array);
         }
-        $newobject = new $func[0];
-        return call_user_func_array(array($newobject, $func[1]), $array);
+        if (class_exists($func[0])) {
+            $newobject = new $func[0];
+            return call_user_func_array(array($newobject, $func[1]), $array);
+        }
     } else {
         if (array_key_exists($function, $GLOBALS) && is_object($GLOBALS[$function]) && get_class($GLOBALS[$function]) == 'Closure') {
             return call_user_func_array($GLOBALS[$function], $array);
         }
-        return call_user_func_array($function, $array);
+    }
+    return call_user_func_array($function, $array);
+}
+
+/**
+ * 插入钩子 Filter接口
+ *
+ * 如果需要传入引用，须在php>=5.6，给参数补上(&...$arg)，Callback_Filter_Plugin同理！
+ *
+ * @param $plugname 接口名称
+ */
+function HookFilterPlugin($plugname)
+{
+    $array = func_get_args();
+    //$array = &$args;
+    foreach ($GLOBALS['hooks'][$plugname] as $fpname => &$fpsignal) {
+        $array[0] = $fpname;
+        //array_unshift($array, $fpname);
+        call_user_func_array('Callback_Filter_Plugin', $array);
+    }
+}
+
+/**
+ * 插入钩子 Filter接口 的带返回值版
+ *
+ *    示例：
+ *    $fpresult = Hook_Filter_Plugin_With_Return('Filter_Plugin_Test', $fpsignal, $arg...);
+ *    if ($fpsignal === PLUGIN_EXITSIGNAL_RETURN) {
+ *        return $fpresult;
+ *    }
+ *
+ */
+function HookFilterPlugin_Return($plugname, &$signal)
+{
+    $array = func_get_args();
+    array_shift($array);
+    array_shift($array);
+    //$array = &$arg;
+    array_unshift($array, null);
+    $signal = PLUGIN_EXITSIGNAL_NONE;
+    foreach ($GLOBALS['hooks'][$plugname] as $fpname => &$fpsignal) {
+        $array[0] = $fpname;
+        $fpreturn = call_user_func_array('Callback_Filter_Plugin', $array);
+        if ($fpsignal === PLUGIN_EXITSIGNAL_RETURN) {
+            $signal = PLUGIN_EXITSIGNAL_RETURN;
+            $fpsignal = PLUGIN_EXITSIGNAL_NONE;
+            return $fpreturn;
+        }
     }
 }
 
@@ -636,7 +682,7 @@ DefinePluginFilter('Filter_Plugin_Cmd_Ajax');
 '**************************************************<
 '类型:Filter
 '名称:Filter_Plugin_Cmd_Redirect
-'参数:$action, $url
+'参数:$url, $action
 '说明:cmd.php的最后跳转接口,用于修改url跳转值
 '调用:
 '**************************************************>
@@ -2496,7 +2542,7 @@ DefinePluginFilter('Filter_Plugin_Template_GetTemplate');
 '名称:Filter_Plugin_Template_Display
 '参数:$this, $entryPage
 '说明:Template类显示接口
-'调用:未启用
+'调用:
 '**************************************************>
  */
 DefinePluginFilter('Filter_Plugin_Template_Display');

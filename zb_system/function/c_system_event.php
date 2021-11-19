@@ -121,7 +121,7 @@ function Redirect_cmd_to_search()
     $url = $r->Make();
 
     foreach ($GLOBALS['hooks']['Filter_Plugin_Cmd_Redirect'] as $fpname => &$fpsignal) {
-        $fpname($action, $url);
+        $fpname($url, $action);
     }
 
     Redirect($url);
@@ -138,7 +138,7 @@ function Redirect_cmd_from_args($url)
     }
     $a = parse_url($url);
     $b = parse_url($zbp->host);
-    if (isset($a['host']) && isset($b['host']) && strtolower($a['host']) == strtolower($b['host'])) {
+    if (isset($a['host']) && isset($b['host']) && strcasecmp($a['host'], $b['host']) == 0) {
         Redirect($url);
     }
 }
@@ -153,7 +153,7 @@ function Redirect_cmd_end($url)
     global $zbp, $action;
 
     foreach ($GLOBALS['hooks']['Filter_Plugin_Cmd_Redirect'] as $fpname => &$fpsignal) {
-        $fpname($action, $url);
+        $fpname($url, $action);
     }
 
     Redirect($url);
@@ -164,7 +164,7 @@ function Redirect_cmd_end_by_script($url)
     global $zbp, $action;
 
     foreach ($GLOBALS['hooks']['Filter_Plugin_Cmd_Redirect'] as $fpname => &$fpsignal) {
-        $fpname($action, $url);
+        $fpname($url, $action);
     }
 
     RedirectByScript($url);
@@ -2148,7 +2148,6 @@ function SaveSetting()
             || $key == 'ZC_COMMENT_REVERSE_ORDER'
             || $key == 'ZC_COMMENT_AUDIT'
             || $key == 'ZC_DISPLAY_SUBCATEGORYS'
-            || $key == 'ZC_GZIP_ENABLE'
             || $key == 'ZC_SYNTAXHIGHLIGHTER_ENABLE'
             || $key == 'ZC_COMMENT_VERIFY_ENABLE'
             || $key == 'ZC_CLOSE_SITE'

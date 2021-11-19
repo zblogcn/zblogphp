@@ -329,14 +329,16 @@ function ViewAuto_Call_Auto($route, $array)
         if (array_key_exists($func[0], $GLOBALS) && is_object($GLOBALS[$func[0]])) {
             return call_user_func(array($GLOBALS[$func[0]], $func[1]), $array);
         }
-        $newobject = new $func[0];
-        return call_user_func(array($newobject, $func[1]), $array);
+        if (class_exists($func[0])) {
+            $newobject = new $func[0];
+            return call_user_func(array($newobject, $func[1]), $array);
+        }
     } else {
         if (array_key_exists($function, $GLOBALS) && is_object($GLOBALS[$function]) && get_class($GLOBALS[$function]) == 'Closure') {
-            return call_user_func_array($GLOBALS[$function], $array);
+            return call_user_func($GLOBALS[$function], $array);
         }
-        return call_user_func($function, $array);
     }
+    return call_user_func($function, $array);
 }
 
 /**

@@ -18,6 +18,7 @@ $GLOBALS['setting_keys'] = array(
     'ZC_TIME_ZONE_NAME',
     'ZC_BLOG_LANGUAGEPACK',
     'ZC_API_ENABLE',
+    'ZC_XMLRPC_ENABLE',
     'ZC_DEBUG_MODE',
     'ZC_DEBUG_MODE_WARNING',
     'ZC_ADDITIONAL_SECURITY',
@@ -42,6 +43,8 @@ $GLOBALS['setting_keys'] = array(
     'ZC_ARTICLE_THUMB_HEIGHT',
     'ZC_MANAGE_COUNT',
     'ZC_POST_BATCH_DELETE',
+    'ZC_DELMEMBER_WITH_ALLDATA',
+    'ZC_CATEGORY_MANAGE_LEGACY_DISPLAY',
 );
 
 /**
@@ -62,6 +65,8 @@ function api_system_basic_info()
             'host' => $zbp->host,
             'version' => $zbp->version,
             'ajaxurl' => $zbp->ajaxurl,
+            'xml_rpc' => $zbp->xmlrpcurl,
+            'cmdurl' => $zbp->cmdurl,
             'cookiespath' => $zbp->cookiespath,
             'manage_count' => $zbp->option['ZC_MANAGE_COUNT'],
             'pagebar_count' => $zbp->option['ZC_PAGEBAR_COUNT'],
@@ -101,9 +106,10 @@ function api_system_get_info()
     global $zbp;
 
     ApiCheckAuth(true, 'admin');
-    
+
     $info = array(
         'environment' => $zbp->cache->system_environment,
+        'version' => $GLOBALS['blogversion'],
         'full_version' => ZC_VERSION_FULL,
         'articles' => (int) $zbp->cache->all_article_nums,
         'categories' => (int) $zbp->cache->all_category_nums,
@@ -113,8 +119,56 @@ function api_system_get_info()
         'members' => (int) $zbp->cache->all_member_nums,
         'theme' => $zbp->theme,
         'style' => $zbp->style,
-        'xml_rpc' => $zbp->xmlrpcurl,
     );
+
+
+    if (ApiCheckAuth(true, 'root', false) === true){
+
+        $ajax = Network::Create();
+        $ssl = '';
+        if ($ajax) {
+            $ajax = substr(get_class($ajax), 9);
+        }
+        if ($ajax == 'curl') {
+            if (ini_get("safe_mode")) {
+                $ajax .= '-s';
+            }
+            if (ini_get("open_basedir")) {
+                $ajax .= '-o';
+            }
+            $array = curl_version();
+            $ajax .= $array['version'];
+        }
+        if (defined('OPENSSL_VERSION_TEXT')) {
+            $a = explode(' ', OPENSSL_VERSION_TEXT);
+            $ssl = GetValueInArray($a, 0) . GetValueInArray($a, 1);
+        }
+
+        $info2 = array(
+            'evn' => array(
+                'php' => GetPHPVersion(),
+                'system' => PHP_OS,
+                'webserver' => GetVars('SERVER_SOFTWARE', 'SERVER'),
+                'database' => $zbp->option['ZC_DATABASE_TYPE'] . $zbp->db->version,
+                'network' => $ajax,
+                'openssl' => $ssl,
+                'x64' => IS_X64,
+                'memory_limit' => ini_get('memory_limit'),
+                'max_execution_time' => ini_get('max_execution_time'),
+                'post_max_size' => ini_get('post_max_size'),
+                'upload_max_filesize' => ini_get('upload_max_filesize'),
+                'libs' => implode(',', get_loaded_extensions()),
+            ),
+            'zbp' => array(
+                'https' => (HTTP_SCHEME == 'https') ? true : false,
+                'debugmode' => $zbp->isdebug,
+                'activedapps' => $GLOBALS['activedapps'],
+            )
+        );
+
+        $info = array_merge($info, $info2);
+
+    }
 
     return array(
         'data' => array('info' => $info,),
@@ -224,7 +278,7 @@ function api_system_save_setting()
             $settingList[$key] = $zbp->option[$key];
         }
     }
-    
+
     return array(
         'data' => array('list' => $settingList,),
         'message' => $GLOBALS['lang']['msg']['operation_succeed'],
