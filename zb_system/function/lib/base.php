@@ -53,6 +53,11 @@ class Base
     protected $idname = '';
 
     /**
+     * @var boolean 是否自动替换host
+     */
+    protected $isreplacehost = true;
+
+    /**
      * @param string $table     数据表
      * @param array  $datainfo  数据表结构信息
      * @param string $classname 已经无用但还是保留
@@ -275,7 +280,6 @@ class Base
      */
     public function LoadInfoByAssoc($array)
     {
-        global $bloghost;
         if (!is_array($array)) {
             return false;
         }
@@ -288,7 +292,7 @@ class Base
             $v = $array[$value[0]];
             if ($value[1] == 'string' || $value[1] == 'char') {
                 if ($key != 'Meta') {
-                    $this->data[$key] = str_replace('{#ZC_BLOG_HOST#}', $bloghost, $v);
+                    $this->data[$key] = ($this->isreplacehost) ? $this->ReplaceTag2Host($v) : $v;
                 } else {
                     $this->data[$key] = $v;
                     $this->Metas->Unserialize($this->data['Meta']);
@@ -370,7 +374,6 @@ class Base
      */
     public function LoadInfoByArray($array)
     {
-        global $bloghost;
         if (!is_array($array)) {
             return false;
         }
@@ -384,7 +387,7 @@ class Base
             $v = $array[$i];
             if ($value[1] == 'string' || $value[1] == 'char') {
                 if ($key != 'Meta') {
-                    $this->data[$key] = str_replace('{#ZC_BLOG_HOST#}', $bloghost, $v);
+                    $this->data[$key] = ($this->isreplacehost) ? $this->ReplaceTag2Host($v) : $v;
                 } else {
                     $this->data[$key] = $v;
                     $this->Metas->Unserialize($this->data['Meta']);
@@ -414,7 +417,6 @@ class Base
      */
     public function LoadInfoByDataArray($array)
     {
-        global $bloghost;
         if (!is_array($array)) {
             return false;
         }
@@ -428,7 +430,7 @@ class Base
             $v = $array[strtolower($key)];
             if ($value[1] == 'string' || $value[1] == 'char') {
                 if ($key != 'Meta') {
-                    $this->data[$key] = str_replace('{#ZC_BLOG_HOST#}', $bloghost, $v);
+                    $this->data[$key] = ($this->isreplacehost) ? $this->ReplaceTag2Host($v) : $v;
                 } else {
                     $this->data[$key] = $v;
                     $this->Metas->Unserialize($this->data['Meta']);
@@ -499,7 +501,7 @@ class Base
                 if ($key == 'Meta' || $bloghost == '/') {
                     $keyvalue[$value[0]] = $this->data[$key];
                 } else {
-                    $keyvalue[$value[0]] = str_replace($bloghost, '{#ZC_BLOG_HOST#}', $this->data[$key]);
+                    $keyvalue[$value[0]] = ($this->isreplacehost) ? $this->ReplaceHost2Tag($this->data[$key]) : $this->data[$key];
                 }
             } else {
                 $keyvalue[$value[0]] = $this->data[$key];
@@ -606,6 +608,18 @@ class Base
             $array[$key] = $value;
         }
         return $array;
+    }
+
+    public function ReplaceTag2Host($s)
+    {
+        global $bloghost;
+        return str_replace('{#ZC_BLOG_HOST#}', $bloghost, $s);
+    }
+
+    public function ReplaceHost2Tag($s)
+    {
+        global $bloghost;
+        return str_replace($bloghost, '{#ZC_BLOG_HOST#}', $s);
     }
 
 }

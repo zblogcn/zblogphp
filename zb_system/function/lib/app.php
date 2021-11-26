@@ -380,6 +380,7 @@ class App
         $this->id = $id;
         $this->type = $type;
         $xmlPath = $this->app_path . FormatString($type, '[filename]') . '.xml';
+        $this->isloaded = false;
 
         if (!is_readable($xmlPath)) {
             return false;

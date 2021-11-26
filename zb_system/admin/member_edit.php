@@ -50,9 +50,7 @@ $member = $zbp->GetMemberByID($memberid);
         <?php echo $lang['msg']['member_edit']; ?></div>
     <div class="SubMenu">
         <?php
-        foreach ($GLOBALS['hooks']['Filter_Plugin_Member_Edit_SubMenu'] as $fpname => &$fpsignal) {
-            $fpname();
-        }
+        HookFilterPlugin('Filter_Plugin_Member_Edit_SubMenu');
         ?>
     </div>
     <div id="divMain2" class="edit member_edit">
@@ -138,9 +136,7 @@ $member = $zbp->GetMemberByID($memberid);
             </p>
             <div id='response' class='editmod2'>
                 <?php
-                foreach ($GLOBALS['hooks']['Filter_Plugin_Member_Edit_Response'] as $fpname => &$fpsignal) {
-                    $fpname();
-                }
+                HookFilterPlugin('Filter_Plugin_Member_Edit_Response');
                 ?>
             </div>
             <p>

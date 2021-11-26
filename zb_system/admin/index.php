@@ -22,9 +22,7 @@ if (!$zbp->CheckRights($zbp->action)) {
     die();
 }
 
-foreach ($GLOBALS['hooks']['Filter_Plugin_Admin_Begin'] as $fpname => &$fpsignal) {
-    $fpname();
-}
+HookFilterPlugin('Filter_Plugin_Admin_Begin');
 
 switch ($zbp->action) {
     case 'ArticleMng':
@@ -125,8 +123,6 @@ require ZBP_PATH . 'zb_system/admin/admin_top.php';
 <?php
 require ZBP_PATH . 'zb_system/admin/admin_footer.php';
 
-foreach ($GLOBALS['hooks']['Filter_Plugin_Admin_End'] as $fpname => &$fpsignal) {
-    $fpname();
-}
+HookFilterPlugin('Filter_Plugin_Admin_End');
 
 RunTime();

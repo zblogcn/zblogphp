@@ -76,9 +76,7 @@ foreach ($zbp->categoriesbyorder_type[$cate->Type] as $k => $v) {
         <?php echo $typetitle . $lang['msg']['category_edit']; ?></div>
     <div class="SubMenu">
         <?php
-        foreach ($GLOBALS['hooks']['Filter_Plugin_Category_Edit_SubMenu'] as $fpname => &$fpsignal) {
-            $fpname();
-        }
+        HookFilterPlugin('Filter_Plugin_Category_Edit_SubMenu');
         ?>
     </div>
     <div id="divMain2" class="edit category_edit">
@@ -139,9 +137,7 @@ foreach ($zbp->categoriesbyorder_type[$cate->Type] as $k => $v) {
             <!-- 1号输出接口 -->
             <div id='response' class='editmod2'>
                 <?php
-                foreach ($GLOBALS['hooks']['Filter_Plugin_Category_Edit_Response'] as $fpname => &$fpsignal) {
-                    $fpname();
-                }
+                HookFilterPlugin('Filter_Plugin_Category_Edit_Response');
                 ?>
             </div>
             <p>

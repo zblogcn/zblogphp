@@ -205,9 +205,7 @@ function misc_vrs()
         <script src="script/common.js?<?php echo $GLOBALS['blogversion']; ?>"></script>
         <script src="script/c_admin_js_add.php?hash=<?php echo $zbp->html_js_hash; ?>&<?php echo $GLOBALS['blogversion']; ?>"></script>
         <?php
-        foreach ($GLOBALS['hooks']['Filter_Plugin_Other_Header'] as $fpname => &$fpsignal) {
-            $fpname();
-        }
+        HookFilterPlugin('Filter_Plugin_Other_Header');
         ?>
         <title><?php echo $blogtitle; ?></title>
     </head>
@@ -281,9 +279,7 @@ function misc_phpinfo()
         <script src="script/common.js?<?php echo $GLOBALS['blogversion']; ?>"></script>
         <script src="script/c_admin_js_add.php?hash=<?php echo $zbp->html_js_hash; ?>&<?php echo $GLOBALS['blogversion']; ?>"></script>
         <?php
-        foreach ($GLOBALS['hooks']['Filter_Plugin_Other_Header'] as $fpname => &$fpsignal) {
-            $fpname();
-        }
+        HookFilterPlugin('Filter_Plugin_Other_Header');
         ?>
         <title><?php echo $blogtitle; ?></title>
         <style type="text/css">
@@ -633,5 +629,7 @@ function misc_clearthumbcache()
 
     rrmdir($zbp->usersdir . '/cache/thumbs');
     $zbp->SetHint('good');
-    Redirect($_SERVER["HTTP_REFERER"]);
+    if (isset($_SERVER["HTTP_REFERER"])) {
+        Redirect($_SERVER["HTTP_REFERER"]);
+    }
 }

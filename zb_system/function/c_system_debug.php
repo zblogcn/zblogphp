@@ -144,8 +144,8 @@ function Debug_Error_Handler($errno, $errstr, $errfile, $errline)
         Logs(var_export(array('Error', $errno, $errstr, $errfile, $errline), true), 'ERROR');
     }
 
-    //@符号的错误抑制功能的实现
-    if (error_reporting() == 0) {
+    //@符号的错误抑制功能的实现 php7 || php8
+    if (error_reporting() == 0 || !(error_reporting() & $errno)) {
         return true;
     }
 

@@ -75,6 +75,16 @@ class ZBlogPHP
     public $fullcurrenturl = null;
 
     /**
+     * @var string 当前脚本
+     */
+    public $currentscript;
+
+    /**
+     * @var string 当前脚本全路径
+     */
+    public $fullcurrentscript;
+
+    /**
      * @var string System目录
      */
     public $systemdir = null;
@@ -328,6 +338,14 @@ class ZBlogPHP
     protected $ispreload = false; //是否预加载
 
     protected $issession = false; //是否使用session
+
+    public $isloadmembers = false;
+
+    public $isloadcategories = false;
+
+    public $isloadtags = false;
+
+    public $isloadmodules = false;
 
     public $ismanage = false; //是否加载管理模式
 
@@ -585,8 +603,8 @@ class ZBlogPHP
     {
         global $option, $lang, $langs, $blogpath, $bloghost, $cookiespath, $cachedir, $logsdir, $datadir,
             $table, $datainfo, $actions, $action, $blogversion, $blogtitle, $blogname, $blogsubname, $routes,
-            $blogtheme, $blogstyle, $currenturl, $activedapps, $posttype, $fullcurrenturl,
-            $usersdir, $systemdir, $admindir, $usersurl, $systemurl, $adminurl;
+            $blogtheme, $blogstyle, $currenturl, $fullcurrenturl, $currentscript, $fullcurrentscript,
+            $activedapps, $posttype, $usersdir, $systemdir, $admindir, $usersurl, $systemurl, $adminurl;
 
         if ((defined('ZBP_DEBUGMODE') && constant('ZBP_DEBUGMODE') == true)) {
             $this->isdebug = true;
@@ -610,6 +628,8 @@ class ZBlogPHP
         $this->host = &$bloghost; //此值在后边初始化时可能会变化!
         $this->currenturl = &$currenturl;
         $this->fullcurrenturl = &$fullcurrenturl;
+        $this->currentscript = &$currentscript;
+        $this->fullcurrentscript = &$fullcurrentscript;
         $this->cookiespath = &$cookiespath;
         $this->usersdir = &$usersdir;
         $this->cachedir = &$cachedir;
@@ -864,11 +884,6 @@ class ZBlogPHP
             $fpreturn = $fpname();
         }
 
-        //此处接口应该在下一版本移除，请不要再使用了！！！
-        foreach ($GLOBALS['hooks']['Filter_Plugin_Zbp_Load_Pre'] as $fpname => &$fpsignal) {
-            $fpreturn = $fpname();
-        }
-
         $this->ispreload = true;
         return true;
     }
@@ -886,6 +901,10 @@ class ZBlogPHP
             return false;
         }
 
+        foreach ($GLOBALS['hooks']['Filter_Plugin_Zbp_Load_Pre'] as $fpname => &$fpsignal) {
+            $fpreturn = $fpname();
+        }
+
         if (!headers_sent()) {
             header('Content-type: text/html; charset=utf-8');
         }
@@ -893,13 +912,13 @@ class ZBlogPHP
         if ($this->option['ZC_LOADMEMBERS_LEVEL'] == 0) {
             $this->option['ZC_LOADMEMBERS_LEVEL'] = 1;
         }
-        $this->LoadMembers($this->option['ZC_LOADMEMBERS_LEVEL']);
-        $this->LoadCategories();
-        //$this->LoadTags();
-        $this->LoadModules();
+        $this->isloadmembers || $this->LoadMembers($this->option['ZC_LOADMEMBERS_LEVEL']);
+        $this->isloadcategories || $this->LoadCategories();
+        //$this->isloadtags || $this->LoadTags();
+        $this->isloadmodules || $this->LoadModules();
         $this->RegBuildModules();
 
-        if (!(is_subclass_of($this->user, 'Base__Member') && $this->user->Level > 0 && !empty($this->user->ID))) {
+        if ($this->CheckIsLoggedin() == false) {
             $this->Verify();
             $this->islogin = empty($this->user->ID) ? false : true;
         }
@@ -938,7 +957,7 @@ class ZBlogPHP
         if ($this->user->Status == ZC_MEMBER_STATUS_LOCKED) {
             $this->ShowError(80, __FILE__, __LINE__);
         }
-        $this->islogin = empty($this->user->ID) ? false : true;
+        $this->CheckIsLoggedin();
 
         $this->isload = true;
         return true;
@@ -1381,6 +1400,21 @@ class ZBlogPHP
      */
 
     /**
+     * 验证是否登录成功.
+     *
+     * @return bool
+     */
+    public function CheckIsLoggedin()
+    {
+        if (is_subclass_of($this->user, 'Base__Member') && $this->user->Level > 0 && !empty($this->user->ID)) {
+            $this->islogin = true;
+            return true;
+        }
+        $this->islogin = false;
+        return false;
+    }
+
+    /**
      * 验证操作权限.
      *
      * @param string     $action 操作
@@ -1659,6 +1693,7 @@ class ZBlogPHP
         $this->membersbyname = array();
         $array = $this->GetMemberList(null, $where);
 
+        $this->isloadmembers = true;
         return true;
     }
 
@@ -1816,6 +1851,7 @@ class ZBlogPHP
         $this->categories = &$this->categoriesbyorder_type[0];
         $this->categorys = &$this->categoriesbyorder_type[0];
 
+        $this->isloadcategories = true;
         return true;
     }
 
@@ -1842,6 +1878,7 @@ class ZBlogPHP
         $this->tags = &$this->tags_type[0];
         $this->tagsbyname = &$this->tagsbyname_type[0];
 
+        $this->isloadtags = true;
         return true;
     }
 
@@ -1876,6 +1913,7 @@ class ZBlogPHP
             }
         }
 
+        $this->isloadmodules = true;
         return true;
     }
 
@@ -2073,25 +2111,28 @@ class ZBlogPHP
                     }
                 }
             }
-            $this->langs = json_decode(json_encode($this->lang));
-        } else {
-            if ($id != '' && isset($this->lang[$id])) {
-                $this->langs->$id = json_decode(json_encode($this->lang[$id]));
-            }
-        }
+            //$this->langs = array_to_object(($this->lang));
+        }// else {
+            //if ($id != '' && isset($this->lang[$id])) {
+                //$this->langs->$id = array_to_object(($this->lang[$id]));
+            //}
+        //}
 
-        foreach ($GLOBALS['hooks']['Filter_Plugin_Zbp_LoadLanguage'] as $fpname => &$fpsignal) {
-            $fpname($this->lang);
-            $this->langs = json_decode(json_encode($this->lang));
-        }
-
+        $this->langs = new ZbpLangs($this->lang, 'langs');
         return true;
     }
 
+    /**
+     * 重新刷新语言包
+     */
     public function ReflushLanguages()
     {
         $this->lang['error']['77'] = str_replace(array('%min', '%max'), array($this->option['ZC_USERNAME_MIN'], $this->option['ZC_USERNAME_MAX']), $this->lang['error']['77']);
-        $this->langs = json_decode(json_encode($this->lang));
+
+        foreach ($GLOBALS['hooks']['Filter_Plugin_Zbp_LoadLanguage'] as $fpname => &$fpsignal) {
+            $fpname($this->lang);
+        }
+        //$this->langs = array_to_object(($this->lang));
     }
 
     /**
@@ -2106,6 +2147,7 @@ class ZBlogPHP
         foreach ($array as $v) {
             $this->LoadLanguage($v[0], $v[1], $v[2]);
         }
+        $this->ReflushLanguages();
     }
 
     /**
@@ -2288,7 +2330,7 @@ class ZBlogPHP
     }
 
     /**
-     * 重建模块.
+     * 注册单个模块.
      *
      * @param string $moduleFileName 模块名
      * @param string $moduleFunction 用户函数
@@ -2299,7 +2341,7 @@ class ZBlogPHP
     }
 
     /**
-     * 系统默认注册模块.
+     * 系统默认注册所有模块.
      */
     public function RegBuildModules()
     {
@@ -2327,7 +2369,7 @@ class ZBlogPHP
     public function AddBuildModule($moduleFileName, $parameters = null)
     {
         $p = func_get_args();
-        call_user_func_array('ModuleBuilder::Add', $p);
+        call_user_func_array(array('ModuleBuilder', 'Add'), $p);
     }
 
     /**

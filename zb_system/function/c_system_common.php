@@ -308,7 +308,7 @@ function RunTime($isOutput = true)
  *
  * @since 1.4
  */
-function GetEnvironment()
+function GetEnvironment($more = false)
 {
     global $zbp;
     $ajax = Network::Create();
@@ -337,16 +337,24 @@ function GetEnvironment()
                 str_replace(array('Microsoft-', '/'), array('', ''), GetVars('SERVER_SOFTWARE', 'SERVER'))
             ),
             0
-        ) . '; PHP' . GetPHPVersion() . (IS_X64 ? 'x64' : '') . '; ' .
-        $zbp->option['ZC_DATABASE_TYPE'] . $zbp->db->version . '; ' . $ajax;
-
+        ) . '; PHP' . GetPHPVersion() . (IS_X64 ? 'x64' : '') . '; ';
+    if (isset($zbp->option) && isset($zbp->db)) {
+        $system_environment .= $zbp->option['ZC_DATABASE_TYPE'] . $zbp->db->version;
+    }
+    $system_environment .= '; ' . $ajax;
     if (defined('OPENSSL_VERSION_TEXT')) {
         $a = explode(' ', OPENSSL_VERSION_TEXT);
         $system_environment .= '; ' . GetValueInArray($a, 0) . GetValueInArray($a, 1);
     }
-    //$um = ini_get('upload_max_filesize');
-    //$pm = ini_get('post_max_size');
-    //$system_environment .= '; UploadMax' . $um . ' PostMax' . $pm;
+
+    if ($more) {
+        $um = ini_get('upload_max_filesize');
+        $pm = ini_get('post_max_size');
+        $ml = ini_get('memory_limit');
+        $et = ini_get('max_execution_time');
+        $system_environment .= '; memory_limit:' . $ml . '; max_execution_time:' . $et;
+        $system_environment .= '; upload_max_filesize:' . $um . '; post_max_size:' . $pm;
+    }
     return $system_environment;
 }
 
@@ -1055,6 +1063,28 @@ function GetRequestUri()
         $url = $url . ($_SERVER['QUERY_STRING'] ? '?' . $_SERVER['QUERY_STRING'] : '');
     }
     return $url;
+}
+
+/**
+ * 获取请求Script Name.
+ *
+ * @return string filename
+ */
+function GetRequestScript()
+{
+    global $blogpath;
+    $f = '';
+    if (isset($_SERVER['PHP_SELF'])) {
+        $f = $_SERVER['PHP_SELF'];
+    } elseif (isset($_SERVER['SCRIPT_NAME'])) {
+        $f = $_SERVER['SCRIPT_NAME'];
+    }
+    $f = str_replace('\\', '/', $f);
+    if (strpos($f, $blogpath) === 0) {
+        $f = str_replace($blogpath, '', $f);
+    }
+    $f = ltrim($f, '/');
+    return $f;
 }
 
 /**
@@ -2252,4 +2282,35 @@ function CheckIsMoblie()
         return true;
     }
     return false;
+}
+
+/**
+ * 数组 转 对象
+ *
+ * @param array $arr 数组
+ * @return object
+ */
+function array_to_object($arr)
+{
+    if (is_array($arr)) {
+        return (object) array_map(__FUNCTION__, $arr);
+    } else {
+        return $arr;
+    }
+}
+
+/**
+ * 对象 转 数组
+ *
+ * @param object $obj 对象
+ * @return array
+ */
+function object_to_array($obj)
+{
+    $arr = is_object($obj) ? get_object_vars($obj) : $obj;
+    if (is_array($arr)) {
+        return array_map(__FUNCTION__, $arr);
+    } else {
+        return $arr;
+    }
 }

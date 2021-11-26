@@ -194,28 +194,15 @@ abstract class Base__Module extends Base
 
         if (isset(ModuleBuilder::$List[$this->FileName])) {
             if (isset(ModuleBuilder::$List[$this->FileName]['function'])) {
-                $f = str_replace(' ', '', ModuleBuilder::$List[$this->FileName]['function']);
+                $f = ModuleBuilder::$List[$this->FileName]['function'];
                 $p = ModuleBuilder::$List[$this->FileName]['parameters'];
                 $p = is_array($p) ? $p : array();
 
-                if (function_exists($f)) {
-                    $this->Content = call_user_func_array($f, $p);
-                } elseif (strpos($f, '::') !== false) {
-                    $a = explode('::', $f);
-                    if (method_exists($a[0], $a[1])) {
-                        $this->Content = call_user_func_array($f, $p);
-                    }
-                } elseif (strpos($f, '->') !== false) {
-                    $f = str_replace(array('$', '{', '}'), '', $f);
-                    $a = explode('->', $f);
-                    if (is_callable(array($GLOBALS[$a[0]], $a[1]))) {
-                        $this->Content = call_user_func_array(array($GLOBALS[$a[0]], $a[1]), $p);
-                    }
-                }
+                $this->Content = call_user_func_array(Parse_Filter_Plugin($f), $p);
+                return true;
             }
         }
-
-        return true;
+        return false;
     }
 
 }

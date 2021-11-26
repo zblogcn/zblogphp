@@ -38,7 +38,4 @@ if ($zbp->cache->success_updated_app !== '') {
     echo '<script src="' . $bloghost . 'zb_system/cmd.php?act=misc&type=updatedapp"></script>';
 }
 
-foreach ($GLOBALS['hooks']['Filter_Plugin_Admin_Header'] as $fpname => &$fpsignal) {
-    $fpname();
-}
-
+HookFilterPlugin('Filter_Plugin_Admin_Header');

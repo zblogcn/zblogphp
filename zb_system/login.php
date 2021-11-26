@@ -28,10 +28,7 @@ if ($zbp->CheckRights('admin')) {
     <script src="script/c_admin_js_add.php?hash=<?php echo $zbp->html_js_hash; ?>&<?php echo $blogversion; ?>"></script>
     <title><?php echo $blogname . '-' . $lang['msg']['login']; ?></title>
 <?php
-foreach ($GLOBALS['hooks']['Filter_Plugin_Login_Header'] as $fpname => &$fpsignal) {
-    $fpname();
-}
-
+HookFilterPlugin('Filter_Plugin_Login_Header');
 ?>
 </head>
 <body class="login">

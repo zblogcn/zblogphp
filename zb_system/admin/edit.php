@@ -93,9 +93,7 @@ require ZBP_PATH . 'zb_system/admin/admin_header.php';
 <script  src="../script/jquery.tagto.js"></script>
 <script  src="../script/jquery-ui-timepicker-addon.js"></script>
 <?php
-foreach ($GLOBALS['hooks']['Filter_Plugin_Edit_Begin'] as $fpname => &$fpsignal) {
-    $fpname();
-}
+HookFilterPlugin('Filter_Plugin_Edit_Begin');
 ?>
 <?php
 require ZBP_PATH . 'zb_system/admin/admin_top.php';
@@ -108,9 +106,7 @@ require ZBP_PATH . 'zb_system/admin/admin_top.php';
 
     <div class="SubMenu">
         <?php
-        foreach ($GLOBALS['hooks']['Filter_Plugin_Edit_SubMenu'] as $fpname => &$fpsignal) {
-            $fpname();
-        }
+        HookFilterPlugin('Filter_Plugin_Edit_SubMenu');
         ?>
     </div>
     <div id="divMain2" class="edit post_edit">
@@ -119,9 +115,7 @@ require ZBP_PATH . 'zb_system/admin/admin_top.php';
                 <!-- 4号输出接口 -->
                 <div id="response4" class="editmod2">
                     <?php
-                    foreach ($GLOBALS['hooks']['Filter_Plugin_Edit_Response4'] as $fpname => &$fpsignal) {
-                        $fpname();
-                    }
+                    HookFilterPlugin('Filter_Plugin_Edit_Response4');
                     ?>
                 </div>
                 <div id="divEditTitle" class="editmod2">
@@ -141,9 +135,7 @@ require ZBP_PATH . 'zb_system/admin/admin_top.php';
                 <!-- 5号输出接口 -->
                 <div id="response5" class="editmod2">
                     <?php
-                    foreach ($GLOBALS['hooks']['Filter_Plugin_Edit_Response5'] as $fpname => &$fpsignal) {
-                        $fpname();
-                    }
+                    HookFilterPlugin('Filter_Plugin_Edit_Response5');
                     ?>
                 </div>
 
@@ -169,9 +161,7 @@ require ZBP_PATH . 'zb_system/admin/admin_top.php';
                 <!-- 1号输出接口 -->
                 <div id="response" class="editmod2">
                     <?php
-                    foreach ($GLOBALS['hooks']['Filter_Plugin_Edit_Response'] as $fpname => &$fpsignal) {
-                        $fpname();
-                    }
+                    HookFilterPlugin('Filter_Plugin_Edit_Response');
                     ?>
                 </div>
 
@@ -233,9 +223,7 @@ require ZBP_PATH . 'zb_system/admin/admin_top.php';
                 <!-- 2号输出接口 -->
                 <div id="response2" class="editmod2">
                     <?php
-                    foreach ($GLOBALS['hooks']['Filter_Plugin_Edit_Response2'] as $fpname => &$fpsignal) {
-                        $fpname();
-                    }
+                    HookFilterPlugin('Filter_Plugin_Edit_Response2');
                     ?>
                 </div>
 
@@ -350,9 +338,7 @@ require ZBP_PATH . 'zb_system/admin/admin_top.php';
                             <!-- 3号输出接口 -->
                             <div id="response3" class="editmod">
                                 <?php
-                                foreach ($GLOBALS['hooks']['Filter_Plugin_Edit_Response3'] as $fpname => &$fpsignal) {
-                                    $fpname();
-                                }
+                                HookFilterPlugin('Filter_Plugin_Edit_Response3');
                                 ?>
                             </div>
                         </div>
@@ -684,9 +670,7 @@ require ZBP_PATH . 'zb_system/admin/admin_top.php';
     </script>
 
     <?php
-    foreach ($GLOBALS['hooks']['Filter_Plugin_Edit_End'] as $fpname => &$fpsignal) {
-        $fpname();
-    }
+    HookFilterPlugin('Filter_Plugin_Edit_End');
     ?>
 
     <script>

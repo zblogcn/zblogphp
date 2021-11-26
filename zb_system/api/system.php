@@ -119,6 +119,8 @@ function api_system_get_info()
         'members' => (int) $zbp->cache->all_member_nums,
         'theme' => $zbp->theme,
         'style' => $zbp->style,
+        'https' => (HTTP_SCHEME == 'https://') ? true : false,
+        'debugmode' => $zbp->isdebug,
     );
 
 
@@ -142,8 +144,17 @@ function api_system_get_info()
             $a = explode(' ', OPENSSL_VERSION_TEXT);
             $ssl = GetValueInArray($a, 0) . GetValueInArray($a, 1);
         }
+        $activedapps = $GLOBALS['activedapps'];
+        $apps = array();
+        foreach ($activedapps as $a) {
+            $app = new App();
+            if ($app->LoadInfoByXml('plugin', $a) == true || $app->LoadInfoByXml('theme', $a) == true) {
+                $apps[] = array('id' => $app->id, 'version' => $app->version ,'modified' => $app->modified);
+            }
+        }
 
         $info2 = array(
+            'activedapps' => $apps,
             'evn' => array(
                 'php' => GetPHPVersion(),
                 'system' => PHP_OS,
@@ -158,11 +169,6 @@ function api_system_get_info()
                 'upload_max_filesize' => ini_get('upload_max_filesize'),
                 'libs' => implode(',', get_loaded_extensions()),
             ),
-            'zbp' => array(
-                'https' => (HTTP_SCHEME == 'https') ? true : false,
-                'debugmode' => $zbp->isdebug,
-                'activedapps' => $GLOBALS['activedapps'],
-            )
         );
 
         $info = array_merge($info, $info2);

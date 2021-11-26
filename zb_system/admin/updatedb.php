@@ -7,7 +7,6 @@
  * @version 1.0 2020-03-26
  */
 require '../function/c_system_base.php';
-require '../function/c_system_admin.php';
 
 $zbp->Load();
 

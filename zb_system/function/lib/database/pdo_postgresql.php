@@ -292,7 +292,6 @@ class Database__PDO_PostgreSQL implements Database__Interface
      */
     public function Transaction($query)
     {
-        //return false;
         if (strcasecmp($query, 'begin') === 0) {
             return $this->db->beginTransaction();
         }

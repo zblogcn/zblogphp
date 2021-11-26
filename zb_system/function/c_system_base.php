@@ -107,11 +107,13 @@ $GLOBALS['action'] = '';
  */
 $GLOBALS['currenturl'] = GetRequestUri();
 $GLOBALS['fullcurrenturl'] = '';
+$GLOBALS['currentscript'] = GetRequestScript();
+$GLOBALS['fullcurrentscript'] = ZBP_PATH . $GLOBALS['currentscript'];
 /*
  * 语言包
  */
 $GLOBALS['lang'] = array(); // array
-$GLOBALS['langs'] = array(); // object
+$GLOBALS['langs'] = null; // object
 /*
  * 系统根路径
  */

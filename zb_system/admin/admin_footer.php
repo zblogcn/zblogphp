@@ -3,9 +3,7 @@
 } ?>
 </section>
 <?php
-foreach ($GLOBALS['hooks']['Filter_Plugin_Admin_Footer'] as $fpname => &$fpsignal) {
-    $fpname();
-}
+HookFilterPlugin('Filter_Plugin_Admin_Footer');
 ?>
 </body>
 </html>

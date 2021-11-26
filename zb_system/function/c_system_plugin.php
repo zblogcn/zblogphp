@@ -23,6 +23,11 @@ define('PLUGIN_EXITSIGNAL_RETURN', 'return');
  * 插件中断方式：break
  */
 define('PLUGIN_EXITSIGNAL_BREAK', 'break');
+/*
+ * 插件中断方式：goto
+ */
+define('PLUGIN_EXITSIGNAL_GOTO', 'goto');
+
 
 //定义总插件激活列表
 $GLOBALS['plugins'] = array();
@@ -199,56 +204,52 @@ function Remove_Filter_Plugin($plugname, $functionname)
 }
 
 /**
- * Callback Filter接口的某项挂载函数 (支持多种型式的function调用，已经玩出花了^_^)
+ * 解析Callback Filter接口的某项挂载函数名 (支持多种型式的function调用，已经玩出花了^_^)
  *
  * 要挂接的函数名 (可以是1函数名 2类名::静态方法名 3全局变量名@动态方法名 4类名@动态方法名 5全局匿名函数)
  *
- * @return var Callback的返回值
+ * @return var 解析后的function值
  */
-function Callback_Filter_Plugin($function)
+function Parse_Filter_Plugin($fpname)
 {
-    //php >= 5.6 函数参数由($function)改为($function, &...$args)，否则不支持传入引用
-    $array = func_get_args();
-    array_shift($array);
-    //$array = &$args;
+    $function = str_replace(' ', '', $fpname);
 
     if (function_exists($function)) {
-        return call_user_func_array($function, $array);
+        return $function;
     } elseif (strpos($function, '::') !== false) {
         $func = explode('::', $function);
-        return call_user_func_array(array($func[0], $func[1]), $array);
+        $function = array($func[0], $func[1]);
     } elseif (strpos($function, '@') !== false) {
         $func = explode('@', $function);
         if (array_key_exists($func[0], $GLOBALS) && is_object($GLOBALS[$func[0]])) {
-            return call_user_func_array(array($GLOBALS[$func[0]], $func[1]), $array);
+            $function = array($GLOBALS[$func[0]], $func[1]);
         }
         if (class_exists($func[0])) {
             $newobject = new $func[0];
-            return call_user_func_array(array($newobject, $func[1]), $array);
+            $function = array($newobject, $func[1]);
         }
     } else {
         if (array_key_exists($function, $GLOBALS) && is_object($GLOBALS[$function]) && get_class($GLOBALS[$function]) == 'Closure') {
-            return call_user_func_array($GLOBALS[$function], $array);
+            $function = $GLOBALS[$function];
         }
     }
-    return call_user_func_array($function, $array);
+    return $function;
 }
 
 /**
  * 插入钩子 Filter接口
  *
- * 如果需要传入引用，须在php>=5.6，给参数补上(&...$arg)，Callback_Filter_Plugin同理！
+ * 如果需要传入引用，须在php>=5.6，给参数补上(&...$arg)！
  *
  * @param $plugname 接口名称
  */
 function HookFilterPlugin($plugname)
 {
     $array = func_get_args();
+    array_shift($array);
     //$array = &$args;
     foreach ($GLOBALS['hooks'][$plugname] as $fpname => &$fpsignal) {
-        $array[0] = $fpname;
-        //array_unshift($array, $fpname);
-        call_user_func_array('Callback_Filter_Plugin', $array);
+        call_user_func_array(Parse_Filter_Plugin($fpname), $array);
     }
 }
 
@@ -256,25 +257,23 @@ function HookFilterPlugin($plugname)
  * 插入钩子 Filter接口 的带返回值版
  *
  *    示例：
- *    $fpresult = Hook_Filter_Plugin_With_Return('Filter_Plugin_Test', $fpsignal, $arg...);
+ *    $fpresult = HookFilterPlugin_Return('Filter_Plugin_Test', $fpsignal, $arg...);
  *    if ($fpsignal === PLUGIN_EXITSIGNAL_RETURN) {
  *        return $fpresult;
  *    }
  *
  */
-function HookFilterPlugin_Return($plugname, &$signal)
+function HookFilterPlugin_Return($plugname, &$signal = null)
 {
     $array = func_get_args();
     array_shift($array);
     array_shift($array);
     //$array = &$arg;
-    array_unshift($array, null);
     $signal = PLUGIN_EXITSIGNAL_NONE;
     foreach ($GLOBALS['hooks'][$plugname] as $fpname => &$fpsignal) {
-        $array[0] = $fpname;
-        $fpreturn = call_user_func_array('Callback_Filter_Plugin', $array);
-        if ($fpsignal === PLUGIN_EXITSIGNAL_RETURN) {
-            $signal = PLUGIN_EXITSIGNAL_RETURN;
+        $fpreturn = call_user_func_array(Parse_Filter_Plugin($fpname), $array);
+        if ($fpsignal === PLUGIN_EXITSIGNAL_RETURN || $fpsignal === PLUGIN_EXITSIGNAL_BREAK || $fpsignal === PLUGIN_EXITSIGNAL_GOTO) {
+            $signal = $fpsignal;
             $fpsignal = PLUGIN_EXITSIGNAL_NONE;
             return $fpreturn;
         }

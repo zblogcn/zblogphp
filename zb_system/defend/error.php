@@ -73,12 +73,13 @@ unset($post_data['token']);
         echo '(' . $error->type . ')' . $error->typeName . ' :   ' . (FormatString($error->messagefull, '[noscript]'));
         echo ' (' . ZC_VERSION_FULL . ') ';
         if (!in_array('Status: 404 Not Found', headers_list())) {
-                echo '(' . GetEnvironment() . ') ';
+                echo '(' . GetEnvironment(true) . ') ';
         }
         ?>
                         </div>
         <?php
-        if (is_array(ZBlogException::$error_debuginfo) && !empty(ZBlogException::$error_debuginfo)) {
+        $error_debuginfo = ZBlogException::$error_debuginfo;
+        if (is_array($error_debuginfo) && !empty($error_debuginfo)) {
         ?>
                         <div>
                             <p><?php echo 'Debug Info'; ?></p>
@@ -88,7 +89,7 @@ unset($post_data['token']);
 
                     <?php
                     $i = 0;
-                    foreach (ZBlogException::$error_debuginfo as $key => $value) {
+                    foreach ($error_debuginfo as $key => $value) {
                         $i += 1;
                         ?>
                                     <tr>

@@ -34,12 +34,8 @@ require 'zb_system/function/c_system_base.php';
 $zbp->RedirectInstall();
 $zbp->Load();
 
-foreach ($GLOBALS['hooks']['Filter_Plugin_Index_Begin'] as $fpname => &$fpsignal) {
-    $fpname();
-}
+HookFilterPlugin('Filter_Plugin_Index_Begin');
 
 ViewIndex();
 
-foreach ($GLOBALS['hooks']['Filter_Plugin_Index_End'] as $fpname => &$fpsignal) {
-    $fpname();
-}
+HookFilterPlugin('Filter_Plugin_Index_End');

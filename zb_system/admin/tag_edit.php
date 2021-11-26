@@ -54,9 +54,7 @@ if ($tag->ID == 0) {
         <?php echo $typetitle . $lang['msg']['tag_edit']; ?></div>
     <div class="SubMenu">
         <?php
-        foreach ($GLOBALS['hooks']['Filter_Plugin_Tag_Edit_SubMenu'] as $fpname => &$fpsignal) {
-            $fpname();
-        }
+        HookFilterPlugin('Filter_Plugin_Tag_Edit_SubMenu');
         ?>
     </div>
     <div id="divMain2" class="edit tag_edit">
@@ -103,9 +101,7 @@ if ($tag->ID == 0) {
             </p>
             <div id='response' class='editmod2'>
                 <?php
-                foreach ($GLOBALS['hooks']['Filter_Plugin_Tag_Edit_Response'] as $fpname => &$fpsignal) {
-                    $fpname();
-                }
+                HookFilterPlugin('Filter_Plugin_Tag_Edit_Response');
                 ?>
             </div>
             <p>

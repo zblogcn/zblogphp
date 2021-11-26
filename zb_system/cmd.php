@@ -24,13 +24,11 @@ if (!$zbp->CheckRights($zbp->action)) {
     die();
 }
 
-foreach ($GLOBALS['hooks']['Filter_Plugin_Cmd_Begin'] as $fpname => &$fpsignal) {
-    $fpname();
-}
+HookFilterPlugin('Filter_Plugin_Cmd_Begin');
 
 switch ($zbp->action) {
     case 'login':
-        Redirect_cmd_from_args(GetVars('redirect', 'GET'));
+        Redirect_cmd_from_args_with_loggedin(GetVars('redirect', 'GET'));
         if ($zbp->CheckRights('admin')) {
             Redirect_cmd_end('admin/index.php?act=admin');
         }
@@ -50,7 +48,7 @@ switch ($zbp->action) {
     case 'verify':
         // 考虑兼容原因，此处不加CSRF验证。logout加的原因是主题的退出无大碍。
         if (VerifyLogin()) {
-            Redirect_cmd_from_args(GetVars('redirect', 'COOKIE'));
+            Redirect_cmd_from_args_with_loggedin(GetVars('redirect', 'COOKIE'));
             Redirect_cmd_end('admin/index.php?act=admin');
         } else {
             Redirect_cmd_end('../');
@@ -377,6 +375,4 @@ switch ($zbp->action) {
         break;
 }
 
-foreach ($GLOBALS['hooks']['Filter_Plugin_Cmd_End'] as $fpname => &$fpsignal) {
-    $fpname();
-}
+HookFilterPlugin('Filter_Plugin_Cmd_End');

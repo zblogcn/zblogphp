@@ -20,6 +20,11 @@ class Metas
     private $p_data = array();
 
     /**
+     * @var boolean 是否自动替换host
+     */
+    protected $isreplacehost = true;
+
+    /**
      * @param string $name key名
      * @param $value
      */
@@ -184,7 +189,9 @@ class Metas
 
         $data = $this->p_data;
 
-        $data = self::ReplaceTagArray($data, 'ReplaceHost2Tag');
+        if ($this->isreplacehost) {
+            $data = self::ReplaceTagArray($data, 'ReplaceHost2Tag');
+        }
 
         //return json_encode($data);
         return serialize($data);
@@ -212,7 +219,9 @@ class Metas
             if (count($this->p_data) == 0) {
                 return true;
             }
-            $this->p_data = self::ReplaceTagArray($this->p_data, 'ReplaceTag2Host');
+            if ($this->isreplacehost) {
+                $this->p_data = self::ReplaceTagArray($this->p_data, 'ReplaceTag2Host');
+            }
         } else {
             $this->p_data = array();
 

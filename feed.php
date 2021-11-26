@@ -8,15 +8,11 @@
  */
 require 'zb_system/function/c_system_base.php';
 
-$zbp->Load();
 $zbp->action = 'feed';
+$zbp->Load();
 
-foreach ($GLOBALS['hooks']['Filter_Plugin_Feed_Begin'] as $fpname => &$fpsignal) {
-    $fpname();
-}
+HookFilterPlugin('Filter_Plugin_Feed_Begin');
 
 ViewIndex();
 
-foreach ($GLOBALS['hooks']['Filter_Plugin_Feed_End'] as $fpname => &$fpsignal) {
-    $fpname();
-}
+HookFilterPlugin('Filter_Plugin_Feed_End');

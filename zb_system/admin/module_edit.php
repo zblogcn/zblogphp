@@ -73,9 +73,7 @@ if ($mod->SourceType == 'themeinclude') {
         <?php echo $lang['msg']['module_edit']; ?></div>
     <div class="SubMenu">
         <?php
-        foreach ($GLOBALS['hooks']['Filter_Plugin_Module_Edit_SubMenu'] as $fpname => &$fpsignal) {
-            $fpname();
-        }
+        HookFilterPlugin('Filter_Plugin_Module_Edit_SubMenu');
         ?>
     </div>
     <div id="divMain2" class="edit tag_edit">
@@ -163,9 +161,7 @@ if ($mod->SourceType == 'themeinclude') {
             <!-- 1号输出接口 -->
             <div id='response' class='editmod2'>
                 <?php
-                foreach ($GLOBALS['hooks']['Filter_Plugin_Module_Edit_Response'] as $fpname => &$fpsignal) {
-                    $fpname();
-                }
+                HookFilterPlugin('Filter_Plugin_Module_Edit_Response');
                 ?>
             </div>
             <p>
