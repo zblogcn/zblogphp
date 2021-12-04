@@ -1034,6 +1034,13 @@ function DelComment()
 
     $id = (int) GetVars('id', 'GET');
     $cmt = $zbp->GetCommentByID($id);
+
+    if ($zbp->CheckRights('CommentAll') == false) {
+        if ($cmt->AuthorID != $zbp->user->ID && $cmt->Post->AuthorID != $zbp->user->ID) {
+            return false;
+        }
+    }
+
     if ($cmt->ID > 0) {
         $comments = $zbp->GetCommentList('*', array(array('=', 'comm_LogID', $cmt->LogID)), null, null, null);
 
@@ -1123,6 +1130,12 @@ function CheckComment()
     if ($cmt->ID == 0) {
         return $cmt;
     }
+    if ($zbp->CheckRights('CommentAll') == false) {
+        if ($cmt->AuthorID != $zbp->user->ID && $cmt->Post->AuthorID != $zbp->user->ID) {
+            return $cmt;
+        }
+    }
+
     $orig_check = (bool) $cmt->IsChecking;
     $cmt->IsChecking = $ischecking;
 
@@ -1209,6 +1222,12 @@ function BatchComment()
 
     if ($type == 'all_del') {
         foreach ($childArray as $i => $cmt) {
+            if ($zbp->CheckRights('CommentAll') == false) {
+                if ($cmt->AuthorID != $zbp->user->ID && $cmt->Post->AuthorID != $zbp->user->ID) {
+                    continue;
+                }
+            }
+
             $cmt->Del();
             if (!$cmt->IsChecking) {
                 CountPostArray(array($cmt->LogID), -1);
@@ -1226,6 +1245,11 @@ function BatchComment()
             if (!$cmt->IsChecking) {
                 continue;
             }
+            if ($zbp->CheckRights('CommentAll') == false) {
+                if ($cmt->AuthorID != $zbp->user->ID && $cmt->Post->AuthorID != $zbp->user->ID) {
+                    continue;
+                }
+            }
 
             $cmt->IsChecking = false;
             $cmt->Save();
@@ -1240,6 +1264,11 @@ function BatchComment()
         foreach ($childArray as $i => $cmt) {
             if ($cmt->IsChecking) {
                 continue;
+            }
+            if ($zbp->CheckRights('CommentAll') == false) {
+                if ($cmt->AuthorID != $zbp->user->ID && $cmt->Post->AuthorID != $zbp->user->ID) {
+                    continue;
+                }
             }
 
             $cmt->IsChecking = true;

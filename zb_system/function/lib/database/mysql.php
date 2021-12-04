@@ -22,6 +22,10 @@ class Database__MySQL implements Database__Interface
 
     private $db = null; //数据库连接
 
+    private $isconnected = false; //是否已打开连接
+
+    private $ispersistent = false; //是否持久连接
+
     /**
      * @var string|null 数据库名
      */
@@ -87,7 +91,11 @@ class Database__MySQL implements Database__Interface
      */
     public function Open($array)
     {
-        if ($array[6] == false) {
+        if ($this->isconnected) {
+            return;
+        }
+        $this->ispersistent = $array[6];
+        if ($this->ispersistent == false) {
             $db = @mysql_connect($array[0] . ':' . $array[5], $array[1], $array[2]);
         } else {
             $db = @mysql_pconnect($array[0] . ':' . $array[5], $array[1], $array[2]);
@@ -122,6 +130,7 @@ class Database__MySQL implements Database__Interface
             $this->dbname = $array[3];
             $this->dbengine = $array[7];
 
+            $this->isconnected = true;
             return true;
         } else {
             $this->Close();
@@ -165,8 +174,11 @@ class Database__MySQL implements Database__Interface
         $this->db = $db;
         $this->dbname = $dbmysql_name;
 
+        $this->isconnected = true;
+
         $s = "CREATE DATABASE IF NOT EXISTS {$dbmysql_name} DEFAULT CHARACTER SET {$u}";
         $r = mysql_query($this->sql->Filter($s), $this->db);
+
         $this->LogsError();
         if ($r === false) {
             return false;
@@ -180,6 +192,14 @@ class Database__MySQL implements Database__Interface
      */
     public function Close()
     {
+        if (!$this->isconnected) {
+            return;
+        }
+        $this->isconnected = false;
+        if ($this->ispersistent == true) {
+            $this->db = null;
+            return;
+        }
         if (is_resource($this->db)) {
             mysql_close($this->db);
             $this->db = null;

@@ -181,7 +181,7 @@ function admincolor_hideMenu(){
  $("div.main,section.main").animate({"padding-left":"46px"});
  $("#leftmenu span").animate({"margin-left":"11px"});
  $("#leftmenu span").css({"font-size":"0"});
- $("#leftmenu span i").css({"font-size":"{$fontsize}px"});
+ $("#leftmenu span i").css({"font-size": $("body").css("font-size")});
  SetCookie('admincolor_hm','1',365);
  admincolor_tooptip();
 
@@ -196,7 +196,7 @@ function admincolor_showMenu(){
  $("div.left,aside.left").animate({"width":"{$leftwidth}px"});
  $("div.main,section.main").animate({"padding-left":"{$rightwidth}px"});
  $("#leftmenu span").animate({"margin-left":"24px"});
- $("#leftmenu span").css({"font-size":"{$fontsize}px"});
+ $("#leftmenu span").css({"font-size": $("body").css("font-size")});
  SetCookie('admincolor_hm','',-1); 
  $("#leftmenu a").tooltip({disabled: true});
 }
@@ -270,19 +270,6 @@ EOD;
         $fpname();
     }
 
-
-}
-
-if (!function_exists('CheckIsMoblie')) {
-
-function CheckIsMoblie()
-{
-    $ua = GetGuestAgent();
-    if (preg_match('/(Android|Web0S|webOS|iPad|iPhone|Mobile|Windows\sPhone|Kindle|BlackBerry|Opera\sMini)/', $ua)) {
-        return true;
-    }
-    return false;
-}
 
 }
 

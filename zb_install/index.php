@@ -1327,7 +1327,7 @@ function InsertInfo()
     $t->FileName = "searchpanel";
     $t->Source = "system";
     $t->SidebarID = 1;
-    $t->Content = '<form name="search" method="post" action="{#ZC_BLOG_HOST#}zb_system/cmd.php?act=search"><input type="text" name="q" size="11" /> <input type="submit" value="' . $zbp->lang['msg']['search'] . '" /></form>';
+    $t->Content = '<form name="search" method="post" action="{#ZC_BLOG_HOST#}zb_system/cmd.php?act=search"><label><span style="position:absolute;color:transparent;z-index:-9999;">Search</span><input type="text" name="q" size="11" /></label> <input type="submit" value="' . $zbp->lang['msg']['search'] . '" /></form>';
     $t->HtmlID = "divSearchPanel";
     $t->Type = "div";
     $t->Save();

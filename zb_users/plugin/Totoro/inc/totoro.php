@@ -188,7 +188,12 @@ class Totoro_Class
 
     public function check_ip($ip)
     {
+        //如果是ipv6，就跳过
         if(filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6) !== false){
+            return false;
+        }
+        //如果是ipv4的内网，就跳过
+        if(filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE) === false){
             return false;
         }
         $ip = ip2long($ip);

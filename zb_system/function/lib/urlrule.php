@@ -70,12 +70,22 @@ class UrlRule
         return $this->PreUrl;
     }
 
+    public function SetPreUrl($url)
+    {
+        $this->PreUrl = $url;
+    }
+
     /**
      * @return array
      */
     public function GetRoute()
     {
         return $this->Route;
+    }
+
+    public function SetRoute($array)
+    {
+        $this->Route = $array;
     }
 
     /**

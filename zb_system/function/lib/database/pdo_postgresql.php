@@ -22,6 +22,10 @@ class Database__PDO_PostgreSQL implements Database__Interface
 
     private $db = null; //数据库连接实例
 
+    private $isconnected = false; //是否已打开连接
+
+    private $ispersistent = false; //是否持久连接
+
     /**
      * @var string|null 数据库名
      */
@@ -78,9 +82,13 @@ class Database__PDO_PostgreSQL implements Database__Interface
      */
     public function Open($array)
     {
+        if ($this->isconnected) {
+            return;
+        }
         $array[3] = strtolower($array[3]);
         $s = "pgsql:host={$array[0]};port={$array[5]};dbname={$array[3]};user={$array[1]};password={$array[2]};options='--client_encoding=UTF8'";
-        if (false == $array[5]) {
+        $this->ispersistent = $array[6];
+        if (false == $this->ispersistent) {
             $db_link = new PDO($s);
         } else {
             $db_link = new PDO($s, null, null, array(PDO::ATTR_PERSISTENT => true));
@@ -92,6 +100,8 @@ class Database__PDO_PostgreSQL implements Database__Interface
         $this->version = SplitAndGet($myver, '-', 0);
         $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_SILENT);
         //$this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+        $this->isconnected = true;
         return true;
     }
 
@@ -110,6 +120,7 @@ class Database__PDO_PostgreSQL implements Database__Interface
         $this->dbname = $dbpgsql_name;
 
         //$db_link->query("SET client_encoding='UTF-8';");
+        $this->isconnected = true;
 
         $isExists = @$this->Query("select count(*) from pg_catalog.pg_database where datname = '$dbpgsql_name';");
         $hasDB = false;
@@ -135,7 +146,11 @@ class Database__PDO_PostgreSQL implements Database__Interface
      */
     public function Close()
     {
+        if (!$this->isconnected) {
+            return;
+        }
         $this->db = null;
+        $this->isconnected = false;
     }
 
     /**

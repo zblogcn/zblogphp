@@ -22,6 +22,8 @@ class Database__PDO_SQLite implements Database__Interface
 
     private $db = null; //数据库连接实例
 
+    private $isconnected = false; //是否已打开连接
+
     /**
      * @var string|null 数据库名
      */
@@ -67,6 +69,9 @@ class Database__PDO_SQLite implements Database__Interface
      */
     public function Open($array)
     {
+        if ($this->isconnected) {
+            return;
+        }
         //pdo_sqlite优先使用sqlite3
         $a = PDO::getAvailableDrivers();
         $dns = 'sqlite';
@@ -84,6 +89,7 @@ class Database__PDO_SQLite implements Database__Interface
         $this->version = SplitAndGet($myver, '-', 0);
         $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_SILENT);
 
+        $this->isconnected = true;
         return true;
     }
 
@@ -92,7 +98,11 @@ class Database__PDO_SQLite implements Database__Interface
      */
     public function Close()
     {
+        if (!$this->isconnected) {
+            return;
+        }
         $this->db = null;
+        $this->isconnected = false;
     }
 
     /**

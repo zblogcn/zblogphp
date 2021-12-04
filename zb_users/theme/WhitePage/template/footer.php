@@ -1,6 +1,6 @@
 		<div id="divBottom">
-			<h4 id="BlogPowerBy">Powered By {$zblogphphtml}</h4>
-			<h3 id="BlogCopyRight">{$copyright}</h3>
+			<p id="BlogPowerBy">Powered By {$zblogphphtml}</p>
+			<p id="BlogCopyRight">{$copyright}</p>
 		</div><div class="clear"></div>
 	</div><div class="clear"></div>
 	</div><div class="clear"></div>

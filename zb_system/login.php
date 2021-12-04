@@ -18,7 +18,7 @@ if ($zbp->CheckRights('admin')) {
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge,chrome=1" />
     <meta name="robots" content="none" />
-    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0"/>
+    <meta name="viewport" content="width=device-width,viewport-fit=cover" />
     <meta name="generator" content="<?php echo $option['ZC_BLOG_PRODUCT_FULL']; ?>" />
     <meta name="renderer" content="webkit" />
     <link rel="stylesheet" href="css/admin.css?<?php echo $blogversion; ?>" type="text/css" media="screen" />

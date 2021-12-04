@@ -1239,3 +1239,43 @@ function BuildModule_statistics($array = array())
 {
     return ModuleBuilder::Statistics($array);
 }
+
+/**
+ * 消除16升级17又退回16后再升级17出的bug;
+ */
+function Fix_16_to_17_and_17_to_16_Error()
+{
+    global $zbp;
+    $result = $zbp->db->Query("SELECT conf_Name, COUNT(conf_Name) FROM {$zbp->table['Config']} GROUP BY conf_Name");
+    $config_list = array();
+
+    foreach ($result as $r) {
+        if (is_array($r)) {
+            $config_list[current($r)] = next($r);
+        }
+    }
+
+    foreach ($config_list as $k => $v) {
+        if ($config_list[$k] == 1) {
+            unset($config_list[$k]);
+        }
+    }
+
+    if (count($config_list) < 1) {
+        return;
+    }
+
+    foreach ($config_list as $k => $v) {
+        $result = $zbp->db->Query("SELECT conf_Value FROM {$zbp->table['Config']} WHERE conf_Name = '{$k}' LIMIT 1");
+        if (is_array($result) && is_array($result[0])) {
+            $config_list[$k] = current($result[0]);
+        }
+    }
+
+    foreach ($config_list as $k => $v) {
+        $zbp->db->Delete("DELETE FROM {$zbp->table['Config']} WHERE conf_Name = '{$k}'");
+        $zbp->db->Insert("INSERT INTO {$zbp->table['Config']} (conf_Name,conf_Value) VALUES ( '{$k}' , '" . $zbp->db->EscapeString($v) . "' )");
+    }
+
+    die;
+}

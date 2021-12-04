@@ -48,6 +48,7 @@ abstract class Base__Member extends Base
         parent::__construct($zbp->table['Member'], $zbp->datainfo['Member'], __CLASS__);
 
         $this->Name = $zbp->lang['msg']['anonymous'];
+        $this->Level = ZC_MEMBER_LEVER_LOWEST;
 
         $this->CreateTime = time();
         $this->UpdateTime = $this->UpdateTime;

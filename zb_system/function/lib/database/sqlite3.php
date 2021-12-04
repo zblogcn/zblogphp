@@ -22,6 +22,8 @@ class Database__SQLite3 implements Database__Interface
 
     private $db = null; //数据库连接实例
 
+    private $isconnected = false; //是否已打开连接
+
     /**
      * @var string|null 数据库名
      */
@@ -67,11 +69,15 @@ class Database__SQLite3 implements Database__Interface
      */
     public function Open($array)
     {
+        if ($this->isconnected) {
+            return;
+        }
         if ($this->db = new SQLite3($array[0])) {
             $this->dbpre = $array[1];
             $this->dbname = $array[0];
             $this->version = substr(GetValueInArray(SQLite3::version(), 'versionString'), 1);
 
+            $this->isconnected = true;
             return true;
         } else {
             return false;
@@ -83,7 +89,11 @@ class Database__SQLite3 implements Database__Interface
      */
     public function Close()
     {
+        if (!$this->isconnected) {
+            return;
+        }
         $this->db->close();
+        $this->isconnected = false;
     }
 
     /**

@@ -18,7 +18,8 @@ if (!defined('ZBP_PATH')) {
  */
 function Include_Admin_Addpagesubmenu()
 {
-    echo MakeSubMenu($GLOBALS['lang']['msg']['new_page'], '../cmd.php?act=PageEdt', 'm-left', null, null, null, 'icon-file-plus-fill');
+    global $zbp;
+    echo MakeSubMenu($GLOBALS['lang']['msg']['new_page'], $zbp->cmdurl . '?act=PageEdt', 'm-left', null, null, null, 'icon-file-plus-fill');
 }
 
 /**
@@ -26,9 +27,10 @@ function Include_Admin_Addpagesubmenu()
  */
 function Include_Admin_Addtagsubmenu()
 {
+    global $zbp;
     $type = (int) GetVars('type');
     $typeurl = $type > 0 ? ('&type=' . $type) : '';
-    echo MakeSubMenu($GLOBALS['lang']['msg']['new_tag'], '../cmd.php?act=TagEdt' . $typeurl, 'm-left', null, null, null, 'icon-tag-fill');
+    echo MakeSubMenu($GLOBALS['lang']['msg']['new_tag'], $zbp->cmdurl . '?act=TagEdt' . $typeurl, 'm-left', null, null, null, 'icon-tag-fill');
 }
 
 /**
@@ -36,9 +38,10 @@ function Include_Admin_Addtagsubmenu()
  */
 function Include_Admin_Addcatesubmenu()
 {
+    global $zbp;
     $type = (int) GetVars('type');
     $typeurl = $type > 0 ? ('&type=' . $type) : '';
-    echo MakeSubMenu($GLOBALS['lang']['msg']['new_category'], '../cmd.php?act=CategoryEdt' . $typeurl, 'm-left', null, null, null, 'icon-folder-plus');
+    echo MakeSubMenu($GLOBALS['lang']['msg']['new_category'], $zbp->cmdurl . '?act=CategoryEdt' . $typeurl, 'm-left', null, null, null, 'icon-folder-plus');
 }
 
 /**
@@ -48,9 +51,9 @@ function Include_Admin_Addmemsubmenu()
 {
     global $zbp;
     if ($zbp->CheckRights('MemberNew')) {
-        echo MakeSubMenu($GLOBALS['lang']['msg']['new_member'], '../cmd.php?act=MemberNew', 'm-left', null, null, null, 'icon-person-plus-fill');
+        echo MakeSubMenu($GLOBALS['lang']['msg']['new_member'], $zbp->cmdurl . '?act=MemberNew', 'm-left', null, null, null, 'icon-person-plus-fill');
     }
-    echo MakeSubMenu($GLOBALS['lang']['msg']['view_rights'], '../cmd.php?act=misc&amp;type=vrs', 'm-left', null, null, null, 'icon-person-check-fill');
+    echo MakeSubMenu($GLOBALS['lang']['msg']['view_rights'], $zbp->cmdurl . '?act=misc&amp;type=vrs', 'm-left', null, null, null, 'icon-person-check-fill');
 }
 
 /**
@@ -58,11 +61,12 @@ function Include_Admin_Addmemsubmenu()
  */
 function Include_Admin_Addmodsubmenu()
 {
-    echo MakeSubMenu($GLOBALS['lang']['msg']['new_module'], '../cmd.php?act=ModuleEdt', 'm-left', null, null, null, 'icon-subtract');
-    echo MakeSubMenu($GLOBALS['lang']['msg']['module_navbar'], '../cmd.php?act=ModuleEdt&amp;filename=navbar');
-    echo MakeSubMenu($GLOBALS['lang']['msg']['module_link'], '../cmd.php?act=ModuleEdt&amp;filename=link');
-    echo MakeSubMenu($GLOBALS['lang']['msg']['module_favorite'], '../cmd.php?act=ModuleEdt&amp;filename=favorite');
-    echo MakeSubMenu($GLOBALS['lang']['msg']['module_misc'], '../cmd.php?act=ModuleEdt&amp;filename=misc');
+    global $zbp;
+    echo MakeSubMenu($GLOBALS['lang']['msg']['new_module'], $zbp->cmdurl . '?act=ModuleEdt', 'm-left', null, null, null, 'icon-subtract');
+    echo MakeSubMenu($GLOBALS['lang']['msg']['module_navbar'], $zbp->cmdurl . '?act=ModuleEdt&amp;filename=navbar');
+    echo MakeSubMenu($GLOBALS['lang']['msg']['module_link'], $zbp->cmdurl . '?act=ModuleEdt&amp;filename=link');
+    echo MakeSubMenu($GLOBALS['lang']['msg']['module_favorite'], $zbp->cmdurl . '?act=ModuleEdt&amp;filename=favorite');
+    echo MakeSubMenu($GLOBALS['lang']['msg']['module_misc'], $zbp->cmdurl . '?act=ModuleEdt&amp;filename=misc');
 }
 
 /**
@@ -78,7 +82,7 @@ function Include_Admin_Addcmtsubmenu()
         } else {
             $n = '';
         }
-        echo MakeSubMenu($GLOBALS['lang']['msg']['check_comment'] . $n, '../cmd.php?act=CommentMng&amp;ischecking=1', 'm-left ' . (GetVars('ischecking') ? 'm-now' : ''), null, null, null, 'icon-shield-shaded');
+        echo MakeSubMenu($GLOBALS['lang']['msg']['check_comment'] . $n, $zbp->cmdurl . '?act=CommentMng&amp;ischecking=1', 'm-left ' . (GetVars('ischecking') ? 'm-now' : ''), null, null, null, 'icon-shield-shaded');
     }
 }
 
@@ -116,7 +120,7 @@ function Include_Admin_CheckWeakPassWord()
     }
 
     if ($action !== 'MemberEdt') {
-        Redirect($zbp->host . 'zb_system/cmd.php?act=MemberEdt&id=' . $zbp->user->ID);
+        Redirect($zbp->cmdurl . '?act=MemberEdt&id=' . $zbp->user->ID);
     }
 
     echo $zbp->ShowHint('bad', $zbp->langs->msg->change_default_password, 9999);
@@ -139,7 +143,7 @@ function Include_Admin_CheckHttp304OK()
         echo '<script>
          var exp = new Date();
          exp.setTime(exp.getTime() + 365*24*3600*1000);
-         $(function () {  $.ajax({type: "GET",url: "' . $zbp->host . 'zb_system/cmd.php?act=checkhttp304ok",success: function(msg){ 
+         $(function () {  $.ajax({type: "GET",url: "' . $zbp->cmdurl . '?act=checkhttp304ok",success: function(msg){ 
             document.cookie="http304ok=0; path=' . $zbp->cookiespath . '" + "; expires=" + exp.toGMTString();
          },statusCode: {500: function() {
             document.cookie="http304ok=1; path=' . $zbp->cookiespath . '" + "; expires=" + exp.toGMTString();
@@ -158,6 +162,24 @@ function Include_Admin_CheckHttp304OK()
     }
 }
 
+/**
+ * Check Moblie and Response Style
+ */
+function Include_Admin_CheckMoblie()
+{
+    if (function_exists('CheckIsMoblie') && CheckIsMoblie()){
+        echo '<style>@media screen{body{font-size:14px}}@media screen and (max-width: 500px) {body{font-size:15px}}</style>';
+    }
+}
+
+function Include_Admin_UpdateAppAfter()
+{
+    global $zbp;
+    if ($zbp->cache->success_updated_app !== '') {
+        echo '<script src="' . $zbp->cmdurl . '?act=misc&type=updatedapp"></script>';
+    }
+}
+
 $topmenus = array();
 
 $leftmenus = array();
@@ -170,23 +192,23 @@ function ResponseAdmin_LeftMenu()
     global $zbp;
     global $leftmenus;
 
-    $leftmenus['nav_new'] = MakeLeftMenu("ArticleEdt", $zbp->lang['msg']['new_article'], $zbp->host . "zb_system/cmd.php?act=ArticleEdt", "nav_new", "aArticleEdt", "", "icon-pencil-square-fill");
-    $leftmenus['nav_article'] = MakeLeftMenu("ArticleMng", $zbp->lang['msg']['article_manage'], $zbp->host . "zb_system/cmd.php?act=ArticleMng", "nav_article", "aArticleMng", "", "icon-stickies");
-    $leftmenus['nav_page'] = MakeLeftMenu("PageMng", $zbp->lang['msg']['page_manage'], $zbp->host . "zb_system/cmd.php?act=PageMng", "nav_page", "aPageMng", "", "icon-stickies-fill");
+    $leftmenus['nav_new'] = MakeLeftMenu("ArticleEdt", $zbp->lang['msg']['new_article'], $zbp->cmdurl . "?act=ArticleEdt", "nav_new", "aArticleEdt", "", "icon-pencil-square-fill");
+    $leftmenus['nav_article'] = MakeLeftMenu("ArticleMng", $zbp->lang['msg']['article_manage'], $zbp->cmdurl . "?act=ArticleMng", "nav_article", "aArticleMng", "", "icon-stickies");
+    $leftmenus['nav_page'] = MakeLeftMenu("PageMng", $zbp->lang['msg']['page_manage'], $zbp->cmdurl . "?act=PageMng", "nav_page", "aPageMng", "", "icon-stickies-fill");
 
     $leftmenus[] = "<li class='split'><hr/></li>";
 
-    $leftmenus['nav_category'] = MakeLeftMenu("CategoryMng", $zbp->lang['msg']['category_manage'], $zbp->host . "zb_system/cmd.php?act=CategoryMng", "nav_category", "aCategoryMng", "", "icon-folder-fill");
-    $leftmenus['nav_tags'] = MakeLeftMenu("TagMng", $zbp->lang['msg']['tag_manage'], $zbp->host . "zb_system/cmd.php?act=TagMng", "nav_tags", "aTagMng", "", "icon-tags-fill");
-    $leftmenus['nav_comment1'] = MakeLeftMenu("CommentMng", $zbp->lang['msg']['comment_manage'], $zbp->host . "zb_system/cmd.php?act=CommentMng", "nav_comment", "aCommentMng", "", "icon-chat-text-fill");
-    $leftmenus['nav_upload'] = MakeLeftMenu("UploadMng", $zbp->lang['msg']['upload_manage'], $zbp->host . "zb_system/cmd.php?act=UploadMng", "nav_upload", "aUploadMng", "", "icon-inboxes-fill");
-    $leftmenus['nav_member'] = MakeLeftMenu("MemberMng", $zbp->lang['msg']['member_manage'], $zbp->host . "zb_system/cmd.php?act=MemberMng", "nav_member", "aMemberMng", "", "icon-people-fill");
+    $leftmenus['nav_category'] = MakeLeftMenu("CategoryMng", $zbp->lang['msg']['category_manage'], $zbp->cmdurl . "?act=CategoryMng", "nav_category", "aCategoryMng", "", "icon-folder-fill");
+    $leftmenus['nav_tags'] = MakeLeftMenu("TagMng", $zbp->lang['msg']['tag_manage'], $zbp->cmdurl . "?act=TagMng", "nav_tags", "aTagMng", "", "icon-tags-fill");
+    $leftmenus['nav_comment1'] = MakeLeftMenu("CommentMng", $zbp->lang['msg']['comment_manage'], $zbp->cmdurl . "?act=CommentMng", "nav_comment", "aCommentMng", "", "icon-chat-text-fill");
+    $leftmenus['nav_upload'] = MakeLeftMenu("UploadMng", $zbp->lang['msg']['upload_manage'], $zbp->cmdurl . "?act=UploadMng", "nav_upload", "aUploadMng", "", "icon-inboxes-fill");
+    $leftmenus['nav_member'] = MakeLeftMenu("MemberMng", $zbp->lang['msg']['member_manage'], $zbp->cmdurl . "?act=MemberMng", "nav_member", "aMemberMng", "", "icon-people-fill");
 
     $leftmenus[] = "<li class='split'><hr/></li>";
 
-    $leftmenus['nav_theme'] = MakeLeftMenu("ThemeMng", $zbp->lang['msg']['theme_manage'], $zbp->host . "zb_system/cmd.php?act=ThemeMng", "nav_theme", "aThemeMng", "", "icon-grid-1x2-fill");
-    $leftmenus['nav_module'] = MakeLeftMenu("ModuleMng", $zbp->lang['msg']['module_manage'], $zbp->host . "zb_system/cmd.php?act=ModuleMng", "nav_module", "aModuleMng", "", "icon-grid-3x3-gap-fill");
-    $leftmenus['nav_plugin'] = MakeLeftMenu("PluginMng", $zbp->lang['msg']['plugin_manage'], $zbp->host . "zb_system/cmd.php?act=PluginMng", "nav_plugin", "aPluginMng", "", "icon-puzzle-fill");
+    $leftmenus['nav_theme'] = MakeLeftMenu("ThemeMng", $zbp->lang['msg']['theme_manage'], $zbp->cmdurl . "?act=ThemeMng", "nav_theme", "aThemeMng", "", "icon-grid-1x2-fill");
+    $leftmenus['nav_module'] = MakeLeftMenu("ModuleMng", $zbp->lang['msg']['module_manage'], $zbp->cmdurl . "?act=ModuleMng", "nav_module", "aModuleMng", "", "icon-grid-3x3-gap-fill");
+    $leftmenus['nav_plugin'] = MakeLeftMenu("PluginMng", $zbp->lang['msg']['plugin_manage'], $zbp->cmdurl . "?act=PluginMng", "nav_plugin", "aPluginMng", "", "icon-puzzle-fill");
 
     foreach ($GLOBALS['hooks']['Filter_Plugin_Admin_LeftMenu'] as $fpname => &$fpsignal) {
         $fpname($leftmenus);
@@ -205,8 +227,8 @@ function ResponseAdmin_TopMenu()
     global $zbp;
     global $topmenus;
 
-    $topmenus[] = MakeTopMenu("admin", $zbp->lang['msg']['dashboard'], $zbp->host . "zb_system/cmd.php?act=admin", "", "", "icon-house-door-fill");
-    $topmenus[] = MakeTopMenu("SettingMng", @$zbp->lang['msg']['web_settings'], $zbp->host . "zb_system/cmd.php?act=SettingMng", "", "", "icon-gear-fill");
+    $topmenus[] = MakeTopMenu("admin", $zbp->lang['msg']['dashboard'], $zbp->cmdurl . "?act=admin", "", "", "icon-house-door-fill");
+    $topmenus[] = MakeTopMenu("SettingMng", @$zbp->lang['msg']['web_settings'], $zbp->cmdurl . "?act=SettingMng", "", "", "icon-gear-fill");
 
     foreach ($GLOBALS['hooks']['Filter_Plugin_Admin_TopMenu'] as $fpname => &$fpsignal) {
         $fpname($topmenus);

@@ -22,6 +22,10 @@ class Database__PostgreSQL implements Database__Interface
 
     private $db = null; //数据库连接
 
+    private $isconnected = false; //是否已打开连接
+
+    private $ispersistent = false; //是否持久连接
+
     /**
      * @var string|null 数据库名
      */
@@ -82,9 +86,13 @@ class Database__PostgreSQL implements Database__Interface
      */
     public function Open($array)
     {
+        if ($this->isconnected) {
+            return;
+        }
         $array[3] = strtolower($array[3]);
         $s = "host={$array[0]} port={$array[5]} dbname={$array[3]} user={$array[1]} password={$array[2]} options='--client_encoding=UTF8'";
-        if (false == $array[5]) {
+        $this->ispersistent = $array[6];
+        if (false == $this->ispersistent) {
             $db_link = pg_connect($s);
         } else {
             $db_link = pg_pconnect($s);
@@ -104,6 +112,7 @@ class Database__PostgreSQL implements Database__Interface
                 $this->version = $v['server'];
             }
 
+            $this->isconnected = true;
             return true;
         }
     }
@@ -122,6 +131,7 @@ class Database__PostgreSQL implements Database__Interface
         $this->db = pg_connect($s);
         $this->dbname = $dbpgsql_name;
 
+        $this->isconnected = true;
 
         $isExists = @$this->Query("select count(*) from pg_catalog.pg_database where datname = '$dbpgsql_name';");
         $hasDB = false;
@@ -147,8 +157,17 @@ class Database__PostgreSQL implements Database__Interface
      */
     public function Close()
     {
+        if (!$this->isconnected) {
+            return;
+        }
+        $this->isconnected = false;
+        if ($this->ispersistent == true) {
+            $this->db = null;
+            return;
+        }
         if (is_resource($this->db)) {
             pg_close($this->db);
+            $this->db = null;
         }
     }
 

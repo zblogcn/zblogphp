@@ -22,6 +22,10 @@ class Database__PDO_MySQL implements Database__Interface
 
     private $db = null; //数据库连接实例
 
+    private $isconnected = false; //是否已打开连接
+
+    private $ispersistent = false; //是否持久连接
+
     /**
      * @var string|null 数据库名
      */
@@ -72,6 +76,9 @@ class Database__PDO_MySQL implements Database__Interface
      */
     public function Open($array)
     {
+        if ($this->isconnected) {
+            return;
+        }
         /*$array=array(
         'dbmysql_server',
         'dbmysql_username',
@@ -82,7 +89,8 @@ class Database__PDO_MySQL implements Database__Interface
         'persistent',
         'engine',
          */
-        if ($array[6] == false) {
+        $this->ispersistent = $array[6];
+        if ($this->ispersistent == false) {
             $options = array();
         } else {
             $options = array(PDO::ATTR_PERSISTENT => true);
@@ -110,6 +118,7 @@ class Database__PDO_MySQL implements Database__Interface
             $this->collate = $c;
             $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_SILENT);
 
+            $this->isconnected = true;
             return true;
         } catch (PDOException $e) {
             return false;
@@ -143,6 +152,8 @@ class Database__PDO_MySQL implements Database__Interface
         $this->charset = $u;
         $this->collate = $c;
 
+        $this->isconnected = true;
+
         $s = "CREATE DATABASE IF NOT EXISTS {$dbmysql_name} DEFAULT CHARACTER SET {$u}";
         $r = $this->db->exec($this->sql->Filter($s));
         $this->LogsError();
@@ -158,7 +169,11 @@ class Database__PDO_MySQL implements Database__Interface
      */
     public function Close()
     {
+        if (!$this->isconnected) {
+            return;
+        }
         $this->db = null;
+        $this->isconnected = false;
     }
 
     /**

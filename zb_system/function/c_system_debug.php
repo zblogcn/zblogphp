@@ -425,11 +425,16 @@ class ZBlogException
         self::$disabled = true;
     }
 
+    private static $disabled_old_state = null;
+
     /**
      * 暂停错误调度.
      */
     public static function SuspendErrorHook()
     {
+        if (is_null(self::$disabled_old_state)) {
+            self::$disabled_old_state = self::$disabled;
+        }
         self::DisableErrorHook();
     }
 
@@ -439,6 +444,10 @@ class ZBlogException
     public static function ResumeErrorHook()
     {
         self::EnableErrorHook();
+        if (!is_null(self::$disabled_old_state)) {
+            self::$disabled = self::$disabled_old_state;
+            self::$disabled_old_state = null;
+        }
     }
 
     /**

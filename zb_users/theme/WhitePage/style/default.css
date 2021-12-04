@@ -480,6 +480,7 @@ div.post-body>pre.prism-highlight .prism-token.prism-operator{
 	padding:0;
 	text-align:center;
 	font-weight:normal;
+    clear: both;
 }
 #BlogCopyRight {
 	font-size:0.9em;
@@ -488,6 +489,7 @@ div.post-body>pre.prism-highlight .prism-token.prism-operator{
 	padding:0;
 	text-align:center;
 	font-weight:normal;
+    clear: both;
 }
 #divCalendar {
 	padding:0 0 0 0;

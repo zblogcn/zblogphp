@@ -22,6 +22,10 @@ class Database__MySQLi implements Database__Interface
 
     private $db = null; //数据库连接实例
 
+    private $isconnected = false; //是否已打开连接
+
+    private $ispersistent = false; //是否持久连接
+
     /**
      * @var string|null 数据库名
      */
@@ -85,9 +89,13 @@ class Database__MySQLi implements Database__Interface
      */
     public function Open($array)
     {
+        if ($this->isconnected) {
+            return;
+        }
         $db = mysqli_init();
 
-        if ($array[6] == true) {
+        $this->ispersistent = $array[6];
+        if ($this->ispersistent == true) {
             $array[0] = 'p:' . $array[0];
         }
 
@@ -117,6 +125,7 @@ class Database__MySQLi implements Database__Interface
             $this->dbpre = $array[4];
             $this->dbengine = $array[7];
 
+            $this->isconnected = true;
             return true;
         }
 
@@ -158,6 +167,8 @@ class Database__MySQLi implements Database__Interface
         $this->db = $db;
         $this->dbname = $dbmysql_name;
 
+        $this->isconnected = true;
+
         $s = "CREATE DATABASE IF NOT EXISTS {$dbmysql_name} DEFAULT CHARACTER SET {$u}";
         $r = mysqli_query($this->db, $this->sql->Filter($s));
         $this->LogsError();
@@ -173,6 +184,14 @@ class Database__MySQLi implements Database__Interface
      */
     public function Close()
     {
+        if (!$this->isconnected) {
+            return;
+        }
+        $this->isconnected = false;
+        if ($this->ispersistent == true) {
+            $this->db = null;
+            return;
+        }
         if (is_object($this->db)) {
             mysqli_close($this->db);
             $this->db = null;

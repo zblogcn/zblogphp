@@ -507,21 +507,21 @@ class ZBlogPHP
             }
         }
 
-        if (preg_match('/Get([a-zA-Z][a-zA-Z0-9_]+)List/', $method, $m) == 1) {
+        if (preg_match('/Get([a-zA-Z][a-zA-Z0-9_]*)List/i', $method, $m) == 1) {
             $classname = $m[1];
             array_unshift($args, $classname);
             if (is_subclass_of($classname, 'Base') == true) {
                 return call_user_func_array(array($this, 'GetListWithBaseObject'), $args);
             }
         }
-        if (preg_match('/Get([a-zA-Z][a-zA-Z0-9_]+)ByArray/', $method, $m) == 1) {
+        if (preg_match('/Get([a-zA-Z][a-zA-Z0-9_]*)ByArray/i', $method, $m) == 1) {
             $classname = $m[1];
             array_unshift($args, $classname);
             if (is_subclass_of($classname, 'Base') == true) {
                 return call_user_func_array(array($this, 'GetListByArrayWithBaseObject'), $args);
             }
         }
-        if (preg_match('/Get([a-zA-Z][a-zA-Z0-9_]+)ByID/', $method, $m) == 1) {
+        if (preg_match('/Get([a-zA-Z][a-zA-Z0-9_]*)ByID/i', $method, $m) == 1) {
             $classname = $m[1];
             array_unshift($args, $classname);
             if (is_subclass_of($classname, 'Base') == true) {
@@ -771,6 +771,10 @@ class ZBlogPHP
                 $this->host = (string) $forced_url;
                 $this->cookiespath = strstr(str_replace('://', '', $this->host), '/');
             } elseif ($this->option['ZC_PERMANENT_DOMAIN_ENABLE'] == true) {
+                //消除16升级17又退回16后再升级17出的bug;
+                if (is_array($this->option['ZC_BLOG_HOST'])) {
+                    Fix_16_to_17_and_17_to_16_Error();
+                }
                 //如果ZC_PERMANENT_DOMAIN_ENABLE已开启的话
                 $this->host = $this->option['ZC_BLOG_HOST'];
                 $this->cookiespath = strstr(str_replace('://', '', $this->host), '/');
@@ -929,6 +933,8 @@ class ZBlogPHP
         Add_Filter_Plugin('Filter_Plugin_Login_Header', 'Include_AddonAdminFont');
         Add_Filter_Plugin('Filter_Plugin_Other_Header', 'Include_AddonAdminFont');
         Add_Filter_Plugin('Filter_Plugin_Admin_Header', 'Include_AddonAdminFont');
+        Add_Filter_Plugin('Filter_Plugin_Admin_Header', 'Include_Admin_CheckMoblie');
+        Add_Filter_Plugin('Filter_Plugin_Admin_Header', 'Include_Admin_UpdateAppAfter');
         Add_Filter_Plugin('Filter_Plugin_BatchPost', 'Include_BatchPost_Article');
         Add_Filter_Plugin('Filter_Plugin_BatchPost', 'Include_BatchPost_Page');
         Add_Filter_Plugin('Filter_Plugin_Index_End', 'Include_Index_End');

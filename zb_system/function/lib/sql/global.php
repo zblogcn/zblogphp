@@ -846,6 +846,18 @@ class SQL__Global
             $sql[] = 'FROM';
             $this->buildTable();
         }
+
+        if (get_class($this) == 'SQL__MySQL') {
+            if (array_key_exists('useindex', $this->option)) {
+                $this->extend['USEINDEX'] = $this->option['useindex'];
+            }
+            if (array_key_exists('forceindex', $this->option)) {
+                $this->extend['FORCEINDEX'] = $this->option['forceindex'];
+            }
+            if (array_key_exists('ignoreindex', $this->option)) {
+                $this->extend['IGNOREINDEX'] = $this->option['ignoreindex'];
+            }
+        }
         if (get_class($this) == 'SQL__MySQL' && array_key_exists('USEINDEX', $this->extend)) {
             $this->buildUSEINDEX();
         }

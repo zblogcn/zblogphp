@@ -11,7 +11,7 @@
 <script src="{$host}zb_system/script/c_html_js_add.php?{if isset($html_js_hash)}hash={$html_js_hash}&{/if}v={$version}"></script>
 <script src="{$host}zb_users/theme/{$theme}/script/custom.js"></script>
 {$header}
-{if $type=='index'&&$page=='1'}
+{if $type=='index'&&$page=='1'&&$option['ZC_XMLRPC_ENABLE']}
 <link rel="alternate" type="application/rss+xml" href="{$feedurl}" title="{$name}" />
 <link rel="EditURI" type="application/rsd+xml" title="RSD" href="{$host}zb_system/xml-rpc/?rsd" />
 <link rel="wlwmanifest" type="application/wlwmanifest+xml" href="{$host}zb_system/xml-rpc/wlwmanifest.xml" />

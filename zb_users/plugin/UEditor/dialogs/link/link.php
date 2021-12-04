@@ -37,7 +37,7 @@
     </table>
 <script type="text/javascript">
 
-    editor.setOpt('allowLinkProtocols', ['http:', 'https:', '#', '/', 'ftp:', 'mailto:', 'tel:']);
+    editor.setOpt('allowLinkProtocols', ['http:', 'https:', '#', '/', 'ftp:', 'mailto:', 'tel:', 'ed2k:', 'magnet:', 'thunder:']);
     var allowLinkProtocols = editor.getOpt('allowLinkProtocols');
 
     var range = editor.selection.getRange(),

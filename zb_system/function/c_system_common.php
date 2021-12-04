@@ -348,6 +348,12 @@ function GetEnvironment($more = false)
     }
 
     if ($more) {
+        if (method_exists($zbp, 'LoadApp')) {
+            $app = $zbp->LoadApp('plugin', 'AppCentre');
+            if (is_object($app) && $app->isloaded == true && $app->IsUsed()) {
+                $system_environment .= ';  AppCentre' . $app->version;
+            }
+        }
         $um = ini_get('upload_max_filesize');
         $pm = ini_get('post_max_size');
         $ml = ini_get('memory_limit');
@@ -2057,7 +2063,7 @@ function RemovePHPCode($code)
 /**
  * 拿到ID数组byList列表
  *
- * @param array $array
+ * @param array $array (可以是base对象数组，也可以是array)
  * @param string $keyname
  *
  * @return array
@@ -2066,12 +2072,24 @@ function GetIDArrayByList($array, $keyname = null)
 {
     $ids = array();
     foreach ($array as $key => $value) {
-        if ($keyname == null) {
-            $a = $value->GetData();
-            $ids[] = reset($a);
-        } else {
-            $a = $value->GetData();
-            $ids[] = $a[$keyname];
+        if (is_array($value)) {
+            if ($keyname == null) {
+                $ids[] = reset($value);
+            } else {
+                $ids[] = $value[$keyname];
+            }
+        } elseif(is_object($value) && is_subclass_of($value, 'Base')) {
+            if ($keyname == null) {
+                $a = $value->GetData();
+                $ids[] = reset($a);
+            } else {
+                $a = $value->GetData();
+                $ids[] = $a[$keyname];
+            }
+        } elseif(is_object($value)) {
+            if ($keyname != null) {
+                $ids[] = $value->$keyname;
+            }
         }
     }
 
