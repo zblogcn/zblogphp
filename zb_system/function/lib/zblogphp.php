@@ -914,7 +914,7 @@ class ZBlogPHP
         }
 
         if ($this->option['ZC_LOADMEMBERS_LEVEL'] == 0) {
-            $this->option['ZC_LOADMEMBERS_LEVEL'] = 1;
+            $this->option['ZC_LOADMEMBERS_LEVEL'] = ZC_MEMBER_LEVER_ADMINISTRATOR;
         }
         $this->isloadmembers || $this->LoadMembers($this->option['ZC_LOADMEMBERS_LEVEL']);
         $this->isloadcategories || $this->LoadCategories();
@@ -924,7 +924,6 @@ class ZBlogPHP
 
         if ($this->CheckIsLoggedin() == false) {
             $this->Verify();
-            $this->islogin = empty($this->user->ID) ? false : true;
         }
 
         //创建模板类
@@ -2106,23 +2105,9 @@ class ZBlogPHP
             if (is_readable($this->systemdir . 'defend/en.php')) {
                 $defend_en = include $this->systemdir . 'defend/en.php';
                 $nowlang = $languagePtr;
-                $this->lang = array_merge($defend_en, $nowlang);
-                foreach ($nowlang as $key => $value) {
-                    if (isset($defend_en[$key]) && is_array($value) && is_array($defend_en[$key])) {
-                        foreach ($defend_en[$key] as $key2 => $value2) {
-                            if (!isset($this->lang[$key][$key2])) {
-                                $this->lang[$key][$key2] = $value2;
-                            }
-                        }
-                    }
-                }
+                $languagePtr = array_replace_recursive($defend_en, $nowlang);
             }
-            //$this->langs = array_to_object(($this->lang));
-        }// else {
-            //if ($id != '' && isset($this->lang[$id])) {
-                //$this->langs->$id = array_to_object(($this->lang[$id]));
-            //}
-        //}
+        }
 
         $this->langs = new ZbpLangs($this->lang, 'langs');
         return true;
@@ -2134,11 +2119,6 @@ class ZBlogPHP
     public function ReflushLanguages()
     {
         $this->lang['error']['77'] = str_replace(array('%min', '%max'), array($this->option['ZC_USERNAME_MIN'], $this->option['ZC_USERNAME_MAX']), $this->lang['error']['77']);
-
-        foreach ($GLOBALS['hooks']['Filter_Plugin_Zbp_LoadLanguage'] as $fpname => &$fpsignal) {
-            $fpname($this->lang);
-        }
-        //$this->langs = array_to_object(($this->lang));
     }
 
     /**

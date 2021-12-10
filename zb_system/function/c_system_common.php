@@ -249,7 +249,7 @@ function Logs_Dump()
 {
     $a = func_get_args();
     foreach ($a as $key => $value) {
-        $s = var_export($value, true);
+        $s = print_r($value, true);
         Logs($s);
     }
 }
@@ -280,11 +280,7 @@ function RunTime($isOutput = true)
 
     $_SERVER['_runtime_result'] = $rt;
 
-    if (array_key_exists('_end_time', $_SERVER)) {
-        return $rt;
-    } else {
-        $_SERVER['_end_time'] = $_end_time;
-    }
+    $_SERVER['_end_time'] = $_end_time;
 
     if (isset($zbp->option['ZC_RUNINFO_DISPLAY']) && $zbp->option['ZC_RUNINFO_DISPLAY'] == false) {
         return $rt;
@@ -295,6 +291,7 @@ function RunTime($isOutput = true)
         echo $rt['query'] . ' queries';
         echo ' , ' . $rt['memory'] . 'kb memory';
         echo ' , ' . $rt['error'] . ' error' . ($rt['error'] > 1 ? 's' : '');
+        //echo print_r($rt['error_detail'], true);
         echo '-->';
     }
 
@@ -506,9 +503,12 @@ function GetGuid()
  */
 function GetVars($name, $type = 'REQUEST', $default = null)
 {
+    if (empty($type)) {
+        $type = 'REQUEST';
+    }
     $array = &$GLOBALS[strtoupper("_$type")];
 
-    if (isset($array[$name])) {
+    if (array_key_exists($name, $array)) {
         return $array[$name];
     } else {
         return $default;
@@ -528,13 +528,7 @@ function GetVars($name, $type = 'REQUEST', $default = null)
  */
 function GetVarsByDefault($name, $type = 'REQUEST', $default = null)
 {
-    $array = &$GLOBALS[strtoupper("_$type")];
-
-    if (isset($array[$name])) {
-        return $array[$name];
-    } else {
-        return $default;
-    }
+    return GetVars($name, $type, $default);
 }
 
 /**
@@ -1086,8 +1080,8 @@ function GetRequestScript()
         $f = $_SERVER['SCRIPT_NAME'];
     }
     $f = str_replace('\\', '/', $f);
-    if (strpos($f, $blogpath) === 0) {
-        $f = str_replace($blogpath, '', $f);
+    if (strpos($f, (string) $blogpath) === 0) {
+        $f = str_replace((string) $blogpath, '', $f);
     }
     $f = ltrim($f, '/');
     return $f;
@@ -2076,19 +2070,24 @@ function GetIDArrayByList($array, $keyname = null)
             if ($keyname == null) {
                 $ids[] = reset($value);
             } else {
-                $ids[] = $value[$keyname];
+                if (array_key_exists($keyname, $array)) {
+                    $ids[] = $value[$keyname];
+                } else {
+                    $ids[] = null;
+                }
             }
-        } elseif(is_object($value) && is_subclass_of($value, 'Base')) {
+        } elseif (is_object($value) && is_subclass_of($value, 'Base')) {
             if ($keyname == null) {
                 $a = $value->GetData();
                 $ids[] = reset($a);
             } else {
-                $a = $value->GetData();
-                $ids[] = $a[$keyname];
-            }
-        } elseif(is_object($value)) {
-            if ($keyname != null) {
                 $ids[] = $value->$keyname;
+            }
+        } elseif (is_object($value)) {
+            if (property_exists($value, $keyname)) {
+                $ids[] = $value->$keyname;
+            } else {
+                $ids[] = null;
             }
         }
     }

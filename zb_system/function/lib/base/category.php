@@ -299,22 +299,74 @@ abstract class Base__Category extends Base
         }
     }
 
-/*   *
-     * 得到子孙分类.
-     *
-     * @param int 分类ID
-     *
-     * @return obj Category
-
-    private function GetSubCategories($obj)
+    /**
+     * 查找父祖分类并写入$parents
+     */
+    private function FindParents($parentid, &$parents)
     {
-        $a = array();
-        if (count($this->SubCategories) > 0) {
-            foreach ($this->SubCategories as $key => $value) {
-                $a += $value->GetSubCategories($value);
+        global $zbp;
+        if ($parentid == 0) {
+            return 0;
+        }
+        if (isset($zbp->categories_all[$parentid])) {
+            $parents[] = $zbp->categories_all[$parentid];
+            if ($zbp->categories_all[$parentid]->ParentID > 0) {
+                return $this->FindParents($zbp->categories_all[$parentid]->ParentID, $parents);
+            }
+
+            return $parentid;
+        } else {
+            return 0;
+        }
+    }
+
+    /**
+     * 判断$id是否是分类的父祖辈分类
+     */
+    public function IsParents($id)
+    {
+        $parents = array();
+        $this->FindParents($this->ParentID, $parents);
+        foreach ($parents as $c) {
+            if ($c->ID == $id) {
+                return true;
             }
         }
-        return $a;
+        return false;
     }
-*/
+
+    /**
+     * 判断$id是否是分类的父分类
+     */
+    public function IsParent($id)
+    {
+        return $this->ParentID == $id;
+    }
+
+    /**
+     * 判断$id是否是分类的子孙分类
+     */
+    public function IsGrandChildren($id)
+    {
+        foreach ($this->ChildrenCategories as $c) {
+            if ($c->ID == $id) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * 判断$id是否是分类的子分类
+     */
+    public function IsChildren($id)
+    {
+        foreach ($this->SubCategories as $c) {
+            if ($c->ID == $id) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 }

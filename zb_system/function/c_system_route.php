@@ -1212,6 +1212,13 @@ function ViewList($page = null, $cate = null, $auth = null, $date = null, $tags 
                 }
             }
         }
+        if ($type == 'category' && $page == 1) {
+            foreach ($articles_top_notorder as $articles_top_notorder_post) {
+                if ($articles_top_notorder_post->TopType == 'categorys' && ($articles_top_notorder_post->Category->IsParents($category->ID)) || $articles_top_notorder_post->Category->ID == $category->ID) {
+                    $articles_top[] = $articles_top_notorder_post;
+                }
+            }
+        }
     }
 
     $select = '';
@@ -1385,16 +1392,22 @@ function ViewPost($id = null, $alias = null, $isrewrite = false, $object = array
     $w[] = array('=', 'log_Type', $posttype);
 
     if ($id !== null && is_numeric($id)) {
+        $id = trim($id);
         if (function_exists('ctype_digit') && !ctype_digit((string) $id)) {
             $zbp->ShowError(3, __FILE__, __LINE__);
         }
 
         $w[] = array('=', 'log_ID', $id);
     } elseif ($alias !== null) {
+        $alias = trim($alias);
         if ($zbp->option['ZC_POST_ALIAS_USE_ID_NOT_TITLE'] == false) {
             $w[] = array('array', array(array('log_Alias', $alias), array('log_Title', $alias)));
         } else {
-            $w[] = array('array', array(array('log_Alias', $alias), array('log_ID', $alias)));
+            if (preg_match('/^[0-9]+$/', $alias) == 1) {
+                $w[] = array('array', array(array('log_Alias', $alias), array('log_ID', $alias)));
+            } else {
+                $w[] = array('=', 'log_Alias', $alias);
+            }
         }
     } else {
         $zbp->ShowError(2, __FILE__, __LINE__);
@@ -1439,9 +1452,15 @@ function ViewPost($id = null, $alias = null, $isrewrite = false, $object = array
     $zbp->LoadTagsByIDString($article->Tag);
 
     if (isset($zbp->option['ZC_VIEWNUMS_TURNOFF']) && $zbp->option['ZC_VIEWNUMS_TURNOFF'] == false) {
-        $article->ViewNums += 1;
-        $sql = $zbp->db->sql->Update($zbp->table['Post'], array('log_ViewNums' => $article->ViewNums), array(array('=', 'log_ID', $article->ID)));
-        $zbp->db->Update($sql);
+        if (count($GLOBALS['hooks']['Filter_Plugin_ViewPost_ViewNums']) > 0) {
+            foreach ($GLOBALS['hooks']['Filter_Plugin_ViewPost_ViewNums'] as $fpname => &$fpsignal) {
+                $article->ViewNums = $fpname($article);
+            }
+        } else {
+            $article->ViewNums += 1;
+            $sql = $zbp->db->sql->Update($zbp->table['Post'], array('log_ViewNums' => $article->ViewNums), array(array('=', 'log_ID', $article->ID)));
+            $zbp->db->Update($sql);
+        }
     }
 
     $pagebar = new Pagebar('javascript:zbp.comment.get(\'' . $article->ID . '\',\'{%page%}\');', false);

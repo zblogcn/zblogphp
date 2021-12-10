@@ -370,7 +370,7 @@ span.button:hover { box-shadow: 0 0 1px #000; border-radius: 2px; padding: 2px 3
 
 /*侧栏管理*/
 .widget-left { float: left; clear: left; width: 100%; margin-right: -290px; overflow: hidden; }
-.widget-list { min-width: 300px; margin-right: 290px; border: 2px solid #EEE; }
+.widget-list { min-width: 270px; margin-right: 290px; border: 2px solid #EEE; }
 .siderbar-list { float: right; width: 290px; margin-left: 0; }
 .widget-list-header,
 .siderbar-header,
@@ -450,4 +450,5 @@ i.icon-arrow-repeat.loading-status:before { animation: refreshloading 1.5s linea
     form.search p {line-height: 3em;}
     #divEditRight .editmod>select,#divEditRight .editmod>input[type=text]{width: 130px;}
     #btnPost{width: 170px;}
+    .content-box .content-box-tabs a, .content-box .content-box-tabs a.current {padding-left:3px;padding-right:3px;margin-right:5px;}
 }

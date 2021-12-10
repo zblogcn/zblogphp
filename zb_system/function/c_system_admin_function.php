@@ -167,8 +167,8 @@ function Include_Admin_CheckHttp304OK()
  */
 function Include_Admin_CheckMoblie()
 {
-    if (function_exists('CheckIsMoblie') && CheckIsMoblie()){
-        echo '<style>@media screen{body{font-size:14px}}@media screen and (max-width: 500px) {body{font-size:15px}}</style>';
+    if (function_exists('CheckIsMoblie') && CheckIsMoblie()) {
+        echo '<style>@media screen{body{font-size:15px}}@media screen and (max-width: 800px) {#divMain{padding:0 1px;overflow:scroll;}}</style>';
     }
 }
 
@@ -621,7 +621,8 @@ function OutputOptionItemsOfIsTop($default)
     $tz[0] = $zbp->lang['msg']['none'];
     $tz[2] = $zbp->lang['msg']['top_index'];
     $tz[1] = $zbp->lang['msg']['top_global'];
-    $tz[4] = $zbp->lang['msg']['top_category'];
+    $tz[4] = $zbp->lang['msg']['top_categorys'];
+    //$tz[8] = $zbp->lang['msg']['top_category'];
 
     foreach ($GLOBALS['hooks']['Filter_Plugin_OutputOptionItemsOfIsTop'] as $fpname => &$fpsignal) {
         $fpreturn = $fpname($default, $tz);

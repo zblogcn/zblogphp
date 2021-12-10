@@ -470,9 +470,10 @@ class ModuleBuilder
         $array = $zbp->GetMemberList('*', $w, array('mem_ID' => 'ASC'), $i, null);
 
         foreach ($array as $member) {
-            $member->Guid = '';
-            $member->Password = '';
-            $authors[] = $member;
+            $m = $member->Cloned();
+            $m->Guid = '';
+            $m->Password = '';
+            $authors[] = $m;
         }
 
         $tags['authors'] = $authors;

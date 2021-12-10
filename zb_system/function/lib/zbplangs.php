@@ -4,7 +4,7 @@ if (!defined('ZBP_PATH')) {
     exit('Access denied');
 }
 
-class ZbpLangs
+class ZbpLangs implements IteratorAggregate
 {
 
     private $item = null;
@@ -43,6 +43,17 @@ class ZbpLangs
     public function __isset($name)
     {
         return array_key_exists($name, $this->array);
+    }
+
+    #[\ReturnTypeWillChange]
+    public function getIterator() {
+        $newarray = array();
+        foreach ($this->array as $key => $value) {
+            if (!is_array($value)) {
+                $newarray[$key] = $value;
+            }
+        }
+        return new ArrayIterator($newarray);
     }
 
 }

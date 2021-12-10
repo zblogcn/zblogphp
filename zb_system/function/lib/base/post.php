@@ -167,6 +167,8 @@ abstract class Base__Post extends Base
                     $this->Top = 1;
                 } elseif ($value == 'index') {
                     $this->Top = 2;
+                } elseif ($value == 'categorys') {
+                    $this->Top = 8;
                 } elseif ($value == 'category') {
                     $this->Top = 4;
                 } elseif ($value == '' || $value == null) {
@@ -350,9 +352,11 @@ abstract class Base__Post extends Base
                     $toptype = 'index';
                 }
                 if ($this->IsTop == 4) {
+                    $toptype = 'categorys';
+                }
+                if ($this->IsTop == 8) {
                     $toptype = 'category';
                 }
-
                 return $toptype;
             case 'TypeName':
                 return $zbp->GetPostType($this->Type, 'name');

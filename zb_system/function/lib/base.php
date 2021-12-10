@@ -471,55 +471,70 @@ class Base
             $keys[] = $value[0];
         }
         $keyvalue = array_fill_keys($keys, '');
+        $keyvalue_orig = array();
 
         foreach ($this->datainfo as $key => $value) {
             if (!is_array($value) || count($value) < 4) {
                 continue;
             }
             if (!array_key_exists($key, $this->data)) {
-                if (empty($this->data[$this->idname])) {
-                    if (strcasecmp($value[1], 'string') == 0 && trim($value[2]) == '') {
-                        $keyvalue[$value[0]] = trim($value[2]);
-                    } else {
-                        unset($keyvalue[$value[0]]);
-                    }
-                } else {
-                    unset($keyvalue[$value[0]]);
-                }
+                //如果unset(某个$key)就不再插入或修改该数据
+                unset($keyvalue[$value[0]]);
                 continue;
             }
 
             if ($value[1] == 'boolean') {
                 $keyvalue[$value[0]] = (int) $this->data[$key];
+                $keyvalue_orig[$value[0]] = (int) $this->original[$key];
             } elseif ($value[1] == 'integer') {
                 $keyvalue[$value[0]] = (int) $this->data[$key];
+                $keyvalue_orig[$value[0]] = (int) $this->original[$key];
             } elseif ($value[1] == 'float') {
                 $keyvalue[$value[0]] = (float) $this->data[$key];
+                $keyvalue_orig[$value[0]] = (float) $this->original[$key];
             } elseif ($value[1] == 'double') {
                 $keyvalue[$value[0]] = (float) $this->data[$key];
+                $keyvalue_orig[$value[0]] = (float) $this->original[$key];
             } elseif ($value[1] == 'string' || $value[1] == 'char') {
                 if ($key == 'Meta' || $bloghost == '/') {
                     $keyvalue[$value[0]] = $this->data[$key];
+                    $keyvalue_orig[$value[0]] = $this->original[$key];
                 } else {
                     $keyvalue[$value[0]] = ($this->isreplacehost) ? $this->ReplaceHost2Tag($this->data[$key]) : $this->data[$key];
+                    $keyvalue_orig[$value[0]] = ($this->isreplacehost) ? $this->ReplaceHost2Tag($this->original[$key]) : $this->original[$key];
                 }
             } else {
                 $keyvalue[$value[0]] = $this->data[$key];
+                $keyvalue_orig[$value[0]] = $this->original[$key];
             }
         }
         array_shift($keyvalue);
+        array_shift($keyvalue_orig);
 
         $id_name = $this->idname;
         $id_field = $this->datainfo[$id_name][0];
 
-        if ($this->$id_name == 0) {
+        if (empty($this->$id_name)) {
+            if (count($keyvalue) == 0) {
+                return true;
+            }
             $sql = $this->db->sql->Insert($this->table, $keyvalue);
             $this->$id_name = $this->db->Insert($sql);
         } else {
+            foreach ($keyvalue as $key => $value) {
+                if (array_key_exists($key, $keyvalue_orig)) {
+                    if ($value === $keyvalue_orig[$key]) {
+                        unset($keyvalue[$key]);
+                    }
+                }
+            }
+            if (count($keyvalue) == 0) {
+                return true;
+            }
             $sql = $this->db->sql->Update($this->table, $keyvalue, array(array('=', $id_field, $this->$id_name)));
             $r = $this->db->Update($sql);
-            $this->original = $this->data;
 
+            $this->original = $this->data;
             return $r;
         }
 

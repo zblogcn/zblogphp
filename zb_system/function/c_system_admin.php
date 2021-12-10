@@ -127,7 +127,7 @@ function Admin_ArticleMng()
     <input name="search" style="width:250px;" type="text" value="" /> &nbsp;&nbsp;&nbsp;&nbsp;<input type="submit" class="button" value="' . $zbp->lang['msg']['submit'] . '"/></p>';
     echo '</form>';
 
-    $search = GetVars('search');
+    $search = GetVars('search', '', '');
     $order_get = GetVars('order', 'GET');
 
     $p = new Pagebar('{%host%}zb_system/cmd.php?act=ArticleMng{&status=%status%}{&istop=%istop%}{&category=%category%}{&search=%search%}{&order=%order%}{&page=%page%}', false);
@@ -454,7 +454,7 @@ function Admin_CategoryMng()
 
     echo '<table border="1" class="tableFull tableBorder tableBorder-thcenter table_hover table_striped">';
 
-    $search = GetVars('search');
+    $search = GetVars('search', '', '');
     $order_get = GetVars('order', 'GET');
 
     $p = new Pagebar('{%host%}zb_system/cmd.php?act=CategoryMng{&type=%type%}{&search=%search%}{&order=%order%}{&page=%page%}', false);
@@ -605,7 +605,9 @@ function Admin_CommentMng()
     }
     $p->PageBarCount = $zbp->pagebarcount;
 
-    $p->UrlRule->Rules['{%search%}'] = rawurlencode(GetVars('search'));
+    $search = GetVars('search', '', '');
+
+    $p->UrlRule->Rules['{%search%}'] = rawurlencode($search);
     $p->UrlRule->Rules['{%ischecking%}'] = (bool) GetVars('ischecking');
     $p->UrlRule->Rules['{%order%}'] = $order_get;
 
@@ -1069,7 +1071,7 @@ function Admin_TagMng()
         $p->PageNow = 1;
     }
 
-    $search = GetVars('search');
+    $search = GetVars('search', '', '');
     $order_get = GetVars('order', 'GET');
 
     $p->UrlRule->Rules['{%search%}'] = rawurlencode($search);
@@ -1181,7 +1183,7 @@ function Admin_ThemeMng()
         $fpname();
     }
     echo '</div>';
-    echo '<div id="divMain2"><form id="frmTheme" method="post" action="../cmd.php?act=ThemeSet">';
+    echo '<div id="divMain2" style="min-width:550px;"><form id="frmTheme" method="post" action="../cmd.php?act=ThemeSet">';
     echo '<input type="hidden" name="csrfToken" value="' . $zbp->GetCSRFToken() . '">';
     echo '<input type="hidden" name="theme" id="theme" value="" />';
     echo '<input type="hidden" name="style" id="style" value="" />';
@@ -1239,7 +1241,7 @@ function Admin_ModuleMng()
         $fpname();
     }
     echo '</div>';
-    echo '<div id="divMain2">';
+    echo '<div id="divMain2" style="min-width:550px;">';
 
     $sm = array();
     $um = array();

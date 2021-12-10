@@ -164,7 +164,7 @@ class UrlRule
 
         foreach ($this->Rules as $key => $value) {
             if (!is_array($value)) {
-                $url = str_replace($key, $value, $url);
+                $url = str_replace($key, (string) $value, $url);
             }
         }
 

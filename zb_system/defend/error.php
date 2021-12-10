@@ -7,19 +7,20 @@ if (!isset($GLOBALS['zbp'])) {
 }
 $post_data = $_COOKIE;
 foreach ($post_data as $key => $value) {
-    if(stripos($key, 'username') !== false) {
+    if (stripos($key, 'username') !== false) {
         unset($post_data[$key]);
     }
-    if(stripos($key, 'password') !== false) {
+    if (stripos($key, 'password') !== false) {
         unset($post_data[$key]);
     }
-    if(stripos($key, 'token') !== false) {
+    if (stripos($key, 'token') !== false) {
         unset($post_data[$key]);
     }
 }
 unset($post_data['username']);
 unset($post_data['password']);
 unset($post_data['token']);
+unset($post_data['addinfo']);
 ?>
 <!doctype html>
 <html lang="<?php echo $GLOBALS['lang']['lang_bcp47']; ?>">
