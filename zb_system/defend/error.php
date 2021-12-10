@@ -81,7 +81,7 @@ unset($post_data['addinfo']);
         <?php
         $error_debuginfo = ZBlogException::$error_debuginfo;
         if (is_array($error_debuginfo) && !empty($error_debuginfo)) {
-        ?>
+            ?>
                         <div>
                             <p><?php echo 'Debug Info'; ?></p>
 
@@ -104,7 +104,7 @@ unset($post_data['addinfo']);
                                 </tbody>
                             </table>
                         </div>
-        <?php
+            <?php
         }
         ?>
 
