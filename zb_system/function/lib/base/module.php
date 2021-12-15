@@ -205,4 +205,24 @@ abstract class Base__Module extends Base
         return false;
     }
 
+    /**
+     * @return array
+     */
+    public function GetSideBarInUsed()
+    {
+        global $zbp;
+        $array = array();
+        $inused = array();
+        for ($i = 1; $i <= 9; $i++) {
+            $optionName = $i === 1 ? 'ZC_SIDEBAR_ORDER' : "ZC_SIDEBAR${i}_ORDER";
+            $array[$i] = $zbp->option[$optionName];
+        }
+        foreach ($array as $id => $s) {
+            if (stripos('|' . $s . '|', '|' . $this->FileName . '|') !== false) {
+                $inused[] = $id;
+            }
+        }
+        return $inused;
+    }
+
 }

@@ -56,22 +56,37 @@ function misc_statistic()
 
     $r = null;
 
-    CountNormalArticleNums();
-    CountTopPost(ZC_POST_TYPE_ARTICLE, null, null);
-    CountCommentNums(null, null);
-    $all_comments = $zbp->cache->all_comment_nums;
+    CountNormalArticleNums(null);
+
+    //按条件统计或不统计
+    if ($zbp->option['ZC_LARGE_DATA'] == false) {
+        CountCommentNums(null, null);
+        CountTopPost(ZC_POST_TYPE_ARTICLE, null, null);
+        $all_articles = GetValueInArrayByCurrent($zbp->db->sql->get()->select($GLOBALS['table']['Post'])->count(array('*' => 'num'))->where(array('=', 'log_Type', '0'))->query, 'num');
+        $all_pages = GetValueInArrayByCurrent($zbp->db->sql->get()->select($GLOBALS['table']['Post'])->count(array('*' => 'num'))->where(array('=', 'log_Type', '1'))->query, 'num');
+        $all_members = GetValueInArrayByCurrent($zbp->db->sql->get()->select($GLOBALS['table']['Member'])->count(array('*' => 'num'))->query, 'num');
+        $all_comments = $zbp->cache->all_comment_nums;
+        $check_comment_nums = $zbp->cache->check_comment_nums;
+    } else {
+        $all_articles = $zbp->cache->all_article_nums;
+        $all_pages = $zbp->cache->all_page_nums;
+        $all_members = $zbp->cache->all_member_nums;
+        $all_comments = $zbp->cache->all_comment_nums;
+        $check_comment_nums = $zbp->cache->check_comment_nums;
+    }
+    if ($zbp->option['ZC_LARGE_DATA'] == true || $zbp->option['ZC_VIEWNUMS_TURNOFF'] == true) {
+        $all_views = 0;
+    } else {
+        $all_views = GetValueInArrayByCurrent($zbp->db->sql->get()->select($GLOBALS['table']['Post'])->sum(array('log_ViewNums' => 'num'))->query, 'num');
+    }
+    //一直统计
+    $all_categories = GetValueInArrayByCurrent($zbp->db->sql->get()->select($GLOBALS['table']['Category'])->count(array('*' => 'num'))->query, 'num');
+    $all_tags = GetValueInArrayByCurrent($zbp->db->sql->get()->select($GLOBALS['table']['Tag'])->count(array('*' => 'num'))->query, 'num');
 
     $xmlrpc_address = '<a href="' . $zbp->xmlrpcurl . '" target="_blank">' . $zbp->lang['msg']['xmlrpc_address'] . '</a>';
     $api_address = '<a href="' . $zbp->apiurl . '" target="_blank">' . $zbp->lang['msg']['api_address'] . '</a>';
     $current_member = $zbp->user->Name;
     $current_version = ZC_VERSION_FULL;
-    $all_articles = GetValueInArrayByCurrent($zbp->db->sql->get()->select($GLOBALS['table']['Post'])->count(array('*' => 'num'))->where(array('=', 'log_Type', '0'))->query, 'num');
-    $all_pages = GetValueInArrayByCurrent($zbp->db->sql->get()->select($GLOBALS['table']['Post'])->count(array('*' => 'num'))->where(array('=', 'log_Type', '1'))->query, 'num');
-    $all_categories = GetValueInArrayByCurrent($zbp->db->sql->get()->select($GLOBALS['table']['Category'])->count(array('*' => 'num'))->query, 'num');
-    $all_views = ($zbp->option['ZC_LARGE_DATA'] == true || $zbp->option['ZC_VIEWNUMS_TURNOFF'] == true) ? 0 : GetValueInArrayByCurrent($zbp->db->sql->get()->select($GLOBALS['table']['Post'])->sum(array('log_ViewNums' => 'num'))->query, 'num');
-    $all_tags = GetValueInArrayByCurrent($zbp->db->sql->get()->select($GLOBALS['table']['Tag'])->count(array('*' => 'num'))->query, 'num');
-    $all_members = GetValueInArrayByCurrent($zbp->db->sql->get()->select($GLOBALS['table']['Member'])->count(array('*' => 'num'))->query, 'num');
-    $check_comment_nums = GetValueInArrayByCurrent($zbp->db->sql->get()->select($GLOBALS['table']['Comment'])->count(array('*' => 'num'))->where('=', 'comm_Ischecking', '1')->query, 'num');
     $current_theme = '{$zbp->theme}';
     $current_style = '{$zbp->style}';
     $current_member = '{$zbp->user->Name}';
@@ -102,8 +117,6 @@ function misc_statistic()
     $zbp->cache->all_member_nums = $all_members;
     $zbp->cache->check_comment_nums = $check_comment_nums;
 
-    $zbp->AddBuildModule('statistics', array($all_articles, $all_pages, $all_categories, $all_tags, $all_views, $all_comments));
-
     $r = str_replace('{#ZC_BLOG_HOST#}', $zbp->host, $r);
     $r = str_replace('{$zbp->user->Name}', $zbp->user->Name, $r);
     $r = str_replace('{$zbp->user->IsGod}', '', $r);
@@ -124,16 +137,14 @@ function misc_statistic()
 
     //增加模块内容（因模块模板改变）而刷新的机制
     try {
-        if ($zbp->isdebug) {
-            $zbp->AddBuildModule('previous');
-            $zbp->AddBuildModule('calendar');
-            $zbp->AddBuildModule('comments');
-            $zbp->AddBuildModule('archives');
-            $zbp->AddBuildModule('tags');
-            $zbp->AddBuildModule('authors');
-            $zbp->AddBuildModule('catalog');
-            $zbp->AddBuildModule('navbar');
-        }
+        $zbp->AddBuildModule('statistics', array($all_articles, $all_pages, $all_categories, $all_tags, $all_views, $all_comments));
+        $zbp->AddBuildModule('previous');
+        $zbp->AddBuildModule('calendar');
+        $zbp->AddBuildModule('comments');
+        $zbp->AddBuildModule('tags');
+        $zbp->AddBuildModule('authors');
+        $zbp->AddBuildModule('catalog');
+        $zbp->AddBuildModule('navbar');
     } catch (Exception $e) {
         $e->getMessage();
     }
@@ -630,6 +641,6 @@ function misc_clearthumbcache()
     rrmdir($zbp->usersdir . '/cache/thumbs');
     $zbp->SetHint('good');
     if (isset($_SERVER["HTTP_REFERER"])) {
-        Redirect($_SERVER["HTTP_REFERER"]);
+        Redirect302($_SERVER["HTTP_REFERER"]);
     }
 }

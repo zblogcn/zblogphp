@@ -71,24 +71,22 @@ abstract class Base__Post extends Base
 
     /**
      * @param string $s|string
-     * @param type|string 1.7.1后可以与$s前后调换
+     * @param type|string 1.7.2后可以与$s前后调换
      *
      * @return bool|string
      */
-    public function Time($type = 'PostTime', $s = 'Y-m-d H:i:s')
+    public function Time($s = 'Y-m-d H:i:s', $type = 'PostTime')
     {
-        //1.7.1增加了参数调换
-        if (array_key_exists($s, $this->data)) {
+        //1.7.2改回了1.6的顺序, $type放在第2参数
+        if (func_num_args() == 2 && array_key_exists($s, $this->data)) {
             list($type, $s) = array($s, $type);
+        } elseif (func_num_args() == 1 && array_key_exists($s, $this->data)){
+            list($type, $s) = array($s, 'Y-m-d H:i:s');
         }
         if (array_key_exists($type, $this->data)) {
             return date($s, (int) $this->$type);
         } else {
-            if (func_num_args() == 2) {
-                return date($s, (int) $this->$type);
-            }
-            // 1.7改为2个参数了($type加在第一个前)，为了兼容之前的写法
-            return date($type, (int) $this->PostTime);
+            return date($s, (int) $this->PostTime);
         }
     }
 
@@ -164,15 +162,15 @@ abstract class Base__Post extends Base
                 return;
             case 'TopType':
                 if ($value == 'global') {
-                    $this->Top = 1;
+                    $this->IsTop = 1;
                 } elseif ($value == 'index') {
-                    $this->Top = 2;
+                    $this->IsTop = 2;
                 } elseif ($value == 'categorys') {
-                    $this->Top = 8;
+                    $this->IsTop = 4;
                 } elseif ($value == 'category') {
-                    $this->Top = 4;
+                    $this->IsTop = 8;
                 } elseif ($value == '' || $value == null) {
-                    $this->Top = 0;
+                    $this->IsTop = 0;
                 }
 
                 return;

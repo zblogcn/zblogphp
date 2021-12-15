@@ -100,11 +100,16 @@ function Logout()
 
 //###############################################################################################################
 
+function Redirect_to_search()
+{
+    Redirect_cmd_to_search(0);
+}
+
 function Redirect_cmd_to_search($post_type = 0)
 {
     global $zbp, $action;
     //$q = rawurlencode(trim(strip_tags(GetVars('q', 'POST'))));
-    //Redirect($zbp->searchurl . '?q=' . $q);
+    //Redirect302($zbp->searchurl . '?q=' . $q);
 
     $route = $zbp->GetPostType_Sub($post_type, 'routes', 'post_article_search');
     if (!empty($route)) {
@@ -157,7 +162,7 @@ function Redirect_cmd_end($url)
         $fpname($url, $action);
     }
 
-    Redirect($url);
+    Redirect302($url);
 }
 
 /**
@@ -544,9 +549,9 @@ function PostArticle()
     $zbp->AddBuildModule('previous');
     $zbp->AddBuildModule('calendar');
     $zbp->AddBuildModule('comments');
-    $zbp->AddBuildModule('archives');
     $zbp->AddBuildModule('tags');
     $zbp->AddBuildModule('authors');
+    $zbp->AddBuildModule('archives');
 
     foreach ($GLOBALS['hooks']['Filter_Plugin_PostArticle_Succeed'] as $fpname => &$fpsignal) {
         $fpname($article);
@@ -601,9 +606,9 @@ function DelArticle()
         $zbp->AddBuildModule('previous');
         $zbp->AddBuildModule('calendar');
         $zbp->AddBuildModule('comments');
-        $zbp->AddBuildModule('archives');
         $zbp->AddBuildModule('tags');
         $zbp->AddBuildModule('authors');
+        $zbp->AddBuildModule('archives');
 
         foreach ($GLOBALS['hooks']['Filter_Plugin_DelArticle_Succeed'] as $fpname => &$fpsignal) {
             $fpname($article);
@@ -1349,8 +1354,10 @@ function PostCategory()
     FilterCategory($cate);
 
     // 此处用作刷新分类内文章数据使用，不作更改
-    if ($cate->ID > 0) {
-        CountCategory($cate, null, $cate->Type);
+    if ($zbp->option['ZC_LARGE_DATA'] == false) {
+        if ($cate->ID > 0) {
+            CountCategory($cate, null, $cate->Type);
+        }
     }
 
     $cate->Save();
@@ -1661,7 +1668,9 @@ function PostMember()
 
     FilterMember($mem);
 
-    CountMember($mem, array(null, null, null, null));
+    if ($zbp->option['ZC_LARGE_DATA'] == false) {
+        CountMember($mem, array(null, null, null, null));
+    }
 
     // 查询同名
     if (isset($data['Name'])) {

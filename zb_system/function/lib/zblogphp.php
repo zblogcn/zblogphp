@@ -772,7 +772,7 @@ class ZBlogPHP
                 $this->cookiespath = strstr(str_replace('://', '', $this->host), '/');
             } elseif ($this->option['ZC_PERMANENT_DOMAIN_ENABLE'] == true) {
                 //消除16升级17又退回16后再升级17出的bug;
-                if (is_array($this->option['ZC_BLOG_HOST'])) {
+                if (is_array($this->option['ZC_BLOG_HOST']) && is_array($this->option['ZC_PERMANENT_DOMAIN_ENABLE'])) {
                     Fix_16_to_17_and_17_to_16_Error();
                 }
                 //如果ZC_PERMANENT_DOMAIN_ENABLE已开启的话
@@ -2354,6 +2354,11 @@ class ZBlogPHP
      */
     public function AddBuildModule($moduleFileName, $parameters = null)
     {
+        if ($moduleFileName == 'archives' && $this->option['ZC_LARGE_DATA'] == false && isset($this->modulesbyfilename['archives'])) {
+            if ($this->modulesbyfilename['archives']->GetSideBarInUsed() == array()) {
+                return;
+            }
+        }
         $p = func_get_args();
         call_user_func_array(array('ModuleBuilder', 'Add'), $p);
     }
@@ -4635,7 +4640,7 @@ class ZBlogPHP
         if (!$this->option['ZC_DATABASE_TYPE']) {
             $s = $_SERVER['QUERY_STRING'];
             $s = empty($s) ? '' : '?' . $s;
-            Redirect('./zb_install/index.php' . $s);
+            Redirect302('./zb_install/index.php' . $s);
         }
     }
 

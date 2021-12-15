@@ -206,7 +206,7 @@ class ModuleBuilder
             $i = 10;
         }
         $tags['maxLi'] = $i;
-        $comments = $zbp->GetCommentList('*', array(array('=', 'comm_IsChecking', 0)), array('comm_PostTime' => 'DESC'), $i, null);
+        $comments = $zbp->GetCommentList('*', array(array('=', 'comm_IsChecking', 0)), array('comm_ID' => 'DESC'), $i, null);
         $tags['comments'] = $comments;
 
         $template->SetTagsAll($tags);
@@ -233,7 +233,7 @@ class ModuleBuilder
             $i = 10;
         }
         $tags['maxLi'] = $i;
-        $articles = $zbp->GetArticleList('*', array(array('=', 'log_Type', 0), array('=', 'log_Status', 0)), array('log_PostTime' => 'DESC'), $i, null, false);
+        $articles = $zbp->GetArticleList('*', array(array('=', 'log_Status', 0)), array('log_PostTime' => 'DESC'), $i, null, false);
         $tags['articles'] = $articles;
 
         $template->SetTagsAll($tags);

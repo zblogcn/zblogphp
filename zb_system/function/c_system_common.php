@@ -506,10 +506,17 @@ function GetVars($name, $type = 'REQUEST', $default = null)
     if (empty($type)) {
         $type = 'REQUEST';
     }
-    $array = &$GLOBALS[strtoupper("_$type")];
 
-    if (array_key_exists($name, $array)) {
+    if (in_array(strtoupper($type), array('SERVER', 'GET', 'POST', 'FILES', 'COOKIE', 'SESSION', 'REQUEST', 'ENV'))) {
+        $type = strtoupper("_$type");
+    }
+
+    $array = &$GLOBALS[$type];
+
+    if (is_array($array) && array_key_exists($name, $array)) {
         return $array[$name];
+    } elseif (is_object($array) && property_exists($array, $name)) {
+        return $array->$name;
     } else {
         return $default;
     }
@@ -926,11 +933,18 @@ function RedirectByScript($url)
  *
  * @param string $url 跳转链接
  */
-function Redirect($url)
+function Redirect302($url)
 {
     SetHttpStatusCode(302);
     header('Location: ' . $url);
     die();
+}
+
+if (!function_exists('Redirect')) {
+    function Redirect($url)
+    {
+        Redirect302($url);
+    }
 }
 
 /**

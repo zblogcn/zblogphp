@@ -276,12 +276,17 @@ function api_post_list()
             'ViewNums' => 'log_ViewNums'
         )
     );
+    $select = '';
     $order = $filter['order'];
     $limit = $filter['limit'];
     $option = $filter['option'];
 
+    foreach ($GLOBALS['hooks']['Filter_Plugin_Api_Post_List_Core'] as $fpname => &$fpsignal) {
+        $fpreturn = $fpname($select, $where, $order, $limit, $option);
+    }
+
     $listArr = ApiGetObjectArrayList(
-        $zbp->GetPostList('*', $where, $order, $limit, $option),
+        $zbp->GetPostList($select, $where, $order, $limit, $option),
         array('Url', 'TagsCount', 'TagsName', 'CommentPostKey', 'ValidCodeUrl'),
         (GetVars('without_content') != 0) ? array('Content') : array(),
         ApiGetAndFilterRelationQuery(

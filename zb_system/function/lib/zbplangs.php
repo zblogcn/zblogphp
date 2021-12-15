@@ -49,7 +49,7 @@ class ZbpLangs implements IteratorAggregate
     public function getIterator() {
         $newarray = array();
         foreach ($this->array as $key => $value) {
-            if (!is_array($value)) {
+            if (is_scalar($value) || is_null($value)) {
                 $newarray[$key] = $value;
             }
         }

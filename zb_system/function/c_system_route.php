@@ -94,7 +94,7 @@ function ViewAuto()
                 }
                 //如果开启伪静且$b_redirect=true和返回string，那么通过原动态访问的会跳转至$result
                 if (is_string($result) && $result == true && $b_redirect == true) {
-                    Redirect($result);
+                    Redirect302($result);
                 }
                 return $result;
             }
@@ -302,7 +302,7 @@ function ViewAuto_Process_Args_Merge(&$route)
 function ViewAuto_Check_Redirect_To($route)
 {
     if (isset($route['redirect_to'])) {
-        Redirect($route['redirect_to']);
+        Redirect302($route['redirect_to']);
         return;
     }
     if (isset($route['redirect301_to'])) {
@@ -1442,7 +1442,7 @@ function ViewPost($id = null, $alias = null, $isrewrite = false, $object = array
 
     if (!empty($route) || $isrewrite == true) {
         if (isset($object[0]) && !isset($object['page']) && (!isset($object['verify_permalink']) || (isset($object['verify_permalink']) && $object['verify_permalink'] != false))) {
-            if (!(stripos(urldecode($article->Url), $object[0]) !== false)) {
+            if (!(stripos(urldecode($article->Url), '/' . $object[0]) !== false)) {
                 //$zbp->ShowError(2, __FILE__, __LINE__);
                 return false;
             }
@@ -1465,7 +1465,7 @@ function ViewPost($id = null, $alias = null, $isrewrite = false, $object = array
 
     $pagebar = new Pagebar('javascript:zbp.comment.get(\'' . $article->ID . '\',\'{%page%}\');', false);
     $pagebar->PageCount = $zbp->commentdisplaycount;
-    $pagebar->PageNow = 1;
+    $pagebar->PageNow = max((int) GetVars('cmt_page', 'GET'), 1);
     $pagebar->PageBarCount = $zbp->pagebarcount;
     $pagebar->UrlRule->RulesObject = &$article;
 

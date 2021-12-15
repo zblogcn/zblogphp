@@ -120,7 +120,7 @@ function Include_Admin_CheckWeakPassWord()
     }
 
     if ($action !== 'MemberEdt') {
-        Redirect($zbp->cmdurl . '?act=MemberEdt&id=' . $zbp->user->ID);
+        Redirect302($zbp->cmdurl . '?act=MemberEdt&id=' . $zbp->user->ID);
     }
 
     echo $zbp->ShowHint('bad', $zbp->langs->msg->change_default_password, 9999);
@@ -168,7 +168,7 @@ function Include_Admin_CheckHttp304OK()
 function Include_Admin_CheckMoblie()
 {
     if (function_exists('CheckIsMoblie') && CheckIsMoblie()) {
-        echo '<style>@media screen{body{font-size:15px}}@media screen and (max-width: 800px) {#divMain{padding:0 1px;overflow:scroll;}}</style>';
+        echo '<style>@media screen{body{font-size:15px}}@media screen and (max-width: 812px) {#divMain{padding:0 1px;overflow:scroll;}}@media screen and (max-width: 428px) {body{font-size:16px}}</style>';
     }
 }
 

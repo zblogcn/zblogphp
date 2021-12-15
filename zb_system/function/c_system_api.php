@@ -126,7 +126,6 @@ function ApiCheckMods(&$mods_allow, &$mods_disallow)
 
     if (!empty($mods_allow) && $b == false) {
         $zbp->ShowError(96, __FILE__, __LINE__);
-        die;
     }
 
     $b = true;
@@ -150,7 +149,6 @@ function ApiCheckMods(&$mods_allow, &$mods_disallow)
 
     if (!empty($mods_disallow) && $b == false) {
         $zbp->ShowError(96, __FILE__, __LINE__);
-        die;
     }
     return true;
 }
@@ -163,7 +161,7 @@ function ApiCheckMods(&$mods_allow, &$mods_disallow)
  * @param int $code
  * @param string|null $message
  */
-function ApiResponse($data = null, $error = null, $code = 200, $message = null)
+function ApiResponse($data = null, $error = null, $code = 200, $message = null, $isreturn = false)
 {
     foreach ($GLOBALS['hooks']['Filter_Plugin_API_Pre_Response'] as $fpname => &$fpsignal) {
         $fpname($data, $error, $code, $message);
@@ -221,7 +219,7 @@ function ApiResponse($data = null, $error = null, $code = 200, $message = null)
         }
     }
 
-    echo JsonEncode($response);
+    $r = JsonEncode($response);
 
     if (empty($error) && $code !== 200) {
         // 如果 code 不为 200，又不是系统抛出的错误，再来抛出一个 Exception，适配 phpunit
@@ -229,6 +227,11 @@ function ApiResponse($data = null, $error = null, $code = 200, $message = null)
         throw new Exception($message, $code);
     }
 
+    if ($isreturn == false) {
+        echo $r;
+    } else {
+        return $r;
+    }
     die;
 }
 

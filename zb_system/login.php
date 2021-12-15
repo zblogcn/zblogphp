@@ -10,7 +10,7 @@ require 'function/c_system_base.php';
 
 $zbp->Load();
 if ($zbp->CheckRights('admin')) {
-    Redirect('cmd.php?act=admin');
+    Redirect302('cmd.php?act=admin');
 }
 ?><!DOCTYPE HTML>
 <html>
