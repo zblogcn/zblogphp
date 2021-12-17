@@ -1632,6 +1632,12 @@ function PostMember()
     if ($mem->IsGod == true) {
         if ($zbp->user->IsGod == false) {
             unset($data['Password']);
+            unset($data['Name']);
+            unset($data['Email']);
+            unset($data['Alias']);
+            unset($data['Status']);
+            unset($data['Intro']);
+            unset($data['HomePage']);
         }
         unset($data['Level']);
     }

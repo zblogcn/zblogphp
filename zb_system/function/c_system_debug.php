@@ -153,7 +153,7 @@ function Debug_Error_Handler($errno, $errstr, $errfile, $errline)
         return true;
     }
 
-    $zbe = ZBlogException::GetInstance();
+    $zbe = ZBlogException::GetNewException();
     $zbe->ParseError($errno, $errstr, $errfile, $errline);
     $zbe->Display();
 
@@ -192,7 +192,7 @@ function Debug_Exception_Handler($exception)
         );
     }
 
-    $zbe = ZBlogException::GetInstance();
+    $zbe = ZBlogException::GetNewException();
     $zbe->ParseException($exception);
     $zbe->Display();
 
@@ -226,7 +226,7 @@ function Debug_Shutdown_Handler()
             return true;
         }
 
-        $zbe = ZBlogException::GetInstance();
+        $zbe = ZBlogException::GetNewException();
         $zbe->ParseShutdown($error);
         $zbe->Display();
     }
@@ -249,9 +249,14 @@ class ZBlogException
 {
 
     /**
-     * 静态zbe
+     * 静态zbe_list
      */
-    private static $private_zbe = null;
+    private static $private_zbe_list = array();
+
+    /**
+     * 错误显示输出
+     */
+    public static $display_error = true;
 
     /**
      * 静态disabled
@@ -286,7 +291,7 @@ class ZBlogException
     /**
      * 静态error_moreinfo
      */
-    public static $error_debuginfo = array();
+    public static $error_moreinfo = null;
 
     /**
      * 静态islogerror
@@ -299,7 +304,12 @@ class ZBlogException
     public static $errors_msg = array();
 
     /**
-     * 类型
+     * 代码
+     */
+    public $code;
+
+    /**
+     * 类型(同代码)
      */
     public $type;
 
@@ -314,6 +324,11 @@ class ZBlogException
     public $messagefull;
 
     /**
+     * 更多信息
+     */
+    public $moreinfo;
+
+    /**
      * 文件
      */
     public $file;
@@ -324,16 +339,14 @@ class ZBlogException
     public $line;
 
     /**
-     * 错误数组
+     * 之前error
      */
-    public $errarray = array();
+    public $previous;
 
     /**
-     * 构造函数，定义常见错误代码
+     * 错误数组
      */
-    public function __construct()
-    {
-        $this->errarray = array(
+    public static $errarray = array(
             0     => 'UNKNOWN',
             1     => 'E_ERROR',
             2     => 'E_WARNING',
@@ -351,39 +364,46 @@ class ZBlogException
             8192  => 'E_DEPRECATED',
             16384 => 'E_USER_DEPRECATED',
             30719 => 'E_ALL',
-        );
-    }
+    );
 
     /**
-     * 获取参数.
-     *
-     * @param $name
-     *
-     * @return mixed
+     * 构造函数，定义常见错误代码
      */
-    public function __get($name)
+    public function __construct()
     {
-        if ($name == 'typeName') {
-            if (isset($this->errarray[$this->type])) {
-                return $this->errarray[$this->type];
-            } else {
-                return $this->errarray[0];
-            }
-        }
+
+    }
+
+    public static function ThrowException($error)
+    {
+        $e = var_export($error, true);
+        throw new Exception($e);
     }
 
     /**
-     * 获取单一实例.
+     * 获取新实例进$private_zbe_list队列里.
      *
      * @return ZBlogException
      */
+    public static function GetNewException()
+    {
+
+        $z = new self();
+        if (count(self::$private_zbe_list) > 0) {
+            $z->previous = end(self::$private_zbe_list);
+        } else {
+            $z->previous = $z;
+        }
+        $z->moreinfo = self::$error_moreinfo;
+        self::$error_moreinfo = null;
+        self::$private_zbe_list[]= $z;
+
+        return $z;
+    }
+
     public static function GetInstance()
     {
-        if (!isset(self::$private_zbe)) {
-            self::$private_zbe = new self();
-        }
-
-        return self::$private_zbe;
+        return self::GetNewException();
     }
 
     /**
@@ -503,6 +523,7 @@ class ZBlogException
     public function ParseError($type, $message, $file, $line)
     {
         $this->type = $type;
+        $this->code = $type;
         $this->message = $message;
         $this->messagefull = $message . ' (set_error_handler) ';
         $this->file = $file;
@@ -517,6 +538,7 @@ class ZBlogException
     public function ParseShutdown($error)
     {
         $this->type = $error['type'];
+        $this->code = $error['type'];
         $this->message = $error['message'];
         $this->messagefull = $error['message'] . ' (register_shutdown_function) ';
         $this->file = $error['file'];
@@ -533,6 +555,7 @@ class ZBlogException
         $this->message = $exception->getMessage();
         $this->messagefull = $exception->getMessage() . ' (set_exception_handler) ';
         $this->type = $exception->getCode();
+        $this->code = $exception->getCode();
         $this->file = $exception->getFile();
         $this->line = $exception->getLine();
 
@@ -550,6 +573,9 @@ class ZBlogException
      */
     public function Display()
     {
+        if (self::$display_error == false) {
+            return;
+        }
         if (!headers_sent()) {
             Http500();
             ob_clean();
@@ -644,6 +670,56 @@ class ZBlogException
         $result = str_replace('{%officedocs%}', $office_docs, $result);
         $result = str_replace('{%officebbs%}', $office_bbs, $result);
         return $result;
+    }
+
+    public function getTypeName() {
+        if (isset(self::$errarray[$this->type])) {
+            return self::$errarray[$this->type];
+        } else {
+            return self::$errarray[0];
+        }
+    }
+
+    public function getType() {
+        return $this->type;
+    }
+
+    public function getMessage() {
+        return $this->message;
+    }
+
+    public function getMessageFull() {
+        return $this->messagefull;
+    }
+
+    public function getMoreInfo() {
+        return $this->moreinfo;
+    }
+
+    public function getPrevious() {
+        return $this->previous;
+    }
+
+    public function getCode() {
+        return $this->code;
+    }
+
+    public function getFile() {
+        return $this->file;
+    }
+
+    public function getLine() {
+        return $this->line;
+    }
+
+    public function getTrace() {
+        $t = debug_backtrace();
+        return $t;
+    }
+
+    public function getTraceAsString() {
+        $t = $this->getTrace();
+        return call_user_func('print_r', $t, true);
     }
 
 }

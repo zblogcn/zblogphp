@@ -55,7 +55,7 @@ $replace_array = array(
     '\'call\' =' => "//路由调用的函数(可以为'函数名'或是'变量名@方法名'或是'变量名::静态方法')\r\n" . '\'call\' =',
     '\'posttype\' =' => "//Post类型(必须，文章为0，页面为1等，必须是路由所属的PostType的ID值，如果不归属于某Post类型请设为null)\r\n" . '\'posttype\' =',
     '\'prefix\' =' => "//prefix如指定的话，可以让不同规则在不同的prefix前缀目录下被访问到\r\n" . '\'prefix\' =',
-    '\'get\' =' => "//指定2个或2个以上参数如array('id','alias')那么只要有id或alias存在就可以,指定1个参数如array('page')则page可存在可不存在\r\n" . '\'get\' =',
+    '\'get\' =' => "//指定2个或2个以上参数(与must_get合并一起判断)如array('id','alias')那么只要有1个参数存在就可以,指定1个参数如array('page')则不要求page存在\r\n" . '\'get\' =',
     '\'not_get\' =' => "//必须排除的\$_GET参数(可以为空数组),如果是array('/.+/')就会禁止任何参数传入\r\n" . '\'not_get\' =',
     '\'must_get\' =' => "//必须包含的\$_GET参数(可以为空数组)\r\n" . '\'must_get\' =',
     '\'args\' =' => "//从伪静规则匹配到的数组中取值传给call的参数(示例为array('id', 'page') or array('cate@alias', 'page') )\r\n" . '\'args\' =',

@@ -71,7 +71,7 @@ unset($post_data['addinfo']);
                         <div>
                             <p><?php echo $GLOBALS['lang']['msg']['error_info']; ?></p>
         <?php
-        echo '(' . $error->type . ')' . $error->typeName . ' :   ' . (FormatString($error->messagefull, '[noscript]'));
+        echo '(' . $error->type . ')' . $error->getTypeName() . ' :   ' . (FormatString($error->messagefull, '[noscript]'));
         echo ' (' . ZC_VERSION_FULL . ') ';
         if (!in_array('Status: 404 Not Found', headers_list())) {
                 echo '(' . GetEnvironment(true) . ') ';
@@ -79,8 +79,7 @@ unset($post_data['addinfo']);
         ?>
                         </div>
         <?php
-        $error_debuginfo = ZBlogException::$error_debuginfo;
-        if (is_array($error_debuginfo) && !empty($error_debuginfo)) {
+        if (is_array($error->moreinfo) && !empty($error->moreinfo)) {
             ?>
                         <div>
                             <p><?php echo 'Debug Info'; ?></p>
@@ -90,7 +89,7 @@ unset($post_data['addinfo']);
 
                     <?php
                     $i = 0;
-                    foreach ($error_debuginfo as $key => $value) {
+                    foreach ($error->moreinfo as $key => $value) {
                         $i += 1;
                         ?>
                                     <tr>
@@ -134,7 +133,7 @@ unset($post_data['addinfo']);
                             <table style='width:100%' class="table_striped">
                                 <tbody>
                     <?php
-                    foreach (debug_backtrace() as $iInt => $sData) {
+                    foreach ($error->getTrace() as $iInt => $sData) {
                         if ($iInt <= 2) { // 不显示错误捕捉部分
                             continue;
                         }

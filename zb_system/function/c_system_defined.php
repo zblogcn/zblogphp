@@ -40,7 +40,7 @@ define('IS_X64', (PHP_INT_SIZE === 8));
  * 如果想获取准确的值，请zbp->Load后使用$zbp->isHttps
  * 此处仅为当前系统环境检测
  */
-define('HTTP_SCHEME', GetScheme($_SERVER));
+defined('HTTP_SCHEME') || define('HTTP_SCHEME', GetScheme($_SERVER));
 
 /*
  * 兼容性策略
@@ -60,7 +60,10 @@ define('IS_CADDY', PHP_SERVER === SERVER_CADDY);
 define('IS_BUILTIN', PHP_SERVER === SERVER_BUILTIN);
 define('IS_HHVM', PHP_ENGINE === ENGINE_HHVM);
 
-define('IS_CLI', php_sapi_name() === 'cli');
+define('IS_CLI', strtolower(php_sapi_name()) === 'cli');
+
+define('IS_WORKERMAN', (IS_CLI && class_exists('Workerman\Worker')));
+define('IS_SWOOLE', (IS_CLI && defined('SWOOLE_VERSION')));
 
 /*
  * 定义文章类型

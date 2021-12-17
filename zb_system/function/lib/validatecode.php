@@ -158,8 +158,10 @@ class ValidateCode
         $_len = (strlen($this->charset) - 1);
         for ($i = 0; $i < $this->codelen; $i++) {
             if (function_exists('mt_rand')) {
+                mt_srand();
                 $this->phrase .= $this->charset[mt_rand(0, $_len)];
             } else {
+                srand();
                 $this->phrase .= $this->charset[rand(0, $_len)];
             }
         }
@@ -276,7 +278,7 @@ class ValidateCode
      */
     protected function drawLine($image, $width, $height, $tcol = null)
     {
-        return ;
+        return;
         if ($tcol === null) {
             $tcol = imagecolorallocate($image, $this->rand(100, 255), $this->rand(100, 255), $this->rand(100, 255));
         }

@@ -454,6 +454,7 @@ function ViewAuto_Check_Get_And_Not_Get_And_Must_Get($get, $notget, $mustget)
         if (count($get) == 1) {
             $b = true;
         } else {
+            $get = array_merge($get, $mustget);
             foreach ($get as $key => $value) {
                 if (isset($_GET[$value])) {
                     $b = true;
@@ -561,9 +562,17 @@ function ViewIndex()
 
     switch ($action) {
         case 'feed':
+            if (!$zbp->CheckRights($GLOBALS['action'])) {
+                Http404();
+                return false;
+            }
             ViewFeed();
             break;
         case 'search':
+            if (!$zbp->CheckRights($GLOBALS['action'])) {
+                Http404();
+                return false;
+            }
             ViewSearch();
             break;
         case 'view':
@@ -582,6 +591,7 @@ function ViewIndex()
  */
 function ViewFeed()
 {
+    $fpargs = func_get_args();
     global $zbp;
 
     foreach ($GLOBALS['hooks']['Filter_Plugin_ViewFeed_Begin'] as $fpname => &$fpsignal) {
@@ -593,50 +603,63 @@ function ViewFeed()
         }
     }
 
-    if (!$zbp->CheckRights($GLOBALS['action'])) {
-        Http404();
-        die;
+    $args = GetValueInArray($fpargs, 0, null);
+    if (is_array($args)) {
+        $posttype = GetValueInArray($args, 'posttype', 0);
+        $cate = GetValueInArray($args, 'cate', null);
+        $auth = GetValueInArray($args, 'auth', null);
+        $date = GetValueInArray($args, 'date', null);
+        $tags = GetValueInArray($args, 'tags', null);
+    } else {
+        $posttype = 0;
+        $cate = GetVars('cate', 'GET');
+        $auth = GetVars('auth', 'GET');
+        $date = GetVars('date', 'GET');
+        $tags = GetVars('tags', 'GET');
     }
 
     $rss2 = new Rss2($zbp->name, $zbp->host, $zbp->subname);
 
     $w = array(array('=', 'log_Status', 0));
 
-    $postype = (int) GetVars('posttype', 'GET', 0);
-    $w[] = array('=', 'log_Type', $postype);
-
-    $actions = $zbp->GetPostType($postype, 'actions');
-
+    //没权限就显示空XML
+    $actions = $zbp->GetPostType($posttype, 'actions');
     if (!$zbp->CheckRights($actions['view'])) {
-        Http404();
-        die;
+        $w[] = array('=', 'log_ID', 0);
     }
 
-    if (GetVars('cate', 'GET') != null) {
-        $w[] = array('=', 'log_CateID', (int) GetVars('cate', 'GET'));
-    } elseif (GetVars('auth', 'GET') != null) {
-        $w[] = array('=', 'log_AuthorID', (int) GetVars('auth', 'GET'));
-    } elseif (GetVars('date', 'GET') != null) {
-        $d = strtotime(GetVars('date', 'GET'));
-        if (strrpos(GetVars('date', 'GET'), '-') !== strpos(GetVars('date', 'GET'), '-')) {
+    $w[] = array('=', 'log_Type', $posttype);
+
+    if ($cate != null) {
+        $w[] = array('=', 'log_CateID', (int) $cate);
+    } elseif ($auth != null) {
+        $w[] = array('=', 'log_AuthorID', (int) $auth);
+    } elseif ($date != null) {
+        $d = strtotime($date);
+        if (strrpos($date, '-') !== strpos($date, '-')) {
             $w[] = array('BETWEEN', 'log_PostTime', $d, strtotime('+1 day', $d));
         } else {
             $w[] = array('BETWEEN', 'log_PostTime', $d, strtotime('+1 month', $d));
         }
-    } elseif (GetVars('tags', 'GET') != null) {
-        $w[] = array('LIKE', 'log_Tag', '%{' . (int) GetVars('tags', 'GET') . '}%');
+    } elseif ($tags != null) {
+        $w[] = array('LIKE', 'log_Tag', '%{' . (int) $tags . '}%');
     }
+
+    $select = '*';
+    $order = array('log_UpdateTime' => 'DESC', 'log_ID' => 'DESC');
+    $limit = $zbp->option['ZC_RSS2_COUNT'];
+    $option = array();
 
     foreach ($GLOBALS['hooks']['Filter_Plugin_ViewFeed_Core'] as $fpname => &$fpsignal) {
         $fpname($w);
     }
 
     $articles = $zbp->GetPostList(
-        '*',
+        $select,
         $w,
-        array('log_UpdateTime' => 'DESC', 'log_ID' => 'DESC'),
-        $zbp->option['ZC_RSS2_COUNT'],
-        null
+        $order,
+        $limit,
+        $option
     );
 
     foreach ($articles as $article) {
@@ -682,9 +705,6 @@ function ViewSearch()
         }
     }
 
-    $q = GetVars('q', 'GET');
-    $page = GetVars('page', 'GET');
-
     $args = GetValueInArray($fpargs, 0, null);
     if (is_array($args)) {
         $return_url = GetValueInArray($args, 'return_url', false);
@@ -699,12 +719,14 @@ function ViewSearch()
     } else {
         $return_url = false;
         $posttype = 0;
+        $q = GetVars('q', 'GET');
+        $page = GetVars('page', 'GET');
         $route = array('urlrule' => $zbp->GetPostType(0, 'search_urlrule'));
         $disablebot = true;
     }
 
     $q = trim(htmlspecialchars($q));
-    $page = (int) $page == 0 ? 1 : (int) $page;
+    $page = max(1, (int) $page);
 
     $w = array();
     $w[] = array('=', 'log_Type', $posttype);
@@ -890,6 +912,12 @@ function ViewList($page = null, $cate = null, $auth = null, $date = null, $tags 
         $return_url = GetValueInArray($object, 'return_url', false);
         $route = GetValueInArray($object, 'route', array());
         $posttype = GetValueInArray($object, 'posttype', 0);
+    }
+
+    //没权限就返回
+    $actions = $zbp->GetPostType($posttype, 'actions');
+    if (!$zbp->CheckRights($actions['view'])) {
+        return false;
     }
 
     //老版本的兼容接口
@@ -1370,6 +1398,12 @@ function ViewPost($id = null, $alias = null, $isrewrite = false, $object = array
             $object['alias'] = $alias;
             $object[0] = empty($alias) ? $id : $alias;
         }
+    }
+
+    //没权限就返回
+    $actions = $zbp->GetPostType($posttype, 'actions');
+    if (!$zbp->CheckRights($actions['view'])) {
+        return false;
     }
 
     //兼容老版本的接口

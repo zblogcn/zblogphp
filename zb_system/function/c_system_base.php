@@ -12,10 +12,10 @@
 $zbp = null;
 
 error_reporting(E_ALL);
-ob_start();
 
 defined('ZBP_PATH') || define('ZBP_PATH', rtrim(str_replace('\\', '/', realpath(dirname(__FILE__) . '/../../')), '/') . '/');
 defined('ZBP_HOOKERROR') || define('ZBP_HOOKERROR', true);
+defined('ZBP_OBSTART') || define('ZBP_OBSTART', true);
 defined('ZBP_SAFEMODE') || define('ZBP_SAFEMODE', false);
 
 //强制开启debug模式，需要开启时请打开注释
@@ -37,6 +37,10 @@ require ZBP_PATH . 'zb_system/function/c_system_api.php';
 
 if (ZBP_HOOKERROR) {
     ZBlogException::SetErrorHook();
+}
+
+if (ZBP_OBSTART) {
+    ob_start();
 }
 
 /**
@@ -75,7 +79,7 @@ $GLOBALS['datainfo'] = include ZBP_PATH . 'zb_system/defend/datainfo.php';
 /*
  * CLI Mock 处理
  */
-if (IS_CLI) {
+if (IS_CLI && !IS_WORKERMAN && !IS_SWOOLE) {
     if (isset($GLOBALS['argv'])) {
         $_SERVER["QUERY_STRING"] = implode('&', array_slice($GLOBALS['argv'], 1));
     } else {

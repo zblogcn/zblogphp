@@ -39,11 +39,23 @@ function ApiTokenVerify()
 }
 
 /**
- * API 报错函数
+ * API 显示报错函数
  */
 function ApiDebugDisplay($error)
 {
     ApiResponse(null, $error);
+}
+
+/**
+ * API ShowError函数
+ */
+function ApiShowError($errorCode, $errorText, $file = null, $line = null, $moreinfo = array(), $httpcode = 200)
+{
+    $GLOBALS['hooks']['Filter_Plugin_Zbp_ShowError']['ApiDebugDisplay'] = PLUGIN_EXITSIGNAL_RETURN;
+    $zbe = ZBlogException::GetInstance();
+    $zbe->ParseError($errorCode, $errorText, $file, $line);
+    ApiResponse(null, $zbe, $httpcode, $errorText);
+    die;
 }
 
 /**
@@ -161,30 +173,30 @@ function ApiCheckMods(&$mods_allow, &$mods_disallow)
  * @param int $code
  * @param string|null $message
  */
-function ApiResponse($data = null, $error = null, $code = 200, $message = null, $isreturn = false)
+function ApiResponse($data = null, $error = null, $code = 200, $message = null, $isresponse = true)
 {
     foreach ($GLOBALS['hooks']['Filter_Plugin_API_Pre_Response'] as $fpname => &$fpsignal) {
-        $fpname($data, $error, $code, $message);
+        $fpname($data, $error, $code, $message, $isresponse);
     }
 
     if (!empty($error)) {
         $error_info = array(
-            'code' => ZBlogException::$error_id,
-            'type' => $error->type,
-            'message' => $error->message,
+            'code' => method_exists($error, 'getCode') ? $error->getCode() : $error->code,
+            'type' => property_exists($error, 'type') ? $error->type : $error->getCode(),
+            'message' => method_exists($error, 'getMessage') ? $error->getMessage() : $error->message,
         );
 
         if ($GLOBALS['zbp']->isdebug) {
-            $error_info['message_full'] = $error->messagefull;
-            $error_info['file'] = $error->file;
-            $error_info['line'] = $error->line;
+            $error_info['message_full'] = property_exists($error, 'messagefull') ? $error->messagefull : '';
+            $error_info['file'] = method_exists($error, 'getFile') ? $error->getFile() : $error->file;
+            $error_info['line'] = method_exists($error, 'getLine') ? $error->getLine() : $error->line;
         }
 
         if ($code === 200) {
             $code = 500;
         }
         if (empty($message)) {
-            $message = 'System error: ' . $error->message;
+            $message = 'System error: ' . (method_exists($error, 'getMessage') ? $error->getMessage() : $error->message);
         }
     }
 
@@ -199,7 +211,6 @@ function ApiResponse($data = null, $error = null, $code = 200, $message = null, 
     if (!defined('ZBP_API_IN_TEST') && $GLOBALS['option']['ZC_RUNINFO_DISPLAY']) {
         $runtime = RunTime(false);
         unset($runtime['error_detail']);
-        //$runtime = array_slice($runtime, 0, 3);
         $response['runtime'] = $runtime;
     }
 
@@ -207,32 +218,29 @@ function ApiResponse($data = null, $error = null, $code = 200, $message = null, 
         $fpname($response);
     }
 
-    if (!defined('ZBP_API_IN_TEST')) {
-        ob_end_clean();
+    if (!defined('ZBP_API_IN_TEST') && $isresponse == true) {
+        //ob_end_clean();
         if (!headers_sent()) {
             header('Content-Type: application/json; charset=utf-8');
-            if (!empty($error)) {
-                SetHttpStatusCode(500);
-            } else {
-                SetHttpStatusCode(200);
-            }
         }
+    }
+
+    if (!empty($error)) {
+        SetHttpStatusCode(500);
     }
 
     $r = JsonEncode($response);
 
-    if (empty($error) && $code !== 200) {
-        // 如果 code 不为 200，又不是系统抛出的错误，再来抛出一个 Exception，适配 phpunit
-        ZBlogException::SuspendErrorHook();
-        throw new Exception($message, $code);
-    }
-
-    if ($isreturn == false) {
+    if ($isresponse == true) {
         echo $r;
-    } else {
-        return $r;
     }
-    die;
+    return $r;
+
+    //if (empty($error) && $code !== 200) {
+        // 如果 code 不为 200，又不是系统抛出的错误，再来抛出一个 Exception，适配 phpunit
+        //ZBlogException::SuspendErrorHook();
+        //throw new Exception($message, $code);
+    //}
 }
 
 /**
@@ -247,7 +255,7 @@ function ApiCheckAuth($loginRequire = false, $action = 'view', $throwException =
     // 登录认证
     if ($loginRequire && !$GLOBALS['zbp']->user->ID) {
         if ($throwException == true) {
-            ApiResponse(null, null, 401, $GLOBALS['lang']['error']['6']);
+            $GLOBALS['zbp']->ShowError($GLOBALS['lang']['error']['6'], __FILE__, __LINE__, null, 401);
         } else {
             return false;
         }
@@ -256,7 +264,7 @@ function ApiCheckAuth($loginRequire = false, $action = 'view', $throwException =
     // 权限认证
     if (!$GLOBALS['zbp']->CheckRights($action)) {
         if ($throwException == true) {
-            ApiResponse(null, null, 403, $GLOBALS['lang']['error']['6']);
+            $GLOBALS['zbp']->ShowError($GLOBALS['lang']['error']['6'], __FILE__, __LINE__, null, 403);
         } else {
             return false;
         }
@@ -511,7 +519,7 @@ function ApiVerifyCSRF($force_check = false)
         }
 
         if (!$zbp->VerifyCSRFToken($csrf_token, 'api')) {
-            ApiResponse(null, null, 419, $GLOBALS['lang']['error']['5']);
+            $GLOBALS['zbp']->ShowError($GLOBALS['lang']['error']['5'], __FILE__, __LINE__, null, 419);
         }
 
         return true;
@@ -554,16 +562,18 @@ function ApiDispatch($mods, $mod, $act)
 
             ApiResultData($result);
 
-            ApiResponse(
+            $r = ApiResponse(
                 isset($result['data']) ? $result['data'] : null,
                 isset($result['error']) ? $result['error'] : null,
                 isset($result['code']) ? $result['code'] : 200,
                 isset($result['message']) ? $result['message'] : 'OK'
             );
+
+            return $r;
         }
     }
 
-    ApiResponse(null, null, 404, $GLOBALS['lang']['error']['96']);
+    $GLOBALS['zbp']->ShowError($GLOBALS['lang']['error']['96'], __FILE__, __LINE__, null, 404);
 }
 
 /**
@@ -628,7 +638,7 @@ function ApiThrottle($name = 'default', $max_reqs = 60, $period = 60)
     }
 
     if ($cached_req['hits'] >= $max_reqs) {
-        ApiResponse(null, null, 429, 'Too many requests.');
+        $GLOBALS['zbp']->ShowError('Too many requests.', __FILE__, __LINE__, null, 429);
     }
 
     $cached_req['hits']++;
@@ -655,6 +665,6 @@ function ApiResultData(&$data)
 function ApiCheckHttpMethod($allow_method = 'GET|POST|PUT|DELETE')
 {
     if (isset($_SERVER['REQUEST_METHOD']) && stripos($allow_method, $_SERVER['REQUEST_METHOD']) === false) {
-        ApiResponse(null, null, 405, $GLOBALS['lang']['error']['5']);
+        $GLOBALS['zbp']->ShowError($GLOBALS['lang']['error']['5'], __FILE__, __LINE__, null, 405);
     }
 }

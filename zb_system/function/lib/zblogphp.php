@@ -878,6 +878,7 @@ class ZBlogPHP
         if ($this->isapi) {
             //挂载API错误显示
             Add_Filter_Plugin('Filter_Plugin_Debug_Display', 'ApiDebugDisplay');
+            Add_Filter_Plugin('Filter_Plugin_Zbp_ShowError', 'ApiShowError');
             //挂载Token验证
             Add_Filter_Plugin('Filter_Plugin_Zbp_PreLoad', 'ApiTokenVerify');
         }
@@ -2354,12 +2355,12 @@ class ZBlogPHP
      */
     public function AddBuildModule($moduleFileName, $parameters = null)
     {
+        $p = func_get_args();
         if ($moduleFileName == 'archives' && $this->option['ZC_LARGE_DATA'] == false && isset($this->modulesbyfilename['archives'])) {
             if ($this->modulesbyfilename['archives']->GetSideBarInUsed() == array()) {
                 return;
             }
         }
-        $p = func_get_args();
         call_user_func_array(array('ModuleBuilder', 'Add'), $p);
     }
 
@@ -3885,8 +3886,9 @@ class ZBlogPHP
      *
      * @return mixed
      */
-    public function ShowError($errorText, $file = null, $line = null, $moreinfo = array())
+    public function ShowError($errorText, $file = null, $line = null, $moreinfo = null)
     {
+        $args = func_get_args();
         $errorCode = 0;
         if (is_numeric($errorText)) {
             $errorCode = (int) $errorText;
@@ -3900,8 +3902,7 @@ class ZBlogPHP
         ZBlogException::$error_id = $errorCode;
         ZBlogException::$error_file = $file;
         ZBlogException::$error_line = $line;
-        $array = ZBlogException::$error_debuginfo;
-        ZBlogException::$error_debuginfo = array_merge($array, $moreinfo);
+        ZBlogException::$error_moreinfo = $moreinfo;
 
         if (stripos('{' . sha1('mustshowerror') . '}', $errorText) === 0) {
             $errorText = str_replace('{' . sha1('mustshowerror') . '}', '', $errorText);
@@ -3912,7 +3913,11 @@ class ZBlogPHP
         }
 
         foreach ($GLOBALS['hooks']['Filter_Plugin_Zbp_ShowError'] as $fpname => &$fpsignal) {
-            $fpreturn = $fpname($errorCode, $errorText, $file, $line, $moreinfo);
+            array_shift($args);
+            array_unshift($args, $errorText);
+            array_unshift($args, $errorCode);
+            //$fpreturn = $fpname($errorCode, $errorText, $file, $line, $moreinfo);
+            $fpreturn = call_user_func_array($fpname, $args);
             if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
                 $fpsignal = PLUGIN_EXITSIGNAL_NONE;
 

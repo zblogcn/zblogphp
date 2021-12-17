@@ -204,6 +204,23 @@ function Remove_Filter_Plugin($plugname, $functionname)
 }
 
 /**
+ * 清除Filter接口的所有挂载函数
+ *
+ * @param $plugname 接口名称
+ *
+ * @return boolean
+ */
+function Clear_Filter_Plugin($plugname)
+{
+    if (isset($GLOBALS['hooks'][$plugname])) {
+        $GLOBALS['hooks'][$plugname] = array();
+        return true;
+    }
+
+    return false;
+}
+
+/**
  * 解析Callback Filter接口的某项挂载函数名 (支持多种型式的function调用，已经玩出花了^_^)
  *
  * 要挂接的函数名 (可以是1函数名 2类名::静态方法名 3全局变量名@动态方法名 4类名@动态方法名 5全局匿名函数)

@@ -488,6 +488,7 @@ function RemoveMoreSpaces($s)
  */
 function GetGuid()
 {
+    mt_srand();
     $charid = strtolower(md5(uniqid(mt_rand(), true)));
 
     return $charid;
@@ -560,6 +561,33 @@ function GetCurrentHost($blogpath, &$cookiesPath)
 {
     $host = HTTP_SCHEME;
 
+    if (defined('ZBP_PRESET_BLOGPATH') && constant('ZBP_PRESET_BLOGPATH') != '') {
+        $host = rtrim(constant('ZBP_PRESET_BLOGPATH'), '/');
+        $cookiesPath = '/';
+        if (defined('ZBP_PRESET_COOKIESPATH') && constant('ZBP_PRESET_COOKIESPATH') != '') {
+            $cookiesPath = constant('ZBP_PRESET_COOKIESPATH');
+        }
+        return $host . $cookiesPath;
+    }
+
+    if (function_exists('getenv') && getenv('ZBP_PRESET_BLOGPATH') != '') {
+        $host = rtrim(getenv('ZBP_PRESET_BLOGPATH'), '/');
+        $cookiesPath = '/';
+        if (getenv('ZBP_PRESET_COOKIESPATH') != '') {
+            $cookiesPath = getenv('ZBP_PRESET_COOKIESPATH');
+        }
+        return $host . $cookiesPath;
+    }
+
+    if (isset($_ENV['ZBP_PRESET_BLOGPATH']) && $_ENV['ZBP_PRESET_BLOGPATH'] != '') {
+        $host = rtrim($_ENV['ZBP_PRESET_BLOGPATH'], '/');
+        $cookiesPath = '/';
+        if (isset($_ENV['ZBP_PRESET_COOKIESPATH']) && $_ENV['ZBP_PRESET_COOKIESPATH'] != '') {
+            $cookiesPath = $_ENV['ZBP_PRESET_COOKIESPATH'];
+        }
+        return $host . $cookiesPath;
+    }
+
     if (isset($_SERVER['HTTP_HOST'])) {
         $host .= $_SERVER['HTTP_HOST'];
     } elseif (isset($_SERVER["SERVER_NAME"])) {
@@ -570,6 +598,11 @@ function GetCurrentHost($blogpath, &$cookiesPath)
     } else {
         $cookiesPath = '/';
         return '/';
+    }
+
+    if (IS_CLI == true) {
+        $cookiesPath = '/';
+        return $host . $cookiesPath;
     }
 
     if (isset($_SERVER['SCRIPT_NAME']) && $_SERVER['SCRIPT_NAME']) {
@@ -891,6 +924,18 @@ function SetHttpStatusCode($number, $force = false)
         415 => 'Unsupported Media Type',
         416 => 'Requested Range Not Satisfiable',
         417 => 'Expectation Failed',
+        418 => 'I\'m a teapot',
+        419 => 'Authorization Timeout',
+        421 => 'Misdirected Request',
+        422 => 'Unprocessable Entity',
+        423 => 'Locked',
+        424 => 'Failed Dependency',
+        425 => 'Too Early',
+        426 => 'Upgrade Required',
+        428 => 'Precondition Required',
+        429 => 'Too Many Requests',
+        431 => 'Request Header Fields Too Large',
+        440 => 'Too Many Requests',
         451 => 'Unavailable For Legal Reasons',
 
         // Server Error 5xx
@@ -905,13 +950,16 @@ function SetHttpStatusCode($number, $force = false)
         508 => 'Loop Detected',
         509 => 'Bandwidth Limit Exceeded',
         510 => 'Not Extended',
+        511 => 'Network Authentication Required',
     );
 
     if (isset($codes[$number])) {
-        header('HTTP/1.1 ' . $number . ' ' . $codes[$number]);
-        $status = $number;
+        if (!headers_sent()) {
+            header('HTTP/1.1 ' . $number . ' ' . $codes[$number]);
+            $status = $number;
 
-        return true;
+            return true;
+        }
     }
 
     return false;
@@ -965,7 +1013,9 @@ function Redirect301($url)
 function Http404()
 {
     SetHttpStatusCode(404);
-    header("Status: 404 Not Found");
+    if (!headers_sent()) {
+        header("Status: 404 Not Found");
+    }
 }
 
 /**
@@ -1073,6 +1123,9 @@ function GetRequestUri()
             $url = str_replace(ZBP_PATH, '/', $url);
             $url = ltrim($url, '/');
             $url = '/' . $url;
+        }
+        if (!isset($_SERVER['QUERY_STRING'])) {
+            $_SERVER['QUERY_STRING'] = '';
         }
         $url = $url . ($_SERVER['QUERY_STRING'] ? '?' . $_SERVER['QUERY_STRING'] : '');
     }
@@ -2345,4 +2398,107 @@ function object_to_array($obj)
     } else {
         return $arr;
     }
+}
+
+/**
+ * 将swoole和workerman下的$request数组转换为$GLOBALS全局数组
+ */
+function http_request_convert_to_global($request)
+{
+    $_GET = array();
+    $_POST = array();
+    $_COOKIE = array();
+    $_FILES = array();
+    $_REQUEST = array();
+    if (!is_array($_ENV)) {
+        $_ENV = array();
+    }
+    if (IS_WORKERMAN) {
+        foreach ($request->get() as $key => $value) {
+            $_GET[$key] = $value;
+        }
+        foreach ($request->post() as $key => $value) {
+            $_POST[$key] = $value;
+        }
+        foreach ($request->cookie() as $key => $value) {
+            $_COOKIE[$key] = $value;
+        }
+        foreach ($request->file() as $key => $value) {
+            $_FILES[$key] = $value;
+        }
+        $_SERVER["HTTP_HOST"] = $request->host();
+        $_SERVER["REQUEST_URI"] = $request->uri();
+        $_SERVER["QUERY_STRING"] = $request->queryString();
+        $_SERVER['SERVER_PROTOCOL'] = 'HTTP/' . $request->protocolVersion();
+        $_SERVER["REQUEST_METHOD"] = $request->method();
+        $connection = func_get_arg(1);
+        $_SERVER["REMOTE_PORT"] = $connection->getRemotePort();
+        $_SERVER["REMOTE_ADDR"] = $connection->getRemoteIp();
+    } elseif (IS_SWOOLE) {
+        $_GET = $request->get;
+        $_POST = $request->post;
+        $_COOKIE = $request->cookie;
+        $_FILES = $request->files;
+        $_SERVER = array_replace($_SERVER, $request->server);
+        $_GET = (!is_array($_GET)) ? array() : $_GET;
+        $_POST = (!is_array($_POST)) ? array() : $_POST;
+        $_COOKIE = (!is_array($_COOKIE)) ? array() : $_COOKIE;
+        $_FILES = (!is_array($_FILES)) ? array() : $_FILES;
+        $_SERVER["HTTP_HOST"] = $request->header['host'];
+        $_SERVER["REQUEST_URI"] = $request->server['request_uri'];
+        if (isset($request->server['query_string'])) {
+            $_SERVER["QUERY_STRING"] = $request->server['query_string'];
+            $_SERVER["REQUEST_URI"] .= '?' . $_SERVER["QUERY_STRING"];
+        } else {
+            $_SERVER["QUERY_STRING"] = '';
+        }
+        $_SERVER["REQUEST_METHOD"] = $request->server['request_method'];
+        $_SERVER['SERVER_PROTOCOL'] = $request->server['server_protocol'];
+        $_SERVER['SERVER_PORT'] = $request->server['server_port'];
+        $_SERVER["REMOTE_PORT"] = $request->server['remote_port'];
+        $_SERVER["REMOTE_ADDR"] = $request->server['remote_addr'];
+    }
+    $_SERVER['SERVER_NAME'] = parse_url($_SERVER["HTTP_HOST"], PHP_URL_HOST);
+    $_SERVER['SERVER_PORT'] = parse_url($_SERVER["HTTP_HOST"], PHP_URL_PORT);
+    if (empty($_SERVER['SERVER_PORT'])) {
+        $_SERVER['SERVER_PORT'] = (HTTP_SCHEME == 'http://') ? 80 : 443;
+    }
+
+    $ro = ini_get('request_order');
+    if (empty($ro)) {
+        $ro = 'GP';//variables_order "EGPCS"
+    }
+    $array = str_split($ro, 1);
+    foreach ($array as $a) {
+        if ($a == 'E') {
+            $_REQUEST = array_replace($_REQUEST, $_ENV);
+        }
+        if ($a == 'G') {
+            $_REQUEST = array_replace($_REQUEST, $_GET);
+        }
+        if ($a == 'P') {
+            $_REQUEST = array_replace($_REQUEST, $_POST);
+        }
+        if ($a == 'C') {
+            $_REQUEST = array_replace($_REQUEST, $_COOKIE);
+        }
+        if ($a == 'S') {
+            $_REQUEST = array_replace($_REQUEST, $_SERVER);
+        }
+    }    
+}
+
+/**
+ * 获取swoole或workerman或标准php环境下的原始post data
+ */
+function get_http_raw_post_data(&$request = null)
+{
+    if (IS_WORKERMAN) {
+        $data = $request->rawBody();
+    } elseif (IS_SWOOLE) {
+        $data = $request->rawContent();
+    } else {
+        $data = file_get_contents("php://input");
+    }
+    return $data;
 }
