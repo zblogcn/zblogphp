@@ -244,13 +244,14 @@ function ApiResponse($data = null, $error = null, $code = 200, $message = null, 
     if ($isresponse == true) {
         echo $r;
     }
-    return $r;
 
     if (empty($error) && $code !== 200) {
         // 如果 code 不为 200，又不是系统抛出的错误，再来抛出一个 Exception，适配 phpunit
         ZBlogException::SuspendErrorHook();
         throw new Exception($message, $code);
     }
+
+    return $r;
 }
 
 /**

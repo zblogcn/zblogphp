@@ -989,10 +989,12 @@ function Redirect302($url)
 }
 
 if (!function_exists('Redirect')) {
+
     function Redirect($url)
     {
         Redirect302($url);
     }
+
 }
 
 /**
@@ -2467,7 +2469,7 @@ function http_request_convert_to_global($request)
 
     $ro = ini_get('request_order');
     if (empty($ro)) {
-        $ro = 'GP';//variables_order "EGPCS"
+        $ro = 'GP'; //variables_order "EGPCS"
     }
     $array = str_split($ro, 1);
     foreach ($array as $a) {
@@ -2486,7 +2488,7 @@ function http_request_convert_to_global($request)
         if ($a == 'S') {
             $_REQUEST = array_replace($_REQUEST, $_SERVER);
         }
-    }    
+    }
 }
 
 /**
