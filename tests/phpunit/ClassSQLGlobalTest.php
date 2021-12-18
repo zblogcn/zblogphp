@@ -11,6 +11,10 @@ class ClassSQLGlobalTest extends PHPUnit\Framework\TestCase
          * Use MySQL to test Global
          */
         self::$db = new SQL__MySQL($GLOBALS['zbp']->db);
+
+        if (self::$db->db->dbpre === null) {
+            self::$db->db->dbpre = 'zbp_';
+        }
     }
 
     public function tearDown(): void
