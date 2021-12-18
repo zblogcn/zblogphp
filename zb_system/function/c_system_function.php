@@ -140,7 +140,7 @@ function GetPost($idorname, $option = null)
     }
 
     foreach ($GLOBALS['hooks']['Filter_Plugin_GetPost_Result'] as $fpname => &$fpsignal) {
-        $fpreturn = $fpname($post);
+        $fpreturn = call_user_func($fpname, $post);
     }
 
     return $post;
@@ -437,11 +437,11 @@ function Include_ShowError404($errorCode, $errorDescription, $file, $line)
         return;
     }
 
+    $GLOBALS['hooks']['Filter_Plugin_Zbp_ShowError']['Include_ShowError404'] = PLUGIN_EXITSIGNAL_RETURN;
+
     $zbp->template->SetTags('title', $zbp->title);
     $zbp->template->SetTemplate('404');
     $zbp->template->Display();
-
-    exit;
 }
 
 /**
@@ -613,6 +613,24 @@ function Include_Frontend_CheckRights($action, $level)
         }
         if ($zbp->option['ZC_ALLOW_AUDITTING_MEMBER_VISIT_MANAGE'] == false && $action == 'admin') {
             $GLOBALS['hooks']['Filter_Plugin_Zbp_CheckRights']['Include_Frontend_CheckRights'] = PLUGIN_EXITSIGNAL_RETURN;
+            return false;
+        }
+    }
+}
+
+/**
+ * 在ViewList,ViewPost中对view权限进行验证
+ */
+function Include_ViewListPost_CheckRights_View($route)
+{
+    global $zbp;
+    if (is_array($route)) {
+        $posttype = GetValueInArray($route, 'posttype', 0);
+        //没权限就返回
+        $actions = $zbp->GetPostType($posttype, 'actions');
+        if (!$zbp->CheckRights($actions['view'])) {
+            SetPluginSignal('Filter_Plugin_ViewList_Begin_V2', __FUNCTION__, PLUGIN_EXITSIGNAL_RETURN);
+            SetPluginSignal('Filter_Plugin_ViewPost_Begin_V2', __FUNCTION__, PLUGIN_EXITSIGNAL_RETURN);
             return false;
         }
     }

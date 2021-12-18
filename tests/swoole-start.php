@@ -18,9 +18,7 @@ $http->on('Request', function ($request, $response)
     try {
         Clear_Filter_Plugin('Filter_Plugin_Zbp_ShowError');
 
-        if (!$GLOBALS['option']['ZC_API_ENABLE']) {
-            $zbp->ShowError($GLOBALS['lang']['error']['95'], null, null, null, 503);
-        }
+        ApiCheckEnable();
 
         foreach ($GLOBALS['hooks']['Filter_Plugin_API_Begin'] as $fpname => &$fpsignal) {
             $fpname();

@@ -252,7 +252,7 @@ function misc_vrs()
 /**
  * 杂项之显示PhpInfo
  */
-function misc_phpinfo()
+function misc_php_zbp_info()
 {
     global $zbp, $blogtitle;
 

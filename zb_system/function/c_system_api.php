@@ -11,6 +11,16 @@ if (!defined('ZBP_PATH')) {
 //###############################################################################################################
 
 /**
+ * API Check Enable
+ */
+function ApiCheckEnable()
+{
+    if (!$GLOBALS['option']['ZC_API_ENABLE']) {
+        $GLOBALS['zbp']->ShowError($GLOBALS['lang']['error']['95'], null, null, null, 503);
+    }
+}
+
+/**
  * API TokenVerify
  */
 function ApiTokenVerify()
@@ -236,11 +246,11 @@ function ApiResponse($data = null, $error = null, $code = 200, $message = null, 
     }
     return $r;
 
-    //if (empty($error) && $code !== 200) {
+    if (empty($error) && $code !== 200) {
         // 如果 code 不为 200，又不是系统抛出的错误，再来抛出一个 Exception，适配 phpunit
-        //ZBlogException::SuspendErrorHook();
-        //throw new Exception($message, $code);
-    //}
+        ZBlogException::SuspendErrorHook();
+        throw new Exception($message, $code);
+    }
 }
 
 /**

@@ -148,16 +148,22 @@ function RemovePluginFilter($strPluginFilter)
  * 设置插件信号
  *
  * @param $plugname
- * @param $function
+ * @param $functionname
  * @param $signal
  *
  * @return boolean
  */
-function SetPluginSignal($plugname, $function, $signal = 'PLUGIN_EXITSIGNAL_NONE')
+function SetPluginSignal($plugname, $functionname, $signal = PLUGIN_EXITSIGNAL_NONE)
 {
-    $GLOBALS['hooks'][$plugname][$function] = $signal;
+    if (isset($GLOBALS['hooks'][$plugname])) {
+        if (isset($GLOBALS['hooks'][$plugname][$functionname])) {
+            $GLOBALS['hooks'][$plugname][$functionname] = $signal;
 
-    return true;
+            return true;
+        }
+    }
+
+    return false;
 }
 
 /**

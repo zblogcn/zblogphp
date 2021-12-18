@@ -914,12 +914,6 @@ function ViewList($page = null, $cate = null, $auth = null, $date = null, $tags 
         $posttype = GetValueInArray($object, 'posttype', 0);
     }
 
-    //没权限就返回
-    $actions = $zbp->GetPostType($posttype, 'actions');
-    if (!$zbp->CheckRights($actions['view'])) {
-        return false;
-    }
-
     //老版本的兼容接口
     foreach ($GLOBALS['hooks']['Filter_Plugin_ViewList_Begin'] as $fpname => &$fpsignal) {
         $fpargs_v1 = array($page, $cate, $auth, $date, $tags, $isrewrite, $object);
@@ -1400,12 +1394,6 @@ function ViewPost($id = null, $alias = null, $isrewrite = false, $object = array
         }
     }
 
-    //没权限就返回
-    $actions = $zbp->GetPostType($posttype, 'actions');
-    if (!$zbp->CheckRights($actions['view'])) {
-        return false;
-    }
-
     //兼容老版本的接口
     foreach ($GLOBALS['hooks']['Filter_Plugin_ViewPost_Begin'] as $fpname => &$fpsignal) {
         $fpargs_v1 = array($id, $alias, $isrewrite, $object);
@@ -1445,7 +1433,6 @@ function ViewPost($id = null, $alias = null, $isrewrite = false, $object = array
         }
     } else {
         $zbp->ShowError(2, __FILE__, __LINE__);
-        exit;
     }
 
     if (empty($zbp->user->ID)) {

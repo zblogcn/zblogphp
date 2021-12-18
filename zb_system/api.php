@@ -14,9 +14,7 @@ require 'function/c_system_base.php';
 
 $zbp->Load();
 
-if (!$GLOBALS['option']['ZC_API_ENABLE']) {
-    $zbp->ShowError($GLOBALS['lang']['error']['95'], null, null, null, 503);
-}
+ApiCheckEnable();
 
 HookFilterPlugin('Filter_Plugin_API_Begin');
 
