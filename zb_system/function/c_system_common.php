@@ -2467,7 +2467,7 @@ function http_request_convert_to_global($request)
         $_SERVER['SERVER_PORT'] = (HTTP_SCHEME == 'https://') ? 443 : 80;
     }
 
-    $ro = ini_get('request_order');
+    $ro = call_user_func('ini_get', 'request_order');
     if (empty($ro)) {
         $ro = 'GP'; //variables_order "EGPCS"
     }
