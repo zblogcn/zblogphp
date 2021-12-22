@@ -1,5 +1,5 @@
 <?php
-define('ZBP_ERRORPROCESSING', true);
+defined('ZBP_ERRORPROCESSING') || define('ZBP_ERRORPROCESSING', true);
 if (!isset($GLOBALS['zbp'])) {
     //exit;
     $GLOBALS['zbp'] = new stdClass();

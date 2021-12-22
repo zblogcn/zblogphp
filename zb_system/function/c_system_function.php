@@ -586,8 +586,6 @@ function Include_Index_Begin()
     global $zbp;
     $zbp->CheckSiteClosed();
 
-    $zbp->RedirectPermanentDomain();
-
     if ($zbp->template->hasTemplate('404')) {
         Add_Filter_Plugin('Filter_Plugin_Zbp_ShowError', 'Include_ShowError404');
     }

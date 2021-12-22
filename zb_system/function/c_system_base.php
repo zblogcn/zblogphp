@@ -46,6 +46,7 @@ if (ZBP_OBSTART) {
 /**
  * 指定加载类的目录并注册加载函数到系统
  */
+RunTime_Begin();
 $GLOBALS['autoload_class_dirs'] = array();
 AddAutoloadClassDir(ZBP_PATH . 'zb_system/function/lib');
 spl_autoload_register('AutoloadClass');
@@ -192,6 +193,21 @@ $GLOBALS['zbp']->Initialize();
  * 加载主题和插件APP
  */
 if (ZBP_SAFEMODE === false) {
+    $aps = GetVarsFromEnv('ZBP_PRESET_PLUGINS');
+    if ($aps != '') {
+        $aps = explode('|', $aps);
+        $aps = array_unique($aps);
+        foreach ($aps as $ap) {
+            $ap_not_in = !in_array($ap, $GLOBALS['activedapps']);
+            if (is_readable($file_base = $GLOBALS['usersdir'] . 'plugin/' . $ap . '/plugin.xml') && $ap_not_in) {
+                $GLOBALS['activedapps'][] = $ap;
+            }
+            if (is_readable($file_base = $GLOBALS['usersdir'] . 'plugin/' . $ap . '/include.php') && $ap_not_in) {
+                include $file_base;
+            }
+        }
+    }
+
     if (is_readable($file_base = $GLOBALS['usersdir'] . 'theme/' . $GLOBALS['blogtheme'] . '/theme.xml')) {
         $GLOBALS['activedapps'][] = $GLOBALS['blogtheme'];
 
@@ -206,10 +222,11 @@ if (ZBP_SAFEMODE === false) {
 
     $aps = $GLOBALS['zbp']->GetPreActivePlugin();
     foreach ($aps as $ap) {
-        if (is_readable($file_base = $GLOBALS['usersdir'] . 'plugin/' . $ap . '/plugin.xml')) {
+        $ap_not_in = !in_array($ap, $GLOBALS['activedapps']);
+        if (is_readable($file_base = $GLOBALS['usersdir'] . 'plugin/' . $ap . '/plugin.xml') && $ap_not_in) {
             $GLOBALS['activedapps'][] = $ap;
         }
-        if (is_readable($file_base = $GLOBALS['usersdir'] . 'plugin/' . $ap . '/include.php')) {
+        if (is_readable($file_base = $GLOBALS['usersdir'] . 'plugin/' . $ap . '/include.php') && $ap_not_in) {
             include $file_base;
         }
     }
@@ -221,7 +238,7 @@ if (ZBP_SAFEMODE === false) {
     }
 }
 
-unset($file_base, $aps, $fn, $ap, $op_users, $opk, $opv);
+unset($file_base, $aps, $fn, $ap, $op_users, $opk, $opv, $ap_not_in);
 
 //1.7新加入的
 $GLOBALS['zbp']->PreLoad();

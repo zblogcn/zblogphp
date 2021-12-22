@@ -254,6 +254,20 @@ function Logs_Dump()
     }
 }
 
+/*
+ * 初始化统计信息
+ */
+function RunTime_Begin()
+{
+   $_SERVER['_start_time'] = microtime(true); //RunTime
+    $_SERVER['_query_count'] = 0;
+    $_SERVER['_memory_usage'] = 0;
+    $_SERVER['_error_count'] = 0;
+    if (function_exists('memory_get_usage')) {
+        $_SERVER['_memory_usage'] = memory_get_usage();
+    } 
+}
+
 /**
  * 输出页面运行时长
  *
@@ -288,7 +302,7 @@ function RunTime($isOutput = true)
 
     if ($isOutput) {
         echo '<!--' . $rt['time'] . ' ms , ';
-        echo $rt['query'] . ' queries';
+        echo $rt['query'] . ($rt['query'] > 1 ? ' queries' : ' query');
         echo ' , ' . $rt['memory'] . 'kb memory';
         echo ' , ' . $rt['error'] . ' error' . ($rt['error'] > 1 ? 's' : '');
         //echo print_r($rt['error_detail'], true);
@@ -540,6 +554,24 @@ function GetVarsByDefault($name, $type = 'REQUEST', $default = null)
 }
 
 /**
+ * 从一系列指定的环境变量获得参数值
+ */
+function GetVarsFromEnv($name)
+{
+    $value = '';
+    if (defined($name) && constant($name) != '') {
+        $value = constant($name);
+    } elseif (function_exists('getenv') && getenv($name) != '') {
+        $value = getenv($name);
+    } elseif (isset($_ENV[$name]) && $_ENV[$name] != '') {
+        $value = $_ENV[$name];
+    } elseif (isset($_SERVER[$name]) && $_SERVER[$name] != '') {
+        $value = $_SERVER[$name];
+    }
+    return $value;
+}
+
+/**
  * 获取数据库名.
  *
  * @return string 返回一个随机的SQLite数据文件名
@@ -561,29 +593,16 @@ function GetCurrentHost($blogpath, &$cookiesPath)
 {
     $host = HTTP_SCHEME;
 
-    if (defined('ZBP_PRESET_BLOGPATH') && constant('ZBP_PRESET_BLOGPATH') != '') {
-        $host = rtrim(constant('ZBP_PRESET_BLOGPATH'), '/');
+    $preset_bloghost = GetVarsFromEnv('ZBP_PRESET_BLOGPATH');
+    $preset_cookiespath = GetVarsFromEnv('ZBP_PRESET_COOKIESPATH');
+    if ($preset_bloghost != '') {
+        defined('ZBP_PRESET_BLOGPATH_USED') || define('ZBP_PRESET_BLOGPATH_USED', true);
+        $host = $preset_bloghost;
+        $host = rtrim($host, '/');
         $cookiesPath = '/';
-        if (defined('ZBP_PRESET_COOKIESPATH') && constant('ZBP_PRESET_COOKIESPATH') != '') {
-            $cookiesPath = constant('ZBP_PRESET_COOKIESPATH');
-        }
-        return $host . $cookiesPath;
-    }
-
-    if (function_exists('getenv') && getenv('ZBP_PRESET_BLOGPATH') != '') {
-        $host = rtrim(getenv('ZBP_PRESET_BLOGPATH'), '/');
-        $cookiesPath = '/';
-        if (getenv('ZBP_PRESET_COOKIESPATH') != '') {
-            $cookiesPath = getenv('ZBP_PRESET_COOKIESPATH');
-        }
-        return $host . $cookiesPath;
-    }
-
-    if (isset($_ENV['ZBP_PRESET_BLOGPATH']) && $_ENV['ZBP_PRESET_BLOGPATH'] != '') {
-        $host = rtrim($_ENV['ZBP_PRESET_BLOGPATH'], '/');
-        $cookiesPath = '/';
-        if (isset($_ENV['ZBP_PRESET_COOKIESPATH']) && $_ENV['ZBP_PRESET_COOKIESPATH'] != '') {
-            $cookiesPath = $_ENV['ZBP_PRESET_COOKIESPATH'];
+        if ($preset_cookiespath != '') {
+            $cookiesPath = $preset_cookiespath;
+            $cookiesPath = rtrim($cookiesPath, '/') . '/';
         }
         return $host . $cookiesPath;
     }
@@ -984,8 +1003,9 @@ function RedirectByScript($url)
 function Redirect302($url)
 {
     SetHttpStatusCode(302);
-    header('Location: ' . $url);
-    die();
+    if (!headers_sent()) {
+        header('Location: ' . $url);
+    }
 }
 
 if (!function_exists('Redirect')) {
@@ -993,6 +1013,7 @@ if (!function_exists('Redirect')) {
     function Redirect($url)
     {
         Redirect302($url);
+        die();
     }
 
 }
@@ -1005,8 +1026,9 @@ if (!function_exists('Redirect')) {
 function Redirect301($url)
 {
     SetHttpStatusCode(301);
-    header('Location: ' . $url);
-    die();
+    if (!headers_sent()) {
+        header('Location: ' . $url);
+    }
 }
 
 /**
@@ -2358,10 +2380,18 @@ function rawurlencode_without_backslash($s)
 
 /**
  * 检查移动端
+ */
+function zbp_is_mobile()
+{
+    return CheckIsMobile();
+}
+
+/**
+ * 检查移动端
  *
  * @return boolean
  */
-function CheckIsMoblie()
+function CheckIsMobile()
 {
     $ua = GetGuestAgent();
     if (preg_match('/(Android|Web0S|webOS|iPad|iPhone|Mobile|Windows\sPhone|Kindle|BlackBerry|Opera\sMini)/', $ua)) {
@@ -2406,6 +2436,7 @@ function object_to_array($obj)
  */
 function http_request_convert_to_global($request)
 {
+    $args = func_get_args();
     $_GET = array();
     $_POST = array();
     $_COOKIE = array();
@@ -2488,6 +2519,16 @@ function http_request_convert_to_global($request)
         if ($a == 'S') {
             $_REQUEST = array_replace($_REQUEST, $_SERVER);
         }
+    }
+    static $already_set = false;
+    if (!$already_set) {
+        $GLOBALS['bloghost'] = GetCurrentHost($GLOBALS['blogpath'], $GLOBALS['cookiespath']);
+        $already_set = true;
+    }
+    $GLOBALS['currenturl'] = GetRequestUri();
+
+    foreach ($GLOBALS['hooks']['Filter_Plugin_Http_Request_Convert_To_Global'] as $fpname => &$fpsignal) {
+        call_user_func_array($fpname, $args);
     }
 }
 
