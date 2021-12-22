@@ -1015,6 +1015,7 @@ if (!function_exists('Redirect')) {
         Redirect302($url);
         die();
     }
+
 }
 
 /**
