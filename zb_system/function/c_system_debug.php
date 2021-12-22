@@ -1,4 +1,5 @@
 <?php
+
 /**
  * 错误调试.
  */
@@ -347,23 +348,23 @@ class ZBlogException
      * 错误数组
      */
     public static $errarray = array(
-            0     => 'UNKNOWN',
-            1     => 'E_ERROR',
-            2     => 'E_WARNING',
-            4     => 'E_PARSE',
-            8     => 'E_NOTICE',
-            16    => 'E_CORE_ERROR',
-            32    => 'E_CORE_WARNING',
-            64    => 'E_COMPILE_ERROR',
-            128   => 'E_COMPILE_WARNING',
-            256   => 'E_USER_ERROR',
-            512   => 'E_USER_WARNING',
-            1024  => 'E_USER_NOTICE',
-            2048  => 'E_STRICT',
-            4096  => 'E_RECOVERABLE_ERROR',
-            8192  => 'E_DEPRECATED',
-            16384 => 'E_USER_DEPRECATED',
-            30719 => 'E_ALL',
+        0     => 'UNKNOWN',
+        1     => 'E_ERROR',
+        2     => 'E_WARNING',
+        4     => 'E_PARSE',
+        8     => 'E_NOTICE',
+        16    => 'E_CORE_ERROR',
+        32    => 'E_CORE_WARNING',
+        64    => 'E_COMPILE_ERROR',
+        128   => 'E_COMPILE_WARNING',
+        256   => 'E_USER_ERROR',
+        512   => 'E_USER_WARNING',
+        1024  => 'E_USER_NOTICE',
+        2048  => 'E_STRICT',
+        4096  => 'E_RECOVERABLE_ERROR',
+        8192  => 'E_DEPRECATED',
+        16384 => 'E_USER_DEPRECATED',
+        30719 => 'E_ALL',
     );
 
     /**
@@ -371,7 +372,6 @@ class ZBlogException
      */
     public function __construct()
     {
-
     }
 
     public static function ThrowException($error)
@@ -401,7 +401,7 @@ class ZBlogException
         }
         $z->moreinfo = self::$error_moreinfo;
         self::$error_moreinfo = null;
-        self::$private_zbe_list[]= $z;
+        self::$private_zbe_list[] = $z;
 
         return $z;
     }
@@ -675,7 +675,8 @@ class ZBlogException
         return $result;
     }
 
-    public function getTypeName() {
+    public function getTypeName()
+    {
         if (isset(self::$errarray[$this->type])) {
             return self::$errarray[$this->type];
         } else {
@@ -683,44 +684,54 @@ class ZBlogException
         }
     }
 
-    public function getType() {
+    public function getType()
+    {
         return $this->type;
     }
 
-    public function getMessage() {
+    public function getMessage()
+    {
         return $this->message;
     }
 
-    public function getMessageFull() {
+    public function getMessageFull()
+    {
         return $this->messagefull;
     }
 
-    public function getMoreInfo() {
+    public function getMoreInfo()
+    {
         return $this->moreinfo;
     }
 
-    public function getPrevious() {
+    public function getPrevious()
+    {
         return $this->previous;
     }
 
-    public function getCode() {
+    public function getCode()
+    {
         return $this->code;
     }
 
-    public function getFile() {
+    public function getFile()
+    {
         return $this->file;
     }
 
-    public function getLine() {
+    public function getLine()
+    {
         return $this->line;
     }
 
-    public function getTrace() {
+    public function getTrace()
+    {
         $t = debug_backtrace();
         return $t;
     }
 
-    public function getTraceAsString() {
+    public function getTraceAsString()
+    {
         $t = $this->getTrace();
         return call_user_func('print_r', $t, true);
     }

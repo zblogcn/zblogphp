@@ -259,13 +259,13 @@ function Logs_Dump()
  */
 function RunTime_Begin()
 {
-   $_SERVER['_start_time'] = microtime(true); //RunTime
+    $_SERVER['_start_time'] = microtime(true); //RunTime
     $_SERVER['_query_count'] = 0;
     $_SERVER['_memory_usage'] = 0;
     $_SERVER['_error_count'] = 0;
     if (function_exists('memory_get_usage')) {
         $_SERVER['_memory_usage'] = memory_get_usage();
-    } 
+    }
 }
 
 /**
@@ -1015,7 +1015,6 @@ if (!function_exists('Redirect')) {
         Redirect302($url);
         die();
     }
-
 }
 
 /**

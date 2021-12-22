@@ -323,15 +323,15 @@ function ViewAuto_Check_Redirect_To($route)
         } else {
             Redirect302($route['Location']);
         }
-        return array('StatusCode'=>$route['StatusCode'], 'Location' => $route['Location']);
+        return array('StatusCode' => $route['StatusCode'], 'Location' => $route['Location']);
     }
     if (isset($route['redirect_to'])) {
         Redirect($route['redirect_to']);
-        return array('StatusCode'=>302, 'Location' => $route['redirect_to']);
+        return array('StatusCode' => 302, 'Location' => $route['redirect_to']);
     }
     if (isset($route['redirect301_to'])) {
         Redirect301($route['redirect301_to']);
-        return array('StatusCode'=>301, 'Location' => $route['redirect_to']);
+        return array('StatusCode' => 301, 'Location' => $route['redirect_to']);
     }
     return false;
 }
@@ -885,7 +885,7 @@ function ViewSearch()
 
     if ($return_url == true) {
         $url = $template->GetTags('url');
-        return array('StatusCode'=>302, 'Location' => $url);
+        return array('StatusCode' => 302, 'Location' => $url);
     }
 
     $template->Display();
@@ -1358,7 +1358,7 @@ function ViewList($page = null, $cate = null, $auth = null, $date = null, $tags 
 
     if ($return_url == true) {
         $url = $template->GetTags('url');
-        return array('StatusCode'=>302, 'Location' => $url);
+        return array('StatusCode' => 302, 'Location' => $url);
     }
 
     $template->Display();
@@ -1625,7 +1625,7 @@ function ViewPost($id = null, $alias = null, $isrewrite = false, $object = array
 
     if ($return_url == true) {
         $url = $template->GetTags('url');
-        return array('StatusCode'=>302, 'Location' => $url);
+        return array('StatusCode' => 302, 'Location' => $url);
     }
 
     $template->Display();
