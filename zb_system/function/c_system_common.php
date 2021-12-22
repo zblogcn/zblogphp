@@ -555,18 +555,31 @@ function GetVarsByDefault($name, $type = 'REQUEST', $default = null)
 
 /**
  * 从一系列指定的环境变量获得参数值
+ * $source = all,constant,getenv,env,server
  */
-function GetVarsFromEnv($name)
+function GetVarsFromEnv($name, $source = '')
 {
     $value = '';
-    if (defined($name) && constant($name) != '') {
+    $type = strtolower($source);
+    if ($type == '' || $type == 'all') {
+        $type = 'constant|getenv|env|server';
+    }
+    $type = '|' . $type . '|';
+    if ((strpos($type, '|constant|') !== false) && defined($name) && constant($name) != '') {
         $value = constant($name);
-    } elseif (function_exists('getenv') && getenv($name) != '') {
+        return $value;
+    }
+    if ((strpos($type, '|getenv|') !== false) && function_exists('getenv') && getenv($name) != '') {
         $value = getenv($name);
-    } elseif (isset($_ENV[$name]) && $_ENV[$name] != '') {
+        return $value;
+    }
+    if ((strpos($type, '|env|') !== false) && isset($_ENV[$name]) && $_ENV[$name] != '') {
         $value = $_ENV[$name];
-    } elseif (isset($_SERVER[$name]) && $_SERVER[$name] != '') {
+        return $value;
+    }
+    if ((strpos($type, '|server|') !== false) && isset($_SERVER[$name]) && $_SERVER[$name] != '') {
         $value = $_SERVER[$name];
+        return $value;
     }
     return $value;
 }

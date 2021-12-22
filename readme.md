@@ -6,7 +6,7 @@ Z-BlogPHP 是由 Z-Blog 社区提供的博客程序，一直致力于给国内�
 
 我们的目标是使用户沉浸于写作、记录生活，不需要关注繁琐的设置等，让用户专注于创作。对于用户而言，它简单易用，体积小，速度快，支持数据量大。对开发者而言，它又有着强大的可定制性、丰富的插件接口和精美的主题模板。
 
-**我们一直在努力把Z-BlogPHP打造成高可玩性、乐高积木式的网站程序!**
+**我们一直在努力把 Z-BlogPHP 打造成高可玩性、乐高积木式的网站程序!**
 
 期待 Z-BlogPHP 能成为您写博、建站的上佳选择。
 
@@ -14,7 +14,7 @@ Z-BlogPHP 是由 Z-Blog 社区提供的博客程序，一直致力于给国内�
 
 For security vulnerabilities, please contact us via ``contact#rainbowsoft.org`` and do not post on GitHub Issue.
 
-提交安全漏洞，请直接联系我们：contact#rainbowsoft.org。您也可以通过[先知安全服务平台](https://xianzhi.aliyun.com)、[360补天](https://loudong.360.cn/)、[国家信息安全漏洞共享平台](http://www.cnvd.org.cn)等平台向我们提交。**请不要在 GitHub Issue 等公开领域发布和漏洞有关的信息，更不要百度翻译成英文后向我们提交，我们看得懂汉字。**
+提交安全漏洞，请直接联系我们：contact#rainbowsoft.org。您也可以通过[先知安全服务平台](https://xianzhi.aliyun.com)、[360 补天](https://loudong.360.cn/)、[国家信息安全漏洞共享平台](http://www.cnvd.org.cn)等平台向我们提交。**请不要在 GitHub Issue 等公开领域发布和漏洞有关的信息，更不要百度翻译成英文后向我们提交，我们看得懂汉字。**
 
 致某些安全初学者：在管理员权限下，通过后台主题管理/插件管理上传 PHP 文件**不是漏洞**！自从 2017 年起，CNVD 已经给我们报了至少五次相关“漏洞”（如 CNVD-2019-12772、CNVD-2019-43601)。请不要用这种东西浪费我们和 CNVD 的时间，同时通过刷低水平“漏洞”骗到的 CNVD 编号对你的简历没有任何帮助。
 
@@ -30,7 +30,7 @@ For security vulnerabilities, please contact us via ``contact#rainbowsoft.org`` 
 ## 运行环境
 - Windows / Linux / macOS and so on...
 - IIS / Apache / nginx / Lighttpd / Kangle / Tengine / Caddy and so on...
-- PHP 5.2 - 8.0
+- PHP 5.2 - 8.1
 - MySQL 5+ / MariaDB 10+ / SQLite 3 / PostgreSQL
 
 ## 安装说明

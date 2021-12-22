@@ -482,7 +482,7 @@ class ZBlogPHP
      */
     public $autofill_template_htmltags = true;
 
-    const OPTION_RESERVE_KEYS = 'ZC_DATABASE_TYPE|ZC_SQLITE_NAME|ZC_SQLITE_PRE|ZC_MYSQL_SERVER|ZC_MYSQL_USERNAME|ZC_MYSQL_PASSWORD|ZC_MYSQL_NAME|ZC_MYSQL_CHARSET|ZC_MYSQL_COLLATE|ZC_MYSQL_PRE|ZC_MYSQL_ENGINE|ZC_MYSQL_PORT|ZC_MYSQL_PERSISTENT|ZC_MYSQL_PORT|ZC_PGSQL_SERVER|ZC_PGSQL_USERNAME|ZC_PGSQL_PASSWORD|ZC_PGSQL_NAME|ZC_PGSQL_CHARSET|ZC_PGSQL_PRE|ZC_PGSQL_PORT|ZC_PGSQL_PERSISTENT|ZC_CLOSE_WHOLE_SITE|ZC_PERMANENT_DOMAIN_FORCED_URL|ZC_PERMANENT_DOMAIN_FORCED_DISABLE';
+    const OPTION_RESERVE_KEYS = 'ZC_DATABASE_TYPE|ZC_SQLITE_NAME|ZC_SQLITE_PRE|ZC_MYSQL_SERVER|ZC_MYSQL_USERNAME|ZC_MYSQL_PASSWORD|ZC_MYSQL_NAME|ZC_MYSQL_CHARSET|ZC_MYSQL_COLLATE|ZC_MYSQL_PRE|ZC_MYSQL_ENGINE|ZC_MYSQL_PORT|ZC_MYSQL_PERSISTENT|ZC_MYSQL_PORT|ZC_PGSQL_SERVER|ZC_PGSQL_USERNAME|ZC_PGSQL_PASSWORD|ZC_PGSQL_NAME|ZC_PGSQL_CHARSET|ZC_PGSQL_PRE|ZC_PGSQL_PORT|ZC_PGSQL_PERSISTENT|ZC_CLOSE_WHOLE_SITE|ZC_PERMANENT_DOMAIN_FORCED_URL|ZC_PERMANENT_DOMAIN_FORCED_DISABLE|ZC_DATABASE_CONFIG';
 
     /**
      * ZBP魔术方法函数**************************************************************.
@@ -1051,10 +1051,21 @@ class ZBlogPHP
             return false;
         }
 
+        $envtype = '';
+        if (isset($this->option['ZC_DATABASE_CONFIG'])) {
+            $envtype = trim(strtolower($this->option['ZC_DATABASE_CONFIG']));
+            if ($envtype == 'option') {
+                $envtype = '';
+            }
+        }
+
         switch ($this->option['ZC_DATABASE_TYPE']) {
             case 'sqlite':
             case 'sqlite3':
             case 'pdo_sqlite':
+                if ($envtype) {
+                    $this->option['ZC_PGSQL_NAME'] = GetVarsFromEnv($this->option['ZC_PGSQL_NAME'], $envtype);
+                }
                 $this->db = self::InitializeDB($this->option['ZC_DATABASE_TYPE']);
                 if ($this->db->Open(
                     array(
@@ -1068,6 +1079,13 @@ class ZBlogPHP
                 break;
             case 'postgresql':
             case 'pdo_postgresql':
+                if ($envtype) {
+                    $this->option['ZC_PGSQL_SERVER'] = GetVarsFromEnv($this->option['ZC_PGSQL_SERVER'], $envtype);
+                    $this->option['ZC_PGSQL_USERNAME'] = GetVarsFromEnv($this->option['ZC_PGSQL_USERNAME'], $envtype);
+                    $this->option['ZC_PGSQL_PASSWORD'] = GetVarsFromEnv($this->option['ZC_PGSQL_PASSWORD'], $envtype);
+                    $this->option['ZC_PGSQL_NAME'] = GetVarsFromEnv($this->option['ZC_PGSQL_NAME'], $envtype);
+                    $this->option['ZC_PGSQL_PORT'] = GetVarsFromEnv($this->option['ZC_PGSQL_PORT'], $envtype);
+                }
                 $this->db = self::InitializeDB($this->option['ZC_DATABASE_TYPE']);
                 if ($this->db->Open(
                     array(
@@ -1088,6 +1106,13 @@ class ZBlogPHP
             case 'mysqli':
             case 'pdo_mysql':
             default:
+                if ($envtype) {
+                    $this->option['ZC_MYSQL_SERVER'] = GetVarsFromEnv($this->option['ZC_MYSQL_SERVER'], $envtype);
+                    $this->option['ZC_MYSQL_USERNAME'] = GetVarsFromEnv($this->option['ZC_MYSQL_USERNAME'], $envtype);
+                    $this->option['ZC_MYSQL_PASSWORD'] = GetVarsFromEnv($this->option['ZC_MYSQL_PASSWORD'], $envtype);
+                    $this->option['ZC_MYSQL_NAME'] = GetVarsFromEnv($this->option['ZC_MYSQL_NAME'], $envtype);
+                    $this->option['ZC_MYSQL_PORT'] = GetVarsFromEnv($this->option['ZC_MYSQL_PORT'], $envtype);
+                }
                 if ($this->option['ZC_DATABASE_TYPE'] == 'mysql' && version_compare(PHP_VERSION, '7.0.0') >= 0) {
                     if (extension_loaded('mysqli')) {
                         $this->option['ZC_DATABASE_TYPE'] = 'mysqli';
@@ -1344,6 +1369,7 @@ class ZBlogPHP
         unset($this->option['ZC_PERMANENT_DOMAIN_FORCED_DISABLE']);
         unset($this->option['ZC_PERMANENT_DOMAIN_FORCED_URL']);
         unset($this->option['ZC_CLOSE_WHOLE_SITE']);
+        unset($this->option['ZC_DATABASE_CONFIG']);
 
         $reserve_keys = explode('|', self::OPTION_RESERVE_KEYS);
 
