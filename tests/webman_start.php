@@ -2,7 +2,7 @@
 require_once __DIR__ . '/vendor/autoload.php';
 define('ZBP_HOOKERROR', false);
 define('ZBP_OBSTART', false);
-//$_ENV['ZBP_PRESET_BLOGPATH'] = 'https://localhost';
+//$_ENV['ZBP_PRESET_HOST'] = 'https://localhost';
 require  __DIR__ . '/zblog/zb_system/function/c_system_base.php';
 
 use Workerman\Worker;

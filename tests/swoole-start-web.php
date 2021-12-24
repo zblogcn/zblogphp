@@ -2,7 +2,7 @@
 //zblog web浏览 示范
 define('ZBP_HOOKERROR', false);
 define('ZBP_OBSTART', false);
-//$_ENV['ZBP_PRESET_BLOGPATH'] = 'http://localhost';
+//$_ENV['ZBP_PRESET_HOST'] = 'http://localhost';
 require_once __DIR__ . '/zblog/zb_system/function/c_system_base.php';
 
 $http = new Swoole\Http\Server('127.0.0.1', 9999);

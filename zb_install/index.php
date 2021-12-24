@@ -57,8 +57,22 @@ if ($zblogstep == 0) {
     $zblogstep = 1;
 }
 
-if ($zbp->option['ZC_DATABASE_TYPE'] !== '') {
-    $zblogstep = 0;
+$a = ($zbp->option['ZC_DATABASE_TYPE'] !== '');
+if ($a) {
+    $b = (isset($zbp->option['ZC_INSTALL_AFTER_CONFIG']) == false);
+    if ($b) {
+        $zblogstep = 0;
+    } else {
+        $c = ($zbp->option['ZC_INSTALL_AFTER_CONFIG'] == false);
+        if ($c) {
+            $zblogstep = 0;
+        } else {
+            $d = ($zbp->db->ExistTable($GLOBALS['table']['Config']) == true);
+            if ($d) {
+                $zblogstep = 0;
+            }
+        }
+    }
 }
 ?>
 <!DOCTYPE HTML>
@@ -950,13 +964,15 @@ function Setup4()
                 $zbp->option['ZC_MYSQL_ENGINE'] = GetVars('dbengine', 'POST');
                 $cts = str_replace('MyISAM', $zbp->option['ZC_MYSQL_ENGINE'], $cts);
 
-                $zbp->db = ZBlogPHP::InitializeDB($zbp->option['ZC_DATABASE_TYPE']);
-                if ($zbp->db->CreateDB($zbp->option['ZC_MYSQL_SERVER'], $zbp->option['ZC_MYSQL_PORT'], $zbp->option['ZC_MYSQL_USERNAME'], $zbp->option['ZC_MYSQL_PASSWORD'], $zbp->option['ZC_MYSQL_NAME']) == true) {
-                    echo $zbp->lang['zb_install']['create_db'] . $zbp->option['ZC_MYSQL_NAME'] . "<br/>";
+                if (!(isset($zbp->option['ZC_INSTALL_AFTER_CONFIG']) && $zbp->option['ZC_INSTALL_AFTER_CONFIG'] == true)) {
+                    $newdb = ZBlogPHP::InitializeDB($zbp->option['ZC_DATABASE_TYPE']);
+                    if ($newdb->CreateDB($zbp->option['ZC_MYSQL_SERVER'], $zbp->option['ZC_MYSQL_PORT'], $zbp->option['ZC_MYSQL_USERNAME'], $zbp->option['ZC_MYSQL_PASSWORD'], $zbp->option['ZC_MYSQL_NAME']) == true) {
+                        echo $zbp->lang['zb_install']['create_db'] . $zbp->option['ZC_MYSQL_NAME'] . "<br/>";
+                    }
+                    $newdb->dbpre = $zbp->option['ZC_MYSQL_PRE'];
+                    $newdb->Close();
+                    $newdb = null;
                 }
-                $zbp->db->dbpre = $zbp->option['ZC_MYSQL_PRE'];
-                $zbp->db->Close();
-
                 break;
             case 'sqlite':
                 $cts = file_get_contents($GLOBALS['blogpath'] . 'zb_system/defend/createtable/sqlite.sql');
@@ -999,12 +1015,15 @@ function Setup4()
                     $zbp->option['ZC_PGSQL_PRE'] == 'zbp_';
                 }
 
-                $zbp->db = ZBlogPHP::InitializeDB($zbp->option['ZC_DATABASE_TYPE']);
-                if ($zbp->db->CreateDB($zbp->option['ZC_PGSQL_SERVER'], $zbp->option['ZC_PGSQL_PORT'], $zbp->option['ZC_PGSQL_USERNAME'], $zbp->option['ZC_PGSQL_PASSWORD'], $zbp->option['ZC_PGSQL_NAME']) == true) {
-                    echo $zbp->lang['zb_install']['create_db'] . $zbp->option['ZC_PGSQL_NAME'] . "<br/>";
+                if (!(isset($zbp->option['ZC_INSTALL_AFTER_CONFIG']) && $zbp->option['ZC_INSTALL_AFTER_CONFIG'] == true)) {
+                    $newdb = ZBlogPHP::InitializeDB($zbp->option['ZC_DATABASE_TYPE']);
+                    if ($newdb->CreateDB($zbp->option['ZC_PGSQL_SERVER'], $zbp->option['ZC_PGSQL_PORT'], $zbp->option['ZC_PGSQL_USERNAME'], $zbp->option['ZC_PGSQL_PASSWORD'], $zbp->option['ZC_PGSQL_NAME']) == true) {
+                        echo $zbp->lang['zb_install']['create_db'] . $zbp->option['ZC_PGSQL_NAME'] . "<br/>";
+                    }
+                    $newdb->dbpre = $zbp->option['ZC_PGSQL_PRE'];
+                    $newdb->Close();
+                    $newdb = null;
                 }
-                $zbp->db->dbpre = $zbp->option['ZC_PGSQL_PRE'];
-                $zbp->db->Close();
                 break;
             default:
                 $isInstallFlag = false;

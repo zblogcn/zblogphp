@@ -712,6 +712,8 @@ class ZBlogPHP
             return false;
         }
 
+        $this->LoadOption_Before();
+
         $oldZone = $this->option['ZC_TIME_ZONE_NAME'];
         date_default_timezone_set($oldZone);
 
@@ -767,7 +769,7 @@ class ZBlogPHP
             Fix_16_to_17_and_17_to_16_Error();
         }
 
-        if (defined('ZBP_PRESET_BLOGPATH_USED')) {
+        if (defined('ZBP_PRESET_HOST_USED')) {
             //如果环境变量已预设了bloghost
             $this->host = rtrim($this->host, '/') . '/';
             $this->option['ZC_BLOG_HOST'] = $this->host;
@@ -1051,21 +1053,10 @@ class ZBlogPHP
             return false;
         }
 
-        $envtype = '';
-        if (isset($this->option['ZC_DATABASE_CONFIG'])) {
-            $envtype = trim(strtolower($this->option['ZC_DATABASE_CONFIG']));
-            if ($envtype == 'option') {
-                $envtype = '';
-            }
-        }
-
         switch ($this->option['ZC_DATABASE_TYPE']) {
             case 'sqlite':
             case 'sqlite3':
             case 'pdo_sqlite':
-                if ($envtype) {
-                    $this->option['ZC_PGSQL_NAME'] = GetVarsFromEnv($this->option['ZC_PGSQL_NAME'], $envtype);
-                }
                 $this->db = self::InitializeDB($this->option['ZC_DATABASE_TYPE']);
                 if ($this->db->Open(
                     array(
@@ -1079,13 +1070,6 @@ class ZBlogPHP
                 break;
             case 'postgresql':
             case 'pdo_postgresql':
-                if ($envtype) {
-                    $this->option['ZC_PGSQL_SERVER'] = GetVarsFromEnv($this->option['ZC_PGSQL_SERVER'], $envtype);
-                    $this->option['ZC_PGSQL_USERNAME'] = GetVarsFromEnv($this->option['ZC_PGSQL_USERNAME'], $envtype);
-                    $this->option['ZC_PGSQL_PASSWORD'] = GetVarsFromEnv($this->option['ZC_PGSQL_PASSWORD'], $envtype);
-                    $this->option['ZC_PGSQL_NAME'] = GetVarsFromEnv($this->option['ZC_PGSQL_NAME'], $envtype);
-                    $this->option['ZC_PGSQL_PORT'] = GetVarsFromEnv($this->option['ZC_PGSQL_PORT'], $envtype);
-                }
                 $this->db = self::InitializeDB($this->option['ZC_DATABASE_TYPE']);
                 if ($this->db->Open(
                     array(
@@ -1106,13 +1090,6 @@ class ZBlogPHP
             case 'mysqli':
             case 'pdo_mysql':
             default:
-                if ($envtype) {
-                    $this->option['ZC_MYSQL_SERVER'] = GetVarsFromEnv($this->option['ZC_MYSQL_SERVER'], $envtype);
-                    $this->option['ZC_MYSQL_USERNAME'] = GetVarsFromEnv($this->option['ZC_MYSQL_USERNAME'], $envtype);
-                    $this->option['ZC_MYSQL_PASSWORD'] = GetVarsFromEnv($this->option['ZC_MYSQL_PASSWORD'], $envtype);
-                    $this->option['ZC_MYSQL_NAME'] = GetVarsFromEnv($this->option['ZC_MYSQL_NAME'], $envtype);
-                    $this->option['ZC_MYSQL_PORT'] = GetVarsFromEnv($this->option['ZC_MYSQL_PORT'], $envtype);
-                }
                 if ($this->option['ZC_DATABASE_TYPE'] == 'mysql' && version_compare(PHP_VERSION, '7.0.0') >= 0) {
                     if (extension_loaded('mysqli')) {
                         $this->option['ZC_DATABASE_TYPE'] = 'mysqli';
@@ -1436,6 +1413,46 @@ class ZBlogPHP
             $this->option['ZC_COMMENT_VERIFY_ENABLE'] = false;
         }
 
+        return true;
+    }
+
+    protected function LoadOption_Before()
+    {
+        $envtype = '';
+        if (isset($this->option['ZC_DATABASE_CONFIG'])) {
+            $envtype = trim(strtolower($this->option['ZC_DATABASE_CONFIG']));
+            if ($envtype == 'option') {
+                $envtype = '';
+            }
+        }
+        if ($envtype == '') {
+            return true;
+        }
+        switch ($this->option['ZC_DATABASE_TYPE']) {
+            case 'sqlite':
+            case 'sqlite3':
+            case 'pdo_sqlite':
+                $this->option['ZC_SQLITE_NAME'] = GetVarsFromEnv($this->option['ZC_SQLITE_NAME'], $envtype);
+                break;
+            case 'postgresql':
+            case 'pdo_postgresql':
+                $this->option['ZC_PGSQL_SERVER'] = GetVarsFromEnv($this->option['ZC_PGSQL_SERVER'], $envtype, $this->option['ZC_PGSQL_SERVER']);
+                $this->option['ZC_PGSQL_USERNAME'] = GetVarsFromEnv($this->option['ZC_PGSQL_USERNAME'], $envtype, $this->option['ZC_PGSQL_USERNAME']);
+                $this->option['ZC_PGSQL_PASSWORD'] = GetVarsFromEnv($this->option['ZC_PGSQL_PASSWORD'], $envtype, $this->option['ZC_PGSQL_PASSWORD']);
+                $this->option['ZC_PGSQL_NAME'] = GetVarsFromEnv($this->option['ZC_PGSQL_NAME'], $envtype, $this->option['ZC_PGSQL_NAME']);
+                $this->option['ZC_PGSQL_PORT'] = GetVarsFromEnv($this->option['ZC_PGSQL_PORT'], $envtype, $this->option['ZC_PGSQL_PORT']);
+                break;
+            case 'mysql':
+            case 'mysqli':
+            case 'pdo_mysql':
+            default:
+                $this->option['ZC_MYSQL_SERVER'] = GetVarsFromEnv($this->option['ZC_MYSQL_SERVER'], $envtype, $this->option['ZC_MYSQL_SERVER']);
+                $this->option['ZC_MYSQL_USERNAME'] = GetVarsFromEnv($this->option['ZC_MYSQL_USERNAME'], $envtype, $this->option['ZC_MYSQL_USERNAME']);
+                $this->option['ZC_MYSQL_PASSWORD'] = GetVarsFromEnv($this->option['ZC_MYSQL_PASSWORD'], $envtype, $this->option['ZC_MYSQL_PASSWORD']);
+                $this->option['ZC_MYSQL_NAME'] = GetVarsFromEnv($this->option['ZC_MYSQL_NAME'], $envtype, $this->option['ZC_MYSQL_NAME']);
+                $this->option['ZC_MYSQL_PORT'] = GetVarsFromEnv($this->option['ZC_MYSQL_PORT'], $envtype, $this->option['ZC_MYSQL_PORT']);
+                break;
+        }
         return true;
     }
 
@@ -4684,6 +4701,12 @@ class ZBlogPHP
             $s = $_SERVER['QUERY_STRING'];
             $s = empty($s) ? '' : '?' . $s;
             Redirect302('./zb_install/index.php' . $s);
+        }
+        if (isset($this->option['ZC_INSTALL_AFTER_CONFIG']) && $this->option['ZC_INSTALL_AFTER_CONFIG'] == true) {
+            $r = $this->db->ExistTable($GLOBALS['table']['Config']);
+            if ($r == false) {
+                Redirect302('./zb_install/index.php');
+            }
         }
     }
 
