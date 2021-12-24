@@ -74,7 +74,7 @@ web.config
 
 # Others
 testcode1.php
-test2.php
+test*.php
 test.php
 phpinfo.php
 /phpMyAdmin/

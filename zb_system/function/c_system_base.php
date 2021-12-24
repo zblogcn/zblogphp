@@ -193,7 +193,6 @@ $GLOBALS['zbp']->Initialize();
  * 加载主题和插件APP
  */
 if (ZBP_SAFEMODE === false) {
-
     $theme_preset = GetVarsFromEnv('ZBP_PRESET_THEME');
     if ($theme_preset != '') {
         $GLOBALS['blogtheme'] = $theme_preset;

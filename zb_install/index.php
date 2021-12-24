@@ -786,11 +786,11 @@ function Setup3()
             if (extension_loaded('pdo_sqlite')) {
                 $a = PDO::getAvailableDrivers();
                 if (in_array('sqlite', $a)) {
-                  $not_use_sqlite2 = true;
+                    $not_use_sqlite2 = true;
                 }
             }
             if (class_exists('SQLite3', false)) {
-              $not_use_sqlite2 = true;
+                $not_use_sqlite2 = true;
             }
             if ($CheckResult['sqlite'][0] && $not_use_sqlite2 == false) {
                 ?>
@@ -1165,10 +1165,10 @@ function CheckServer()
             $a = PDO::getAvailableDrivers();
             $v = '';
             if (in_array('sqlite', $a)) {
-              $v .= 'sqlite3';
+                $v .= 'sqlite3';
             }
             if (in_array('sqlite2', $a)) {
-              $v .= ' sqlite2';
+                $v .= ' sqlite2';
             }
             $pdo = null;
             $CheckResult['pdo_sqlite'][0] = $v;
@@ -1500,25 +1500,25 @@ function SaveConfig()
     $zbp->LoadCache();
     $app = $zbp->LoadApp('theme', 'default');
     if ($app->isloaded == true) {
-      $app->SaveSideBars();
+        $app->SaveSideBars();
     }
 
     $app = $zbp->LoadApp('theme', 'Zit');
     if ($app->isloaded == true) {
-      $app->LoadSideBars();
-      $app->SaveSideBars();
+        $app->LoadSideBars();
+        $app->SaveSideBars();
     }
 
     $app = $zbp->LoadApp('theme', 'tpure');
     if ($app->isloaded == true) {
-      $app->LoadSideBars();
-      $app->SaveSideBars();
+        $app->LoadSideBars();
+        $app->SaveSideBars();
     }
 
     $app = $zbp->LoadApp('theme', 'WhitePage');
     if ($app->isloaded == true) {
-      $app->LoadSideBars();
-      $app->SaveSideBars();
+        $app->LoadSideBars();
+        $app->SaveSideBars();
     }
 
     $app = $zbp->LoadApp('theme', $zbp->option['ZC_BLOG_THEME']);
