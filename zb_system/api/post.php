@@ -281,7 +281,7 @@ function api_post_list()
     $limit = $filter['limit'];
     $option = $filter['option'];
 
-    foreach ($GLOBALS['hooks']['Filter_Plugin_Api_Post_List_Core'] as $fpname => &$fpsignal) {
+    foreach ($GLOBALS['hooks']['Filter_Plugin_API_Post_List_Core'] as $fpname => &$fpsignal) {
         $fpreturn = $fpname($select, $where, $order, $limit, $option);
     }
 

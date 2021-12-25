@@ -2789,10 +2789,10 @@ DefinePluginFilter('Filter_Plugin_API_Result_Data');
 /*
 '**************************************************<
 '类型:Filter
-'名称:Filter_Plugin_Api_Post_List_Core
+'名称:Filter_Plugin_API_Post_List_Core
 '参数:&$select, $where, $order, $limit, $option
 '说明:处理api_post_list的查询
 '调用:
 '**************************************************>
  */
-DefinePluginFilter('Filter_Plugin_Api_Post_List_Core');
+DefinePluginFilter('Filter_Plugin_API_Post_List_Core');
