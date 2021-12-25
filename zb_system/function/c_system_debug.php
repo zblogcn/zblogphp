@@ -1,4 +1,5 @@
 <?php
+
 /**
  * 错误调试.
  */
@@ -153,7 +154,7 @@ function Debug_Error_Handler($errno, $errstr, $errfile, $errline)
         return true;
     }
 
-    $zbe = ZBlogException::GetNewException();
+    $zbe = ZBlogException::GetInstance();
     $zbe->ParseError($errno, $errstr, $errfile, $errline);
     $zbe->Display();
 
@@ -192,7 +193,7 @@ function Debug_Exception_Handler($exception)
         );
     }
 
-    $zbe = ZBlogException::GetNewException();
+    $zbe = ZBlogException::GetInstance();
     $zbe->ParseException($exception);
     $zbe->Display();
 
@@ -226,7 +227,7 @@ function Debug_Shutdown_Handler()
             return true;
         }
 
-        $zbe = ZBlogException::GetNewException();
+        $zbe = ZBlogException::GetInstance();
         $zbe->ParseShutdown($error);
         $zbe->Display();
     }
@@ -347,23 +348,23 @@ class ZBlogException
      * 错误数组
      */
     public static $errarray = array(
-            0     => 'UNKNOWN',
-            1     => 'E_ERROR',
-            2     => 'E_WARNING',
-            4     => 'E_PARSE',
-            8     => 'E_NOTICE',
-            16    => 'E_CORE_ERROR',
-            32    => 'E_CORE_WARNING',
-            64    => 'E_COMPILE_ERROR',
-            128   => 'E_COMPILE_WARNING',
-            256   => 'E_USER_ERROR',
-            512   => 'E_USER_WARNING',
-            1024  => 'E_USER_NOTICE',
-            2048  => 'E_STRICT',
-            4096  => 'E_RECOVERABLE_ERROR',
-            8192  => 'E_DEPRECATED',
-            16384 => 'E_USER_DEPRECATED',
-            30719 => 'E_ALL',
+        0     => 'UNKNOWN',
+        1     => 'E_ERROR',
+        2     => 'E_WARNING',
+        4     => 'E_PARSE',
+        8     => 'E_NOTICE',
+        16    => 'E_CORE_ERROR',
+        32    => 'E_CORE_WARNING',
+        64    => 'E_COMPILE_ERROR',
+        128   => 'E_COMPILE_WARNING',
+        256   => 'E_USER_ERROR',
+        512   => 'E_USER_WARNING',
+        1024  => 'E_USER_NOTICE',
+        2048  => 'E_STRICT',
+        4096  => 'E_RECOVERABLE_ERROR',
+        8192  => 'E_DEPRECATED',
+        16384 => 'E_USER_DEPRECATED',
+        30719 => 'E_ALL',
     );
 
     /**
@@ -371,7 +372,6 @@ class ZBlogException
      */
     public function __construct()
     {
-
     }
 
     public static function ThrowException($error)
@@ -380,30 +380,30 @@ class ZBlogException
         throw new Exception($e);
     }
 
+    public static function GetNewException()
+    {
+        $z = new self();
+        $z->moreinfo = self::$error_moreinfo;
+        self::$error_moreinfo = null;
+        return $z;
+    }
+
     /**
      * 获取新实例进$private_zbe_list队列里.
      *
      * @return ZBlogException
      */
-    public static function GetNewException()
+    public static function GetInstance()
     {
-
         $z = new self();
         if (count(self::$private_zbe_list) > 0) {
             $z->previous = end(self::$private_zbe_list);
-        } else {
-            $z->previous = $z;
         }
         $z->moreinfo = self::$error_moreinfo;
         self::$error_moreinfo = null;
-        self::$private_zbe_list[]= $z;
+        self::$private_zbe_list[] = $z;
 
         return $z;
-    }
-
-    public static function GetInstance()
-    {
-        return self::GetNewException();
     }
 
     /**
@@ -578,9 +578,8 @@ class ZBlogException
         }
         if (!headers_sent()) {
             Http500();
-            ob_clean();
         }
-
+        ob_clean();
         $error = $this;
 
         foreach ($GLOBALS['hooks']['Filter_Plugin_Debug_Display'] as $fpname => &$fpsignal) {
@@ -594,11 +593,15 @@ class ZBlogException
         include dirname(__FILE__) . '/../defend/error.php';
         RunTime();
 
+        flush();
+        if (IS_CLI && (IS_WORKERMAN || IS_SWOOLE)) {
+            return true;
+        }
+
         /*
          * ``flush()`` and ``exit($errorCode)`` is for HHVM.
          * @link https://github.com/zblogcn/zblogphp/issues/32
          */
-        flush();
         exit(1);
     }
 
@@ -672,7 +675,8 @@ class ZBlogException
         return $result;
     }
 
-    public function getTypeName() {
+    public function getTypeName()
+    {
         if (isset(self::$errarray[$this->type])) {
             return self::$errarray[$this->type];
         } else {
@@ -680,44 +684,54 @@ class ZBlogException
         }
     }
 
-    public function getType() {
+    public function getType()
+    {
         return $this->type;
     }
 
-    public function getMessage() {
+    public function getMessage()
+    {
         return $this->message;
     }
 
-    public function getMessageFull() {
+    public function getMessageFull()
+    {
         return $this->messagefull;
     }
 
-    public function getMoreInfo() {
+    public function getMoreInfo()
+    {
         return $this->moreinfo;
     }
 
-    public function getPrevious() {
+    public function getPrevious()
+    {
         return $this->previous;
     }
 
-    public function getCode() {
+    public function getCode()
+    {
         return $this->code;
     }
 
-    public function getFile() {
+    public function getFile()
+    {
         return $this->file;
     }
 
-    public function getLine() {
+    public function getLine()
+    {
         return $this->line;
     }
 
-    public function getTrace() {
+    public function getTrace()
+    {
         $t = debug_backtrace();
         return $t;
     }
 
-    public function getTraceAsString() {
+    public function getTraceAsString()
+    {
         $t = $this->getTrace();
         return call_user_func('print_r', $t, true);
     }

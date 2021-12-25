@@ -6,6 +6,9 @@ use Workerman\Protocols\Http\Request;
 require_once __DIR__ . '/vendor/autoload.php';
 define('ZBP_HOOKERROR', false);
 define('ZBP_OBSTART', false);
+//$_ENV['ZBP_PRESET_HOST'] = 'http://localhost';
+$_ENV['ZBP_PRESET_PLUGINS'] = 'ViewIndex';
+$_ENV['ZBP_PRESET_THEME'] = 'OnePage';
 require  __DIR__ . '/zblog/zb_system/function/c_system_base.php';
 
 // 创建一个Worker监听2345端口，使用http协议通讯
@@ -27,10 +30,7 @@ $http_worker->onMessage = function(TcpConnection $connection, Request $request)
 {
     $zbp = \ZBlogPHP::GetInstance();
     http_request_convert_to_global($request, $connection);
-    //$_ENV['ZBP_PRESET_BLOGPATH'] = 'http://localhost';
-    $_SERVER['_start_time'] = microtime(true); //RunTime
-    $GLOBALS['currenturl'] = GetRequestUri();
-    $GLOBALS['bloghost'] = GetCurrentHost($GLOBALS['blogpath'], $GLOBALS['cookiespath']);
+    RunTime_Begin();
 
     try {
         Clear_Filter_Plugin('Filter_Plugin_Zbp_ShowError');
@@ -42,16 +42,7 @@ $http_worker->onMessage = function(TcpConnection $connection, Request $request)
         ], $r);
         $connection->send($response);
     }
-    catch (Error $e) {
-        $rt = RunTime(false);
-        $r = print_r(array($e->getCode(), $e->getMessage(), $rt), true);
-        $response = new Workerman\Protocols\Http\Response(500, [
-            'Content-Type' => 'text/html; charset=utf-8',
-        ], $r);
-        $response->withStatus(500);
-        $connection->send($response);
-    }
-    catch (Exception $e) {
+    catch (\Throwable $e) {
         $rt = RunTime(false);
         $r = print_r(array($e->getCode(), $e->getMessage(), $rt), true);
         $response = new Workerman\Protocols\Http\Response(500, [

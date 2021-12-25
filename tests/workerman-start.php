@@ -6,6 +6,7 @@ use Workerman\Protocols\Http\Request;
 require_once __DIR__ . '/vendor/autoload.php';
 define('ZBP_HOOKERROR', false);
 define('ZBP_OBSTART', false);
+//$_ENV['ZBP_PRESET_HOST'] = 'http://localhost';
 require  __DIR__ . '/zblog/zb_system/function/c_system_base.php';
 
 // 创建一个Worker监听2345端口，使用http协议通讯
@@ -27,7 +28,7 @@ $http_worker->onMessage = function(TcpConnection $connection, Request $request)
 {
     $zbp = \ZBlogPHP::GetInstance();
     http_request_convert_to_global($request, $connection);
-    $_SERVER['_start_time'] = microtime(true); //RunTime
+    RunTime_Begin();
 
     try {
         Clear_Filter_Plugin('Filter_Plugin_Zbp_ShowError');
@@ -68,15 +69,7 @@ $http_worker->onMessage = function(TcpConnection $connection, Request $request)
         ], $r);
         $connection->send($response);
     }
-    catch (Error $e) {
-        $r = ApiResponse(null, $e, '500', '', false);
-        $response = new Workerman\Protocols\Http\Response(500, [
-            'Content-Type' => 'text/json; charset=utf-8',
-        ], $r);
-        $response->withStatus(500);
-        $connection->send($response);
-    }
-    catch (Exception $e) {
+    catch (\Throwable $e) {
         $r = ApiResponse(null, $e, '500', '', false);
         $response = new Workerman\Protocols\Http\Response(500, [
             'Content-Type' => 'text/json; charset=utf-8',

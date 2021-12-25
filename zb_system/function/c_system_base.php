@@ -19,7 +19,7 @@ defined('ZBP_OBSTART') || define('ZBP_OBSTART', true);
 defined('ZBP_SAFEMODE') || define('ZBP_SAFEMODE', false);
 
 //强制开启debug模式，需要开启时请打开注释
-//defined('ZBP_DEBUGMODE') || define('ZBP_DEBUGMODE', true);
+defined('ZBP_DEBUGMODE') || define('ZBP_DEBUGMODE', true);
 
 /**
  * 加载系统基础函数.
@@ -46,6 +46,7 @@ if (ZBP_OBSTART) {
 /**
  * 指定加载类的目录并注册加载函数到系统
  */
+RunTime_Begin();
 $GLOBALS['autoload_class_dirs'] = array();
 AddAutoloadClassDir(ZBP_PATH . 'zb_system/function/lib');
 spl_autoload_register('AutoloadClass');
@@ -192,19 +193,42 @@ $GLOBALS['zbp']->Initialize();
  * 加载主题和插件APP
  */
 if (ZBP_SAFEMODE === false) {
-    if (is_readable($file_base = $GLOBALS['usersdir'] . 'theme/' . $GLOBALS['blogtheme'] . '/theme.xml')) {
-        $GLOBALS['activedapps'][] = $GLOBALS['blogtheme'];
+    $theme_preset = GetVarsFromEnv('ZBP_PRESET_THEME');
+    if ($theme_preset != '') {
+        $GLOBALS['blogtheme'] = $theme_preset;
+        $style_preset = GetVarsFromEnv('ZBP_PRESET_THEME_STYLE');
+        if ($style_preset != '') {
+            $GLOBALS['blogstyle'] = $style_preset;
+        }
+    }
+    $theme_name = $GLOBALS['blogtheme'];
+    $file_base = $GLOBALS['usersdir'] . 'theme/' . $GLOBALS['blogtheme'] . '/theme.xml';
+    $theme_include = $GLOBALS['usersdir'] . 'theme/' . $GLOBALS['blogtheme'] . '/include.php';
+
+    if (is_readable($file_base)) {
+        $GLOBALS['activedapps'][] = $theme_name;
 
         // 读主题版本信息
-        $GLOBALS['zbp']->themeapp = $GLOBALS['zbp']->LoadApp('theme', $GLOBALS['blogtheme']);
+        $GLOBALS['zbp']->themeapp = $GLOBALS['zbp']->LoadApp('theme', $theme_name);
         $GLOBALS['zbp']->themeinfo = $GLOBALS['zbp']->themeapp->GetInfoArray();
 
-        if ($GLOBALS['zbp']->themeapp->isloaded && is_readable($file_base = $GLOBALS['usersdir'] . 'theme/' . $GLOBALS['blogtheme'] . '/include.php')) {
-            include $file_base;
+        if ($GLOBALS['zbp']->themeapp->isloaded && is_readable($theme_include)) {
+            include $theme_include;
         }
     }
 
-    $aps = $GLOBALS['zbp']->GetPreActivePlugin();
+    $aps = GetVarsFromEnv('ZBP_PRESET_PLUGINS');
+    $aps2 = $GLOBALS['zbp']->GetPreActivePlugin();
+    if ($aps != '') {
+        $aps = explode('|', $aps);
+        foreach ($aps2 as $ap) {
+            $aps[] = $ap;
+        }
+        $aps = array_unique($aps);
+    } else {
+        $aps = $aps2;
+    }
+
     foreach ($aps as $ap) {
         if (is_readable($file_base = $GLOBALS['usersdir'] . 'plugin/' . $ap . '/plugin.xml')) {
             $GLOBALS['activedapps'][] = $ap;
@@ -221,7 +245,8 @@ if (ZBP_SAFEMODE === false) {
     }
 }
 
-unset($file_base, $aps, $fn, $ap, $op_users, $opk, $opv);
+unset($file_base, $aps, $aps2, $fn, $ap, $op_users, $opk, $opv);
+unset($theme_name, $theme_iclude, $theme_preset, $style_preset);
 
 //1.7新加入的
 $GLOBALS['zbp']->PreLoad();

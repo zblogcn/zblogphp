@@ -482,7 +482,7 @@ class ZBlogPHP
      */
     public $autofill_template_htmltags = true;
 
-    const OPTION_RESERVE_KEYS = 'ZC_DATABASE_TYPE|ZC_SQLITE_NAME|ZC_SQLITE_PRE|ZC_MYSQL_SERVER|ZC_MYSQL_USERNAME|ZC_MYSQL_PASSWORD|ZC_MYSQL_NAME|ZC_MYSQL_CHARSET|ZC_MYSQL_COLLATE|ZC_MYSQL_PRE|ZC_MYSQL_ENGINE|ZC_MYSQL_PORT|ZC_MYSQL_PERSISTENT|ZC_MYSQL_PORT|ZC_PGSQL_SERVER|ZC_PGSQL_USERNAME|ZC_PGSQL_PASSWORD|ZC_PGSQL_NAME|ZC_PGSQL_CHARSET|ZC_PGSQL_PRE|ZC_PGSQL_PORT|ZC_PGSQL_PERSISTENT|ZC_CLOSE_WHOLE_SITE|ZC_PERMANENT_DOMAIN_FORCED_URL|ZC_PERMANENT_DOMAIN_WHOLE_DISABLE';
+    const OPTION_RESERVE_KEYS = 'ZC_DATABASE_TYPE|ZC_SQLITE_NAME|ZC_SQLITE_PRE|ZC_MYSQL_SERVER|ZC_MYSQL_USERNAME|ZC_MYSQL_PASSWORD|ZC_MYSQL_NAME|ZC_MYSQL_CHARSET|ZC_MYSQL_COLLATE|ZC_MYSQL_PRE|ZC_MYSQL_ENGINE|ZC_MYSQL_PORT|ZC_MYSQL_PERSISTENT|ZC_MYSQL_PORT|ZC_PGSQL_SERVER|ZC_PGSQL_USERNAME|ZC_PGSQL_PASSWORD|ZC_PGSQL_NAME|ZC_PGSQL_CHARSET|ZC_PGSQL_PRE|ZC_PGSQL_PORT|ZC_PGSQL_PERSISTENT|ZC_CLOSE_WHOLE_SITE|ZC_PERMANENT_DOMAIN_FORCED_URL|ZC_PERMANENT_DOMAIN_FORCED_DISABLE|ZC_DATABASE_CONFIG';
 
     /**
      * ZBP魔术方法函数**************************************************************.
@@ -712,6 +712,8 @@ class ZBlogPHP
             return false;
         }
 
+        $this->LoadOption_Before();
+
         $oldZone = $this->option['ZC_TIME_ZONE_NAME'];
         date_default_timezone_set($oldZone);
 
@@ -762,28 +764,39 @@ class ZBlogPHP
             ZBlogException::$islogerror = true;
         }
 
-        //ZC_PERMANENT_DOMAIN_WHOLE_DISABLE不存在 或是 ZC_PERMANENT_DOMAIN_WHOLE_DISABLE存在但为假
-        $domain_disable = GetValueInArray($this->option, 'ZC_PERMANENT_DOMAIN_WHOLE_DISABLE');
-        if ($domain_disable == false) {
-            $forced_url = GetValueInArray($this->option, 'ZC_PERMANENT_DOMAIN_FORCED_URL');
-            if ($forced_url != '') {
-                //如果ZC_PERMANENT_DOMAIN_FORCED_URL存在 且不为空
-                $this->host = (string) $forced_url;
-                $this->cookiespath = strstr(str_replace('://', '', $this->host), '/');
-            } elseif ($this->option['ZC_PERMANENT_DOMAIN_ENABLE'] == true) {
-                //消除16升级17又退回16后再升级17出的bug;
-                if (is_array($this->option['ZC_BLOG_HOST']) && is_array($this->option['ZC_PERMANENT_DOMAIN_ENABLE'])) {
-                    Fix_16_to_17_and_17_to_16_Error();
+        //消除16升级17又退回16后再升级17出的bug;
+        if (is_array($this->option['ZC_BLOG_HOST']) && is_array($this->option['ZC_PERMANENT_DOMAIN_ENABLE'])) {
+            Fix_16_to_17_and_17_to_16_Error();
+        }
+
+        if (defined('ZBP_PRESET_HOST_USED')) {
+            //如果环境变量已预设了bloghost
+            $this->host = rtrim($this->host, '/') . '/';
+            $this->option['ZC_BLOG_HOST'] = $this->host;
+        } else {
+            //ZC_PERMANENT_DOMAIN_WHOLE_DISABLE不存在 或是 ZC_PERMANENT_DOMAIN_WHOLE_DISABLE存在但为假
+            $domain_disable = GetValueInArray($this->option, 'ZC_PERMANENT_DOMAIN_WHOLE_DISABLE');
+            if ($domain_disable == false) {
+                $forced_url = GetValueInArray($this->option, 'ZC_PERMANENT_DOMAIN_FORCED_URL');
+                if ($forced_url != '') {
+                    //如果ZC_PERMANENT_DOMAIN_FORCED_URL存在 且不为空
+                    $forced_url = rtrim($forced_url, '/') . '/';
+                    $this->host = (string) $forced_url;
+                    $this->cookiespath = strstr(str_replace('://', '', $this->host), '/');
+                } elseif ($this->option['ZC_PERMANENT_DOMAIN_ENABLE'] == true) {
+                    //如果ZC_PERMANENT_DOMAIN_ENABLE已开启的话
+                    $this->host = $this->option['ZC_BLOG_HOST'];
+                    $this->host = rtrim($this->host, '/') . '/';
+                    $this->cookiespath = strstr(str_replace('://', '', $this->host), '/');
+                } else {
+                    //默认自动识别域名
+                    $this->host = rtrim($this->host, '/') . '/';
+                    $this->option['ZC_BLOG_HOST'] = $this->host;
                 }
-                //如果ZC_PERMANENT_DOMAIN_ENABLE已开启的话
-                $this->host = $this->option['ZC_BLOG_HOST'];
-                $this->cookiespath = strstr(str_replace('://', '', $this->host), '/');
             } else {
-                //默认自动识别域名
+                $this->host = rtrim($this->host, '/') . '/';
                 $this->option['ZC_BLOG_HOST'] = $this->host;
             }
-        } else {
-            $this->option['ZC_BLOG_HOST'] = $this->host;
         }
 
         $this->option['ZC_BLOG_PRODUCT'] = 'Z-BlogPHP';
@@ -1330,8 +1343,10 @@ class ZBlogPHP
     {
         $this->option['ZC_BLOG_CLSID'] = $this->guid;
 
-        unset($this->option['ZC_PERMANENT_DOMAIN_WHOLE_DISABLE']);
+        unset($this->option['ZC_PERMANENT_DOMAIN_FORCED_DISABLE']);
         unset($this->option['ZC_PERMANENT_DOMAIN_FORCED_URL']);
+        unset($this->option['ZC_CLOSE_WHOLE_SITE']);
+        unset($this->option['ZC_DATABASE_CONFIG']);
 
         $reserve_keys = explode('|', self::OPTION_RESERVE_KEYS);
 
@@ -1398,6 +1413,46 @@ class ZBlogPHP
             $this->option['ZC_COMMENT_VERIFY_ENABLE'] = false;
         }
 
+        return true;
+    }
+
+    protected function LoadOption_Before()
+    {
+        $envtype = '';
+        if (isset($this->option['ZC_DATABASE_CONFIG'])) {
+            $envtype = trim(strtolower($this->option['ZC_DATABASE_CONFIG']));
+            if ($envtype == 'option') {
+                $envtype = '';
+            }
+        }
+        if ($envtype == '') {
+            return true;
+        }
+        switch ($this->option['ZC_DATABASE_TYPE']) {
+            case 'sqlite':
+            case 'sqlite3':
+            case 'pdo_sqlite':
+                $this->option['ZC_SQLITE_NAME'] = GetVarsFromEnv($this->option['ZC_SQLITE_NAME'], $envtype);
+                break;
+            case 'postgresql':
+            case 'pdo_postgresql':
+                $this->option['ZC_PGSQL_SERVER'] = GetVarsFromEnv($this->option['ZC_PGSQL_SERVER'], $envtype, $this->option['ZC_PGSQL_SERVER']);
+                $this->option['ZC_PGSQL_USERNAME'] = GetVarsFromEnv($this->option['ZC_PGSQL_USERNAME'], $envtype, $this->option['ZC_PGSQL_USERNAME']);
+                $this->option['ZC_PGSQL_PASSWORD'] = GetVarsFromEnv($this->option['ZC_PGSQL_PASSWORD'], $envtype, $this->option['ZC_PGSQL_PASSWORD']);
+                $this->option['ZC_PGSQL_NAME'] = GetVarsFromEnv($this->option['ZC_PGSQL_NAME'], $envtype, $this->option['ZC_PGSQL_NAME']);
+                $this->option['ZC_PGSQL_PORT'] = GetVarsFromEnv($this->option['ZC_PGSQL_PORT'], $envtype, $this->option['ZC_PGSQL_PORT']);
+                break;
+            case 'mysql':
+            case 'mysqli':
+            case 'pdo_mysql':
+            default:
+                $this->option['ZC_MYSQL_SERVER'] = GetVarsFromEnv($this->option['ZC_MYSQL_SERVER'], $envtype, $this->option['ZC_MYSQL_SERVER']);
+                $this->option['ZC_MYSQL_USERNAME'] = GetVarsFromEnv($this->option['ZC_MYSQL_USERNAME'], $envtype, $this->option['ZC_MYSQL_USERNAME']);
+                $this->option['ZC_MYSQL_PASSWORD'] = GetVarsFromEnv($this->option['ZC_MYSQL_PASSWORD'], $envtype, $this->option['ZC_MYSQL_PASSWORD']);
+                $this->option['ZC_MYSQL_NAME'] = GetVarsFromEnv($this->option['ZC_MYSQL_NAME'], $envtype, $this->option['ZC_MYSQL_NAME']);
+                $this->option['ZC_MYSQL_PORT'] = GetVarsFromEnv($this->option['ZC_MYSQL_PORT'], $envtype, $this->option['ZC_MYSQL_PORT']);
+                break;
+        }
         return true;
     }
 
@@ -2398,15 +2453,8 @@ class ZBlogPHP
         foreach ($array as $a) {
             $l = new Base($table, $datainfo);
             $l->LoadInfoByAssoc($a);
-            $id = $l->GetIdName();
-            if ($this->CheckCache('Base', $l->$id) == false) {
-                $this->AddCache($l);
-                $list[] = $l;
-            } else {
-                $n = &$this->GetCache('Base', $l->$id);
-                $list[] = $n;
-            }
-            unset($l, $n);
+            $list[] = $l;
+            unset($l);
         }
 
         return $list;
@@ -2460,21 +2508,10 @@ class ZBlogPHP
             $array = $array2;
         }
 
-        $array = array_unique($array);
-        $cache = &$this->GetCache('Base');
-        foreach ($cache as $o) {
-            $v1 = $o->$field_name;
-            foreach ($array as $k2 => $v2) {
-                if ($v1 == $v2) {
-                    unset($array[$k2]);
-                    $list[] = $o;
-                    break;
-                }
-            }
-        }
         if (empty($array)) {
             return $list;
         }
+        $array = array_unique($array);
 
         $where[] = array('IN', $datainfo[$field_name][0], implode(',', $array));
         $sql = $this->db->sql->Select($table, '*', $where);
@@ -2485,15 +2522,8 @@ class ZBlogPHP
         foreach ($objects as $a) {
             $l = new Base($table, $datainfo);
             $l->LoadInfoByAssoc($a);
-            $id = $l->GetIdName();
-            if ($this->CheckCache('Base', $l->$id) == false) {
-                $this->AddCache($l);
-                $list[] = $l;
-            } else {
-                $n = &$this->GetCache('Base', $l->$id);
-                $list[] = $n;
-            }
-            unset($l, $n);
+            $list[] = $l;
+            unset($l);
         }
 
         return $list;
@@ -4647,6 +4677,12 @@ class ZBlogPHP
             $s = empty($s) ? '' : '?' . $s;
             Redirect302('./zb_install/index.php' . $s);
         }
+        if (isset($this->option['ZC_INSTALL_AFTER_CONFIG']) && $this->option['ZC_INSTALL_AFTER_CONFIG'] == true) {
+            $r = $this->db->ExistTable($GLOBALS['table']['Config']);
+            if ($r == false) {
+                Redirect302('./zb_install/index.php');
+            }
+        }
     }
 
     //举例：backend-ui,,,
@@ -4809,24 +4845,6 @@ class ZBlogPHP
      */
     public function RedirectPermanentDomain()
     {
-        $domain_disable = GetValueInArray($this->option, 'ZC_PERMANENT_DOMAIN_WHOLE_DISABLE');
-        if ($domain_disable == true) {
-            return;
-        }
-
-        $forced = GetValueInArray($this->option, 'ZC_PERMANENT_DOMAIN_FORCED_URL');
-        if ($this->option['ZC_PERMANENT_DOMAIN_ENABLE'] == false && $forced == '') {
-            return;
-        }
-
-        $host = str_replace(array('https://', 'http://'), array('', ''), GetCurrentHost(ZBP_PATH, $null));
-        $host2 = str_replace(array('https://', 'http://'), array('', ''), $this->host);
-
-        if ($host != $host2) {
-            $u = GetRequestUri();
-            $u = $this->host . substr($u, 1);
-            Redirect301($u);
-        }
     }
 
     /**

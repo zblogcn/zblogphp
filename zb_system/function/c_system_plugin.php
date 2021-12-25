@@ -342,6 +342,17 @@ DefinePluginFilter('Filter_Plugin_Autoload');
 /*
 '**************************************************<
 '类型:Filter
+'名称:Filter_Plugin_Http_Request_Convert_To_Global
+'参数:$request
+'说明:http_request_convert_to_global函数
+'调用:
+'**************************************************>
+ */
+DefinePluginFilter('Filter_Plugin_Http_Request_Convert_To_Global');
+
+/*
+'**************************************************<
+'类型:Filter
 '名称:Filter_Plugin_Logs
 '参数:$s,$iserror
 '说明:监控记录函数

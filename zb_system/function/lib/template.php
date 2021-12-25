@@ -87,6 +87,11 @@ class Template
      */
     public $template_dirname = 'template';
 
+    /**
+     * @var bool 是否已显示过了
+     */
+    public $isdisplayed = false;
+
     public function __construct()
     {
     }
@@ -709,6 +714,10 @@ class Template
         }
 
         include $file;
+
+        $this->isdisplayed = true;
+
+        return true;
     }
 
     /**
@@ -977,13 +986,13 @@ class Template
         $this->templateTags['zblogphpabbrhtml'] = $zbp->option['ZC_BLOG_PRODUCT_HTML'];
         $this->templateTags['type'] = '';
         $this->templateTags['page'] = '';
-        $this->templateTags['socialcomment'] = &$zbp->socialcomment;
-        $this->templateTags['header'] = &$zbp->header;
-        $this->templateTags['footer'] = &$zbp->footer;
-        $this->templateTags['validcodeurl'] = &$zbp->validcodeurl;
-        $this->templateTags['feedurl'] = &$zbp->feedurl;
-        $this->templateTags['searchurl'] = &$zbp->searchurl;
-        $this->templateTags['ajaxurl'] = &$zbp->ajaxurl;
+        $this->templateTags['socialcomment'] = $zbp->socialcomment;
+        $this->templateTags['header'] = $zbp->header;
+        $this->templateTags['footer'] = $zbp->footer;
+        $this->templateTags['validcodeurl'] = $zbp->validcodeurl;
+        $this->templateTags['feedurl'] = $zbp->feedurl;
+        $this->templateTags['searchurl'] = $zbp->searchurl;
+        $this->templateTags['ajaxurl'] = $zbp->ajaxurl;
         $this->templateTags['issearch'] = false;
         $this->templateTags['html_js_hash'] = $zbp->html_js_hash;
         $this->templateTags['admin_js_hash'] = $zbp->admin_js_hash;

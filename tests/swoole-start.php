@@ -2,6 +2,7 @@
 //zblog api 示范
 define('ZBP_HOOKERROR', false);
 define('ZBP_OBSTART', false);
+//$_ENV['ZBP_PRESET_HOST'] = 'http://localhost';
 require_once __DIR__ . '/zblog/zb_system/function/c_system_base.php';
 
 $http = new Swoole\Http\Server('127.0.0.1', 9999);
@@ -13,7 +14,7 @@ $http->on('Request', function ($request, $response)
     $response->header('Content-Type', 'text/html; charset=utf-8');
     $zbp = \ZBlogPHP::GetInstance();
     http_request_convert_to_global($request);
-    $_SERVER['_start_time'] = microtime(true); //RunTime
+    RunTime_Begin();
 
     try {
         Clear_Filter_Plugin('Filter_Plugin_Zbp_ShowError');
@@ -51,14 +52,7 @@ $http->on('Request', function ($request, $response)
         $response->header('Content-Type', 'text/json; charset=utf-8');
         $response->write($r);
     }
-    catch (Error $e) {
-        //echo print_r($e, true);
-        $r = ApiResponse(null, $e, '500', '', false);
-        $response->header('Content-Type', 'text/json; charset=utf-8');
-        $response->status(500);
-        $response->end($r);
-    }
-    catch (Exception $e) {
+    catch (\Throwable $e) {
         //echo print_r($e, true);
         $r = ApiResponse(null, $e, '500', '', false);
         $response->header('Content-Type', 'text/json; charset=utf-8');

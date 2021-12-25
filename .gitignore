@@ -53,6 +53,7 @@ mix-manifest.json
 !/zb_users/plugin/LinksManage
 !/zb_users/plugin/app_zblogcn_admin_css
 !/zb_users/plugin/ScheduledTasks
+!/zb_users/plugin/ViewIndex
 
 # Unoffical Theme
 /zb_users/theme/*
@@ -65,6 +66,7 @@ mix-manifest.json
 !/zb_users/theme/tpure
 !/zb_users/theme/Zit
 !/zb_users/theme/os2020
+!/zb_users/theme/OnePage
 
 # Rules
 .htaccess
@@ -73,7 +75,7 @@ web.config
 
 # Others
 testcode1.php
-test2.php
+test*.php
 test.php
 phpinfo.php
 /phpMyAdmin/

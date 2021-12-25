@@ -16,10 +16,7 @@ class Index
     {
         $zbp = \ZBlogPHP::GetInstance();
         http_request_convert_to_global($request, \Webman\App::connection());
-        //$_ENV['ZBP_PRESET_BLOGPATH'] = 'http://localhost';
-        $_SERVER['_start_time'] = microtime(true); //RunTime
-        $GLOBALS['currenturl'] = GetRequestUri();
-        $GLOBALS['bloghost'] = GetCurrentHost($GLOBALS['blogpath'], $GLOBALS['cookiespath']);
+        RunTime_Begin();
 
         //\ZBlogPHP::ThrowException('index');
 

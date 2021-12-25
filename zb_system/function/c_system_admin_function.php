@@ -167,7 +167,7 @@ function Include_Admin_CheckHttp304OK()
  */
 function Include_Admin_CheckMoblie()
 {
-    if (function_exists('CheckIsMoblie') && CheckIsMoblie()) {
+    if (function_exists('CheckIsMobile') && CheckIsMobile()) {
         echo '<style>@media screen{body{font-size:15px}}@media screen and (max-width: 812px) {#divMain{padding:0 1px;overflow:scroll;}}@media screen and (max-width: 428px) {body{font-size:16px}}</style>';
     }
 }

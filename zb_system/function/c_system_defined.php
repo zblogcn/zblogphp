@@ -64,6 +64,7 @@ define('IS_CLI', strtolower(php_sapi_name()) === 'cli');
 
 define('IS_WORKERMAN', (IS_CLI && class_exists('Workerman\Worker')));
 define('IS_SWOOLE', (IS_CLI && defined('SWOOLE_VERSION')));
+define('IS_SCF', (getenv('SCF_RUNTIME') && getenv('SCF_FUNCTIONNAME')));
 
 /*
  * 定义文章类型
