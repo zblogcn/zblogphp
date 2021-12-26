@@ -19,7 +19,7 @@ defined('ZBP_OBSTART') || define('ZBP_OBSTART', true);
 defined('ZBP_SAFEMODE') || define('ZBP_SAFEMODE', false);
 
 //强制开启debug模式，需要开启时请打开注释
-defined('ZBP_DEBUGMODE') || define('ZBP_DEBUGMODE', true);
+//defined('ZBP_DEBUGMODE') || define('ZBP_DEBUGMODE', true);
 
 /**
  * 加载系统基础函数.

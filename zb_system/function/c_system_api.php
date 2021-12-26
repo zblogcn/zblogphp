@@ -235,7 +235,7 @@ function ApiResponse($data = null, $error = null, $code = 200, $message = null, 
         }
     }
 
-    if (!empty($error)) {
+    if ($code === 500) {
         SetHttpStatusCode(500);
     }
 
