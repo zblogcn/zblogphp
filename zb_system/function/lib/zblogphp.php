@@ -3937,10 +3937,6 @@ class ZBlogPHP
             $errorText = $this->lang['error'][$errorText];
         }
 
-        if ($errorCode == 2) {
-            Http404();
-        }
-
         ZBlogException::$error_id = $errorCode;
         ZBlogException::$error_file = $file;
         ZBlogException::$error_line = $line;
@@ -3965,6 +3961,10 @@ class ZBlogPHP
 
                 return $fpreturn;
             }
+        }
+
+        if ($errorCode == 2) {
+            Http404();
         }
 
         throw new Exception($errorText);

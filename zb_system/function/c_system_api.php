@@ -62,6 +62,10 @@ function ApiDebugDisplay($error)
 function ApiShowError($errorCode, $errorText, $file = null, $line = null, $moreinfo = array(), $httpcode = 200)
 {
     $GLOBALS['hooks']['Filter_Plugin_Zbp_ShowError']['ApiDebugDisplay'] = PLUGIN_EXITSIGNAL_RETURN;
+    //如果是$errorCode == 2就是http 404
+    if ($errorCode == 2 && $httpcode == 200) {
+        $httpcode = 404;
+    }
     $zbe = ZBlogException::GetInstance();
     $zbe->ParseError($errorCode, $errorText, $file, $line);
     ApiResponse(null, $zbe, $httpcode, $errorText);
@@ -235,8 +239,8 @@ function ApiResponse($data = null, $error = null, $code = 200, $message = null, 
         }
     }
 
-    if ($code === 500) {
-        SetHttpStatusCode(500);
+    if ($code >= 500) {
+        SetHttpStatusCode($code);
     }
 
     $r = JsonEncode($response);
