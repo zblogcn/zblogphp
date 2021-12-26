@@ -1396,7 +1396,7 @@ function InsertInfo()
     $t->FileName = "link";
     $t->Source = "system";
     $t->SidebarID = 1;
-    $t->Content = '<li><a href="https://github.com/zblogcn" target="_blank" title="Z-Blog on Github">Z-Blog on Github</a></li><li><a href="https://zbloghost.cn/" target="_blank" title="Z-Blog官方主机">Z-Blog主机</a></li>';
+    $t->Content = '<li><a href="https://github.com/zblogcn" target="_blank" title="Z-Blog on Github">Z-Blog on Github</a></li>';
     $t->HtmlID = "divLinkage";
     $t->Type = "ul";
     $t->Save();

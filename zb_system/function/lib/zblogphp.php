@@ -1057,6 +1057,13 @@ class ZBlogPHP
             case 'sqlite':
             case 'sqlite3':
             case 'pdo_sqlite':
+                if ($this->option['ZC_DATABASE_TYPE'] == 'sqlite' && version_compare(PHP_VERSION, '5.4.0') >= 0) {
+                    if (extension_loaded('sqlite3')) {
+                        $this->option['ZC_DATABASE_TYPE'] = 'sqlite3';
+                    } elseif (extension_loaded('pdo_sqlite')) {
+                        $this->option['ZC_DATABASE_TYPE'] = 'pdo_sqlite';
+                    }
+                }
                 $this->db = self::InitializeDB($this->option['ZC_DATABASE_TYPE']);
                 if ($this->db->Open(
                     array(
@@ -1070,6 +1077,11 @@ class ZBlogPHP
                 break;
             case 'postgresql':
             case 'pdo_postgresql':
+                if ($this->option['ZC_DATABASE_TYPE'] == 'postgresql') {
+                    if (!extension_loaded('pgsql') && extension_loaded('pdo_pgsql')) {
+                        $this->option['ZC_DATABASE_TYPE'] = 'pdo_postgresql';
+                    }
+                }
                 $this->db = self::InitializeDB($this->option['ZC_DATABASE_TYPE']);
                 if ($this->db->Open(
                     array(
@@ -1090,7 +1102,7 @@ class ZBlogPHP
             case 'mysqli':
             case 'pdo_mysql':
             default:
-                if ($this->option['ZC_DATABASE_TYPE'] == 'mysql' && version_compare(PHP_VERSION, '7.0.0') >= 0) {
+                if ($this->option['ZC_DATABASE_TYPE'] == 'mysql' && (version_compare(PHP_VERSION, '7.0.0') >= 0) || (!extension_loaded('mysql') && version_compare(PHP_VERSION, '7.0.0') < 0)) {
                     if (extension_loaded('mysqli')) {
                         $this->option['ZC_DATABASE_TYPE'] = 'mysqli';
                     } elseif (extension_loaded('pdo_mysql')) {
