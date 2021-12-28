@@ -70,7 +70,7 @@ function api_upload_post()
     try {
         $upload = PostUpload();
 
-        $array = ApiGetObjectArray($upload);
+        $array = ApiGetObjectArray($upload, array('Url'));
 
         return array(
             'message' => $GLOBALS['lang']['msg']['operation_succeed'],

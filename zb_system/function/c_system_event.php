@@ -322,7 +322,7 @@ function DelPost()
         if (!$zbp->CheckRights($post->TypeActions['all']) && $post->AuthorID != $zbp->user->ID) {
             $zbp->ShowError(6, __FILE__, __LINE__);
         }
-        
+
         foreach ($GLOBALS['hooks']['Filter_Plugin_DelPost_Core'] as $fpname => &$fpsignal) {
             $fpname($post);
         }
@@ -898,10 +898,18 @@ function PostComment()
         'AuthorID' => null,
     );
 
-    $_POST['LogID'] = $_GET['postid'];
+    if (isset($_GET['postid'])) {
+        $_POST['LogID'] = $_GET['postid'];
+    } elseif ($_POST['postid']) {
+        $_POST['LogID'] = $_POST['postid'];
+    } elseif ($_POST['LogID']) {
+        $_POST['LogID'] = $_POST['LogID'];
+    } else {
+        $_POST['LogID'] = 0;
+    }
 
-    if ($zbp->ValidCmtKey($_GET['postid'], $_GET['key']) == false) {
-        if (isset($zbp->option['ZC_COMMENT_VALIDCMTKEY_ENABLE']) && $zbp->option['ZC_COMMENT_VALIDCMTKEY_ENABLE']) {
+    if ($zbp->option['ZC_COMMENT_VALIDCMTKEY_ENABLE']) {
+        if ($zbp->ValidCmtKey($_POST['LogID'], $_GET['key']) == false) {
             $zbp->ShowError(43, __FILE__, __LINE__);
         }
     }
