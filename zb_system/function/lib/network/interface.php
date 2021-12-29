@@ -100,4 +100,39 @@ interface Network__Interface
      */
     public function setTimeOuts($resolveTimeout, $connectTimeout, $sendTimeout, $receiveTimeout);
 
+    /**
+     * @return mixed
+     */
+    public function getStatusCode();
+
+    /**
+     * @return mixed
+     */
+    public function getStatusText();
+
+    /**
+     * @return mixed
+     */
+    public function getReasonPhrase();
+
+    /**
+     * @return mixed
+     */
+    public function withStatus($code, $reasonPhrase = '');
+
+    /**
+     * @return mixed
+     */
+    public function getBody();
+
+    /**
+     * @return mixed
+     */
+    public function getHeaders();
+
+    /**
+     * @return mixed
+     */
+    public function getHeader($name);
+
 }

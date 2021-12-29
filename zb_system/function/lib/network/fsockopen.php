@@ -555,4 +555,48 @@ class Network__fsockopen implements Network__Interface
         $this->maxredirs = $n;
     }
 
+    public function getStatusCode()
+    {
+        return $this->status;
+    }
+
+    public function getStatusText()
+    {
+        return $this->statusText;
+    }
+
+    public function getReasonPhrase()
+    {
+        return substr($this->statusText, 13);
+    }
+
+    public function withStatus($code, $reasonPhrase = '')
+    {
+    }
+
+    public function getBody()
+    {
+        return $this->responseText;
+    }
+
+    public function getHeaders()
+    {
+        $headers = array();
+        foreach ($this->responseHeader as $h) {
+            $array = explode(': ', $h, 2);
+            if (count($array) > 1) {
+                $headers[$array[0]] = $array[1];
+            }
+        }
+        return $headers;
+    }
+
+    public function getHeader($name)
+    {
+        $headers = $this->getHeaders();
+        if (isset($headers[$name])) {
+            return $headers[$name];
+        }
+    }
+
 }
