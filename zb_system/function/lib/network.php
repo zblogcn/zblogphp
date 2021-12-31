@@ -49,7 +49,7 @@ class Network
             $this->curl = true;
         }
         if ((bool) ini_get('allow_url_fopen')) {
-            if (function_exists('fsockopen')) {
+            if (function_exists('stream_socket_client')) {
                 $this->network_list[] = 'fsockopen';
             }
             $this->fsockopen = true;

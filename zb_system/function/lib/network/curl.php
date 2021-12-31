@@ -41,6 +41,8 @@ class Network__curl implements Network__Interface
 
     private $timeout = 30;
 
+    private $set_timeouts = false;
+
     private $errstr = '';
 
     private $errno = 0;
@@ -53,12 +55,14 @@ class Network__curl implements Network__Interface
 
     private $private_isBinary = false;
 
+    private $curl = null;
+
     /**
      * @ignore
      */
     public function __construct()
     {
-        //$this->ch = curl_init();
+        $this->curl = &$this->ch;
     }
 
     /**
@@ -190,6 +194,7 @@ class Network__curl implements Network__Interface
     {
         curl_setopt($this->ch, CURLOPT_CONNECTTIMEOUT, $connectTimeout);
         curl_setopt($this->ch, CURLOPT_TIMEOUT, $resolveTimeout);
+        $this->set_timeouts = true;
     }
 
     /**
@@ -238,11 +243,19 @@ class Network__curl implements Network__Interface
         curl_setopt($this->ch, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($this->ch, CURLOPT_SSL_VERIFYHOST, false);
 
+        if ($this->set_timeouts == false) {
+            curl_setopt($this->ch, CURLOPT_CONNECTTIMEOUT, $this->timeout);
+            curl_setopt($this->ch, CURLOPT_TIMEOUT, $this->timeout);
+        }
+
         $result = curl_exec($this->ch);
         $header_size = curl_getinfo($this->ch, CURLINFO_HEADER_SIZE);
 
         $this->responseHeader = explode("\r\n", substr($result, 0, ($header_size - 4)));
         $this->responseText = substr($result, $header_size);
+        if (is_bool($this->responseText) && !$this->responseText) {
+            $this->responseText = '';
+        }
         curl_close($this->ch);
 
         foreach ($this->responseHeader as $key => $value) {

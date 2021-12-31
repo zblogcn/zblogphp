@@ -131,6 +131,7 @@ class Network__fsockopen implements Network__Interface
      */
     public function setTimeOuts($resolveTimeout, $connectTimeout, $sendTimeout, $receiveTimeout)
     {
+        $this->option['timeout'] = $resolveTimeout;
     }
 
     /**
@@ -225,16 +226,39 @@ class Network__fsockopen implements Network__Interface
         }
 
         $this->option['header'] = implode("\r\n", $this->httpheader);
+        $this->option['ignore_errors'] = true;
+        if (isset($this->option['timeout'])) {
+            $this->timeout = $this->option['timeout'];
+        } else {
+            $this->option['timeout'] = $this->timeout;
+        }
 
-        ZBlogException::SuspendErrorHook();
-        $socket = fsockopen(
-            ($this->scheme == 'https' ? 'ssl://' : '') . $this->parsed_url['host'],
-            $this->port,
+        if ($this->maxredirs > 0) {
+            $this->option['follow_location'] = 1;
+            //补一个数字 要大于1才跳转
+            $this->option['max_redirects'] = ($this->maxredirs + 1);
+        } else {
+            $this->option['follow_location'] = 0;
+            $this->option['max_redirects'] = 0;
+        }
+
+        $contextOptions = array('http' => $this->option, 'ssl' => array('verify_peer' => false,'verify_peer_name' => false));
+        $context = stream_context_create($contextOptions);
+
+        if (defined('ZBP_PATH')) {
+            ZBlogException::SuspendErrorHook();
+        }
+        $socket = stream_socket_client(
+            (($this->scheme == 'https' ? 'ssl://' : '') . $this->parsed_url['host']) . ':' . $this->port,
             $this->errno,
             $this->errstr,
-            $this->timeout
+            $this->timeout,
+            STREAM_CLIENT_CONNECT,
+            $context
         );
-        ZBlogException::SuspendErrorHook();
+        if (defined('ZBP_PATH')) {
+            ZBlogException::ResumeErrorHook();
+        }
         if (!$socket) {
             return;
         }
