@@ -6,7 +6,7 @@ if (!defined('ZBP_PATH')) {
 /**
  * 获取链接内容类.
  */
-class Network__Filegetcontents implements Network__Interface
+class Network__filegetcontents implements Network__Interface
 {
 
     private $readyState = 0; //状态
