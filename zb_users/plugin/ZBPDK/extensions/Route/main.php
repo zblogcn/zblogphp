@@ -80,7 +80,11 @@ foreach ($defined_route as $route_type => $route_note) {
         if (isset($value['args'])) {
             foreach ($value['args'] as $key2 => $value2) {
                 if (is_integer($key2)) {
-                    $s .=  '$'. $value2 . ', ';
+                    if (is_array($value2)) {
+                        $s .= '$'. current($value2) . ', ';
+                    } else {
+                        $s .=  '$'. $value2 . ', ';
+                    }
                 } else {
                     $s .=  '$'. $key2 . ', ';
                 }
@@ -94,6 +98,11 @@ foreach ($defined_route as $route_type => $route_note) {
         echo trim(trim($s), ',');
         //echo $s;
         echo ')';
+        $backargs = null;
+        if (isset($value['args'])) {
+            $backargs = $value['args'];
+            unset($value['args']);
+        }
         $t = var_export($value,true);
         if ($value['type'] == 'active') {
             $replace_array['\'type\' ='] = "//路由类型 (active类型不匹配规则，只从过滤\$_GET和从\$_GET中取值并传入Call，不匹配将跳出本规则进入下一条)\r\n" . '\'type\' =';
@@ -106,6 +115,9 @@ foreach ($defined_route as $route_type => $route_note) {
         }
         foreach ($replace_array as $key => $value) {
             $t = str_replace('  ' . $key, $value, $t);
+        }
+        if ($backargs !== null) {
+            $t .= PHP_EOL . "// 从伪静规则匹配到的数组中取值传给call的参数(示例为array('id', 'page') or array('cate@alias', 'page') )或是更复杂的配置" . PHP_EOL . '\'args\' => ' . var_export($backargs,true);
         }
         echo '<div style="display:none;margin:1em;box-shadow: 0px 0px 5px gray;padding:1em;background-color:#f8f8f8;"><pre>'.$t.'</pre></div>';
         echo '</td></tr>';

@@ -453,7 +453,6 @@ class Network__fsockopen implements Network__Interface
 
     private function reinit()
     {
-        global $zbp;
         $this->httpheader = array();
 
         if (!$this->canreinit) {
@@ -480,7 +479,12 @@ class Network__fsockopen implements Network__Interface
         $this->errstr = '';
         $this->errno = 0;
 
-        $this->setRequestHeader('User-Agent', 'Mozilla/5.0 (' . $zbp->cache->system_environment . ') Z-BlogPHP/' . $GLOBALS['blogversion']);
+        if (defined('ZBP_PATH')) {
+            $this->setRequestHeader('User-Agent', 'Mozilla/5.0 (' . $GLOBALS['zbp']->cache->system_environment . ') Z-BlogPHP/' . $GLOBALS['zbp']->version);
+        } else {
+            $this->setRequestHeader('User-Agent', 'Mozilla/5.0 (compatible; ZBP_NetWork)');
+        }
+
         $this->setMaxRedirs(1);
     }
 

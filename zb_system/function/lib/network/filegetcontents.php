@@ -373,7 +373,6 @@ class Network__Filegetcontents implements Network__Interface
 
     private function reinit()
     {
-        global $zbp;
         $this->readyState = 0; //状态
         $this->responseBody = null; //返回的二进制
         $this->responseStream = null; //返回的数据流
@@ -390,7 +389,13 @@ class Network__Filegetcontents implements Network__Interface
         $this->postdata = array();
         $this->httpheader = array();
         $this->responseHeader = array();
-        $this->setRequestHeader('User-Agent', 'Mozilla/5.0 (' . $zbp->cache->system_environment . ') Z-BlogPHP/' . $GLOBALS['blogversion']);
+
+        if (defined('ZBP_PATH')) {
+            $this->setRequestHeader('User-Agent', 'Mozilla/5.0 (' . $GLOBALS['zbp']->cache->system_environment . ') Z-BlogPHP/' . $GLOBALS['zbp']->version);
+        } else {
+            $this->setRequestHeader('User-Agent', 'Mozilla/5.0 (compatible; ZBP_NetWork)');
+        }
+
         $this->setMaxRedirs(1);
     }
 
