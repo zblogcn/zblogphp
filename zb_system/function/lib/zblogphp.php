@@ -482,7 +482,7 @@ class ZBlogPHP
      */
     public $autofill_template_htmltags = true;
 
-    const OPTION_RESERVE_KEYS = 'ZC_DATABASE_TYPE|ZC_SQLITE_NAME|ZC_SQLITE_PRE|ZC_MYSQL_SERVER|ZC_MYSQL_USERNAME|ZC_MYSQL_PASSWORD|ZC_MYSQL_NAME|ZC_MYSQL_CHARSET|ZC_MYSQL_COLLATE|ZC_MYSQL_PRE|ZC_MYSQL_ENGINE|ZC_MYSQL_PORT|ZC_MYSQL_PERSISTENT|ZC_MYSQL_PORT|ZC_PGSQL_SERVER|ZC_PGSQL_USERNAME|ZC_PGSQL_PASSWORD|ZC_PGSQL_NAME|ZC_PGSQL_CHARSET|ZC_PGSQL_PRE|ZC_PGSQL_PORT|ZC_PGSQL_PERSISTENT|ZC_CLOSE_WHOLE_SITE|ZC_PERMANENT_DOMAIN_FORCED_URL|ZC_PERMANENT_DOMAIN_FORCED_DISABLE|ZC_DATABASE_CONFIG';
+    const OPTION_RESERVE_KEYS = 'ZC_DATABASE_TYPE|ZC_SQLITE_NAME|ZC_SQLITE_PRE|ZC_MYSQL_SERVER|ZC_MYSQL_USERNAME|ZC_MYSQL_PASSWORD|ZC_MYSQL_NAME|ZC_MYSQL_CHARSET|ZC_MYSQL_COLLATE|ZC_MYSQL_PRE|ZC_MYSQL_ENGINE|ZC_MYSQL_PORT|ZC_MYSQL_PERSISTENT|ZC_MYSQL_PORT|ZC_PGSQL_SERVER|ZC_PGSQL_USERNAME|ZC_PGSQL_PASSWORD|ZC_PGSQL_NAME|ZC_PGSQL_CHARSET|ZC_PGSQL_PRE|ZC_PGSQL_PORT|ZC_PGSQL_PERSISTENT|ZC_CLOSE_WHOLE_SITE|ZC_PERMANENT_DOMAIN_FORCED_URL|ZC_PERMANENT_DOMAIN_FORCED_DISABLE|ZC_INSTALL_AFTER_CONFIG';
 
     /**
      * ZBP魔术方法函数**************************************************************.
@@ -711,8 +711,6 @@ class ZBlogPHP
         if ($this->isinitialized) {
             return false;
         }
-
-        $this->LoadOption_Before();
 
         $oldZone = $this->option['ZC_TIME_ZONE_NAME'];
         date_default_timezone_set($oldZone);
@@ -1057,6 +1055,8 @@ class ZBlogPHP
             case 'sqlite':
             case 'sqlite3':
             case 'pdo_sqlite':
+                $this->option['ZC_SQLITE_NAME'] = GetOptionVarsFromEnv($this->option['ZC_SQLITE_NAME']);
+
                 if ($this->option['ZC_DATABASE_TYPE'] == 'sqlite' && version_compare(PHP_VERSION, '5.4.0') >= 0) {
                     if (extension_loaded('sqlite3')) {
                         $this->option['ZC_DATABASE_TYPE'] = 'sqlite3';
@@ -1077,6 +1077,12 @@ class ZBlogPHP
                 break;
             case 'postgresql':
             case 'pdo_postgresql':
+                $this->option['ZC_PGSQL_SERVER'] = GetOptionVarsFromEnv($this->option['ZC_PGSQL_SERVER']);
+                $this->option['ZC_PGSQL_USERNAME'] = GetOptionVarsFromEnv($this->option['ZC_PGSQL_USERNAME']);
+                $this->option['ZC_PGSQL_PASSWORD'] = GetOptionVarsFromEnv($this->option['ZC_PGSQL_PASSWORD']);
+                $this->option['ZC_PGSQL_NAME'] = GetOptionVarsFromEnv($this->option['ZC_PGSQL_NAME']);
+                $this->option['ZC_PGSQL_PORT'] = GetOptionVarsFromEnv($this->option['ZC_PGSQL_PORT']);
+
                 if ($this->option['ZC_DATABASE_TYPE'] == 'postgresql') {
                     if (!extension_loaded('pgsql') && extension_loaded('pdo_pgsql')) {
                         $this->option['ZC_DATABASE_TYPE'] = 'pdo_postgresql';
@@ -1102,6 +1108,12 @@ class ZBlogPHP
             case 'mysqli':
             case 'pdo_mysql':
             default:
+                $this->option['ZC_MYSQL_SERVER'] = GetOptionVarsFromEnv($this->option['ZC_MYSQL_SERVER']);
+                $this->option['ZC_MYSQL_USERNAME'] = GetOptionVarsFromEnv($this->option['ZC_MYSQL_USERNAME']);
+                $this->option['ZC_MYSQL_PASSWORD'] = GetOptionVarsFromEnv($this->option['ZC_MYSQL_PASSWORD']);
+                $this->option['ZC_MYSQL_NAME'] = GetOptionVarsFromEnv($this->option['ZC_MYSQL_NAME']);
+                $this->option['ZC_MYSQL_PORT'] = GetOptionVarsFromEnv($this->option['ZC_MYSQL_PORT']);
+
                 if ($this->option['ZC_DATABASE_TYPE'] == 'mysql' && (version_compare(PHP_VERSION, '7.0.0') >= 0) || (!extension_loaded('mysql') && version_compare(PHP_VERSION, '7.0.0') < 0)) {
                     if (extension_loaded('mysqli')) {
                         $this->option['ZC_DATABASE_TYPE'] = 'mysqli';
@@ -1358,7 +1370,7 @@ class ZBlogPHP
         unset($this->option['ZC_PERMANENT_DOMAIN_FORCED_DISABLE']);
         unset($this->option['ZC_PERMANENT_DOMAIN_FORCED_URL']);
         unset($this->option['ZC_CLOSE_WHOLE_SITE']);
-        unset($this->option['ZC_DATABASE_CONFIG']);
+        unset($this->option['ZC_INSTALL_AFTER_CONFIG']);
 
         $reserve_keys = explode('|', self::OPTION_RESERVE_KEYS);
 
@@ -1425,46 +1437,6 @@ class ZBlogPHP
             $this->option['ZC_COMMENT_VERIFY_ENABLE'] = false;
         }
 
-        return true;
-    }
-
-    protected function LoadOption_Before()
-    {
-        $envtype = '';
-        if (isset($this->option['ZC_DATABASE_CONFIG'])) {
-            $envtype = trim(strtolower($this->option['ZC_DATABASE_CONFIG']));
-            if ($envtype == 'option') {
-                $envtype = '';
-            }
-        }
-        if ($envtype == '') {
-            return true;
-        }
-        switch ($this->option['ZC_DATABASE_TYPE']) {
-            case 'sqlite':
-            case 'sqlite3':
-            case 'pdo_sqlite':
-                $this->option['ZC_SQLITE_NAME'] = GetVarsFromEnv($this->option['ZC_SQLITE_NAME'], $envtype);
-                break;
-            case 'postgresql':
-            case 'pdo_postgresql':
-                $this->option['ZC_PGSQL_SERVER'] = GetVarsFromEnv($this->option['ZC_PGSQL_SERVER'], $envtype, $this->option['ZC_PGSQL_SERVER']);
-                $this->option['ZC_PGSQL_USERNAME'] = GetVarsFromEnv($this->option['ZC_PGSQL_USERNAME'], $envtype, $this->option['ZC_PGSQL_USERNAME']);
-                $this->option['ZC_PGSQL_PASSWORD'] = GetVarsFromEnv($this->option['ZC_PGSQL_PASSWORD'], $envtype, $this->option['ZC_PGSQL_PASSWORD']);
-                $this->option['ZC_PGSQL_NAME'] = GetVarsFromEnv($this->option['ZC_PGSQL_NAME'], $envtype, $this->option['ZC_PGSQL_NAME']);
-                $this->option['ZC_PGSQL_PORT'] = GetVarsFromEnv($this->option['ZC_PGSQL_PORT'], $envtype, $this->option['ZC_PGSQL_PORT']);
-                break;
-            case 'mysql':
-            case 'mysqli':
-            case 'pdo_mysql':
-            default:
-                $this->option['ZC_MYSQL_SERVER'] = GetVarsFromEnv($this->option['ZC_MYSQL_SERVER'], $envtype, $this->option['ZC_MYSQL_SERVER']);
-                $this->option['ZC_MYSQL_USERNAME'] = GetVarsFromEnv($this->option['ZC_MYSQL_USERNAME'], $envtype, $this->option['ZC_MYSQL_USERNAME']);
-                $this->option['ZC_MYSQL_PASSWORD'] = GetVarsFromEnv($this->option['ZC_MYSQL_PASSWORD'], $envtype, $this->option['ZC_MYSQL_PASSWORD']);
-                $this->option['ZC_MYSQL_NAME'] = GetVarsFromEnv($this->option['ZC_MYSQL_NAME'], $envtype, $this->option['ZC_MYSQL_NAME']);
-                $this->option['ZC_MYSQL_PORT'] = GetVarsFromEnv($this->option['ZC_MYSQL_PORT'], $envtype, $this->option['ZC_MYSQL_PORT']);
-                break;
-        }
         return true;
     }
 
@@ -3937,10 +3909,14 @@ class ZBlogPHP
             $errorText = $this->lang['error'][$errorText];
         }
 
-        ZBlogException::$error_id = $errorCode;
-        ZBlogException::$error_file = $file;
-        ZBlogException::$error_line = $line;
-        ZBlogException::$error_moreinfo = $moreinfo;
+        $zbe = ZBlogException::GetInstance();
+        $zbe->message = $errorText;
+        $zbe->messagefull = $errorText . ' (set_exception_handler) ';
+        $zbe->type = $errorCode;
+        $zbe->code = $errorCode;
+        $zbe->file = $file;
+        $zbe->line = $line;
+        $zbe->moreinfo = $moreinfo;
 
         if (stripos('{' . sha1('mustshowerror') . '}', $errorText) === 0) {
             $errorText = str_replace('{' . sha1('mustshowerror') . '}', '', $errorText);

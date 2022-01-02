@@ -202,7 +202,9 @@ class Network__filegetcontents implements Network__Interface
         $this->option['header'] = implode("\r\n", $this->httpheader);
         //$this->httpheader[] = 'Referer: ' . 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
         $this->option['ignore_errors'] = true;
-        if (!isset($this->option['timeout'])) {
+        if (isset($this->option['timeout'])) {
+            $this->timeout = $this->option['timeout'];
+        } else {
             $this->option['timeout'] = $this->timeout;
         }
 

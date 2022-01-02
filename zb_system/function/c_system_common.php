@@ -2445,6 +2445,39 @@ function object_to_array($obj)
 }
 
 /**
+ * GetOptionVarsFromEnv
+ */
+function GetOptionVarsFromEnv($value)
+{
+    $type = null;
+    $arg = null;
+    if (strpos($value, 'constant:') === 0) {
+        $type = 'constant';
+        $arg = explode(':', $value);
+        $arg = $arg[1];
+    }
+    if (strpos($value, 'server:') === 0) {
+        $type = 'server';
+        $arg = explode(':', $value);
+        $arg = $arg[1];
+    }
+    if (strpos($value, 'getenv:') === 0) {
+        $type = 'getenv';
+        $arg = explode(':', $value);
+        $arg = $arg[1];
+    }
+    if (strpos($value, 'env:') === 0) {
+        $type = 'env';
+        $arg = explode(':', $value);
+        $arg = $arg[1];
+    }
+    if ($type === null) {
+        return $value;
+    }
+    return GetVarsFromEnv($arg, $type, $arg);
+}
+
+/**
  * 将swoole和workerman下的$request数组转换为$GLOBALS全局数组
  */
 function http_request_convert_to_global($request)

@@ -198,7 +198,7 @@ function api_member_delete()
 
     ApiVerifyCSRF(true);
 
-    if ($zbp->GetMemberByID((int) GetVars('id', 'GET'))->ID == 0) {
+    if ($zbp->GetMemberByID((int) GetVars('id'))->ID == 0) {
         return array(
             'code' => 404,
             'message' => $GLOBALS['lang']['error']['97'],

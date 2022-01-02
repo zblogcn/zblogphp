@@ -154,7 +154,7 @@ function Debug_Error_Handler($errno, $errstr, $errfile, $errline)
         return true;
     }
 
-    $zbe = ZBlogException::GetInstance();
+    $zbe = ZBlogException::GetNewException();
     $zbe->ParseError($errno, $errstr, $errfile, $errline);
     $zbe->Display();
 
@@ -193,7 +193,7 @@ function Debug_Exception_Handler($exception)
         );
     }
 
-    $zbe = ZBlogException::GetInstance();
+    $zbe = ZBlogException::GetNewException();
     $zbe->ParseException($exception);
     $zbe->Display();
 
@@ -227,7 +227,7 @@ function Debug_Shutdown_Handler()
             return true;
         }
 
-        $zbe = ZBlogException::GetInstance();
+        $zbe = ZBlogException::GetNewException();
         $zbe->ParseShutdown($error);
         $zbe->Display();
     }
@@ -273,26 +273,6 @@ class ZBlogException
      * 静态iswarning
      */
     public static $iswarning = true;
-
-    /**
-     * 静态error_id
-     */
-    public static $error_id = 0;
-
-    /**
-     * 静态error_file
-     */
-    public static $error_file = null;
-
-    /**
-     * 静态error_line
-     */
-    public static $error_line = null;
-
-    /**
-     * 静态error_moreinfo
-     */
-    public static $error_moreinfo = null;
 
     /**
      * 静态islogerror
@@ -383,8 +363,10 @@ class ZBlogException
     public static function GetNewException()
     {
         $z = new self();
-        $z->moreinfo = self::$error_moreinfo;
-        self::$error_moreinfo = null;
+        $lastzbe = end(self::$private_zbe_list);
+        if (is_object($lastzbe)) {
+            $z->moreinfo = $lastzbe->moreinfo;
+        }
         return $z;
     }
 
@@ -395,15 +377,36 @@ class ZBlogException
      */
     public static function GetInstance()
     {
+        if (IS_CLI && (IS_WORKERMAN || IS_SWOOLE)) {
+            self::$private_zbe_list[] = array();
+        }
         $z = new self();
         if (count(self::$private_zbe_list) > 0) {
             $z->previous = end(self::$private_zbe_list);
         }
-        $z->moreinfo = self::$error_moreinfo;
-        self::$error_moreinfo = null;
         self::$private_zbe_list[] = $z;
 
         return $z;
+    }
+
+    /**
+     * 获取$private_zbe_list队列.
+     *
+     * @return array()
+     */
+    public static function GetList()
+    {
+        return self::$private_zbe_list;
+    }
+
+    /**
+     * 清空$private_zbe_list队列.
+     *
+     * @return null
+     */
+    public static function ClearList()
+    {
+        self::$private_zbe_list = array();
     }
 
     /**
@@ -559,12 +562,14 @@ class ZBlogException
         $this->file = $exception->getFile();
         $this->line = $exception->getLine();
 
-        if (self::$error_file !== null) {
-            $this->file = self::$error_file;
-        }
-
-        if (self::$error_line !== null) {
-            $this->line = self::$error_line;
+        $lastzbe = end(self::$private_zbe_list);
+        if (is_object($lastzbe)) {
+            if ($lastzbe->file !== null) {
+                $this->file = $lastzbe->file;
+            }
+            if ($lastzbe->line !== null) {
+                $this->line = $lastzbe->line;
+            }
         }
     }
 
@@ -642,10 +647,17 @@ class ZBlogException
         global $lang;
         global $bloghost;
         $result = '';
-        if (self::$error_id != 0) {
+
+        $lastzbe = end(self::$private_zbe_list);
+        $error_id = 0;
+        if (is_object($lastzbe)) {
+            $error_id = $lastzbe->code;
+        }
+
+        if ($error_id != 0) {
             // 代表Z-BlogPHP自身抛出的错误
-            if (isset($lang['error_reasons'][self::$error_id])) {
-                $result = $lang['error_reasons'][self::$error_id];
+            if (isset($lang['error_reasons'][$error_id])) {
+                $result = $lang['error_reasons'][$error_id];
             } else {
                 $result = $lang['error_reasons']['default'];
             }
@@ -659,7 +671,7 @@ class ZBlogException
             }
         }
 
-        $errorId = urlencode(self::$error_id);
+        $errorId = urlencode($error_id);
         $errorMessage = urlencode($this->message);
         $moreHelp = $lang['offical_urls']['bing_help'];
         $office_docs = $lang['offical_urls']['office_docs'];
