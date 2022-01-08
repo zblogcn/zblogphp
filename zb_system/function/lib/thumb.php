@@ -455,7 +455,11 @@ class Thumb
                 imagepng($this->srcRes, $this->dstImagePath);
                 break;
             case 'bmp':
-                imagebmp($this->srcRes, $this->dstImagePath);
+                if (function_exists('imagebmp')) {
+                    imagebmp($this->srcRes, $this->dstImagePath);
+                } else {
+                    imagejpeg($this->srcRes, $this->dstImagePath, 90);
+                }
                 break;
         }
     }
