@@ -1114,7 +1114,7 @@ class ZBlogPHP
                 $this->option['ZC_MYSQL_NAME'] = GetOptionVarsFromEnv($this->option['ZC_MYSQL_NAME']);
                 $this->option['ZC_MYSQL_PORT'] = GetOptionVarsFromEnv($this->option['ZC_MYSQL_PORT']);
 
-                if ($this->option['ZC_DATABASE_TYPE'] == 'mysql' && (version_compare(PHP_VERSION, '7.0.0') >= 0) || (!extension_loaded('mysql') && version_compare(PHP_VERSION, '7.0.0') < 0)) {
+                if ($this->option['ZC_DATABASE_TYPE'] == 'mysql' && !extension_loaded('mysql')) {
                     if (extension_loaded('mysqli')) {
                         $this->option['ZC_DATABASE_TYPE'] = 'mysqli';
                     } elseif (extension_loaded('pdo_mysql')) {
