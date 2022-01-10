@@ -2341,6 +2341,20 @@ class ZBlogPHP
     }
 
     /**
+     * 获取当前模板对像
+     */
+    public function &GetTemplate()
+    {
+        if (IS_CLI && (IS_WORKERMAN || IS_SWOOLE)) {
+            $template = clone $this->template;
+        } else {
+            $template = &$this->template;
+        }
+
+        return $template;
+    }
+
+    /**
      * 模块处理类函数**************************************************************.
      */
 

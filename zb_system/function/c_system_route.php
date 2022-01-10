@@ -840,11 +840,8 @@ function ViewSearch()
         $results[] = $r;
     }
 
-    if (IS_CLI && (IS_WORKERMAN || IS_SWOOLE)) {
-        $template = clone $zbp->template;
-    } else {
-        $template = &$zbp->template;
-    }
+    $template = &$zbp->GetTemplate();
+
     if ($disablebot) {
         $template->SetTags('header', $template->GetTags('header') . '    <meta name="robots" content="noindex,nofollow,noarchive" />' . "\r\n");
     }
@@ -1312,11 +1309,8 @@ function ViewList($page = null, $cate = null, $auth = null, $date = null, $tags 
 
     $zbp->LoadMembersInList($articles);
 
-    if (IS_CLI && (IS_WORKERMAN || IS_SWOOLE)) {
-        $template = clone $zbp->template;
-    } else {
-        $template = &$zbp->template;
-    }
+    $template = &$zbp->GetTemplate();
+
     $template->SetTags('title', $zbp->title);
     $template->SetTags('articles', $articles);
     if ($pagebar->PageAll == 0) {
@@ -1585,11 +1579,8 @@ function ViewPost($id = null, $alias = null, $isrewrite = false, $object = array
 
     $zbp->LoadMembersInList($comments);
 
-    if (IS_CLI && (IS_WORKERMAN || IS_SWOOLE)) {
-        $template = clone $zbp->template;
-    } else {
-        $template = &$zbp->template;
-    }
+    $template = &$zbp->GetTemplate();
+
     $template->SetTags('posttype', $article->Type);
     $template->SetTags('title', ($article->Status == 0 ? '' : '[' . $zbp->lang['post_status_name'][$article->Status] . ']') . $article->Title);
     $template->SetTags('url', $article->Url);
@@ -1702,11 +1693,8 @@ function ViewComments($postid, $page)
         }
     }
 
-    if (IS_CLI && (IS_WORKERMAN || IS_SWOOLE)) {
-        $template = clone $zbp->template;
-    } else {
-        $template = &$zbp->template;
-    }
+    $template = &$zbp->GetTemplate();
+
     $template->SetTags('title', $zbp->title);
     $template->SetTags('article', $post);
     $template->SetTags('type', 'comment');
@@ -1760,11 +1748,8 @@ function ViewComment($id)
         $comment->Content .= '<label id="AjaxComment' . $comment->ID . '"></label>';
     }
 
-    if (IS_CLI && (IS_WORKERMAN || IS_SWOOLE)) {
-        $template = clone $zbp->template;
-    } else {
-        $template = &$zbp->template;
-    }
+    $template = &$zbp->GetTemplate();
+
     $template->SetTags('title', $zbp->title);
     $template->SetTags('comment', $comment);
     $template->SetTags('article', $post);
