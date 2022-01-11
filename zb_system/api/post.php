@@ -49,6 +49,21 @@ function api_post_get()
                 // 默认为公开状态的文章/页面
                 ApiCheckAuth(false, $post->TypeActions['view']);
             }
+
+            if (GetVars('viewnums') == true) {
+                if (isset($zbp->option['ZC_VIEWNUMS_TURNOFF']) && $zbp->option['ZC_VIEWNUMS_TURNOFF'] == false) {
+                    if (count($GLOBALS['hooks']['Filter_Plugin_ViewPost_ViewNums']) > 0) {
+                        foreach ($GLOBALS['hooks']['Filter_Plugin_ViewPost_ViewNums'] as $fpname => &$fpsignal) {
+                            $post->ViewNums = $fpname($post);
+                        }
+                    } else {
+                        $post->ViewNums += 1;
+                        $sql = $zbp->db->sql->Update($zbp->table['Post'], array('log_ViewNums' => $post->ViewNums), array(array('=', 'log_ID', $post->ID)));
+                        $zbp->db->Update($sql);
+                    }
+                }
+            }
+
             $array = ApiGetObjectArray(
                 $post,
                 array('Url','TagsCount','TagsName','CommentPostKey','ValidCodeUrl'),
