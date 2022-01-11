@@ -120,28 +120,24 @@ function ViewAuto()
             foreach ($match_with_page as $match) {
                 $r = ViewAuto_Get_Compiled_Urlrule($route, $match);
                 if (($r != '' && preg_match($r, $url, $m) == 1) || ($r == '' && $url == '') || ($r == '' && $url == 'index.php') || ($r == '/(?J)^index\.php\/$/' && $url == '')) {
-                    $c = true;
-                    break;
+                    $array = $m;
+                    ViewAuto_Process_Args_get($array, GetValueInArray($route, 'args_get', array()), $route);
+                    ViewAuto_Process_Args($array, $parameters, $m);
+                    ViewAuto_Process_Args_with($array, GetValueInArray($route, 'args_with', array()), $route);
+                    ViewAuto_Process_Args_Merge($route);
+                    //var_dump($match, $route['urlrule'], $r, $url, $m, $array);//die;
+                    $result = ViewAuto_Check_Redirect_To($route);
+                    if (is_array($result)) {
+                        return $result;
+                    }
+                    $result = ViewAuto_Call_Auto($route, $array);
+                    if ($result === false) {
+                        continue;
+                    }
+                    return $result;
                 }
             }
             //var_dump($route['name'],$match, $route['urlrule'], $r, $url, $m);//die;
-            if ($c) {
-                $array = $m;
-                ViewAuto_Process_Args_get($array, GetValueInArray($route, 'args_get', array()), $route);
-                ViewAuto_Process_Args($array, $parameters, $m);
-                ViewAuto_Process_Args_with($array, GetValueInArray($route, 'args_with', array()), $route);
-                ViewAuto_Process_Args_Merge($route);
-                //var_dump($match, $route['urlrule'], $r, $url, $m, $array);//die;
-                $result = ViewAuto_Check_Redirect_To($route);
-                if (is_array($result)) {
-                    return $result;
-                }
-                $result = ViewAuto_Call_Auto($route, $array);
-                if ($result === false) {
-                    continue;
-                }
-                return $result;
-            }
         }
     }
 
@@ -150,7 +146,7 @@ function ViewAuto()
         $b = ViewAuto_Check_Get_And_Not_Get_And_Must_Get(GetValueInArray($route, 'get', array()), GetValueInArray($route, 'not_get', array()), GetValueInArray($route, 'must_get', array()));
         $b = $b && ViewAuto_Check_Request_Method(GetValueInArray($route, 'request_method', ''));
         if ($b) {
-            $c = false;
+            $array_for = array();
             $match_with_page = $parameters = $m = array();
             //如果指定了规则就检查匹配，没有指定就任意匹配生效
             if (((isset($route['urlrule_regex']) && trim($route['urlrule_regex']) != '') || (isset($route['urlrule']) && trim($route['urlrule']) != ''))) {
@@ -161,32 +157,33 @@ function ViewAuto()
                         $url = str_ireplace('index.php', '', $url);
                     }
                     if (($r != '' && preg_match($r, $url, $m) == 1) || ($r == '' && $url == '') || ($r == '' && $url == 'index.php') || ($r == '/(?J)^index\.php\/$/' && $url == '')) {
-                        $c = true;
-                        break;
+                        $array_for[] = array(true, $parameters, $m);
                     }
                 }
             } else {
                 $prefix = GetValueInArray($route, 'prefix', '');
                 $prefix = empty($prefix) ? '' : ($prefix . '/');
                 if ($prefix == '' || ($prefix == substr($url, 0, strlen($prefix)))) {
-                    $c = true;
+                    $array_for[] = array(true, array(), array());
                 }
             }
-            if ($c) {
-                $array = $m;
-                ViewAuto_Process_Args_get($array, GetValueInArray($route, 'args_get', array()), $route);
-                ViewAuto_Process_Args($array, $parameters, $m);
-                ViewAuto_Process_Args_with($array, GetValueInArray($route, 'args_with', array()), $route);
-                ViewAuto_Process_Args_Merge($route);
-                $result = ViewAuto_Check_Redirect_To($route);
-                if (is_array($result)) {
+            foreach ($array_for as $for_value) {
+                if ($for_value[0] == true) {
+                    $array = $for_value[2];
+                    ViewAuto_Process_Args_get($array, GetValueInArray($route, 'args_get', array()), $route);
+                    ViewAuto_Process_Args($array, $for_value[1], $for_value[2]);
+                    ViewAuto_Process_Args_with($array, GetValueInArray($route, 'args_with', array()), $route);
+                    ViewAuto_Process_Args_Merge($route);
+                    $result = ViewAuto_Check_Redirect_To($route);
+                    if (is_array($result)) {
+                        return $result;
+                    }
+                    $result = ViewAuto_Call_Auto($route, $array);
+                    if ($result === false) {
+                        continue;
+                    }
                     return $result;
                 }
-                $result = ViewAuto_Call_Auto($route, $array);
-                if ($result === false) {
-                    continue;
-                }
-                return $result;
             }
         }
     }
