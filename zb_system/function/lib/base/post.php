@@ -78,6 +78,22 @@ abstract class Base__Post extends Base
     public function Time($s = 'Y-m-d H:i:s', $type = 'PostTime')
     {
         //1.7.2改回了1.6的顺序, $type放在第2参数
+        if ($s === 'Post') {
+            $s = 'PostTime';
+        } elseif ($s === 'Create') {
+            $s = 'CreateTime';
+        } elseif ($s === 'Update') {
+            $s = 'UpdateTime';
+        }
+        if (func_num_args() == 2) {
+            if ($type === 'Post') {
+                $type = 'PostTime';
+            } elseif ($type === 'Create') {
+                $type = 'CreateTime';
+            } elseif ($type === 'Update') {
+                $type = 'UpdateTime';
+            }
+        }
         if (func_num_args() == 2 && array_key_exists($s, $this->data)) {
             list($type, $s) = array($s, $type);
         } elseif (func_num_args() == 1 && array_key_exists($s, $this->data)){

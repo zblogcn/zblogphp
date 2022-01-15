@@ -178,6 +178,10 @@ abstract class Base__Member extends Base
             return $this->GetHashByMD5Path();
         }
         if ($name == 'IsGod') {
+            $evn = GetVarsFromEnv('ZBP_PRESET_DISABLE_ROOT');
+            if ($evn == true) {
+                return false;
+            }
             if ($this->private_isgod === true || $this->private_isgod === false) {
                 return $this->private_isgod;
             } else {

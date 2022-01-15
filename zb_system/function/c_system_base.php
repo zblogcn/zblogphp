@@ -46,9 +46,13 @@ if (ZBP_OBSTART) {
 /**
  * 指定加载类的目录并注册加载函数到系统
  */
-RunTime_Begin();
+if (function_exists('RunTime_Begin')) {
+    RunTime_Begin();
+}
 $GLOBALS['autoload_class_dirs'] = array();
-AddAutoloadClassDir(ZBP_PATH . 'zb_system/function/lib');
+if (function_exists('AddAutoloadClassDir')) {
+    AddAutoloadClassDir(ZBP_PATH . 'zb_system/function/lib'); 
+}
 spl_autoload_register('AutoloadClass');
 
 if (is_readable($file_base = ZBP_PATH . 'vendor/autoload.php') && PHP_VERSION_ID >= 50300) {

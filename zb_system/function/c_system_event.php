@@ -130,6 +130,10 @@ function Redirect_cmd_to_search($post_type = 0)
     Redirect_cmd_end($url);
 }
 
+function Redirect_to_inside($url) {
+    Redirect_cmd_from_args_with_loggedin($url);
+}
+
 /**
  * 检查已登录后才跳转到内部页面的CMD页面跳转函数
  */
