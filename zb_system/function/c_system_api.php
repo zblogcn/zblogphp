@@ -187,10 +187,10 @@ function ApiCheckMods(&$mods_allow, &$mods_disallow)
  * @param int $code
  * @param string|null $message
  */
-function ApiResponse($data = null, $error = null, $code = 200, $message = null, $should_resp = true)
+function ApiResponse($data = null, $error = null, $code = 200, $message = null)
 {
     foreach ($GLOBALS['hooks']['Filter_Plugin_API_Pre_Response'] as $fpname => &$fpsignal) {
-        $fpname($data, $error, $code, $message, $should_resp);
+        $fpname($data, $error, $code, $message);
     }
 
     if (!empty($error)) {
@@ -232,7 +232,7 @@ function ApiResponse($data = null, $error = null, $code = 200, $message = null, 
         $fpname($response);
     }
 
-    if (!defined('ZBP_API_IN_TEST') && $should_resp == true) {
+    if (!defined('ZBP_API_IN_TEST')) {
         //ob_end_clean();
         if (!headers_sent()) {
             header('Content-Type: application/json; charset=utf-8');
@@ -245,9 +245,7 @@ function ApiResponse($data = null, $error = null, $code = 200, $message = null, 
 
     $r = JsonEncode($response);
 
-    if ($should_resp == true) {
-        echo $r;
-    }
+    echo $r;
 
     if (empty($error) && $code !== 200) {
         // 如果 code 不为 200，又不是系统抛出的错误，再来抛出一个 Exception，适配 phpunit
@@ -576,6 +574,15 @@ function ApiDispatch($mods, $mod, $act)
             $result = call_user_func($func);
 
             ApiResultData($result);
+
+            if (isset($result['json'])) {
+                if (!headers_sent()) {
+                    header('Content-Type: application/json; charset=utf-8');
+                }
+                $r = JsonEncode($result['json']);
+                echo $r;
+                return $r;
+            }
 
             $r = ApiResponse(
                 isset($result['data']) ? $result['data'] : null,

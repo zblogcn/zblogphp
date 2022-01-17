@@ -2680,7 +2680,7 @@ DefinePluginFilter('Filter_Plugin_CSP_Backend');
 '**************************************************<
 '类型:Filter
 '名称:Filter_Plugin_API_Pre_Response
-'参数:&$data,&$error,&$code,&$message,&$should_resp
+'参数:&$data,&$error,&$code,&$message
 '说明:API 响应处理前接口
 '调用:
 '**************************************************>
