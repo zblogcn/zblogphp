@@ -193,32 +193,38 @@ function ApiResponse($data = null, $error = null, $code = 200, $message = null)
         $fpname($data, $error, $code, $message);
     }
 
-    if (!empty($error)) {
-        $error_info = array(
-            'code' => method_exists($error, 'getCode') ? $error->getCode() : $error->code,
-            'type' => property_exists($error, 'type') ? $error->type : $error->getCode(),
-            'message' => method_exists($error, 'getMessage') ? $error->getMessage() : $error->message,
-        );
+    if ($error !== null) {
+        if (is_object($error)) {
+            $error_info = array(
+                'code' => method_exists($error, 'getCode') ? $error->getCode() : $error->code,
+                'type' => property_exists($error, 'type') ? $error->type : $error->getCode(),
+                'message' => method_exists($error, 'getMessage') ? $error->getMessage() : $error->message,
+            );
 
-        if ($GLOBALS['zbp']->isdebug) {
-            $error_info['message_full'] = property_exists($error, 'messagefull') ? $error->messagefull : '';
-            $error_info['file'] = method_exists($error, 'getFile') ? $error->getFile() : $error->file;
-            $error_info['line'] = method_exists($error, 'getLine') ? $error->getLine() : $error->line;
-        }
+            if ($GLOBALS['zbp']->isdebug) {
+                $error_info['message_full'] = property_exists($error, 'messagefull') ? $error->messagefull : '';
+                $error_info['file'] = method_exists($error, 'getFile') ? $error->getFile() : $error->file;
+                $error_info['line'] = method_exists($error, 'getLine') ? $error->getLine() : $error->line;
+            }
 
-        if ($code === 200) {
-            $code = 500;
+            if ($code === 200) {
+                $code = 500;
+            }
+            if (empty($message)) {
+                $message = 'System error: ' . $error_info['message'];
+            }
+        } else {
+            $error_info = $error;
         }
-        if (empty($message)) {
-            $message = 'System error: ' . (method_exists($error, 'getMessage') ? $error->getMessage() : $error->message);
-        }
+    } else {
+        $error_info = null;
     }
 
     $response = array(
         'code' => $code,
         'message' => !empty($message) ? $message : 'OK',
         'data' => $data,
-        'error' => empty($error) ? null : $error_info,
+        'error' => $error_info,
     );
 
     // 显示 Runtime 调试信息
@@ -574,6 +580,19 @@ function ApiDispatch($mods, $mod, $act)
             $result = call_user_func($func);
 
             ApiResultData($result);
+
+            if (isset($result['original'])) {
+                if (!headers_sent()) {
+                    if (isset($result['original-type'])) {
+                        header('Content-Type: ' . $result['original-type'] . '; charset=utf-8');
+                    } else {
+                        header('Content-Type: application/json; charset=utf-8');
+                    }
+                }
+                $r = $result['original'];
+                echo $r;
+                return $r;
+            }
 
             if (isset($result['json'])) {
                 if (!headers_sent()) {

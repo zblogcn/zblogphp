@@ -149,7 +149,7 @@ function ViewAuto()
             $array_for = array();
             $match_with_page = $parameters = $m = array();
             //如果指定了规则就检查匹配，没有指定就任意匹配生效
-            if (((isset($route['urlrule_regex']) && trim($route['urlrule_regex']) != '') || (isset($route['urlrule']) && trim($route['urlrule']) != ''))) {
+            if (isset($route['args']) && !empty($route['args'])) {
                 ViewAuto_Get_Parameters_And_Match_with_page($route, $parameters, $match_with_page);
                 foreach ($match_with_page as $match) {
                     $r = ViewAuto_Get_Compiled_Urlrule($route, $match);
@@ -981,7 +981,6 @@ function ViewList($page = null, $cate = null, $auth = null, $date = null, $tags 
     $w = array();
     $w[] = array('=', 'log_Type', $posttype);
     $w[] = array('=', 'log_Status', 0);
-    $w[] = array('=', 'log_IsTop', 0);
 
     $page = (int) $page == 0 ? 1 : (int) $page;
 
@@ -995,6 +994,11 @@ function ViewList($page = null, $cate = null, $auth = null, $date = null, $tags 
                 $pagebar = new Pagebar($route);
             } else {
                 $pagebar = new Pagebar($zbp->GetPostType($posttype, 'list_urlrule'), true, true);
+            }
+            if ($zbp->option['ZC_LISTONTOP_TURNOFF'] == false) {
+                $w[] = array('=', 'log_IsTop', 0);
+            } else {
+                $w[] = array('>=', 'log_IsTop', 0);
             }
             if (0 == $posttype) {
                 $pagebar->Count = $zbp->cache->normal_article_nums;
@@ -1012,6 +1016,11 @@ function ViewList($page = null, $cate = null, $auth = null, $date = null, $tags 
                 $pagebar = new Pagebar($route);
             } else {
                 $pagebar = new Pagebar($zbp->GetPostType($posttype, 'list_category_urlrule'));
+            }
+            if ($zbp->option['ZC_LISTONTOP_TURNOFF'] == false) {
+                $w[] = array('=', 'log_IsTop', 0);
+            } else {
+                $w[] = array('>=', 'log_IsTop', 0);
             }
             $category = new Category();
 
@@ -1073,6 +1082,8 @@ function ViewList($page = null, $cate = null, $auth = null, $date = null, $tags 
             } else {
                 $pagebar = new Pagebar($zbp->GetPostType($posttype, 'list_author_urlrule'));
             }
+            $w[] = array('>=', 'log_IsTop', 0);
+
             $author = new Member();
 
             if (!is_array($auth)) {
@@ -1119,6 +1130,7 @@ function ViewList($page = null, $cate = null, $auth = null, $date = null, $tags 
             } else {
                 $pagebar = new Pagebar($zbp->GetPostType($posttype, 'list_date_urlrule'));
             }
+            $w[] = array('>=', 'log_IsTop', 0);
 
             if (!is_array($date)) {
                 $datetime = $date;
@@ -1193,6 +1205,8 @@ function ViewList($page = null, $cate = null, $auth = null, $date = null, $tags 
             } else {
                 $pagebar = new Pagebar($zbp->GetPostType($posttype, 'list_tag_urlrule'));
             }
+            $w[] = array('>=', 'log_IsTop', 0);
+
             $tag = new Tag();
 
             if (!is_array($tags)) {
@@ -1294,6 +1308,15 @@ function ViewList($page = null, $cate = null, $auth = null, $date = null, $tags 
 
     if (count($articles) <= 0 && $page > 1) {
         $zbp->ShowError(2, __FILE__, __LINE__);
+    }
+
+    $articles_top_ids_array = GetIDArrayByList($articles_top, 'ID');
+    if (!empty($articles_top_ids_array)) {
+        foreach ($articles as $articles_key => $articles_value) {
+            if (in_array($articles_value->ID, $articles_top_ids_array)) {
+                unset($articles[$articles_key]);
+            }
+        }
     }
 
     $articles = array_merge($articles_top, $articles);
