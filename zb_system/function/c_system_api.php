@@ -245,7 +245,7 @@ function ApiResponse($data = null, $error = null, $code = 200, $message = null)
         }
     }
 
-    if ($code >= 500) {
+    if (is_object($error) && $code >= 500) {
         SetHttpStatusCode($code);
     }
 

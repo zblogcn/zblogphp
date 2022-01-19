@@ -155,7 +155,7 @@ function api_system_get_info()
 
         $info2 = array(
             'activedapps' => $apps,
-            'evn' => array(
+            'env' => array(
                 'php' => GetPHPVersion(),
                 'system' => PHP_OS,
                 'webserver' => GetVars('SERVER_SOFTWARE', 'SERVER'),

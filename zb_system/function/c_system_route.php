@@ -148,8 +148,10 @@ function ViewAuto()
         if ($b) {
             $array_for = array();
             $match_with_page = $parameters = $m = array();
-            //如果指定了规则就检查匹配，没有指定就任意匹配生效
-            if (isset($route['args']) && !empty($route['args'])) {
+            //判断规则是动态还是伪静规则
+            $c = (isset($route['args']) && !empty($route['args']));
+            $c = $c || (!isset($route['get']) && !isset($route['not_get']) && !isset($route['must_get']));
+            if ($c) {
                 ViewAuto_Get_Parameters_And_Match_with_page($route, $parameters, $match_with_page);
                 foreach ($match_with_page as $match) {
                     $r = ViewAuto_Get_Compiled_Urlrule($route, $match);
