@@ -651,6 +651,11 @@ class SQL__Global
 
                 return $whereData;
             }
+            //fix 解决这种array('or', array('=','log_ID',1));bug问题的代码！
+            if (count($value) == 2 && is_array($value[1]) && isset($value[1][0]) && !is_array($value[1][0])) {
+                $whereData = $this->buildWhere_Single($value[1]);
+                return $whereData;
+            }
             foreach ($value[1] as $x => $y) {
                 if (count($y) == 2) {
                     $y[1] = $this->db->EscapeString($y[1]);

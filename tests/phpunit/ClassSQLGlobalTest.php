@@ -173,6 +173,27 @@ class ClassSQLGlobalTest extends PHPUnit\Framework\TestCase
                 ->sql
         );
         $this->assertEquals(
+            'SELECT * FROM  zbp_post  WHERE  (  log_ID = \'2\'  OR  log_Title = \'3\' ) ',
+            self::$db
+                ->select("zbp_post")
+                ->where(
+                    array('OR',
+                        array('=', 'log_ID', '2'),
+                        array('=', 'log_Title', '3'),
+                    )
+                )
+                ->sql
+        );
+        $this->assertEquals(
+            'SELECT * FROM  zbp_post  WHERE  log_ID = \'1\' ',
+            self::$db
+                ->select("zbp_post")
+                ->where(
+                    array('OR', array('=', 'log_ID', '1'))
+                )
+                ->sql
+        );
+        $this->assertEquals(
             'SELECT * FROM  zbp_post  WHERE  ((1 = 1) AND ( log_ID = \'1\'  OR  log_Title = \'2\' ) )',
             self::$db
                 ->select("zbp_post")
