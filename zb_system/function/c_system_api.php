@@ -606,7 +606,7 @@ function ApiDispatch($mods, $mod, $act)
             ApiResultData($result);
 
             if (isset($result['raw'])) {
-                return ApiResponseRaw($result['raw'], isset($result['original-type']) ? $result['original-type'] : 'application/json');
+                return ApiResponseRaw($result['raw'], isset($result['raw-type']) ? $result['raw-type'] : 'application/json');
             }
             if (isset($result['json'])) {
                 return ApiResponseRaw(JsonEncode($result['json']));
