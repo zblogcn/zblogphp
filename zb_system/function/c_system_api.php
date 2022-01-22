@@ -263,6 +263,30 @@ function ApiResponse($data = null, $error = null, $code = 200, $message = null)
 }
 
 /**
+ * API 原始数据输出.
+ *
+ * @param string|null $raw
+ * @param string $original_type
+ * @return string|null
+ */
+function ApiResponseRaw($raw, $original_type = 'application/json')
+{
+    foreach ($GLOBALS['hooks']['Filter_Plugin_API_Pre_Response_Raw'] as $fpname => &$fpsignal) {
+        $fpname($raw, $original_type);
+    }
+
+    if (!defined('ZBP_API_IN_TEST')) {
+        //ob_end_clean();
+        if (!headers_sent()) {
+            header('Content-Type: ' . $original_type . '; charset=utf-8');
+        }
+    }
+
+    echo $raw;
+    return $raw;
+}
+
+/**
  * API 检测权限.
  *
  * @param bool $loginRequire
@@ -581,36 +605,19 @@ function ApiDispatch($mods, $mod, $act)
 
             ApiResultData($result);
 
-            if (isset($result['original'])) {
-                if (!headers_sent()) {
-                    if (isset($result['original-type'])) {
-                        header('Content-Type: ' . $result['original-type'] . '; charset=utf-8');
-                    } else {
-                        header('Content-Type: application/json; charset=utf-8');
-                    }
-                }
-                $r = $result['original'];
-                echo $r;
-                return $r;
+            if (isset($result['raw'])) {
+                return ApiResponseRaw($result['raw'], isset($result['original-type']) ? $result['original-type'] : 'application/json');
             }
-
             if (isset($result['json'])) {
-                if (!headers_sent()) {
-                    header('Content-Type: application/json; charset=utf-8');
-                }
-                $r = JsonEncode($result['json']);
-                echo $r;
-                return $r;
+                return ApiResponseRaw(JsonEncode($result['json']));
             }
 
-            $r = ApiResponse(
+            return ApiResponse(
                 isset($result['data']) ? $result['data'] : null,
                 isset($result['error']) ? $result['error'] : null,
                 isset($result['code']) ? $result['code'] : 200,
                 isset($result['message']) ? $result['message'] : 'OK'
             );
-
-            return $r;
         }
     }
 
@@ -691,12 +698,12 @@ function ApiThrottle($name = 'default', $max_reqs = 60, $period = 60)
 /**
  * API 返回数据处理函数
  */
-function ApiResultData(&$data)
+function ApiResultData(&$result)
 {
     global $mod, $act;
 
     foreach ($GLOBALS['hooks']['Filter_Plugin_API_Result_Data'] as $fpname => &$fpsignal) {
-        $fpname($data, $mod, $act);
+        $fpname($result, $mod, $act);
     }
 }
 

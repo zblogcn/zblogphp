@@ -2790,7 +2790,7 @@ DefinePluginFilter('Filter_Plugin_API_VerifyCSRF_Skip');
 '**************************************************<
 '类型:Filter
 '名称:Filter_Plugin_API_Result_Data
-'参数:&data, $mod, $act
+'参数:&$result, $mod, $act
 '说明:处理返回数据
 '调用:
 '**************************************************>
@@ -2807,3 +2807,14 @@ DefinePluginFilter('Filter_Plugin_API_Result_Data');
 '**************************************************>
  */
 DefinePluginFilter('Filter_Plugin_API_Post_List_Core');
+
+/*
+'**************************************************<
+'类型:Filter
+'名称:Filter_Plugin_API_Pre_Response_Raw
+'参数:&$raw, &$$original_type
+'说明:处理返回数据
+'调用:
+'**************************************************>
+ */
+DefinePluginFilter('Filter_Plugin_API_Pre_Response_Raw');
