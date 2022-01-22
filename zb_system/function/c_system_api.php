@@ -266,19 +266,19 @@ function ApiResponse($data = null, $error = null, $code = 200, $message = null)
  * API 原始数据输出.
  *
  * @param string|null $raw
- * @param string $original_type
+ * @param string $raw_type
  * @return string|null
  */
-function ApiResponseRaw($raw, $original_type = 'application/json')
+function ApiResponseRaw($raw, $raw_type = 'application/json')
 {
     foreach ($GLOBALS['hooks']['Filter_Plugin_API_Pre_Response_Raw'] as $fpname => &$fpsignal) {
-        $fpname($raw, $original_type);
+        $fpname($raw, $raw_type);
     }
 
     if (!defined('ZBP_API_IN_TEST')) {
         //ob_end_clean();
         if (!headers_sent()) {
-            header('Content-Type: ' . $original_type . '; charset=utf-8');
+            header('Content-Type: ' . $raw_type . '; charset=utf-8');
         }
     }
 

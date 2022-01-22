@@ -2812,7 +2812,7 @@ DefinePluginFilter('Filter_Plugin_API_Post_List_Core');
 '**************************************************<
 '类型:Filter
 '名称:Filter_Plugin_API_Pre_Response_Raw
-'参数:&$raw, &$$original_type
+'参数:&$raw, &$$raw_type
 '说明:处理返回数据
 '调用:
 '**************************************************>
