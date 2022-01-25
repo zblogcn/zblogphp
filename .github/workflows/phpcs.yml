@@ -9,30 +9,17 @@ jobs:
   phpcs:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-        with:
-          ref: ${{ github.event.pull_request.head.sha }}
-      - name: Install dependencies
-        run: composer install --prefer-dist --no-progress --no-interaction
-      - uses: actions/github-script@0.6.0
-        id: pr
-        with:
-          github-token: ${{env.BOT_USER_TOKEN}}
-          result-encoding: string
-          script: |
-            const result = await github.repos.listPullRequestsAssociatedWithCommit({
-              owner: context.payload.repository.owner.name,
-              repo: context.payload.repository.name,
-              commit_sha: context.payload.head_commit.id
-            })
-            return result.data[0].number;
-      - name: Get file changes
-        id: get_file_changes
-        uses: trilom/file-changes-action@v1.2.4
-        with:
-          githubToken: ${{ secrets.GH_BOT_TOKEN }}
-          output: '" "'
-          prNumber: ${{ steps.pr.outputs.results }}
-      - name: PHPCS check
-        if: ${{ steps.get_file_changes.outputs.files_added != '' || steps.get_file_changes.outputs.files_modified }}
-        run: ./vendor/bin/phpcs "${{ steps.get_file_changes.outputs.files_added }}" "${{ steps.get_file_changes.outputs.files_modified }}" --report=checkstyle
+    - uses: actions/checkout@v2
+      with:
+        ref: ${{ github.event.pull_request.head.sha }}
+    - name: Install dependencies
+      run: composer install --prefer-dist --no-progress --no-interaction
+    - name: Get file changes
+      id: get_file_changes
+      uses: trilom/file-changes-action@v1.2.4
+      with:
+        githubToken: ${{ secrets.GH_BOT_TOKEN }}
+        output: '" "'
+    - name: PHPCS check
+      if: ${{ steps.get_file_changes.outputs.files_added != '' || steps.get_file_changes.outputs.files_modified }}
+      run: ./vendor/bin/phpcs "${{ steps.get_file_changes.outputs.files_added }}" "${{ steps.get_file_changes.outputs.files_modified }}" --report=checkstyle
