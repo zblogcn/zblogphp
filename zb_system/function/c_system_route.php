@@ -674,7 +674,7 @@ function ViewFeed()
     }
 
     $select = '*';
-    $order = array($zbp->displayorder => 'DESC', 'log_ID' => 'DESC');
+    $order = array($zbp->option['ZC_RSS2_ORDER'] => 'DESC', 'log_ID' => 'DESC');
     $limit = $zbp->option['ZC_RSS2_COUNT'];
     $option = array();
 
