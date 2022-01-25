@@ -107,6 +107,7 @@ return array(
 
     // '杂项
     'ZC_RSS2_COUNT'       => 10,
+    'ZC_RSS2_ORDER'       => 'log_PostTime',
     'ZC_RSS_EXPORT_WHOLE' => true,
 
     // '后台管理
