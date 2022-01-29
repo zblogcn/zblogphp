@@ -904,9 +904,9 @@ function PostComment()
 
     if (isset($_GET['postid'])) {
         $_POST['LogID'] = $_GET['postid'];
-    } elseif ($_POST['postid']) {
+    } elseif (isset($_POST['postid'])) {
         $_POST['LogID'] = $_POST['postid'];
-    } elseif ($_POST['LogID']) {
+    } elseif (isset($_POST['LogID'])) {
         $_POST['LogID'] = $_POST['LogID'];
     } else {
         $_POST['LogID'] = 0;
