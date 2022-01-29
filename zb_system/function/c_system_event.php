@@ -1988,13 +1988,15 @@ function PostUpload()
     }
     if (isset($upload)) {
         CountMemberArray(array($upload->AuthorID), array(0, 0, 0, +1));
+
+        foreach ($GLOBALS['hooks']['Filter_Plugin_PostUpload_Succeed'] as $fpname => &$fpsignal) {
+            $fpname($upload);
+        }
+
+        return $upload;
     }
 
-    foreach ($GLOBALS['hooks']['Filter_Plugin_PostUpload_Succeed'] as $fpname => &$fpsignal) {
-        $fpname($upload);
-    }
-
-    return $upload;
+    return false;
 }
 
 /**

@@ -53,7 +53,9 @@ function ApiTokenVerify()
  */
 function ApiDebugDisplay($error)
 {
+    $GLOBALS['hooks']['Filter_Plugin_Debug_Display']['ApiDebugDisplay'] = PLUGIN_EXITSIGNAL_RETURN;
     ApiResponse(null, $error);
+    //die;
 }
 
 /**
@@ -61,7 +63,7 @@ function ApiDebugDisplay($error)
  */
 function ApiShowError($errorCode, $errorText, $file = null, $line = null, $moreinfo = array(), $httpcode = 200)
 {
-    $GLOBALS['hooks']['Filter_Plugin_Zbp_ShowError']['ApiDebugDisplay'] = PLUGIN_EXITSIGNAL_RETURN;
+    $GLOBALS['hooks']['Filter_Plugin_Zbp_ShowError']['ApiShowError'] = PLUGIN_EXITSIGNAL_RETURN;
     //如果是$errorCode == 2就是http 404
     if ($errorCode == 2 && $httpcode == 200) {
         $httpcode = 404;
