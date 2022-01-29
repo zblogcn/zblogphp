@@ -219,8 +219,11 @@ switch ($zbp->action) {
         break;
     case 'UploadPst':
         CheckIsRefererValid();
-        PostUpload();
-        $zbp->SetHint('good');
+        if (PostUpload()) {
+            $zbp->SetHint('good');
+        } else {
+            $zbp->SetHint('bad');
+        }
         Redirect_cmd_end('cmd.php?act=UploadMng');
         break;
     case 'UploadDel':

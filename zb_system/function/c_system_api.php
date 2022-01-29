@@ -241,7 +241,7 @@ function ApiResponse($data = null, $error = null, $code = 200, $message = null)
     }
 
     if (!defined('ZBP_API_IN_TEST')) {
-        //ob_end_clean();
+        ob_end_clean();
         if (!headers_sent()) {
             header('Content-Type: application/json; charset=utf-8');
         }
@@ -278,7 +278,7 @@ function ApiResponseRaw($raw, $raw_type = 'application/json')
     }
 
     if (!defined('ZBP_API_IN_TEST')) {
-        //ob_end_clean();
+        ob_end_clean();
         if (!headers_sent()) {
             header('Content-Type: ' . $raw_type . '; charset=utf-8');
         }
