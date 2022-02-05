@@ -2601,16 +2601,16 @@ function string_simple_encrypt($data, $password)
     $nh = rand(0, 64);
     $ch = $chars[$nh];
     $mdKey = md5($key . $ch);
-    $mdKey = substr($mdKey, $nh % 8, $nh % 8 + 7);
+    $mdKey = substr($mdKey, ($nh % 8), (($nh % 8) + 7));
     $txt = base64_encode($txt);
     $tmp = '';
     $i = 0;
     $j = 0;
     $k = 0;
     for ($i = 0; $i < strlen($txt); $i++) {
-      $k = $k == strlen($mdKey) ? 0 : $k;
-      $j = ($nh + strpos($chars, $txt[$i]) + ord($mdKey[$k++])) % 64;
-      $tmp .= $chars[$j];
+        $k = $k == strlen($mdKey) ? 0 : $k;
+        $j = (($nh + strpos($chars, $txt[$i]) + ord($mdKey[$k++])) % 64);
+        $tmp .= $chars[$j];
     }
     return base64_encode($ch . $tmp);
 }
@@ -2623,17 +2623,19 @@ function string_simple_decrypt($data, $password)
     $ch = $txt[0];
     $nh = strpos($chars, $ch);
     $mdKey = md5($key . $ch);
-    $mdKey = substr($mdKey, $nh % 8, $nh % 8 + 7);
+    $mdKey = substr($mdKey, ($nh % 8), (($nh % 8) + 7));
     $txt = substr($txt, 1);
     $tmp = '';
     $i = 0;
     $j = 0;
     $k = 0;
     for ($i = 0; $i < strlen($txt); $i++) {
-      $k = $k == strlen($mdKey) ? 0 : $k;
-      $j = strpos($chars, $txt[$i]) - $nh - ord($mdKey[$k++]);
-      while ($j < 0) $j += 64;
-      $tmp .= $chars[$j];
+        $k = $k == strlen($mdKey) ? 0 : $k;
+        $j = ((strpos($chars, $txt[$i]) - $nh) - ord($mdKey[$k++]));
+        while ($j < 0) {
+            $j += 64;
+        }
+        $tmp .= $chars[$j];
     }
     return base64_decode($tmp);
 }
@@ -2648,9 +2650,9 @@ function openssl_aes256gcm_encrypt($data, $password)
     $tag = null;
     $endata = openssl_encrypt($data, 'AES-256-GCM', $keygen, OPENSSL_RAW_DATA, $nonce, $tag, $additional_data);
     $json = array(
-      'data' => base64_encode($endata),
-      'nonce' => base64_encode($nonce),
-      'tag' => base64_encode($tag),
+        'data' => base64_encode($endata),
+        'nonce' => base64_encode($nonce),
+        'tag' => base64_encode($tag),
     );
     return base64_encode(json_encode($json));
 }
@@ -2681,8 +2683,8 @@ function sodium_aes256gcm_encrypt($data, $password)
 
     $endata = sodium_crypto_aead_aes256gcm_encrypt($data, $additional_data, $nonce, $keygen);
     $json = array(
-      'data' => base64_encode($endata),
-      'nonce' => base64_encode($nonce),
+        'data' => base64_encode($endata),
+        'nonce' => base64_encode($nonce),
     );
     return base64_encode(json_encode($json));
 }
@@ -2710,8 +2712,8 @@ function mcrypt_aes256cbc_encrypt($data, $password)
     $keygen = $md5password;
     $endata = mcrypt_encrypt(MCRYPT_RIJNDAEL_256, $keygen, $data, MCRYPT_MODE_CBC, $nonce);
     $json = array(
-      'data' => base64_encode($endata),
-      'nonce' => base64_encode($nonce),
+        'data' => base64_encode($endata),
+        'nonce' => base64_encode($nonce),
     );
     return base64_encode(json_encode($json));
 }
