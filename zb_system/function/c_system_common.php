@@ -2592,3 +2592,166 @@ function get_http_raw_post_data(&$request = null)
     }
     return $data;
 }
+
+function string_simple_encrypt($data, $password)
+{
+    $key = sha1($password);
+    $txt = $data;
+    $chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-=+";
+    $nh = rand(0, 64);
+    $ch = $chars[$nh];
+    $mdKey = md5($key . $ch);
+    $mdKey = substr($mdKey, $nh % 8, $nh % 8 + 7);
+    $txt = base64_encode($txt);
+    $tmp = '';
+    $i = 0;
+    $j = 0;
+    $k = 0;
+    for ($i = 0; $i < strlen($txt); $i++) {
+      $k = $k == strlen($mdKey) ? 0 : $k;
+      $j = ($nh + strpos($chars, $txt[$i]) + ord($mdKey[$k++])) % 64;
+      $tmp .= $chars[$j];
+    }
+    return base64_encode($ch . $tmp);
+}
+
+function string_simple_decrypt($data, $password)
+{
+    $key = sha1($password);
+    $txt = base64_decode($data);
+    $chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-=+";
+    $ch = $txt[0];
+    $nh = strpos($chars, $ch);
+    $mdKey = md5($key . $ch);
+    $mdKey = substr($mdKey, $nh % 8, $nh % 8 + 7);
+    $txt = substr($txt, 1);
+    $tmp = '';
+    $i = 0;
+    $j = 0;
+    $k = 0;
+    for ($i = 0; $i < strlen($txt); $i++) {
+      $k = $k == strlen($mdKey) ? 0 : $k;
+      $j = strpos($chars, $txt[$i]) - $nh - ord($mdKey[$k++]);
+      while ($j < 0) $j += 64;
+      $tmp .= $chars[$j];
+    }
+    return base64_decode($tmp);
+}
+
+function openssl_aes256gcm_encrypt($data, $password)
+{
+    $data = $data;
+    $nonce = openssl_random_pseudo_bytes(12);
+    $additional_data = 'additional';
+    $md5password = md5(sha1($password));
+    $keygen = $md5password;
+    $tag = null;
+    $endata = openssl_encrypt($data, 'AES-256-GCM', $keygen, OPENSSL_RAW_DATA, $nonce, $tag, $additional_data);
+    $json = array(
+      'data' => base64_encode($endata),
+      'nonce' => base64_encode($nonce),
+      'tag' => base64_encode($tag),
+    );
+    return base64_encode(json_encode($json));
+}
+
+function openssl_aes256gcm_decrypt($endata, $password)
+{
+    $endata = base64_decode($endata);
+    $jsondata = json_decode($endata, true);
+    if (!isset($jsondata['data'])) {
+        return false;
+    }
+    $data = base64_decode($jsondata['data']);
+    $nonce = base64_decode($jsondata['nonce']);
+    $md5password = md5(sha1($password));
+    $keygen = $md5password;
+    $additional_data = 'additional';
+    $tag = base64_decode($jsondata['tag']);
+    return openssl_decrypt($data, 'AES-256-GCM', $keygen, OPENSSL_RAW_DATA, $nonce, $tag, $additional_data);
+}
+
+function sodium_aes256gcm_encrypt($data, $password)
+{
+    $data = $data;
+    $nonce = random_bytes(SODIUM_CRYPTO_AEAD_AES256GCM_NPUBBYTES);
+    $additional_data = 'additional';
+    $md5password = md5(sha1($password));
+    $keygen = $md5password;
+
+    $endata = sodium_crypto_aead_aes256gcm_encrypt($data, $additional_data, $nonce, $keygen);
+    $json = array(
+      'data' => base64_encode($endata),
+      'nonce' => base64_encode($nonce),
+    );
+    return base64_encode(json_encode($json));
+}
+
+function sodium_aes256gcm_decrypt($endata, $password)
+{
+    $endata = base64_decode($endata);
+    $jsondata = json_decode($endata, true);
+    if (!isset($jsondata['data'])) {
+        return false;
+    }
+    $data = base64_decode($jsondata['data']);
+    $nonce = base64_decode($jsondata['nonce']);
+    $md5password = md5(sha1($password));
+    $keygen = $md5password;
+    $additional_data = 'additional';
+    return sodium_crypto_aead_aes256gcm_decrypt($data, $additional_data, $nonce, $keygen);
+}
+
+function mcrypt_aes256cbc_encrypt($data, $password)
+{
+    $data = $data;
+    $nonce = mcrypt_create_iv(mcrypt_get_iv_size(MCRYPT_RIJNDAEL_256, MCRYPT_MODE_CBC), MCRYPT_RAND);
+    $md5password = md5(sha1($password));
+    $keygen = $md5password;
+    $endata = mcrypt_encrypt(MCRYPT_RIJNDAEL_256, $keygen, $data, MCRYPT_MODE_CBC, $nonce);
+    $json = array(
+      'data' => base64_encode($endata),
+      'nonce' => base64_encode($nonce),
+    );
+    return base64_encode(json_encode($json));
+}
+
+function mcrypt_aes256cbc_decrypt($endata, $password)
+{
+    $endata = base64_decode($endata);
+    $jsondata = json_decode($endata, true);
+    if (!isset($jsondata['data'])) {
+        return false;
+    }
+    $data = base64_decode($jsondata['data']);
+    $nonce = base64_decode($jsondata['nonce']);
+    $md5password = md5(sha1($password));
+    $keygen = $md5password;
+    return mcrypt_decrypt(MCRYPT_RIJNDAEL_256, $keygen, $data, MCRYPT_MODE_CBC, $nonce);
+}
+
+function zbp_encrypt($data, $password)
+{
+    if (function_exists('sodium_crypto_aead_aes256gcm_encrypt')) {
+        return sodium_aes256gcm_encrypt($data, $password);
+    } elseif (function_exists('openssl_encrypt')) {
+        return openssl_aes256gcm_encrypt($data, $password);
+    } elseif (function_exists('mcrypt_aes256cbc_encrypt')) {
+        return mcrypt_aes256cbc_encrypt($data, $password);
+    } else {
+        return string_simple_encrypt($data, $password);
+    }
+}
+
+function zbp_decrypt($endata, $password)
+{
+    if (function_exists('sodium_crypto_aead_aes256gcm_decrypt')) {
+        return sodium_aes256gcm_decrypt($endata, $password);
+    } elseif (function_exists('openssl_decrypt')) {
+        return openssl_aes256gcm_decrypt($endata, $password);
+    } elseif (function_exists('mcrypt_aes256cbc_decrypt')) {
+        return mcrypt_aes256cbc_decrypt($endata, $password);
+    } else {
+        return string_simple_decrypt($endata, $password);
+    }
+}
