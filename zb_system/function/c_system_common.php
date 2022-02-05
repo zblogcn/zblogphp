@@ -2647,8 +2647,9 @@ function openssl_aes256gcm_encrypt($data, $password)
     $additional_data = 'additional';
     $md5password = md5(sha1($password));
     $keygen = $md5password;
-    $tag = null;
-    $endata = openssl_encrypt($data, 'AES-256-GCM', $keygen, OPENSSL_RAW_DATA, $nonce, $tag, $additional_data);
+    $tag = '';
+    $array = array($data, 'AES-256-GCM', $keygen, OPENSSL_RAW_DATA, $nonce, &$tag, $additional_data);
+    $endata = call_user_func_array('openssl_encrypt', $array);
     $json = array(
         'data' => base64_encode($endata),
         'nonce' => base64_encode($nonce),
@@ -2670,7 +2671,7 @@ function openssl_aes256gcm_decrypt($endata, $password)
     $keygen = $md5password;
     $additional_data = 'additional';
     $tag = base64_decode($jsondata['tag']);
-    return openssl_decrypt($data, 'AES-256-GCM', $keygen, OPENSSL_RAW_DATA, $nonce, $tag, $additional_data);
+    return call_user_func('openssl_decrypt', $data, 'AES-256-GCM', $keygen, OPENSSL_RAW_DATA, $nonce, $tag, $additional_data);
 }
 
 function sodium_aes256gcm_encrypt($data, $password)
@@ -2707,10 +2708,11 @@ function sodium_aes256gcm_decrypt($endata, $password)
 function mcrypt_aes256cbc_encrypt($data, $password)
 {
     $data = $data;
-    $nonce = mcrypt_create_iv(mcrypt_get_iv_size(MCRYPT_RIJNDAEL_256, MCRYPT_MODE_CBC), MCRYPT_RAND);
+    $nonce = call_user_func('mcrypt_get_iv_size', constant('MCRYPT_RIJNDAEL_256'), constant('MCRYPT_MODE_CBC'));
+    $nonce = call_user_func('mcrypt_create_iv', $nonce, constant('MCRYPT_RAND'));
     $md5password = md5(sha1($password));
     $keygen = $md5password;
-    $endata = mcrypt_encrypt(MCRYPT_RIJNDAEL_256, $keygen, $data, MCRYPT_MODE_CBC, $nonce);
+    $endata = call_user_func('mcrypt_encrypt', constant('MCRYPT_RIJNDAEL_256'), $keygen, $data, constant('MCRYPT_MODE_CBC'), $nonce);
     $json = array(
         'data' => base64_encode($endata),
         'nonce' => base64_encode($nonce),
@@ -2729,7 +2731,7 @@ function mcrypt_aes256cbc_decrypt($endata, $password)
     $nonce = base64_decode($jsondata['nonce']);
     $md5password = md5(sha1($password));
     $keygen = $md5password;
-    return mcrypt_decrypt(MCRYPT_RIJNDAEL_256, $keygen, $data, MCRYPT_MODE_CBC, $nonce);
+    return call_user_func('mcrypt_decrypt', constant('MCRYPT_RIJNDAEL_256'), $keygen, $data, constant('MCRYPT_MODE_CBC'), $nonce);
 }
 
 function zbp_encrypt($data, $password)
