@@ -148,8 +148,19 @@ function AutoloadClass($className)
         }
     }
 
+    //PSR4 load
+    $psr4name = str_replace('\\', '/', $className);
+    $psr4name = ltrim($psr4name, '/');
+    foreach ($autoload_class_dirs as $dir) {
+        $fileName = $dir . $psr4name . '.php';
+        if (is_readable($fileName)) {
+            include $fileName;
+            return true;
+        }
+    }
+
+    //ZBP mode load
     $className = str_replace('__', '/', $className);
-    //$fileName = ZBP_PATH . 'zb_system/function/lib/' . strtolower($className) . '.php';
     foreach ($autoload_class_dirs as $dir) {
         $fileName = $dir . strtolower($className) . '.php';
         if (is_readable($fileName)) {
@@ -2593,14 +2604,14 @@ function get_http_raw_post_data(&$request = null)
     return $data;
 }
 
-function string_simple_encrypt($data, $password)
+function string_simple_encrypt($data, $password, $additional = null)
 {
     $key = hash('sha256', $password);
     $txt = $data;
     $chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-=+";
     $nh = rand(0, 64);
     $ch = $chars[$nh];
-    $mdKey = md5($key . $ch);
+    $mdKey = sha1($key . $ch . $additional);
     $mdKey = substr($mdKey, ($nh % 8), (($nh % 8) + 7));
     $txt = base64_encode($txt);
     $tmp = '';
@@ -2615,14 +2626,14 @@ function string_simple_encrypt($data, $password)
     return base64_encode($ch . $tmp);
 }
 
-function string_simple_decrypt($data, $password)
+function string_simple_decrypt($data, $password, $additional = null)
 {
     $key = hash('sha256', $password);
     $txt = base64_decode($data);
     $chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-=+";
     $ch = $txt[0];
     $nh = strpos($chars, $ch);
-    $mdKey = md5($key . $ch);
+    $mdKey = sha1($key . $ch . $additional);
     $mdKey = substr($mdKey, ($nh % 8), (($nh % 8) + 7));
     $txt = substr($txt, 1);
     $tmp = '';
@@ -2640,12 +2651,14 @@ function string_simple_decrypt($data, $password)
     return base64_decode($tmp);
 }
 
-function openssl_aes256gcm_encrypt($data, $password)
+function openssl_aes256gcm_encrypt($data, $password, $additional = null)
 {
-    $data = $data;
     $nonce = openssl_random_pseudo_bytes(12);
     $additional_data = 'additional';
-    $md5password = md5(hash('sha256', $password));
+    if (!is_null($additional)) {
+        $additional_data = hash('sha256', $additional);
+    }
+    $md5password = md5(hash('sha256', $password) . $additional);
     $keygen = $md5password;
     $tag = '';
     $array = array($data, 'AES-256-GCM', $keygen, OPENSSL_RAW_DATA, $nonce, &$tag, $additional_data);
@@ -2658,28 +2671,33 @@ function openssl_aes256gcm_encrypt($data, $password)
     return base64_encode(json_encode($json));
 }
 
-function openssl_aes256gcm_decrypt($endata, $password)
+function openssl_aes256gcm_decrypt($endata, $password, $additional = null)
 {
     $endata = base64_decode($endata);
     $jsondata = json_decode($endata, true);
-    if (!isset($jsondata['data'])) {
+    if (!isset($jsondata['data']) || !isset($jsondata['nonce']) || !isset($jsondata['tag'])) {
         return false;
     }
     $data = base64_decode($jsondata['data']);
     $nonce = base64_decode($jsondata['nonce']);
-    $md5password = md5(hash('sha256', $password));
+    $md5password = md5(hash('sha256', $password) . $additional);
     $keygen = $md5password;
     $additional_data = 'additional';
+    if (!is_null($additional)) {
+        $additional_data = hash('sha256', $additional);
+    }
     $tag = base64_decode($jsondata['tag']);
     return call_user_func('openssl_decrypt', $data, 'AES-256-GCM', $keygen, OPENSSL_RAW_DATA, $nonce, $tag, $additional_data);
 }
 
-function sodium_aes256gcm_encrypt($data, $password)
+function sodium_aes256gcm_encrypt($data, $password, $additional = null)
 {
-    $data = $data;
     $nonce = random_bytes(SODIUM_CRYPTO_AEAD_AES256GCM_NPUBBYTES);
     $additional_data = 'additional';
-    $md5password = md5(hash('sha256', $password));
+    if (!is_null($additional)) {
+        $additional_data = hash('sha256', $additional);
+    }
+    $md5password = md5(hash('sha256', $password) . $additional);
     $keygen = $md5password;
 
     $endata = sodium_crypto_aead_aes256gcm_encrypt($data, $additional_data, $nonce, $keygen);
@@ -2690,29 +2708,31 @@ function sodium_aes256gcm_encrypt($data, $password)
     return base64_encode(json_encode($json));
 }
 
-function sodium_aes256gcm_decrypt($endata, $password)
+function sodium_aes256gcm_decrypt($endata, $password, $additional = null)
 {
     $endata = base64_decode($endata);
     $jsondata = json_decode($endata, true);
-    if (!isset($jsondata['data'])) {
+    if (!isset($jsondata['data']) || !isset($jsondata['nonce'])) {
         return false;
     }
     $data = base64_decode($jsondata['data']);
     $nonce = base64_decode($jsondata['nonce']);
-    $md5password = md5(hash('sha256', $password));
+    $md5password = md5(hash('sha256', $password) . $additional);
     $keygen = $md5password;
     $additional_data = 'additional';
+    if (!is_null($additional)) {
+        $additional_data = hash('sha256', $additional);
+    }
     return sodium_crypto_aead_aes256gcm_decrypt($data, $additional_data, $nonce, $keygen);
 }
 
-function mcrypt_aes256cbc_encrypt($data, $password)
+function mcrypt_aes256ofb_encrypt($data, $password, $additional = null)
 {
-    $data = $data;
-    $nonce = call_user_func('mcrypt_get_iv_size', constant('MCRYPT_RIJNDAEL_256'), constant('MCRYPT_MODE_CBC'));
+    $nonce = call_user_func('mcrypt_get_iv_size', constant('MCRYPT_RIJNDAEL_128'), constant('MCRYPT_MODE_OFB'));
     $nonce = call_user_func('mcrypt_create_iv', $nonce, constant('MCRYPT_RAND'));
-    $md5password = md5(hash('sha256', $password));
+    $md5password = md5(hash('sha256', $password) . $additional);
     $keygen = $md5password;
-    $endata = call_user_func('mcrypt_encrypt', constant('MCRYPT_RIJNDAEL_256'), $keygen, $data, constant('MCRYPT_MODE_CBC'), $nonce);
+    $endata = call_user_func('mcrypt_encrypt', constant('MCRYPT_RIJNDAEL_128'), $keygen, $data, constant('MCRYPT_MODE_OFB'), $nonce);
     $json = array(
         'data' => base64_encode($endata),
         'nonce' => base64_encode($nonce),
@@ -2720,42 +2740,64 @@ function mcrypt_aes256cbc_encrypt($data, $password)
     return base64_encode(json_encode($json));
 }
 
-function mcrypt_aes256cbc_decrypt($endata, $password)
+function mcrypt_aes256ofb_decrypt($endata, $password, $additional = null)
 {
     $endata = base64_decode($endata);
     $jsondata = json_decode($endata, true);
-    if (!isset($jsondata['data'])) {
+    if (!isset($jsondata['data']) || !isset($jsondata['nonce'])) {
         return false;
     }
     $data = base64_decode($jsondata['data']);
     $nonce = base64_decode($jsondata['nonce']);
-    $md5password = md5(hash('sha256', $password));
+    $md5password = md5(hash('sha256', $password) . $additional);
     $keygen = $md5password;
-    return call_user_func('mcrypt_decrypt', constant('MCRYPT_RIJNDAEL_256'), $keygen, $data, constant('MCRYPT_MODE_CBC'), $nonce);
+    $data = call_user_func('mcrypt_decrypt', constant('MCRYPT_RIJNDAEL_128'), $keygen, $data, constant('MCRYPT_MODE_OFB'), $nonce);
+    $data = rtrim($data, pack('C', 0));
+    return $data;
 }
 
-function zbp_encrypt($data, $password)
+function zbp_encrypt($data, $password, $additional = null, $type = null)
 {
+    $type = trim(strtolower($type));
+    if ($type == 'sodium') {
+        return sodium_aes256gcm_encrypt($data, $password, $additional);
+    } elseif ($type == 'openssl') {
+        return openssl_aes256gcm_encrypt($data, $password, $additional);
+    } elseif ($type == 'mcrypt') {
+        return mcrypt_aes256ofb_encrypt($data, $password, $additional);
+    } elseif ($type == 'string') {
+        return string_simple_encrypt($data, $password, $additional);
+    }
     if (function_exists('sodium_crypto_aead_aes256gcm_encrypt')) {
-        return sodium_aes256gcm_encrypt($data, $password);
+        return sodium_aes256gcm_encrypt($data, $password, $additional);
     } elseif (function_exists('openssl_encrypt')) {
-        return openssl_aes256gcm_encrypt($data, $password);
-    } elseif (function_exists('mcrypt_aes256cbc_encrypt')) {
-        return mcrypt_aes256cbc_encrypt($data, $password);
+        return openssl_aes256gcm_encrypt($data, $password, $additional);
+    } elseif (function_exists('mcrypt_encrypt')) {
+        return mcrypt_aes256ofb_encrypt($data, $password, $additional);
     } else {
-        return string_simple_encrypt($data, $password);
+        return string_simple_encrypt($data, $password, $additional);
     }
 }
 
-function zbp_decrypt($endata, $password)
+function zbp_decrypt($endata, $password, $additional = null, $type = null)
 {
+    $type = trim(strtolower($type));
+    if ($type == 'sodium') {
+        return sodium_aes256gcm_decrypt($endata, $password, $additional);
+    } elseif ($type == 'openssl') {
+        return openssl_aes256gcm_decrypt($endata, $password, $additional);
+    } elseif ($type == 'mcrypt') {
+        return mcrypt_aes256ofb_decrypt($endata, $password, $additional);
+    } elseif ($type == 'string') {
+        return string_simple_decrypt($endata, $password, $additional);
+    }
     if (function_exists('sodium_crypto_aead_aes256gcm_decrypt')) {
-        return sodium_aes256gcm_decrypt($endata, $password);
+        return sodium_aes256gcm_decrypt($endata, $password, $additional);
     } elseif (function_exists('openssl_decrypt')) {
-        return openssl_aes256gcm_decrypt($endata, $password);
-    } elseif (function_exists('mcrypt_aes256cbc_decrypt')) {
-        return mcrypt_aes256cbc_decrypt($endata, $password);
+        return openssl_aes256gcm_decrypt($endata, $password, $additional);
+    } elseif (function_exists('mcrypt_decrypt')) {
+        return mcrypt_aes256ofb_decrypt($endata, $password, $additional);
     } else {
-        return string_simple_decrypt($endata, $password);
+        return string_simple_decrypt($endata, $password, $additional);
     }
 }
