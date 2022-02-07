@@ -2604,7 +2604,7 @@ function get_http_raw_post_data(&$request = null)
     return $data;
 }
 
-function string_simple_encrypt($data, $password, $additional = null)
+function zbp_string_simple_encrypt($data, $password, $additional = null)
 {
     $key = hash('sha256', $password);
     $txt = $data;
@@ -2626,7 +2626,7 @@ function string_simple_encrypt($data, $password, $additional = null)
     return base64_encode($ch . $tmp);
 }
 
-function string_simple_decrypt($data, $password, $additional = null)
+function zbp_string_simple_decrypt($data, $password, $additional = null)
 {
     $key = hash('sha256', $password);
     $txt = base64_decode($data);
@@ -2651,7 +2651,7 @@ function string_simple_decrypt($data, $password, $additional = null)
     return base64_decode($tmp);
 }
 
-function openssl_aes256gcm_encrypt($data, $password, $additional = null)
+function zbp_openssl_aes256gcm_encrypt($data, $password, $additional = null)
 {
     $nonce = openssl_random_pseudo_bytes(12);
     $additional_data = 'additional';
@@ -2664,35 +2664,35 @@ function openssl_aes256gcm_encrypt($data, $password, $additional = null)
     $array = array($data, 'AES-256-GCM', $keygen, OPENSSL_RAW_DATA, $nonce, &$tag, $additional_data);
     $endata = call_user_func_array('openssl_encrypt', $array);
     $json = array(
-        'data' => base64_encode($endata),
-        'nonce' => base64_encode($nonce),
-        'tag' => base64_encode($tag),
+        'data' => $endata,
+        'nonce' => $nonce,
+        'tag' => $tag,
     );
-    return base64_encode(json_encode($json));
+    return base64_encode(serialize($json));
 }
 
-function openssl_aes256gcm_decrypt($endata, $password, $additional = null)
+function zbp_openssl_aes256gcm_decrypt($data, $password, $additional = null)
 {
-    $endata = base64_decode($endata);
-    $jsondata = json_decode($endata, true);
+    $endata = base64_decode($data);
+    $jsondata = unserialize($endata);
     if (!isset($jsondata['data']) || !isset($jsondata['nonce']) || !isset($jsondata['tag'])) {
         return false;
     }
-    $data = base64_decode($jsondata['data']);
-    $nonce = base64_decode($jsondata['nonce']);
+    $data = $jsondata['data'];
+    $nonce = $jsondata['nonce'];
+    $tag = $jsondata['tag'];
     $md5password = md5(hash('sha256', $password) . $additional);
     $keygen = $md5password;
     $additional_data = 'additional';
     if (!is_null($additional)) {
         $additional_data = hash('sha256', $additional);
     }
-    $tag = base64_decode($jsondata['tag']);
     return call_user_func('openssl_decrypt', $data, 'AES-256-GCM', $keygen, OPENSSL_RAW_DATA, $nonce, $tag, $additional_data);
 }
 
-function sodium_aes256gcm_encrypt($data, $password, $additional = null)
+function zbp_sodium_chacha20poly1305_ietf_encrypt($data, $password, $additional = null)
 {
-    $nonce = random_bytes(SODIUM_CRYPTO_AEAD_AES256GCM_NPUBBYTES);
+    $nonce = random_bytes(SODIUM_CRYPTO_AEAD_CHACHA20POLY1305_IETF_NPUBBYTES);
     $additional_data = 'additional';
     if (!is_null($additional)) {
         $additional_data = hash('sha256', $additional);
@@ -2700,33 +2700,33 @@ function sodium_aes256gcm_encrypt($data, $password, $additional = null)
     $md5password = md5(hash('sha256', $password) . $additional);
     $keygen = $md5password;
 
-    $endata = sodium_crypto_aead_aes256gcm_encrypt($data, $additional_data, $nonce, $keygen);
+    $endata = sodium_crypto_aead_chacha20poly1305_ietf_encrypt($data, $additional_data, $nonce, $keygen);
     $json = array(
-        'data' => base64_encode($endata),
-        'nonce' => base64_encode($nonce),
+        'data' => $endata,
+        'nonce' => $nonce,
     );
-    return base64_encode(json_encode($json));
+    return base64_encode(serialize($json));
 }
 
-function sodium_aes256gcm_decrypt($endata, $password, $additional = null)
+function zbp_sodium_chacha20poly1305_ietf_decrypt($data, $password, $additional = null)
 {
-    $endata = base64_decode($endata);
-    $jsondata = json_decode($endata, true);
+    $endata = base64_decode($data);
+    $jsondata = unserialize($endata);
     if (!isset($jsondata['data']) || !isset($jsondata['nonce'])) {
         return false;
     }
-    $data = base64_decode($jsondata['data']);
-    $nonce = base64_decode($jsondata['nonce']);
+    $data = $jsondata['data'];
+    $nonce = $jsondata['nonce'];
     $md5password = md5(hash('sha256', $password) . $additional);
     $keygen = $md5password;
     $additional_data = 'additional';
     if (!is_null($additional)) {
         $additional_data = hash('sha256', $additional);
     }
-    return sodium_crypto_aead_aes256gcm_decrypt($data, $additional_data, $nonce, $keygen);
+    return sodium_crypto_aead_chacha20poly1305_ietf_decrypt($data, $additional_data, $nonce, $keygen);
 }
 
-function mcrypt_aes256ofb_encrypt($data, $password, $additional = null)
+function zbp_mcrypt_aes256ofb_encrypt($data, $password, $additional = null)
 {
     $nonce = call_user_func('mcrypt_get_iv_size', constant('MCRYPT_RIJNDAEL_128'), constant('MCRYPT_MODE_OFB'));
     $nonce = call_user_func('mcrypt_create_iv', $nonce, constant('MCRYPT_RAND'));
@@ -2734,21 +2734,21 @@ function mcrypt_aes256ofb_encrypt($data, $password, $additional = null)
     $keygen = $md5password;
     $endata = call_user_func('mcrypt_encrypt', constant('MCRYPT_RIJNDAEL_128'), $keygen, $data, constant('MCRYPT_MODE_OFB'), $nonce);
     $json = array(
-        'data' => base64_encode($endata),
-        'nonce' => base64_encode($nonce),
+        'data' => $endata,
+        'nonce' => $nonce,
     );
-    return base64_encode(json_encode($json));
+    return base64_encode(serialize($json));
 }
 
-function mcrypt_aes256ofb_decrypt($endata, $password, $additional = null)
+function zbp_mcrypt_aes256ofb_decrypt($data, $password, $additional = null)
 {
-    $endata = base64_decode($endata);
-    $jsondata = json_decode($endata, true);
+    $endata = base64_decode($data);
+    $jsondata = unserialize($endata);
     if (!isset($jsondata['data']) || !isset($jsondata['nonce'])) {
         return false;
     }
-    $data = base64_decode($jsondata['data']);
-    $nonce = base64_decode($jsondata['nonce']);
+    $data = $jsondata['data'];
+    $nonce = $jsondata['nonce'];
     $md5password = md5(hash('sha256', $password) . $additional);
     $keygen = $md5password;
     $data = call_user_func('mcrypt_decrypt', constant('MCRYPT_RIJNDAEL_128'), $keygen, $data, constant('MCRYPT_MODE_OFB'), $nonce);
@@ -2756,48 +2756,178 @@ function mcrypt_aes256ofb_decrypt($endata, $password, $additional = null)
     return $data;
 }
 
+/**
+ * zbp内置对称加密函数
+ *
+ * @param string $data 待加密数据string
+ * @param string $password 密码明文
+ * @param string $additional 附加信息
+ * @param string $type 可以指定类型为 chacha20poly1305, aes256gcm, aes256ofb
+ */
 function zbp_encrypt($data, $password, $additional = null, $type = null)
 {
     $type = trim(strtolower($type));
-    if ($type == 'sodium') {
-        return sodium_aes256gcm_encrypt($data, $password, $additional);
-    } elseif ($type == 'openssl') {
-        return openssl_aes256gcm_encrypt($data, $password, $additional);
-    } elseif ($type == 'mcrypt') {
-        return mcrypt_aes256ofb_encrypt($data, $password, $additional);
+    if ($type == 'chacha20poly1305') {
+        return zbp_sodium_chacha20poly1305_ietf_encrypt($data, $password, $additional);
+    } elseif ($type == 'aes256gcm') {
+        return zbp_openssl_aes256gcm_encrypt($data, $password, $additional);
+    } elseif ($type == 'aes256ofb') {
+        return zbp_mcrypt_aes256ofb_encrypt($data, $password, $additional);
     } elseif ($type == 'string') {
-        return string_simple_encrypt($data, $password, $additional);
+        return zbp_string_simple_encrypt($data, $password, $additional);
     }
-    if (function_exists('sodium_crypto_aead_aes256gcm_encrypt')) {
-        return sodium_aes256gcm_encrypt($data, $password, $additional);
+    if (function_exists('sodium_crypto_aead_chacha20poly1305_ietf_encrypt')) {
+        return zbp_sodium_chacha20poly1305_ietf_encrypt($data, $password, $additional);
     } elseif (function_exists('openssl_encrypt')) {
-        return openssl_aes256gcm_encrypt($data, $password, $additional);
+        return zbp_openssl_aes256gcm_encrypt($data, $password, $additional);
     } elseif (function_exists('mcrypt_encrypt')) {
-        return mcrypt_aes256ofb_encrypt($data, $password, $additional);
+        return zbp_mcrypt_aes256ofb_encrypt($data, $password, $additional);
     } else {
-        return string_simple_encrypt($data, $password, $additional);
+        return zbp_string_simple_encrypt($data, $password, $additional);
     }
 }
 
-function zbp_decrypt($endata, $password, $additional = null, $type = null)
+/**
+ * zbp内置对称解密函数
+ *
+ * @param string $data 待解密数据string
+ * @param string $password 密码明文
+ * @param string $additional 附加信息
+ * @param string $type 可以指定类型为 aes256gcm, chacha20poly1305, aes256ofb
+ */
+function zbp_decrypt($data, $password, $additional = null, $type = null)
 {
     $type = trim(strtolower($type));
-    if ($type == 'sodium') {
-        return sodium_aes256gcm_decrypt($endata, $password, $additional);
-    } elseif ($type == 'openssl') {
-        return openssl_aes256gcm_decrypt($endata, $password, $additional);
-    } elseif ($type == 'mcrypt') {
-        return mcrypt_aes256ofb_decrypt($endata, $password, $additional);
+    if ($type == 'aes256gcm') {
+        return zbp_openssl_aes256gcm_decrypt($data, $password, $additional);
+    } elseif ($type == 'chacha20poly1305') {
+        return zbp_sodium_chacha20poly1305_ietf_decrypt($data, $password, $additional);
+    } elseif ($type == 'aes256ofb') {
+        return zbp_mcrypt_aes256ofb_decrypt($data, $password, $additional);
     } elseif ($type == 'string') {
-        return string_simple_decrypt($endata, $password, $additional);
+        return zbp_string_simple_decrypt($data, $password, $additional);
     }
-    if (function_exists('sodium_crypto_aead_aes256gcm_decrypt')) {
-        return sodium_aes256gcm_decrypt($endata, $password, $additional);
-    } elseif (function_exists('openssl_decrypt')) {
-        return openssl_aes256gcm_decrypt($endata, $password, $additional);
+    if (function_exists('openssl_decrypt')) {
+        return zbp_openssl_aes256gcm_decrypt($data, $password, $additional);
+    } elseif (function_exists('sodium_crypto_aead_chacha20poly1305_ietf_decrypt')) {
+        return zbp_sodium_chacha20poly1305_ietf_decrypt($data, $password, $additional);
     } elseif (function_exists('mcrypt_decrypt')) {
-        return mcrypt_aes256ofb_decrypt($endata, $password, $additional);
+        return zbp_mcrypt_aes256ofb_decrypt($data, $password, $additional);
     } else {
-        return string_simple_decrypt($endata, $password, $additional);
+        return zbp_string_simple_decrypt($data, $password, $additional);
     }
+}
+
+/**
+ * zbp内置非对称RSA公钥加密函数
+ *
+ * @param string $data 待加密数据string
+ * @param string $public_key_pem 公钥pem字符串
+ * @param string $key_length 密钥长度默认2048
+ */
+function zbp_rsa_public_encrypt($data, $public_key_pem, $key_length = 2048)
+{
+    if ($key_length == 1024) {
+        $length = 117;
+    } elseif ($key_length == 2048) {
+        $length = 245;
+    } elseif ($key_length == 4096) {
+        $length = 501;
+    } elseif ($key_length == 512) {
+        $length = 53;
+    }
+    $dataarray = str_split($data, $length);
+    $endata = null;
+    foreach ($dataarray as $single) {
+        $endata_single = null;
+        openssl_public_encrypt($single, $endata_single, $public_key_pem);
+        $endata .= $endata_single;
+    }
+    return base64_encode($endata);
+}
+
+/**
+ * zbp内置非对称RSA公钥解密函数
+ *
+ * @param string $data 待解密数据string
+ * @param string $public_key_pem 公钥pem字符串
+ * @param string $key_length 密钥长度默认2048
+ */
+function zbp_rsa_public_decrypt($data, $public_key_pem, $key_length = 2048)
+{
+    if ($key_length == 1024) {
+        $length = 128;
+    } elseif ($key_length == 2048) {
+        $length = 256;
+    } elseif ($key_length == 4096) {
+        $length = 512;
+    } elseif ($key_length == 512) {
+        $length = 64;
+    }
+    $data = base64_decode($data);
+    $dataarray = str_split($data, $length);
+    $dedata = null;
+    foreach ($dataarray as $single) {
+        $dedata_single = null;
+        openssl_public_decrypt($single, $dedata_single, $public_key_pem);
+        $dedata .= $dedata_single;
+    }
+    return $dedata;
+}
+
+/**
+ * zbp内置非对称RSA私钥加密函数
+ *
+ * @param string $data 待加密数据string
+ * @param string $private_key_pem 私钥pem字符串
+ * @param string $key_length 密钥长度默认2048
+ */
+function zbp_rsa_private_encrypt($data, $private_key_pem, $key_length = 2048)
+{
+    if ($key_length == 1024) {
+        $length = 117;
+    } elseif ($key_length == 2048) {
+        $length = 245;
+    } elseif ($key_length == 4096) {
+        $length = 501;
+    } elseif ($key_length == 512) {
+        $length = 53;
+    }
+    $dataarray = str_split($data, $length);
+    $endata = null;
+    foreach ($dataarray as $single) {
+        $endata_single = null;
+        openssl_private_encrypt($single, $endata_single, $private_key_pem);
+        $endata .= $endata_single;
+    }
+    return base64_encode($endata);
+}
+
+/**
+ * zbp内置非对称RSA私钥解密函数
+ *
+ * @param string $data 待解密数据string
+ * @param string $private_key_pem 私钥pem字符串
+ * @param string $key_length 密钥长度默认2048
+ */
+function zbp_rsa_private_decrypt($data, $private_key_pem, $key_length = 2048)
+{
+    if ($key_length == 1024) {
+        $length = 128;
+    } elseif ($key_length == 2048) {
+        $length = 256;
+    } elseif ($key_length == 4096) {
+        $length = 512;
+    } elseif ($key_length == 512) {
+        $length = 64;
+    }
+    $data = base64_decode($data);
+    $dataarray = str_split($data, $length);
+    $dedata = null;
+    foreach ($dataarray as $single) {
+        $dedata_single = null;
+        openssl_private_decrypt($single, $dedata_single, $private_key_pem);
+        $dedata .= $dedata_single;
+    }
+    return $dedata;
 }
