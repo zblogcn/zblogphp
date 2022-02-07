@@ -2761,25 +2761,25 @@ function zbp_mcrypt_aes256ofb_decrypt($data, $password, $additional = null)
  *
  * @param string $data 待加密数据string
  * @param string $password 密码明文
- * @param string $additional 附加信息
- * @param string $type 可以指定类型为 chacha20poly1305, aes256gcm, aes256ofb
+ * @param string $additional 附加认证数据
+ * @param string $type 可以指定类型为 aes256gcm, chacha20poly1305, aes256ofb
  */
 function zbp_encrypt($data, $password, $additional = null, $type = null)
 {
     $type = trim(strtolower($type));
-    if ($type == 'chacha20poly1305') {
-        return zbp_sodium_chacha20poly1305_ietf_encrypt($data, $password, $additional);
-    } elseif ($type == 'aes256gcm') {
+    if ($type == 'aes256gcm') {
         return zbp_openssl_aes256gcm_encrypt($data, $password, $additional);
+    } elseif ($type == 'chacha20poly1305') {
+        return zbp_sodium_chacha20poly1305_ietf_encrypt($data, $password, $additional);
     } elseif ($type == 'aes256ofb') {
         return zbp_mcrypt_aes256ofb_encrypt($data, $password, $additional);
     } elseif ($type == 'string') {
         return zbp_string_simple_encrypt($data, $password, $additional);
     }
-    if (function_exists('sodium_crypto_aead_chacha20poly1305_ietf_encrypt')) {
-        return zbp_sodium_chacha20poly1305_ietf_encrypt($data, $password, $additional);
-    } elseif (function_exists('openssl_encrypt')) {
+    if (function_exists('openssl_encrypt')) {
         return zbp_openssl_aes256gcm_encrypt($data, $password, $additional);
+    } elseif (function_exists('sodium_crypto_aead_chacha20poly1305_ietf_encrypt')) {
+        return zbp_sodium_chacha20poly1305_ietf_encrypt($data, $password, $additional);
     } elseif (function_exists('mcrypt_encrypt')) {
         return zbp_mcrypt_aes256ofb_encrypt($data, $password, $additional);
     } else {
@@ -2792,7 +2792,7 @@ function zbp_encrypt($data, $password, $additional = null, $type = null)
  *
  * @param string $data 待解密数据string
  * @param string $password 密码明文
- * @param string $additional 附加信息
+ * @param string $additional 附加认证数据
  * @param string $type 可以指定类型为 aes256gcm, chacha20poly1305, aes256ofb
  */
 function zbp_decrypt($data, $password, $additional = null, $type = null)
