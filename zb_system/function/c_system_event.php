@@ -1592,8 +1592,6 @@ function PostMember()
     // 如果是管理员，则再允许改动别的字段
     if ($zbp->CheckRights('MemberAll')) {
         array_push($editableField, 'Level', 'Status', 'Name', 'IP');
-    } else {
-        $data['ID'] = $zbp->user->ID;
     }
     // 复制一个新数组
     foreach ($editableField as $value) {
@@ -1615,6 +1613,7 @@ function PostMember()
     }
 
     if ($data['ID'] == 0) {
+        //新建用户必须提供密码
         if (!isset($data['Password']) || $data['Password'] == '') {
             $zbp->ShowError(73, __FILE__, __LINE__);
         }
@@ -1622,6 +1621,7 @@ function PostMember()
         if ($mem->Guid == '') {
             $mem->Guid = GetGuid();
         }
+        //检查新建用户权限
         if (!$zbp->CheckRights('MemberNew')) {
             $zbp->ShowError(6, __FILE__, __LINE__);
         }
@@ -1630,10 +1630,11 @@ function PostMember()
         if ($mem->ID == 0) {
             $zbp->ShowError(69, __FILE__, __LINE__);
         }
+        //检查编辑用户权限
         if (!$zbp->CheckRights('MemberEdt')) {
             $zbp->ShowError(6, __FILE__, __LINE__);
         }
-        //检查是编辑还是编辑他人
+        //检查编辑他人(MemberAll)
         if ($mem->ID <> $zbp->user->ID) {
             if (!$zbp->CheckRights('MemberAll')) {
                 $zbp->ShowError(6, __FILE__, __LINE__);

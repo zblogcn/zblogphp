@@ -4865,30 +4865,9 @@ class ZBlogPHP
 
     /**
      * 验证用户登录（MD5加zbp->guid盐后的密码）.
-     *
-     * @deprecated
-     *
-     * @param string $name         用户名
-     * @param string $ps_path_hash MD5加zbp->guid盐后的密码
-     * @param object $member       返回读取成功的member对象
-     *
-     * @return bool
      */
     public function Verify_MD5Path($name, $ps_path_hash, &$member = null)
     {
-        if ($name == '' || $ps_path_hash == '') {
-            return false;
-        }
-        $m = $this->GetMemberByName($name);
-        if ($m->ID != null) {
-            if ($m->PassWord_MD5Path == $ps_path_hash) {
-                $member = $m;
-
-                return true;
-            }
-        }
-
-        return false;
     }
 
     /**
