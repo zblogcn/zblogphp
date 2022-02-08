@@ -241,7 +241,7 @@ function ApiResponse($data = null, $error = null, $code = 200, $message = null)
     }
 
     if (!defined('ZBP_API_IN_TEST')) {
-        ob_end_clean();
+        @ob_clean();
         if (!headers_sent()) {
             header('Content-Type: application/json; charset=utf-8');
         }

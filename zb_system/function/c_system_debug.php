@@ -584,7 +584,7 @@ class ZBlogException
         if (!headers_sent()) {
             Http500();
         }
-        ob_clean();
+        @ob_clean();
         $error = $this;
 
         foreach ($GLOBALS['hooks']['Filter_Plugin_Debug_Display'] as $fpname => &$fpsignal) {
@@ -598,11 +598,11 @@ class ZBlogException
         include dirname(__FILE__) . '/../defend/error.php';
         RunTime();
 
-        flush();
         if (IS_CLI && (IS_WORKERMAN || IS_SWOOLE)) {
             return true;
         }
 
+        flush();
         /*
          * ``flush()`` and ``exit($errorCode)`` is for HHVM.
          * @link https://github.com/zblogcn/zblogphp/issues/32
