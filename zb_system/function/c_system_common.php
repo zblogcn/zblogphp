@@ -2606,10 +2606,12 @@ function get_http_raw_post_data(&$request = null)
 
 function zbp_string_simple_encrypt($data, $password, $additional = null)
 {
-    $key = hash('sha256', $password);
+    $key = md5($password);
+    mt_srand();
+    $nonce = substr(md5(mt_rand()), 0, 16);
     $txt = $data;
     $chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-=+";
-    $nh = rand(0, 64);
+    $nh = mt_rand(0, 64);
     $ch = $chars[$nh];
     $mdKey = sha1($key . $ch . $additional);
     $mdKey = substr($mdKey, ($nh % 8), (($nh % 8) + 7));
@@ -2623,13 +2625,18 @@ function zbp_string_simple_encrypt($data, $password, $additional = null)
         $j = (($nh + strpos($chars, $txt[$i]) + ord($mdKey[$k++])) % 64);
         $tmp .= $chars[$j];
     }
-    return base64_encode($ch . $tmp);
+    $hmac = hash_hmac('md5', $data, $key . $nonce, true);
+    $endata = $hmac . $nonce . $ch . $tmp;
+    return base64_encode($endata);
 }
 
 function zbp_string_simple_decrypt($data, $password, $additional = null)
 {
-    $key = hash('sha256', $password);
+    $key = md5($password);
     $txt = base64_decode($data);
+    $hmac = substr($txt, 0, 16);
+    $nonce = substr($txt, 16, 16);
+    $txt = substr($txt, 32);
     $chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-=+";
     $ch = $txt[0];
     $nh = strpos($chars, $ch);
@@ -2648,12 +2655,17 @@ function zbp_string_simple_decrypt($data, $password, $additional = null)
         }
         $tmp .= $chars[$j];
     }
-    return base64_decode($tmp);
+    $dedata = base64_decode($tmp);
+    if (hash_hmac('md5', $dedata, $key . $nonce, true) == $hmac) {
+        return $dedata;
+    }
+    return false;
 }
 
 function zbp_openssl_aes256gcm_encrypt($data, $password, $additional = null)
 {
-    $nonce = openssl_random_pseudo_bytes(12);
+    $nonce_length = openssl_cipher_iv_length('AES-256-GCM');
+    $nonce = openssl_random_pseudo_bytes($nonce_length);
     $additional_data = 'additional';
     if (!is_null($additional)) {
         $additional_data = hash('sha256', $additional);
@@ -2661,99 +2673,97 @@ function zbp_openssl_aes256gcm_encrypt($data, $password, $additional = null)
     $md5password = md5(hash('sha256', $password) . $additional);
     $keygen = $md5password;
     $tag = '';
-    $array = array($data, 'AES-256-GCM', $keygen, OPENSSL_RAW_DATA, $nonce, &$tag, $additional_data);
+    $array = array($data, 'AES-256-GCM', $keygen, OPENSSL_RAW_DATA, $nonce, &$tag, $additional_data, 16);
     $endata = call_user_func_array('openssl_encrypt', $array);
-    $json = array(
-        'data' => $endata,
-        'nonce' => $nonce,
-        'tag' => $tag,
-    );
-    return base64_encode(serialize($json));
+    $hmac = hash_hmac('sha256', $data, $keygen . $nonce, true);
+    $json = $hmac . $nonce . $tag . $endata;
+    return base64_encode($json);
 }
 
 function zbp_openssl_aes256gcm_decrypt($data, $password, $additional = null)
 {
     $endata = base64_decode($data);
-    $jsondata = unserialize($endata);
-    if (!isset($jsondata['data']) || !isset($jsondata['nonce']) || !isset($jsondata['tag'])) {
-        return false;
-    }
-    $data = $jsondata['data'];
-    $nonce = $jsondata['nonce'];
-    $tag = $jsondata['tag'];
+    $nonce_length = openssl_cipher_iv_length('AES-256-GCM');
+    $hmac = substr($endata, 0, 32);
+    $nonce = substr($endata, 32, $nonce_length);
+    $tag = substr($endata, (32 + $nonce_length), 16);
+    $data = substr($endata, (32 + $nonce_length + 16));
     $md5password = md5(hash('sha256', $password) . $additional);
     $keygen = $md5password;
     $additional_data = 'additional';
     if (!is_null($additional)) {
         $additional_data = hash('sha256', $additional);
     }
-    return call_user_func('openssl_decrypt', $data, 'AES-256-GCM', $keygen, OPENSSL_RAW_DATA, $nonce, $tag, $additional_data);
+    $dedata = call_user_func('openssl_decrypt', $data, 'AES-256-GCM', $keygen, OPENSSL_RAW_DATA, $nonce, $tag, $additional_data);
+    if (hash_hmac('sha256', $dedata, $keygen . $nonce, true) == $hmac) {
+        return $dedata;
+    }
+    return false;
 }
 
 function zbp_sodium_chacha20poly1305_ietf_encrypt($data, $password, $additional = null)
 {
-    $nonce = random_bytes(SODIUM_CRYPTO_AEAD_CHACHA20POLY1305_IETF_NPUBBYTES);
+    $nonce_length = SODIUM_CRYPTO_AEAD_CHACHA20POLY1305_IETF_NPUBBYTES;
+    $nonce = random_bytes($nonce_length);
     $additional_data = 'additional';
     if (!is_null($additional)) {
         $additional_data = hash('sha256', $additional);
     }
     $md5password = md5(hash('sha256', $password) . $additional);
     $keygen = $md5password;
-
     $endata = sodium_crypto_aead_chacha20poly1305_ietf_encrypt($data, $additional_data, $nonce, $keygen);
-    $json = array(
-        'data' => $endata,
-        'nonce' => $nonce,
-    );
-    return base64_encode(serialize($json));
+    $hmac = hash_hmac('sha256', $data, $keygen . $nonce, true);
+    $json = $hmac . $nonce . $endata;
+    return base64_encode($json);
 }
 
 function zbp_sodium_chacha20poly1305_ietf_decrypt($data, $password, $additional = null)
 {
     $endata = base64_decode($data);
-    $jsondata = unserialize($endata);
-    if (!isset($jsondata['data']) || !isset($jsondata['nonce'])) {
-        return false;
-    }
-    $data = $jsondata['data'];
-    $nonce = $jsondata['nonce'];
+    $nonce_length = SODIUM_CRYPTO_AEAD_CHACHA20POLY1305_IETF_NPUBBYTES;
+    $hmac = substr($endata, 0, 32);
+    $nonce = substr($endata, 32, $nonce_length);
+    $data = substr($endata, (32 + $nonce_length));
     $md5password = md5(hash('sha256', $password) . $additional);
     $keygen = $md5password;
     $additional_data = 'additional';
     if (!is_null($additional)) {
         $additional_data = hash('sha256', $additional);
     }
-    return sodium_crypto_aead_chacha20poly1305_ietf_decrypt($data, $additional_data, $nonce, $keygen);
+    $dedata = sodium_crypto_aead_chacha20poly1305_ietf_decrypt($data, $additional_data, $nonce, $keygen);
+    if (hash_hmac('sha256', $dedata, $keygen . $nonce, true) == $hmac) {
+        return $dedata;
+    }
+    return false;
 }
 
 function zbp_mcrypt_aes256ofb_encrypt($data, $password, $additional = null)
 {
-    $nonce = call_user_func('mcrypt_get_iv_size', constant('MCRYPT_RIJNDAEL_128'), constant('MCRYPT_MODE_OFB'));
-    $nonce = call_user_func('mcrypt_create_iv', $nonce, constant('MCRYPT_RAND'));
+    $nonce_length = call_user_func('mcrypt_get_iv_size', constant('MCRYPT_RIJNDAEL_128'), constant('MCRYPT_MODE_OFB'));
+    $nonce = call_user_func('mcrypt_create_iv', $nonce_length, constant('MCRYPT_RAND'));
     $md5password = md5(hash('sha256', $password) . $additional);
     $keygen = $md5password;
     $endata = call_user_func('mcrypt_encrypt', constant('MCRYPT_RIJNDAEL_128'), $keygen, $data, constant('MCRYPT_MODE_OFB'), $nonce);
-    $json = array(
-        'data' => $endata,
-        'nonce' => $nonce,
-    );
-    return base64_encode(serialize($json));
+    $hmac = hash_hmac('sha256', $data, $keygen . $nonce, true);
+    $json = $hmac . $nonce . $endata;
+    return base64_encode($json);
 }
 
 function zbp_mcrypt_aes256ofb_decrypt($data, $password, $additional = null)
 {
     $endata = base64_decode($data);
-    $jsondata = unserialize($endata);
-    if (!isset($jsondata['data']) || !isset($jsondata['nonce'])) {
-        return false;
-    }
-    $data = $jsondata['data'];
-    $nonce = $jsondata['nonce'];
+    $nonce_length = call_user_func('mcrypt_get_iv_size', constant('MCRYPT_RIJNDAEL_128'), constant('MCRYPT_MODE_OFB'));
+    $hmac = substr($endata, 0, 32);
+    $nonce = substr($endata, 32, $nonce_length);
+    $data = substr($endata, (32 + $nonce_length));
     $md5password = md5(hash('sha256', $password) . $additional);
     $keygen = $md5password;
     $data = call_user_func('mcrypt_decrypt', constant('MCRYPT_RIJNDAEL_128'), $keygen, $data, constant('MCRYPT_MODE_OFB'), $nonce);
-    $data = rtrim($data, pack('C', 0));
-    return $data;
+    $dedata = rtrim($data, pack('C', 0));
+    if (hash_hmac('sha256', $dedata, $keygen . $nonce, true) == $hmac) {
+        return $dedata;
+    }
+    return false;
 }
 
 /**
@@ -2843,7 +2853,8 @@ function zbp_rsa_public_encrypt($data, $public_key_pem, $key_length = 2048)
         openssl_public_encrypt($single, $endata_single, $public_key_pem);
         $endata .= $endata_single;
     }
-    return base64_encode($endata);
+    $hmac = hash_hmac('sha256', $data, md5($endata), true);
+    return base64_encode($hmac . $endata);
 }
 
 /**
@@ -2865,6 +2876,9 @@ function zbp_rsa_public_decrypt($data, $public_key_pem, $key_length = 2048)
         $length = 64;
     }
     $data = base64_decode($data);
+    $hmac = substr($data, 0, 32);
+    $data = substr($data, 32);
+    $md5_endata = md5($data);
     $dataarray = str_split($data, $length);
     $dedata = null;
     foreach ($dataarray as $single) {
@@ -2872,7 +2886,10 @@ function zbp_rsa_public_decrypt($data, $public_key_pem, $key_length = 2048)
         openssl_public_decrypt($single, $dedata_single, $public_key_pem);
         $dedata .= $dedata_single;
     }
-    return $dedata;
+    if (hash_hmac('sha256', $dedata, $md5_endata, true) == $hmac) {
+        return $dedata;
+    }
+    return false;
 }
 
 /**
@@ -2900,7 +2917,8 @@ function zbp_rsa_private_encrypt($data, $private_key_pem, $key_length = 2048)
         openssl_private_encrypt($single, $endata_single, $private_key_pem);
         $endata .= $endata_single;
     }
-    return base64_encode($endata);
+    $hmac = hash_hmac('sha256', $data, md5($endata), true);
+    return base64_encode($hmac . $endata);
 }
 
 /**
@@ -2922,6 +2940,9 @@ function zbp_rsa_private_decrypt($data, $private_key_pem, $key_length = 2048)
         $length = 64;
     }
     $data = base64_decode($data);
+    $hmac = substr($data, 0, 32);
+    $data = substr($data, 32);
+    $md5_endata = md5($data);
     $dataarray = str_split($data, $length);
     $dedata = null;
     foreach ($dataarray as $single) {
@@ -2929,5 +2950,8 @@ function zbp_rsa_private_decrypt($data, $private_key_pem, $key_length = 2048)
         openssl_private_decrypt($single, $dedata_single, $private_key_pem);
         $dedata .= $dedata_single;
     }
-    return $dedata;
+    if (hash_hmac('sha256', $dedata, $md5_endata, true) == $hmac) {
+        return $dedata;
+    }
+    return false;
 }

@@ -47,7 +47,7 @@ if (function_exists('RunTime_Begin')) {
 }
 $GLOBALS['autoload_class_dirs'] = array();
 if (function_exists('AddAutoloadClassDir')) {
-    AddAutoloadClassDir(ZBP_PATH . 'zb_system/function/lib'); 
+    AddAutoloadClassDir(ZBP_PATH . 'zb_system/function/lib');
 }
 spl_autoload_register('AutoloadClass');
 
