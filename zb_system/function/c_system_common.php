@@ -584,6 +584,10 @@ function GetVarsFromEnv($name, $source = '', $default = '')
         $value = getenv($name);
         return $value;
     }
+    if ((strpos($type, '|env|') !== false) && function_exists('getenv') && getenv($name) != '') {
+        $value = getenv($name);
+        return $value;
+    }
     if ((strpos($type, '|env|') !== false) && isset($_ENV[$name]) && $_ENV[$name] != '') {
         $value = $_ENV[$name];
         return $value;
@@ -2604,62 +2608,50 @@ function get_http_raw_post_data(&$request = null)
     return $data;
 }
 
-function zbp_string_simple_encrypt($data, $password, $additional = null)
+function zbp_string_auth_code($data, $operation, $password, $additional = null)
 {
+    $ckey_length = 16;
     $key = md5($password);
+    $keya = md5(substr($key, 0, 16));
+    $keyb = md5(substr($key, 16, 16));
+    $string = ($operation == 'DECODE') ? base64_decode($data) : $data;
     mt_srand();
-    $nonce = substr(md5(mt_rand()), 0, 16);
-    $txt = $data;
-    $chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-=+";
-    $nh = mt_rand(0, 64);
-    $ch = $chars[$nh];
-    $mdKey = sha1($key . $ch . $additional);
-    $mdKey = substr($mdKey, ($nh % 8), (($nh % 8) + 7));
-    $txt = base64_encode($txt);
-    $tmp = '';
-    $i = 0;
-    $j = 0;
-    $k = 0;
-    for ($i = 0; $i < strlen($txt); $i++) {
-        $k = $k == strlen($mdKey) ? 0 : $k;
-        $j = (($nh + strpos($chars, $txt[$i]) + ord($mdKey[$k++])) % 64);
-        $tmp .= $chars[$j];
+    $hmac = ($operation == 'DECODE') ? substr($string, 0, 32) : '';
+    $nonce = ($operation == 'DECODE') ? substr($string, 32, $ckey_length) : substr(md5(mt_rand() . $additional), 0, $ckey_length);
+    $string = ($operation == 'DECODE') ? substr($string, (32 + $ckey_length)) : $string;
+    $string_length = strlen($string);
+    $cryptkey = $keya . md5($keyb . $nonce);
+    $key_length = strlen($cryptkey);
+    $result = '';
+    $box = range(0, 255);
+    $rndkey = array();
+    for ($i = 0; $i <= 255; $i++) {
+        $rndkey[$i] = ord($cryptkey[($i % $key_length)]);
     }
-    $hmac = hash_hmac('md5', $data, $key . $nonce, true);
-    $endata = $hmac . $nonce . $ch . $tmp;
-    return base64_encode($endata);
-}
-
-function zbp_string_simple_decrypt($data, $password, $additional = null)
-{
-    $key = md5($password);
-    $txt = base64_decode($data);
-    $hmac = substr($txt, 0, 16);
-    $nonce = substr($txt, 16, 16);
-    $txt = substr($txt, 32);
-    $chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-=+";
-    $ch = $txt[0];
-    $nh = strpos($chars, $ch);
-    $mdKey = sha1($key . $ch . $additional);
-    $mdKey = substr($mdKey, ($nh % 8), (($nh % 8) + 7));
-    $txt = substr($txt, 1);
-    $tmp = '';
-    $i = 0;
-    $j = 0;
-    $k = 0;
-    for ($i = 0; $i < strlen($txt); $i++) {
-        $k = $k == strlen($mdKey) ? 0 : $k;
-        $j = ((strpos($chars, $txt[$i]) - $nh) - ord($mdKey[$k++]));
-        while ($j < 0) {
-            $j += 64;
+    for ($j = $i = 0; $i < 256; $i++) {
+        $j = (($j + $box[$i] + $rndkey[$i]) % 256);
+        $tmp = $box[$i];
+        $box[$i] = $box[$j];
+        $box[$j] = $tmp;
+    }
+    for ($a = $j = $i = 0; $i < $string_length; $i++) {
+        $a = (($a + 1) % 256);
+        $j = (($j + $box[$a]) % 256);
+        $tmp = $box[$a];
+        $box[$a] = $box[$j];
+        $box[$j] = $tmp;
+        $result .= chr(ord($string[$i]) ^ ($box[($box[$a] + $box[$j]) % 256]));
+    }
+    if ($operation == 'DECODE') {
+        if ($hmac == hash_hmac('sha256', $result, $key . $nonce, true)) {
+            return $result;
+        } else {
+            return false;
         }
-        $tmp .= $chars[$j];
+    } else {
+        $hmac = hash_hmac('sha256', $string, $key . $nonce, true);
+        return base64_encode($hmac . $nonce . $result);
     }
-    $dedata = base64_decode($tmp);
-    if (hash_hmac('md5', $dedata, $key . $nonce, true) == $hmac) {
-        return $dedata;
-    }
-    return false;
 }
 
 function zbp_openssl_aes256gcm_encrypt($data, $password, $additional = null)
@@ -2759,7 +2751,7 @@ function zbp_mcrypt_aes256ofb_decrypt($data, $password, $additional = null)
     $md5password = md5(hash('sha256', $password) . $additional);
     $keygen = $md5password;
     $data = call_user_func('mcrypt_decrypt', constant('MCRYPT_RIJNDAEL_128'), $keygen, $data, constant('MCRYPT_MODE_OFB'), $nonce);
-    $dedata = rtrim($data, pack('C', 0));
+    $dedata = rtrim($data, "\0");
     if (hash_hmac('sha256', $dedata, $keygen . $nonce, true) == $hmac) {
         return $dedata;
     }
@@ -2772,19 +2764,19 @@ function zbp_mcrypt_aes256ofb_decrypt($data, $password, $additional = null)
  * @param string $data 待加密数据string
  * @param string $password 密码明文
  * @param string $additional 附加认证数据
- * @param string $type 可以指定类型为 aes256gcm, chacha20poly1305, aes256ofb
+ * @param string $type 可以指定类型为 aes256gcm, chacha20, aes256ofb
  */
 function zbp_encrypt($data, $password, $additional = null, $type = null)
 {
     $type = trim(strtolower($type));
     if ($type == 'aes256gcm') {
         return zbp_openssl_aes256gcm_encrypt($data, $password, $additional);
-    } elseif ($type == 'chacha20poly1305') {
+    } elseif ($type == 'chacha20') {
         return zbp_sodium_chacha20poly1305_ietf_encrypt($data, $password, $additional);
     } elseif ($type == 'aes256ofb') {
         return zbp_mcrypt_aes256ofb_encrypt($data, $password, $additional);
     } elseif ($type == 'string') {
-        return zbp_string_simple_encrypt($data, $password, $additional);
+        return zbp_string_auth_code($data, 'ENCODE', $password, $additional);
     }
     if (function_exists('openssl_encrypt')) {
         return zbp_openssl_aes256gcm_encrypt($data, $password, $additional);
@@ -2793,7 +2785,7 @@ function zbp_encrypt($data, $password, $additional = null, $type = null)
     } elseif (function_exists('mcrypt_encrypt')) {
         return zbp_mcrypt_aes256ofb_encrypt($data, $password, $additional);
     } else {
-        return zbp_string_simple_encrypt($data, $password, $additional);
+        return zbp_string_auth_code($data, 'ENCODE', $password, $additional);
     }
 }
 
@@ -2803,19 +2795,19 @@ function zbp_encrypt($data, $password, $additional = null, $type = null)
  * @param string $data 待解密数据string
  * @param string $password 密码明文
  * @param string $additional 附加认证数据
- * @param string $type 可以指定类型为 aes256gcm, chacha20poly1305, aes256ofb
+ * @param string $type 可以指定类型为 aes256gcm, chacha20, aes256ofb
  */
 function zbp_decrypt($data, $password, $additional = null, $type = null)
 {
     $type = trim(strtolower($type));
     if ($type == 'aes256gcm') {
         return zbp_openssl_aes256gcm_decrypt($data, $password, $additional);
-    } elseif ($type == 'chacha20poly1305') {
+    } elseif ($type == 'chacha20') {
         return zbp_sodium_chacha20poly1305_ietf_decrypt($data, $password, $additional);
     } elseif ($type == 'aes256ofb') {
         return zbp_mcrypt_aes256ofb_decrypt($data, $password, $additional);
     } elseif ($type == 'string') {
-        return zbp_string_simple_decrypt($data, $password, $additional);
+        return zbp_string_auth_code($data, 'DECODE', $password, $additional);
     }
     if (function_exists('openssl_decrypt')) {
         return zbp_openssl_aes256gcm_decrypt($data, $password, $additional);
@@ -2824,7 +2816,7 @@ function zbp_decrypt($data, $password, $additional = null, $type = null)
     } elseif (function_exists('mcrypt_decrypt')) {
         return zbp_mcrypt_aes256ofb_decrypt($data, $password, $additional);
     } else {
-        return zbp_string_simple_decrypt($data, $password, $additional);
+        return zbp_string_auth_code($data, 'DECODE', $password, $additional);
     }
 }
 
@@ -2835,7 +2827,7 @@ function zbp_decrypt($data, $password, $additional = null, $type = null)
  * @param string $public_key_pem 公钥pem字符串
  * @param string $key_length 密钥长度默认2048
  */
-function zbp_rsa_public_encrypt($data, $public_key_pem, $key_length = 2048)
+function zbp_rsa_public_encrypt($data, $public_key_pem, $key_length = 2048, $with_hash = false)
 {
     if ($key_length == 1024) {
         $length = 117;
@@ -2853,6 +2845,9 @@ function zbp_rsa_public_encrypt($data, $public_key_pem, $key_length = 2048)
         openssl_public_encrypt($single, $endata_single, $public_key_pem);
         $endata .= $endata_single;
     }
+    if ($with_hash == false) {
+        return base64_encode($endata);
+    }
     $hmac = hash_hmac('sha256', $data, md5($endata), true);
     return base64_encode($hmac . $endata);
 }
@@ -2864,7 +2859,7 @@ function zbp_rsa_public_encrypt($data, $public_key_pem, $key_length = 2048)
  * @param string $public_key_pem 公钥pem字符串
  * @param string $key_length 密钥长度默认2048
  */
-function zbp_rsa_public_decrypt($data, $public_key_pem, $key_length = 2048)
+function zbp_rsa_public_decrypt($data, $public_key_pem, $key_length = 2048, $with_hash = false)
 {
     if ($key_length == 1024) {
         $length = 128;
@@ -2876,15 +2871,20 @@ function zbp_rsa_public_decrypt($data, $public_key_pem, $key_length = 2048)
         $length = 64;
     }
     $data = base64_decode($data);
-    $hmac = substr($data, 0, 32);
-    $data = substr($data, 32);
-    $md5_endata = md5($data);
+    if ($with_hash == true) {
+        $hmac = substr($data, 0, 32);
+        $data = substr($data, 32);
+        $md5_endata = md5($data);
+    }
     $dataarray = str_split($data, $length);
     $dedata = null;
     foreach ($dataarray as $single) {
         $dedata_single = null;
         openssl_public_decrypt($single, $dedata_single, $public_key_pem);
         $dedata .= $dedata_single;
+    }
+    if ($with_hash == false) {
+        return $dedata;
     }
     if (hash_hmac('sha256', $dedata, $md5_endata, true) == $hmac) {
         return $dedata;
@@ -2899,7 +2899,7 @@ function zbp_rsa_public_decrypt($data, $public_key_pem, $key_length = 2048)
  * @param string $private_key_pem 私钥pem字符串
  * @param string $key_length 密钥长度默认2048
  */
-function zbp_rsa_private_encrypt($data, $private_key_pem, $key_length = 2048)
+function zbp_rsa_private_encrypt($data, $private_key_pem, $key_length = 2048, $with_hash = false)
 {
     if ($key_length == 1024) {
         $length = 117;
@@ -2917,6 +2917,9 @@ function zbp_rsa_private_encrypt($data, $private_key_pem, $key_length = 2048)
         openssl_private_encrypt($single, $endata_single, $private_key_pem);
         $endata .= $endata_single;
     }
+    if ($with_hash == false) {
+        return base64_encode($endata);
+    }
     $hmac = hash_hmac('sha256', $data, md5($endata), true);
     return base64_encode($hmac . $endata);
 }
@@ -2928,7 +2931,7 @@ function zbp_rsa_private_encrypt($data, $private_key_pem, $key_length = 2048)
  * @param string $private_key_pem 私钥pem字符串
  * @param string $key_length 密钥长度默认2048
  */
-function zbp_rsa_private_decrypt($data, $private_key_pem, $key_length = 2048)
+function zbp_rsa_private_decrypt($data, $private_key_pem, $key_length = 2048, $with_hash = false)
 {
     if ($key_length == 1024) {
         $length = 128;
@@ -2940,15 +2943,20 @@ function zbp_rsa_private_decrypt($data, $private_key_pem, $key_length = 2048)
         $length = 64;
     }
     $data = base64_decode($data);
-    $hmac = substr($data, 0, 32);
-    $data = substr($data, 32);
-    $md5_endata = md5($data);
+    if ($with_hash == true) {
+        $hmac = substr($data, 0, 32);
+        $data = substr($data, 32);
+        $md5_endata = md5($data);
+    }
     $dataarray = str_split($data, $length);
     $dedata = null;
     foreach ($dataarray as $single) {
         $dedata_single = null;
         openssl_private_decrypt($single, $dedata_single, $private_key_pem);
         $dedata .= $dedata_single;
+    }
+    if ($with_hash == false) {
+        return $dedata;
     }
     if (hash_hmac('sha256', $dedata, $md5_endata, true) == $hmac) {
         return $dedata;
