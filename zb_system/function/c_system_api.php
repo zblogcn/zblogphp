@@ -670,30 +670,11 @@ function ApiCheckLimit()
  */
 function ApiThrottle($name = 'default', $max_reqs = 60, $period = 60)
 {
-    global $zbpcache;
-
-    if (!isset($zbpcache)) {
-        return false;
-    } else {
-        $zbpcache->Connect();
-    }
-
     $user_id = md5(GetGuestIP());
-
-    $cache_key = "api-throttle:$name:$user_id";
-    $cached_value = $zbpcache->Get($cache_key);
-    $cached_req = json_decode($cached_value, true);
-    if (!$cached_value || !$cached_req || (time() >= $cached_req['expire_time'])) {
-        $cached_req = array('hits' => 0, 'expire_time' => (time() + $period));
-    }
-
-    if ($cached_req['hits'] >= $max_reqs) {
+    $name = "api-throttle:$name:$user_id";
+    if (zbp_throttle($name, $max_reqs, $period) === false) {
         $GLOBALS['zbp']->ShowError('Too many requests.', __FILE__, __LINE__, null, 429);
     }
-
-    $cached_req['hits']++;
-    $zbpcache->Set($cache_key, json_encode($cached_req), ($cached_req['expire_time'] - time()));
-
     return true;
 }
 
