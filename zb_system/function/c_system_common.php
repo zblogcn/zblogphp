@@ -2712,7 +2712,7 @@ function zbp_openssl_aes256gcm_decrypt($data, $password, $additional = null, $wi
 function zbp_openssl_aes256_encrypt($data, $password, $additional = null, $mode = '', $with_hash = false)
 {
     $mode = str_replace(array('aes', '256', '-', '_'), '', $mode);
-    if (!in_array($mode, array('cbc', 'cfb', 'ctr', 'ofb'))) {
+    if (!in_array($mode, array('cbc', 'cfb', 'ctr', 'ecb', 'ofb'))) {
         $mode = 'cbc';
     }
     if (function_exists('openssl_encrypt')) {
@@ -2746,7 +2746,7 @@ function zbp_openssl_aes256_encrypt($data, $password, $additional = null, $mode 
 function zbp_openssl_aes256_decrypt($data, $password, $additional = null, $mode = '', $with_hash = false)
 {
     $mode = str_replace(array('aes', '256', '-', '_'), '', $mode);
-    if (!in_array($mode, array('cbc', 'cfb', 'ctr', 'ofb'))) {
+    if (!in_array($mode, array('cbc', 'cfb', 'ctr', 'ecb', 'ofb'))) {
         $mode = 'cbc';
     }
     if (function_exists('openssl_decrypt')) {
@@ -2791,7 +2791,7 @@ function zbp_openssl_aes256_decrypt($data, $password, $additional = null, $mode 
 function zbp_openssl_sm4_encrypt($data, $password, $additional = null, $mode = '', $with_hash = false)
 {
     $mode = str_replace(array('sm4', '-', '_'), '', $mode);
-    $sm4_array = array("cbc", "cfb", "ctr", "ecb", "ofb");
+    $sm4_array = array('cbc', 'cfb', 'ctr', 'ecb', 'ofb');
     if (!in_array($mode, $sm4_array)) {
         $mode = "cbc";
     }
@@ -2817,7 +2817,7 @@ function zbp_openssl_sm4_encrypt($data, $password, $additional = null, $mode = '
 function zbp_openssl_sm4_decrypt($data, $password, $additional = null, $mode = '', $with_hash = false)
 {
     $mode = str_replace(array('sm4', '-', '_'), '', $mode);
-    $sm4_array = array("cbc", "cfb", "ctr", "ecb", "ofb");
+    $sm4_array = array('cbc', 'cfb', 'ctr', 'ecb', 'ofb');
     if (!in_array($mode, $sm4_array)) {
         $mode = "cbc";
     }
