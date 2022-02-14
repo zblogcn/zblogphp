@@ -2670,7 +2670,7 @@ function zbp_openssl_aes256gcm_encrypt($data, $password, $additional = null, $wi
     $array = array($data, $mode, $keygen, $option, $nonce, &$tag, $additional_data, 16);
     $endata = call_user_func_array('openssl_encrypt', $array);
     if ($with_hash == false) {
-        return base64_encode($nonce . $endata);
+        return base64_encode($nonce . $tag . $endata);
     }
     $hmac = hash_hmac('sha256', $data, $keygen . $nonce, true);
     $json = $hmac . $nonce . $tag . $endata;
@@ -2711,28 +2711,27 @@ function zbp_openssl_aes256gcm_decrypt($data, $password, $additional = null, $wi
 
 function zbp_openssl_aes256_encrypt($data, $password, $additional = null, $mode = '', $with_hash = false)
 {
+    $mode = str_replace(array('aes', '256', '-', '_'), '', $mode);
+    if (!in_array($mode, array('cbc', 'cfb', 'ctr', 'ofb'))) {
+        $mode = 'cbc';
+    }
     if (function_exists('openssl_encrypt')) {
-      $mode = str_replace(array('aes', '256' , '-', '_'), '', $mode);
-      if (!in_array($mode, array('cbc', 'cfb', 'ctr', 'ecb', 'ocb', 'ofb'))) {
-          $mode = 'cbc';
-      }
-      $mode = strtolower('aes-256-' . $mode);
-      $nonce_length = openssl_cipher_iv_length($mode);
-      $nonce = openssl_random_pseudo_bytes($nonce_length);
+        $mode = strtolower('aes-256-' . $mode);
+        $nonce_length = openssl_cipher_iv_length($mode);
+        $nonce = openssl_random_pseudo_bytes($nonce_length);
     } elseif (function_exists('mcrypt_encrypt')) {
-      $mode = str_replace(array('mcrypt', '-', '_'), '', $mode);
-      if (!in_array($mode, array("ecb", "cbc", "cfb", "ofb", "nofb"))) {
-          $mode = 'cbc';
-      }
-      $mode = constant(strtoupper('MCRYPT_MODE_' . $mode));
-      $nonce_length = call_user_func('mcrypt_get_iv_size', constant('MCRYPT_RIJNDAEL_128'), $mode);
-      $nonce = call_user_func('mcrypt_create_iv', $nonce_length, constant('MCRYPT_RAND'));
+        if (!$mode == 'ctr') {
+            $mode = constant(strtoupper('MCRYPT_MODE_' . $mode));
+        }
+        $nonce_length = call_user_func('mcrypt_get_iv_size', constant('MCRYPT_RIJNDAEL_128'), $mode);
+        $nonce = call_user_func('mcrypt_create_iv', $nonce_length, constant('MCRYPT_RAND'));
     }
     $md5password = md5(hash('sha256', $password) . $additional);
     $keygen = $md5password;
     if (function_exists('openssl_encrypt')) {
         $option = (PHP_VERSION_ID < 50400) ? 0 : OPENSSL_RAW_DATA;
         $endata = call_user_func('openssl_encrypt', $data, $mode, $keygen, $option, $nonce);
+        $endata = (PHP_VERSION_ID < 50400) ? base64_decode($endata) : $endata;
     } elseif (function_exists('mcrypt_encrypt')) {
         $endata = call_user_func('mcrypt_encrypt', constant('MCRYPT_RIJNDAEL_128'), $keygen, $data, $mode, $nonce);
     }
@@ -2746,22 +2745,20 @@ function zbp_openssl_aes256_encrypt($data, $password, $additional = null, $mode 
 
 function zbp_openssl_aes256_decrypt($data, $password, $additional = null, $mode = '', $with_hash = false)
 {
+    $mode = str_replace(array('aes', '256', '-', '_'), '', $mode);
+    if (!in_array($mode, array('cbc', 'cfb', 'ctr', 'ofb'))) {
+        $mode = 'cbc';
+    }
     if (function_exists('openssl_decrypt')) {
-      $mode = str_replace(array('aes', '256' , '-', '_'), '', $mode);
-      if (!in_array($mode, array('cbc', 'cfb', 'ctr', 'ecb', 'ocb', 'ofb'))) {
-          $mode = 'cbc';
-      }
-      $mode = strtolower('aes-256-' . $mode);
-      $nonce_length = openssl_cipher_iv_length($mode);
-      //$nonce = openssl_random_pseudo_bytes($nonce_length);
+        $mode = strtolower('aes-256-' . $mode);
+        $nonce_length = openssl_cipher_iv_length($mode);
+        //$nonce = openssl_random_pseudo_bytes($nonce_length);
     } elseif (function_exists('mcrypt_decrypt')) {
-      $mode = str_replace(array('mcrypt', '-', '_'), '', $mode);
-      if (!in_array($mode, array("ecb", "cbc", "cfb", "ofb", "nofb"))) {
-          $mode = 'cbc';
-      }
-      $mode = constant(strtoupper('MCRYPT_MODE_' . $mode));
-      $nonce_length = call_user_func('mcrypt_get_iv_size', constant('MCRYPT_RIJNDAEL_128'), $mode);
-      //$nonce = call_user_func('mcrypt_create_iv', $nonce_length, constant('MCRYPT_RAND'));
+        if (!$mode == 'ctr') {
+            $mode = constant(strtoupper('MCRYPT_MODE_' . $mode));
+        }
+        $nonce_length = call_user_func('mcrypt_get_iv_size', constant('MCRYPT_RIJNDAEL_128'), $mode);
+        //$nonce = call_user_func('mcrypt_create_iv', $nonce_length, constant('MCRYPT_RAND'));
     }
     $endata = base64_decode($data);
     if ($with_hash == false) {
@@ -2776,6 +2773,7 @@ function zbp_openssl_aes256_decrypt($data, $password, $additional = null, $mode 
     $keygen = $md5password;
     if (function_exists('openssl_encrypt')) {
         $option = (PHP_VERSION_ID < 50400) ? 0 : OPENSSL_RAW_DATA;
+        $data = (PHP_VERSION_ID < 50400) ? base64_encode($data) : $data;
         $dedata = call_user_func('openssl_decrypt', $data, $mode, $keygen, $option, $nonce);
     } elseif (function_exists('mcrypt_decrypt')) {
         $data = call_user_func('mcrypt_decrypt', constant('MCRYPT_RIJNDAEL_128'), $keygen, $data, $mode, $nonce);
@@ -2853,18 +2851,18 @@ function zbp_openssl_sm4_decrypt($data, $password, $additional = null, $mode = '
  * @param string $data 待加密数据string
  * @param string $password 密码明文
  * @param string $additional 附加认证数据
- * @param string $type 可以指定类型为 aes256gcm, aes256cbc, sm4
+ * @param string $type 可以指定类型为 aes256gcm, aes256cbc, sm4cbc
  */
 function zbp_encrypt($data, $password, $additional = null, $type = 'aes256gcm')
 {
     $type = trim(strtolower($type));
-    if ($type == 'aes256gcm') {
+    if ($type == 'aes256gcm' && PHP_VERSION_ID > 70100) {
         return zbp_openssl_aes256gcm_encrypt($data, $password, $additional);
     } elseif (stripos($type, 'aes256') === 0) {
         return zbp_openssl_aes256_encrypt($data, $password, $additional, $type);
-    } elseif (stripos($type, 'sm4') === 0) {
+    } elseif (stripos($type, 'sm4') === 0 && PHP_VERSION_ID > 70200) {
         return zbp_openssl_sm4_encrypt($data, $password, $additional, $type);
-    } 
+    }
 }
 
 /**
@@ -2873,16 +2871,16 @@ function zbp_encrypt($data, $password, $additional = null, $type = 'aes256gcm')
  * @param string $data 待解密数据string
  * @param string $password 密码明文
  * @param string $additional 附加认证数据
- * @param string $type 可以指定类型为 aes256gcm, aes256cbc, sm4
+ * @param string $type 可以指定类型为 aes256gcm, aes256cbc, sm4cbc
  */
 function zbp_decrypt($data, $password, $additional = null, $type = 'aes256gcm')
 {
     $type = trim(strtolower($type));
-    if ($type == 'aes256gcm') {
+    if ($type == 'aes256gcm' && PHP_VERSION_ID > 70100) {
         return zbp_openssl_aes256gcm_decrypt($data, $password, $additional);
     } elseif (stripos($type, 'aes256') === 0) {
         return zbp_openssl_aes256_decrypt($data, $password, $additional, $type);
-    } elseif (stripos($type, 'sm4') === 0) {
+    } elseif (stripos($type, 'sm4') === 0 && PHP_VERSION_ID > 70200) {
         return zbp_openssl_sm4_decrypt($data, $password, $additional, $type);
     }
 }
@@ -2896,15 +2894,7 @@ function zbp_decrypt($data, $password, $additional = null, $type = 'aes256gcm')
  */
 function zbp_rsa_public_encrypt($data, $public_key_pem, $key_length = 2048, $with_hash = false)
 {
-    if ($key_length == 1024) {
-        $length = 117;
-    } elseif ($key_length == 2048) {
-        $length = 245;
-    } elseif ($key_length == 4096) {
-        $length = 501;
-    } elseif ($key_length == 512) {
-        $length = 53;
-    }
+    $length = (($key_length / 8) - 11);
     $dataarray = str_split($data, $length);
     $endata = null;
     foreach ($dataarray as $single) {
@@ -2928,15 +2918,7 @@ function zbp_rsa_public_encrypt($data, $public_key_pem, $key_length = 2048, $wit
  */
 function zbp_rsa_public_decrypt($data, $public_key_pem, $key_length = 2048, $with_hash = false)
 {
-    if ($key_length == 1024) {
-        $length = 128;
-    } elseif ($key_length == 2048) {
-        $length = 256;
-    } elseif ($key_length == 4096) {
-        $length = 512;
-    } elseif ($key_length == 512) {
-        $length = 64;
-    }
+    $length = ($key_length / 8);
     $data = base64_decode($data);
     if ($with_hash == true) {
         $hmac = substr($data, 0, 32);
@@ -2968,15 +2950,7 @@ function zbp_rsa_public_decrypt($data, $public_key_pem, $key_length = 2048, $wit
  */
 function zbp_rsa_private_encrypt($data, $private_key_pem, $key_length = 2048, $with_hash = false)
 {
-    if ($key_length == 1024) {
-        $length = 117;
-    } elseif ($key_length == 2048) {
-        $length = 245;
-    } elseif ($key_length == 4096) {
-        $length = 501;
-    } elseif ($key_length == 512) {
-        $length = 53;
-    }
+    $length = (($key_length / 8) - 11);
     $dataarray = str_split($data, $length);
     $endata = null;
     foreach ($dataarray as $single) {
@@ -3000,15 +2974,7 @@ function zbp_rsa_private_encrypt($data, $private_key_pem, $key_length = 2048, $w
  */
 function zbp_rsa_private_decrypt($data, $private_key_pem, $key_length = 2048, $with_hash = false)
 {
-    if ($key_length == 1024) {
-        $length = 128;
-    } elseif ($key_length == 2048) {
-        $length = 256;
-    } elseif ($key_length == 4096) {
-        $length = 512;
-    } elseif ($key_length == 512) {
-        $length = 64;
-    }
+    $length = ($key_length / 8);
     $data = base64_decode($data);
     if ($with_hash == true) {
         $hmac = substr($data, 0, 32);
@@ -3061,66 +3027,3 @@ function zbp_throttle($name = 'default', $max_reqs = 60, $period = 60)
     $zbpcache->Set($cache_key, json_encode($cached_req), ($cached_req['expire_time'] - time()));
     return true;
 }
-
-function zbp_sodium_aes256gcm_encrypt($data, $password, $additional = null, $with_hash = false)
-{
-    $nonce_length = SODIUM_CRYPTO_AEAD_AES256GCM_NPUBBYTES;
-    $nonce = random_bytes($nonce_length);
-    $additional_data = 'additional';
-    if (!is_null($additional)) {
-        $additional_data = hash('sha256', $additional);
-    }
-    $md5password = md5(hash('sha256', $password) . $additional);
-    $keygen = $md5password;
-    $endata = sodium_crypto_aead_aes256gcm_encrypt($data, $additional_data, $nonce, $keygen);
-    $tag = substr($endata, -16);
-    $endata = substr($endata, 0, -16);
-    if ($with_hash == false) {
-        return base64_encode($nonce . $tag . $endata);
-    }
-    $hmac = hash_hmac('sha256', $data, $keygen . $nonce, true);
-    $json = $hmac . $nonce . $tag . $endata;
-    return base64_encode($json);
-}
-
-function zbp_sodium_aes256gcm_decrypt($data, $password, $additional = null, $with_hash = false)
-{
-    $nonce_length = SODIUM_CRYPTO_AEAD_AES256GCM_NPUBBYTES;
-    $endata = base64_decode($data);
-    if ($with_hash == false) {
-        $nonce = substr($endata, 0, $nonce_length);
-        $tag = substr($endata, (0 + $nonce_length), 16);
-        $data = substr($endata, (0 + $nonce_length + 16));
-    } else {
-        $hmac = substr($endata, 0, 32);
-        $nonce = substr($endata, 32, $nonce_length);
-        $tag = substr($endata, (32 + $nonce_length), 16);
-        $data = substr($endata, (32 + $nonce_length + 16));
-    }
-    $md5password = md5(hash('sha256', $password) . $additional);
-    $keygen = $md5password;
-    $additional_data = 'additional';
-    if (!is_null($additional)) {
-        $additional_data = hash('sha256', $additional);
-    }
-    $dedata = sodium_crypto_aead_aes256gcm_decrypt($data . $tag, $additional_data, $nonce, $keygen);
-    if ($with_hash == false) {
-        return $dedata;
-    }
-    if (hash_hmac('sha256', $dedata, $keygen . $nonce, true) == $hmac) {
-        return $dedata;
-    }
-    return false;
-}
-
-function zbp_aes256gcm_encrypt($data, $password, $additional, $nonce) 
-{
-    $endata = sodium_crypto_aead_aes256gcm_encrypt($data, $additional, $nonce, $password);
-    return base64_encode($endata);
-}
-
-function zbp_aes256gcm_decrypt($data, $password, $additional, $nonce) 
-{
-    $dedata = sodium_crypto_aead_aes256gcm_decrypt($data, $additional, $nonce, $password);
-}
-
