@@ -102,7 +102,7 @@ abstract class Base__Comment extends Base
      */
     public function __set($name, $value)
     {
-        if (in_array($name, array('Author', 'Comments', 'Level', 'Post'))) {
+        if (in_array($name, array('Author', 'Comments', 'Level', 'Post', 'Parent'))) {
             return;
         }
         foreach ($GLOBALS['hooks']['Filter_Plugin_Comment_Set'] as $fpname => &$fpsignal) {

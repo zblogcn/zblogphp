@@ -1283,7 +1283,7 @@ function ViewList($page = null, $cate = null, $auth = null, $date = null, $tags 
         }
         if ($type == 'category' && $page == 1) {
             foreach ($articles_top_notorder as $articles_top_notorder_post) {
-                if ($articles_top_notorder_post->TopType == 'categorys' && ($articles_top_notorder_post->Category->IsParents($category->ID)) || $articles_top_notorder_post->Category->ID == $category->ID) {
+                if ($articles_top_notorder_post->TopType == 'categorys' && (($articles_top_notorder_post->Category->IsParents($category->ID)) || $articles_top_notorder_post->Category->ID == $category->ID)) {
                     $articles_top[] = $articles_top_notorder_post;
                 }
             }
