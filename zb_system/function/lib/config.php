@@ -580,6 +580,7 @@ class Config implements Iterator
      */
     public function __debugInfo()
     {
+        $array = array();
         foreach ($this as $key => $value) {
             if ($key == 'datainfo' || $key == 'db') {
                 continue;
