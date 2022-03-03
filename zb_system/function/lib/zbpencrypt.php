@@ -28,6 +28,17 @@
 
 //$endata = ZbpEncrypt::rsa_private_encrypt('text', '私钥')
 //$dedata = ZbpEncrypt::rsa_public_decrypt($endata, '公钥')
+
+//可以和其它系统对接的aes256gcm,aes256,sm4加解密
+//$endata = ZbpEncrypt::original_aes256gcm_encrypt('text', 'password', '附加认证字符', '初始向量');
+//$dedata = ZbpEncrypt::original_aes256gcm_decrypt($endata, 'password', '附加认证字符', '初始向量');
+
+//$endata = ZbpEncrypt::original_aes256_encrypt('text', 'password', '初始向量');
+//$dedata = ZbpEncrypt::original_aes256_decrypt($endata, 'password', '初始向量');
+
+//$endata = ZbpEncrypt::original_sm4_encrypt('text', 'password', '初始向量');
+//$dedata = ZbpEncrypt::original_sm4_decrypt($endata, 'password', '初始向量');
+
 class ZbpEncrypt
 {
 
@@ -125,6 +136,18 @@ class ZbpEncrypt
     public static function original_aes256_decrypt($data, $password, $iv, $mode = 'cbc')
     {
         return self::zbp_original_aes256_decrypt($data, $password, $iv, $mode);
+    }
+
+    //原味版本的sm4加密（需要输入二种参数）
+    public static function original_sm4_encrypt($data, $password, $iv, $mode = 'cbc')
+    {
+        return self::zbp_original_sm4_encrypt($data, $password, $iv, $mode);
+    }
+
+    //原味版本的sm4解密（需要输入二种参数）
+    public static function original_sm4_decrypt($data, $password, $iv, $mode = 'cbc')
+    {
+        return self::zbp_original_sm4_decrypt($data, $password, $iv, $mode);
     }
 
     /**
@@ -580,7 +603,7 @@ class ZbpEncrypt
     }
 
     /**
-     * 原始版本的输入密码，初始向量，mod的aes256加密函数
+     * 原始版本的输入密码，初始向量，mode的aes256加密函数
      */
     private static function zbp_original_aes256_encrypt($data, $password, $iv, $mode = 'cbc')
     {
@@ -628,7 +651,7 @@ class ZbpEncrypt
     }
 
     /**
-     * 原始版本的输入密码，初始向量，mod的aes256解密函数
+     * 原始版本的输入密码，初始向量，mode的aes256解密函数
      */
     private static function zbp_original_aes256_decrypt($data, $password, $iv, $mode = 'cbc')
     {
@@ -676,6 +699,48 @@ class ZbpEncrypt
             }
             $dedata = $data;
         }
+        return $dedata;
+    }
+
+    /**
+     * 原始版本的输入密码，初始向量，mode的sm4的5种模式加密
+     */
+    private static function zbp_original_sm4_encrypt($data, $password, $iv, $mode = 'cbc')
+    {
+        $password = substr(str_pad($password, 32, '0'), 0, 32);
+        $nonce = substr(str_pad($iv, 16, '0'), 0, 16);
+        $mode = str_replace(array('sm4', '-', '_'), '', $mode);
+        $sm4_array = array('cbc', 'cfb', 'ctr', 'ecb', 'ofb');
+        if (!in_array($mode, $sm4_array)) {
+            $mode = "cbc";
+        }
+        $mode = "sm4-" . $mode;
+        if ($mode == 'sm4-ecb') {
+            $nonce = null;
+        }
+        $array = array($data, $mode, $password, OPENSSL_RAW_DATA, $nonce);
+        $endata = call_user_func_array('openssl_encrypt', $array);
+        return base64_encode($endata);
+    }
+
+    /**
+     * 原始版本的输入密码，初始向量，mode的sm4的5种模式解密
+     */
+    private static function zbp_original_sm4_decrypt($data, $password, $iv, $mode = 'cbc')
+    {
+        $password = substr(str_pad($password, 32, '0'), 0, 32);
+        $nonce = substr(str_pad($iv, 16, '0'), 0, 16);
+        $mode = str_replace(array('sm4', '-', '_'), '', $mode);
+        $sm4_array = array('cbc', 'cfb', 'ctr', 'ecb', 'ofb');
+        if (!in_array($mode, $sm4_array)) {
+            $mode = "cbc";
+        }
+        $mode = "sm4-" . $mode;
+        $endata = base64_decode($data);
+        if ($mode == 'sm4-ecb') {
+            $nonce = null;
+        }
+        $dedata = call_user_func('openssl_decrypt', $endata, $mode, $password, OPENSSL_RAW_DATA, $nonce);
         return $dedata;
     }
 
