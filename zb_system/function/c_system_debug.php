@@ -139,7 +139,9 @@ function Debug_Error_Handler($errno, $errstr, $errfile, $errline)
         $fpreturn = $fpname('Error', array($errno, $errstr, $errfile, $errline));
     }
 
-    $_SERVER['_error_count'] = ($_SERVER['_error_count'] + 1);
+    if (isset($_SERVER['_error_count'])) {
+        $_SERVER['_error_count'] = ($_SERVER['_error_count'] + 1);
+    }
 
     if (ZBlogException::$islogerror == true) {
         Logs(var_export(array('Error', $errno, $errstr, $errfile, $errline), true), 'ERROR');
@@ -178,7 +180,9 @@ function Debug_Exception_Handler($exception)
         $fpreturn = $fpname('Exception', $exception);
     }
 
-    $_SERVER['_error_count'] = ($_SERVER['_error_count'] + 1);
+    if (isset($_SERVER['_error_count'])) {
+        $_SERVER['_error_count'] = ($_SERVER['_error_count'] + 1);
+    }
 
     if (ZBlogException::$islogerror) {
         Logs(
@@ -217,7 +221,9 @@ function Debug_Shutdown_Handler()
             $fpreturn = $fpname('Shutdown', $error);
         }
 
-        $_SERVER['_error_count'] = ($_SERVER['_error_count'] + 1);
+        if (isset($_SERVER['_error_count'])) {
+            $_SERVER['_error_count'] = ($_SERVER['_error_count'] + 1);
+        }
 
         if (ZBlogException::$islogerror) {
             Logs(var_export(array('Shutdown', $error['type'], $error['message'], $error['file'], $error['line']), true), 'FATAL');

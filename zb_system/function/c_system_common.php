@@ -2464,15 +2464,15 @@ function RunTime($isOutput = true)
 
     $rt = array();
     $_end_time = microtime(true);
-    $rt['time'] = number_format((1000 * ($_end_time - $_SERVER['_start_time'])), 2);
-    $rt['query'] = $_SERVER['_query_count'];
-    $rt['memory'] = $_SERVER['_memory_usage'];
+    $rt['time'] = number_format((1000 * ($_end_time - GetVars('_start_time', 'SERVER', 0))), 2);
+    $rt['query'] = GetVars('_query_count', 'SERVER', 0);
+    $rt['memory'] = GetVars('_memory_usage', 'SERVER', 0);
     $rt['debug'] = $zbp->isdebug ? 1 : 0;
     $rt['loggedin'] = $zbp->islogin ? 1 : 0;
-    $rt['error'] = $_SERVER['_error_count'];
+    $rt['error'] = GetVars('_error_count', 'SERVER', 0);
     $rt['error_detail'] = ZBlogException::$errors_msg;
     if (function_exists('memory_get_peak_usage')) {
-        $rt['memory'] = (int) ((memory_get_peak_usage() - $_SERVER['_memory_usage']) / 1024);
+        $rt['memory'] = (int) ((memory_get_peak_usage() - GetVars('_memory_usage', 'SERVER', 0)) / 1024);
     }
 
     $_SERVER['_runtime_result'] = $rt;
@@ -2531,55 +2531,6 @@ function GetDbName()
 /**
  * 安全检测判断类函数**************************************************************.
  */
-
-/**
- * 简易版本的字符串加扰函数 ($operation='encode','decode')
- */
-function zbp_string_auth_code($data, $operation, $password, $additional = null)
-{
-    $ckey_length = 16;
-    $key = md5($password);
-    $keya = md5(substr($key, 0, 16));
-    $keyb = md5(substr($key, 16, 16));
-    $string = ($operation == 'decode') ? base64_decode($data) : $data;
-    mt_srand();
-    $hmac = ($operation == 'decode') ? substr($string, 0, 32) : '';
-    $nonce = ($operation == 'decode') ? substr($string, 32, $ckey_length) : substr(md5(mt_rand() . $additional), 0, $ckey_length);
-    $string = ($operation == 'decode') ? substr($string, (32 + $ckey_length)) : $string;
-    $string_length = strlen($string);
-    $cryptkey = $keya . md5($keyb . $nonce);
-    $key_length = strlen($cryptkey);
-    $result = '';
-    $box = range(0, 255);
-    $rndkey = array();
-    for ($i = 0; $i <= 255; $i++) {
-        $rndkey[$i] = ord($cryptkey[($i % $key_length)]);
-    }
-    for ($j = $i = 0; $i < 256; $i++) {
-        $j = (($j + $box[$i] + $rndkey[$i]) % 256);
-        $tmp = $box[$i];
-        $box[$i] = $box[$j];
-        $box[$j] = $tmp;
-    }
-    for ($a = $j = $i = 0; $i < $string_length; $i++) {
-        $a = (($a + 1) % 256);
-        $j = (($j + $box[$a]) % 256);
-        $tmp = $box[$a];
-        $box[$a] = $box[$j];
-        $box[$j] = $tmp;
-        $result .= chr(ord($string[$i]) ^ ($box[($box[$a] + $box[$j]) % 256]));
-    }
-    if ($operation == 'decode') {
-        if ($hmac == hash_hmac('sha256', $result, $key . $nonce, true)) {
-            return $result;
-        } else {
-            return false;
-        }
-    } else {
-        $hmac = hash_hmac('sha256', $string, $key . $nonce, true);
-        return base64_encode($hmac . $nonce . $result);
-    }
-}
 
 /**
  * 验证Web Token是否合法.

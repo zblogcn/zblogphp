@@ -106,13 +106,25 @@ class ZbpEncrypt
     //原味版本的aes256gcm加密（需要输入三种参数）
     public static function original_aes256gcm_encrypt($data, $password, $additional, $nonce)
     {
-        return self::zbp_aes256gcm_encrypt($data, $password, $additional, $nonce);
+        return self::zbp_original_aes256gcm_encrypt($data, $password, $additional, $nonce);
     }
 
     //原味版本的aes256gcm解密（需要输入三种参数）
     public static function original_aes256gcm_decrypt($data, $password, $additional, $nonce)
     {
-        return self::zbp_aes256gcm_decrypt($data, $password, $additional, $nonce);
+        return self::zbp_original_aes256gcm_decrypt($data, $password, $additional, $nonce);
+    }
+
+    //原味版本的aes256加密（需要输入二种参数）
+    public static function original_aes256_encrypt($data, $password, $iv, $mode = 'cbc')
+    {
+        return self::zbp_original_aes256_encrypt($data, $password, $iv, $mode);
+    }
+
+    //原味版本的aes256解密（需要输入二种参数）
+    public static function original_aes256_decrypt($data, $password, $iv, $mode = 'cbc')
+    {
+        return self::zbp_original_aes256_decrypt($data, $password, $iv, $mode);
     }
 
     /**
@@ -529,9 +541,9 @@ class ZbpEncrypt
     }
 
     /**
-     * 输入密码，附加认证字符串，初始向量的aes256gcm加密函数
+     * 原始版本的输入密码，附加认证字符串，初始向量的aes256gcm加密函数
      */
-    private static function zbp_aes256gcm_encrypt($data, $password, $additional, $nonce)
+    private static function zbp_original_aes256gcm_encrypt($data, $password, $additional, $nonce)
     {
         $password = substr(str_pad($password, 32, '0'), 0, 32);
         $nonce = substr(str_pad($nonce, 12, '0'), 0, 12);
@@ -548,9 +560,9 @@ class ZbpEncrypt
     }
 
     /**
-     * 输入密码，附加认证字符串，初始向量的aes256gcm解密函数
+     * 原始版本的输入密码，附加认证字符串，初始向量的aes256gcm解密函数
      */
-    private static function zbp_aes256gcm_decrypt($data, $password, $additional, $nonce)
+    private static function zbp_original_aes256gcm_decrypt($data, $password, $additional, $nonce)
     {
         $password = substr(str_pad($password, 32, '0'), 0, 32);
         $nonce = substr(str_pad($nonce, 12, '0'), 0, 12);
@@ -563,6 +575,106 @@ class ZbpEncrypt
             $data = substr($data, 0, -16);
             $func_name = 'openssl_decrypt';
             $dedata = $func_name($data, 'aes-256-gcm', $password, OPENSSL_RAW_DATA, $nonce, $tag, $additional);
+        }
+        return $dedata;
+    }
+
+    /**
+     * 原始版本的输入密码，初始向量，mod的aes256加密函数
+     */
+    private static function zbp_original_aes256_encrypt($data, $password, $iv, $mode = 'cbc')
+    {
+        $password = substr(str_pad($password, 32, '0'), 0, 32);
+        //初始向量长度在ecb下为0，其它为16
+        $nonce = substr(str_pad($iv, 16, '0'), 0, 16);
+        $mode = str_replace(array('aes', '256', '-', '_'), '', $mode);
+        if (!in_array($mode, array('cbc', 'cfb', 'ctr', 'ecb', 'ofb'))) {
+            $mode = 'cbc';
+        }
+        if (function_exists('openssl_encrypt')) {
+            $mode = strtolower('aes-256-' . $mode);
+            $nonce_length = 16;
+            if ($mode == 'aes-256-ecb') {
+                $nonce_length = 0;
+                $nonce = null;
+            }
+        } elseif (function_exists('mcrypt_encrypt')) {
+            if (!$mode == 'ctr') {
+                $mode = constant(strtoupper('MCRYPT_MODE_' . $mode));
+            }
+            $nonce_length = 16;
+            if ($mode == constant('MCRYPT_MODE_ECB')) {
+                $nonce_length = 0;
+                $nonce = null;
+            }
+        }
+        if (function_exists('openssl_encrypt')) {
+            $option = (PHP_VERSION_ID < 50400) ? 0 : OPENSSL_RAW_DATA;
+            $endata = call_user_func('openssl_encrypt', $data, $mode, $password, $option, $nonce);
+            $endata = (PHP_VERSION_ID < 50400) ? base64_decode($endata) : $endata;
+        } elseif (function_exists('mcrypt_encrypt')) {
+            //pkcs7 pad
+            $pkcs7_data = $data;
+            if (function_exists('mb_strlen')) {
+                $len = mb_strlen($pkcs7_data, '8bit');
+            } else {
+                $len = strlen($pkcs7_data);
+            }
+            $c = (16 - ($len % 16));
+            $pkcs7_data .= str_repeat(chr($c), $c);
+            $endata = call_user_func('mcrypt_encrypt', constant('MCRYPT_RIJNDAEL_128'), $password, $pkcs7_data, $mode, $nonce);
+        }
+        return base64_encode($endata);
+    }
+
+    /**
+     * 原始版本的输入密码，初始向量，mod的aes256解密函数
+     */
+    private static function zbp_original_aes256_decrypt($data, $password, $iv, $mode = 'cbc')
+    {
+        $password = substr(str_pad($password, 32, '0'), 0, 32);
+        $nonce = substr(str_pad($iv, 16, '0'), 0, 16);
+        $mode = str_replace(array('aes', '256', '-', '_'), '', $mode);
+        if (!in_array($mode, array('cbc', 'cfb', 'ctr', 'ecb', 'ofb'))) {
+            $mode = 'cbc';
+        }
+        if (function_exists('openssl_decrypt')) {
+            $mode = strtolower('aes-256-' . $mode);
+            $nonce_length = 16;
+            if ($mode == 'aes-256-ecb') {
+                $nonce_length = 0;
+                $nonce = null;
+            }
+        } elseif (function_exists('mcrypt_decrypt')) {
+            if (!$mode == 'ctr') {
+                $mode = constant(strtoupper('MCRYPT_MODE_' . $mode));
+            }
+            $nonce_length = 16;
+            if ($mode == constant('MCRYPT_MODE_ECB')) {
+                $nonce_length = 0;
+                $nonce = null;
+            }
+        }
+        $data = base64_decode($data);
+        if (function_exists('openssl_encrypt')) {
+            $option = (PHP_VERSION_ID < 50400) ? 0 : OPENSSL_RAW_DATA;
+            $data = (PHP_VERSION_ID < 50400) ? base64_encode($data) : $data;
+            $dedata = call_user_func('openssl_decrypt', $data, $mode, $password, $option, $nonce);
+        } elseif (function_exists('mcrypt_decrypt')) {
+            $data = call_user_func('mcrypt_decrypt', constant('MCRYPT_RIJNDAEL_128'), $password, $data, $mode, $nonce);
+            //pkcs7 unpad
+            $text = $data;
+            $pad = ord($text[(strlen($text) - 1)]);
+            if ($pad > strlen($text)) {
+                $data = $text;
+            } else {
+                if (strspn($text, chr($pad), (strlen($text) - $pad)) != $pad) {
+                    $data = $text;
+                } else {
+                    $data = substr($text, 0, (-1 * $pad));
+                }
+            }
+            $dedata = $data;
         }
         return $dedata;
     }
