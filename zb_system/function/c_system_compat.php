@@ -414,27 +414,26 @@ if (!function_exists('session_status')) {
 
 if (!function_exists('array_replace_recursive')) {
 
-    function array_replace_recursive($array, $array1)
+    function _compat_recurse($array, $array1)
     {
-
-        function recurse($array, $array1)
-        {
-            foreach ($array1 as $key => $value) {
-                // create new key in $array, if it is empty or not an array
-                if (!isset($array[$key]) || (isset($array[$key]) && !is_array($array[$key]))) {
-                    $array[$key] = array();
-                }
-
-                // overwrite the value in the base array
-                if (is_array($value)) {
-                    $value = recurse($array[$key], $value);
-                }
-                $array[$key] = $value;
+        foreach ($array1 as $key => $value) {
+            // create new key in $array, if it is empty or not an array
+            if (!isset($array[$key]) || (isset($array[$key]) && !is_array($array[$key]))) {
+                $array[$key] = array();
             }
 
-            return $array;
+            // overwrite the value in the base array
+            if (is_array($value)) {
+                $value = _compat_recurse($array[$key], $value);
+            }
+            $array[$key] = $value;
         }
 
+        return $array;
+    }
+
+    function array_replace_recursive($array, $array1)
+    {
         // handle the arguments, merge one by one
         $args = func_get_args();
         $array = $args[0];
@@ -443,7 +442,7 @@ if (!function_exists('array_replace_recursive')) {
         }
         for ($i = 1; $i < count($args); $i++) {
             if (is_array($args[$i])) {
-                $array = recurse($array, $args[$i]);
+                $array = _compat_recurse($array, $args[$i]);
             }
         }
         return $array;
@@ -499,28 +498,4 @@ if (!function_exists('hash_equals')) {
         return $ret === 0;
     }
 
-}
-
-/*
- * 版本兼容处理
- * PHP 7.4移除了get_magic_quotes_gpc
- * https://github.com/php/php-src/commit/b2ea507beab862a0167af6b99f44fe9c695ca4f0
- */
-if (function_exists('get_magic_quotes_gpc') && PHP_VERSION_ID < 70400 && call_user_func('get_magic_quotes_gpc')) {
-
-    function _stripslashes(&$var)
-    {
-        if (is_array($var)) {
-            foreach ($var as $k => &$v) {
-                _stripslashes($v);
-            }
-        } else {
-            $var = stripslashes($var);
-        }
-    }
-
-    _stripslashes($_GET);
-    _stripslashes($_POST);
-    _stripslashes($_COOKIE);
-    _stripslashes($_REQUEST);
 }

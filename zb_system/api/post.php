@@ -240,7 +240,18 @@ function api_post_list()
     // 组织查询条件
     $where = array();
     if ($cateId > 0) {
-        $where[] = array('=', 'log_CateID', $cateId);
+        if (GetVars('with_subcate') == false) {
+            $where[] = array('=', 'log_CateID', $cateId);
+        } else {
+            $arysubcate = array();
+            $arysubcate[] = array('log_CateID', $cateId);
+            if (isset($zbp->categories[$cateId])) {
+                foreach ($zbp->categories[$cateId]->ChildrenCategories as $subcate) {
+                    $arysubcate[] = array('log_CateID', $subcate->ID);
+                }
+            }
+            $where[] = array('array', $arysubcate);
+        }
     }
     if ($tagId > 0) {
         $where[] = array('LIKE', 'log_Tag', '%{' . $tagId . '}%');
