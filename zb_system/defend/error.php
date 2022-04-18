@@ -52,7 +52,7 @@ unset($post_data['addinfo']);
                 if (!$GLOBALS['zbp']->isdebug) {
                     ?>
                     <div class="divHeader lessinfo" style="margin-bottom:10px;">
-                        <b><?php echo FormatString(FormatString($error->message, '[noscript]'), '[html-format]'); ?></b></div>
+                        <b><?php echo FormatString($error->message, '[noscript]'); ?></b></div>
                     <div class="content lessinfo">
                         <div>
                             <p style="font-weight: normal;"><?php echo $GLOBALS['lang']['msg']['possible_causes_error']; ?></p>
@@ -76,7 +76,7 @@ unset($post_data['addinfo']);
         } else {
             $errtype = '';
         }
-        echo '(' . $error->type . ')' . $errtype . ' :   ' . (FormatString(FormatString($error->messagefull, '[noscript]'), '[html-format]'));
+        echo '(' . $error->type . ')' . $errtype . ' :   ' . (FormatString($error->messagefull, '[noscript]'));
         echo ' (' . ZC_VERSION_FULL . ') ';
         if (!in_array('Status: 404 Not Found', headers_list())) {
                 echo '(' . GetEnvironment(true) . ') ';
