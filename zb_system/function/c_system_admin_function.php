@@ -720,7 +720,7 @@ function OutputOptionItemsOfPostType($default)
     $tz = array();
 
     foreach ($zbp->posttype as $key => $value) {
-        $tz[$key] = $value[0];
+        $tz[$key] = $value['name'];
     }
 
     foreach ($GLOBALS['hooks']['Filter_Plugin_OutputOptionItemsOfCommon'] as $fpname => &$fpsignal) {
