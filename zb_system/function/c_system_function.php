@@ -441,6 +441,7 @@ function Include_ShowError404($errorCode, $errorDescription, $file, $line)
 
     $zbp->template->SetTags('title', $zbp->title);
     $zbp->template->SetTemplate('404');
+    $zbp->template->SetTags('type', '404');
     $zbp->template->Display();
 
     if (IS_CLI && (IS_WORKERMAN || IS_SWOOLE)) {
