@@ -193,7 +193,7 @@ require ZBP_PATH . 'zb_system/admin/admin_top.php';
                     </div>
                     <!-- )tags -->
 
-                    <div id="insertintro" class="editmod2" style="padding-top:0.5em;paddding-bottom:0.5em;">
+                    <div id="insertintro" class="editmod2" style="padding-top:0.5em;padding-bottom:0.5em;">
                         <span>* <?php echo $lang['msg']['help_generate_summary']; ?>
                             <a href="#" onClick="AutoIntro()">[<?php echo $lang['msg']['generate_summary']; ?>]</a></span></div>
                     <?php
