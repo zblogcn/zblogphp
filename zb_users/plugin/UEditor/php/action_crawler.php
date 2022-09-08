@@ -31,6 +31,24 @@ if (isset($_POST[$fieldName])) {
 } else {
     $source = $_GET[$fieldName];
 }
+
+foreach ($source as $imgUrl) {
+    $host = parse_url($imgUrl, PHP_URL_HOST);
+    if (filter_var($host, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4) !== false) {
+        if (filter_var($host, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE) === false) {
+            return json_encode(array(
+                'state' => 'callback参数不合法',
+            ));
+        }
+    } elseif(filter_var($host, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6) !== false) {
+        if (filter_var($host, FILTER_VALIDATE_IP, FILTER_FLAG_NO_RES_RANGE) === false) {
+            return json_encode(array(
+                'state' => 'callback参数不合法',
+            ));
+        }
+    }
+}
+
 foreach ($source as $imgUrl) {
     $item = new Uploader($imgUrl, $config, "remote");
     $info = $item->getFileInfo();
