@@ -46,6 +46,15 @@ foreach ($source as $imgUrl) {
                 'state' => 'callback参数不合法',
             ));
         }
+    } else {
+        $host = gethostbyname($host);
+        if (filter_var($host, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4) !== false) {
+            if (filter_var($host, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE) === false) {
+                return json_encode(array(
+                    'state' => 'callback参数不合法',
+                ));
+            }
+        }
     }
 }
 
