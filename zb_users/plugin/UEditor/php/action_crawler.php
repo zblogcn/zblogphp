@@ -39,6 +39,34 @@ foreach ($source as $imgUrl) {
             return json_encode(array(
                 'state' => 'callback参数不合法',
             ));
+        } else {
+            $ip = explode('.', $host);
+            if (
+                ($ip[0] == 0) ||
+                ($ip[0] >= 240) ||
+                ($ip[0] == 127) ||
+                ($ip[0] == 169 && $ip[1] == 254)
+            ) {
+                'state' => 'callback参数不合法',
+            }
+            if (
+                ($ip[0] == 0) ||
+                ($ip[0] >= 240) ||
+                ($ip[0] == 127) ||
+                ($ip[0] == 169 && $ip[1] == 254)
+            ) {
+                'state' => 'callback参数不合法',
+            }
+            if (
+                    ($ip[0] == 100 && $ip[1] >= 64 && $ip[1] <= 127 ) ||
+                    ($ip[0] == 192 && $ip[1] == 0 && $ip[2] == 0 ) ||
+                    ($ip[0] == 192 && $ip[1] == 0 && $ip[2] == 2 ) ||
+                    ($ip[0] == 198 && $ip[1] >= 18 && $ip[1] <= 19 ) ||
+                    ($ip[0] == 198 && $ip[1] == 51 && $ip[2] == 100 ) ||
+                    ($ip[0] == 203 && $ip[1] == 0 && $ip[2] == 113 )
+            ) {
+                'state' => 'callback参数不合法',
+            }
         }
     } elseif(filter_var($host, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6) !== false) {
         if (filter_var($host, FILTER_VALIDATE_IP, FILTER_FLAG_NO_RES_RANGE) === false) {
@@ -53,6 +81,34 @@ foreach ($source as $imgUrl) {
                 return json_encode(array(
                     'state' => 'callback参数不合法',
                 ));
+            }
+        } else {
+            $ip = explode('.', $host);
+            if (
+                ($ip[0] == 0) ||
+                ($ip[0] >= 240) ||
+                ($ip[0] == 127) ||
+                ($ip[0] == 169 && $ip[1] == 254)
+            ) {
+                'state' => 'callback参数不合法',
+            }
+            if (
+                ($ip[0] == 0) ||
+                ($ip[0] >= 240) ||
+                ($ip[0] == 127) ||
+                ($ip[0] == 169 && $ip[1] == 254)
+            ) {
+                'state' => 'callback参数不合法',
+            }
+            if (
+                    ($ip[0] == 100 && $ip[1] >= 64 && $ip[1] <= 127 ) ||
+                    ($ip[0] == 192 && $ip[1] == 0 && $ip[2] == 0 ) ||
+                    ($ip[0] == 192 && $ip[1] == 0 && $ip[2] == 2 ) ||
+                    ($ip[0] == 198 && $ip[1] >= 18 && $ip[1] <= 19 ) ||
+                    ($ip[0] == 198 && $ip[1] == 51 && $ip[2] == 100 ) ||
+                    ($ip[0] == 203 && $ip[1] == 0 && $ip[2] == 113 )
+            ) {
+                'state' => 'callback参数不合法',
             }
         }
     }
