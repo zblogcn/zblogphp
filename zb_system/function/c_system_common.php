@@ -2727,7 +2727,7 @@ function is_intranet_ip($check_ip) {
         if (filter_var($check_ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_RES_RANGE) === false) {
             return true;
         }else{
-            $ip = explode('.', $check_ip);
+            $ip = explode(':', $check_ip);
             if (($ip[0] == 0 && $ip[1] == 0 && $ip[2] == 0 && $ip[3] == 0
                             && $ip[4] == 0 && $ip[5] == 0 && $ip[6] == 0 && ($ip[7] == 0 || $ip[7] == 1))
                         || ($ip[0] == 0x5f)
