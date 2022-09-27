@@ -842,6 +842,10 @@ class ZBlogPHP
         }
         //var_dump($this->ishttps);die;
 
+        $this->usersurl = $this->host . 'zb_users/';
+        $this->systemurl = $this->host . 'zb_system/';
+        $this->adminurl = $this->host . 'zb_system/admin/';
+
         $this->verifyCodeUrl = $this->systemurl . 'script/c_validcode.php';
         $this->validcodeurl = &$this->verifyCodeUrl;
         $this->feedurl = $this->host . 'feed.php';
