@@ -161,11 +161,11 @@ function GetCurrentHost($blogpath, &$cookiesPath)
 
     if (isset($_SERVER['HTTP_X_FORWARDED_HOST'])) {
         $host .= $_SERVER['HTTP_X_FORWARDED_HOST'];
-    }elseif (isset($_SERVER['HTTP_TENCENT_ACCELERATION_DOMAIN_NAME'])) {
+    } elseif (isset($_SERVER['HTTP_TENCENT_ACCELERATION_DOMAIN_NAME'])) {
         $host .= $_SERVER['HTTP_TENCENT_ACCELERATION_DOMAIN_NAME'];
-    }elseif (isset($_SERVER['HTTP_ALI_SWIFT_LOG_HOST'])) {
+    } elseif (isset($_SERVER['HTTP_ALI_SWIFT_LOG_HOST'])) {
         $host .= $_SERVER['HTTP_ALI_SWIFT_LOG_HOST'];
-    }elseif (isset($_SERVER['HTTP_HOST'])) {
+    } elseif (isset($_SERVER['HTTP_HOST'])) {
         $host .= $_SERVER['HTTP_HOST'];
     } elseif (isset($_SERVER["SERVER_NAME"])) {
         $host .= $_SERVER["SERVER_NAME"];
@@ -432,13 +432,27 @@ function Http304($filename, $time)
 function GetGuestIP()
 {
     global $zbp;
-    if (isset($zbp->option['ZC_USING_CDN_GUESTIP_TYPE']) && $zbp->option['ZC_USING_CDN_GUESTIP_TYPE'] != '') {
+
+    $user_ip = null;
+
+    if ($zbp->option['ZC_USING_CDN_GUESTIP_TYPE'] != 'REMOTE_ADDR') {
         $user_ip = GetVars($zbp->option['ZC_USING_CDN_GUESTIP_TYPE'], "SERVER");
-        if (is_null($user_ip)) {
+    }
+
+    if (is_null($user_ip)) {
+        if (isset($_SERVER["HTTP_X_FORWARDED_FOR"])) {
+            $user_ip = $_SERVER["HTTP_X_FORWARDED_FOR"];
+            if (strpos($user_ip, ',') !== false) {
+                $array = explode(",", $user_ip);
+                $user_ip = $array[0];
+            }
+        } elseif (isset($_SERVER["HTTP_X_REAL_IP"])) {
+            $user_ip = $_SERVER["HTTP_X_REAL_IP"];
+        } elseif (isset($_SERVER["HTTP_CF_CONNECTING_IP"])) {
+            $user_ip = $_SERVER["HTTP_CF_CONNECTING_IP"];
+        } else {
             $user_ip = GetVars("REMOTE_ADDR", "SERVER");
         }
-    } else {
-        $user_ip = GetVars("REMOTE_ADDR", "SERVER");
     }
 
     return $user_ip;
