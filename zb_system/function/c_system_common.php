@@ -48,6 +48,8 @@ function GetScheme($array)
         return 'https://';
     } elseif (array_key_exists('SERVER_PORT_SECURE', $array) && ($array['SERVER_PORT_SECURE'] == 1)) {
         return 'https://';
+    } elseif (array_key_exists('HTTP_X_CLIENT_SCHEME', $array) && (strtolower($array['HTTP_X_CLIENT_SCHEME']) == 'https')) {
+        return 'https://';
     }
     return 'http://';
 }
@@ -157,7 +159,13 @@ function GetCurrentHost($blogpath, &$cookiesPath)
         return $host . $cookiesPath;
     }
 
-    if (isset($_SERVER['HTTP_HOST'])) {
+    if (isset($_SERVER['HTTP_X_FORWARDED_HOST'])) {
+        $host .= $_SERVER['HTTP_X_FORWARDED_HOST'];
+    }elseif (isset($_SERVER['HTTP_TENCENT_ACCELERATION_DOMAIN_NAME'])) {
+        $host .= $_SERVER['HTTP_TENCENT_ACCELERATION_DOMAIN_NAME'];
+    }elseif (isset($_SERVER['HTTP_ALI_SWIFT_LOG_HOST'])) {
+        $host .= $_SERVER['HTTP_ALI_SWIFT_LOG_HOST'];
+    }elseif (isset($_SERVER['HTTP_HOST'])) {
         $host .= $_SERVER['HTTP_HOST'];
     } elseif (isset($_SERVER["SERVER_NAME"])) {
         $host .= $_SERVER["SERVER_NAME"];
@@ -169,6 +177,7 @@ function GetCurrentHost($blogpath, &$cookiesPath)
         return '/';
     }
 
+    //下边没用了，但没有删除
     if (IS_CLI == true) {
         $cookiesPath = '/';
         return $host . $cookiesPath;
