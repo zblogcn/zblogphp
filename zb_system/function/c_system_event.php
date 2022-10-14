@@ -278,11 +278,12 @@ function PostPost()
 
     FilterPost($post);
 
-    $post->Save();
-
     if ($zbp->option['ZC_LARGE_DATA'] == false) {
-        CountPostArray(array($post->ID));
+        //CountPostArray(array($post->ID));
+        CountPost($post, null);
     }
+
+    $post->Save();
 
     $zbp->AddBuildModule('comments');
 
@@ -494,6 +495,11 @@ function PostArticle()
 
     FilterPost($article);
 
+    if ($zbp->option['ZC_LARGE_DATA'] == false) {
+        //CountPostArray(array($post->ID));
+        CountPost($article, null);
+    }
+
     $article->Save();
     $zbp->AddCache($article);
 
@@ -530,9 +536,6 @@ function PostArticle()
         }
 
         CountCategoryArray(array($article->CateID), +1);
-    }
-    if ($zbp->option['ZC_LARGE_DATA'] == false) {
-        CountPostArray(array($article->ID));
     }
     if ($orig_id == 0 && $article->IsTop == 0 && $article->Status == ZC_POST_STATUS_PUBLIC) {
         CountNormalArticleNums(+1);
@@ -790,6 +793,11 @@ function PostPage()
 
     FilterPost($article);
 
+    if ($zbp->option['ZC_LARGE_DATA'] == false) {
+        //CountPostArray(array($post->ID));
+        CountPost($article, null);
+    }
+
     $article->Save();
 
     if ($pre_author != $article->AuthorID) {
@@ -798,9 +806,6 @@ function PostPage()
         }
 
         CountMemberArray(array($article->AuthorID), array(0, +1, 0, 0));
-    }
-    if ($zbp->option['ZC_LARGE_DATA'] == false) {
-        CountPostArray(array($article->ID));
     }
 
     $zbp->AddBuildModule('comments');
