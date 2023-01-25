@@ -121,8 +121,9 @@ function &UsingPluginFilter($strPluginFilter)
     if (isset($GLOBALS['hooks'][$strPluginFilter])) {
         return $GLOBALS['hooks'][$strPluginFilter];
     }
+    $result = array();
 
-    return array();
+    return $result;
 }
 
 /**
