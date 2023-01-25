@@ -549,7 +549,7 @@ class Config implements Iterator
     {
         $name = FilterCorrectName($name);
         if (!$name) {
-            return;
+            return false;
         }
         $this->kvdata[$name] = $value;
 
@@ -567,7 +567,7 @@ class Config implements Iterator
     {
         $name = FilterCorrectName($name);
         if (!isset($this->kvdata[$name])) {
-            return;
+            return false;
         }
 
         unset($this->kvdata[$name]);

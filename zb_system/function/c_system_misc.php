@@ -146,7 +146,7 @@ function misc_statistic()
         $zbp->AddBuildModule('catalog');
         $zbp->AddBuildModule('navbar');
     } catch (Exception $e) {
-        $e->getMessage();
+        echo $e->getMessage();
     }
     $zbp->BuildModule();
     $zbp->SaveCache();
@@ -543,7 +543,7 @@ function misc_php_zbp_info()
                 echo '</tbody></table>';
 
 
-                
+
                 echo '</div>';
                 ?>
             </div>
@@ -602,7 +602,7 @@ function misc_updatedapp()
     global $zbp;
 
     header('Content-Type: application/x-javascript; Charset=utf-8');
-    
+
     if (!$zbp->CheckRights('admin')) {
         echo $zbp->ShowError(6, __FILE__, __LINE__);
         die();

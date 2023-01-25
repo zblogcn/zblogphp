@@ -128,7 +128,7 @@ class ValidateCode
      *
      * @param $interpolate bool  True to enable, false to disable
      *
-     * @return CaptchaBuilder
+     * @return ValidateCode
      */
     public function setInterpolation($interpolate = true)
     {
@@ -264,7 +264,7 @@ class ValidateCode
      *
      * @param bool $ignoreAllEffects
      *
-     * @return CaptchaBuilder
+     * @return ValidateCode
      */
     public function setIgnoreAllEffects($ignoreAllEffects)
     {

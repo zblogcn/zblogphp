@@ -418,11 +418,11 @@ class Network__fsockopen implements Network__Interface
      * @param string $name
      * @param string $entity
      *
-     * @return mixed
+     * @return void
      */
     public function addText($name, $entity)
     {
-        return $this->add_postdata($name, $entity);
+        $this->add_postdata($name, $entity);
     }
 
     /**

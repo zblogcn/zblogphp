@@ -70,7 +70,7 @@ class Database__SQLite3 implements Database__Interface
     public function Open($array)
     {
         if ($this->isconnected) {
-            return;
+            return true;
         }
         if ($this->db = new SQLite3($array[0])) {
             $this->dbpre = $array[1];
@@ -108,15 +108,18 @@ class Database__SQLite3 implements Database__Interface
 
     public function QueryMulti($s)
     {
+        $result = false;
         //$a=explode(';',str_replace('%pre%', $this->dbpre, $s));
         $a = explode(';', $s);
         foreach ($a as $s) {
             $s = trim($s);
             if ($s != '') {
-                $this->db->query($this->sql->Filter($s));
+                $result = $this->db->query($this->sql->Filter($s));
                 $this->LogsError();
             }
         }
+
+        return $result;
     }
 
     /**
@@ -242,7 +245,7 @@ class Database__SQLite3 implements Database__Interface
      *
      * @param string $query 指令
      *
-     * @return bool
+     * @return array
      */
     public function Transaction($query)
     {

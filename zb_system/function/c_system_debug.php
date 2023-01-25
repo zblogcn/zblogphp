@@ -408,7 +408,7 @@ class ZBlogException
     /**
      * 清空$private_zbe_list队列.
      *
-     * @return null
+     * @return void
      */
     public static function ClearList()
     {

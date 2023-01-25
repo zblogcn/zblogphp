@@ -123,7 +123,7 @@ function Include_Admin_CheckWeakPassWord()
         Redirect302($zbp->cmdurl . '?act=MemberEdt&id=' . $zbp->user->ID);
     }
 
-    echo $zbp->ShowHint('bad', $zbp->langs->msg->change_default_password, 9999);
+    $zbp->ShowHint('bad', $zbp->langs->msg->change_default_password, 9999);
 }
 
 /**

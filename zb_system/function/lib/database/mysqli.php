@@ -90,7 +90,7 @@ class Database__MySQLi implements Database__Interface
     public function Open($array)
     {
         if ($this->isconnected) {
-            return;
+            return true;
         }
         $db = mysqli_init();
 
@@ -202,8 +202,6 @@ class Database__MySQLi implements Database__Interface
      * 执行多行SQL语句.
      *
      * @param string $s 以;号分隔的多条SQL语句
-     *
-     * @return array
      */
     public function QueryMulit($s)
     {
@@ -214,15 +212,18 @@ class Database__MySQLi implements Database__Interface
 
     public function QueryMulti($s)
     {
+        $result = false;
         //$a=explode(';',str_replace('%pre%', $this->dbpre, $s));
         $a = explode(';', $s);
         foreach ($a as $s) {
             $s = trim($s);
             if ($s != '') {
-                mysqli_query($this->db, $this->sql->Filter($s));
+                $result = mysqli_query($this->db, $this->sql->Filter($s));
                 $this->LogsError();
             }
         }
+
+        return $result;
     }
 
     /**
@@ -361,7 +362,7 @@ class Database__MySQLi implements Database__Interface
      *
      * @param string $query 指令
      *
-     * @return bool
+     * @return array
      */
     public function Transaction($query)
     {

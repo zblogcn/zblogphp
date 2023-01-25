@@ -85,7 +85,7 @@ class Database__PostgreSQL implements Database__Interface
     public function Open($array)
     {
         if ($this->isconnected) {
-            return;
+            return true;
         }
         $array[3] = strtolower($array[3]);
         $s = "host={$array[0]} port={$array[5]} dbname={$array[3]} user={$array[1]} password={$array[2]} options='--client_encoding=UTF8'";
@@ -181,15 +181,18 @@ class Database__PostgreSQL implements Database__Interface
 
     public function QueryMulti($s)
     {
+        $result = false;
         //$a=explode(';',str_replace('%pre%', $this->dbpre,$s));
         $a = explode(';', $s);
         foreach ($a as $s) {
             $s = trim($s);
             if ($s != '') {
-                $r = pg_query($this->db, $this->sql->Filter($s));
+                $result = pg_query($this->db, $this->sql->Filter($s));
                 $this->LogsError();
             }
         }
+
+        return $result;
     }
 
     /**
@@ -244,7 +247,7 @@ class Database__PostgreSQL implements Database__Interface
      *
      * @param string $query SQL语句
      *
-     * @return resource
+     * @return mixed
      */
     public function Delete($query)
     {
@@ -340,7 +343,7 @@ class Database__PostgreSQL implements Database__Interface
      *
      * @param string $query 指令
      *
-     * @return bool
+     * @return array
      */
     public function Transaction($query)
     {

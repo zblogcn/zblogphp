@@ -92,7 +92,7 @@ class Database__MySQL implements Database__Interface
     public function Open($array)
     {
         if ($this->isconnected) {
-            return;
+            return true;
         }
         $this->ispersistent = $array[6];
         if ($this->ispersistent == false) {
@@ -220,6 +220,7 @@ class Database__MySQL implements Database__Interface
 
     public function QueryMulti($s)
     {
+        $result = false;
         //$a=explode(';',str_replace('%pre%', $this->dbpre,$s));
         $a = explode(';', $s);
         foreach ($a as $s) {
@@ -229,6 +230,8 @@ class Database__MySQL implements Database__Interface
                 $this->LogsError();
             }
         }
+
+        return $result;
     }
 
     /**
@@ -277,7 +280,7 @@ class Database__MySQL implements Database__Interface
      *
      * @param string $query SQL语句
      *
-     * @return resource
+     * @return mixed
      */
     public function Update($query)
     {
@@ -292,7 +295,7 @@ class Database__MySQL implements Database__Interface
      *
      * @param string $query SQL语句
      *
-     * @return resource
+     * @return mixed
      */
     public function Delete($query)
     {
@@ -380,7 +383,7 @@ class Database__MySQL implements Database__Interface
      *
      * @param string $query 指令
      *
-     * @return bool
+     * @return array
      */
     public function Transaction($query)
     {

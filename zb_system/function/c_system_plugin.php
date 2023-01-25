@@ -232,7 +232,7 @@ function Clear_Filter_Plugin($plugname)
  *
  * 要挂接的函数名 (可以是1函数名 2类名::静态方法名 3全局变量名@动态方法名 4类名@动态方法名 5全局匿名函数)
  *
- * @return var 解析后的function值
+ * @return mixed 解析后的function值
  */
 function Parse_Filter_Plugin($fpname)
 {
