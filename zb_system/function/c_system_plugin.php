@@ -66,7 +66,7 @@ function InstallPlugin($strPluginName)
 /**
  * 插件删除函数，只在插件删除时运行一次
  *
- * @param $strPluginName 插件ID
+ * @param string $strPluginName 插件ID
  *
  * @return void
  */
@@ -81,7 +81,7 @@ function UninstallPlugin($strPluginName)
 /**
  * 创建插件接口Hook
  *
- * @param $strPluginFilter 插件接口Hook
+ * @param string $strPluginFilter 插件接口Hook
  *
  * @return boolean
  */
@@ -100,7 +100,7 @@ function DefinePluginFilter($strPluginFilter)
 /**
  * 检查插件接口Hook
  *
- * @param $strPluginFilter 插件接口Hook
+ * @param string $strPluginFilter 插件接口Hook
  *
  * @return boolean
  */
@@ -112,7 +112,7 @@ function ExistsPluginFilter($strPluginFilter)
 /**
  * 调用插件接口(php >= 5.5可以在接口调用处使用)
  *
- * @param $strPluginFilter 插件接口Hook
+ * @param string $strPluginFilter 插件接口Hook
  *
  * @return array
  */
@@ -129,7 +129,7 @@ function &UsingPluginFilter($strPluginFilter)
 /**
  * 移除插件Hook接口
  *
- * @param $strPluginFilter 插件接口Hook
+ * @param string $strPluginFilter 插件接口Hook
  *
  * @return boolean
  */
@@ -170,9 +170,9 @@ function SetPluginSignal($plugname, $functionname, $signal = PLUGIN_EXITSIGNAL_N
 /**
  * 挂上Filter接口
  *
- * @param $plugname 接口名称
- * @param $functionname 要挂接的函数名
- * @param $exitsignal :return,break,continue
+ * @param string $plugname 接口名称
+ * @param string $functionname 要挂接的函数名
+ * @param string $exitsignal :return,break,continue
  *
  * @return boolean
  */
@@ -192,8 +192,8 @@ function Add_Filter_Plugin($plugname, $functionname, $exitsignal = PLUGIN_EXITSI
 /**
  * 卸载Filter接口的某项挂载函数
  *
- * @param $plugname 接口名称
- * @param $functionname 要挂接的函数名
+ * @param string $plugname 接口名称
+ * @param string $functionname 要挂接的函数名
  *
  * @return boolean
  */
@@ -213,7 +213,7 @@ function Remove_Filter_Plugin($plugname, $functionname)
 /**
  * 清除Filter接口的所有挂载函数
  *
- * @param $plugname 接口名称
+ * @param string $plugname 接口名称
  *
  * @return boolean
  */
@@ -265,7 +265,7 @@ function Parse_Filter_Plugin($fpname)
  *
  * 如果需要传入引用，须在php>=5.6，给参数补上(&...$arg)！
  *
- * @param $plugname 接口名称
+ * @param string $plugname 接口名称
  */
 function HookFilterPlugin($plugname)
 {

@@ -50,19 +50,17 @@ class Database__MySQL implements Database__Interface
     }
 
     /**
-     * @var 字符集
+     * @var string 字符集
      */
     public $charset = 'utf8';
 
     /**
-     * @var 字符排序
+     * @var null|string 字符排序
      */
     public $collate = null;
 
     /**
      * 对字符串进行转义，在指定的字符前添加反斜杠，即执行addslashes函数.
-     *
-     * @use addslashes
      *
      * @param string $s
      *

@@ -157,7 +157,7 @@ class Base
     /**
      * 设置Data数据.
      *
-     * @param key 如果是array，就忽略$value
+     * @param array|string $key 如果是array，就忽略$value
      *
      * @return bool
      */

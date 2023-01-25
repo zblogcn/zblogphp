@@ -37,12 +37,12 @@ class Database__PostgreSQL implements Database__Interface
     public $sql = null;
 
     /**
-     * @var 字符集
+     * @var string 字符集
      */
     public $charset = 'utf8';
 
     /**
-     * @var 字符排序
+     * @var string 字符排序
      */
     public $collate = null;
 
@@ -232,7 +232,7 @@ class Database__PostgreSQL implements Database__Interface
      *
      * @param string $query SQL语句
      *
-     * @return resource
+     * @return mixed
      */
     public function Update($query)
     {

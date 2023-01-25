@@ -2311,7 +2311,7 @@ function JsonError4ShowErrorHook($errorCode, $errorString, $file, $line)
  *
  * @param string $errorCode   错误编号
  * @param string $errorString 错误内容
- * @param object $data 具体内容
+ * @param object|array|null $data 具体内容
  */
 function JsonError($errorCode, $errorString, $data)
 {
