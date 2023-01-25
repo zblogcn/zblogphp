@@ -9,9 +9,9 @@
 require '../zb_system/function/c_system_base.php';
 error_reporting(0);
 ini_set("display_errors", 0);
-set_error_handler(create_function('', ''));
-set_exception_handler(create_function('', ''));
-register_shutdown_function(create_function('', ''));
+set_error_handler('emptyFunction');
+set_exception_handler('emptyFunction');
+register_shutdown_function('emptyFunction');
 
 $zbp->Load();
 

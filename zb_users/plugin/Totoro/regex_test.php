@@ -16,9 +16,9 @@ Totoro_init();
 $blogtitle = 'Totoro反垃圾评论';
 
 if (GetVars('type', 'GET') == 'test') {
-    set_error_handler(create_function('', ''));
-    set_exception_handler(create_function('', ''));
-    register_shutdown_function(create_function('', ''));
+    set_error_handler('emptyFunction');
+    set_exception_handler('emptyFunction');
+    register_shutdown_function('emptyFunction');
     $regex = GetVars('regexp', 'POST');
     $regex = "/(" . $regex . ")/si";
     $matches = array();

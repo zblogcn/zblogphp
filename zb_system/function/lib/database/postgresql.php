@@ -57,15 +57,13 @@ class Database__PostgreSQL implements Database__Interface
     /**
      * 对字符串进行转义，在指定的字符前添加反斜杠，即执行addslashes函数.
      *
-     * @use addslashes
-     *
      * @param string $s
      *
      * @return string
      */
     public function EscapeString($s)
     {
-        return pg_escape_string($s);
+        return pg_escape_string($this->db, $s);
     }
 
     /**
@@ -92,7 +90,7 @@ class Database__PostgreSQL implements Database__Interface
         $array[3] = strtolower($array[3]);
         $s = "host={$array[0]} port={$array[5]} dbname={$array[3]} user={$array[1]} password={$array[2]} options='--client_encoding=UTF8'";
         $this->ispersistent = $array[6];
-        if (false == $this->ispersistent) {
+        if (!$this->ispersistent) {
             $db_link = pg_connect($s);
         } else {
             $db_link = pg_pconnect($s);
@@ -136,14 +134,12 @@ class Database__PostgreSQL implements Database__Interface
         $isExists = @$this->Query("select count(*) from pg_catalog.pg_database where datname = '$dbpgsql_name';");
         $hasDB = false;
         if (is_array($isExists) && is_array($isExists[0]) && isset($isExists[0]['count'])) {
-            if ($isExists[0]['count'] == '0') {
-                $hasDB = false;
-            } else {
+            if ($isExists[0]['count'] != '0') {
                 $hasDB = true;
             }
         }
 
-        if ($hasDB == true) {
+        if ($hasDB) {
             return false;
         }
 
