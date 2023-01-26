@@ -106,6 +106,16 @@ class ValidateCode
     protected $fontsize = 15; //字体大小
 
     /**
+     * @var string 背景图
+     */
+    protected $backgroundImages;
+
+    /**
+     * @var false|int 背景色
+     */
+    protected $background;
+
+    /**
      * The image contents.
      */
     public function getContents()

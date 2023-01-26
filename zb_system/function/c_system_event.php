@@ -2189,8 +2189,8 @@ function SetSidebar()
 {
     global $zbp;
     for ($i = 1; $i <= 9; $i++) {
-        $optionName = $i === 1 ? 'ZC_SIDEBAR_ORDER' : "ZC_SIDEBAR${i}_ORDER";
-        $formName = $i === 1 ? 'sidebar' : "sidebar${i}";
+        $optionName = $i === 1 ? 'ZC_SIDEBAR_ORDER' : "ZC_SIDEBAR{$i}_ORDER";
+        $formName = $i === 1 ? 'sidebar' : "sidebar{$i}";
         if (isset($_POST[$formName])) {
             $zbp->option[$optionName] = trim(GetVars($formName, 'POST'), '|');
         }
