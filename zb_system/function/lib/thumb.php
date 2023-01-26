@@ -153,6 +153,9 @@ class Thumb
             if (! $image) {
                 continue;
             }
+			if (PHP_SYSTEM === SYSTEM_WINDOWS) {
+				$image = iconv("UTF-8", "GBK//IGNORE", $image);
+			}
             $ext = GetFileExt($image);
             if (! in_array($ext, array('jpeg', 'jpg', 'png', 'gif', 'bmp'))) {
                 continue;
