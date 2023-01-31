@@ -140,7 +140,11 @@ class SQL__MySQL extends SQL__Global
                     $sql[] = $value[0] . " $value[1]($d1,$d2) NOT NULL DEFAULT 0" . "{$comment},";
                 }
                 if ($value[1] == 'date' || $value[1] == 'time' || $value[1] == 'datetime') {
-                    $sql[] = $value[0] . " $value[1] NOT NULL" . "{$comment},";
+                    if ($value[3] === null) {
+                        $sql[] = $value[0] . " $value[1] NULL" . "{$comment},";
+                    } else {
+                        $sql[] = $value[0] . " $value[1] NOT NULL" . "{$comment},";
+                    }
                 }
                 if ($value[1] == 'timestamp') {
                     $sql[] = $value[0] . " $value[1] NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP" . "{$comment},";

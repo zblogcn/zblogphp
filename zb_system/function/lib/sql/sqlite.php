@@ -101,7 +101,11 @@ class SQL__SQLite extends SQL__Global
                     $createData[] = $value[0] . " $value[1]($d1,$d2) NOT NULL DEFAULT 0";
                 }
                 if ($value[1] == 'date' || $value[1] == 'datetime') {
-                    $createData[] = $value[0] . " $value[1] NOT NULL";
+                    if ($value[3] === null) {
+                        $createData[] = $value[0] . " $value[1] NULL";
+                    } else {
+                        $createData[] = $value[0] . " $value[1] NOT NULL";
+                    }
                 }
                 if ($value[1] == 'timestamp') {
                     $createData[] = $value[0] . " $value[1] NOT NULL DEFAULT CURRENT_TIMESTAMP";
