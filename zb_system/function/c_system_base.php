@@ -248,5 +248,9 @@ if (ZBP_SAFEMODE === false) {
 unset($file_base, $aps, $aps2, $fn, $ap, $op_users, $opk, $opv);
 unset($theme_name, $theme_include, $theme_preset, $style_preset);
 
+if (!function_exists('emptyFunction')) {
+    function emptyFunction() {}
+}
+
 //1.7新加入的
 $GLOBALS['zbp']->PreLoad();

@@ -13,6 +13,7 @@ class Uploader
     private $file; //文件上传对象
     private $base64; //文件上传对象
     private $config; //配置信息
+    private $type; //文件来源 remote:远程文件；base64:Base64编码；upload:本地上传(默认)
     private $oriName; //原始文件名
     private $fileName; //新文件名
     private $fullName; //完整文件名,即从当前配置目录开始的URL
@@ -58,9 +59,9 @@ class Uploader
         $this->fileField = $fileField;
         $this->config = $config;
         $this->type = $type;
-        if ($type == "remote") {
+        if ($this->type == "remote") {
             $this->saveRemote();
-        } elseif ($type == "base64") {
+        } elseif ($this->type == "base64") {
             $this->upBase64();
         } else {
             $this->upFile();

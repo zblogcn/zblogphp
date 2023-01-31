@@ -5,7 +5,7 @@
  */
 if (!defined('PHP_VERSION_ID')) {
     $version = explode('.', PHP_VERSION);
-    define('PHP_VERSION_ID', ($version[0] * 10000 + $version[1] * 100 + $version[2]));
+    define('PHP_VERSION_ID', ((int) $version[0] * 10000 + (int) $version[1] * 100 + (int) $version[2]));
     unset($version);
 }
 

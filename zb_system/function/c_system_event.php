@@ -49,10 +49,10 @@ function VerifyLogin($throwException = true)
 
         if ($throwException) {
             $zbp->ShowError(8, __FILE__, __LINE__);
-        } else {
-            return false;
         }
     }
+
+    return false;
 }
 
 /**
@@ -195,7 +195,7 @@ function Redirect_cmd_end_by_script($url)
  *
  * @throws Exception
  *
- * @return Post
+ * @return Post|false
  */
 function PostPost()
 {
@@ -354,7 +354,7 @@ function DelPost()
  *
  * @throws Exception
  *
- * @return Post
+ * @return Post|false
  */
 function PostArticle()
 {
@@ -719,7 +719,7 @@ function DelArticle_Comments($id)
  *
  * @throws Exception
  *
- * @return Article
+ * @return Post|false
  */
 function PostPage()
 {
@@ -887,7 +887,7 @@ function BatchPost($type)
  *
  * @throws Exception
  *
- * @return Comment
+ * @return Comment|false
  */
 function PostComment()
 {
@@ -911,9 +911,7 @@ function PostComment()
         $_POST['LogID'] = $_GET['postid'];
     } elseif (isset($_POST['postid'])) {
         $_POST['LogID'] = $_POST['postid'];
-    } elseif (isset($_POST['LogID'])) {
-        $_POST['LogID'] = $_POST['LogID'];
-    } else {
+    } elseif (!isset($_POST['LogID'])) {
         $_POST['LogID'] = 0;
     }
 
@@ -1312,7 +1310,7 @@ function BatchComment()
 /**
  * 提交分类数据.
  *
- * @return Category
+ * @return Category|false
  */
 function PostCategory()
 {
@@ -1455,7 +1453,7 @@ function DelCategory_Articles($id)
 /**
  * 提交标签数据.
  *
- * @return Tag
+ * @return Tag|false
  */
 function PostTag()
 {
@@ -1569,7 +1567,7 @@ function DelTag()
  *
  * @throws Exception
  *
- * @return Member
+ * @return Member|false
  */
 function PostMember()
 {
@@ -1797,7 +1795,7 @@ function DelMember_AllData($id)
 /**
  * 提交模块数据.
  *
- * @return Module
+ * @return Module|false
  */
 function PostModule()
 {
@@ -1940,7 +1938,7 @@ function DelModule()
  * 附件上传.
  *
  * @throws Exception
- * @return Upload
+ * @return Upload|false
  */
 function PostUpload()
 {
@@ -2189,8 +2187,8 @@ function SetSidebar()
 {
     global $zbp;
     for ($i = 1; $i <= 9; $i++) {
-        $optionName = $i === 1 ? 'ZC_SIDEBAR_ORDER' : "ZC_SIDEBAR${i}_ORDER";
-        $formName = $i === 1 ? 'sidebar' : "sidebar${i}";
+        $optionName = $i === 1 ? 'ZC_SIDEBAR_ORDER' : "ZC_SIDEBAR{$i}_ORDER";
+        $formName = $i === 1 ? 'sidebar' : "sidebar{$i}";
         if (isset($_POST[$formName])) {
             $zbp->option[$optionName] = trim(GetVars($formName, 'POST'), '|');
         }

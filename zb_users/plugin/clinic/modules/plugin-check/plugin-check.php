@@ -37,7 +37,7 @@ class plugin_check extends clinic
             $this->output('success', '主题不存在，已替换为default主题。');
             $zbp->option['ZC_BLOG_THEME'] = 'default';
         }
-        $zbp->option['ZC_USING_PLUGIN_LIST'] = trim(implode($newPluginList, '|'));
+        $zbp->option['ZC_USING_PLUGIN_LIST'] = trim(implode('|', $newPluginList));
         $zbp->SaveOption();
         $this->output('success', '修复完成');
     }

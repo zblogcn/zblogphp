@@ -157,9 +157,9 @@ class Base
     /**
      * 设置Data数据.
      *
-     * @param key 如果是array，就忽略$value
+     * @param array|string $key 如果是array，就忽略$value
      *
-     * @return array
+     * @return bool
      */
     public function SetData($key, $value = null)
     {
@@ -239,7 +239,7 @@ class Base
     /**
      * 获取Database__Interface.
      *
-     * @return string
+     * @return Database__Interface
      */
     public function &GetDb()
     {
@@ -606,7 +606,7 @@ class Base
     /**
      * Get ID Name.
      *
-     * @return object
+     * @return int|string
      */
     public function GetIdName()
     {

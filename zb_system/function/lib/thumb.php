@@ -229,7 +229,7 @@ class Thumb
      * 相对地址处理.
      *
      * @param string $url
-     * @return string
+     * @return void
      */
     protected static function handleRelativeUrl(&$url)
     {
@@ -289,7 +289,7 @@ class Thumb
     public function loadSrcByString($img_string)
     {
         $this->srcRes = imagecreatefromstring($img_string);
-        
+
         if (! $this->srcRes) {
             throw new Exception($GLOBALS['zbp']->lang['error']['101']);
         }

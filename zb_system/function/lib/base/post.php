@@ -33,7 +33,7 @@ if (!defined('ZBP_PATH')) {
  */
 abstract class Base__Post extends Base
 {
-    
+
     private $private_prev = '';
 
     private $private_next = '';
@@ -474,7 +474,7 @@ abstract class Base__Post extends Base
     }
 
     /**
-     * @return any
+     * @return array|string
      */
     public function GetType($key)
     {

@@ -1169,12 +1169,12 @@ class ZBlogPHP
      *
      * @param string $type 数据连接类型
      *
-     * @return Database__Interface
+     * @return Database__Interface|null
      */
     public static function InitializeDB($type)
     {
         if (!trim($type)) {
-            return;
+            return null;
         }
 
         $newtype = 'Database__' . trim($type);
@@ -2274,7 +2274,7 @@ class ZBlogPHP
      * @param bool $onlycheck  为真的且$forcebuild为假的话，只判断是否需要而不Build，返回false就是需要更新，为true就不需要
      * @param bool $forcebuild
      *
-     * @return true or false
+     * @return bool
      */
     public function CheckTemplate($onlycheck = false, $forcebuild = false)
     {
@@ -3020,7 +3020,7 @@ class ZBlogPHP
     private function GetSomeThingById(&$object, $className, $id)
     {
         if (empty($id)) {
-            return;
+            return null;
         }
 
         if (array_key_exists($id, $object)) {
@@ -3089,6 +3089,8 @@ class ZBlogPHP
                 }
             }
         }
+
+        return null;
     }
 
     /**
@@ -4124,11 +4126,11 @@ class ZBlogPHP
      *
      * @param $typeid
      *
-     * @return string
+     * @return string|array
      */
     public function GetPostType($typeid, $key)
     {
-        if ($key == null || empty($key)) {
+        if (empty($key)) {
             return $this->posttype[$typeid];
         }
         if ('name' == $key) {
@@ -4155,7 +4157,7 @@ class ZBlogPHP
                 $actions = $this->posttype[$typeid]['actions'];
             }
             $post_actions = $this->posttype[0]['actions'];
-            if (is_array($actions) && empty($actions) == false) {
+            if (is_array($actions) && !empty($actions)) {
                 foreach ($post_actions as $key => $value) {
                     if (!isset($actions[$key])) {
                         $actions[$key] = $value;
@@ -4169,6 +4171,8 @@ class ZBlogPHP
                 return $this->posttype[$typeid][$key];
             }
         }
+
+        return '';
     }
 
     /**

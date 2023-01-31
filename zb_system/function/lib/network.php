@@ -65,7 +65,7 @@ class Network
     /**
      * @param string $extension
      *
-     * @return Network__Interface
+     * @return Network__Interface|null
      */
     public static function Create($extension = '')
     {
@@ -73,14 +73,12 @@ class Network
             self::$private_network = new self();
         }
         if ((!self::$private_network->file_get_contents) && (!self::$private_network->fsockopen) && (!self::$private_network->curl)) {
-            return;
+            return null;
         }
 
         $extension = ($extension == '' ? self::$private_network->network_list[0] : $extension);
         $type = 'Network__' . $extension;
-        $network = new $type();
-
-        return $network;
+        return new $type();
     }
 
 }

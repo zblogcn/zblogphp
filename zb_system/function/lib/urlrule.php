@@ -170,11 +170,11 @@ class UrlRule
 
         //1.7的魔术戏法：处理路由规则里预先指定好的"关联数据来源"的参数并先替换一次
         $paras = self::ProcessParameters($route);
-        foreach ($paras as $key => &$p) {
+        foreach ($paras as &$p) {
             if ($p['relate'] && is_object($this->RulesObject)) {
                 $object = clone $this->RulesObject;
                 $objectArray = explode('.', $p['relate']);
-                foreach ($objectArray as $key => $subObject) {
+                foreach ($objectArray as $subObject) {
                     //先判断是数组，还是函数，还是对象
                     if (stripos($subObject, '[') !== false) {
                         $i = preg_match_all('/\[.+\]/', $subObject, $m);
@@ -214,8 +214,7 @@ class UrlRule
                     $p['relate_value'] = '';
                 }
             }
-        }
-        foreach ($paras as $key => $p) {
+
             //首先替换人为指定value的
             if (array_key_exists('value', $p)) {
                 $url = str_replace('{%' . $p['name'] . '%}', $p['value'], $url);
@@ -259,7 +258,7 @@ class UrlRule
     public static function ProcessParameters($route)
     {
         $newargs = array();
-        
+
         if (isset($route['args'])) {
             $parameters = $route['args'];
         } else {
@@ -569,7 +568,7 @@ class UrlRule
             $array[] = array('{%alias%}' => '(?P<' . $type . '>.+)');
             $array[] = array('{' . $type . '}' => '(?P<' . $type . '>.+)');
         }
- 
+
         foreach ($array as $key => $value) {
             $url = str_replace(key($value), current($value), $url);
         }

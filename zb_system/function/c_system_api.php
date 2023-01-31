@@ -458,7 +458,7 @@ function ApiGetRequestFilter($limitDefault = null, $sortableColumns = array(), $
  * 获取分页信息.
  *
  * @param array|null $option
- * @return array
+ * @return array|stdClass
  */
 function ApiGetPagebarInfo($option = null)
 {

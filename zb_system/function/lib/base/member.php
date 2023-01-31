@@ -51,7 +51,6 @@ abstract class Base__Member extends Base
         $this->Level = ZC_MEMBER_LEVER_LOWEST;
 
         $this->CreateTime = time();
-        $this->UpdateTime = $this->UpdateTime;
     }
 
     /**

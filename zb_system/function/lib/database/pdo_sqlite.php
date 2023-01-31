@@ -70,7 +70,7 @@ class Database__PDO_SQLite implements Database__Interface
     public function Open($array)
     {
         if ($this->isconnected) {
-            return;
+            return true;
         }
         //pdo_sqlite优先使用sqlite3
         $a = PDO::getAvailableDrivers();
@@ -119,15 +119,18 @@ class Database__PDO_SQLite implements Database__Interface
 
     public function QueryMulti($s)
     {
+        $result = false;
         //$a=explode(';',str_replace('%pre%', $this->dbpre, $s));
         $a = explode(';', $s);
         foreach ($a as $s) {
             $s = trim($s);
             if ($s != '') {
-                $this->db->exec($this->sql->Filter($s));
+                $result = $this->db->exec($this->sql->Filter($s));
                 $this->LogsError();
             }
         }
+
+        return $result;
     }
 
     /**

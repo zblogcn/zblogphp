@@ -98,10 +98,6 @@ function api_comment_post()
             'message' => $GLOBALS['lang']['msg']['operation_failed'] . ' ' . $e->getMessage(),
         );
     }
-
-    return array(
-        'message' => $GLOBALS['lang']['msg']['operation_succeed'],
-    );
 }
 
 /**

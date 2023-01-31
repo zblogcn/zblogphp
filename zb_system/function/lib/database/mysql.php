@@ -50,19 +50,17 @@ class Database__MySQL implements Database__Interface
     }
 
     /**
-     * @var 字符集
+     * @var string 字符集
      */
     public $charset = 'utf8';
 
     /**
-     * @var 字符排序
+     * @var null|string 字符排序
      */
     public $collate = null;
 
     /**
      * 对字符串进行转义，在指定的字符前添加反斜杠，即执行addslashes函数.
-     *
-     * @use addslashes
      *
      * @param string $s
      *
@@ -92,7 +90,7 @@ class Database__MySQL implements Database__Interface
     public function Open($array)
     {
         if ($this->isconnected) {
-            return;
+            return true;
         }
         $this->ispersistent = $array[6];
         if ($this->ispersistent == false) {
@@ -220,6 +218,7 @@ class Database__MySQL implements Database__Interface
 
     public function QueryMulti($s)
     {
+        $result = false;
         //$a=explode(';',str_replace('%pre%', $this->dbpre,$s));
         $a = explode(';', $s);
         foreach ($a as $s) {
@@ -229,6 +228,8 @@ class Database__MySQL implements Database__Interface
                 $this->LogsError();
             }
         }
+
+        return $result;
     }
 
     /**
@@ -277,7 +278,7 @@ class Database__MySQL implements Database__Interface
      *
      * @param string $query SQL语句
      *
-     * @return resource
+     * @return mixed
      */
     public function Update($query)
     {
@@ -292,7 +293,7 @@ class Database__MySQL implements Database__Interface
      *
      * @param string $query SQL语句
      *
-     * @return resource
+     * @return mixed
      */
     public function Delete($query)
     {
@@ -380,7 +381,7 @@ class Database__MySQL implements Database__Interface
      *
      * @param string $query 指令
      *
-     * @return bool
+     * @return array
      */
     public function Transaction($query)
     {

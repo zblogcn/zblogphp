@@ -1196,6 +1196,8 @@ function GetValueInArrayByCurrent($array, $name, $default = null)
 
         return GetValueInArray($array, $name, $default);
     }
+
+    return $default;
 }
 
 /**
@@ -1383,7 +1385,7 @@ function object_to_array($obj)
     if (is_array($arr)) {
         return array_map(__FUNCTION__, $arr);
     } else {
-        return $arr;
+        return (array) $arr;
     }
 }
 
@@ -1793,7 +1795,7 @@ function CheckCanBeString($obj)
  *
  * @param string $sql
  *
- * @return string
+ * @return void
  */
 function utf84mb_filter(&$sql)
 {
@@ -1803,7 +1805,7 @@ function utf84mb_filter(&$sql)
 /**
  * 实现utf84mb的fixHtmlSpecialChars
  *
- * @return string
+ * @return void
  */
 function utf84mb_fixHtmlSpecialChars()
 {
@@ -2122,7 +2124,7 @@ function RemoveProtocolFromUrl($url)
 /**
  * 判断 URL 是否为本地.
  *
- * @return array
+ * @return bool
  */
 function CheckUrlIsLocal($url)
 {
@@ -2309,7 +2311,7 @@ function JsonError4ShowErrorHook($errorCode, $errorString, $file, $line)
  *
  * @param string $errorCode   错误编号
  * @param string $errorString 错误内容
- * @param object $data 具体内容
+ * @param object|array|null $data 具体内容
  */
 function JsonError($errorCode, $errorString, $data)
 {
