@@ -19,7 +19,9 @@ if (!defined('ZBP_PATH')) {
  * @property int|string CateID 文章分类ID
  * @property Category Category 文章分类
  * @property int|string Status 文章状态
- * @property int PostTime 发表时间
+ * @property int PostTime 发布时间
+ * @property int CreateTime 创建时间
+ * @property int UpdateTime 更新时间
  * @property int IsTop 文章置顶状态
  * @property string Tag 文章标签
  * @property string Alias 文章别名

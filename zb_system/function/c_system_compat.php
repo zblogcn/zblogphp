@@ -499,3 +499,9 @@ if (!function_exists('hash_equals')) {
     }
 
 }
+
+
+if (!function_exists('emptyFunction')) {
+    function emptyFunction() {}
+}
+

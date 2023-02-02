@@ -12,14 +12,18 @@
 $zbp = null;
 
 error_reporting(E_ALL);
-ob_start();
 
 defined('ZBP_PATH') || define('ZBP_PATH', rtrim(str_replace('\\', '/', realpath(dirname(__FILE__) . '/../../')), '/') . '/');
 defined('ZBP_HOOKERROR') || define('ZBP_HOOKERROR', true);
+defined('ZBP_OBSTART') || define('ZBP_OBSTART', true);
 defined('ZBP_SAFEMODE') || define('ZBP_SAFEMODE', false);
 
 //强制开启debug模式，需要开启时请打开注释
 //defined('ZBP_DEBUGMODE') || define('ZBP_DEBUGMODE', true);
+
+if (ZBP_OBSTART) {
+    ob_start();
+}
 
 /**
  * 加载系统基础函数.
@@ -247,10 +251,6 @@ if (ZBP_SAFEMODE === false) {
 
 unset($file_base, $aps, $aps2, $fn, $ap, $op_users, $opk, $opv);
 unset($theme_name, $theme_include, $theme_preset, $style_preset);
-
-if (!function_exists('emptyFunction')) {
-    function emptyFunction() {}
-}
 
 //1.7新加入的
 $GLOBALS['zbp']->PreLoad();
