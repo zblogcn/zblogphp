@@ -35,6 +35,13 @@ class Thumb
     static public $minHeightNeedToThumb = 50;
 
     /**
+     * 默认图片质量
+     *
+     * @var integer
+     */
+    static public $quality = 90;
+
+    /**
      * 需要排除的本地路径.
      *
      * @var array
@@ -141,6 +148,11 @@ class Thumb
 
         if (self::$defaultImg === null) {
             self::$defaultImg = ZBP_THUMB_DEFAULT_IMG;
+        }
+
+        $default_quality = (int) $zbp->option['ZC_THUMB_DEFAULT_QUALITY'];
+        if ($default_quality > 0 && $default_quality <= 100) {
+            self::$quality = $default_quality;
         }
 
         $thumbs = array();
@@ -449,7 +461,7 @@ class Thumb
         switch ($ext) {
             case 'jpg':
             case 'jpeg':
-                imagejpeg($this->srcRes, $this->dstImagePath, 90);
+                imagejpeg($this->srcRes, $this->dstImagePath, self::$quality);
                 break;
             case 'gif':
                 imagegif($this->srcRes, $this->dstImagePath);
@@ -457,11 +469,14 @@ class Thumb
             case 'png':
                 imagepng($this->srcRes, $this->dstImagePath);
                 break;
+            case 'webp':
+                imagewebp($this->srcRes, $this->dstImagePath, self::$quality);
+                break;
             case 'bmp':
                 if (function_exists('imagebmp')) {
                     imagebmp($this->srcRes, $this->dstImagePath);
                 } else {
-                    imagejpeg($this->srcRes, $this->dstImagePath, 90);
+                    imagejpeg($this->srcRes, $this->dstImagePath, self::$quality);
                 }
                 break;
         }
