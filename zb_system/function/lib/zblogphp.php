@@ -747,19 +747,19 @@ class ZBlogPHP
         }
 
         if (isset($this->option['ZC_DEBUG_MODE_WARNING'])) {
-            ZBlogException::$iswarning = (bool) $this->option['ZC_DEBUG_MODE_WARNING'];
+            ZBlogErrorContrl::$iswarning = (bool) $this->option['ZC_DEBUG_MODE_WARNING'];
         }
         if (isset($this->option['ZC_DEBUG_MODE_STRICT'])) {
-            ZBlogException::$isstrict = (bool) $this->option['ZC_DEBUG_MODE_STRICT'];
+            ZBlogErrorContrl::$isstrict = (bool) $this->option['ZC_DEBUG_MODE_STRICT'];
         }
         if (isset($this->option['ZC_DEBUG_LOG_ERROR'])) {
-            ZBlogException::$islogerror = (bool) $this->option['ZC_DEBUG_LOG_ERROR'];
+            ZBlogErrorContrl::$islogerror = (bool) $this->option['ZC_DEBUG_LOG_ERROR'];
         }
 
         if (defined('ZBP_DEBUGMODE') && constant('ZBP_DEBUGMODE') == true) {
-            ZBlogException::$iswarning = true;
-            ZBlogException::$isstrict = true;
-            ZBlogException::$islogerror = true;
+            ZBlogErrorContrl::$iswarning = true;
+            ZBlogErrorContrl::$isstrict = true;
+            ZBlogErrorContrl::$islogerror = true;
         }
 
         //消除16升级17又退回16后再升级17出的bug;
@@ -1023,7 +1023,7 @@ class ZBlogPHP
 
             $this->CloseConnect();
 
-            if (ZBlogException::$islogerror && is_array($this->db->error) && !empty($this->db->error)) {
+            if (ZBlogErrorContrl::$islogerror && is_array($this->db->error) && !empty($this->db->error)) {
                 foreach ($this->db->error as $e) {
                     Logs($this->db->type . ' error id:' . PHP_EOL . var_export($e, true), 'ERROR');
                 }
@@ -3943,7 +3943,7 @@ class ZBlogPHP
         if ($errorCode == 2) {
             $last_zbe->http_code = 404;
         }
-        ZBlogException::SetLastZEE($last_zbe);
+        ZBlogErrorContrl::SetLastZEE($last_zbe);
 
         if (stripos('{' . sha1('mustshowerror') . '}', $errorText) === 0) {
             $errorText = str_replace('{' . sha1('mustshowerror') . '}', '', $errorText);

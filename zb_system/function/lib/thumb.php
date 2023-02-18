@@ -195,7 +195,7 @@ class Thumb
             }
             $thumb = new self;
 
-            ZBlogException::SuspendErrorHook();
+            ZBlogErrorContrl::SuspendErrorHook();
             try {
                 if (! CheckUrlIsLocal($image)) {
                     $thumb->loadSrcByExternalUrl($image);
@@ -203,12 +203,12 @@ class Thumb
                     $thumb->loadSrcByPath($img_path);
                 }
             } catch (Exception $e) {
-                ZBlogException::ResumeErrorHook();
+                ZBlogErrorContrl::ResumeErrorHook();
                 if (self::$defaultImg) {
                     $thumb->loadSrcByPath(self::$defaultImg);
                 }
             }
-            ZBlogException::ResumeErrorHook();
+            ZBlogErrorContrl::ResumeErrorHook();
 
             if ($thumb->loadedCompletely) {
                 $thumb->shouldClip($clip)->setWidth($width)->setHeight($height)->setDstImagePath($thumb_path)->handle();

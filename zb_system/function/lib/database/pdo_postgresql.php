@@ -334,10 +334,10 @@ class Database__PDO_PostgreSQL implements Database__Interface
         $r = null;
         $table = strtolower($table);
         $field = strtolower($field);
-        ZBlogException::SuspendErrorHook();
+        ZBlogErrorContrl::SuspendErrorHook();
         $s = "SELECT * FROM information_schema.columns WHERE table_schema = 'public' AND table_name = '$table' AND column_name = '$field'";
         $r = @$this->Query($s);
-        ZBlogException::ResumeErrorHook();
+        ZBlogErrorContrl::ResumeErrorHook();
         if (is_array($r) && count($r) == 0) {
             return false;
         }
