@@ -71,12 +71,7 @@ unset($post_data['addinfo']);
                         <div>
                             <p><?php echo $GLOBALS['lang']['msg']['error_info']; ?></p>
         <?php
-        if (method_exists($error, 'getTypeName')) {
-            $errtype = $error->getTypeName();
-        } else {
-            $errtype = '';
-        }
-        echo '(' . $error->type . ')' . $errtype . ' :   ' . (FormatString($error->messagefull, '[noscript]'));
+        echo '[' . $error->type . '] (' . $error->code . ') :   ' . (FormatString($error->messagefull, '[noscript]'));
         echo ' (' . ZC_VERSION_FULL . ') ';
         if (!in_array('Status: 404 Not Found', headers_list())) {
                 echo '(' . GetEnvironment(true) . ') ';
@@ -87,7 +82,7 @@ unset($post_data['addinfo']);
         if (is_array($error->moreinfo) && !empty($error->moreinfo)) {
             ?>
                         <div>
-                            <p><?php echo 'Debug Info'; ?></p>
+                            <p><?php echo 'Debug More Info'; ?></p>
 
                             <table style="width: 100%" class="table_striped">
                                 <tbody>

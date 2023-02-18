@@ -3915,6 +3915,7 @@ class ZBlogPHP
      * @param string/int $errorText
      * @param null       $file
      * @param null       $line
+     * @param array      $moreinfo
      *
      * @throws Exception
      *
@@ -3929,18 +3930,20 @@ class ZBlogPHP
             $errorText = $this->lang['error'][$errorText];
         }
 
-        if ($errorCode == 2) {
-            Http404();
+        if ($file == null or $line == null) {
+            $file = __FILE__;
+            $line = __LINE__ - 11;
         }
-
-        $zbe = ZBlogException::GetInstance();
-        $zbe->message = $errorText;
-        $zbe->messagefull = $errorText . ' (set_exception_handler) ';
-        $zbe->type = $errorCode;
-        $zbe->code = $errorCode;
-        $zbe->file = $file;
-        $zbe->line = $line;
-        $zbe->moreinfo = $moreinfo;
+        $last_zbe = new ZbpErrorException($errorText, $errorCode, null, $file, $line);
+        //$last_zbe->message = $errorText;
+        //$last_zbe->code = $errorCode;
+        $last_zbe->messagefull = $errorText . ' (set_exception_handler) ';
+        $last_zbe->moreinfo = $moreinfo;
+        $last_zbe->http_code = 500;
+        if ($errorCode == 2) {
+            $last_zbe->http_code = 404;
+        }
+        ZBlogException::SetLastZEE($last_zbe);
 
         if (stripos('{' . sha1('mustshowerror') . '}', $errorText) === 0) {
             $errorText = str_replace('{' . sha1('mustshowerror') . '}', '', $errorText);
@@ -3963,7 +3966,8 @@ class ZBlogPHP
             }
         }
 
-        throw new Exception($errorText);
+        //这里应扔出一个ZbpErrorException ZBP错误异常
+        throw $last_zbe;
     }
 
     /**

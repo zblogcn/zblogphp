@@ -156,7 +156,7 @@ function Debug_Error_Handler($errno, $errstr, $errfile, $errline)
         return true;
     }
 
-    $zbe = ZBlogException::GetNewException();
+    $zbe = ZBlogException::GetNewException('Error');
     $zbe->ParseError($errno, $errstr, $errfile, $errline);
     $zbe->Display();
 
@@ -197,7 +197,7 @@ function Debug_Exception_Handler($exception)
         );
     }
 
-    $zbe = ZBlogException::GetNewException();
+    $zbe = ZBlogException::GetNewException(get_class($exception));
     $zbe->ParseException($exception);
     $zbe->Display();
 
@@ -233,7 +233,7 @@ function Debug_Shutdown_Handler()
             return true;
         }
 
-        $zbe = ZBlogException::GetNewException();
+        $zbe = ZBlogException::GetNewException('Shutdown');
         $zbe->ParseShutdown($error);
         $zbe->Display();
     }
@@ -249,6 +249,25 @@ function Debug_DoNothing()
     return true;
 }
 
+
+/**
+ * Class ZbpErrorException.
+ */
+class ZbpErrorException extends Exception
+{
+    public $moreinfo = null;
+    public $http_code = 500;
+    public $messagefull = null;
+
+    public function __construct($message = "", $code = 0, $previous = null, $file = '', $line = 0)
+    {
+        $this->message = $message;
+        $this->code = $code;
+        $this->file = $file;
+        $this->line = $line;
+    }
+}
+
 /**
  * Class ZBlogException.
  */
@@ -256,9 +275,14 @@ class ZBlogException
 {
 
     /**
-     * 静态zbe_list
+     * @var object 单例模式下的ZBE唯一实例
      */
-    private static $private_zbe_list = array();
+    private static $private_zbe = null;
+
+    /**
+     * 最后一个last_zee
+     */
+    private static $last_zee = null;
 
     /**
      * 错误显示输出
@@ -296,7 +320,7 @@ class ZBlogException
     public $code;
 
     /**
-     * 类型(同代码)
+     * 类型(Error, Exception, Shutdown, ZbpErrorException)
      */
     public $type;
 
@@ -311,7 +335,7 @@ class ZBlogException
     public $messagefull;
 
     /**
-     * 更多信息
+     * 更多信息 (可能是数组)
      */
     public $moreinfo;
 
@@ -326,9 +350,9 @@ class ZBlogException
     public $line;
 
     /**
-     * 之前error
+     * http_code
      */
-    public $previous;
+    public $http_code = 500;
 
     /**
      * 错误数组
@@ -366,53 +390,56 @@ class ZBlogException
         throw new Exception($e);
     }
 
-    public static function GetNewException()
+    public static function GetNewException($error_type)
     {
         $z = new self();
-        $lastzbe = end(self::$private_zbe_list);
-        if (is_object($lastzbe)) {
-            $z->moreinfo = $lastzbe->moreinfo;
-        }
+        $z->type = $error_type;
         return $z;
     }
 
     /**
-     * 获取新实例进$private_zbe_list队列里.
+     * 获取ZBE实例
      *
      * @return ZBlogException
      */
     public static function GetInstance()
     {
-        if (IS_CLI && (IS_WORKERMAN || IS_SWOOLE)) {
-            self::$private_zbe_list[] = array();
+        if (!is_object(self::$private_zbe)) {
+            self::$private_zbe = new ZBlogException();
         }
-        $z = new self();
-        if (count(self::$private_zbe_list) > 0) {
-            $z->previous = end(self::$private_zbe_list);
-        }
-        self::$private_zbe_list[] = $z;
-
-        return $z;
+        return self::$private_zbe();
     }
 
     /**
-     * 获取$private_zbe_list队列.
+     * 清除之前并获取最后一个ZEE
      *
-     * @return array()
+     * @return ZbpErrorException
      */
-    public static function GetList()
+    public static function SetLastZEE($zee)
     {
-        return self::$private_zbe_list;
+        self::$last_zee = $zee;
+        return self::GetLastZEE();
     }
 
     /**
-     * 清空$private_zbe_list队列.
+     * 获取最后一个ZEE
      *
-     * @return void
+     * @return ZbpErrorException
      */
-    public static function ClearList()
+    public static function GetLastZEE()
     {
-        self::$private_zbe_list = array();
+        return self::$last_zee;
+    }
+
+    /**
+     * 清除最后一个ZEE
+     *
+     * @return ZbpErrorException
+     */
+    public static function ClearLastZEE()
+    {
+        self::$last_zee = null;
+        return null;
     }
 
     /**
@@ -531,7 +558,6 @@ class ZBlogException
      */
     public function ParseError($type, $message, $file, $line)
     {
-        $this->type = $type;
         $this->code = $type;
         $this->message = $message;
         $this->messagefull = $message . ' (set_error_handler) ';
@@ -546,7 +572,6 @@ class ZBlogException
      */
     public function ParseShutdown($error)
     {
-        $this->type = $error['type'];
         $this->code = $error['type'];
         $this->message = $error['message'];
         $this->messagefull = $error['message'] . ' (register_shutdown_function) ';
@@ -563,19 +588,16 @@ class ZBlogException
     {
         $this->message = $exception->getMessage();
         $this->messagefull = $exception->getMessage() . ' (set_exception_handler) ';
-        $this->type = $exception->getCode();
+        if (is_a($exception, 'Error')) {
+            $this->messagefull = $exception->getMessage() . ' (set_error_handler) ';
+        }
         $this->code = $exception->getCode();
         $this->file = $exception->getFile();
         $this->line = $exception->getLine();
-
-        $lastzbe = end(self::$private_zbe_list);
-        if (is_object($lastzbe)) {
-            if ($lastzbe->file !== null) {
-                $this->file = $lastzbe->file;
-            }
-            if ($lastzbe->line !== null) {
-                $this->line = $lastzbe->line;
-            }
+        if (get_class($exception) == 'ZbpErrorException') {
+            $this->moreinfo = $exception->moreinfo;
+            $this->messagefull = $exception->messagefull;
+            $this->http_code = $exception->http_code;
         }
     }
 
@@ -588,7 +610,7 @@ class ZBlogException
             return;
         }
         if (!headers_sent()) {
-            Http500();
+            SetHttpStatusCode($this->http_code);
         }
         @ob_clean();
         $error = $this;
@@ -654,10 +676,10 @@ class ZBlogException
         global $bloghost;
         $result = '';
 
-        $lastzbe = end(self::$private_zbe_list);
+        $lastzee = self::$last_zee;
         $error_id = 0;
-        if (is_object($lastzbe)) {
-            $error_id = $lastzbe->code;
+        if (is_object($lastzee)) {
+            $error_id = $lastzee->code;
         }
 
         if ($error_id != 0) {
@@ -693,15 +715,6 @@ class ZBlogException
         return $result;
     }
 
-    public function getTypeName()
-    {
-        if (isset(self::$errarray[$this->type])) {
-            return self::$errarray[$this->type];
-        } else {
-            return self::$errarray[0];
-        }
-    }
-
     public function getType()
     {
         return $this->type;
@@ -722,9 +735,9 @@ class ZBlogException
         return $this->moreinfo;
     }
 
-    public function getPrevious()
+    public function getHttpCode()
     {
-        return $this->previous;
+        return $this->http_code;
     }
 
     public function getCode()

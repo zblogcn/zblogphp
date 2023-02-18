@@ -61,17 +61,13 @@ function ApiDebugDisplay($error)
 /**
  * API ShowError函数
  */
-function ApiShowError($errorCode, $errorText, $file = null, $line = null, $moreinfo = array(), $httpcode = 200)
+function ApiShowError()
 {
     $GLOBALS['hooks']['Filter_Plugin_Zbp_ShowError']['ApiShowError'] = PLUGIN_EXITSIGNAL_RETURN;
-    //如果是$errorCode == 2就是http 404
-    if ($errorCode == 2 && $httpcode == 200) {
-        $httpcode = 404;
-    }
-    $zbe = ZBlogException::GetInstance();
-    $zbe->ParseError($errorCode, $errorText, $file, $line);
-    ApiResponse(null, $zbe, $httpcode, $errorText);
-    die;
+    //$_SERVER['_error_count'] = ($_SERVER['_error_count'] + 1);
+    $zee = ZBlogException::GetLastZEE();
+    throw $zee;
+    //die;
 }
 
 /**
@@ -198,8 +194,8 @@ function ApiResponse($data = null, $error = null, $code = 200, $message = null)
     if ($error !== null) {
         if (is_object($error)) {
             $error_info = array(
+                'type' => method_exists($error, 'getType') ? $error->type : 'Error',
                 'code' => method_exists($error, 'getCode') ? $error->getCode() : $error->code,
-                'type' => property_exists($error, 'type') ? $error->type : $error->getCode(),
                 'message' => method_exists($error, 'getMessage') ? $error->getMessage() : $error->message,
             );
 
@@ -207,13 +203,14 @@ function ApiResponse($data = null, $error = null, $code = 200, $message = null)
                 $error_info['message_full'] = property_exists($error, 'messagefull') ? $error->messagefull : '';
                 $error_info['file'] = method_exists($error, 'getFile') ? $error->getFile() : $error->file;
                 $error_info['line'] = method_exists($error, 'getLine') ? $error->getLine() : $error->line;
+                $error_info['moreinfo'] = property_exists($error, 'moreinfo') ? $error->moreinfo : array();
             }
 
             if ($code === 200) {
                 $code = 500;
             }
             if (empty($message)) {
-                $message = 'System error: ' . $error_info['message'];
+                $message = $error_info['type'] . ': ' . $error_info['message'];
             }
         } else {
             $error_info = $error;
@@ -232,7 +229,16 @@ function ApiResponse($data = null, $error = null, $code = 200, $message = null)
     // 显示 Runtime 调试信息
     if (!defined('ZBP_API_IN_TEST') && $GLOBALS['option']['ZC_RUNINFO_DISPLAY']) {
         $runtime = RunTime(false);
-        unset($runtime['error_detail']);
+        if ($GLOBALS['zbp']->isdebug) {
+            $runtime['env'] = GetEnvironment();
+            $runtime['zbp'] = ZC_VERSION_FULL;
+            $app = $GLOBALS['zbp']->LoadApp('plugin', 'AppCentre');
+            if ($app->isloaded == true && $app->IsUsed()) {
+                $runtime['appcenter'] = $app->version;
+            }
+        } else {
+            unset($runtime['error_detail']);
+        }
         $response['runtime'] = $runtime;
     }
 
@@ -247,15 +253,18 @@ function ApiResponse($data = null, $error = null, $code = 200, $message = null)
         }
     }
 
-    if (is_object($error) && $code >= 500) {
-        SetHttpStatusCode($code);
+    if (!is_null($error)) {
+        SetHttpStatusCode(500, true);
+        $r = JsonEncode($response);
+        echo $r;
+        return $r;
     }
 
     $r = JsonEncode($response);
 
     echo $r;
 
-    if (empty($error) && $code !== 200) {
+    if (is_null($error) && $code !== 200) {
         // 如果 code 不为 200，又不是系统抛出的错误，再来抛出一个 Exception，适配 phpunit
         ZBlogException::SuspendErrorHook();
         throw new Exception($message, $code);
@@ -603,7 +612,17 @@ function ApiDispatch($mods, $mod, $act)
         include_once $mod_file;
         $func = 'api_' . $mod . '_' . $act;
         if (function_exists($func)) {
-            $result = call_user_func($func);
+            try {
+                $result = call_user_func($func);
+            } catch (Throwable $e) {
+                $_SERVER['_error_count'] = ($_SERVER['_error_count'] + 1);
+                $result = ApiResponse(null, $e);
+                return $result;
+            } catch (Exception $e) {
+                $_SERVER['_error_count'] = ($_SERVER['_error_count'] + 1);
+                $result = ApiResponse(null, $e);
+                return $result;
+            }
 
             ApiResultData($result);
 

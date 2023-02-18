@@ -384,9 +384,6 @@ function Redirect301($url)
 function Http404()
 {
     SetHttpStatusCode(404);
-    if (!headers_sent()) {
-        header("Status: 404 Not Found");
-    }
 }
 
 /**
@@ -2694,7 +2691,7 @@ function zbp_throttle($name = 'default', $max_reqs = 60, $period = 60)
         $zbpcache->Connect();
     }
     $cache_key = $name;
-    $cached_value = $zbpcache->Get($cache_key);
+    $cached_value = (string) $zbpcache->Get($cache_key);
     $cached_req = json_decode($cached_value, true);
     if (!$cached_value || !$cached_req || (time() >= $cached_req['expire_time'])) {
         $cached_req = array('hits' => 0, 'expire_time' => (time() + $period));
