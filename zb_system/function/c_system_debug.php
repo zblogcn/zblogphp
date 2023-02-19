@@ -156,7 +156,7 @@ function Debug_Error_Handler($errno, $errstr, $errfile, $errline)
         return true;
     }
 
-    $zbe = ZBlogErrorContrl::GetNewException('Error');
+    $zbe = ZBlogErrorContrl::GetNewException();
     $zbe->ParseError($errno, $errstr, $errfile, $errline);
     $zbe->Display();
 
@@ -197,7 +197,7 @@ function Debug_Exception_Handler($exception)
         );
     }
 
-    $zbe = ZBlogErrorContrl::GetNewException(get_class($exception));
+    $zbe = ZBlogErrorContrl::GetNewException();
     $zbe->ParseException($exception);
     $zbe->Display();
 
@@ -233,7 +233,7 @@ function Debug_Shutdown_Handler()
             return true;
         }
 
-        $zbe = ZBlogErrorContrl::GetNewException('Shutdown');
+        $zbe = ZBlogErrorContrl::GetNewException();
         $zbe->ParseShutdown($error);
         $zbe->Display();
     }
@@ -255,9 +255,13 @@ function Debug_DoNothing()
  */
 class ZbpErrorException extends Exception
 {
-    public $moreinfo = null;
-    public $http_code = 500;
+    public $moreinfo = array();
+    public $httpcode = 500;
     public $messagefull = null;
+    /**
+     * 类型(Error, Exception, Shutdown, ZbpErrorException)
+     */
+    public $type = __CLASS__;
 
     public function __construct($message = "", $code = 0, $previous = null, $file = '', $line = 0)
     {
@@ -265,6 +269,26 @@ class ZbpErrorException extends Exception
         $this->code = $code;
         $this->file = $file;
         $this->line = $line;
+    }
+
+    public function getType()
+    {
+        return $this->type;
+    }
+
+    public function getMessageFull()
+    {
+        return $this->messagefull;
+    }
+
+    public function getMoreInfo()
+    {
+        return $this->moreinfo;
+    }
+
+    public function getHttpCode()
+    {
+        return $this->httpcode;
     }
 }
 
@@ -315,44 +339,9 @@ class ZBlogErrorContrl
     public static $errors_msg = array();
 
     /**
-     * 代码
+     * 内部_zee
      */
-    public $code;
-
-    /**
-     * 类型(Error, Exception, Shutdown, ZbpErrorException)
-     */
-    public $type;
-
-    /**
-     * 消息
-     */
-    public $message;
-
-    /**
-     * 完全消息
-     */
-    public $messagefull;
-
-    /**
-     * 更多信息 (可能是数组)
-     */
-    public $moreinfo;
-
-    /**
-     * 文件
-     */
-    public $file;
-
-    /**
-     * 行号
-     */
-    public $line;
-
-    /**
-     * http_code
-     */
-    public $http_code = 500;
+    private  $private_zee = null;
 
     /**
      * 错误数组
@@ -382,6 +371,22 @@ class ZBlogErrorContrl
      */
     public function __construct()
     {
+        $this->private_zee = new ZbpErrorException();
+    }
+
+    public function __get($name)
+    {
+        if ($name == 'file') {
+            return $this->private_zee->getFile();
+        }elseif ($name == 'line') {
+            return $this->private_zee->getLine();
+        }elseif ($name == 'code') {
+            return $this->private_zee->getCode();
+        }elseif ($name == 'message') {
+            return $this->private_zee->getMessage();
+        }else {
+            return $this->private_zee->$name;
+        }
     }
 
     public static function ThrowException($error)
@@ -390,10 +395,9 @@ class ZBlogErrorContrl
         throw new Exception($e);
     }
 
-    public static function GetNewException($error_type)
+    public static function GetNewException()
     {
         $z = new self();
-        $z->type = $error_type;
         return $z;
     }
 
@@ -558,11 +562,9 @@ class ZBlogErrorContrl
      */
     public function ParseError($type, $message, $file, $line)
     {
-        $this->code = $type;
-        $this->message = $message;
-        $this->messagefull = $message . ' (set_error_handler) ';
-        $this->file = $file;
-        $this->line = $line;
+        $this->private_zee = new ZbpErrorException($message, $type, null, $file, $line);
+        $this->private_zee->messagefull = $message . ' (set_error_handler) ';
+        $this->private_zee->type = 'Error';
     }
 
     /**
@@ -572,11 +574,10 @@ class ZBlogErrorContrl
      */
     public function ParseShutdown($error)
     {
-        $this->code = $error['type'];
-        $this->message = $error['message'];
-        $this->messagefull = $error['message'] . ' (register_shutdown_function) ';
-        $this->file = $error['file'];
-        $this->line = $error['line'];
+        $this->private_zee = new ZbpErrorException($error['message'], $error['type'], null, $error['file'], $error['line']);
+        $this->private_zee->messagefull = $error['message'] . ' (register_shutdown_function) ';
+        $this->private_zee->type = 'Shutdown';
+
     }
 
     /**
@@ -586,18 +587,16 @@ class ZBlogErrorContrl
      */
     public function ParseException($exception)
     {
-        $this->message = $exception->getMessage();
-        $this->messagefull = $exception->getMessage() . ' (set_exception_handler) ';
+        $this->private_zee = new ZbpErrorException($exception->getMessage(), $exception->getCode(), null, $exception->getFile(), $exception->getLine());
+        $this->private_zee->messagefull = $exception->getMessage() . ' (set_exception_handler) ';
+        $this->private_zee->type = get_class($exception);
         if (is_a($exception, 'Error')) {
             $this->messagefull = $exception->getMessage() . ' (set_error_handler) ';
         }
-        $this->code = $exception->getCode();
-        $this->file = $exception->getFile();
-        $this->line = $exception->getLine();
         if (get_class($exception) == 'ZbpErrorException') {
-            $this->moreinfo = $exception->moreinfo;
-            $this->messagefull = $exception->messagefull;
-            $this->http_code = $exception->http_code;
+            $this->private_zee->moreinfo = $exception->moreinfo;
+            $this->private_zee->messagefull = $exception->messagefull;
+            $this->private_zee->httpcode = $exception->httpcode;
         }
     }
 
@@ -610,7 +609,7 @@ class ZBlogErrorContrl
             return;
         }
         if (!headers_sent()) {
-            SetHttpStatusCode($this->http_code);
+            SetHttpStatusCode($this->getHttpCode());
         }
         @ob_clean();
         $error = $this;
@@ -717,42 +716,42 @@ class ZBlogErrorContrl
 
     public function getType()
     {
-        return $this->type;
-    }
-
-    public function getMessage()
-    {
-        return $this->message;
+        return $this->private_zee->getType();
     }
 
     public function getMessageFull()
     {
-        return $this->messagefull;
+        return $this->private_zee->getMessageFull();
     }
 
     public function getMoreInfo()
     {
-        return $this->moreinfo;
+        return $this->private_zee->getMoreInfo();
     }
 
     public function getHttpCode()
     {
-        return $this->http_code;
+        return $this->private_zee->getHttpCode();
+    }
+
+    public function getMessage()
+    {
+        return $this->private_zee->getMessage();
     }
 
     public function getCode()
     {
-        return $this->code;
+        return $this->private_zee->getCode();
     }
 
     public function getFile()
     {
-        return $this->file;
+        return $this->private_zee->getFile();
     }
 
     public function getLine()
     {
-        return $this->line;
+        return $this->private_zee->getLine();
     }
 
     public function getTrace()

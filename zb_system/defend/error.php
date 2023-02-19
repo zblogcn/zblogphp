@@ -52,7 +52,7 @@ unset($post_data['addinfo']);
                 if (!$GLOBALS['zbp']->isdebug) {
                     ?>
                     <div class="divHeader lessinfo" style="margin-bottom:10px;">
-                        <b><?php echo FormatString($error->message, '[noscript]'); ?></b></div>
+                        <b><?php echo FormatString($error->getMessage(), '[noscript]'); ?></b></div>
                     <div class="content lessinfo">
                         <div>
                             <p style="font-weight: normal;"><?php echo $GLOBALS['lang']['msg']['possible_causes_error']; ?></p>
@@ -71,7 +71,7 @@ unset($post_data['addinfo']);
                         <div>
                             <p><?php echo $GLOBALS['lang']['msg']['error_info']; ?></p>
         <?php
-        echo '[' . $error->type . '] (' . $error->code . ') :   ' . (FormatString($error->messagefull, '[noscript]'));
+        echo '[' . $error->getType() . '] (' . $error->getCode() . ') :   ' . (FormatString($error->getMessageFull(), '[noscript]'));
         echo ' (' . ZC_VERSION_FULL . ') ';
         if (!in_array('Status: 404 Not Found', headers_list())) {
                 echo '(' . GetEnvironment(true) . ') ';
@@ -79,7 +79,8 @@ unset($post_data['addinfo']);
         ?>
                         </div>
         <?php
-        if (is_array($error->moreinfo) && !empty($error->moreinfo)) {
+        $moreinfo = $error->getMoreInfo();
+        if (is_array($moreinfo) && !empty($moreinfo)) {
             ?>
                         <div>
                             <p><?php echo 'Debug More Info'; ?></p>
@@ -89,7 +90,7 @@ unset($post_data['addinfo']);
 
                     <?php
                     $i = 0;
-                    foreach ($error->moreinfo as $key => $value) {
+                    foreach ($moreinfo as $key => $value) {
                         $i += 1;
                         ?>
                                     <tr>
@@ -109,17 +110,17 @@ unset($post_data['addinfo']);
 
                         <div>
                             <p><?php echo $GLOBALS['lang']['msg']['file_line']; ?></p>
-                            <i><?php echo $error->file; ?></i><br/>
+                            <i><?php echo $error->getFile(); ?></i><br/>
                             <table style="width: 100%" class="table_striped">
                                 <tbody>
 
                     <?php
-                    $aFile = $error->get_code($error->file, $error->line);
+                    $aFile = $error->get_code($error->getFile(), $error->getLine());
                     foreach ($aFile as $iInt => $sData) {
                         ?>
                                     <tr>
-                                        <td style='width:50px' <?php echo ($iInt + 1) == $error->line ? ' class="bg-lightcolor"' : ''; ?> ><?php echo ($iInt + 1); ?></td>
-                                        <td <?php echo ($iInt + 1) == $error->line ? ' class="bg-lightcolor"' : ''; ?> ><?php echo $sData; ?></td>
+                                        <td style='width:50px' <?php echo ($iInt + 1) == $error->getLine() ? ' class="bg-lightcolor"' : ''; ?> ><?php echo ($iInt + 1); ?></td>
+                                        <td <?php echo ($iInt + 1) == $error->getLine() ? ' class="bg-lightcolor"' : ''; ?> ><?php echo $sData; ?></td>
                                     </tr>
                                     <?php
                     }

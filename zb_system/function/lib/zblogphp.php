@@ -3939,9 +3939,9 @@ class ZBlogPHP
         //$last_zbe->code = $errorCode;
         $last_zbe->messagefull = $errorText . ' (set_exception_handler) ';
         $last_zbe->moreinfo = $moreinfo;
-        $last_zbe->http_code = 500;
+        $last_zbe->httpcode = 500;
         if ($errorCode == 2) {
-            $last_zbe->http_code = 404;
+            $last_zbe->httpcode = 404;
         }
         ZBlogErrorContrl::SetLastZEE($last_zbe);
 

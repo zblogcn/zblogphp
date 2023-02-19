@@ -181,7 +181,7 @@ function ApiCheckMods(&$mods_allow, &$mods_disallow)
  * API 响应.
  *
  * @param array|null $data
- * @param ZBlogException|null $error
+ * @param ZBlogErrorException|Exception|Error|null $error
  * @param int $code
  * @param string|null $message
  */
@@ -194,16 +194,16 @@ function ApiResponse($data = null, $error = null, $code = 200, $message = null)
     if ($error !== null) {
         if (is_object($error)) {
             $error_info = array(
-                'type' => method_exists($error, 'getType') ? $error->type : 'Error',
-                'code' => method_exists($error, 'getCode') ? $error->getCode() : $error->code,
-                'message' => method_exists($error, 'getMessage') ? $error->getMessage() : $error->message,
+                'type' => method_exists($error, 'getType') ? $error->getType() : get_class($error),
+                'code' => method_exists($error, 'getCode') ? $error->getCode() : 0,
+                'message' => method_exists($error, 'getMessage') ? $error->getMessage() : '',
             );
 
             if ($GLOBALS['zbp']->isdebug) {
-                $error_info['message_full'] = property_exists($error, 'messagefull') ? $error->messagefull : '';
-                $error_info['file'] = method_exists($error, 'getFile') ? $error->getFile() : $error->file;
-                $error_info['line'] = method_exists($error, 'getLine') ? $error->getLine() : $error->line;
-                $error_info['moreinfo'] = property_exists($error, 'moreinfo') ? $error->moreinfo : array();
+                $error_info['message_full'] = method_exists($error, 'getMessageFull') ? $error->getMessageFull() : '';
+                $error_info['file'] = method_exists($error, 'getFile') ? $error->getFile() : '';
+                $error_info['line'] = method_exists($error, 'getLine') ? $error->getLine() : '';
+                $error_info['moreinfo'] = method_exists($error, 'getMoreInfo') ? $error->getMoreInfo() : array();
             }
 
             if ($code === 200) {
