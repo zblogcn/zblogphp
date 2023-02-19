@@ -227,7 +227,7 @@ function ApiResponse($data = null, $error = null, $code = 200, $message = null)
     );
 
     // 显示 Runtime 调试信息
-    if (!defined('ZBP_API_IN_TEST') && $GLOBALS['option']['ZC_RUNINFO_DISPLAY']) {
+    if (defined('ZBP_API_IN_TEST') || $GLOBALS['option']['ZC_RUNINFO_DISPLAY']) {
         $runtime = RunTime(false);
         if ($GLOBALS['zbp']->isdebug) {
             $runtime['env'] = GetEnvironment();
@@ -261,7 +261,6 @@ function ApiResponse($data = null, $error = null, $code = 200, $message = null)
     }
 
     $r = JsonEncode($response);
-
     echo $r;
 
     if (is_null($error) && $code !== 200) {

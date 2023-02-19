@@ -321,6 +321,17 @@ DefinePluginFilter('Filter_Plugin_Debug_Handler');
 /*
 '**************************************************<
 '类型:Filter
+'名称:Filter_Plugin_Debug_Parse
+'参数:$zee 类型(ZbpErrorException)
+'说明:Filter_Plugin_Debug_Display之前的接口，1.7.3新增，用于取代Filter_Plugin_Debug_Display接口，实现统一的拦截
+'调用:
+'**************************************************>
+ */
+DefinePluginFilter('Filter_Plugin_Debug_Parse');
+
+/*
+'**************************************************<
+'类型:Filter
 '名称:Filter_Plugin_Debug_Display
 '参数:
 '说明:定义ZBlogException的Display函数的接口

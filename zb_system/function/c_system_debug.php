@@ -156,8 +156,17 @@ function Debug_Error_Handler($errno, $errstr, $errfile, $errline)
         return true;
     }
 
-    $zbe = ZBlogErrorContrl::GetNewException();
-    $zbe->ParseError($errno, $errstr, $errfile, $errline);
+    $zbe = new ZBlogErrorContrl();
+    $zee = $zbe->ParseError($errno, $errstr, $errfile, $errline);
+
+    foreach ($GLOBALS['hooks']['Filter_Plugin_Debug_Parse'] as $fpname => &$fpsignal) {
+        $fpsignal = PLUGIN_EXITSIGNAL_NONE;
+        $fpreturn = $fpname($zee);
+        if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
+            return true;
+        }
+    }
+
     $zbe->Display();
 
     return true;
@@ -197,8 +206,17 @@ function Debug_Exception_Handler($exception)
         );
     }
 
-    $zbe = ZBlogErrorContrl::GetNewException();
-    $zbe->ParseException($exception);
+    $zbe = new ZBlogErrorContrl();
+    $zee = $zbe->ParseException($exception);
+
+    foreach ($GLOBALS['hooks']['Filter_Plugin_Debug_Parse'] as $fpname => &$fpsignal) {
+        $fpsignal = PLUGIN_EXITSIGNAL_NONE;
+        $fpreturn = $fpname($zee);
+        if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
+            return true;
+        }
+    }
+
     $zbe->Display();
 
     return true;
@@ -233,8 +251,17 @@ function Debug_Shutdown_Handler()
             return true;
         }
 
-        $zbe = ZBlogErrorContrl::GetNewException();
-        $zbe->ParseShutdown($error);
+        $zbe = new ZBlogErrorContrl();
+        $zee = $zbe->ParseShutdown($error);
+
+        foreach ($GLOBALS['hooks']['Filter_Plugin_Debug_Parse'] as $fpname => &$fpsignal) {
+            $fpsignal = PLUGIN_EXITSIGNAL_NONE;
+            $fpreturn = $fpname($zee);
+            if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
+                return true;
+            }
+        }
+
         $zbe->Display();
     }
 
@@ -389,39 +416,20 @@ class ZBlogErrorContrl
         }
     }
 
-    public static function ThrowException($error)
-    {
-        $e = var_export($error, true);
-        throw new Exception($e);
-    }
-
-    public static function GetNewException()
-    {
-        $z = new self();
-        return $z;
-    }
-
     /**
-     * 获取ZBE实例
-     *
-     * @return ZBlogException
-     */
-    public static function GetInstance()
-    {
-        if (!is_object(self::$private_zbe)) {
-            self::$private_zbe = new ZBlogException();
-        }
-        return self::$private_zbe();
-    }
-
-    /**
-     * 清除之前并获取最后一个ZEE
+     * 设置最后一个ZEE，如果是Error或是Exception就转换为ZEE
      *
      * @return ZbpErrorException
      */
     public static function SetLastZEE($zee)
     {
-        self::$last_zee = $zee;
+        if (is_a($zee, 'ZbpErrorException')) {
+            self::$last_zee = $zee;
+        } else {
+            $newzee = new ZbpErrorException($zee->getMessage(), $zee->getCode(), null, $zee->getFile(), $zee->getLine());
+            self::$last_zee = $newzee;
+        }
+
         return self::GetLastZEE();
     }
 
@@ -565,6 +573,8 @@ class ZBlogErrorContrl
         $this->private_zee = new ZbpErrorException($message, $type, null, $file, $line);
         $this->private_zee->messagefull = $message . ' (set_error_handler) ';
         $this->private_zee->type = 'Error';
+        self::SetLastZEE($this->private_zee);
+        return $this->private_zee;
     }
 
     /**
@@ -577,7 +587,8 @@ class ZBlogErrorContrl
         $this->private_zee = new ZbpErrorException($error['message'], $error['type'], null, $error['file'], $error['line']);
         $this->private_zee->messagefull = $error['message'] . ' (register_shutdown_function) ';
         $this->private_zee->type = 'Shutdown';
-
+        self::SetLastZEE($this->private_zee);
+        return $this->private_zee;
     }
 
     /**
@@ -591,13 +602,15 @@ class ZBlogErrorContrl
         $this->private_zee->messagefull = $exception->getMessage() . ' (set_exception_handler) ';
         $this->private_zee->type = get_class($exception);
         if (is_a($exception, 'Error')) {
-            $this->messagefull = $exception->getMessage() . ' (set_error_handler) ';
+            $this->private_zee->messagefull = $exception->getMessage() . ' (set_error_handler) ';
         }
         if (get_class($exception) == 'ZbpErrorException') {
             $this->private_zee->moreinfo = $exception->moreinfo;
             $this->private_zee->messagefull = $exception->messagefull;
             $this->private_zee->httpcode = $exception->httpcode;
         }
+        self::SetLastZEE($this->private_zee);
+        return $this->private_zee;
     }
 
     /**
@@ -675,7 +688,7 @@ class ZBlogErrorContrl
         global $bloghost;
         $result = '';
 
-        $lastzee = self::$last_zee;
+        $lastzee = $this->private_zee;
         $error_id = 0;
         if (is_object($lastzee)) {
             $error_id = $lastzee->code;
