@@ -208,6 +208,28 @@ unset($post_data['addinfo']);
                                 </tbody>
                             </table>
                         </div>
+                        <div>
+                            <p><?php echo 'Error Info List'; ?></p>
+                            <table style="width: 100%" class="table_striped">
+                                <tbody>
+
+                    <?php
+                    $error_list = ZbpErrorContrl::GetErrorInfoList();
+                    $i = 0;
+                    foreach ($error_list as $key => $value) {
+                        $i += 1;
+                        ?>
+                                    <tr>
+                                        <td style='width:50px;'><?php echo $key; ?></td>
+                                        <td><?php echo htmlspecialchars(var_export($value, true)); ?></td>
+                                    </tr>
+                                    <?php
+                    }
+                    ?>
+
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                     <?php
     }

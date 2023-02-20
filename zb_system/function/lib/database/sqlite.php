@@ -264,9 +264,9 @@ class Database__SQLite implements Database__Interface
     public function ExistColumn($table, $field)
     {
         $r = null;
-        ZBlogErrorContrl::SuspendErrorHook();
+        ZbpErrorContrl::SuspendErrorHook();
         $r = @$this->Query("PRAGMA table_info([$table])");
-        ZBlogErrorContrl::ResumeErrorHook();
+        ZbpErrorContrl::ResumeErrorHook();
         $r = serialize($r);
         if (stripos($r, '"' . $field . '"') !== false) {
             return true;

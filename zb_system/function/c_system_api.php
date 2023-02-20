@@ -54,8 +54,8 @@ function ApiTokenVerify()
 function ApiDebugDisplay($error)
 {
     $GLOBALS['hooks']['Filter_Plugin_Debug_Display']['ApiDebugDisplay'] = PLUGIN_EXITSIGNAL_RETURN;
+    //这里的输出是为了解决了shutdown时的输出，因为只有只有shutdown才会到这里
     ApiResponse(null, $error);
-    //die;
 }
 
 /**
@@ -63,11 +63,8 @@ function ApiDebugDisplay($error)
  */
 function ApiShowError()
 {
-    $GLOBALS['hooks']['Filter_Plugin_Zbp_ShowError']['ApiShowError'] = PLUGIN_EXITSIGNAL_RETURN;
-    //$_SERVER['_error_count'] = ($_SERVER['_error_count'] + 1);
-    $zee = ZBlogErrorContrl::GetLastZEE();
-    throw $zee;
-    //die;
+    $GLOBALS['hooks']['Filter_Plugin_Zbp_ShowError']['ApiShowError'] = PLUGIN_EXITSIGNAL_BREAK;
+    //主动跳过，直接throw
 }
 
 /**
@@ -265,7 +262,7 @@ function ApiResponse($data = null, $error = null, $code = 200, $message = null)
 
     if (is_null($error) && $code !== 200) {
         // 如果 code 不为 200，又不是系统抛出的错误，再来抛出一个 Exception，适配 phpunit
-        ZBlogErrorContrl::SuspendErrorHook();
+        ZbpErrorContrl::SuspendErrorHook();
         throw new Exception($message, $code);
     }
 

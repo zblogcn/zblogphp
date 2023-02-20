@@ -380,10 +380,10 @@ class Database__MySQLi implements Database__Interface
     public function ExistColumn($table, $field)
     {
         $r = null;
-        ZBlogErrorContrl::SuspendErrorHook();
+        ZbpErrorContrl::SuspendErrorHook();
         $s = "SELECT column_name FROM information_schema.columns WHERE table_schema='$this->dbname' AND table_name = '$table' AND column_name = '$field'";
         $r = @$this->Query($s);
-        ZBlogErrorContrl::ResumeErrorHook();
+        ZbpErrorContrl::ResumeErrorHook();
         if (is_array($r) && count($r) == 0) {
             return false;
         }

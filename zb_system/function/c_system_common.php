@@ -2431,14 +2431,14 @@ function Logs($logString, $level = 'INFO', $source = 'system')
         }
     }
 
-    ZBlogErrorContrl::SuspendErrorHook();
+    ZbpErrorContrl::SuspendErrorHook();
     $handle = @fopen($f, 'a+');
     if ($handle) {
         $t = $time;
         @fwrite($handle, '[' . $t . ']' . " " . $level . " " . $source . " " . $ip . "\r\n" . $logString . "\r\n");
         @fclose($handle);
     }
-    ZBlogErrorContrl::ResumeErrorHook();
+    ZbpErrorContrl::ResumeErrorHook();
 
     return true;
 }
@@ -2492,7 +2492,7 @@ function RunTime($isOutput = true)
     $rt['debug'] = $zbp->isdebug ? 1 : 0;
     $rt['loggedin'] = $zbp->islogin ? 1 : 0;
     $rt['error'] = GetVars('_error_count', 'SERVER', 0);
-    $rt['error_detail'] = ZBlogErrorContrl::$errors_msg;
+    $rt['error_detail'] = ZbpErrorContrl::GetErrorInfoList();
     if (function_exists('memory_get_peak_usage')) {
         $rt['memory'] = (int) ((memory_get_peak_usage() - GetVars('_memory_usage', 'SERVER', 0)) / 1024);
     }

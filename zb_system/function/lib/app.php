@@ -747,7 +747,7 @@ class App
         $id = $xml->id;
         $dir = $zbp->path . 'zb_users/' . $type . '/';
 
-        ZBlogErrorContrl::SuspendErrorHook();
+        ZbpErrorContrl::SuspendErrorHook();
 
         self::$unpack_app = null;
 
@@ -778,7 +778,7 @@ class App
 
         self::$unpack_app = $zbp->LoadApp($type, $id);
 
-        ZBlogErrorContrl::ResumeErrorHook();
+        ZbpErrorContrl::ResumeErrorHook();
 
         return true;
     }

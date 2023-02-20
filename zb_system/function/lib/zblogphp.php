@@ -747,19 +747,19 @@ class ZBlogPHP
         }
 
         if (isset($this->option['ZC_DEBUG_MODE_WARNING'])) {
-            ZBlogErrorContrl::$iswarning = (bool) $this->option['ZC_DEBUG_MODE_WARNING'];
+            ZbpErrorContrl::$iswarning = (bool) $this->option['ZC_DEBUG_MODE_WARNING'];
         }
         if (isset($this->option['ZC_DEBUG_MODE_STRICT'])) {
-            ZBlogErrorContrl::$isstrict = (bool) $this->option['ZC_DEBUG_MODE_STRICT'];
+            ZbpErrorContrl::$isstrict = (bool) $this->option['ZC_DEBUG_MODE_STRICT'];
         }
         if (isset($this->option['ZC_DEBUG_LOG_ERROR'])) {
-            ZBlogErrorContrl::$islogerror = (bool) $this->option['ZC_DEBUG_LOG_ERROR'];
+            ZbpErrorContrl::$islogerror = (bool) $this->option['ZC_DEBUG_LOG_ERROR'];
         }
 
         if (defined('ZBP_DEBUGMODE') && constant('ZBP_DEBUGMODE') == true) {
-            ZBlogErrorContrl::$iswarning = true;
-            ZBlogErrorContrl::$isstrict = true;
-            ZBlogErrorContrl::$islogerror = true;
+            ZbpErrorContrl::$iswarning = true;
+            ZbpErrorContrl::$isstrict = true;
+            ZbpErrorContrl::$islogerror = true;
         }
 
         //消除16升级17又退回16后再升级17出的bug;
@@ -1023,7 +1023,7 @@ class ZBlogPHP
 
             $this->CloseConnect();
 
-            if (ZBlogErrorContrl::$islogerror && is_array($this->db->error) && !empty($this->db->error)) {
+            if (ZbpErrorContrl::$islogerror && is_array($this->db->error) && !empty($this->db->error)) {
                 foreach ($this->db->error as $e) {
                     Logs($this->db->type . ' error id:' . PHP_EOL . var_export($e, true), 'ERROR');
                 }
@@ -3943,7 +3943,7 @@ class ZBlogPHP
         if ($errorCode == 2) {
             $last_zbe->httpcode = 404;
         }
-        ZBlogErrorContrl::SetLastZEE($last_zbe);
+        ZbpErrorContrl::SetLastZEE($last_zbe);
 
         if (stripos('{' . sha1('mustshowerror') . '}', $errorText) === 0) {
             $errorText = str_replace('{' . sha1('mustshowerror') . '}', '', $errorText);
@@ -3963,6 +3963,8 @@ class ZBlogPHP
                 $fpsignal = PLUGIN_EXITSIGNAL_NONE;
 
                 return $fpreturn;
+            } elseif ($fpsignal == PLUGIN_EXITSIGNAL_BREAK) {
+                break;
             }
         }
 
