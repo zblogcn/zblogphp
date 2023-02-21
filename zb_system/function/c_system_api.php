@@ -49,13 +49,14 @@ function ApiTokenVerify()
 }
 
 /**
- * API 显示报错函数
+ * API 处理报错函数
  */
-function ApiDebugDisplay($error)
+function ApiDebugHandler($error)
 {
-    $GLOBALS['hooks']['Filter_Plugin_Debug_Display']['ApiDebugDisplay'] = PLUGIN_EXITSIGNAL_RETURN;
+    $GLOBALS['hooks']['Filter_Plugin_Debug_Handler']['ApiDebugHandler'] = PLUGIN_EXITSIGNAL_RETURN;
     //这里的输出是为了解决了shutdown时的输出，因为只有只有shutdown才会到这里
     ApiResponse(null, $error);
+    return true;
 }
 
 /**
@@ -608,6 +609,7 @@ function ApiDispatch($mods, $mod, $act)
         include_once $mod_file;
         $func = 'api_' . $mod . '_' . $act;
         if (function_exists($func)) {
+            //$result = call_user_func($func);
             try {
                 $result = call_user_func($func);
             } catch (Throwable $e) {

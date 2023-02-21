@@ -892,7 +892,7 @@ class ZBlogPHP
 
         if ($this->isapi) {
             //挂载API错误显示
-            Add_Filter_Plugin('Filter_Plugin_Debug_Display', 'ApiDebugDisplay');
+            Add_Filter_Plugin('Filter_Plugin_Debug_Handler', 'ApiDebugHandler');
             Add_Filter_Plugin('Filter_Plugin_Zbp_ShowError', 'ApiShowError');
             //挂载Token验证
             Add_Filter_Plugin('Filter_Plugin_Zbp_PreLoad', 'ApiTokenVerify');
@@ -3917,7 +3917,7 @@ class ZBlogPHP
      * @param null       $line
      * @param array      $moreinfo
      *
-     * @throws Exception
+     * @throws ZbpErrorException
      *
      * @return mixed
      */
@@ -3934,16 +3934,15 @@ class ZBlogPHP
             $file = __FILE__;
             $line = __LINE__ - 11;
         }
-        $last_zbe = new ZbpErrorException($errorText, $errorCode, null, $file, $line);
-        //$last_zbe->message = $errorText;
-        //$last_zbe->code = $errorCode;
-        $last_zbe->messagefull = $errorText . ' (set_exception_handler) ';
-        $last_zbe->moreinfo = $moreinfo;
-        $last_zbe->httpcode = 500;
-        if ($errorCode == 2) {
-            $last_zbe->httpcode = 404;
+        $messagefull = $errorText . ' (set_exception_handler) ';
+        if (!is_array($moreinfo) && !is_null($moreinfo)) {
+            $moreinfo = array($moreinfo);
         }
-        ZbpErrorContrl::SetLastZEE($last_zbe);
+        $httpcode = 500;
+        if ($errorCode == 2) {
+            $httpcode = 404;
+        }
+        $last_zbe = new ZbpErrorException($errorText, $errorCode, null, $file, $line, 'ZbpErrorException', $moreinfo, $httpcode, $messagefull);
 
         if (stripos('{' . sha1('mustshowerror') . '}', $errorText) === 0) {
             $errorText = str_replace('{' . sha1('mustshowerror') . '}', '', $errorText);
@@ -3953,6 +3952,7 @@ class ZBlogPHP
             throw new Exception($errorText);
         }
 
+        //这里的接口不应再被使用了，请用Filter_Plugin_Debug_Handler和Filter_Plugin_Debug_Display
         foreach ($GLOBALS['hooks']['Filter_Plugin_Zbp_ShowError'] as $fpname => &$fpsignal) {
             array_shift($args);
             array_unshift($args, $errorText);

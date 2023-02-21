@@ -263,7 +263,7 @@ function Parse_Filter_Plugin($fpname)
 /**
  * 插入钩子 Filter接口
  *
- * 如果需要传入引用，须在php>=5.6，给参数补上(&...$arg)！
+ * 如果需要传入引用，须在php>=5.6，给参数补上(...$args)！
  *
  * @param string $plugname 接口名称
  */
@@ -311,7 +311,7 @@ function HookFilterPlugin_Return($plugname, &$signal = null)
 '**************************************************<
 '类型:Filter
 '名称:Filter_Plugin_Debug_Handler
-'参数:$type 类型(Shutdown|Exception|Error) $error 错误数据(对象或数组)
+'参数:$zee 类型(ZbpErrorException)
 '说明:定义Debug_Shutdown_Handler,Debug_Exception_Handler,Debug_Error_Handler函数的接口
 '调用:
 '**************************************************>
@@ -321,20 +321,9 @@ DefinePluginFilter('Filter_Plugin_Debug_Handler');
 /*
 '**************************************************<
 '类型:Filter
-'名称:Filter_Plugin_Debug_Parse
-'参数:$zee 类型(ZbpErrorException)
-'说明:Filter_Plugin_Debug_Display之前的接口，1.7.3新增，用于取代Filter_Plugin_Debug_Display接口，实现统一的拦截
-'调用:
-'**************************************************>
- */
-DefinePluginFilter('Filter_Plugin_Debug_Parse');
-
-/*
-'**************************************************<
-'类型:Filter
 '名称:Filter_Plugin_Debug_Display
-'参数:
-'说明:定义ZBlogException的Display函数的接口
+'参数:$zec 类型(ZbpErrorContrl)
+'说明:定义ZBlogException的Display函数的接口(与Handler不同的是一个传入zbp异常类一个是控制类)
 '调用:
 '**************************************************>
  */
