@@ -566,7 +566,7 @@ class Config implements Iterator
     public function DelKey($name)
     {
         $name = FilterCorrectName($name);
-        if (!isset($this->kvdata[$name])) {
+        if (array_key_exists($name, $this->kvdata) == false) {
             return false;
         }
 
