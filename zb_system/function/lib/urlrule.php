@@ -214,7 +214,8 @@ class UrlRule
                     $p['relate_value'] = '';
                 }
             }
-
+        }
+        foreach ($paras as $p) {
             //首先替换人为指定value的
             if (array_key_exists('value', $p)) {
                 $url = str_replace('{%' . $p['name'] . '%}', $p['value'], $url);

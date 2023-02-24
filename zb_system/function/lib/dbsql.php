@@ -151,7 +151,7 @@ class DbSql
                     }
                 }
                 $query = $sqlpb->query;
-                $option['pagebar']->Count = GetValueInArrayByCurrent($query, 'num');
+                $option['pagebar']->Count = (int) GetValueInArrayByCurrent($query, 'num');
             } else {
                 $option['pagebar']->Count = (int) $option['pagebar']->Count;
             }

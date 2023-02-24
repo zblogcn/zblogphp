@@ -146,7 +146,7 @@ function misc_statistic()
         $zbp->AddBuildModule('catalog');
         $zbp->AddBuildModule('navbar');
     } catch (Exception $e) {
-        echo $e->getMessage();
+        //echo $e->getMessage();
     }
     $zbp->BuildModule();
     $zbp->SaveCache();
