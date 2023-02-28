@@ -3946,9 +3946,8 @@ class ZBlogPHP
 
         if (stripos('{' . sha1('mustshowerror') . '}', $errorText) === 0) {
             $errorText = str_replace('{' . sha1('mustshowerror') . '}', '', $errorText);
-            $GLOBALS['hooks']['Filter_Plugin_Debug_Display'] = array();
-            $GLOBALS['hooks']['Filter_Plugin_Debug_Handler'] = array();
-
+            Clear_Filter_Plugin('Filter_Plugin_Debug_Display');
+            Clear_Filter_Plugin('Filter_Plugin_Debug_Handler');
             throw new Exception($errorText);
         }
 

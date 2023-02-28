@@ -131,18 +131,19 @@ abstract class Base__Member extends Base
             return $u->Make();
         }
         if ($name == 'Avatar') {
+            if ($this->private_avatar) {
+                return $this->private_avatar;
+            }
             foreach ($GLOBALS['hooks']['Filter_Plugin_Member_Avatar'] as $fpname => &$fpsignal) {
                 $fpreturn = $fpname($this);
                 if ($fpreturn) {
+                    $this->private_avatar = $fpreturn;
+
                     $fpsignal = PLUGIN_EXITSIGNAL_NONE;
 
                     return $fpreturn;
                 }
             }
-            if ($this->private_avatar) {
-                return $this->private_avatar;
-            }
-
             $s = $zbp->usersdir . 'avatar/' . $this->ID . '.png';
             if (is_readable($s)) {
                 $this->private_avatar = $zbp->host . 'zb_users/avatar/' . $this->ID . '.png';
