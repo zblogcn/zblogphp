@@ -45,7 +45,7 @@ return array(
     'db_set_port'                     => '（資料庫通訊埠號默認3306，如需要修改，請在「資料庫主機」裡追加「:資料庫通訊埠號」。）',
     'website_setting'                 => '網站設定',
     'username_intro'                  => '（拉丁字母，數字，漢字或._的組合）',
-    'password_intro'                  => '（最少八位數的數字、字元的組合）',
+    'password_intro'                  => '（最少八位數的數字、字元、符號的組合）',
     'create_db'                       => '新增了資料庫！',
     'create_table'                    => '資料表已加入至資料庫！',
     'exist_table_in_db'               => '該資料庫裡已存在相關的資料表和資料，請更改資料表前置字串或是更換清空資料庫再安裝。',

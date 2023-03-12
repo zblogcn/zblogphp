@@ -42,7 +42,7 @@ return array(
     'db_set_port'                     => '端口号默认3306，如需要修改请在\'数据库地址\'里追加\':端口号\'。',
     'website_setting'                 => '网站设置',
     'username_intro'                  => '英文,数字,汉字或._的组合',
-    'password_intro'                  => '8位或更长的数字或字母组合',
+    'password_intro'                  => '8位或更长的数字或字母、符号组合',
     'create_db'                       => '创建数据库！',
     'create_table'                    => '连接数据库并创建数据表！',
     'exist_table_in_db'               => '该数据库里已存在相关的表和数据，请更改表前缀或是更换清空数据库再安装。',

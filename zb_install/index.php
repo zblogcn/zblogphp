@@ -192,7 +192,7 @@ switch ($zblogstep) {
         alert("<?php echo $zbp->lang['zb_install']['adminpassword_need']; ?>");
         return false;
       };
-      var passwordRegExp = /^[A-Za-z0-9`~!@#\$%\^&\*\-_\?]+$/u;
+      var passwordRegExp = /^[A-Za-z0-9'"`~@#%&_/;!:=<>\[\]\(\)\{\}\+\|\.\-\*\^\$\?\\]+$/u;
       if (
         !(password.length >= <?php echo $zbp->option['ZC_PASSWORD_MIN']; ?> && password.length <= <?php echo $zbp->option['ZC_PASSWORD_MAX']; ?>) ||
         passwordRegExp.test(password) == false

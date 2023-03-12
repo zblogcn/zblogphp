@@ -2285,7 +2285,7 @@ class ZBlogPHP
         //本函数的返回值很有意思，为false表示需要rebuild 为true表示已重建完成或是不需要rebuild
         //$zbp->CheckTemplate(true) == false 的意思，就是判断模板需需要重刷新吗？
 
-        $array_md5 = unserialize($this->cache->templates_md5_array);
+        $array_md5 = @unserialize($this->cache->templates_md5_array);
         if (!is_array($array_md5)) {
             $array_md5 = array();
         }
