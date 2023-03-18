@@ -238,7 +238,7 @@ class App
     {
         global $zbp;
 
-        return !isset($zbp->activedapps[$this->id]);
+        return !array_key_exists($this->id, $zbp->activedapps);
     }
 
     /**
