@@ -1841,7 +1841,7 @@ function PostModule()
     }
     if (isset($_POST['Content'])) {
         if ($_POST['Type'] != 'div') {
-            $_POST['Content'] = str_replace(array("\r", "\n"), array('', ''), $_POST['Content']);
+            //$_POST['Content'] = str_replace(array("\r", "\n"), array('', ''), $_POST['Content']);
         }
     }
 
