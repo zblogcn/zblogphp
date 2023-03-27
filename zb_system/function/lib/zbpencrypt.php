@@ -36,20 +36,23 @@
 //$endata = ZbpEncrypt::original_aes256_encrypt('text', 'password', '初始向量');
 //$dedata = ZbpEncrypt::original_aes256_decrypt($endata, 'password', '初始向量');
 
+//$endata = ZbpEncrypt::original_aes128_encrypt('text', 'password', '初始向量');
+//$dedata = ZbpEncrypt::original_aes128_decrypt($endata, 'password', '初始向量');
+
 //$endata = ZbpEncrypt::original_sm4_encrypt('text', 'password', '初始向量');
 //$dedata = ZbpEncrypt::original_sm4_decrypt($endata, 'password', '初始向量');
 
 class ZbpEncrypt
 {
 
-    //加密函数 (先选择aes256gcm，php版本太低才用aes256cbc)
-    public static function encrypt($data, $password, $additional = null, $type = 'aes256gcm')
+    //加密函数 (支持aes256cbc, aes256xts, aes256gcm，sm4cbc)
+    public static function encrypt($data, $password, $additional = null, $type = 'aes256cbc')
     {
         return self::zbp_encrypt($data, $password, $additional, $type);
     }
 
-    //解密函数 (先选择aes256gcm，php版本太低才用aes256cbc)
-    public static function decrypt($data, $password, $additional = null, $type = 'aes256gcm')
+    //解密函数 (支持aes256cbc, aes256xts, aes256gcm，sm4cbc)
+    public static function decrypt($data, $password, $additional = null, $type = 'aes256cbc')
     {
         return self::zbp_decrypt($data, $password, $additional, $type);
     }
@@ -66,7 +69,7 @@ class ZbpEncrypt
         return self::zbp_openssl_aes256gcm_decrypt($data, $password, $additional);
     }
 
-    //aes256加密函数 (mode = 'cbc', 'cfb', 'ctr', 'ecb', 'ofb')
+    //aes256加密函数 (mode = 'cbc', 'cfb', 'ctr', 'ecb', 'ofb', 'xts')
     public static function aes256_encrypt($data, $password, $additional = null, $mode = '')
     {
         return self::zbp_openssl_aes256_encrypt($data, $password, $additional, $mode);
@@ -136,6 +139,18 @@ class ZbpEncrypt
     public static function original_aes256_decrypt($data, $password, $iv, $mode = 'cbc')
     {
         return self::zbp_original_aes256_decrypt($data, $password, $iv, $mode);
+    }
+
+    //原味版本的aes128加密（需要输入二种参数）
+    public static function original_aes128_encrypt($data, $password, $iv, $mode = 'cbc')
+    {
+        return self::zbp_original_aes128_encrypt($data, $password, $iv, $mode);
+    }
+
+    //原味版本的aes128解密（需要输入二种参数）
+    public static function original_aes128_decrypt($data, $password, $iv, $mode = 'cbc')
+    {
+        return self::zbp_original_aes128_decrypt($data, $password, $iv, $mode);
     }
 
     //原味版本的sm4加密（需要输入二种参数）
@@ -233,12 +248,12 @@ class ZbpEncrypt
     }
 
     /**
-     * openssl的aes256的4种模式加密
+     * openssl的aes256的6种模式加密
      */
     private static function zbp_openssl_aes256_encrypt($data, $password, $additional = null, $mode = '', $with_hash = false)
     {
         $mode = str_replace(array('aes', '256', '-', '_'), '', $mode);
-        if (!in_array($mode, array('cbc', 'cfb', 'ctr', 'ecb', 'ofb'))) {
+        if (!in_array($mode, array('xts', 'cbc', 'cfb', 'ctr', 'ecb', 'ofb'))) {
             $mode = 'cbc';
         }
         if (function_exists('openssl_encrypt')) {
@@ -287,12 +302,12 @@ class ZbpEncrypt
     }
 
     /**
-     * openssl的aes256的5种模式解密
+     * openssl的aes256的6种模式解密
      */
     private static function zbp_openssl_aes256_decrypt($data, $password, $additional = null, $mode = '', $with_hash = false)
     {
         $mode = str_replace(array('aes', '256', '-', '_'), '', $mode);
-        if (!in_array($mode, array('cbc', 'cfb', 'ctr', 'ecb', 'ofb'))) {
+        if (!in_array($mode, array('xts', 'cbc', 'cfb', 'ctr', 'ecb', 'ofb'))) {
             $mode = 'cbc';
         }
         if (function_exists('openssl_decrypt')) {
@@ -419,14 +434,21 @@ class ZbpEncrypt
      * @param string $additional 附加认证数据
      * @param string $type 可以指定类型为 aes256gcm, aes256cbc, sm4cbc
      */
-    private static function zbp_encrypt($data, $password, $additional = null, $type = 'aes256gcm')
+    private static function zbp_encrypt($data, $password, $additional = null, $type = 'aes256cbc')
     {
         $type = trim(strtolower($type));
-        if ($type == 'aes256gcm' && PHP_VERSION_ID >= 70100) {
+        $type = str_replace('-', '', $type);
+        if ($type == 'aes256gcm') {
+            if (PHP_VERSION_ID < 70100) {
+                return false;
+            }
             return self::zbp_openssl_aes256gcm_encrypt($data, $password, $additional);
         } elseif (stripos($type, 'aes256') === 0) {
             return self::zbp_openssl_aes256_encrypt($data, $password, $additional, $type);
-        } elseif (stripos($type, 'sm4') === 0 && PHP_VERSION_ID >= 70200) {
+        } elseif (stripos($type, 'sm4') === 0) {
+            if (PHP_VERSION_ID < 70200) {
+                return false;
+            }
             return self::zbp_openssl_sm4_encrypt($data, $password, $additional, $type);
         }
     }
@@ -439,14 +461,20 @@ class ZbpEncrypt
      * @param string $additional 附加认证数据
      * @param string $type 可以指定类型为 aes256gcm, aes256cbc, sm4cbc
      */
-    private static function zbp_decrypt($data, $password, $additional = null, $type = 'aes256gcm')
+    private static function zbp_decrypt($data, $password, $additional = null, $type = 'aes256cbc')
     {
         $type = trim(strtolower($type));
-        if ($type == 'aes256gcm' && PHP_VERSION_ID >= 70100) {
+        if ($type == 'aes256gcm') {
+            if (PHP_VERSION_ID < 70100) {
+                return false;
+            }
             return self::zbp_openssl_aes256gcm_decrypt($data, $password, $additional);
         } elseif (stripos($type, 'aes256') === 0) {
             return self::zbp_openssl_aes256_decrypt($data, $password, $additional, $type);
-        } elseif (stripos($type, 'sm4') === 0 && PHP_VERSION_ID >= 70200) {
+        } elseif (stripos($type, 'sm4') === 0) {
+            if (PHP_VERSION_ID < 70200) {
+                return false;
+            }
             return self::zbp_openssl_sm4_decrypt($data, $password, $additional, $type);
         }
     }
@@ -610,8 +638,8 @@ class ZbpEncrypt
         $password = substr(str_pad($password, 32, '0'), 0, 32);
         //初始向量长度在ecb下为0，其它为16
         $nonce = substr(str_pad($iv, 16, '0'), 0, 16);
-        $mode = str_replace(array('aes', '256', '-', '_'), '', $mode);
-        if (!in_array($mode, array('cbc', 'cfb', 'ctr', 'ecb', 'ofb'))) {
+        $mode = str_replace(array('aes', '256', '128', '-', '_'), '', $mode);
+        if (!in_array($mode, array('xts', 'cbc', 'cfb', 'ctr', 'ecb', 'ofb'))) {
             $mode = 'cbc';
         }
         if (function_exists('openssl_encrypt')) {
@@ -657,14 +685,114 @@ class ZbpEncrypt
     {
         $password = substr(str_pad($password, 32, '0'), 0, 32);
         $nonce = substr(str_pad($iv, 16, '0'), 0, 16);
-        $mode = str_replace(array('aes', '256', '-', '_'), '', $mode);
-        if (!in_array($mode, array('cbc', 'cfb', 'ctr', 'ecb', 'ofb'))) {
+        $mode = str_replace(array('aes', '256', '128', '-', '_'), '', $mode);
+        if (!in_array($mode, array('xts', 'cbc', 'cfb', 'ctr', 'ecb', 'ofb'))) {
             $mode = 'cbc';
         }
         if (function_exists('openssl_decrypt')) {
             $mode = strtolower('aes-256-' . $mode);
             $nonce_length = 16;
             if ($mode == 'aes-256-ecb') {
+                $nonce_length = 0;
+                $nonce = null;
+            }
+        } elseif (function_exists('mcrypt_decrypt')) {
+            if (!$mode == 'ctr') {
+                $mode = constant(strtoupper('MCRYPT_MODE_' . $mode));
+            }
+            $nonce_length = 16;
+            if ($mode == constant('MCRYPT_MODE_ECB')) {
+                $nonce_length = 0;
+                $nonce = null;
+            }
+        }
+        $data = base64_decode($data);
+        if (function_exists('openssl_encrypt')) {
+            $option = (PHP_VERSION_ID < 50400) ? 0 : OPENSSL_RAW_DATA;
+            $data = (PHP_VERSION_ID < 50400) ? base64_encode($data) : $data;
+            $dedata = call_user_func('openssl_decrypt', $data, $mode, $password, $option, $nonce);
+        } elseif (function_exists('mcrypt_decrypt')) {
+            $data = call_user_func('mcrypt_decrypt', constant('MCRYPT_RIJNDAEL_128'), $password, $data, $mode, $nonce);
+            //pkcs7 unpad
+            $text = $data;
+            $pad = ord($text[(strlen($text) - 1)]);
+            if ($pad > strlen($text)) {
+                $data = $text;
+            } else {
+                if (strspn($text, chr($pad), (strlen($text) - $pad)) != $pad) {
+                    $data = $text;
+                } else {
+                    $data = substr($text, 0, (-1 * $pad));
+                }
+            }
+            $dedata = $data;
+        }
+        return $dedata;
+    }
+
+    /**
+     * 原始版本的输入密码，初始向量，mode的aes128加密函数
+     */
+    private static function zbp_original_aes128_encrypt($data, $password, $iv, $mode = 'cbc')
+    {
+        $password = substr(str_pad($password, 32, '0'), 0, 32);
+        //初始向量长度在ecb下为0，其它为16
+        $nonce = substr(str_pad($iv, 16, '0'), 0, 16);
+        $mode = str_replace(array('aes', '256', '128', '-', '_'), '', $mode);
+        if (!in_array($mode, array('xts', 'cbc', 'cfb', 'ctr', 'ecb', 'ofb'))) {
+            $mode = 'cbc';
+        }
+        if (function_exists('openssl_encrypt')) {
+            $mode = strtolower('aes-128-' . $mode);
+            $nonce_length = 16;
+            if ($mode == 'aes-128-ecb') {
+                $nonce_length = 0;
+                $nonce = null;
+            }
+        } elseif (function_exists('mcrypt_encrypt')) {
+            if (!$mode == 'ctr') {
+                $mode = constant(strtoupper('MCRYPT_MODE_' . $mode));
+            }
+            $nonce_length = 16;
+            if ($mode == constant('MCRYPT_MODE_ECB')) {
+                $nonce_length = 0;
+                $nonce = null;
+            }
+        }
+        if (function_exists('openssl_encrypt')) {
+            $option = (PHP_VERSION_ID < 50400) ? 0 : OPENSSL_RAW_DATA;
+            $endata = call_user_func('openssl_encrypt', $data, $mode, $password, $option, $nonce);
+            $endata = (PHP_VERSION_ID < 50400) ? base64_decode($endata) : $endata;
+        } elseif (function_exists('mcrypt_encrypt')) {
+            //pkcs7 pad
+            $pkcs7_data = $data;
+            if (function_exists('mb_strlen')) {
+                $len = mb_strlen($pkcs7_data, '8bit');
+            } else {
+                $len = strlen($pkcs7_data);
+            }
+            $c = (16 - ($len % 16));
+            $pkcs7_data .= str_repeat(chr($c), $c);
+            $endata = call_user_func('mcrypt_encrypt', constant('MCRYPT_RIJNDAEL_128'), $password, $pkcs7_data, $mode, $nonce);
+        }
+        return base64_encode($endata);
+    }
+
+    /**
+     * 原始版本的输入密码，初始向量，mode的aes128解密函数
+     */
+    private static function zbp_original_aes128_decrypt($data, $password, $iv, $mode = 'cbc')
+    {
+        $password = substr(str_pad($password, 32, '0'), 0, 32);
+        $nonce = substr(str_pad($iv, 16, '0'), 0, 16);
+        $mode = str_replace(array('aes', '256', '128', '-', '_'), '', $mode);
+        if (!in_array($mode, array('xts', 'cbc', 'cfb', 'ctr', 'ecb', 'ofb'))) {
+            $mode = 'cbc';
+        }
+        if (function_exists('openssl_decrypt')) {
+            $mode = strtolower('aes-128-' . $mode);
+            $nonce_length = 16;
+            if ($mode == 'aes-128-ecb') {
                 $nonce_length = 0;
                 $nonce = null;
             }
