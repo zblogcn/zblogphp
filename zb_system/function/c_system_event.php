@@ -2245,7 +2245,7 @@ function SaveSetting()
             $value = DelNameInString($value, 'php');
             $value = DelNameInString($value, 'asp');
         }
-        $zbp->option[$key] = trim(str_replace(array("\r", "\n"), array("", ""), $value));
+        //$zbp->option[$key] = trim(str_replace(array("\r", "\n"), array("", ""), $value));
     }
     $zbp->option['ZC_DEBUG_MODE'] = (bool) $zbp->option['ZC_DEBUG_MODE'];
 

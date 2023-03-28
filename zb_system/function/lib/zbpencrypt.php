@@ -735,7 +735,8 @@ class ZbpEncrypt
      */
     private static function zbp_original_aes128_encrypt($data, $password, $iv, $mode = 'cbc')
     {
-        $password = substr(str_pad($password, 32, '0'), 0, 32);
+        //aes128的密码长度16
+        $password = substr(str_pad($password, 16, '0'), 0, 16);
         //初始向量长度在ecb下为0，其它为16
         $nonce = substr(str_pad($iv, 16, '0'), 0, 16);
         $mode = str_replace(array('aes', '256', '128', '-', '_'), '', $mode);
@@ -783,7 +784,7 @@ class ZbpEncrypt
      */
     private static function zbp_original_aes128_decrypt($data, $password, $iv, $mode = 'cbc')
     {
-        $password = substr(str_pad($password, 32, '0'), 0, 32);
+        $password = substr(str_pad($password, 16, '0'), 0, 16);
         $nonce = substr(str_pad($iv, 16, '0'), 0, 16);
         $mode = str_replace(array('aes', '256', '128', '-', '_'), '', $mode);
         if (!in_array($mode, array('xts', 'cbc', 'cfb', 'ctr', 'ecb', 'ofb'))) {
