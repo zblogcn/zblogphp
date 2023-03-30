@@ -93,6 +93,18 @@ class ZbpEncrypt
         return self::zbp_openssl_sm4_decrypt($data, $password, $additional, $mode);
     }
 
+    //chacha20加密函数
+    public static function chacha20_encrypt($data, $password, $additional = null, $mode = '')
+    {
+        return self::zbp_chacha20_encrypt($data, $password, $additional, $mode);
+    }
+
+    //chacha20解密函数
+    public static function chacha20_decrypt($data, $password, $additional = null, $mode = '')
+    {
+        return self::zbp_chacha20_decrypt($data, $password, $additional, $mode);
+    }
+
     //rsa公钥加密函数
     public static function rsa_public_encrypt($data, $public_key_pem, $key_length = 2048)
     {
@@ -180,10 +192,7 @@ class ZbpEncrypt
             $nonce_length = openssl_cipher_iv_length($mode);
             $nonce = openssl_random_pseudo_bytes($nonce_length);
         }
-        $additional_data = 'additional';
-        if (!is_null($additional)) {
-            $additional_data = hash('sha256', $additional);
-        }
+        $additional_data = $additional;
         $md5password = md5(hash('sha256', $password) . $additional);
         $keygen = $md5password;
         if (function_exists($func_name) && $func_name()) {
@@ -227,12 +236,9 @@ class ZbpEncrypt
             $tag = substr($endata, (32 + $nonce_length), 16);
             $data = substr($endata, (32 + $nonce_length + 16));
         }
+        $additional_data = $additional;
         $md5password = md5(hash('sha256', $password) . $additional);
         $keygen = $md5password;
-        $additional_data = 'additional';
-        if (!is_null($additional)) {
-            $additional_data = hash('sha256', $additional);
-        }
         if (function_exists($func_name) && $func_name()) {
             $dedata = sodium_crypto_aead_aes256gcm_decrypt($data . $tag, $additional_data, $nonce, $keygen);
         } else {
@@ -439,7 +445,7 @@ class ZbpEncrypt
         $type = trim(strtolower($type));
         $type = str_replace('-', '', $type);
         if ($type == 'aes256gcm') {
-            if (PHP_VERSION_ID < 70100) {
+            if (PHP_VERSION_ID < 70100 && !function_exists('sodium_crypto_aead_aes256gcm_encrypt')) {
                 return false;
             }
             return self::zbp_openssl_aes256gcm_encrypt($data, $password, $additional);
@@ -465,7 +471,7 @@ class ZbpEncrypt
     {
         $type = trim(strtolower($type));
         if ($type == 'aes256gcm') {
-            if (PHP_VERSION_ID < 70100) {
+            if (PHP_VERSION_ID < 70100 && !function_exists('sodium_crypto_aead_aes256gcm_encrypt')) {
                 return false;
             }
             return self::zbp_openssl_aes256gcm_decrypt($data, $password, $additional);
@@ -871,6 +877,105 @@ class ZbpEncrypt
         }
         $dedata = call_user_func('openssl_decrypt', $endata, $mode, $password, OPENSSL_RAW_DATA, $nonce);
         return $dedata;
+    }
+
+    /**
+     * chacha20加密
+     */
+    private static function zbp_chacha20_encrypt($data, $password, $additional = null, $mode = null, $with_hash = false)
+    {
+        if ($mode == 'chacha20') {//php73
+            $nonce_length = 16;
+        } elseif ($mode == 'chacha20-poly1305') {
+            $nonce_length = 8;
+        } elseif ($mode == 'chacha20-poly1305-ieft') {
+            $nonce_length = 12;
+        } elseif ($mode == 'xchacha20-poly1305-ieft') {
+            $nonce_length = 24;
+        } else {
+            $nonce_length = 12;
+            $mode = 'chacha20-poly1305-ieft';
+        }
+        $nonce = random_bytes($nonce_length);
+        $additional_data = $additional;
+        $md5password = md5(hash('sha256', $password) . $additional);
+        $keygen = $md5password;
+
+        if ($mode == 'chacha20') {
+            $tag = null;
+            $endata = openssl_encrypt($data, 'chacha20', $keygen, 1, $nonce, $tag, $additional_data);
+        }
+        if ($mode == 'chacha20-poly1305') {
+            $endata = sodium_crypto_aead_chacha20poly1305_encrypt($data, $additional_data, $nonce, $keygen);
+        }
+        if ($mode == 'chacha20-poly1305-ieft') {
+            $endata = sodium_crypto_aead_chacha20poly1305_ietf_encrypt($data, $additional_data, $nonce, $keygen);
+        }
+        if ($mode == 'xchacha20-poly1305-ieft') {
+            $endata = sodium_crypto_aead_xchacha20poly1305_ietf_encrypt($data, $additional_data, $nonce, $keygen);
+        }
+
+        if ($with_hash == false) {
+            return base64_encode($nonce . $endata);
+        }
+        $hmac = hash_hmac('sha256', $data, $keygen . $nonce, true);
+        $json = $hmac . $nonce . $endata;
+        return base64_encode($json);
+    }
+
+    /**
+     * chacha20解密
+     */
+    private static function zbp_chacha20_decrypt($data, $password, $additional = null, $mode = null, $with_hash = false)
+    {
+        $endata = base64_decode($data);
+        if ($mode == 'chacha20') {
+            $nonce_length = 16;
+        } elseif ($mode == 'chacha20-poly1305') {
+            $nonce_length = 8;
+        } elseif ($mode == 'chacha20-poly1305-ieft') {
+            $nonce_length = 12;
+        } elseif ($mode == 'xchacha20-poly1305-ieft') {
+            $nonce_length = 24;
+        } else {
+            $nonce_length = 12;
+            $mode = 'chacha20-poly1305-ieft';
+        }
+        $nonce = random_bytes($nonce_length);
+        $additional_data = $additional;
+        $md5password = md5(hash('sha256', $password) . $additional);
+        $keygen = $md5password;
+
+        if ($with_hash == false) {
+            $nonce = substr($endata, 0, $nonce_length);
+            $data = substr($endata, (0 + $nonce_length));
+        } else {
+            $hmac = substr($endata, 0, 32);
+            $nonce = substr($endata, 32, $nonce_length);
+            $data = substr($endata, (32 + $nonce_length));
+        }
+
+        if ($mode == 'chacha20') {
+            $tag = null;
+            $dedata = openssl_decrypt($data, 'chacha20', $keygen, 1, $nonce, $tag, $additional_data);
+        }
+        if ($mode == 'chacha20-poly1305') {
+            $dedata = sodium_crypto_aead_chacha20poly1305_decrypt($data, $additional_data, $nonce, $keygen);
+        }
+        if ($mode == 'chacha20-poly1305-ieft') {
+            $dedata = sodium_crypto_aead_chacha20poly1305_ietf_decrypt($data, $additional_data, $nonce, $keygen);
+        }
+        if ($mode == 'xchacha20-poly1305-ieft') {
+            $dedata = sodium_crypto_aead_xchacha20poly1305_ietf_decrypt($data, $additional_data, $nonce, $keygen);
+        }
+
+        if ($with_hash == false) {
+            return $dedata;
+        }
+        if (hash_hmac('sha256', $dedata, $keygen . $nonce, true) == $hmac) {
+            return $dedata;
+        }
+        return false;
     }
 
 }
