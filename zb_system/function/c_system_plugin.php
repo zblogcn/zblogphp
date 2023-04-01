@@ -79,7 +79,7 @@ function UninstallPlugin($strPluginName)
 }
 
 /**
- * 创建插件接口Hook
+ * 定义插件接口Hook
  *
  * @param string $strPluginFilter 插件接口Hook
  *
@@ -230,7 +230,7 @@ function Clear_Filter_Plugin($plugname)
 /**
  * 解析Callback Filter接口的某项挂载函数名 (支持多种型式的function调用，已经玩出花了^_^)
  *
- * 要挂接的函数名 (可以是1函数名 2类名::静态方法名 3全局变量名@动态方法名 4类名@动态方法名 5全局匿名函数)
+ * 要挂接的函数名 (可以是1函数名 2类名::静态方法名 3类名@动态方法名 4全局变量名@动态方法名 5全局匿名函数)
  *
  * @return mixed 解析后的function值
  */
@@ -245,12 +245,11 @@ function Parse_Filter_Plugin($fpname)
         $function = array($func[0], $func[1]);
     } elseif (strpos($function, '@') !== false) {
         $func = explode('@', $function);
-        if (array_key_exists($func[0], $GLOBALS) && is_object($GLOBALS[$func[0]])) {
-            $function = array($GLOBALS[$func[0]], $func[1]);
-        }
         if (class_exists($func[0])) {
             $newobject = new $func[0];
             $function = array($newobject, $func[1]);
+        } elseif (array_key_exists($func[0], $GLOBALS) && is_object($GLOBALS[$func[0]])) {
+            $function = array($GLOBALS[$func[0]], $func[1]);
         }
     } else {
         if (array_key_exists($function, $GLOBALS) && is_object($GLOBALS[$function]) && get_class($GLOBALS[$function]) == 'Closure') {
