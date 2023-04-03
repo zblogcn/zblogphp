@@ -3921,7 +3921,7 @@ class ZBlogPHP
      *
      * @return mixed
      */
-    public function ShowError($errorText, $file = null, $line = null, $moreinfo = null)
+    public function ShowError($errorText, $file = null, $line = null, $moreinfo = null, $httpcode = null)
     {
         $args = func_get_args();
         $errorCode = 0;
@@ -3938,11 +3938,16 @@ class ZBlogPHP
         if (!is_array($moreinfo) && !is_null($moreinfo)) {
             $moreinfo = array($moreinfo);
         }
-        $httpcode = 500;
-        if ($errorCode == 2) {
-            $httpcode = 404;
+        if ($httpcode === null) {
+            $httpcode = 500;
+            if ($errorCode == 2) {
+                $httpcode = 404;
+            }
+        } else {
+            $httpcode = (int) $httpcode;
         }
-        $show_zbe = new ZbpErrorException($errorText, $errorCode, null, $file, $line, 'ZbpErrorException', $moreinfo, $httpcode, $messagefull);
+
+        $show_zbe = new ZbpErrorException($errorText, $errorCode, null, $file, $line, null, $moreinfo, $httpcode, $messagefull);
 
         if (stripos('{' . sha1('mustshowerror') . '}', $errorText) === 0) {
             $errorText = str_replace('{' . sha1('mustshowerror') . '}', '', $errorText);
@@ -3958,7 +3963,7 @@ class ZBlogPHP
             array_shift($args);
             array_unshift($args, $errorText);
             array_unshift($args, $errorCode);
-            //$fpreturn = $fpname($errorCode, $errorText, $file, $line, $moreinfo);
+            //$fpreturn = $fpname($errorCode, $errorText, $file, $line, $moreinfo, $httpcode);
             $fpreturn = call_user_func_array($fpname, $args);
             if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
                 $fpsignal = PLUGIN_EXITSIGNAL_NONE;

@@ -315,7 +315,7 @@ class ZbpErrorException extends Exception
     public $httpcode = 500;
     public $messagefull = null;
 
-    public function __construct($message = "", $code = 0, $previous = null, $file = '', $line = 0, $type = '', $moreinfo = array(), $httpcode = null, $messagefull = null)
+    public function __construct($message = "", $code = 0, $previous = null, $file = '', $line = 0, $type = null, $moreinfo = array(), $httpcode = null, $messagefull = null)
     {
         if (is_array($message)) {
             $array = $message;
@@ -352,7 +352,9 @@ class ZbpErrorException extends Exception
         }
         $this->file = $file;
         $this->line = $line;
-        $this->moreinfo = $moreinfo;
+        if (is_array($moreinfo)) {
+            $this->moreinfo = $moreinfo;
+        }
         if (!empty($type)) {
             $this->type = $type;
         }
