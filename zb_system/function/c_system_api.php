@@ -53,7 +53,7 @@ function ApiTokenVerify()
  */
 function ApiDebugHandler($error)
 {
-    $GLOBALS['hooks']['Filter_Plugin_Debug_Handler_ZEC']['ApiDebugHandler'] = PLUGIN_EXITSIGNAL_RETURN;
+    $GLOBALS['hooks']['Filter_Plugin_Debug_Handler_ZEE']['ApiDebugHandler'] = PLUGIN_EXITSIGNAL_RETURN;
     //全局拦截error,exception,shutdown
     ApiResponse(null, $error);
     return true;

@@ -426,7 +426,7 @@ function GetList($count = 10, $cate = null, $auth = null, $date = null, $tags = 
  * @param $file
  * @param $line
  *
- * @api Filter_Plugin_Debug_Handler_ZEC
+ * @api Filter_Plugin_Debug_Handler_ZEE
  * @api Filter_Plugin_Debug_Handler_Common
  *
  * @throws Exception
@@ -441,7 +441,7 @@ function Include_ShowError404($errorCode, $errorDescription = null, $file = null
             $file = $errorCode->getFile();
             $line = $errorCode->getLine();
             $errorCode = $errorCode->getCode();
-            $GLOBALS['hooks']['Filter_Plugin_Debug_Handler_ZEC']['Include_ShowError404'] = PLUGIN_EXITSIGNAL_RETURN;
+            $GLOBALS['hooks']['Filter_Plugin_Debug_Handler_ZEE']['Include_ShowError404'] = PLUGIN_EXITSIGNAL_RETURN;
         } else {
             return;
         }
@@ -608,7 +608,7 @@ function Include_Index_Begin()
     $zbp->CheckSiteClosed();
 
     if ($zbp->template->hasTemplate('404')) {
-        Add_Filter_Plugin('Filter_Plugin_Debug_Handler_ZEC', 'Include_ShowError404');
+        Add_Filter_Plugin('Filter_Plugin_Debug_Handler_ZEE', 'Include_ShowError404');
         Add_Filter_Plugin('Filter_Plugin_Debug_Handler_Common', 'Include_ShowError404');
     }
 

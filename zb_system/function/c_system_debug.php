@@ -152,7 +152,7 @@ function Debug_Error_Handler($errno, $errstr, $errfile, $errline)
     $zec = new ZbpErrorContrl();
     $zee = $zec->ParseError($errno, $errstr, $errfile, $errline);
 
-    foreach ($GLOBALS['hooks']['Filter_Plugin_Debug_Handler_ZEC'] as $fpname => &$fpsignal) {
+    foreach ($GLOBALS['hooks']['Filter_Plugin_Debug_Handler_ZEE'] as $fpname => &$fpsignal) {
         $fpsignal = PLUGIN_EXITSIGNAL_NONE;
         $fpreturn = $fpname($zee);
         if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
@@ -204,7 +204,7 @@ function Debug_Exception_Handler($exception)
     $zec = new ZbpErrorContrl();
     $zee = $zec->ParseException($exception);
 
-    foreach ($GLOBALS['hooks']['Filter_Plugin_Debug_Handler_ZEC'] as $fpname => &$fpsignal) {
+    foreach ($GLOBALS['hooks']['Filter_Plugin_Debug_Handler_ZEE'] as $fpname => &$fpsignal) {
         $fpsignal = PLUGIN_EXITSIGNAL_NONE;
         $fpreturn = $fpname($zee);
         if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
@@ -250,7 +250,7 @@ function Debug_Shutdown_Handler()
         $zec = new ZbpErrorContrl();
         $zee = $zec->ParseShutdown($error);
 
-        foreach ($GLOBALS['hooks']['Filter_Plugin_Debug_Handler_ZEC'] as $fpname => &$fpsignal) {
+        foreach ($GLOBALS['hooks']['Filter_Plugin_Debug_Handler_ZEE'] as $fpname => &$fpsignal) {
             $fpsignal = PLUGIN_EXITSIGNAL_NONE;
             $fpreturn = $fpname($zee);
             if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
