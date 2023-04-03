@@ -169,7 +169,15 @@ function Debug_Error_Handler($errno, $errstr, $errfile, $errline)
     }
 
     //原始Filter_Plugin_Debug_Handler在173已废除，如果Handler_ZEC or Common没有处理，就转入Display
-    Debug_Error_Exception_Fatal_Dispaly($zec);
+    foreach ($GLOBALS['hooks']['Filter_Plugin_Debug_Display'] as $fpname => &$fpsignal) {
+        $fpsignal = PLUGIN_EXITSIGNAL_NONE;
+        $fpreturn = $fpname($zec);
+        if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
+            return $fpreturn;
+        }
+    }
+
+    $zec->Display();
 
     return true;
 }
@@ -221,7 +229,15 @@ function Debug_Exception_Handler($exception)
     }
 
     //原始Filter_Plugin_Debug_Handler在173已废除，如果Handler_ZEC or Common没有处理，就转入Display
-    Debug_Error_Exception_Fatal_Dispaly($zec);
+    foreach ($GLOBALS['hooks']['Filter_Plugin_Debug_Display'] as $fpname => &$fpsignal) {
+        $fpsignal = PLUGIN_EXITSIGNAL_NONE;
+        $fpreturn = $fpname($zec);
+        if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
+            return $fpreturn;
+        }
+    }
+
+    $zec->Display();
 
     return true;
 }
@@ -267,31 +283,20 @@ function Debug_Shutdown_Handler()
         }
 
         //原始Filter_Plugin_Debug_Handler在173已废除，如果Handler_ZEC or Common没有处理，就转入Display
-        Debug_Error_Exception_Fatal_Dispaly($zec);
+        foreach ($GLOBALS['hooks']['Filter_Plugin_Debug_Display'] as $fpname => &$fpsignal) {
+            $fpsignal = PLUGIN_EXITSIGNAL_NONE;
+            $fpreturn = $fpname($zec);
+            if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
+                return $fpreturn;
+            }
+        }
+
+        $zec->Display();
     }
 
     return true;
 }
 
-/**
- * Error,Exception,Fatal等错误显示（可以拦截并自定义页面）
- *
- * @param ZbpErrorException    $zec   传入的经过解析重新生成的zbp异常类
- *
- * @return bool
- */
-function Debug_Error_Exception_Fatal_Dispaly($zec)
-{
-    foreach ($GLOBALS['hooks']['Filter_Plugin_Debug_Display'] as $fpname => &$fpsignal) {
-        $fpsignal = PLUGIN_EXITSIGNAL_NONE;
-        $fpreturn = $fpname($zec);
-        if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
-            return $fpreturn;
-        }
-    }
-
-    return $zec->Display();
-}
 
 /**
  * Debug DoNothing
