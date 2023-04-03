@@ -384,6 +384,9 @@ function Redirect301($url)
 function Http404()
 {
     SetHttpStatusCode(404);
+    if (!headers_sent()) {
+        header("Status: 404 Not Found");
+    }
 }
 
 /**
@@ -2386,7 +2389,7 @@ function ScriptError($errorCode, $errorText = '', $file = '', $line = '')
  * 记录日志.
  *
  * @param string $logString
- * @param string $level INFO|ERROR|WARNING|FATAL|DEBUG|TRACE
+ * @param string $level INFO|ERROR|EXCEPTION|FATAL|DEBUG|TRACE
  * @param string $source system or plugin ID
  *
  * @return bool
@@ -2402,7 +2405,7 @@ function Logs($logString, $level = 'INFO', $source = 'system')
         $level = 'INFO';
     }
     $level = strtoupper($level);
-    if ($level == 'WARNING' || $level == 'ERROR' || $level == 'FATAL') {
+    if ($level == 'EXCEPTION' || $level == 'ERROR' || $level == 'FATAL') {
         $isError = true;
     }
 

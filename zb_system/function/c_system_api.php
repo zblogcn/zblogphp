@@ -53,14 +53,14 @@ function ApiTokenVerify()
  */
 function ApiDebugHandler($error)
 {
-    $GLOBALS['hooks']['Filter_Plugin_Debug_Handler']['ApiDebugHandler'] = PLUGIN_EXITSIGNAL_RETURN;
-    //这里的输出是为了解决了shutdown时的输出，因为只有只有shutdown才会到这里
+    $GLOBALS['hooks']['Filter_Plugin_Debug_Handler_ZEC']['ApiDebugHandler'] = PLUGIN_EXITSIGNAL_RETURN;
+    //全局拦截error,exception,shutdown
     ApiResponse(null, $error);
     return true;
 }
 
 /**
- * API ShowError函数
+ * API ShowError函数 (这个已经在1.7.3废除掉了，使用ApiDebugHandler输出错误)
  */
 function ApiShowError()
 {

@@ -839,7 +839,7 @@ if (isset($zbp->option['ZC_XMLRPC_ENABLE']) && $zbp->option['ZC_XMLRPC_ENABLE'] 
     die;
 }
 
-Add_Filter_Plugin('Filter_Plugin_Zbp_ShowError', 'RespondError');
+Add_Filter_Plugin('Filter_Plugin_Debug_Handler_Common', 'RespondError');
 
 $zbp->CheckSiteClosed();
 

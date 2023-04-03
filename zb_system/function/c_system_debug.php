@@ -136,7 +136,8 @@ function Debug_Error_Handler($errno, $errstr, $errfile, $errline)
     }
 
     if (ZbpErrorContrl::$islogerror == true) {
-        Logs(var_export(array('Error', $errno, $errstr, $errfile, $errline), true), 'ERROR');
+        $err = ZbpErrorContrl::$errarray[$errno];
+        Logs(var_export(array($err, $errno, $errstr, $errfile, $errline), true), 'ERROR');
     }
 
     //@符号的错误抑制功能的实现 php7 || php8
@@ -151,15 +152,24 @@ function Debug_Error_Handler($errno, $errstr, $errfile, $errline)
     $zec = new ZbpErrorContrl();
     $zee = $zec->ParseError($errno, $errstr, $errfile, $errline);
 
-    foreach ($GLOBALS['hooks']['Filter_Plugin_Debug_Handler'] as $fpname => &$fpsignal) {
+    foreach ($GLOBALS['hooks']['Filter_Plugin_Debug_Handler_ZEC'] as $fpname => &$fpsignal) {
         $fpsignal = PLUGIN_EXITSIGNAL_NONE;
         $fpreturn = $fpname($zee);
         if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
             return $fpreturn;
         }
     }
-    //如果Filter_Plugin_Debug_Handler没有处理，就转入Display
-    Debug_Error_Exception_Dispaly($zec);
+
+    foreach ($GLOBALS['hooks']['Filter_Plugin_Debug_Handler_Common'] as $fpname => &$fpsignal) {
+        $fpsignal = PLUGIN_EXITSIGNAL_NONE;
+        $fpreturn = $fpname($errno, $errstr, $errfile, $errline);
+        if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
+            return $fpreturn;
+        }
+    }
+
+    //原始Filter_Plugin_Debug_Handler在173已废除，如果Handler_ZEC or Common没有处理，就转入Display
+    Debug_Error_Exception_Fatal_Dispaly($zec);
 
     return true;
 }
@@ -194,15 +204,24 @@ function Debug_Exception_Handler($exception)
     $zec = new ZbpErrorContrl();
     $zee = $zec->ParseException($exception);
 
-    foreach ($GLOBALS['hooks']['Filter_Plugin_Debug_Handler'] as $fpname => &$fpsignal) {
+    foreach ($GLOBALS['hooks']['Filter_Plugin_Debug_Handler_ZEC'] as $fpname => &$fpsignal) {
         $fpsignal = PLUGIN_EXITSIGNAL_NONE;
         $fpreturn = $fpname($zee);
         if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
             return $fpreturn;
         }
     }
-    //如果Filter_Plugin_Debug_Handler没有处理，就转入Display
-    Debug_Error_Exception_Dispaly($zec);
+
+    foreach ($GLOBALS['hooks']['Filter_Plugin_Debug_Handler_Common'] as $fpname => &$fpsignal) {
+        $fpsignal = PLUGIN_EXITSIGNAL_NONE;
+        $fpreturn = $fpname($exception->getCode(), $exception->getMessage(), $exception->getFile(), $exception->getLine());
+        if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
+            return $fpreturn;
+        }
+    }
+
+    //原始Filter_Plugin_Debug_Handler在173已废除，如果Handler_ZEC or Common没有处理，就转入Display
+    Debug_Error_Exception_Fatal_Dispaly($zec);
 
     return true;
 }
@@ -231,28 +250,37 @@ function Debug_Shutdown_Handler()
         $zec = new ZbpErrorContrl();
         $zee = $zec->ParseShutdown($error);
 
-        foreach ($GLOBALS['hooks']['Filter_Plugin_Debug_Handler'] as $fpname => &$fpsignal) {
+        foreach ($GLOBALS['hooks']['Filter_Plugin_Debug_Handler_ZEC'] as $fpname => &$fpsignal) {
             $fpsignal = PLUGIN_EXITSIGNAL_NONE;
             $fpreturn = $fpname($zee);
             if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
                 return $fpreturn;
             }
         }
-        //如果Filter_Plugin_Debug_Handler没有处理，就转入Display
-        Debug_Error_Exception_Dispaly($zec);
+
+        foreach ($GLOBALS['hooks']['Filter_Plugin_Debug_Handler_Common'] as $fpname => &$fpsignal) {
+            $fpsignal = PLUGIN_EXITSIGNAL_NONE;
+            $fpreturn = $fpname($error['type'], $error['message'], $error['file'], $error['line']);
+            if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
+                return $fpreturn;
+            }
+        }
+
+        //原始Filter_Plugin_Debug_Handler在173已废除，如果Handler_ZEC or Common没有处理，就转入Display
+        Debug_Error_Exception_Fatal_Dispaly($zec);
     }
 
     return true;
 }
 
 /**
- * Error，Exception等错误显示（可以拦截并自定义页面）
+ * Error,Exception,Fatal等错误显示（可以拦截并自定义页面）
  *
  * @param ZbpErrorException    $zec   传入的经过解析重新生成的zbp异常类
  *
  * @return bool
  */
-function Debug_Error_Exception_Dispaly($zec)
+function Debug_Error_Exception_Fatal_Dispaly($zec)
 {
     foreach ($GLOBALS['hooks']['Filter_Plugin_Debug_Display'] as $fpname => &$fpsignal) {
         $fpsignal = PLUGIN_EXITSIGNAL_NONE;

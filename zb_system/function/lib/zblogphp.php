@@ -892,7 +892,7 @@ class ZBlogPHP
 
         if ($this->isapi) {
             //挂载API错误显示
-            Add_Filter_Plugin('Filter_Plugin_Debug_Handler', 'ApiDebugHandler');
+            Add_Filter_Plugin('Filter_Plugin_Debug_Handler_ZEC', 'ApiDebugHandler');
             Add_Filter_Plugin('Filter_Plugin_Zbp_ShowError', 'ApiShowError');
             //挂载Token验证
             Add_Filter_Plugin('Filter_Plugin_Zbp_PreLoad', 'ApiTokenVerify');
@@ -3942,16 +3942,18 @@ class ZBlogPHP
         if ($errorCode == 2) {
             $httpcode = 404;
         }
-        $last_zbe = new ZbpErrorException($errorText, $errorCode, null, $file, $line, 'ZbpErrorException', $moreinfo, $httpcode, $messagefull);
+        $show_zbe = new ZbpErrorException($errorText, $errorCode, null, $file, $line, 'ZbpErrorException', $moreinfo, $httpcode, $messagefull);
 
         if (stripos('{' . sha1('mustshowerror') . '}', $errorText) === 0) {
             $errorText = str_replace('{' . sha1('mustshowerror') . '}', '', $errorText);
             Clear_Filter_Plugin('Filter_Plugin_Debug_Display');
             Clear_Filter_Plugin('Filter_Plugin_Debug_Handler');
+            Clear_Filter_Plugin('Filter_Plugin_Debug_Handler_Common');
+            Clear_Filter_Plugin('Filter_Plugin_Debug_Handler_ZEC');
             throw new Exception($errorText);
         }
 
-        //这里的接口不应再被使用了，请用Filter_Plugin_Debug_Handler和Filter_Plugin_Debug_Display
+        //这里的接口不应再被使用了，请用Filter_Plugin_Debug_Handler_ZEC or Common和Filter_Plugin_Debug_Display
         foreach ($GLOBALS['hooks']['Filter_Plugin_Zbp_ShowError'] as $fpname => &$fpsignal) {
             array_shift($args);
             array_unshift($args, $errorText);
@@ -3968,7 +3970,7 @@ class ZBlogPHP
         }
 
         //这里应扔出一个ZbpErrorException ZBP错误异常
-        throw $last_zbe;
+        throw $show_zbe;
     }
 
     /**

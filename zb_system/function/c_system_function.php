@@ -426,18 +426,32 @@ function GetList($count = 10, $cate = null, $auth = null, $date = null, $tags = 
  * @param $file
  * @param $line
  *
- * @api Filter_Plugin_Zbp_ShowError
+ * @api Filter_Plugin_Debug_Handler_ZEC
+ * @api Filter_Plugin_Debug_Handler_Common
  *
  * @throws Exception
  */
-function Include_ShowError404($errorCode, $errorDescription, $file, $line)
+function Include_ShowError404($errorCode, $errorDescription = null, $file = null, $line = null)
 {
     global $zbp;
-    if (!in_array("Status: 404 Not Found", headers_list())) {
+    if (is_a($errorCode, 'ZbpErrorException')) {
+        if ($errorCode->getHttpCode() == 404) {
+            Http404();
+            $errorDescription = $errorCode->getMessage();
+            $file = $errorCode->getFile();
+            $line = $errorCode->getLine();
+            $errorCode = $errorCode->getCode();
+            $GLOBALS['hooks']['Filter_Plugin_Debug_Handler_ZEC']['Include_ShowError404'] = PLUGIN_EXITSIGNAL_RETURN;
+        } else {
+            return;
+        }
+    } elseif (in_array("Status: 404 Not Found", headers_list())) {
+        $GLOBALS['hooks']['Filter_Plugin_Debug_Handler_Common']['Include_ShowError404'] = PLUGIN_EXITSIGNAL_RETURN;
+    } elseif (function_exists('http_response_code') && http_response_code() == 404){
+        $GLOBALS['hooks']['Filter_Plugin_Debug_Handler_Common']['Include_ShowError404'] = PLUGIN_EXITSIGNAL_RETURN;
+    } else {
         return;
     }
-
-    $GLOBALS['hooks']['Filter_Plugin_Zbp_ShowError']['Include_ShowError404'] = PLUGIN_EXITSIGNAL_RETURN;
 
     $zbp->template->SetTags('title', $zbp->title);
     $zbp->template->SetTemplate('404');
@@ -594,7 +608,8 @@ function Include_Index_Begin()
     $zbp->CheckSiteClosed();
 
     if ($zbp->template->hasTemplate('404')) {
-        Add_Filter_Plugin('Filter_Plugin_Zbp_ShowError', 'Include_ShowError404');
+        Add_Filter_Plugin('Filter_Plugin_Debug_Handler_ZEC', 'Include_ShowError404');
+        Add_Filter_Plugin('Filter_Plugin_Debug_Handler_Common', 'Include_ShowError404');
     }
 
     if ($zbp->option['ZC_ADDITIONAL_SECURITY']) {

@@ -4,7 +4,11 @@ require '../../../zb_system/function/c_system_base.php';
 
 $zbp->Load();
 
-Add_Filter_Plugin('Filter_Plugin_Zbp_ShowError', 'RespondError', PLUGIN_EXITSIGNAL_RETURN);
+if (ExistsPluginFilter('Filter_Plugin_Debug_Handler_Common')) {
+    Add_Filter_Plugin('Filter_Plugin_Debug_Handler_Common', 'RespondError', PLUGIN_EXITSIGNAL_RETURN);
+} else {
+    Add_Filter_Plugin('Filter_Plugin_Zbp_ShowError', 'RespondError', PLUGIN_EXITSIGNAL_RETURN);
+}
 
 if (!$zbp->CheckPlugin('RegPage')) {
     $zbp->ShowError(48);

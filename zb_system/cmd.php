@@ -61,11 +61,11 @@ switch ($zbp->action) {
         $die = false;
         if (GetVars('isajax', 'POST')) {
             // 兼容老版本的评论前端
-            Add_Filter_Plugin('Filter_Plugin_Zbp_ShowError', 'RespondError', PLUGIN_EXITSIGNAL_RETURN);
+            Add_Filter_Plugin('Filter_Plugin_Debug_Handler_Common', 'RespondError', PLUGIN_EXITSIGNAL_RETURN);
             $die = true;
         } elseif (GetVars('format', 'POST') == "json") {
             // 1.5之后的评论以json形式加载给前端
-            Add_Filter_Plugin('Filter_Plugin_Zbp_ShowError', 'JsonError4ShowErrorHook', PLUGIN_EXITSIGNAL_RETURN);
+            Add_Filter_Plugin('Filter_Plugin_Debug_Handler_Common', 'JsonError4ShowErrorHook', PLUGIN_EXITSIGNAL_RETURN);
             $die = true;
         }
         PostComment();

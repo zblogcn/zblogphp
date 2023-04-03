@@ -10,7 +10,7 @@ require '../function/c_system_base.php';
 
 $zbp->Load();
 
-Add_Filter_Plugin('Filter_Plugin_Zbp_ShowError', 'JsonError4ShowErrorHook', PLUGIN_EXITSIGNAL_RETURN);
+Add_Filter_Plugin('Filter_Plugin_Debug_Handler_Common', 'JsonError4ShowErrorHook', PLUGIN_EXITSIGNAL_RETURN);
 
 if (!$zbp->CheckRights('root')) {
     $zbp->ShowError(6);

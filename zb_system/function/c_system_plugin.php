@@ -310,8 +310,8 @@ function HookFilterPlugin_Return($plugname, &$signal = null)
 '**************************************************<
 '类型:Filter
 '名称:Filter_Plugin_Debug_Handler
-'参数:$zee 类型(ZbpErrorException)
-'说明:定义Debug_Shutdown_Handler,Debug_Exception_Handler,Debug_Error_Handler函数的接口
+'参数:
+'说明:已废弃
 '调用:
 '**************************************************>
  */
@@ -320,8 +320,30 @@ DefinePluginFilter('Filter_Plugin_Debug_Handler');
 /*
 '**************************************************<
 '类型:Filter
+'名称:Filter_Plugin_Debug_Handler_ZEC
+'参数:$zee 类型(ZbpErrorException)
+'说明:定义Debug_Shutdown_Handler,Debug_Exception_Handler,Debug_Error_Handler函数的接口
+'调用:
+'**************************************************>
+ */
+DefinePluginFilter('Filter_Plugin_Debug_Handler_ZEC');
+
+/*
+'**************************************************<
+'类型:Filter
+'名称:Filter_Plugin_Debug_Handler_Common
+'参数:int $errno, string $errstr, string $errfile, int $errline
+'说明:定义Debug_Shutdown_Handler,Debug_Exception_Handler,Debug_Error_Handler函数的接口
+'调用:
+'**************************************************>
+ */
+DefinePluginFilter('Filter_Plugin_Debug_Handler_Common');
+
+/*
+'**************************************************<
+'类型:Filter
 '名称:Filter_Plugin_Debug_Display
-'参数:$zec 类型(ZbpErrorContrl)
+'参数:$
 '说明:定义ZBlogException的Display函数的接口(与Handler不同的是一个传入zbp异常类一个是控制类)
 '调用:
 '**************************************************>
