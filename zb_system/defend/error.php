@@ -209,12 +209,12 @@ unset($post_data['addinfo']);
                             </table>
                         </div>
                         <div>
-                            <p><?php echo 'Error Info List'; ?></p>
+                            <p><?php echo 'Error List'; ?></p>
                             <table style="width: 100%" class="table_striped">
                                 <tbody>
 
                     <?php
-                    $error_list = ZbpErrorContrl::GetErrorInfoList();
+                    $error_list = ZbpErrorContrl::GetErrorList();
                     $i = 0;
                     foreach ($error_list as $key => $value) {
                         $i += 1;

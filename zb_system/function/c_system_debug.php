@@ -130,7 +130,7 @@ function Debug_IgnoreError($errno)
  */
 function Debug_Error_Handler($errno, $errstr, $errfile, $errline)
 {
-    ZbpErrorContrl::AddErrorInfoList($errno, $errstr, $errfile, $errline, 'Error');
+    ZbpErrorContrl::AddErrorList($errno, $errstr, $errfile, $errline, 'Error');
     if (ZbpErrorContrl::$disabled == true) {
         return true;
     }
@@ -154,7 +154,7 @@ function Debug_Error_Handler($errno, $errstr, $errfile, $errline)
 
     foreach ($GLOBALS['hooks']['Filter_Plugin_Debug_Handler_ZEE'] as $fpname => &$fpsignal) {
         $fpsignal = PLUGIN_EXITSIGNAL_NONE;
-        $fpreturn = $fpname($zee);
+        $fpreturn = $fpname($zee, 'Error');
         if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
             return $fpreturn;
         }
@@ -162,7 +162,7 @@ function Debug_Error_Handler($errno, $errstr, $errfile, $errline)
 
     foreach ($GLOBALS['hooks']['Filter_Plugin_Debug_Handler_Common'] as $fpname => &$fpsignal) {
         $fpsignal = PLUGIN_EXITSIGNAL_NONE;
-        $fpreturn = $fpname($errno, $errstr, $errfile, $errline);
+        $fpreturn = $fpname($zee->getCode(), $zee->getMessage(), $zee->getFile(), $zee->getLine());
         if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
             return $fpreturn;
         }
@@ -191,7 +191,7 @@ function Debug_Error_Handler($errno, $errstr, $errfile, $errline)
  */
 function Debug_Exception_Handler($exception)
 {
-    ZbpErrorContrl::AddErrorInfoList($exception);
+    ZbpErrorContrl::AddErrorList($exception);
     if (ZbpErrorContrl::$disabled == true) {
         return true;
     }
@@ -214,7 +214,7 @@ function Debug_Exception_Handler($exception)
 
     foreach ($GLOBALS['hooks']['Filter_Plugin_Debug_Handler_ZEE'] as $fpname => &$fpsignal) {
         $fpsignal = PLUGIN_EXITSIGNAL_NONE;
-        $fpreturn = $fpname($zee);
+        $fpreturn = $fpname($zee, 'Exception');
         if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
             return $fpreturn;
         }
@@ -222,7 +222,7 @@ function Debug_Exception_Handler($exception)
 
     foreach ($GLOBALS['hooks']['Filter_Plugin_Debug_Handler_Common'] as $fpname => &$fpsignal) {
         $fpsignal = PLUGIN_EXITSIGNAL_NONE;
-        $fpreturn = $fpname($exception->getCode(), $exception->getMessage(), $exception->getFile(), $exception->getLine());
+        $fpreturn = $fpname($zee->getCode(), $zee->getMessage(), $zee->getFile(), $zee->getLine());
         if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
             return $fpreturn;
         }
@@ -250,13 +250,13 @@ function Debug_Exception_Handler($exception)
 function Debug_Shutdown_Handler()
 {
     if ($error = error_get_last()) {
-        ZbpErrorContrl::AddErrorInfoList($error['type'], $error['message'], $error['file'], $error['line'], 'Shutdown');
+        ZbpErrorContrl::AddErrorList($error['type'], $error['message'], $error['file'], $error['line'], 'Fatal');
         if (ZbpErrorContrl::$disabled == true) {
             return true;
         }
 
         if (ZbpErrorContrl::$islogerror) {
-            Logs(var_export(array('Shutdown', $error['type'], $error['message'], $error['file'], $error['line']), true), 'FATAL');
+            Logs(var_export(array('Fatal', $error['type'], $error['message'], $error['file'], $error['line']), true), 'FATAL');
         }
 
         if (Debug_IgnoreError($error['type'])) {
@@ -264,11 +264,11 @@ function Debug_Shutdown_Handler()
         }
 
         $zec = new ZbpErrorContrl();
-        $zee = $zec->ParseShutdown($error);
+        $zee = $zec->ParseFatal($error);
 
         foreach ($GLOBALS['hooks']['Filter_Plugin_Debug_Handler_ZEE'] as $fpname => &$fpsignal) {
             $fpsignal = PLUGIN_EXITSIGNAL_NONE;
-            $fpreturn = $fpname($zee);
+            $fpreturn = $fpname($zee, 'Fatal');
             if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
                 return $fpreturn;
             }
@@ -276,7 +276,7 @@ function Debug_Shutdown_Handler()
 
         foreach ($GLOBALS['hooks']['Filter_Plugin_Debug_Handler_Common'] as $fpname => &$fpsignal) {
             $fpsignal = PLUGIN_EXITSIGNAL_NONE;
-            $fpreturn = $fpname($error['type'], $error['message'], $error['file'], $error['line']);
+            $fpreturn = $fpname($zee->getCode(), $zee->getMessage(), $zee->getFile(), $zee->getLine());
             if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
                 return $fpreturn;
             }
@@ -313,7 +313,7 @@ function Debug_DoNothing()
 class ZbpErrorException extends Exception
 {
     /**
-     * 类型(Error, Exception, Shutdown, ZbpErrorException)
+     * 类型(Error, Exception, Fatal, ZbpErrorException)
      */
     public $type = __CLASS__;
     public $moreinfo = array();
@@ -484,11 +484,11 @@ class ZbpErrorContrl
     }
 
     /**
-     * AddErrorInfoList
+     * AddErrorList
      *
      * @return true
      */
-    public static function AddErrorInfoList($code, $message = null, $file = null, $line = null, $type = null)
+    public static function AddErrorList($code, $message = null, $file = null, $line = null, $type = null)
     {
         if (is_a($code, 'Exception') || is_a($code, 'Error')) {
             $array = array();
@@ -518,12 +518,12 @@ class ZbpErrorContrl
     }
 
     /**
-     * GetErrorInfoList
+     * GetErrorList
      *
      * @return array
      */
     
-    public static function GetErrorInfoList()
+    public static function GetErrorList()
     {
         return self::$error_msg_list;
     }
@@ -663,11 +663,11 @@ class ZbpErrorContrl
      *
      * @param $error
      */
-    public function ParseShutdown($error)
+    public function ParseFatal($error)
     {
         $this->private_zee = new ZbpErrorException($error['message'], $error['type'], null, $error['file'], $error['line']);
         $this->private_zee->messagefull = $error['message'] . ' (register_shutdown_function) ';
-        $this->private_zee->type = 'Shutdown';
+        $this->private_zee->type = 'Fatal';
         return $this->private_zee;
     }
 
