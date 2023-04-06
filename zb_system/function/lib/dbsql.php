@@ -128,12 +128,15 @@ class DbSql
     {
         if (!is_array($option)) {
             $option = array();
+        } else {
+            $option = array_change_key_case($option, CASE_LOWER);
         }
 
         $sql = $this->get()->select($table)->option($option)->where($where)->orderBy($order)->limit($limit);
 
         //定义出key array
         $array = array('COUNT', 'MIN', 'MAX', 'SUM', 'AVG', 'SELECTANY', 'FROM', 'INNERJOIN', 'LEFTJOIN', 'RIGHTJOIN', 'JOIN', 'FULLJOIN', 'USEINDEX', 'FORCEINDEX', 'IGNOREINDEX', 'ON', 'DISTINCT', 'RANDOM', 'COLUMN', 'GROUPBY', 'HAVING', 'WHERE', 'ORDER', 'LIMIT');
+
         foreach ($array as $key => $keyword) {
             if (isset($option[strtolower($keyword)])) {
                 $args = array($option[strtolower($keyword)]);
