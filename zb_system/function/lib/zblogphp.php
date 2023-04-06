@@ -394,7 +394,12 @@ class ZBlogPHP
 
     public $activeapps;
 
+    //不保存进Option的单次开关
     public $cookie_tooken_httponly = true;
+
+    public $logs_more_info = false;
+
+    public $build_system_module = true;
 
     /**
      * @var int 管理页面显示条数

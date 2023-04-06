@@ -137,14 +137,17 @@ function misc_statistic()
 
     //增加模块内容（因模块模板改变）而刷新的机制
     try {
-        $zbp->AddBuildModule('statistics', array($all_articles, $all_pages, $all_categories, $all_tags, $all_views, $all_comments));
-        $zbp->AddBuildModule('previous');
-        $zbp->AddBuildModule('calendar');
-        $zbp->AddBuildModule('comments');
-        $zbp->AddBuildModule('tags');
-        $zbp->AddBuildModule('authors');
-        $zbp->AddBuildModule('catalog');
-        $zbp->AddBuildModule('navbar');
+        if ($zbp->build_system_module) {
+            $zbp->AddBuildModule('statistics', array($all_articles, $all_pages, $all_categories, $all_tags, $all_views, $all_comments));
+            $zbp->AddBuildModule('previous');
+            $zbp->AddBuildModule('calendar');
+            $zbp->AddBuildModule('comments');
+            $zbp->AddBuildModule('tags');
+            $zbp->AddBuildModule('authors');
+            $zbp->AddBuildModule('catalog');
+            $zbp->AddBuildModule('navbar');
+        }
+    } catch (Throwable $t) {
     } catch (Exception $e) {
         //echo $e->getMessage();
     }

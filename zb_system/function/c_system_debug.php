@@ -142,6 +142,9 @@ function Debug_Error_Handler($errno, $errstr, $errfile, $errline)
 
     //@符号的错误抑制功能的实现 php7 || php8
     if (error_reporting() == 0 || !(error_reporting() & $errno)) {
+        //if (function_exists('error_clear_last ')) {
+        //    error_clear_last();
+        //}
         return true;
     }
 
@@ -243,7 +246,7 @@ function Debug_Exception_Handler($exception)
 }
 
 /**
- * 当机错误处理.
+ * 当机错误处理.(不再使用)
  *
  * @return bool
  */
@@ -538,7 +541,7 @@ class ZbpErrorContrl
         }
         set_error_handler('Debug_Error_Handler');
         set_exception_handler('Debug_Exception_Handler');
-        register_shutdown_function('Debug_Shutdown_Handler');
+        //register_shutdown_function('Debug_Shutdown_Handler');
     }
 
     /**
@@ -546,9 +549,12 @@ class ZbpErrorContrl
      */
     public static function ClearErrorHook()
     {
+        if (IS_CLI) {
+            return;
+        }
         set_error_handler('Debug_DoNothing');
         set_exception_handler('Debug_DoNothing');
-        register_shutdown_function('Debug_DoNothing');
+        //register_shutdown_function('Debug_DoNothing');
     }
 
     /**

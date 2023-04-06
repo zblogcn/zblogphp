@@ -2389,7 +2389,7 @@ function ScriptError($errorCode, $errorText = '', $file = '', $line = '')
  * 记录日志.
  *
  * @param string $logString
- * @param string $level INFO|ERROR|EXCEPTION|FATAL|DEBUG|TRACE
+ * @param string $level INFO|DEBUG|TRACE|NOTICE|WARN|ALERT|ERROR|EXCEPTION|FATAL
  * @param string $source system or plugin ID
  *
  * @return bool
@@ -2411,9 +2411,28 @@ function Logs($logString, $level = 'INFO', $source = 'system')
 
     $ip = GetGuestIP();
     $ua = GetGuestAgent();
-
+    $addinfo = array();
+    $addinfo['ip'] = $ip;
+    $addinfo['host'] = GetVars('HTTP_HOST', 'SERVER');
+    $addinfo['user-agent'] = $ua;
+    $addinfo['uri'] = GetVars('REQUEST_URI', 'SERVER');
+    $addinfo['method'] = GetVars('REQUEST_METHOD', 'SERVER');
+    $addinfo['args'] = GetVars('QUERY_STRING', 'SERVER');
+    $addinfo['php_self'] = GetVars('PHP_SELF', 'SERVER');
+    $addinfo['script_name'] = GetVars('SCRIPT_NAME', 'SERVER');
+    if (function_exists('getallheaders')) {
+        $addinfo['header'] = getallheaders();
+        unset($addinfo['header']['User-Agent']);
+        unset($addinfo['header']['Cookie']);
+    }
+    ob_start(); 
+    debug_print_backtrace(); 
+    $trace = ob_get_contents(); 
+    ob_end_clean(); 
+    $addinfo['debug_backtrace'] = $trace;
+    
     foreach ($GLOBALS['hooks']['Filter_Plugin_Logs'] as $fpname => &$fpsignal) {
-        $fpreturn = $fpname($logString, $level, $source, $time, $ip, $ua);
+        $fpreturn = $fpname($logString, $level, $source, $time, $addinfo);
         if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
             $fpsignal = PLUGIN_EXITSIGNAL_NONE;
 
@@ -2434,14 +2453,14 @@ function Logs($logString, $level = 'INFO', $source = 'system')
         }
     }
 
-    ZbpErrorContrl::SuspendErrorHook();
-    $handle = @fopen($f, 'a+');
-    if ($handle) {
-        $t = $time;
-        @fwrite($handle, '[' . $t . ']' . " " . $level . " " . $source . " " . $ip . "\r\n" . $logString . "\r\n");
-        @fclose($handle);
+    $s = '[' . $time . ']' . " " . $level . " " . $source . " " . $ip . "\r\n" . $logString . "\r\n";
+
+    if ($zbp->logs_more_info) {
+        $s .= '--------------------------------' . "\r\n";
+        $s .= var_export($addinfo, true) . "\r\n";
     }
-    ZbpErrorContrl::ResumeErrorHook();
+
+    @file_put_contents($f, $s, FILE_APPEND | LOCK_EX);
 
     return true;
 }
