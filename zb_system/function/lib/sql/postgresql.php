@@ -114,7 +114,6 @@ class SQL__PostgreSQL extends SQL__Global
                     $sql[] = $value[0] . " decimal($d1,$d2) NOT NULL DEFAULT 0" . ',';
                 }
                 if ($value[1] == 'date' || $value[1] == 'time') {
-                    $sql[] = $value[0] . " $value[1] NOT NULL,";
                     if ($value[3] === null) {
                         $sql[] = $value[0] . " $value[1] NULL,";
                     } else {
