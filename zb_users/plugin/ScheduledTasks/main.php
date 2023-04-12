@@ -86,7 +86,7 @@ foreach ($ScheduledTasks_Data as $task) {
                         <p>
 <b>注册新任务</b><br/>
 
-在tasks目录下复制test.php为一个新的php文件，并修改其中的关键内容。<br/>
+在tasks目录下复制task_test.php为一个新的php文件，并修改其中的关键内容。<br/>
 
 <b>定时运行</b><br/>
 
@@ -96,6 +96,7 @@ foreach ($ScheduledTasks_Data as $task) {
 
 {token} 为 $zbp->Config('ScheduledTasks')->Token的值或是本页显示的Token值<br/>
 
+也可以由其它的定时器触发，比如各种云函数定时访问。<br/>
                         </p>
                     </td>
                 </tr>

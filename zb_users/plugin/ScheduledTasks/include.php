@@ -15,7 +15,7 @@ interval: 间隔 （以分为单位）
 lasttime: 最后一次执行的时间 （新任务为空）
 lastresult: 最后一次执行的结果 （新任务为空）
 suspend：挂起（boolean）暂停该计划
-operate:正在执行中(boolean) 为了防止多次刷新执行同一个任务
+running:正在执行中(boolean) 为了防止多次刷新执行同一个任务
 }
 
 任务队列
@@ -124,6 +124,9 @@ function ScheduledTasks_Execute($id){
     } catch (Throwable $e) {
         $result = null;
     }
+
+    $ScheduledTasks_Data[$id]['lasttime'] = time();
+    $ScheduledTasks_Data[$id]['lastresult'] = $result;
 
     return $result;    
 }
