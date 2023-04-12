@@ -9,9 +9,9 @@
 <include>include.php</include>
 <level>1</level>
 <author>
-  <name>zhouzishu</name>
+  <name>zx.asd</name>
   <email></email>
-  <url>https://zzs.im/</url>
+  <url>https://www.zblogcn.com/</url>
 </author>
 <source>
   <name></name>
@@ -19,9 +19,9 @@
   <url></url>
 </source>
 <adapted>170000</adapted>
-<version>1.0</version>
+<version>1.1</version>
 <pubdate>2020-12-07</pubdate>
-<modified>2020-12-07</modified>
+<modified>2023-04-12</modified>
 <price>0</price>
 <advanced>
   <dependency></dependency>
