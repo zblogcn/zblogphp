@@ -55,7 +55,7 @@ function ApiDebugHandler($error)
 {
     $GLOBALS['hooks']['Filter_Plugin_Debug_Handler_ZEE']['ApiDebugHandler'] = PLUGIN_EXITSIGNAL_RETURN;
     //全局拦截error,exception,shutdown
-    ApiResponse(null, $error);
+    echo ApiResponse(null, $error);
     return true;
 }
 
@@ -240,10 +240,6 @@ function ApiResponse($data = null, $error = null, $code = 200, $message = null)
         $response['runtime'] = $runtime;
     }
 
-    foreach ($GLOBALS['hooks']['Filter_Plugin_API_Response'] as $fpname => &$fpsignal) {
-        $fpname($response);
-    }
-
     if (!defined('ZBP_API_IN_TEST')) {
         @ob_clean();
         if (!headers_sent()) {
@@ -251,15 +247,23 @@ function ApiResponse($data = null, $error = null, $code = 200, $message = null)
         }
     }
 
+    //输出错误
     if (!is_null($error)) {
         SetHttpStatusCode(500, true);
         $r = JsonEncode($response);
-        echo $r;
         return $r;
     }
 
+    foreach ($GLOBALS['hooks']['Filter_Plugin_API_Response'] as $fpname => &$fpsignal) {
+        $fpreturn = $fpname($response);
+        if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
+            $fpsignal = PLUGIN_EXITSIGNAL_NONE;
+
+            return $fpreturn;
+        }
+    }
+
     $r = JsonEncode($response);
-    echo $r;
 
     if (is_null($error) && $code !== 200) {
         // 如果 code 不为 200，又不是系统抛出的错误，再来抛出一个 Exception，适配 phpunit
@@ -290,7 +294,6 @@ function ApiResponseRaw($raw, $raw_type = 'application/json')
         }
     }
 
-    echo $raw;
     return $raw;
 }
 
@@ -614,29 +617,33 @@ function ApiDispatch($mods, $mod, $act)
                 $result = call_user_func($func);
             } catch (Throwable $e) {
                 $_SERVER['_error_count'] = ($_SERVER['_error_count'] + 1);
-                $result = ApiResponse(null, $e);
-                return $result;
+                $r = ApiResponse(null, $e);
+                echo $r;
+                return $r;
             } catch (Exception $e) {
                 $_SERVER['_error_count'] = ($_SERVER['_error_count'] + 1);
-                $result = ApiResponse(null, $e);
-                return $result;
+                $r = ApiResponse(null, $e);
+                echo $r;
+                return $r;
             }
 
             ApiResultData($result);
 
             if (isset($result['raw'])) {
-                return ApiResponseRaw($result['raw'], isset($result['raw-type']) ? $result['raw-type'] : 'application/json');
-            }
-            if (isset($result['json'])) {
-                return ApiResponseRaw(JsonEncode($result['json']));
+                $r = ApiResponseRaw($result['raw'], isset($result['raw-type']) ? $result['raw-type'] : 'application/json');
+            } elseif (isset($result['json'])) {
+                $r = ApiResponseRaw(JsonEncode($result['json']));
+            } else {
+                $r = ApiResponse(
+                    isset($result['data']) ? $result['data'] : null,
+                    isset($result['error']) ? $result['error'] : null,
+                    isset($result['code']) ? $result['code'] : 200,
+                    isset($result['message']) ? $result['message'] : 'OK'
+                );
             }
 
-            return ApiResponse(
-                isset($result['data']) ? $result['data'] : null,
-                isset($result['error']) ? $result['error'] : null,
-                isset($result['code']) ? $result['code'] : 200,
-                isset($result['message']) ? $result['message'] : 'OK'
-            );
+            echo $r;
+            return $r;
         }
     }
 

@@ -1841,7 +1841,7 @@ function PostModule()
     }
     if (isset($_POST['Content'])) {
         if ($_POST['Type'] != 'div') {
-            //$_POST['Content'] = str_replace(array("\r", "\n"), array('', ''), $_POST['Content']);
+            //div不再过滤\r和\n//$_POST['Content'] = str_replace(array("\r", "\n"), array('', ''), $_POST['Content']);
         }
     }
 
@@ -2246,6 +2246,8 @@ function SaveSetting()
             $value = DelNameInString($value, 'asp');
         }
         //$zbp->option[$key] = trim(str_replace(array("\r", "\n"), array("", ""), $value));
+        //这里不拿掉\r和\n了
+        $zbp->option[$key] = $value;
     }
     $zbp->option['ZC_DEBUG_MODE'] = (bool) $zbp->option['ZC_DEBUG_MODE'];
 
