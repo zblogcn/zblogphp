@@ -191,6 +191,14 @@ class Database__SQLite3 implements Database__Interface
     }
 
     /**
+     * @return int
+     */
+    public function GetInsertId()
+    {
+        return $this->db->lastInsertRowID();
+    }
+
+    /**
      * @param $table
      * @param $datainfo
      */

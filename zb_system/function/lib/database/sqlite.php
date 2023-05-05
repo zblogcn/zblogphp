@@ -190,6 +190,14 @@ class Database__SQLite implements Database__Interface
     }
 
     /**
+     * @return int
+     */
+    public function GetInsertId()
+    {
+        return sqlite_last_insert_rowid($this->db);
+    }
+
+    /**
      * @param $table
      * @param $datainfo
      */

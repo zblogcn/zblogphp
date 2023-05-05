@@ -349,4 +349,9 @@ class DbSql
         }
     }
 
+    public function GetInsertId($table = null)
+    {
+        return $this->db->GetInsertId($table);
+    }
+
 }

@@ -194,6 +194,14 @@ class Database__PDO_SQLite implements Database__Interface
         $this->LogsError();
         return $this->db->lastInsertId();
     }
+    
+    /**
+     * @return int
+     */
+    public function GetInsertId()
+    {
+        return $this->db->lastInsertId();
+    }
 
     /**
      * @param $table

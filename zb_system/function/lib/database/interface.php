@@ -44,4 +44,6 @@ interface Database__Interface
 
     public function ExistColumn($table, $field);
 
+    public function GetInsertId();
+
 }

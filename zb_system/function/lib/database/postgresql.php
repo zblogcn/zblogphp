@@ -281,6 +281,19 @@ class Database__PostgreSQL implements Database__Interface
     }
 
     /**
+     * @return int
+     */
+    public function GetInsertId($table)
+    {
+        $seq = $table;
+        $seq = str_replace(array('"',"'"), '', $seq) . '_seq';
+        $query = "select currval('{$seq}'::regclass)";
+        $r = pg_query($this->db, $query);
+        $id = (int) pg_fetch_result($r, 0, 0);
+        return $id;
+    }
+
+    /**
      * 新建表.
      *
      * @param string $tablename 表名

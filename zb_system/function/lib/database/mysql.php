@@ -319,6 +319,14 @@ class Database__MySQL implements Database__Interface
     }
 
     /**
+     * @return int
+     */
+    public function GetInsertId()
+    {
+        return mysql_insert_id($this->db);
+    }
+
+    /**
      * 新建表.
      *
      * @param string $tablename 表名

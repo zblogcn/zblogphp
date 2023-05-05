@@ -289,6 +289,14 @@ class Database__PDO_MySQL implements Database__Interface
     }
 
     /**
+     * @return int
+     */
+    public function GetInsertId()
+    {
+        return $this->db->lastInsertId();
+    }
+
+    /**
      * @param $table
      * @param $datainfo
      */

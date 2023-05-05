@@ -305,6 +305,14 @@ class Database__MySQLi implements Database__Interface
     }
 
     /**
+     * @return int
+     */
+    public function GetInsertId()
+    {
+        return mysqli_insert_id($this->db);
+    }
+
+    /**
      * @param $table
      * @param $datainfo
      */
