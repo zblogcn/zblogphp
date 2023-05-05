@@ -135,6 +135,11 @@ function Debug_Error_Handler($errno, $errstr, $errfile, $errline)
         return true;
     }
 
+    //已废弃接口
+    foreach ($GLOBALS['hooks']['Filter_Plugin_Debug_Handler'] as $fpname => &$fpsignal) {
+        $fpreturn = $fpname('Error', array($errno, $errstr, $errfile, $errline));
+    }
+
     if (ZbpErrorContrl::$islogerror == true) {
         $err = ZbpErrorContrl::$errarray[$errno];
         Logs(var_export(array($err, $errno, $errstr, $errfile, $errline), true), 'ERROR');
@@ -199,6 +204,11 @@ function Debug_Exception_Handler($exception)
         return true;
     }
 
+    //已废弃接口
+    foreach ($GLOBALS['hooks']['Filter_Plugin_Debug_Handler'] as $fpname => &$fpsignal) {
+        $fpreturn = $fpname('Exception', $exception);
+    }
+
     if (ZbpErrorContrl::$islogerror) {
         Logs(
             var_export(
@@ -256,6 +266,11 @@ function Debug_Shutdown_Handler()
         ZbpErrorContrl::AddErrorList($error['type'], $error['message'], $error['file'], $error['line'], 'Fatal');
         if (ZbpErrorContrl::$disabled == true) {
             return true;
+        }
+
+        //已废弃接口
+        foreach ($GLOBALS['hooks']['Filter_Plugin_Debug_Handler'] as $fpname => &$fpsignal) {
+            $fpreturn = $fpname('Shutdown', $error);
         }
 
         if (ZbpErrorContrl::$islogerror) {

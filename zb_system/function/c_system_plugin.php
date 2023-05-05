@@ -321,7 +321,7 @@ DefinePluginFilter('Filter_Plugin_Debug_Handler');
 '**************************************************<
 '类型:Filter
 '名称:Filter_Plugin_Debug_Handler_ZEE
-'参数:$zee 类型(ZbpErrorException)
+'参数:$zee 类型(ZbpErrorException), $debug_type
 '说明:定义Debug_Shutdown_Handler,Debug_Exception_Handler,Debug_Error_Handler函数的接口
 '调用:
 '**************************************************>
@@ -343,7 +343,7 @@ DefinePluginFilter('Filter_Plugin_Debug_Handler_Common');
 '**************************************************<
 '类型:Filter
 '名称:Filter_Plugin_Debug_Display
-'参数:$
+'参数:$zec 类型(ZbpErrorContrl)
 '说明:定义ZBlogException的Display函数的接口(与Handler不同的是一个传入zbp异常类一个是控制类)
 '调用:
 '**************************************************>
@@ -1556,7 +1556,7 @@ DefinePluginFilter('Filter_Plugin_ViewList_Begin_V2');
 '**************************************************<
 '类型:Filter
 '名称:Filter_Plugin_ViewList_Core
-'参数:&$type,&$page,&$category,&$author,&$datetime,&$tag,&$w,&$pagebar
+'参数:&$type,&$page,&$category,&$author,&$datetime,&$tag,&$w,&$pagebar,$list_template
 '说明:定义列表核心接口
 '调用:
 '**************************************************>
