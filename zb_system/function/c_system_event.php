@@ -1359,6 +1359,8 @@ function PostCategory()
 
     FilterMeta($cate);
 
+    $cate->UpdateTime = time();
+
     //刷新RootID
     $cate->Level;
 
@@ -1499,6 +1501,8 @@ function PostTag()
     }
 
     FilterTag($tag);
+
+    $tag->UpdateTime = time();
 
     if ($zbp->option['ZC_LARGE_DATA'] == false) {
         CountTag($tag);
@@ -1689,6 +1693,8 @@ function PostMember()
     }
 
     FilterMember($mem);
+
+    $mem->UpdateTime = time();
 
     if ($zbp->option['ZC_LARGE_DATA'] == false) {
         CountMember($mem, array(null, null, null, null));

@@ -50,6 +50,9 @@ abstract class Base__Category extends Base
 
         $this->SubCategorys = &$this->SubCategories;
         $this->Name = $zbp->lang['msg']['unnamed'];
+
+        $this->CreateTime = time();
+        $this->UpdateTime = $this->CreateTime;
     }
 
     /**

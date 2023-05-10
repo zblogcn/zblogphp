@@ -21,6 +21,9 @@ abstract class Base__Tag extends Base
     {
         global $zbp;
         parent::__construct($zbp->table['Tag'], $zbp->datainfo['Tag'], __CLASS__);
+
+        $this->CreateTime = time();
+        $this->UpdateTime = $this->CreateTime;
     }
 
     /**

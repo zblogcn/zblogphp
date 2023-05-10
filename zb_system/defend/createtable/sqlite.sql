@@ -32,6 +32,9 @@ CREATE TABLE %pre%category (
   cate_Intro text NOT NULL DEFAULT '',
   cate_RootID integer NOT NULL DEFAULT 0,
   cate_ParentID integer NOT NULL DEFAULT 0,
+  cate_CreateTime integer NOT NULL DEFAULT '0',
+  cate_PostTime integer NOT NULL DEFAULT '0',
+  cate_UpdateTime integer NOT NULL DEFAULT '0',
   cate_Template varchar(250) NOT NULL DEFAULT '',
   cate_LogTemplate varchar(250) NOT NULL DEFAULT '',
   cate_Meta text NOT NULL DEFAULT ''
@@ -112,6 +115,9 @@ CREATE TABLE %pre%tag (
   tag_Alias varchar(250) NOT NULL DEFAULT '',
   tag_Group varchar(250) NOT NULL DEFAULT '',
   tag_Intro text NOT NULL DEFAULT '',
+  tag_CreateTime integer NOT NULL DEFAULT '0',
+  tag_PostTime integer NOT NULL DEFAULT '0',
+  tag_UpdateTime integer NOT NULL DEFAULT '0',
   tag_Template varchar(250) NOT NULL DEFAULT '',
   tag_Meta text NOT NULL DEFAULT ''
 );

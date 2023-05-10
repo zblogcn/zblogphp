@@ -23,7 +23,7 @@ define('ZC_VERSION_MAJOR', '1');
 define('ZC_VERSION_MINOR', '7');
 define('ZC_VERSION_BUILD', '3');
 define('ZC_VERSION_COMMIT', '3100');
-define('ZC_VERSION_CODENAME', 'Alpha'); //Finch
+define('ZC_VERSION_CODENAME', 'Finch');
 define('ZC_VERSION', ZC_VERSION_MAJOR . '.' . ZC_VERSION_MINOR . '.' . ZC_VERSION_BUILD . '.' . ZC_VERSION_COMMIT);
 if (strcasecmp(ZC_VERSION_CODENAME, 'Beta') == 0 || strcasecmp(ZC_VERSION_CODENAME, 'Alpha') == 0) {
     define('ZC_VERSION_DISPLAY', ZC_VERSION_MAJOR . '.' . ZC_VERSION_MINOR . '.' . ZC_VERSION_BUILD . '.' . ZC_VERSION_COMMIT . ' ' . ZC_VERSION_CODENAME);
@@ -35,4 +35,4 @@ define('ZC_BLOG_COMMIT', ZC_VERSION_COMMIT); // 为写入系统配置统一风�
 $GLOBALS['blogversion'] = ZC_VERSION_MAJOR . ZC_VERSION_MINOR . ZC_VERSION_COMMIT;
 define('ZC_NOW_VERSION', $GLOBALS['blogversion']);
 define('ZC_BLOG_VERSION', ZC_VERSION_DISPLAY . ' Build ' . $GLOBALS['blogversion']);
-define('ZC_LAST_VERSION', '172800'); //数据库里写入的最新的数据库版本号（非系统版本号，只有更改数据库结构才会变动）
+define('ZC_LAST_VERSION', '173000'); //数据库里写入的最新的数据库版本号（非系统版本号，只有更改数据库结构才会变动）

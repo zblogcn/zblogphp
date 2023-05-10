@@ -84,6 +84,34 @@ function updatedb()
     //172800
     @$db->Query("UPDATE {$t['Post']} SET {$d['Post']['UpdateTime'][0]} = {$d['Post']['PostTime'][0]} WHERE {$d['Post']['UpdateTime'][0]} = 0;");
 
+
+    //173000
+    $old = updatedb_checkexist($t['Category'], $d['Category']['CreateTime'][0]);
+    if ($old === false) {
+        @$db->Query("ALTER TABLE {$t['Category']} ADD {$d['Category']['CreateTime'][0]} integer NOT NULL DEFAULT 0;");
+    }
+    $old = updatedb_checkexist($t['Category'], $d['Category']['UpdateTime'][0]);
+    if ($old === false) {
+        @$db->Query("ALTER TABLE {$t['Category']} ADD {$d['Category']['UpdateTime'][0]} integer NOT NULL DEFAULT 0;");
+    }
+    $old = updatedb_checkexist($t['Category'], $d['Category']['PostTime'][0]);
+    if ($old === false) {
+        @$db->Query("ALTER TABLE {$t['Category']} ADD {$d['Category']['PostTime'][0]} integer NOT NULL DEFAULT 0;");
+    }
+
+    $old = updatedb_checkexist($t['Tag'], $d['Tag']['CreateTime'][0]);
+    if ($old === false) {
+        @$db->Query("ALTER TABLE {$t['Tag']} ADD {$d['Tag']['CreateTime'][0]} integer NOT NULL DEFAULT 0;");
+    }
+    $old = updatedb_checkexist($t['Tag'], $d['Tag']['UpdateTime'][0]);
+    if ($old === false) {
+        @$db->Query("ALTER TABLE {$t['Tag']} ADD {$d['Tag']['UpdateTime'][0]} integer NOT NULL DEFAULT 0;");
+    }
+    $old = updatedb_checkexist($t['Tag'], $d['Tag']['PostTime'][0]);
+    if ($old === false) {
+        @$db->Query("ALTER TABLE {$t['Tag']} ADD {$d['Tag']['PostTime'][0]} integer NOT NULL DEFAULT 0;");
+    }
+
     $zbp->option['ZC_LAST_VERSION'] = ZC_LAST_VERSION;
     $zbp->SaveOption();
 }
