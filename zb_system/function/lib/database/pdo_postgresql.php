@@ -252,7 +252,7 @@ class Database__PDO_PostgreSQL implements Database__Interface
     /**
      * @return int
      */
-    public function GetInsertId($table)
+    public function GetInsertId($table = null)
     {
         $seq = $table;
         $seq = str_replace(array('"',"'"), '', $seq) . '_seq';
