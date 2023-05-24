@@ -193,14 +193,20 @@ abstract class Base__Upload extends Base
         global $zbp;
         if ($name == 'Url') {
             foreach ($GLOBALS['hooks']['Filter_Plugin_Upload_Url'] as $fpname => &$fpsignal) {
-                return $fpname($this);
+                $furl = $fpname($this);
+                if ($furl !== null) {
+                    return $furl;
+                }
             }
 
             return $zbp->host . 'zb_users/' . $this->Dir . rawurlencode($this->Name);
         }
         if ($name == 'Dir') {
             foreach ($GLOBALS['hooks']['Filter_Plugin_Upload_Dir'] as $fpname => &$fpsignal) {
-                return $fpname($this);
+                $fdir = $fpname($this);
+                if ($fdir !== null) {
+                    return $fdir;
+                }
             }
             $dir = 'upload/' . date('Y', $this->PostTime) . '/' . date('m', $this->PostTime) . '/';
             if ($zbp->option['ZC_UPLOAD_DIR_YEARMONTHDAY']) {
