@@ -191,6 +191,9 @@ abstract class Base__Upload extends Base
     public function __get($name)
     {
         global $zbp;
+        //注：这里原先设计失误，没有判断接口函数返回值就直接return，造成了插件必须自己拼接所有的url，不管接管还是不接管
+        //1.7.3后修改为先判断null，如果返回null就交给下一棒直到返回系统默认值
+        //Filter_Plugin_Upload_Url和Filter_Plugin_Upload_Dir都做了同样的修复
         if ($name == 'Url') {
             foreach ($GLOBALS['hooks']['Filter_Plugin_Upload_Url'] as $fpname => &$fpsignal) {
                 $furl = $fpname($this);

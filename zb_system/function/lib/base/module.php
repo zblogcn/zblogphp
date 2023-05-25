@@ -114,6 +114,9 @@ abstract class Base__Module extends Base
     {
         global $zbp;
 
+        //强制处理转小写的问题
+        $this->FileName = strtolower($this->FileName);
+
         foreach ($GLOBALS['hooks']['Filter_Plugin_Module_Save'] as $fpname => &$fpsignal) {
             $fpreturn = $fpname($this);
             if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
