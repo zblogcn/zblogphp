@@ -3,8 +3,44 @@
 <id>Zit</id>
 <name>ZBlogIt</name>
 <url>https://jgpy.cn/blog/front-end/ZBlogIt.htm</url>
-<note>可丰富变换外观的ZBlogPHP1.6系统自带主题</note>
+<note>可丰富变换外观的ZBlogPHP系统自带主题</note>
 <description>更新日志
+2020-05-13 V1.7
+BUG 修复登录页LOGO错位的问题
+2020-04-10 V1.6
+NEW 新增无侧栏的单页面模板“widepage”
+NEW 调整了多图列表图片展示效果
+FIX 完善了相关样式
+2022-02-05 V1.5
+FIX 完善了后台非管理员用户左侧菜单分割线
+FIX 完善了后台按钮外观
+BUG 修复后台主题配置链接标题含html代码的问题
+BUG 修复了后台英文左侧菜单链接换行的问题
+BUG 修复了后台管理页选项卡菜单栏出现滚动条的问题
+2022-01-05 V1.4
+NEW 封面图采用系统缩略图形式
+NEW 新增焦点内容图文列表开关以随机文章代替随机评论
+NEW 新增移动设备隐藏焦点内容开关
+FIX 完善了后台相关样式
+FIX 完善了相关代码及样式
+FIX 完善了相关文章无图背景外观
+2021-11-15 V1.3
+NEW 针对1.7版系统优化同时取消对1.6版系统支持
+NEW 新增多图文章列表外观及开关
+FIX 完善了文章列表摘要输出
+FIX 优化了相关样式
+BUG 修复模板中错误引用Kandy类的问题
+BUG 修复网站分类模块树形列表错位问题
+2021-09-18 V1.2
+NEW 新增分类页眉背景图和标语自定义功能
+NEW 新增后台侧边背景动画开关
+FIX 恢复文章列表默认摘要形式以避免潜在问题
+FIX 调整了搜索结果关键字高亮方式
+FIX 完善了文章内容引用及标题样式
+FIX 完善了1.7系统的后台外观
+FIX 优化了相关样式
+2020-06-10 V1.13
+BUG 修复内容页上一篇文章提示少了“《”的问题
 2020-04-29 V1.12
 BUG 修复上一版测试文件被打包的错误
 BUG 修复单页面发表评论按钮无内容的问题
@@ -32,10 +68,10 @@ BUG 修复了部分元素滤镜未应用的问题
   <email>i@jgpy.cn</email>
   <url>https://jgpy.cn</url>
 </source>
-<adapted>162090</adapted>
-<version>1.12</version>
+<adapted>173050</adapted>
+<version>1.7</version>
 <pubdate>2019-11-27</pubdate>
-<modified>2020-04-29</modified>
+<modified>2022-05-13</modified>
 <price>0</price>
 <phpver>5.2</phpver>
 <advanced>
@@ -45,11 +81,11 @@ BUG 修复了部分元素滤镜未应用的问题
   <conflict></conflict>
 </advanced>
 <sidebars>
-  <sidebar1>calendar|archives|controlpanel|catalog|favorite|link|misc</sidebar1>
-  <sidebar2>calendar|catalog|archives|previous</sidebar2>
-  <sidebar3>catalog|previous|comments</sidebar3>
-  <sidebar4>comments</sidebar4>
-  <sidebar5>comments</sidebar5>
+  <sidebar1>calendar|kandypopmodule|controlpanel|catalog|previous|comments|archives|tags|link|misc</sidebar1>
+  <sidebar2>calendar|controlpanel|catalog|previous|comments|archives|tags|link|misc</sidebar2>
+  <sidebar3>calendar|controlpanel|catalog|previous|comments|archives|tags|link|misc</sidebar3>
+  <sidebar4>catalog|controlpanel|link</sidebar4>
+  <sidebar5>catalog|controlpanel|link</sidebar5>
   <sidebar6></sidebar6>
   <sidebar7></sidebar7>
   <sidebar8></sidebar8>

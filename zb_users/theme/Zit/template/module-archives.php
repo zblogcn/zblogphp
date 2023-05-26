@@ -6,6 +6,6 @@
 </select>
 {else}
 {foreach $urls as $url}
-<li class="stock"><a href="{$url.Url}" class="kico-calendar">{$url.Name} <mark>{$url.Count}</mark></a></li>
+<li class="stock"><a href="{$url.Url}" class="kico-calendar kico-gap">{$url.Name} <mark>{$url.Count}</mark></a></li>
 {/foreach}
 {/if}

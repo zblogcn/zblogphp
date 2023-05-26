@@ -11,7 +11,7 @@
 	<link rel="stylesheet" href="{$host}zb_users/theme/{$theme}/style/{$style}.css?{$themeinfo['modified']}" type="text/css" media="all"/>
 {else}
 	<link rel="stylesheet" href="{$host}zb_users/theme/{$theme}/style/{$style}.css?{$themeinfo['modified']}" type="text/css" media="all"/>
-	<script src="{$host}zb_system/script/jquery-2.2.4.min.js?v={$version}"></script>
+	<script src="{$host}zb_system/script/jquery-latest.min.js?v={$version}"></script>
 	<script src="{$host}zb_system/script/zblogphp.js?v={$version}"></script>
 	<script src="{$host}zb_system/script/c_html_js_add.php?{if isset($html_js_hash)}hash={$html_js_hash}&{/if}v={$version}"></script>
 {/if}

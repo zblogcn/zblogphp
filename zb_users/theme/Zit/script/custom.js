@@ -44,31 +44,8 @@ $(function(){
   $len=$("<span style='position:fixed;top:-999em;transition:none;'></span>"),
   pos=$("#banner").height()/2.5;
 
-  $menu.before($mobi.click(function(){
-    this.on=!this.on;
-    $(this).text(this.on?"×":"≡");
-    $("body")[this.on?"addClass":"removeClass"]("friz");
-  }));
-
-  $("textarea").on("keyup blur",function(){
-    this.style.height = "auto";
-    this.style.height = (this.scrollHeight+4) + "px";
-    this.style.overflow = "hidden";
-  }).keyup();
-
-  $search.find("button").click(function(){
-    var invis=$search.hasClass("invis");
-    $search.removeClass("invis").find("input").focus();
-    return !invis;
-  });
-  $("#shuts").click(function(){
-    $search.addClass("invis");
-  });
-
   $("img.cover").each(function(){
     if(!this.frame){
-      this.width=this.offsetWidth;
-      this.height=this.offsetHeight;
       this.style.backgroundImage="url("+this.src+")";
       var img=new Image(),me=this;
       img.src=this.src;
@@ -81,11 +58,43 @@ $(function(){
     }
   });
 
+  $menu.before($mobi.click(function(){
+    this.on=!this.on;
+    $(this).text(this.on?"×":"≡");
+    $("body")[this.on?"addClass":"removeClass"]("friz");
+  }));
+
+  $search.find("button").click(function(){
+    var invis=$search.hasClass("invis");
+    $search.removeClass("invis").find("input").focus();
+    return !invis;
+  });
+  $("#shuts").click(function(){
+    $search.addClass("invis");
+  });
+
+  $("img.hue").each(function(){
+    this.style.backgroundSize="auto";
+    this.style.backgroundPosition=Math.ceil(Math.random()*100)+"%";
+  });
+
+  $("#cont").find("h1,h2,h3,h4,h5,h6").addClass("zit");
+
+  $(".album").find(".cover").each(function(){
+    $(this).css("opacity",(Math.floor(Math.random()*(95-60))+50)/100);
+  });
+
   $side.find("#tbCalendar").parent("div").css("margin","-1em -1em -.5em");
 
   $side.find(".cp-hello").parent().addClass("cpanel").find("a").addClass("more");
   $side.find(".cp-login a").addClass("kico-user");
-  $side.find(".cp-vrs a").addClass("kico-page");
+  $side.find(".cp-vrs a").addClass("kico-memo");
+
+  $("textarea").on("keyup blur",function(){
+    this.style.height = "auto";
+    this.style.height = (this.scrollHeight+4) + "px";
+    this.style.overflow = "hidden";
+  }).keyup();
 
   $cmt[0]&&$len.appendTo("body");
   $cmt.find("input:text").on("focus keyup keydown init",function(){
@@ -102,6 +111,8 @@ $(function(){
   });
 
   $cmt.find(":submit").after($revoke.hide());
+
+  $("#tbCalendar caption a:eq(1)").addClass("zit");
 
   $(window).scroll(function(){
     $face[$(this).scrollTop()>pos?"removeClass":"addClass"]("swell");

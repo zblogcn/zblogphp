@@ -22,7 +22,7 @@ if ($zbp->CheckRights('admin')) {
     <meta name="generator" content="<?php echo $option['ZC_BLOG_PRODUCT_FULL']; ?>" />
     <meta name="renderer" content="webkit" />
     <link rel="stylesheet" href="css/admin.css?<?php echo $blogversion; ?>" type="text/css" media="screen" />
-    <script src="script/jquery-2.2.4.min.js?<?php echo $blogversion; ?>"></script>
+    <script src="script/jquery-latest.min.js?<?php echo $blogversion; ?>"></script>
     <script src="script/zblogphp.js?<?php echo $blogversion; ?>"></script>
     <script src="script/md5.js?<?php echo $blogversion; ?>"></script>
     <script src="script/c_admin_js_add.php?hash=<?php echo $zbp->html_js_hash; ?>&<?php echo $blogversion; ?>"></script>

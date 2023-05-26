@@ -7,14 +7,19 @@
  */
 
 html body{font-size:16px;background:#fafbfc;color:#345;}
+body{min-width:auto;}
 
 a{transition:all 0.5s;}
 
-.zit{color:#fff;background:#39c;padding:0.5em;line-height:1;position:absolute;z-index:2;min-width:2em;display:inline-block;min-height:1em;margin:0;}
-.zit::after{content:"Z";position:absolute;left:0.5em;bottom:-0.5em;transform:rotate(30deg);display:inline-block;margin:0 0.2em 0 0;z-index:-1;color:#39c;font-weight:bold;transition:all 0.5s;}
-.zit a{color:#fff;}
+.zit,
+.content-box .content-box-tabs a.current{color:#fff;background:#39c;padding:0.5em;line-height:1;position:absolute;z-index:2;min-width:2em;display:inline-block;min-height:1em;margin:0;}
+.zit::after,
+.content-box-tabs .current::after{content:"Z";position:absolute;left:0.5em;bottom:-0.5em;transform:rotate(30deg);display:inline-block;margin:0 0.2em 0 0;z-index:-1;color:#39c;font-weight:bold;transition:all 0.5s;}
+.zit a,
+#divMain .content-box .content-box-tabs a.current{color:#fff;}
 
 form{margin:0;}
+textarea{font-family:"Microsoft YaHei";}
 
 #divMain{float:none;padding:2.5em 2em 2em;}
 
@@ -28,7 +33,7 @@ form.search p{padding:0;}
 .pane table{margin:0;border:none;line-height:1.8;box-shadow:none;}
 .pane td,
 .pane th{border:none;padding:0.8em;}
-.pane th{background:none;}
+.pane th{background:none;white-space: nowrap;}
 
 ul::after,
 ol::after,
@@ -70,25 +75,34 @@ ol::after,
 .left #leftmenu a{margin:0;float:none;padding:0.5em 0.25em;height:auto;line-height:1.5;display:block;width:auto;text-align:center;color:#fafbfc;}
 .left #leftmenu span{float:none;height:auto;line-height:1.5;text-align:inherit;margin:0;padding:0 0 0 20px;background-position:0 55%;}
 html[lang="en"] .left #leftmenu a{text-align:left;padding-left:0.5em;}
-.left #leftmenu a:hover{letter-spacing:0.05em;text-indent:0.05em;font-weight:bold;background:rgba(0,0,0,0.05);color:#fff;}
+.left #leftmenu a:hover{letter-spacing:0.05em;text-indent:0.05em;font-weight:bold;background:rgba(0,0,0,0.1);color:#fff;}
 #leftmenu li.on::after{content:".";overflow:hidden;height:0;line-height:0;width:0;border:0.5em solid;border-color:transparent #fafbfc transparent transparent;position:absolute;right:0;top:50%;margin:-0.5em 0 0;}
 #leftmenu li.on{font-weight:bold;}
+.left #leftmenu .on a{background:rgba(0,0,0,0.2);}
+.left #leftmenu li span i{margin-left:-20px;line-height:1;}
+.left #leftmenu li span span{padding:0;}
+
+html[lang='en'] .left #leftmenu{font-size:15px;}
+html[lang='en'] .left #leftmenu a:hover{letter-spacing:-.02em;text-indent:0;}
+html[lang='en'] #leftmenu li.on{font-weight:bold;letter-spacing:-.02em;}
 
 .main{margin-left:10em;padding:0;}
 
 div.hint{margin:0;padding:0 !important;}
-div.hint p{line-height:2;padding:0.5em 2em 0.5em 0;background-position:99% 50% !important;text-align:right;font-weight:bold;color:#123;}
+div.hint p{line-height:2;padding:0.5em 2em 0.5em 0;background-position:99% 50% !important;text-align:right;font-weight:bold;color:#123;border-radius:0;}
 
 .divHeader2{border:none;}
 
 .SubMenu{height:40px;line-height:37px;margin:2em 0 -2em !important;padding:0 10px;border-bottom:2px solid #39c;overflow:auto;}
-.SubMenu a{background:#fefefe;box-shadow:0 0 0.5em rgba(0,0,0,0.05);border:solid #f4f5f6;border-width:1px 1px 0;border-radius:0.3em 0.3em 0 0;overflow:hidden;}
+.SubMenu a{background:#fefefe;box-shadow:0 0 0.5em rgba(0,0,0,0.05);border:solid #f4f5f6;border-width:1px 1px 0;border-radius:0.3em 0.3em 0 0;overflow:hidden;margin-bottom:0;}
 .SubMenu a:hover{background:#def;}
 .SubMenu span{color:#17a;}
 .SubMenu span:hover{color:#234;}
 .SubMenu span:hover b{color:#fee;}
 .SubMenu span.m-now:hover{color:#fff;}
 .SubMenu a.hilite{top:0 !important;padding:0 !important;}
+.SubMenu a.hilite:hover{background:#39c}
+.SubMenu [class^='kico']{line-height:1;}
 
 #btnPost{height:auto !important;padding:0.5em 1em;border-radius:0.5em;border-width:2px;}
 
@@ -108,6 +122,30 @@ div.hint p{line-height:2;padding:0.5em 2em 0.5em 0;background-position:99% 50% !
 
 #divMain2>.pane>.warning{transform:none;max-width:35em;position:static;margin:0 auto;font-size:1em;}
 #divMain2>.pane>.warning form{margin:1em 0 0;}
+#divMain2 i.icon-trash,
+#divMain2 i.icon-cancel{color:#c00;}
+#divMain2 i.icon-cloud-arrow-up-fill,
+#divMain2 i.icon-link-45deg{color:#5ad;}
+#divMain2 i.icon-download,
+#divMain2 i.icon-shield-fill-check{color:#1b0;}
+#divMain2 i.icon-pencil-square,
+#divMain2 i.icon-shield-fill-x{color:#c71;}
+#divMain2 i.icon-grid-fill{color:#39a;}
+#divMain2 a i[class^="icon-"]{transition:.2s all;display:inline-block;}
+#divMain2 a i[class^="icon-"]:hover{transform:scale(1.1);color:#e00;}
+
+.order_button{position:absolute;}
+.content-box .content-box-tabs{padding:0 0 10px;}
+.content-box .content-box-tabs a.current{position:relative;transition:none;}
+
+input.btn,.button,button.btn{background:#39c;color:#fff;border:none;cursor:pointer;border:none!important;transition:all .3s}
+input.button,input[type="submit"],button{background:#39c;}
+input.btn,.button,button.btn{padding:.6em 1em;border-radius:.5em;font-size:1.2em;font-weight:bold;}
+input.btn:hover,button:hover{box-shadow:0 0 2em rgba(0,0,0,.2) inset!important}
+form.search .button, form.search .reset,.theme-activate{padding:0 1em!important;border-radius:3px;font-weight:normal;}
+.theme-activate{font-size:.9em;}
+
+#divAppType .btn{display:block;width:100%;font-size:16px;}
 
 @keyframes slide{
   0% {background-position:center;}

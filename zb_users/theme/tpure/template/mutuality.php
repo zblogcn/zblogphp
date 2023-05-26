@@ -1,9 +1,9 @@
-<?php die(); ?>{* Template Name:相关文章模块 *}
-{if $zbp->Config('tpure')->PostRELATEON=='1'}
-{$aid=$article.ID}
-{$tagid=$article.Tags}
-{$cid=$article.Category.ID}
+<?php die(); ?>{* Template Name:相关文章模块(勿选) *}
+{if $zbp->Config('tpure')->PostRELATEON == '1'}
 {php}
+$aid=$article->ID;
+$tagid=$article->Tags;
+$cid=$article->Category->ID;
 if($zbp->Config('tpure')->PostRELATENUM){
 	$relatenum = $zbp->Config('tpure')->PostRELATENUM;
 }else{
@@ -15,7 +15,7 @@ if(empty($tagid)){
 }else{
 	$tagrd=array_rand($tagid);
 }
-if( sizeof($tagid)>0 && ($tagid[$tagrd]->Count)>1){
+if(sizeof($tagid)>0 && ($tagid[$tagrd]->Count)>1 && $zbp->Config('tpure')->PostRELATECATE == '0'){
 	$tagi='%{'.$tagrd.'}%';
 	$where = array(array('=','log_Status','0'),array('like','log_Tag',$tagi),array('<>','log_ID',$aid));
 }else{
@@ -32,38 +32,61 @@ switch ($zbp->option['ZC_DATABASE_TYPE']) {
 		$order = array('random()'=>'');
 	break;
 }
-$array = $zbp->GetArticleList(array('*'),$where,$order,array($relatenum),'');
+
+if(ZC_VERSION_COMMIT >= 2800){
+	$w = array();
+	$str = '';
+	if($zbp->Config('tpure')->PostRELATENUM)
+	{
+		$w['random'] = $zbp->Config('tpure')->PostRELATENUM;
+	}else{
+		$w['random'] = '6';
+	}
+	if($article->TagsCount && $zbp->Config('tpure')->PostRELATECATE != '1')
+	{
+	  $w['is_related'] = $article->ID;
+	}else{
+	  $w['cate'] = $article->Category->ID;
+	}
+	$array = GetList($w);
+}else{
+	$array = $zbp->GetArticleList(array('*'),$where,$order,array($relatenum),'');
+}
 {/php}
 {if count($array)>0}
-	<div class="block">
-		<div class="posttitle"><h4>相关文章</h4></div>
-		<div class="relatecon">
-	{php}
-		foreach ($array as $related) {
-			$content = $related->Content;
-			$intro = preg_replace('/[\r\n\s]+/', ' ', trim(SubStrUTF8(TransferHTML($content,'[nohtml]'),$zbp->Config('tpure')->PostINTRONUM)).'...');
-			if(tpure_Thumb($related) != ''){
-				$isimg = ' class="isimg"';
-			}else{
-				$isimg = '';
-			}
-			if(($related->ID)!=$aid){
+<div class="block">
+	<div class="posttitle"><h4>{if $zbp->Config('tpure')->PostRELATETITLE == '1'}“{$article.Title}” {$zbp->lang['tpure']['of']}{/if}{$zbp->lang['tpure']['relate']}</h4></div>
+	<div class="relatecon{if $zbp->Config('tpure')->PostRELATESTYLE == '1'}{if $zbp->Config('tpure')->PostRELATEDIALLEL == '1'} diallel{else} onlyone{/if}{/if}">
+{php}
+	foreach ($array as $related) {
+		$content = $related->Content;
+		$intro = preg_replace('/[\r\n\s]+/', ' ', trim(SubStrUTF8(TransferHTML($content,'[nohtml]'),$zbp->Config('tpure')->PostINTRONUM)).'...');
+		if(tpure_Thumb($related) != ''){
+			$isimg = ' class="isimg"';
+		}else{
+			$isimg = '';
+		}
+		if(($related->ID) != $article->ID){
+			if($zbp->Config('tpure')->PostRELATESTYLE == '0'){
 				$str .= '<div class="relate">';
-					if(tpure_Thumb($related) != ''){$str .= '<div class="relateimg"><a href="'.$related->Url.'" target="_blank" title="'.$related->Title.'"><img src="'.tpure_Thumb($related).'" alt="'.$related->Title.'"></a></div>';}
+					if(tpure_Thumb($related) != ''){$str .= '<div class="relateimg"><a href="'.$related->Url.'" title="'.$related->Title.'"><img src="'.tpure_Thumb($related).'" alt="'.$related->Title.'" /></a></div>';}
 				$str .= '<div class="relateinfo">
-						<h3><a href="'.$related->Url.'" target="_blank" title="'.$related->Title.'">'.$related->Title.'</a></h3>
+						<h3><a href="'.$related->Url.'" title="'.$related->Title.'">'.$related->Title.'</a></h3>
 						<p'.$isimg.'>';
-						if(tpure_isMobile()){$str .= '<a href="'.$article->Url.'" target="_blank">';}
+						if(tpure_isMobile()){$str .= '<a href="'.$related->Url.'">';}
 							$str .= $intro;
 						if(tpure_isMobile()){$str .= '</a>';}
 						$str .= '</p>';
 					$str .= '</div>
 				</div>';
+			}else{
+				$str .= '<div class="relatelist"><a href="'.$related->Url.'" title="'.$related->Title.'">'.$related->Title.'</a><span class="posttime">'.tpure_TimeAgo($related->Time()).'</span></div>';
 			}
 		}
-	{/php}
-	{$str}
-		</div>
+	}
+{/php}
+{$str}
 	</div>
+</div>
 {/if}
 {/if}

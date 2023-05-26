@@ -1,6 +1,6 @@
 {if !$article.IsLock}
 <div id="cmts">
-<h3 class="zit kico-da">{$cfg.CommentTitle}</h3>
+<h3 class="zit kico-lao">{$cfg.CommentTitle}</h3>
 {if $socialcomment}
   {$socialcomment}
 {else}

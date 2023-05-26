@@ -1,0 +1,63 @@
+@font-face{
+	font-family:socialshare;
+	src:url(fonts/iconfont.eot);
+	src:url(fonts/iconfont.eot?#iefix) format("embedded-opentype"),
+	url(fonts/iconfont.woff) format("woff"),
+	url(fonts/iconfont.ttf) format("truetype"),
+	url(fonts/iconfont.svg#iconfont) format("svg")
+}
+.sharing {font-size:16px; font-family:socialshare!important; font-style:normal; }
+.sharing * { font-family:socialshare!important; }
+.sharing .icon-tencent:before{content:"\f07a"}
+.sharing .icon-qq:before{content:"\f11a"}
+.sharing .icon-weibo:before{content:"\f12a"}
+.sharing .icon-wechat:before{content:"\f09a"}
+.sharing .icon-douban:before{content:"\f10a"}
+.sharing .icon-heart:before{content:"\f20a"}
+.sharing .icon-like:before{content:"\f00a"}
+.sharing .icon-qzone:before{content:"\f08a";}
+.sharing .icon-linkedin:before{content:"\f01a"}
+.sharing .icon-diandian:before{content:"\f05a"}
+.sharing .icon-facebook:before{content:"\f03a"}
+.sharing .icon-google:before{content:"\f04a"}
+.sharing .icon-twitter:before{content:"\f06a"}
+.sharing a{position:relative;text-decoration:none;margin:4px;display:inline-block;outline:0}
+.sharing .share-icon{position:relative;display:inline-block;width:28px;height:28px;font-size:0px;border-radius:50%;line-height:28px;border:1px solid #666;color:#666;text-align:center;vertical-align:middle;transition:background 0s ease-out 0s}
+.sharing .share-icon:before { font-size:18px; }
+.sharing .icon-qq:before,.sharing .icon-qzone:before{font-size:19px;}
+.sharing .share-icon:hover{background:#666;color:#fff;text-decoration:none;}
+.sharing .icon-weibo{color:#ff763b;border-color:#ff763b}
+.sharing .icon-weibo:hover{background:#ff763b}
+.sharing .icon-tencent{color:#56b6e7;border-color:#56b6e7}
+.sharing .icon-tencent:hover{background:#56b6e7}
+.sharing .icon-qq{color:#56b6e7;border-color:#56b6e7}
+.sharing .icon-qq:hover{background:#56b6e7}
+.sharing .icon-qzone{color:#fdbe3d;border-color:#fdbe3d}
+.sharing .icon-qzone:hover{background:#fdbe3d}
+.sharing .icon-douban{color:#33b045;border-color:#33b045}
+.sharing .icon-douban:hover{background:#33b045}
+.sharing .icon-linkedin{color:#0077b5;border-color:#0077b5}
+.sharing .icon-linkedin:hover{background:#0077b5}
+.sharing .icon-facebook{color:#44619d;border-color:#44619d}
+.sharing .icon-facebook:hover{background:#44619d}
+.sharing .icon-google{color:#db4437;border-color:#db4437}
+.sharing .icon-google:hover{background:#db4437}
+.sharing .icon-twitter{color:#55acee;border-color:#55acee}
+.sharing .icon-twitter:hover{background:#55acee}
+.sharing .icon-diandian{color:#307dca;border-color:#307dca}
+.sharing .icon-diandian:hover{background:#307dca}
+.sharing .icon-wechat{position:relative;color:#7bc549;border-color:#7bc549}
+.sharing .icon-wechat:hover{background:#7bc549}
+.sharing .icon-wechat .wechat-qrcode{display:none;border:1px solid #eee;position:absolute;z-index:999;top:-205px;left:-67px;width:160px;height:192px;color:#666;font-size:12px;text-align:center;background-color:#fff;box-shadow:0 2px 10px #aaa;transition:all .2s;-webkit-tansition:all 350ms;-moz-transition:all 350ms}
+.sharing .icon-wechat .wechat-qrcode.bottom{top:40px;left:-84px}
+.sharing .icon-wechat .wechat-qrcode.bottom:after{display:none}
+.sharing .icon-wechat .wechat-qrcode h4{font-weight:400;height:26px;line-height:26px;font-size:12px;background-color:#f3f3f3;margin:0;padding:0;color:#777}
+.sharing .icon-wechat .wechat-qrcode .qrcode{width:100%;margin:10px auto 8px;}
+.sharing .icon-wechat .wechat-qrcode .qrcode img { margin:0 auto; border:3px solid #fff; }
+.sharing .icon-wechat .wechat-qrcode .qrcode table{margin:0!important}
+.sharing .icon-wechat .wechat-qrcode .help p{font-weight:400;text-align:center;line-height:16px;padding:0;margin:0}
+.sharing .icon-wechat .wechat-qrcode:after{content:'';position:absolute;left:50%;margin-left:-6px;bottom:-14px;width:0;height:0;border-width:8px 6px 6px 6px;border-style:solid;border-color:#fff transparent transparent transparent}
+.sharing .icon-wechat:hover .wechat-qrcode{display:block}
+.night .sharing .icon-wechat .wechat-qrcode { color:#999; border:1px solid #3a3a3a; box-shadow:0 2px 10px #191919; background-color:#262626; }
+.night .sharing .icon-wechat .wechat-qrcode h4 { color:#999; background:#3a3a3a; }
+.night .sharing .icon-wechat .wechat-qrcode:after { border-color:#3a3a3a transparent transparent transparent; }

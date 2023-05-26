@@ -73,14 +73,13 @@ require $blogpath . 'zb_system/admin/admin_top.php';
 .pane .zit{top:-1em;left:1em;}
 .pane p{padding:.5em;transition:all 1s;}
 .pane p:hover{background:#f7f8f9;margin:0 -1em;padding:.5em 1.5em;}
-.pane dfn{font:bold 1em arial;display:inline-block;width:9em;}
+.pane dfn{font:bold 1em arial;display:inline-block;width:10em;}
 .pane small{color:#789;margin-left:.5em}
 .pane samp{position:relative;}
 .pane input,
 .pane textarea{border:1px solid #cde;line-height:2;border-radius:.2em;padding:.3em;width:26em;vertical-align:middle;}
 .pane textarea{height:4em;overflow:auto;font:1em/1.5 arial;}
-.btn{background:#39c;padding:.6em 1em;color:#fff;border:none;font-size:1.2em;border-radius:.5em;font-weight:bold;cursor:pointer;margin-left:1em;}
-.btn:hover{box-shadow:0 0 3em rgba(0,0,0,.1) inset}
+.btn{margin-left:1em;}
 .update{background:#8c1}
 .disabled{cursor:not-allowed;color:#999!important;opacity:.7;}
 textarea.disabled,
@@ -120,9 +119,11 @@ echo <<<FORM
     <p>
     <dfn>{$msg->hue}</dfn> <samp><input type="text" id="hue" name="Hue" value="{$cfg->Hue}" readonly><span id="slider"></span></samp> <small>{$msg->hue_tip}</small>
     </p>
+    <p><dfn>{$msg->menuanimate}</dfn> <input type="text" class="checkbox" name="MenuAnimate" value="{$cfg->MenuAnimate}"> <small>{$msg->menuanimate_tip}</small></p>
     <p><dfn>{$msg->defaultadmin}</dfn> <input type="text" class="checkbox" name="DefaultAdmin" value="{$cfg->DefaultAdmin}"></p>
     <p><dfn>{$msg->staticname}</dfn> <input type="text" class="checkbox" name="StaticName" value="{$cfg->StaticName}"> <small>{$msg->staticname_tip}</small></p>
     <p><dfn>{$msg->listtags}</dfn> <input type="text" class="checkbox" name="ListTags" value="{$cfg->ListTags}"> <small>{$msg->listtags_tip}</small></p>
+    <p><dfn>{$msg->listalbum}</dfn> <input type="text" class="checkbox" name="ListAlbum" value="{$cfg->ListAlbum}"> <small>{$msg->listalbum_tip}</small></p>
     <p><dfn>{$msg->hideintro}</dfn> <input type="text" class="checkbox" name="HideIntro" value="{$cfg->HideIntro}"> <small>{$msg->hideintro_tip}</small></p>
     <p><dfn>{$msg->mobileside}</dfn> <input type="text" class="checkbox" name="MobileSide" value="{$cfg->MobileSide}"> <small>{$msg->mobileside_tip}</small></p>
     <p><dfn>{$msg->sidemods}</dfn> <textarea name="SideMods" placeholder="{$msg->sidemods_place}">{$cfg->SideMods}</textarea> <small>{$msg->sidemods_tip}</small></p>
@@ -134,9 +135,11 @@ echo <<<FORM
     <p><dfn>{$msg->mottosize}</dfn> <input type="text" name="MottoSize" value="{$cfg->MottoSize}"> <small>{$msg->mottosize_tip}<var>px</var> <var>%</var> <var>em</var></small></p>
   </div>
   <div class="pane">
-    <h3 class="zit">{$msg->rand}</h3>
+    <h3 class="zit">{$msg->focus}</h3>
     <p><dfn>{$msg->cmtids}</dfn> <textarea name="CmtIds">{$cfg->CmtIds}</textarea> <small>{$msg->cmtids_tip}</small></p>
-    <p><dfn>{$msg->gbook}</dfn> <input type="text" name="GbookID" value="{$cfg->GbookID}" required> <small>{$msg->gbook_tip}</p>
+    <p><dfn>{$msg->gbook}</dfn> <input type="text" name="GbookID" value="{$cfg->GbookID}" required> <small>{$msg->gbook_tip}</small></p>
+    <p><dfn>{$msg->randlog}</dfn> <input type="text" class="checkbox"  name="RandLog" value="{$cfg->RandLog}"> <small>{$msg->randlog_tip}</small></p>
+    <p><dfn>{$msg->hiderand}</dfn> <input type="text" class="checkbox"  name="HideRand" value="{$cfg->HideRand}"> <small>{$msg->hiderand_tip}</small></p>
   </div>
   <div class="pane">
     <h3 class="zit">{$msg->seo}</h3>

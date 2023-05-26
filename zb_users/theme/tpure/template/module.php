@@ -1,5 +1,5 @@
 <dl id="{$module.HtmlID}" class="sidebox">
-    {if (!$module.IsHideTitle)&&($module.Name)}<dt>{$module.Name}</dt>{/if}
+    {if (!$module.IsHideTitle)&&($module.Name)}<dt class="sidetitle">{$module.Name}</dt>{else}<dt></dt>{/if}
     <dd>
         {if $module.Type=='div'}
 		<div>{$module.Content}</div>
