@@ -19,7 +19,7 @@ function ActivePlugin_tpure()
     Add_Filter_Plugin('Filter_Plugin_Admin_Header', 'tpure_Header');
     Add_Filter_Plugin('Filter_Plugin_Zbp_Load', 'tpure_Refresh');
     Add_Filter_Plugin('Filter_Plugin_ViewSearch_Template', 'tpure_SearchMain');
-    Add_Filter_Plugin('Filter_Plugin_Cmd_Ajax','tpure_CmdAjax'); 
+    Add_Filter_Plugin('Filter_Plugin_Cmd_Ajax','tpure_CmdAjax');
     Add_Filter_Plugin('Filter_Plugin_ViewList_Core', 'tpure_Exclude_Category');
     Add_Filter_Plugin('Filter_Plugin_Edit_Response5', 'tpure_Edit_Response');
     Add_Filter_Plugin('Filter_Plugin_Member_Edit_Response', 'tpure_MemberEdit_Response');
@@ -54,7 +54,7 @@ function ActivePlugin_tpure()
     if($zbp->Config('tpure')->PostVIEWALLON == '1'){
         Add_Filter_Plugin('Filter_Plugin_Edit_Response3', 'tpure_ArticleViewall');
     }
-    
+
     if ($zbp->Config('tpure')->PostFANCYBOXON == '1') {
         Add_Filter_Plugin('Filter_Plugin_Zbp_MakeTemplatetags','tpure_Fancybox');
         Add_Filter_Plugin('Filter_Plugin_ViewPost_Template','tpure_FancyboxRegex');
@@ -134,7 +134,7 @@ function tpure_json($code, $msg = '', $data = '')
         $json = array(
             'code'  => $code,
             'msg'   => $msg,
-            'data'  => $data,  
+            'data'  => $data,
         );
     }
     $rt = RunTime(false);
@@ -406,12 +406,12 @@ function tpure_Post_Next(&$thispage)
 //判断参数内日期是否是今天，示例：tpure_IsToday('2020-12-30')
 function tpure_IsToday($date)
 {
-    $greyday = $date; 
-    $formatday = substr($greyday,0,10); 
-    $today = date('Y-m-d'); 
-    if($formatday==$today){ 
-        return true; 
-    }else{ 
+    $greyday = $date;
+    $formatday = substr($greyday,0,10);
+    $today = date('Y-m-d');
+    if($formatday==$today){
+        return true;
+    }else{
         return false;
     }
 }
@@ -439,7 +439,7 @@ function tpure_DefaultTemplate(&$template)
                 $template->SetTemplate('catalog');
         }
     }
-    if(($template->GetTags('type') == 'category' && $template->GetTags('category')->Template != 'forum' && $template->GetTags('category')->Template != 'album' && $template->GetTags('category')->Template != 'sticker' && $template->GetTags('category')->Template != 'hotspot') || 
+    if(($template->GetTags('type') == 'category' && $template->GetTags('category')->Template != 'forum' && $template->GetTags('category')->Template != 'album' && $template->GetTags('category')->Template != 'sticker' && $template->GetTags('category')->Template != 'hotspot') ||
         ($template->GetTags('type') == 'tag' && $template->GetTags('tag')->Template != 'forum' && $template->GetTags('tag')->Template != 'album' && $template->GetTags('tag')->Template != 'sticker' && $template->GetTags('tag')->Template != 'hotspot') || $template->GetTags('type') == 'date'){
         $template->SetTemplate('catalog');
     }
@@ -1668,7 +1668,7 @@ function tpure_Config()
         'PostPAGECMTON' => '1',
         'PostCMTMAILON' => '1',
         'PostCMTSITEON' => '1',
-        'PostCMTLOGINON' =>  '1',
+        'PostCMTLOGINON' =>  '0',
         'PostCMTIPON' => '1',
         'VerifyCode' =>  'ABCDEFGHKMNPRSTUVWXYZ123456789',
         'PostINDEXSTYLE' =>  '0',
@@ -1847,7 +1847,7 @@ function InstallPlugin_tpure()
     if (!$zbp->Config('tpure')->HasKey('Version')) {
         tpure_Config();
     }
-    $zbp->Config('tpure')->Version = '4.9';
+    $zbp->Config('tpure')->Version = '5.0.2';
     $zbp->SaveConfig('tpure');
     tpure_CreateModule();
 }
@@ -1857,12 +1857,12 @@ function UpdatePlugin_tpure()
 {
     global $zbp;
     $version = $zbp->Config('tpure')->Version;
-    if($version !== 4.9){
-        $zbp->Config('tpure')->Version = 4.9;
+    if($version !== '5.0.2'){
+        $zbp->Config('tpure')->Version = '5.0.2';
         $zbp->SaveConfig('tpure');
     }
     if(!$zbp->Config('tpure')->Haskey("Version")){
-        $zbp->Config('tpure')->Version = '4.9';
+        $zbp->Config('tpure')->Version = '5.0.2';
         $zbp->SaveConfig('tpure');
     }
 }
