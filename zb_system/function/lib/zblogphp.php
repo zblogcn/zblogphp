@@ -2159,6 +2159,9 @@ class ZBlogPHP
         }
 
         $this->langs = new ZbpLangs($this->lang, 'langs');
+
+        $this->ReflushLanguages();
+
         return true;
     }
 
@@ -2167,7 +2170,9 @@ class ZBlogPHP
      */
     public function ReflushLanguages()
     {
-        $this->lang['error']['77'] = str_replace(array('%min', '%max'), array($this->option['ZC_USERNAME_MIN'], $this->option['ZC_USERNAME_MAX']), $this->lang['error']['77']);
+        $s = str_replace(array('%min', '%max'), array($this->option['ZC_USERNAME_MIN'], $this->option['ZC_USERNAME_MAX']), $this->lang['error']['77']);
+        $this->RegError('77', $s);
+        //$this->langs = new ZbpLangs($this->lang, 'langs');
     }
 
     /**
@@ -3981,6 +3986,18 @@ class ZBlogPHP
 
         //这里应扔出一个ZbpErrorException ZBP错误异常
         throw $show_zbe;
+    }
+
+    /**
+     * 注册Error.
+     *
+     * @param $name
+     * @param $level
+     * @param $title
+     */
+    public function RegError($errorCode, $errorText)
+    {
+        $this->lang['error'][$errorCode] = $errorText;
     }
 
     /**
