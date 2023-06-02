@@ -184,7 +184,7 @@ function WhitePage_SuperFast()
 {
     $s = ob_get_clean();
     $zbpjs = file_get_contents(ZBP_PATH . 'zb_system/script/zblogphp.js');
-    $jqjs = file_get_contents(ZBP_PATH . 'zb_system/script/jquery-2.2.4.min.js');
+    $jqjs = file_get_contents(ZBP_PATH . 'zb_system/script/jquery-latest.min.js');
     $js = WhitePage_AddJS(false);
     $s = $jqjs . PHP_EOL . $zbpjs . PHP_EOL . $s . PHP_EOL . $js;
     //$s = str_replace(array("\n", "\r"), '', $s);
