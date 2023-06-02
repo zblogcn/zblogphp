@@ -395,7 +395,9 @@ class ZBlogPHP
     public $activeapps;
 
     //不保存进Option的单次开关
-    public $cookie_tooken_httponly = true;
+    public $cookie_tooken_httponly = true;//已废弃
+    public $cookie_httponly = true;
+    public $cookie_domain = '';
 
     public $logs_more_info = false;
 
@@ -692,6 +694,8 @@ class ZBlogPHP
 
         $this->isHttps = &$this->ishttps;
         $this->isloggedin = &$this->islogin;
+
+        $this->cookie_tooken_httponly = &$this->cookie_httponly;
 
         $this->BindingCache();
     }
