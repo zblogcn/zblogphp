@@ -77,6 +77,7 @@ function api_system_basic_info()
             'comment_verify_enable' => $zbp->option['ZC_COMMENT_VERIFY_ENABLE'],
             'comment_reverse_order' => $zbp->option['ZC_COMMENT_REVERSE_ORDER'],
             'copyright' => $zbp->option['ZC_BLOG_COPYRIGHT'],
+            'api_display_count' => $zbp->option['ZC_API_DISPLAY_COUNT'],
             'zblogphp' => $zbp->option['ZC_BLOG_PRODUCT_FULL'],
         ),
         'is_logged_in' => $zbp->islogin,

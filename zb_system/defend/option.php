@@ -230,4 +230,5 @@ return array(
     'ZC_API_ENABLE'                     => false,
     'ZC_API_THROTTLE_ENABLE'            => false,
     'ZC_API_THROTTLE_MAX_REQS_PER_MIN'  => 60,
+    'ZC_API_DISPLAY_COUNT'              => 10,
 );

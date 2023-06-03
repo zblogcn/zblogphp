@@ -1692,6 +1692,7 @@ function checkDomain(){
                     echo '<tr><td class="td25"><p><b>' . $zbp->lang['msg']['enable_api'] . '</b></p></td><td><p><input id="ZC_API_ENABLE" name="ZC_API_ENABLE" type="text" value="' . $zbp->option['ZC_API_ENABLE'] . '" class="checkbox"/></p></td></tr>';
                     echo '<tr><td><p><b>' . $zbp->lang['msg']['enable_api_throttle'] . '</b><br/><span class="note">' . $zbp->lang['msg']['enable_api_throttle_note'] . '</span></p></td><td><p><input id="ZC_API_THROTTLE_ENABLE" name="ZC_API_THROTTLE_ENABLE" type="text" value="' . $zbp->option['ZC_API_THROTTLE_ENABLE'] . '" class="checkbox"/></p></td></tr>';
                     echo '<tr><td><p><b>' . $zbp->lang['msg']['api_throttle_max_reqs_per_min'] . '</b><br/><span class="note">' . $zbp->lang['msg']['api_throttle_max_reqs_note'] . '</span></p></td><td><p><input id="ZC_API_THROTTLE_MAX_REQS_PER_MIN" name="ZC_API_THROTTLE_MAX_REQS_PER_MIN" style="max-width:600px;width:90%;" type="text" value="' . $zbp->option['ZC_API_THROTTLE_MAX_REQS_PER_MIN'] . '" /></p></td></tr>';
+                    echo '<tr><td><p><b>' . $zbp->lang['msg']['api_display_count'] . '</b><br/><span class="note">' . $zbp->lang['msg']['api_throttle_max_reqs_note'] . '</span></p></td><td><p><input id="ZC_API_DISPLAY_COUNT" name="ZC_API_DISPLAY_COUNT" style="max-width:600px;width:90%;" type="text" value="' . $zbp->option['ZC_API_DISPLAY_COUNT'] . '" /></p></td></tr>';
                     echo '</table>';
                     echo '</div>';
                     ?>

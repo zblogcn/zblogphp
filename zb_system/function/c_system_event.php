@@ -2227,6 +2227,8 @@ function SaveSetting()
             || $key == 'ZC_CLOSE_SITE'
             || $key == 'ZC_ADDITIONAL_SECURITY'
             || $key == 'ZC_ARTICLE_THUMB_SWITCH'
+            || $key == 'ZC_API_THROTTLE_ENABLE'
+            || $key == 'ZC_API_ENABLE'
         ) {
             $zbp->option[$key] = (bool) $value;
             continue;
@@ -2241,6 +2243,8 @@ function SaveSetting()
             || $key == 'ZC_ARTICLE_THUMB_TYPE'
             || $key == 'ZC_ARTICLE_THUMB_WIDTH'
             || $key == 'ZC_ARTICLE_THUMB_HEIGHT'
+            || $key == 'ZC_API_DISPLAY_COUNT'
+            || $key == 'ZC_API_THROTTLE_MAX_REQS_PER_MIN'
         ) {
             $zbp->option[$key] = (int) $value;
             continue;

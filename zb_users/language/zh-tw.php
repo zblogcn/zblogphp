@@ -284,6 +284,7 @@ return array(
         'category_legacy_display'           => '分類管理按傳統模式顯示',
         'change_default_password'           => '請立即更改默認密碼！',
         'delete_member_with_alldata'        => '刪除用戶同時刪除其文章和評論',
+        'api_display_count'                 => 'API頁顯示文章的數量',
         ''                                  => '',
     ),
 
