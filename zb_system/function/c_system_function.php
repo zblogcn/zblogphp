@@ -427,7 +427,6 @@ function GetList($count = 10, $cate = null, $auth = null, $date = null, $tags = 
  * @param $line
  *
  * @api Filter_Plugin_Debug_Handler_ZEE
- * @api Filter_Plugin_Debug_Handler_Common
  *
  * @throws Exception
  */
@@ -442,13 +441,13 @@ function Include_ShowError404($errorCode, $errorDescription = null, $file = null
             $line = $errorCode->getLine();
             $errorCode = $errorCode->getCode();
             $GLOBALS['hooks']['Filter_Plugin_Debug_Handler_ZEE']['Include_ShowError404'] = PLUGIN_EXITSIGNAL_RETURN;
+        } elseif (in_array("Status: 404 Not Found", headers_list())) {
+            $GLOBALS['hooks']['Filter_Plugin_Debug_Handler_ZEE']['Include_ShowError404'] = PLUGIN_EXITSIGNAL_RETURN;
+        } elseif (function_exists('http_response_code') && http_response_code() == 404){
+            $GLOBALS['hooks']['Filter_Plugin_Debug_Handler_ZEE']['Include_ShowError404'] = PLUGIN_EXITSIGNAL_RETURN;
         } else {
             return;
         }
-    } elseif (in_array("Status: 404 Not Found", headers_list())) {
-        $GLOBALS['hooks']['Filter_Plugin_Debug_Handler_Common']['Include_ShowError404'] = PLUGIN_EXITSIGNAL_RETURN;
-    } elseif (function_exists('http_response_code') && http_response_code() == 404){
-        $GLOBALS['hooks']['Filter_Plugin_Debug_Handler_Common']['Include_ShowError404'] = PLUGIN_EXITSIGNAL_RETURN;
     } else {
         return;
     }
@@ -609,7 +608,6 @@ function Include_Index_Begin()
 
     if ($zbp->template->hasTemplate('404')) {
         Add_Filter_Plugin('Filter_Plugin_Debug_Handler_ZEE', 'Include_ShowError404');
-        Add_Filter_Plugin('Filter_Plugin_Debug_Handler_Common', 'Include_ShowError404');
     }
 
     if ($zbp->option['ZC_ADDITIONAL_SECURITY']) {

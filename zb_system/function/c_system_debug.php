@@ -170,7 +170,7 @@ function Debug_Error_Handler($errno, $errstr, $errfile, $errline)
 
     foreach ($GLOBALS['hooks']['Filter_Plugin_Debug_Handler_Common'] as $fpname => &$fpsignal) {
         $fpsignal = PLUGIN_EXITSIGNAL_NONE;
-        $fpreturn = $fpname($zee->getCode(), $zee->getMessage(), $zee->getFile(), $zee->getLine());
+        $fpreturn = $fpname($zee->getCode(), $zee->getMessage(), $zee->getFile(), $zee->getLine(), 'Error');
         if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
             return $fpreturn;
         }
@@ -235,7 +235,7 @@ function Debug_Exception_Handler($exception)
 
     foreach ($GLOBALS['hooks']['Filter_Plugin_Debug_Handler_Common'] as $fpname => &$fpsignal) {
         $fpsignal = PLUGIN_EXITSIGNAL_NONE;
-        $fpreturn = $fpname($zee->getCode(), $zee->getMessage(), $zee->getFile(), $zee->getLine());
+        $fpreturn = $fpname($zee->getCode(), $zee->getMessage(), $zee->getFile(), $zee->getLine(), 'Exception');
         if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
             return $fpreturn;
         }
@@ -294,7 +294,7 @@ function Debug_Shutdown_Handler()
 
         foreach ($GLOBALS['hooks']['Filter_Plugin_Debug_Handler_Common'] as $fpname => &$fpsignal) {
             $fpsignal = PLUGIN_EXITSIGNAL_NONE;
-            $fpreturn = $fpname($zee->getCode(), $zee->getMessage(), $zee->getFile(), $zee->getLine());
+            $fpreturn = $fpname($zee->getCode(), $zee->getMessage(), $zee->getFile(), $zee->getLine(), 'Fatal');
             if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
                 return $fpreturn;
             }

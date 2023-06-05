@@ -168,6 +168,27 @@ function SetPluginSignal($plugname, $functionname, $signal = PLUGIN_EXITSIGNAL_N
 }
 
 /**
+ * 获取插件信号
+ *
+ * @param $plugname
+ * @param $functionname
+ *
+ * @return string or null
+ */
+function GetPluginSignal($plugname, $functionname)
+{
+    if (isset($GLOBALS['hooks'][$plugname])) {
+        if (isset($GLOBALS['hooks'][$plugname][$functionname])) {
+            $signal = $GLOBALS['hooks'][$plugname][$functionname];
+
+            return $signal;
+        }
+    }
+
+    return null;
+}
+
+/**
  * 挂上Filter接口
  *
  * @param string $plugname 接口名称
@@ -322,7 +343,7 @@ DefinePluginFilter('Filter_Plugin_Debug_Handler');
 '类型:Filter
 '名称:Filter_Plugin_Debug_Handler_ZEE
 '参数:$zee 类型(ZbpErrorException), $debug_type
-'说明:定义Debug_Shutdown_Handler,Debug_Exception_Handler,Debug_Error_Handler函数的接口
+'说明:定义Debug_Exception_Handler,Debug_Error_Handler函数的接口
 '调用:
 '**************************************************>
  */
@@ -332,8 +353,8 @@ DefinePluginFilter('Filter_Plugin_Debug_Handler_ZEE');
 '**************************************************<
 '类型:Filter
 '名称:Filter_Plugin_Debug_Handler_Common
-'参数:int $errno, string $errstr, string $errfile, int $errline
-'说明:定义Debug_Shutdown_Handler,Debug_Exception_Handler,Debug_Error_Handler函数的接口
+'参数:int $errno, string $errstr, string $errfile, int $errline, string $debug_type
+'说明:定义Debug_Exception_Handler,Debug_Error_Handler函数的接口
 '调用:
 '**************************************************>
  */

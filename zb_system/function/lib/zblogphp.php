@@ -3979,12 +3979,12 @@ class ZBlogPHP
             array_unshift($args, $errorCode);
             //$fpreturn = $fpname($errorCode, $errorText, $file, $line, $moreinfo, $httpcode);
             $fpreturn = call_user_func_array($fpname, $args);
-            if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
+            if ($fpsignal == PLUGIN_EXITSIGNAL_BREAK) {
                 $fpsignal = PLUGIN_EXITSIGNAL_NONE;
-
-                return $fpreturn;
-            } elseif ($fpsignal == PLUGIN_EXITSIGNAL_BREAK) {
                 break;
+            } elseif ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
+                $fpsignal = PLUGIN_EXITSIGNAL_NONE;
+                return $fpreturn;
             }
         }
 
