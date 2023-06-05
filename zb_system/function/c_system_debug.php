@@ -168,9 +168,10 @@ function Debug_Error_Handler($errno, $errstr, $errfile, $errline)
         }
     }
 
+    //这是Filter_Plugin_Zbp_ShowError接口的替代品，无须改动插件函数的参数
     foreach ($GLOBALS['hooks']['Filter_Plugin_Debug_Handler_Common'] as $fpname => &$fpsignal) {
         $fpsignal = PLUGIN_EXITSIGNAL_NONE;
-        $fpreturn = $fpname($zee->getCode(), $zee->getMessage(), $zee->getFile(), $zee->getLine(), 'Error');
+        $fpreturn = $fpname($zee->getCode(), $zee->getMessage(), $zee->getFile(), $zee->getLine(), $zee->getMoreInfo(), $zee->getHttpCode());
         if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
             return $fpreturn;
         }
@@ -235,7 +236,7 @@ function Debug_Exception_Handler($exception)
 
     foreach ($GLOBALS['hooks']['Filter_Plugin_Debug_Handler_Common'] as $fpname => &$fpsignal) {
         $fpsignal = PLUGIN_EXITSIGNAL_NONE;
-        $fpreturn = $fpname($zee->getCode(), $zee->getMessage(), $zee->getFile(), $zee->getLine(), 'Exception');
+        $fpreturn = $fpname($zee->getCode(), $zee->getMessage(), $zee->getFile(), $zee->getLine(), $zee->getMoreInfo(), $zee->getHttpCode());
         if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
             return $fpreturn;
         }
@@ -294,7 +295,7 @@ function Debug_Shutdown_Handler()
 
         foreach ($GLOBALS['hooks']['Filter_Plugin_Debug_Handler_Common'] as $fpname => &$fpsignal) {
             $fpsignal = PLUGIN_EXITSIGNAL_NONE;
-            $fpreturn = $fpname($zee->getCode(), $zee->getMessage(), $zee->getFile(), $zee->getLine(), 'Fatal');
+            $fpreturn = $fpname($zee->getCode(), $zee->getMessage(), $zee->getFile(), $zee->getLine(), $zee->getMoreInfo(), $zee->getHttpCode());
             if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
                 return $fpreturn;
             }

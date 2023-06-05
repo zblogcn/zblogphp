@@ -3972,7 +3972,7 @@ class ZBlogPHP
             throw new Exception($errorText);
         }
 
-        //这里的接口不应再被使用了，请用Filter_Plugin_Debug_Handler_ZEE or Common和Filter_Plugin_Debug_Display
+        //这里的接口不应再被使用了，请用Filter_Plugin_Debug_Handler_Common接口！
         foreach ($GLOBALS['hooks']['Filter_Plugin_Zbp_ShowError'] as $fpname => &$fpsignal) {
             array_shift($args);
             array_unshift($args, $errorText);

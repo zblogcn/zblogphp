@@ -332,7 +332,7 @@ function HookFilterPlugin_Return($plugname, &$signal = null)
 '类型:Filter
 '名称:Filter_Plugin_Debug_Handler
 '参数:
-'说明:已废弃
+'说明:1.7.3已废弃，不应再使用
 '调用:
 '**************************************************>
  */
@@ -353,8 +353,8 @@ DefinePluginFilter('Filter_Plugin_Debug_Handler_ZEE');
 '**************************************************<
 '类型:Filter
 '名称:Filter_Plugin_Debug_Handler_Common
-'参数:int $errno, string $errstr, string $errfile, int $errline, string $debug_type
-'说明:定义Debug_Exception_Handler,Debug_Error_Handler函数的接口
+'参数:int $errno, string $errstr, string $errfile, int $errline
+'说明:这是Filter_Plugin_Zbp_ShowError接口的替代品，无须改动插件函数的参数
 '调用:
 '**************************************************>
  */
@@ -470,7 +470,7 @@ DefinePluginFilter('Filter_Plugin_Zbp_CheckRights');
 '类型:Filter
 '名称:Filter_Plugin_Zbp_ShowError
 '参数:$idortext
-'说明:Zbp类的显示错误接口
+'说明:1.7.3已废弃，不应再使用
 '调用:
 '**************************************************>
  */
