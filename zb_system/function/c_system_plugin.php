@@ -469,8 +469,8 @@ DefinePluginFilter('Filter_Plugin_Zbp_CheckRights');
 '**************************************************<
 '类型:Filter
 '名称:Filter_Plugin_Zbp_ShowError
-'参数:$idortext
-'说明:1.7.3已废弃，不应再使用
+'参数:
+'说明:1.7.3已废弃，请使用Filter_Plugin_Debug_Handler_Common接口，参数不变
 '调用:
 '**************************************************>
  */
