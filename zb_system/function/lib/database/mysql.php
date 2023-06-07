@@ -20,7 +20,7 @@ class Database__MySQL implements Database__Interface
      */
     public $dbpre = null;
 
-    private $db = null; //数据库连接
+    protected $db = null; //数据库连接
 
     private $isconnected = false; //是否已打开连接
 
@@ -376,7 +376,7 @@ class Database__MySQL implements Database__Interface
         }
     }
 
-    private function LogsError()
+    protected function LogsError()
     {
         $e = mysql_errno($this->db);
         if ($e != 0) {

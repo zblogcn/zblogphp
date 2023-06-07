@@ -20,7 +20,7 @@ class Database__SQLite implements Database__Interface
      */
     public $dbpre = null;
 
-    private $db = null; //数据库连接实例
+    protected $db = null; //数据库连接实例
 
     private $isconnected = false; //是否已打开连接
 
@@ -241,7 +241,7 @@ class Database__SQLite implements Database__Interface
         }
     }
 
-    private function LogsError()
+    protected function LogsError()
     {
         $e = sqlite_last_error($this->db);
         if ($e != 0) {
