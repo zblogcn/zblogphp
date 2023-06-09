@@ -651,6 +651,62 @@ function ApiDispatch($mods, $mod, $act)
 }
 
 /**
+ * API 执行.
+ *
+ * @param string      $mod
+ * @param string      $act
+ * @param array       $get
+ * @param array       $post
+ */
+function ApiExecute($mod, $act, $get = array(), $post = array())
+{
+    global $zbp;
+    $mods = &$GLOBALS['mods'];
+    if (!$zbp->isapi || !is_array($mods)){
+        $GLOBALS['mods'] = array();
+        ApiLoadMods($GLOBALS['mods']);
+    }
+
+    foreach ($GLOBALS['hooks']['Filter_Plugin_API_Dispatch'] as $fpname => &$fpsignal) {
+        $fpname($mods, $mod, $act);
+    }
+
+    if (empty($act)) {
+        $act = 'get';
+    }
+
+    if (isset($mods[$mod]) && file_exists($mod_file = $mods[$mod])) {
+        include_once $mod_file;
+        $func = 'api_' . $mod . '_' . $act;
+
+        $api_get_backup = $_GET;
+        $api_post_backup = $_POST;
+        $api_cookie_backup = $_COOKIE;
+        $api_request_backup = $_REQUEST;
+
+        $_GET = $get;
+        $_POST = $post;
+        $_COOKIE = array();
+        $_REQUEST = array_merge($get, $post);
+
+        $result = call_user_func($func);
+
+        $_GET = $api_get_backup;
+        $_POST = $api_post_backup;
+        $_COOKIE = $api_cookie_backup;
+        $_REQUEST = $api_request_backup;
+
+        if (is_array($result)) {
+            if (array_key_exists('data', $result)) {
+                return $result['data'];
+            }
+        }
+    }
+
+    return null;
+}
+
+/**
  * API 地址生成.
  *
  * @param string $mod

@@ -169,7 +169,7 @@ abstract class Base__Tag extends Base
      * @param string $s
      * @param string $type
      *
-     * @return bool|string
+     * @return null|string
      */
     public function Time($s = 'Y-m-d', $type = 'PostTime')
     {
@@ -189,7 +189,7 @@ abstract class Base__Tag extends Base
                 $type = 'UpdateTime';
             }
         }
-        if (func_num_args() == 2 && array_key_exists($s, $this->data)) {
+        if (func_num_args() == 2 && !array_key_exists($type, $this->data) && array_key_exists($s, $this->data)) {
             list($type, $s) = array($s, $type);
         } elseif (func_num_args() == 1 && array_key_exists($s, $this->data)){
             list($type, $s) = array($s, 'Y-m-d');

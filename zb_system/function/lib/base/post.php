@@ -75,7 +75,7 @@ abstract class Base__Post extends Base
      * @param string $s
      * @param type|string 1.7.2后可以与$s前后调换
      *
-     * @return bool|string
+     * @return null|string
      */
     public function Time($s = 'Y-m-d H:i:s', $type = 'PostTime')
     {
@@ -96,7 +96,7 @@ abstract class Base__Post extends Base
                 $type = 'UpdateTime';
             }
         }
-        if (func_num_args() == 2 && array_key_exists($s, $this->data)) {
+        if (func_num_args() == 2 && !array_key_exists($type, $this->data) && array_key_exists($s, $this->data)) {
             list($type, $s) = array($s, $type);
         } elseif (func_num_args() == 1 && array_key_exists($s, $this->data)){
             list($type, $s) = array($s, 'Y-m-d H:i:s');
