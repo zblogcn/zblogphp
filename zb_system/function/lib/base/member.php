@@ -301,4 +301,40 @@ abstract class Base__Member extends Base
         return parent::Del();
     }
 
+    /**
+     * @param string $s
+     * @param string $type
+     *
+     * @return bool|string
+     */
+    public function Time($s = 'Y-m-d', $type = 'PostTime')
+    {
+        if ($s === 'Post') {
+            $s = 'PostTime';
+        } elseif ($s === 'Create') {
+            $s = 'CreateTime';
+        } elseif ($s === 'Update') {
+            $s = 'UpdateTime';
+        }
+        if (func_num_args() == 2) {
+            if ($type === 'Post') {
+                $type = 'PostTime';
+            } elseif ($type === 'Create') {
+                $type = 'CreateTime';
+            } elseif ($type === 'Update') {
+                $type = 'UpdateTime';
+            }
+        }
+        if (func_num_args() == 2 && array_key_exists($s, $this->data)) {
+            list($type, $s) = array($s, $type);
+        } elseif (func_num_args() == 1 && array_key_exists($s, $this->data)){
+            list($type, $s) = array($s, 'Y-m-d');
+        }
+        if (array_key_exists($type, $this->data)) {
+            return date($s, (int) $this->$type);
+        } else {
+            return date($s, (int) $this->PostTime);
+        }
+    }
+
 }

@@ -72,7 +72,7 @@ abstract class Base__Post extends Base
     }
 
     /**
-     * @param string $s|string
+     * @param string $s
      * @param type|string 1.7.2后可以与$s前后调换
      *
      * @return bool|string
