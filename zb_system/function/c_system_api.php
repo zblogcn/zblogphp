@@ -662,7 +662,7 @@ function ApiExecute($mod, $act, $get = array(), $post = array())
 {
     global $zbp;
     $mods = &$GLOBALS['mods'];
-    if (!$zbp->isapi || !is_array($mods)){
+    if (!$zbp->isapi || !is_array($mods)) {
         $GLOBALS['mods'] = array();
         ApiLoadMods($GLOBALS['mods']);
     }
