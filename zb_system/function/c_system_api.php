@@ -728,7 +728,7 @@ function ApiUrlGenerate($mod, $act = 'get', $query = array())
         $query_string = '';
     }
 
-    return $zbp->host . 'zb_system/api.php?mod=' . $mod . '&act=' . $act . $query_string;
+    return $zbp->apiurl . '?mod=' . $mod . '&act=' . $act . $query_string;
 }
 
 /**
