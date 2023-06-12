@@ -232,6 +232,44 @@ function Remove_Filter_Plugin($plugname, $functionname)
 }
 
 /**
+ * 暂停Filter接口
+ *
+ * @param string $plugname 接口名称
+ *
+ * @return boolean
+ */
+function Suspend_Filter_Plugin($plugname)
+{
+    $newname = '__' . $plugname;
+    if (isset($GLOBALS['hooks'][$plugname]) && !isset($GLOBALS['hooks'][$newname])) {
+        $GLOBALS['hooks'][$newname] = $GLOBALS['hooks'][$plugname];
+        $GLOBALS['hooks'][$plugname] = array();
+        return true;
+    } else {
+        return false;
+    }
+}
+
+/**
+ * 恢复Filter接口
+ *
+ * @param string $plugname 接口名称
+ *
+ * @return boolean
+ */
+function Resume_Filter_Plugin($plugname)
+{
+    $newname = '__' . $plugname;
+    if (isset($GLOBALS['hooks'][$plugname]) && isset($GLOBALS['hooks'][$newname])) {
+        $GLOBALS['hooks'][$plugname] = $GLOBALS['hooks'][$newname];
+        unset($GLOBALS['hooks'][$newname]);
+        return true;
+    } else {
+        return false;
+    }
+}
+
+/**
  * 清除Filter接口的所有挂载函数
  *
  * @param string $plugname 接口名称
@@ -301,7 +339,7 @@ function HookFilterPlugin($plugname)
  * 插入钩子 Filter接口 的带返回值版
  *
  *    示例：
- *    $fpresult = HookFilterPlugin_Return('Filter_Plugin_Test', $fpsignal, $arg...);
+ *    $fpresult = HookFilterPlugin_Back('Filter_Plugin_Test', $fpsignal, $arg...);
  *    if ($fpsignal === PLUGIN_EXITSIGNAL_RETURN) {
  *        return $fpresult;
  *    }
