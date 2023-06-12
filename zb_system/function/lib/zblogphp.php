@@ -90,6 +90,11 @@ class ZBlogPHP
     public $systemdir = null;
 
     /**
+     * @var string Api Mods目录
+     */
+    public $apimodsdir = null;
+
+    /**
      * @var string Admin目录
      */
     public $admindir = null;
@@ -608,10 +613,11 @@ class ZBlogPHP
      */
     public function __construct()
     {
-        global $option, $lang, $langs, $blogpath, $bloghost, $cookiespath, $cachedir, $logsdir, $datadir,
-            $table, $datainfo, $actions, $action, $blogversion, $blogtitle, $blogname, $blogsubname, $routes,
-            $blogtheme, $blogstyle, $currenturl, $fullcurrenturl, $currentscript, $fullcurrentscript,
-            $activedapps, $posttype, $usersdir, $systemdir, $admindir, $usersurl, $systemurl, $adminurl;
+        global $option, $lang, $langs, $blogpath, $bloghost, $cookiespath, $cachedir, 
+            $logsdir, $datadir, $table, $datainfo, $actions, $action, $blogversion,
+            $blogtitle, $blogname, $blogsubname, $routes, $blogtheme, $blogstyle,$currenturl,
+            $fullcurrenturl, $currentscript, $fullcurrentscript, $activedapps, $posttype,
+            $usersdir, $systemdir, $admindir, $usersurl, $systemurl, $adminurl, $apimodsdir;
 
         if ((defined('ZBP_DEBUGMODE') && constant('ZBP_DEBUGMODE') == true)) {
             $this->isdebug = true;
@@ -643,6 +649,7 @@ class ZBlogPHP
         $this->logsdir = &$logsdir;
         $this->datadir = &$datadir;
         $this->systemdir = &$systemdir;
+        $this->apimodsdir = &$apimodsdir;
         $this->admindir = &$admindir;
         $this->usersurl = &$usersurl;
         $this->systemurl = &$systemurl;

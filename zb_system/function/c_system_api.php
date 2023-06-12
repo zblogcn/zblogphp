@@ -54,13 +54,13 @@ function ApiTokenVerify()
 function ApiDebugHandler($error)
 {
     $GLOBALS['hooks']['Filter_Plugin_Debug_Handler_ZEE']['ApiDebugHandler'] = PLUGIN_EXITSIGNAL_RETURN;
-    //全局拦截error,exception,shutdown
+    //全局拦截error,exception
     echo ApiResponse(null, $error);
     return true;
 }
 
 /**
- * API ShowError函数 (这个已经在1.7.3废除掉了，使用ApiDebugHandler输出错误)
+ * API ShowError函数 (ShowError接口已经在1.7.3不再使用了，使用ApiDebugHandler输出错误)
  */
 function ApiShowError()
 {
@@ -71,65 +71,218 @@ function ApiShowError()
 /**
  * 载入 API Mods.
  */
-function ApiLoadMods(&$mods)
+function ApiLoadMods()
 {
-    global $zbp;
+    global $zbp, $api_public_mods;
 
     foreach ($GLOBALS['hooks']['Filter_Plugin_API_Extend_Mods'] as $fpname => &$fpsignal) {
         $add_mods = $fpname();
-
-        if (!is_array($add_mods)) {
-            continue;
-        }
-
-        foreach ($add_mods as $mod => $file) {
-            $mod = strtolower($mod);
-            if (array_key_exists($mod, $mods)) {
-                continue;
+        if (is_array($add_mods)) {
+            foreach ($add_mods as $mod => $file) {
+                $mod = strtolower($mod);
+                if (!array_key_exists($mod, $api_public_mods)) {
+                    $api_public_mods[$mod] = $file;
+                }
             }
-
-            $mods[$mod] = $file;
         }
     }
 
-    // 从 zb_system/api/ 目录中载入 mods
-    foreach (GetFilesInDir(ZBP_PATH . 'zb_system/api/', 'php') as $mod => $file) {
-        $mods[$mod] = $file;
+    ApiLoadSystemMods();
+    return true;
+}
+
+/**
+ * 载入系统的 API Mods.
+ */
+function ApiLoadSystemMods()
+{
+    global $zbp, $api_public_mods;
+    // 从 $zbp->apimodsdir 目录中载入 mods
+    foreach (GetFilesInDir($zbp->apimodsdir, 'php') as $mod => $file) {
+        $api_public_mods[$mod] = $file;
     }
     return true;
 }
 
 /**
- * 移除指定的 API Mods.
+ * 载入指定目录下的 API Mods.
  */
-function ApiRemoveMods($name)
+function ApiLoadCustomMods($modsdir)
 {
-    global $mods;
-    unset($mods[$name]);
-    return $mods;
+    global $zbp, $api_public_mods;
+    // 从指定目录$dir中载入 mods
+    foreach (GetFilesInDir($modsdir, 'php') as $mod => $file) {
+        $api_public_mods[strtolower($mod)] = $file;
+    }
+    return true;
 }
 
 /**
- * 检查API Mods的白名单和黑名单.
+ * 载入指定目录下的 API Mods 进 Private Mods.
+ */
+function ApiLoadPrivateMods($modsdir)
+{
+    global $zbp, $api_private_mods;
+    // 从指定目录$dir中载入 mods
+    foreach (GetFilesInDir($modsdir, 'php') as $mod => $file) {
+        $api_private_mods[strtolower($mod)] = $file;
+    }
+    return true;
+}
+
+/**
+ * 添加指定的 API Mods.
+ */
+function ApiAddMods($modname, $filename)
+{
+    global $api_public_mods;
+    $name = strtolower($modname);
+    if (!array_key_exists($name, $api_public_mods)) {
+        $api_public_mods[$name] = $filename;
+        return true;
+    } else {
+        return false;
+    }
+}
+
+/**
+ * 移除指定的 API Mods.
+ */
+function ApiRemoveMods($modname)
+{
+    global $api_public_mods;
+    $name = strtolower($modname);
+    if (array_key_exists($name, $api_public_mods)) {
+        unset($api_public_mods[$name]);
+        return true;
+    } else {
+        return false;
+    }
+}
+
+/**
+ * 添加指定的 API Private Mods.
+ */
+function ApiAddPrivateMods($modname, $filename)
+{
+    global $api_private_mods;
+    $name = strtolower($modname);
+    if (!array_key_exists($name, $api_private_mods)) {
+        $api_private_mods[$name] = $filename;
+        return true;
+    } else {
+        return false;
+    }
+}
+
+/**
+ * 移除指定的 API Private Mods.
+ */
+function ApiRemovePrivateMods($modname)
+{
+    global $api_private_mods;
+    $name = strtolower($modname);
+    if (array_key_exists($name, $api_private_mods)) {
+        unset($api_private_mods[$name]);
+        return true;
+    } else {
+        return false;
+    }
+}
+
+/**
+ * 添加$mod,$act到Allow Mods Rule.
+ */
+function ApiAddAllowMods($mod, $act = '')
+{
+    global $zbp, $api_allow_mods_rule, $api_disallow_mods_rule;
+
+    $mod = strtolower($mod);
+    $act = strtolower($act);
+
+    $api_allow_mods_rule[] = array($mod => $act);
+}
+
+/**
+ * 添加$mod,$act到Disallow Mods Rule.
+ */
+function ApiAddDisallowMods($mod, $act = '')
+{
+    global $zbp, $api_allow_mods_rule, $api_disallow_mods_rule;
+
+    $mod = strtolower($mod);
+    $act = strtolower($act);
+
+    $api_disallow_mods_rule[] = array($mod => $act);
+}
+
+/**
+ * 删除$mod,$act自Allow Mods Rule.
+ */
+function ApiRemoveAllowMods($mod, $act = '')
+{
+    global $zbp, $api_allow_mods_rule, $api_disallow_mods_rule;
+
+    $mod = strtolower($mod);
+    $act = strtolower($act);
+
+    foreach ($api_allow_mods_rule as $k => $v) {
+        if(array_key_exists($mod, $v) && $v[$mod] === $act) {
+            unset($api_allow_mods_rule[$k]);
+        }
+    }
+}
+
+/**
+ * 删除$mod,$act自Disallow Mods Rule.
+ */
+function ApiRemoveDisallowMods($mod, $act = '')
+{
+    global $zbp, $api_allow_mods_rule, $api_disallow_mods_rule;
+
+    $mod = strtolower($mod);
+    $act = strtolower($act);
+
+    foreach ($api_disallow_mods_rule as $k => $v) {
+        if(array_key_exists($mod, $v) && $v[$mod] === $act) {
+            unset($api_disallow_mods_rule[$k]);
+        }
+    }
+}
+
+/**
+ * 设置API Mods的白名单和黑名单并检查mod和act..
  * $mods_allow白名单请慎用，启用白名单后，不在白名单的mod都将被拒绝
  * 如果只想关闭某些模块只需要对$mods_disallow黑名单进行添加
  */
-function ApiCheckMods(&$mods_allow, &$mods_disallow)
+function ApiCheckMods()
 {
-    global $zbp, $mod, $act;
+    global $zbp, $api_allow_mods_rule, $api_disallow_mods_rule, $mod, $act;
 
     //接口及对$mods_allow, $mods_disallow的添加
     foreach ($GLOBALS['hooks']['Filter_Plugin_API_CheckMods'] as $fpname => &$fpsignal) {
         $new_allow = $new_disallow = array();
         $fpname($new_allow, $new_disallow);
 
-        $mods_allow = array_merge($mods_allow, $new_allow);
-        $mods_disallow = array_merge($mods_disallow, $new_disallow);
+        $api_allow_mods_rule = array_merge($api_allow_mods_rule, $new_allow);
+        $api_disallow_mods_rule = array_merge($api_disallow_mods_rule, $new_disallow);
     }
 
-    $b = false;
+    if (ApiCheckModAndAct($mod, $act) === false) {
+        $zbp->ShowError(96, __FILE__, __LINE__);
+    }
 
-    foreach ($mods_allow as $array) {
+}
+
+/**
+ * 检查$mod, $act是否通Mods白名单和黑名单.
+ */
+function ApiCheckModAndAct($mod, $act)
+{
+    global $zbp, $api_allow_mods_rule, $api_disallow_mods_rule;
+
+    $b = false;
+    foreach ($api_allow_mods_rule as $array) {
         if (!empty($array) && is_array($array)) {
             foreach ($array as $k => $v) {
                 $list_mod = $k;
@@ -146,13 +299,13 @@ function ApiCheckMods(&$mods_allow, &$mods_disallow)
         }
     }
 
-    if (!empty($mods_allow) && $b == false) {
-        $zbp->ShowError(96, __FILE__, __LINE__);
+    if (!empty($api_allow_mods_rule) && $b == false) {
+        return false;
     }
 
     $b = true;
 
-    foreach ($mods_disallow as $array) {
+    foreach ($api_disallow_mods_rule as $array) {
         if (!empty($array) && is_array($array)) {
             foreach ($array as $k => $v) {
                 $list_mod = $k;
@@ -169,8 +322,8 @@ function ApiCheckMods(&$mods_allow, &$mods_disallow)
         }
     }
 
-    if (!empty($mods_disallow) && $b == false) {
-        $zbp->ShowError(96, __FILE__, __LINE__);
+    if (!empty($api_disallow_mods_rule) && $b == false) {
+        return false;
     }
     return true;
 }
@@ -661,45 +814,62 @@ function ApiDispatch($mods, $mod, $act)
 function ApiExecute($mod, $act, $get = array(), $post = array())
 {
     global $zbp;
-    $mods = &$GLOBALS['mods'];
-    if (!$zbp->isapi || !is_array($mods)) {
-        $GLOBALS['mods'] = array();
-        ApiLoadMods($GLOBALS['mods']);
-    }
+    static $is_load_mods = false;
 
-    foreach ($GLOBALS['hooks']['Filter_Plugin_API_Dispatch'] as $fpname => &$fpsignal) {
-        $fpname($mods, $mod, $act);
+    $mods = &$GLOBALS['api_public_mods'];
+    $mods_private = &$GLOBALS['api_private_mods'];
+    $mod = strtolower($mod);
+    $act = strtolower($act);
+
+    if ($is_load_mods === false){
+        ApiLoadMods();
+        $is_load_mods = true;
     }
 
     if (empty($act)) {
         $act = 'get';
     }
 
-    if (isset($mods[$mod]) && file_exists($mod_file = $mods[$mod])) {
+    //foreach ($GLOBALS['hooks']['Filter_Plugin_API_Dispatch'] as $fpname => &$fpsignal) {
+    //    $fpname($mods, $mod, $act);
+    //}
+
+    //if (ApiCheckModAndAct($mod, $act) === false) {
+    //    return null;
+    //}
+
+    $func = null;
+
+    if (isset($mods_private[$mod]) && file_exists($mod_file = $mods_private[$mod])) {
         include_once $mod_file;
         $func = 'api_' . $mod . '_' . $act;
+    } elseif (isset($mods[$mod]) && file_exists($mod_file = $mods[$mod])) {
+        include_once $mod_file;
+        $func = 'api_' . $mod . '_' . $act;
+    } else {
+        return null;
+    }
 
-        $api_get_backup = $_GET;
-        $api_post_backup = $_POST;
-        $api_cookie_backup = $_COOKIE;
-        $api_request_backup = $_REQUEST;
+    $api_get_backup = $_GET;
+    $api_post_backup = $_POST;
+    $api_cookie_backup = $_COOKIE;
+    $api_request_backup = $_REQUEST;
 
-        $_GET = $get;
-        $_POST = $post;
-        $_COOKIE = array();
-        $_REQUEST = array_merge($get, $post);
+    $_GET = $get;
+    $_POST = $post;
+    $_COOKIE = array();
+    $_REQUEST = array_merge($get, $post);
 
-        $result = call_user_func($func);
+    $result = call_user_func($func);
 
-        $_GET = $api_get_backup;
-        $_POST = $api_post_backup;
-        $_COOKIE = $api_cookie_backup;
-        $_REQUEST = $api_request_backup;
+    $_GET = $api_get_backup;
+    $_POST = $api_post_backup;
+    $_COOKIE = $api_cookie_backup;
+    $_REQUEST = $api_request_backup;
 
-        if (is_array($result)) {
-            if (array_key_exists('data', $result)) {
-                return $result['data'];
-            }
+    if (is_array($result)) {
+        if (array_key_exists('data', $result)) {
+            return $result['data'];
         }
     }
 

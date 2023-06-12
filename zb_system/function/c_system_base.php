@@ -136,6 +136,10 @@ $GLOBALS['usersdir'] = ZBP_PATH . 'zb_users/';
  */
 $GLOBALS['systemdir'] = ZBP_PATH . 'zb_system/';
 /*
+ * Api Mods路径
+ */
+$GLOBALS['apimodsdir'] = $GLOBALS['systemdir'] . 'api/';
+/*
  * Admin路径
  */
 $GLOBALS['admindir'] = $GLOBALS['systemdir'] . 'admin/';
@@ -182,6 +186,14 @@ $GLOBALS['bloghost'] = GetCurrentHost($GLOBALS['blogpath'], $GLOBALS['cookiespat
 $GLOBALS['usersurl'] = $GLOBALS['bloghost'] . 'zb_users/';
 $GLOBALS['systemurl'] = $GLOBALS['bloghost'] . 'zb_system/';
 $GLOBALS['adminurl'] = $GLOBALS['bloghost'] . 'zb_system/admin/';
+
+/*
+ * Api Mods
+ */
+$GLOBALS['api_public_mods'] = array();
+$GLOBALS['api_private_mods'] = array();
+$GLOBALS['api_allow_mods_rule'] = array();
+$GLOBALS['api_disallow_mods_rule'] = array();
 
 /*
  * 系统实例化

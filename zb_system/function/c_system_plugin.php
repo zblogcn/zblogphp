@@ -307,7 +307,7 @@ function HookFilterPlugin($plugname)
  *    }
  *
  */
-function HookFilterPlugin_Return($plugname, &$signal = null)
+function HookFilterPlugin_Back($plugname, &$signal = null)
 {
     $array = func_get_args();
     array_shift($array);
