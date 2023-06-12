@@ -13,13 +13,8 @@ jobs:
         uses: actions/checkout@main
       - name: Download latest jQuery
         run: wget -O $GITHUB_WORKSPACE/zb_system/script/jquery-latest.min.js https://cdn.jsdelivr.net/npm/jquery/dist/jquery.min.js
-      - name: Commit files
-        run: |
-          git config --local user.email "github@rainbowsoft.org"
-          git config --local user.name "Z-Blog Bot"
-          git diff-index --quiet HEAD || (git commit -m "[Auto] updated jQuery (monthly)" -a --no-verify)
-      - name: Push changes
-        uses: ad-m/github-push-action@master
+      - name: Commit & Push changes
+        uses: actions-js/push@master
         with:
-          github_token: ${{ secrets.GH_ZBLOGPHP_PUSH_TOKEN }}
-          branch: master
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          message: "[Auto] updated jQuery (monthly)"
