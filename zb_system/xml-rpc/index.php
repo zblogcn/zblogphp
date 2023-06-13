@@ -826,7 +826,6 @@ function xmlrpc_ShowError($code, $file, $line, $httpcode = 401)
 {
     global $zbp;
     SetHttpStatusCode($httpcode);
-    ShowError($code, $file, $line);
     $zbp->ShowError($code, $file, $line);
 }
 
