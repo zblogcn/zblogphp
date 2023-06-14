@@ -453,22 +453,6 @@ function SetFilterPluginAddition($plugname, $key, $value)
     return false;
 }
 
-/**
- * 设置别名
- */
-function Clear_Filter_Plugin($plugname)
-{
-    return ClearFilterPlugin($plugname);
-}
-
-/**
- * 设置别名
- */
-function Parse_Filter_Plugin($fpname)
-{
-    return ParseFilterPlugin($fpname);
-}
-
 //###############################################################################################################
 //<c_system_dubug,c_system_common里的接口>
 
