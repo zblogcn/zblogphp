@@ -140,9 +140,8 @@ function ApiAddMods($modname, $filename)
     if (!array_key_exists($name, $api_public_mods)) {
         $api_public_mods[$name] = $filename;
         return true;
-    } else {
-        return false;
     }
+    return false;
 }
 
 /**
@@ -155,9 +154,8 @@ function ApiRemoveMods($modname)
     if (array_key_exists($name, $api_public_mods)) {
         unset($api_public_mods[$name]);
         return true;
-    } else {
-        return false;
     }
+    return false;
 }
 
 /**
@@ -170,9 +168,8 @@ function ApiAddPrivateMods($modname, $filename)
     if (!array_key_exists($name, $api_private_mods)) {
         $api_private_mods[$name] = $filename;
         return true;
-    } else {
-        return false;
     }
+    return false;
 }
 
 /**
@@ -185,9 +182,8 @@ function ApiRemovePrivateMods($modname)
     if (array_key_exists($name, $api_private_mods)) {
         unset($api_private_mods[$name]);
         return true;
-    } else {
-        return false;
     }
+    return false;
 }
 
 /**
@@ -227,7 +223,7 @@ function ApiRemoveAllowMods($mod, $act = '')
     $act = strtolower($act);
 
     foreach ($api_allow_mods_rule as $k => $v) {
-        if(array_key_exists($mod, $v) && $v[$mod] === $act) {
+        if (array_key_exists($mod, $v) && $v[$mod] === $act) {
             unset($api_allow_mods_rule[$k]);
         }
     }
@@ -244,7 +240,7 @@ function ApiRemoveDisallowMods($mod, $act = '')
     $act = strtolower($act);
 
     foreach ($api_disallow_mods_rule as $k => $v) {
-        if(array_key_exists($mod, $v) && $v[$mod] === $act) {
+        if (array_key_exists($mod, $v) && $v[$mod] === $act) {
             unset($api_disallow_mods_rule[$k]);
         }
     }
@@ -271,7 +267,6 @@ function ApiCheckMods()
     if (ApiCheckModAndAct($mod, $act) === false) {
         $zbp->ShowError(96, __FILE__, __LINE__);
     }
-
 }
 
 /**
@@ -506,9 +501,7 @@ function ApiGetObjectArray($object, $other_props = array(), $remove_props = arra
             $remove_props[] = 'Password';
             $remove_props[] = 'IP';
             break;
-        default:
-            # code...
-            break;
+        // ...
     }
 
     foreach ($remove_props as $key => $value) {
@@ -821,7 +814,7 @@ function ApiExecute($mod, $act, $get = array(), $post = array())
     $mod = strtolower($mod);
     $act = strtolower($act);
 
-    if ($is_load_mods === false){
+    if ($is_load_mods === false) {
         ApiLoadMods();
         $is_load_mods = true;
     }
