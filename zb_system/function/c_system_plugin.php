@@ -353,11 +353,32 @@ function HookFilterPlugin_Ref($plugname, &...$args)
 /**
  * 插入钩子 Filter接口 的带返回值版
  * 获取 Filter接口信号 请用GetFilterPluginSignal
- * 与HookFilterPlugin的区别除了有返回值外，还可以被插件退出或中断，下同
+ * 与HookFilterPlugin的区别是HookFilterPluginBack可以被插件退出返回
  * 
  * @param string $plugname 接口名称
  */
 function HookFilterPluginBack($plugname)
+{
+    $array = func_get_args();
+    array_shift($array);
+    foreach ($GLOBALS['hooks'][$plugname] as $fpname => &$fpsignal) {
+        $fpreturn = call_user_func_array(ParseFilterPlugin($fpname), $array);
+        SetFilterPluginSignal($plugname, $fpsignal);
+        if ($fpsignal === PLUGIN_EXITSIGNAL_RETURN) {
+            $fpsignal = PLUGIN_EXITSIGNAL_NONE;
+            return $fpreturn;
+        }
+    }
+}
+
+/**
+ * 插入钩子 Filter接口 的带返回值版
+ * 获取 Filter接口信号 请用GetFilterPluginSignal
+ * 与HookFilterPluginBack的区别是HookFilterPluginBack2还可以被插件中断，GOTO
+ * 
+ * @param string $plugname 接口名称
+ */
+function HookFilterPluginBack2($plugname)
 {
     $array = func_get_args();
     array_shift($array);
@@ -379,6 +400,17 @@ function HookFilterPluginBack($plugname)
  */
 /*
 function HookFilterPluginBack_Ref($plugname, &...$args)
+{
+    foreach ($GLOBALS['hooks'][$plugname] as $fpname => &$fpsignal) {
+        $fpreturn = call_user_func_array(ParseFilterPlugin($fpname), $args);
+        SetFilterPluginSignal($plugname, $fpsignal);
+        if ($fpsignal === PLUGIN_EXITSIGNAL_RETURN) {
+            $fpsignal = PLUGIN_EXITSIGNAL_NONE;
+            return $fpreturn;
+        }
+    }
+}
+function HookFilterPluginBack2_Ref($plugname, &...$args)
 {
     foreach ($GLOBALS['hooks'][$plugname] as $fpname => &$fpsignal) {
         $fpreturn = call_user_func_array(ParseFilterPlugin($fpname), $args);
