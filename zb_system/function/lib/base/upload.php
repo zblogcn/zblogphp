@@ -197,7 +197,7 @@ abstract class Base__Upload extends Base
         if ($name == 'Url') {
             foreach ($GLOBALS['hooks']['Filter_Plugin_Upload_Url'] as $fpname => &$fpsignal) {
                 $furl = $fpname($this);
-                if ($furl !== null) {
+                if (!empty($furl)) {
                     return $furl;
                 }
             }
@@ -207,7 +207,7 @@ abstract class Base__Upload extends Base
         if ($name == 'Dir') {
             foreach ($GLOBALS['hooks']['Filter_Plugin_Upload_Dir'] as $fpname => &$fpsignal) {
                 $fdir = $fpname($this);
-                if ($fdir !== null) {
+                if (!empty($fdir)) {
                     return $fdir;
                 }
             }

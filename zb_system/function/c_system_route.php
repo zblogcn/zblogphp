@@ -338,13 +338,13 @@ function ViewAuto_Check_Redirect_To($route)
 /**
  * ViewAuto的辅助函数
  * $route['call']参数，可以是1函数名 2类名::静态方法名 3全局变量名@动态方法名 4类名@动态方法名) 5全局匿名函数
- * 借用了plugin里的Parse_Filter_Plugin函数去解析$function
+ * 借用了plugin里的ParseFilterPlugin函数去解析$function
  */
 function ViewAuto_Call_Auto($route, $array)
 {
     $function = $route['call'];
     $array['_route'] = $route;
-    return call_user_func(Parse_Filter_Plugin($function), $array);
+    return call_user_func(ParseFilterPlugin($function), $array);
 }
 
 /**

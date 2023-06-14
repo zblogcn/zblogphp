@@ -201,7 +201,7 @@ abstract class Base__Module extends Base
                 $p = ModuleBuilder::$List[$this->FileName]['parameters'];
                 $p = is_array($p) ? $p : array();
 
-                $this->Content = call_user_func_array(Parse_Filter_Plugin($f), $p);
+                $this->Content = call_user_func_array(ParseFilterPlugin($f), $p);
                 return true;
             }
         }

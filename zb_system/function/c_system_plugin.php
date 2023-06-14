@@ -34,6 +34,7 @@ $GLOBALS['plugins'] = array();
 
 //定义总接口列表，1.5版启用，逐渐过度到hooks
 $GLOBALS['hooks'] = array();
+$GLOBALS['hooks_addition'] = array();
 
 /**
  * 注册插件函数，由每个插件主动调用.
@@ -146,7 +147,7 @@ function RemovePluginFilter($strPluginFilter)
 }
 
 /**
- * 设置插件信号
+ * 设置插件自身信号
  *
  * @param $plugname
  * @param $functionname
@@ -168,7 +169,7 @@ function SetPluginSignal($plugname, $functionname, $signal = PLUGIN_EXITSIGNAL_N
 }
 
 /**
- * 获取插件信号
+ * 获取插件自身信号
  *
  * @param $plugname
  * @param $functionname
@@ -232,51 +233,13 @@ function Remove_Filter_Plugin($plugname, $functionname)
 }
 
 /**
- * 暂停Filter接口
- *
- * @param string $plugname 接口名称
- *
- * @return boolean
- */
-function Suspend_Filter_Plugin($plugname)
-{
-    $newname = '__' . $plugname;
-    if (isset($GLOBALS['hooks'][$plugname]) && !isset($GLOBALS['hooks'][$newname])) {
-        $GLOBALS['hooks'][$newname] = $GLOBALS['hooks'][$plugname];
-        $GLOBALS['hooks'][$plugname] = array();
-        return true;
-    } else {
-        return false;
-    }
-}
-
-/**
- * 恢复Filter接口
- *
- * @param string $plugname 接口名称
- *
- * @return boolean
- */
-function Resume_Filter_Plugin($plugname)
-{
-    $newname = '__' . $plugname;
-    if (isset($GLOBALS['hooks'][$plugname]) && isset($GLOBALS['hooks'][$newname])) {
-        $GLOBALS['hooks'][$plugname] = $GLOBALS['hooks'][$newname];
-        unset($GLOBALS['hooks'][$newname]);
-        return true;
-    } else {
-        return false;
-    }
-}
-
-/**
  * 清除Filter接口的所有挂载函数
  *
  * @param string $plugname 接口名称
  *
  * @return boolean
  */
-function Clear_Filter_Plugin($plugname)
+function ClearFilterPlugin($plugname)
 {
     if (isset($GLOBALS['hooks'][$plugname])) {
         $GLOBALS['hooks'][$plugname] = array();
@@ -287,13 +250,54 @@ function Clear_Filter_Plugin($plugname)
 }
 
 /**
+ * 暂停Filter接口
+ *
+ * @param string $plugname 接口名称
+ *
+ * @return boolean
+ */
+function SuspendFilterPlugin($plugname)
+{
+
+    if (isset($GLOBALS['hooks'][$plugname])) {
+        $array = $GLOBALS['hooks'][$plugname];
+        $GLOBALS['hooks'][$plugname] = array();
+        SetFilterPluginAddition($plugname, 'func_data', $array);
+        return true;
+    }
+    return false;
+
+}
+
+/**
+ * 恢复Filter接口
+ *
+ * @param string $plugname 接口名称
+ *
+ * @return boolean
+ */
+function ResumeFilterPlugin($plugname)
+{
+    
+    if (isset($GLOBALS['hooks'][$plugname])) {
+        $array = GetFilterPluginAddition($plugname, 'func_data');
+        if (!is_null($array) && is_array($array)) {
+            $GLOBALS['hooks'][$plugname] = $array;
+            SetFilterPluginAddition($plugname, 'func_data', null);
+            return true;
+        }
+    }
+    return false;
+}
+
+/**
  * 解析Callback Filter接口的某项挂载函数名 (支持多种型式的function调用，已经玩出花了^_^)
  *
  * 要挂接的函数名 (可以是1函数名 2类名::静态方法名 3类名@动态方法名 4全局变量名@动态方法名 5全局匿名函数)
  *
  * @return mixed 解析后的function值
  */
-function Parse_Filter_Plugin($fpname)
+function ParseFilterPlugin($fpname)
 {
     $function = str_replace(' ', '', $fpname);
 
@@ -321,45 +325,148 @@ function Parse_Filter_Plugin($fpname)
 /**
  * 插入钩子 Filter接口
  *
- * 如果需要传入引用，须在php>=5.6，给参数补上(...$args)！
- *
  * @param string $plugname 接口名称
  */
 function HookFilterPlugin($plugname)
 {
     $array = func_get_args();
     array_shift($array);
-    //$array = &$args;
     foreach ($GLOBALS['hooks'][$plugname] as $fpname => &$fpsignal) {
-        call_user_func_array(Parse_Filter_Plugin($fpname), $array);
+        call_user_func_array(ParseFilterPlugin($fpname), $array);
     }
 }
 
 /**
- * 插入钩子 Filter接口 的带返回值版
+ * 插入钩子 Filter接口引用版 (php>=5.6)
  *
- *    示例：
- *    $fpresult = HookFilterPlugin_Back('Filter_Plugin_Test', $fpsignal, $arg...);
- *    if ($fpsignal === PLUGIN_EXITSIGNAL_RETURN) {
- *        return $fpresult;
- *    }
- *
+ * @param string $plugname 接口名称
  */
-function HookFilterPlugin_Back($plugname, &$signal = null)
+/*
+function HookFilterPlugin_Ref($plugname, &...$args)
+{
+    foreach ($GLOBALS['hooks'][$plugname] as $fpname => &$fpsignal) {
+        call_user_func_array(ParseFilterPlugin($fpname), $args);
+    }
+}
+*/
+
+/**
+ * 插入钩子 Filter接口 的带返回值版
+ * 获取 Filter接口信号 请用GetFilterPluginSignal
+ * 与HookFilterPlugin的区别除了有返回值外，还可以被插件退出或中断，下同
+ * 
+ * @param string $plugname 接口名称
+ */
+function HookFilterPluginBack($plugname)
 {
     $array = func_get_args();
     array_shift($array);
-    array_shift($array);
-    //$array = &$arg;
-    $signal = PLUGIN_EXITSIGNAL_NONE;
     foreach ($GLOBALS['hooks'][$plugname] as $fpname => &$fpsignal) {
-        $fpreturn = call_user_func_array(Parse_Filter_Plugin($fpname), $array);
+        $fpreturn = call_user_func_array(ParseFilterPlugin($fpname), $array);
+        SetFilterPluginSignal($plugname, $fpsignal);
         if ($fpsignal === PLUGIN_EXITSIGNAL_RETURN || $fpsignal === PLUGIN_EXITSIGNAL_BREAK || $fpsignal === PLUGIN_EXITSIGNAL_GOTO) {
-            $signal = $fpsignal;
             $fpsignal = PLUGIN_EXITSIGNAL_NONE;
             return $fpreturn;
         }
     }
+}
+
+/**
+ * 插入钩子 Filter接口带返回值的引用版 (php>=5.6)
+ * 获取 Filter接口信号 请用GetFilterPluginSignal
+ * 
+ * @param string $plugname 接口名称
+ */
+/*
+function HookFilterPluginBack_Ref($plugname, &...$args)
+{
+    foreach ($GLOBALS['hooks'][$plugname] as $fpname => &$fpsignal) {
+        $fpreturn = call_user_func_array(ParseFilterPlugin($fpname), $args);
+        SetFilterPluginSignal($plugname, $fpsignal);
+        if ($fpsignal === PLUGIN_EXITSIGNAL_RETURN || $fpsignal === PLUGIN_EXITSIGNAL_BREAK || $fpsignal === PLUGIN_EXITSIGNAL_GOTO) {
+            $fpsignal = PLUGIN_EXITSIGNAL_NONE;
+            return $fpreturn;
+        }
+    }
+}
+*/
+
+/**
+ * 获取 Filter 接口信号
+ * 由宿主调用而非插件，插件获取信号用GetPluginSignal
+ *
+ * @param string $plugname 接口名称
+ */
+function GetFilterPluginSignal($plugname)
+{
+    $signal = GetFilterPluginAddition($plugname, 'signal');
+    SetFilterPluginAddition($plugname, 'signal', PLUGIN_EXITSIGNAL_NONE);
+    return $signal;
+}
+
+/**
+ * 设置 Filter 接口信号
+ * 由宿主调用而非插件，插件设置信号用SetPluginSignal
+ *
+ * @param string $plugname 接口名称
+ * @param string $signal 信号
+ */
+function SetFilterPluginSignal($plugname, $signal = PLUGIN_EXITSIGNAL_NONE)
+{
+    return SetFilterPluginAddition($plugname, 'signal', $signal);
+}
+
+/**
+ * 获取 Filter 接口附加信息
+ */
+function GetFilterPluginAddition($plugname, $key)
+{
+    $ha = &$GLOBALS['hooks_addition'];
+    if (isset($GLOBALS['hooks'][$plugname])) {
+        if (!isset($ha[$plugname])) {
+            $ha[$plugname] = array();
+        }
+        if (!array_key_exists($key, $ha[$plugname])) {
+            $ha[$plugname][$key] = null;
+        }
+        return $ha[$plugname][$key];
+    }
+    return null;
+}
+
+/**
+ * 设置 Filter 接口附加信息
+ */
+function SetFilterPluginAddition($plugname, $key, $value)
+{
+    $ha = &$GLOBALS['hooks_addition'];
+    if (isset($GLOBALS['hooks'][$plugname])) {
+        if (!isset($ha[$plugname])) {
+            $ha[$plugname] = array();
+        }
+        if (!array_key_exists($key, $ha[$plugname])) {
+            $ha[$plugname][$key] = null;
+        }
+        $ha[$plugname][$key] = $value;
+        return true;
+    }
+    return false;
+}
+
+/**
+ * 设置别名
+ */
+function Clear_Filter_Plugin($plugname)
+{
+    return ClearFilterPlugin($plugname);
+}
+
+/**
+ * 设置别名
+ */
+function Parse_Filter_Plugin($fpname)
+{
+    return ParseFilterPlugin($fpname);
 }
 
 //###############################################################################################################
