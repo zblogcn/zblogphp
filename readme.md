@@ -30,7 +30,7 @@ For security vulnerabilities, please contact us via ``contact#rainbowsoft.org`` 
 ## 运行环境
 - Windows / Linux / macOS and so on...
 - IIS / Apache / nginx / Lighttpd / Kangle / Tengine / Caddy and so on...
-- PHP 5.2 - 8.1
+- PHP 5.2 - 8.2
 - MySQL 5+ / MariaDB 10+ / SQLite 3 / PostgreSQL
 
 ## 安装说明

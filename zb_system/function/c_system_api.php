@@ -133,7 +133,7 @@ function ApiLoadPrivateMods($modsdir)
 /**
  * 添加指定的 API Mods.
  */
-function ApiAddMods($modname, $filename)
+function ApiAddMod($modname, $filename)
 {
     global $api_public_mods;
     $name = strtolower($modname);
@@ -148,7 +148,7 @@ function ApiAddMods($modname, $filename)
 /**
  * 移除指定的 API Mods.
  */
-function ApiRemoveMods($modname)
+function ApiRemoveMod($modname)
 {
     global $api_public_mods;
     $name = strtolower($modname);
@@ -163,7 +163,7 @@ function ApiRemoveMods($modname)
 /**
  * 添加指定的 API Private Mods.
  */
-function ApiAddPrivateMods($modname, $filename)
+function ApiAddPrivateMod($modname, $filename)
 {
     global $api_private_mods;
     $name = strtolower($modname);
@@ -178,7 +178,7 @@ function ApiAddPrivateMods($modname, $filename)
 /**
  * 移除指定的 API Private Mods.
  */
-function ApiRemovePrivateMods($modname)
+function ApiRemovePrivateMod($modname)
 {
     global $api_private_mods;
     $name = strtolower($modname);
@@ -193,7 +193,7 @@ function ApiRemovePrivateMods($modname)
 /**
  * 添加$mod,$act到Allow Mods Rule.
  */
-function ApiAddAllowMods($mod, $act = '')
+function ApiAddAllowMod($mod, $act = '')
 {
     global $zbp, $api_allow_mods_rule, $api_disallow_mods_rule;
 
@@ -206,7 +206,7 @@ function ApiAddAllowMods($mod, $act = '')
 /**
  * 添加$mod,$act到Disallow Mods Rule.
  */
-function ApiAddDisallowMods($mod, $act = '')
+function ApiAddDisallowMod($mod, $act = '')
 {
     global $zbp, $api_allow_mods_rule, $api_disallow_mods_rule;
 
@@ -219,7 +219,7 @@ function ApiAddDisallowMods($mod, $act = '')
 /**
  * 删除$mod,$act自Allow Mods Rule.
  */
-function ApiRemoveAllowMods($mod, $act = '')
+function ApiRemoveAllowMod($mod, $act = '')
 {
     global $zbp, $api_allow_mods_rule, $api_disallow_mods_rule;
 
@@ -236,7 +236,7 @@ function ApiRemoveAllowMods($mod, $act = '')
 /**
  * 删除$mod,$act自Disallow Mods Rule.
  */
-function ApiRemoveDisallowMods($mod, $act = '')
+function ApiRemoveDisallowMod($mod, $act = '')
 {
     global $zbp, $api_allow_mods_rule, $api_disallow_mods_rule;
 
