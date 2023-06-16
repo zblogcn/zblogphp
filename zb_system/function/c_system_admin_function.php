@@ -66,7 +66,6 @@ function Include_Admin_Addmodsubmenu()
     echo MakeSubMenu($GLOBALS['lang']['msg']['module_navbar'], $zbp->cmdurl . '?act=ModuleEdt&amp;filename=navbar');
     echo MakeSubMenu($GLOBALS['lang']['msg']['module_link'], $zbp->cmdurl . '?act=ModuleEdt&amp;filename=link');
     echo MakeSubMenu($GLOBALS['lang']['msg']['module_favorite'], $zbp->cmdurl . '?act=ModuleEdt&amp;filename=favorite');
-    echo MakeSubMenu($GLOBALS['lang']['msg']['module_misc'], $zbp->cmdurl . '?act=ModuleEdt&amp;filename=misc');
 }
 
 /**
