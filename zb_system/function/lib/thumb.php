@@ -169,7 +169,14 @@ class Thumb
 				$image = iconv("UTF-8", "GBK//IGNORE", $image);
 			}
             $ext = GetFileExt($image);
-            if (! in_array($ext, array('jpeg', 'jpg', 'png', 'gif', 'bmp'))) {
+            $ext_arr = array('jpeg', 'jpg', 'png', 'gif', 'bmp');
+            if (function_exists('imageavif')) {
+                $ext_arr[] = 'avif';
+            }
+            if (function_exists('imagewebp')) {
+                $ext_arr[] = 'webp';
+            }
+            if (! in_array($ext, $ext_arr)) {
                 continue;
             }
             if (count($parsed_url = parse_url($image)) === 1 && isset($parsed_url['path'])) {
@@ -471,6 +478,9 @@ class Thumb
                 break;
             case 'webp':
                 imagewebp($this->srcRes, $this->dstImagePath, self::$quality);
+                break;
+            case 'avif':
+                imageavif($this->srcRes, $this->dstImagePath, self::$quality);
                 break;
             case 'bmp':
                 if (function_exists('imagebmp')) {
