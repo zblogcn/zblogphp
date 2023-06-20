@@ -1395,6 +1395,8 @@ function Admin_ModuleMng()
                 items: '.widget',
                 start: function(event, ui) {
                     showWidget(ui.item.parent().prev());
+                },
+                stop: function(event, ui) {
                     var c = ui.item.find(".funid").html();
                     var siderbarName = [];
                     ui.item.parent().find(".funid").each(function(item, element) {
@@ -1408,8 +1410,7 @@ function Admin_ModuleMng()
                     if (siderbarName[c] > 1) {
                         ui.item.remove();
                     };
-                },
-                stop: function(event, ui) {
+
                     $(this).parent().find(".roll").show("slow");
                     sortFunction();
                     $(this).parent().find(".roll").hide("slow");
