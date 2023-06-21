@@ -214,7 +214,7 @@ unset($post_data['addinfo']);
                                 <tbody>
 
                     <?php
-                    $error_list = ZbpErrorContrl::GetErrorList();
+                    $error_list = ZbpErrorControl::GetErrorList();
                     $i = 0;
                     foreach ($error_list as $key => $value) {
                         $i += 1;

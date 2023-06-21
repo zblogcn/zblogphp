@@ -64,9 +64,9 @@ class XssHtml
         $this->m_xss = "<meta http-equiv=\"Content-Type\" content=\"text/html;charset={$charset}\"><nouse>" . $this->m_xss . '</nouse>';
         $this->m_dom = new DOMDocument('1.0', 'utf-8');
         $this->m_dom->strictErrorChecking = false;
-        ZbpErrorContrl::DisableErrorHook();
+        ZbpErrorControl::DisableErrorHook();
         $this->m_ok = @$this->m_dom->loadHTML($this->m_xss);
-        ZbpErrorContrl::EnableErrorHook();
+        ZbpErrorControl::EnableErrorHook();
         libxml_use_internal_errors(false);
     }
 

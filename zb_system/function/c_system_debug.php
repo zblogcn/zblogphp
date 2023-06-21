@@ -68,7 +68,7 @@ function Debug_PrintConstants()
  */
 function Debug_IgnoreError($errno)
 {
-    if (ZbpErrorContrl::$iswarning == false) {
+    if (ZbpErrorControl::$iswarning == false) {
         if ($errno == E_WARNING) {
             return true;
         }
@@ -77,7 +77,7 @@ function Debug_IgnoreError($errno)
             return true;
         }
     }
-    if (ZbpErrorContrl::$isstrict == false) {
+    if (ZbpErrorControl::$isstrict == false) {
         if ($errno == E_STRICT) {
             return true;
         }
@@ -130,8 +130,8 @@ function Debug_IgnoreError($errno)
  */
 function Debug_Error_Handler($errno, $errstr, $errfile, $errline)
 {
-    ZbpErrorContrl::AddErrorList($errno, $errstr, $errfile, $errline, 'Error');
-    if (ZbpErrorContrl::$disabled == true) {
+    ZbpErrorControl::AddErrorList($errno, $errstr, $errfile, $errline, 'Error');
+    if (ZbpErrorControl::$disabled == true) {
         return true;
     }
 
@@ -140,8 +140,8 @@ function Debug_Error_Handler($errno, $errstr, $errfile, $errline)
         $fpreturn = $fpname('Error', array($errno, $errstr, $errfile, $errline));
     }
 
-    if (ZbpErrorContrl::$islogerror == true) {
-        $err = ZbpErrorContrl::$errarray[$errno];
+    if (ZbpErrorControl::$islogerror == true) {
+        $err = ZbpErrorControl::$errarray[$errno];
         Logs(var_export(array($err, $errno, $errstr, $errfile, $errline), true), 'ERROR');
     }
 
@@ -157,7 +157,7 @@ function Debug_Error_Handler($errno, $errstr, $errfile, $errline)
         return true;
     }
 
-    $zec = new ZbpErrorContrl();
+    $zec = new ZbpErrorControl();
     $zee = $zec->ParseError($errno, $errstr, $errfile, $errline);
 
     foreach ($GLOBALS['hooks']['Filter_Plugin_Debug_Handler_ZEE'] as $fpname => &$fpsignal) {
@@ -200,8 +200,8 @@ function Debug_Error_Handler($errno, $errstr, $errfile, $errline)
  */
 function Debug_Exception_Handler($exception)
 {
-    ZbpErrorContrl::AddErrorList($exception);
-    if (ZbpErrorContrl::$disabled == true) {
+    ZbpErrorControl::AddErrorList($exception);
+    if (ZbpErrorControl::$disabled == true) {
         return true;
     }
 
@@ -210,7 +210,7 @@ function Debug_Exception_Handler($exception)
         $fpreturn = $fpname('Exception', $exception);
     }
 
-    if (ZbpErrorContrl::$islogerror) {
+    if (ZbpErrorControl::$islogerror) {
         Logs(
             var_export(
                 array(
@@ -223,7 +223,7 @@ function Debug_Exception_Handler($exception)
         );
     }
 
-    $zec = new ZbpErrorContrl();
+    $zec = new ZbpErrorControl();
     $zee = $zec->ParseException($exception);
 
     foreach ($GLOBALS['hooks']['Filter_Plugin_Debug_Handler_ZEE'] as $fpname => &$fpsignal) {
@@ -264,8 +264,8 @@ function Debug_Exception_Handler($exception)
 function Debug_Shutdown_Handler()
 {
     if ($error = error_get_last()) {
-        ZbpErrorContrl::AddErrorList($error['type'], $error['message'], $error['file'], $error['line'], 'Fatal');
-        if (ZbpErrorContrl::$disabled == true) {
+        ZbpErrorControl::AddErrorList($error['type'], $error['message'], $error['file'], $error['line'], 'Fatal');
+        if (ZbpErrorControl::$disabled == true) {
             return true;
         }
 
@@ -274,7 +274,7 @@ function Debug_Shutdown_Handler()
             $fpreturn = $fpname('Shutdown', $error);
         }
 
-        if (ZbpErrorContrl::$islogerror) {
+        if (ZbpErrorControl::$islogerror) {
             Logs(var_export(array('Fatal', $error['type'], $error['message'], $error['file'], $error['line']), true), 'FATAL');
         }
 
@@ -282,7 +282,7 @@ function Debug_Shutdown_Handler()
             return true;
         }
 
-        $zec = new ZbpErrorContrl();
+        $zec = new ZbpErrorControl();
         $zee = $zec->ParseFatal($error);
 
         foreach ($GLOBALS['hooks']['Filter_Plugin_Debug_Handler_ZEE'] as $fpname => &$fpsignal) {
@@ -410,9 +410,9 @@ class ZbpErrorException extends Exception
 }
 
 /**
- * Class ZbpErrorContrl (原名ZBlogException)
+ * Class ZbpErrorControl (原名ZBlogException)
  */
-class ZbpErrorContrl
+class ZbpErrorControl
 {
 
     /**
@@ -874,11 +874,11 @@ class ZbpErrorContrl
 
 }
 
-//给ZBlogException改名为ZbpErrorContrl，然后保持延续就起了别名
+//给ZBlogException改名为ZbpErrorControl，然后保持延续就起了别名
 if (function_exists('class_alias')) {//>5.2
-    class_alias('ZbpErrorContrl', 'ZBlogException');
+    class_alias('ZbpErrorControl', 'ZBlogException');
 } else {
-    class ZBlogException extends ZbpErrorContrl
+    class ZBlogException extends ZbpErrorControl
     {
     }
 }

@@ -379,10 +379,10 @@ class Database__PDO_MySQL implements Database__Interface
     public function ExistColumn($table, $field)
     {
         $r = null;
-        ZbpErrorContrl::SuspendErrorHook();
+        ZbpErrorControl::SuspendErrorHook();
         $s = "SELECT column_name FROM information_schema.columns WHERE table_schema='$this->dbname' AND table_name = '$table' AND column_name = '$field'";
         $r = @$this->Query($s);
-        ZbpErrorContrl::ResumeErrorHook();
+        ZbpErrorControl::ResumeErrorHook();
         if (is_array($r) && count($r) == 0) {
             return false;
         }

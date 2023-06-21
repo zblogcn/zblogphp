@@ -218,7 +218,7 @@ class Network__filegetcontents implements Network__Interface
         }
 
         if (defined('ZBP_PATH')) {
-            ZbpErrorContrl::SuspendErrorHook();
+            ZbpErrorControl::SuspendErrorHook();
         }
         $http_response_header = null;
         $this->responseText = file_get_contents(($this->isgzip == true ? 'compress.zlib://' : '') . $this->url, false, stream_context_create(array('http' => $this->option, 'ssl' => array('verify_peer' => false,'verify_peer_name' => false))));
@@ -227,7 +227,7 @@ class Network__filegetcontents implements Network__Interface
         }
         $this->responseHeader = $http_response_header;
         if (defined('ZBP_PATH')) {
-            ZbpErrorContrl::ResumeErrorHook();
+            ZbpErrorControl::ResumeErrorHook();
         }
 
         if (!is_array($this->responseHeader)) {

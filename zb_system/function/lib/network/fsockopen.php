@@ -246,7 +246,7 @@ class Network__fsockopen implements Network__Interface
         $context = stream_context_create($contextOptions);
 
         if (defined('ZBP_PATH')) {
-            ZbpErrorContrl::SuspendErrorHook();
+            ZbpErrorControl::SuspendErrorHook();
         }
         $socket = stream_socket_client(
             (($this->scheme == 'https' ? 'ssl://' : '') . $this->parsed_url['host']) . ':' . $this->port,
@@ -257,7 +257,7 @@ class Network__fsockopen implements Network__Interface
             $context
         );
         if (defined('ZBP_PATH')) {
-            ZbpErrorContrl::ResumeErrorHook();
+            ZbpErrorControl::ResumeErrorHook();
         }
         if (!$socket) {
             return;

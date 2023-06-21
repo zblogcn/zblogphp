@@ -40,7 +40,7 @@ require ZBP_PATH . 'zb_system/function/c_system_event.php';
 require ZBP_PATH . 'zb_system/function/c_system_api.php';
 
 if (ZBP_HOOKERROR) {
-    ZbpErrorContrl::SetErrorHook();
+    ZbpErrorControl::SetErrorHook();
 }
 
 /**
