@@ -60,14 +60,14 @@ class Thumb
     /**
      * 图片句柄.
      *
-     * @var resource
+     * @var GdImage
      */
     protected $srcRes;
 
     /**
      * 临时图片句柄.
      *
-     * @var resource|null
+     * @var GdImage
      */
     protected $tmpRes;
 
@@ -165,9 +165,9 @@ class Thumb
             if (! $image) {
                 continue;
             }
-			if (PHP_SYSTEM === SYSTEM_WINDOWS) {
-				$image = iconv("UTF-8", "GBK//IGNORE", $image);
-			}
+            if (PHP_SYSTEM === SYSTEM_WINDOWS) {
+                $image = iconv("UTF-8", "GBK//IGNORE", $image);
+            }
             $ext = GetFileExt($image);
             $ext_arr = array('jpeg', 'jpg', 'png', 'gif', 'bmp');
             if (function_exists('imageavif')) {

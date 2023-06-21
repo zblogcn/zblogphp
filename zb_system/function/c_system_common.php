@@ -2150,7 +2150,7 @@ function UrlHostToPath($url)
         return $url;
     }
 
-    return ZBP_PATH . substr(RemoveProtocolFromUrl($url), strlen(RemoveProtocolFromUrl($zbp->host)));
+    return ZBP_PATH . urldecode(substr(RemoveProtocolFromUrl($url), strlen(RemoveProtocolFromUrl($zbp->host))));
 }
 
 /**
