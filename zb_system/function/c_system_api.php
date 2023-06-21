@@ -56,6 +56,9 @@ function ApiDebugHandler($error)
     $GLOBALS['hooks']['Filter_Plugin_Debug_Handler_ZEE']['ApiDebugHandler'] = PLUGIN_EXITSIGNAL_RETURN;
     //全局拦截error,exception
     echo ApiResponse(null, $error);
+    if (!IS_CLI) {
+        exit(1);
+    }
     return true;
 }
 
@@ -758,20 +761,8 @@ function ApiDispatch($mods, $mod, $act)
         include_once $mod_file;
         $func = 'api_' . $mod . '_' . $act;
         if (function_exists($func)) {
-            //$result = call_user_func($func);
-            try {
-                $result = call_user_func($func);
-            } catch (Throwable $e) {
-                $_SERVER['_error_count'] = ($_SERVER['_error_count'] + 1);
-                $r = ApiResponse(null, $e);
-                echo $r;
-                return $r;
-            } catch (Exception $e) {
-                $_SERVER['_error_count'] = ($_SERVER['_error_count'] + 1);
-                $r = ApiResponse(null, $e);
-                echo $r;
-                return $r;
-            }
+
+            $result = call_user_func($func);
 
             ApiResultData($result);
 
