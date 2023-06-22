@@ -24,7 +24,7 @@ function VerifyLogin($throwException = true)
     global $zbp;
     /* @var Member $m */
     $m = null;
-    if ($zbp->Verify_MD5(trim(GetVars('username', 'POST')), trim(GetVars('password', 'POST')), $m)) {
+    if ($zbp->Verify_MD5(_trim(GetVars('username', 'POST')), _trim(GetVars('password', 'POST')), $m)) {
         $zbp->user = $m;
         $zbp->islogin = true;
         $sd = (float) GetVars('savedate');
@@ -108,7 +108,7 @@ function Redirect_to_search()
 function Redirect_cmd_to_search($post_type = 0)
 {
     global $zbp, $action;
-    //$q = rawurlencode(trim(strip_tags(GetVars('q', 'POST'))));
+    //$q = rawurlencode(_trim(strip_tags(GetVars('q', 'POST'))));
     //Redirect302($zbp->searchurl . '?q=' . $q);
 
     $route = $zbp->GetPostType_Sub($post_type, 'routes', 'post_article_search');
@@ -119,7 +119,7 @@ function Redirect_cmd_to_search($post_type = 0)
         $r = new UrlRule($urlrule);
     }
 
-    $q = rawurlencode(trim(strip_tags(GetVars('q', 'POST'))));
+    $q = rawurlencode(_trim(strip_tags(GetVars('q', 'POST'))));
     $r->Rules['{%page%}'] = '';
     $r->Rules['{%q%}'] = $q;
     $r->Rules['{%search%}'] = $q;
@@ -382,7 +382,7 @@ function PostArticle()
             if (stripos($_POST['Content'], '<!--more-->') !== false) {
                 $_POST['Intro'] = GetValueInArray(explode('<!--more-->', $_POST['Content']), 0);
             }
-            if (trim($_POST['Intro']) == '' || (stripos($_POST['Intro'], '<!--autointro-->') !== false)) {
+            if (_trim($_POST['Intro']) == '' || (stripos($_POST['Intro'], '<!--autointro-->') !== false)) {
                 if ($zbp->option['ZC_ARTICLE_INTRO_WITH_TEXT'] == true) {
                     //改纯HTML摘要
                     $i = (int) $zbp->option['ZC_ARTICLE_EXCERPT_MAX'];
@@ -640,7 +640,7 @@ function PostArticle_CheckTagAndConvertIDtoString($tagnamestring, $post_type = 0
     $s = '';
     $tagnamestring = str_replace(array(';', '，', '、'), ',', $tagnamestring);
     $tagnamestring = strip_tags($tagnamestring);
-    $tagnamestring = trim($tagnamestring);
+    $tagnamestring = _trim($tagnamestring);
     if ($tagnamestring == '') {
         return '';
     }
@@ -652,7 +652,7 @@ function PostArticle_CheckTagAndConvertIDtoString($tagnamestring, $post_type = 0
     $a = explode(',', $tagnamestring);
     $b = array();
     foreach ($a as $value) {
-        $v = trim($value);
+        $v = _trim($value);
         if ($v) {
             $b[] = $v;
         }
@@ -1589,7 +1589,7 @@ function PostMember()
     }
 
     //检测密码
-    if (trim($_POST["Password"]) == '' || trim($_POST["PasswordRe"]) == '' || $_POST["Password"] != $_POST["PasswordRe"]) {
+    if (_trim($_POST["Password"]) == '' || _trim($_POST["PasswordRe"]) == '' || $_POST["Password"] != $_POST["PasswordRe"]) {
         unset($_POST["Password"]);
         unset($_POST["PasswordRe"]);
     }
@@ -1674,7 +1674,7 @@ function PostMember()
     // 然后，读入密码
     // 密码需要单独处理，因为拿不到用户Guid
     if (isset($data['Password'])) {
-        $data['Password'] = trim($data['Password']);
+        $data['Password'] = _trim($data['Password']);
         if ($data['Password'] != '') {
             if (strlen($data['Password']) < $zbp->option['ZC_PASSWORD_MIN'] || strlen($data['Password']) > $zbp->option['ZC_PASSWORD_MAX']) {
                 $zbp->ShowError(54, __FILE__, __LINE__);
@@ -1960,7 +1960,7 @@ function PostUpload()
                 $upload->Name = $_FILES[$key]['name'];
                 if (GetVars('auto_rename', 'POST') == 'on' || GetVars('auto_rename', 'POST') == true) {
                     $temp_arr = explode(".", $upload->Name);
-                    $file_ext = strtolower(trim(array_pop($temp_arr)));
+                    $file_ext = strtolower(_trim(array_pop($temp_arr)));
                     $upload->Name = date("YmdHis") . time() . rand(10000, 99999) . '.' . $file_ext;
                 }
                 $upload->SourceName = $_FILES[$key]['name'];
@@ -2067,7 +2067,7 @@ function EnablePlugin($name)
         }
     }
 
-    $zbp->option['ZC_USING_PLUGIN_LIST'] = trim(implode('|', $arrayhas), '|');
+    $zbp->option['ZC_USING_PLUGIN_LIST'] = _trim(implode('|', $arrayhas), '|');
 
     $zbp->SaveOption();
 
@@ -2101,7 +2101,7 @@ function DisablePlugin($name)
         }
     }
 
-    $zbp->option['ZC_USING_PLUGIN_LIST'] = trim(implode('|', $arrayhas), '|');
+    $zbp->option['ZC_USING_PLUGIN_LIST'] = _trim(implode('|', $arrayhas), '|');
 
     $zbp->SaveOption();
 
@@ -2196,7 +2196,7 @@ function SetSidebar()
         $optionName = $i === 1 ? 'ZC_SIDEBAR_ORDER' : "ZC_SIDEBAR{$i}_ORDER";
         $formName = $i === 1 ? 'sidebar' : "sidebar{$i}";
         if (isset($_POST[$formName])) {
-            $zbp->option[$optionName] = trim(GetVars($formName, 'POST'), '|');
+            $zbp->option[$optionName] = _trim(GetVars($formName, 'POST'), '|');
         }
     }
     $zbp->SaveOption();
@@ -2255,7 +2255,7 @@ function SaveSetting()
             $value = DelNameInString($value, 'php');
             $value = DelNameInString($value, 'asp');
         }
-        //$zbp->option[$key] = trim(str_replace(array("\r", "\n"), array("", ""), $value));
+        //$zbp->option[$key] = _trim(str_replace(array("\r", "\n"), array("", ""), $value));
         //这里不拿掉\r和\n了
         $zbp->option[$key] = $value;
     }
@@ -2272,8 +2272,8 @@ function SaveSetting()
         $zbp->option['ZC_DEBUG_LOG_ERROR'] = false;
     }
 
-    $zbp->option['ZC_BLOG_HOST'] = trim($zbp->option['ZC_BLOG_HOST']);
-    $zbp->option['ZC_BLOG_HOST'] = trim($zbp->option['ZC_BLOG_HOST'], '/') . '/';
+    $zbp->option['ZC_BLOG_HOST'] = _trim($zbp->option['ZC_BLOG_HOST']);
+    $zbp->option['ZC_BLOG_HOST'] = _trim($zbp->option['ZC_BLOG_HOST'], '/') . '/';
     if ($zbp->option['ZC_BLOG_HOST'] == '/') {
         $zbp->option['ZC_BLOG_HOST'] = $zbp->host;
     }

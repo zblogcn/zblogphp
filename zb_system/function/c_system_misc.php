@@ -538,8 +538,8 @@ function misc_php_zbp_info()
                 $ca = explode(",", $c);
                 foreach ($ca as $key => $value) {
                     echo '<tr><td class="e">' . $value . '</td><td class="v">';
-                    if (defined(trim($value))) {
-                        echo constant(trim($value));
+                    if (defined(_trim($value))) {
+                        echo constant(_trim($value));
                     }
                     echo '</td></tr>';
                 }

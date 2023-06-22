@@ -185,7 +185,7 @@ class Database__PostgreSQL implements Database__Interface
         //$a=explode(';',str_replace('%pre%', $this->dbpre,$s));
         $a = explode(';', $s);
         foreach ($a as $s) {
-            $s = trim($s);
+            $s = _trim($s);
             if ($s != '') {
                 $result = pg_query($this->db, $this->sql->Filter($s));
                 $this->LogsError();

@@ -1251,7 +1251,7 @@ class SQL__Global
         $this->buildIFEXISTS();
         $this->buildTable();
         $s = '';
-        $str = trim(implode('', $this->table));
+        $str = _trim(implode('', $this->table));
         if ($str === '') {
             $s = implode(' ,', $this->other['TABLE']);
             $s = str_replace('%pre%', $this->db->dbpre, $s);

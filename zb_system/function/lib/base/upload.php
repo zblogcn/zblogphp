@@ -52,7 +52,7 @@ abstract class Base__Upload extends Base
         if (preg_match('/pht(ml)?(\d*)|phar/i', $e)) {
             return false;
         }
-        if (trim($extList) == '') {
+        if (_trim($extList) == '') {
             $extList = $zbp->option['ZC_UPLOAD_FILETYPE'];
         }
 

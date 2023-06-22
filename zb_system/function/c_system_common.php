@@ -150,11 +150,11 @@ function GetCurrentHost($blogpath, &$cookiesPath)
     if ($preset_bloghost != '') {
         defined('ZBP_PRESET_HOST_USED') || define('ZBP_PRESET_HOST_USED', true);
         $host = $preset_bloghost;
-        $host = rtrim($host, '/');
+        $host = _rtrim($host, '/');
         $cookiesPath = '/';
         if ($preset_cookiespath != '') {
             $cookiesPath = $preset_cookiespath;
-            $cookiesPath = rtrim($cookiesPath, '/') . '/';
+            $cookiesPath = _rtrim($cookiesPath, '/') . '/';
         }
         return $host . $cookiesPath;
     }
@@ -188,14 +188,14 @@ function GetCurrentHost($blogpath, &$cookiesPath)
         $y = $blogpath;
         if (strpos($x, $y) !== false) {
             $x = str_replace($y, '', $x);
-            $x = ltrim($x, '/');
+            $x = _ltrim($x, '/');
             $x = '/' . $x;
         }
         for ($i = 0; $i < strlen($x); $i++) {
             $f = $y . substr($x, ($i - strlen($x)));
             $z = substr($x, 0, $i);
             if (file_exists($f) && is_file($f)) {
-                $z = trim($z, '/');
+                $z = _trim($z, '/');
                 $z = '/' . $z . '/';
                 $z = str_replace('//', '/', $z);
                 $cookiesPath = $z;
@@ -506,7 +506,7 @@ function GetRequestUri()
         $url = str_replace('\\', '/', $_SERVER['PHP_SELF']);
         if (strpos($url, ZBP_PATH) !== false) {
             $url = str_replace(ZBP_PATH, '/', $url);
-            $url = ltrim($url, '/');
+            $url = _ltrim($url, '/');
             $url = '/' . $url;
         }
         if (!isset($_SERVER['QUERY_STRING'])) {
@@ -536,7 +536,7 @@ function GetRequestScript()
     if (empty($s) == false && strpos($f, $s) === 0) {
         $f = str_replace($s, '', $f);
     }
-    $f = ltrim($f, '/');
+    $f = _ltrim($f, '/');
     return $f;
 }
 
@@ -745,7 +745,7 @@ function AutoloadClass($className)
 
     //PSR4 load
     $psr4name = str_replace('\\', '/', $className);
-    $psr4name = ltrim($psr4name, '/');
+    $psr4name = _ltrim($psr4name, '/');
     foreach ($autoload_class_dirs as $dir) {
         $fileName = $dir . $psr4name . '.php';
         if (is_readable($fileName)) {
@@ -773,12 +773,12 @@ function AutoloadClass($className)
 function AddAutoloadClassDir($dir, $prepend = false)
 {
     global $autoload_class_dirs;
-    $dir = trim($dir);
+    $dir = _trim($dir);
     if (empty($dir)) {
         return false;
     }
     $dir = str_replace('\\', '/', $dir);
-    $dir = rtrim($dir, '/') . '/';
+    $dir = _rtrim($dir, '/') . '/';
     if ($prepend == false) {
         $autoload_class_dirs[] = $dir;
     } else {
@@ -1152,10 +1152,10 @@ function CheckIncludedFiles($file)
     $a = get_included_files();
     $file = str_replace('\\', '/', $file);
     foreach ($a as $key => $value) {
-        $a[$key] = trim(str_replace('\\', '/', $value));
+        $a[$key] = _trim(str_replace('\\', '/', $value));
     }
 
-    return in_array(trim($file), $a);
+    return in_array(_trim($file), $a);
 }
 
 /**
@@ -1443,7 +1443,7 @@ function AddNameInString($s, $name)
     if (in_array($name, $apl) == false) {
         $apl[] = $name;
     }
-    $pl = trim(implode('|', $apl), '|');
+    $pl = _trim(implode('|', $apl), '|');
 
     return $pl;
 }
@@ -1467,7 +1467,7 @@ function DelNameInString($s, $name)
             unset($apl[$i]);
         }
     }
-    $pl = trim(implode('|', $apl), '|');
+    $pl = _trim(implode('|', $apl), '|');
 
     return $pl;
 }
@@ -1823,7 +1823,7 @@ function utf84mb_fixHtmlSpecialChars()
  */
 function utf84mb_convertToUCS4($matches)
 {
-    return sprintf("&#x%s;", ltrim(strtoupper(bin2hex(iconv('UTF-8', 'UCS-4', $matches[0]))), "0"));
+    return sprintf("&#x%s;", _ltrim(strtoupper(bin2hex(iconv('UTF-8', 'UCS-4', $matches[0]))), "0"));
 }
 
 /**
@@ -1905,6 +1905,42 @@ function Ucs2Utf8($matchs)
 }
 
 /**
+ * trim （将null转为空字符串）
+ *
+ * @param string|null $string
+ * @param string $characters
+ * @return string
+ */
+function _trim($string, $characters = "\t\n\r\0\x0B")
+{
+    return trim(is_null($string) ? '' : $string, $characters);
+}
+
+/**
+ * ltrim （将null转为空字符串）
+ *
+ * @param string|null $string
+ * @param string $characters
+ * @return string
+ */
+function _ltrim($string, $characters = "\t\n\r\0\x0B")
+{
+    return ltrim(is_null($string) ? '' : $string, $characters);
+}
+
+/**
+ * rtrim （将null转为空字符串）
+ *
+ * @param string|null $string
+ * @param string $characters
+ * @return string
+ */
+function _rtrim($string, $characters = "\t\n\r\0\x0B")
+{
+    return rtrim(is_null($string) ? '' : $string, $characters);
+}
+
+/**
  * HTML文本处理转换类函数**************************************************************.
  */
 
@@ -1935,7 +1971,7 @@ function FormatString($source, $para)
 
     if (strpos($para, '[noscript]') !== false) {
         $class  = new XssHtml($source);
-        $source = trim($class->getHtml());
+        $source = _trim($class->getHtml());
     }
     if (strpos($para, '[enter]') !== false) {
         $source = str_replace("\r\n", "<br/>", $source);
@@ -2682,7 +2718,7 @@ function CheckHTTPRefererValid()
 {
     global $bloghost;
     $referer = GetVars('HTTP_REFERER', 'SERVER');
-    if (trim($referer) === '') {
+    if (_trim($referer) === '') {
         return true;
     }
     $s = $bloghost;

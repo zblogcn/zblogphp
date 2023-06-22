@@ -446,7 +446,7 @@ class App
         $appIgnorePath = $this->app_path . 'zbignore.txt';
         $appIgnores = array();
         if (is_readable($appIgnorePath)) {
-            $appIgnores = explode("\n", str_replace("\r", "\n", trim(file_get_contents($appIgnorePath))));
+            $appIgnores = explode("\n", str_replace("\r", "\n", _trim(file_get_contents($appIgnorePath))));
         }
         foreach ($appIgnores as $key => $value) {
             if (!empty($value)) {
@@ -644,7 +644,7 @@ class App
 
         foreach ($this->ignore_files as $glob) {
             if (is_dir($d = $this->app_path . $glob)) {
-                $this->ignored_dirs[crc32($d)] = rtrim($d, '/') . '/';
+                $this->ignored_dirs[crc32($d)] = _rtrim($d, '/') . '/';
             }
         }
         foreach ($this->dirs as $key => $value) {
@@ -707,7 +707,7 @@ class App
                 }
             }
             if (is_dir($path) && is_dir($d = $appPath . $glob)) {
-                $d = rtrim($d, '/') . '/';
+                $d = _rtrim($d, '/') . '/';
                 if (stripos($path, $d) !== false) {
                     return true;
                 }
@@ -795,7 +795,7 @@ class App
             return new Exception(str_replace('%s', $this->adapted, $zbp->lang['error'][78]));
         }
 
-        if (trim($this->phpver) == '') {
+        if (_trim($this->phpver) == '') {
             $this->phpver = '5.2';
         }
         if (version_compare($this->phpver, GetPHPVersion()) > 0) {
@@ -805,7 +805,7 @@ class App
 
         $ae = explode('|', $this->advanced_existsfunctions);
         foreach ($ae as $e) {
-            $e = trim($e);
+            $e = _trim($e);
             if (!$e) {
                 continue;
             }

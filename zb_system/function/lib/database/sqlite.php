@@ -112,7 +112,7 @@ class Database__SQLite implements Database__Interface
         //$a=explode(';',str_replace('%pre%', $this->dbpre, $s));
         $a = explode(';', $s);
         foreach ($a as $s) {
-            $s = trim($s);
+            $s = _trim($s);
             if ($s != '') {
                 $result = sqlite_query($this->db, $this->sql->Filter($s));
                 $this->LogsError();

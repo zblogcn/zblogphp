@@ -647,7 +647,7 @@ function xmlrpc_editPost($id, $xmlstring, $publish)
         }
         if (isset($post['categories'])) {
             $post['categories'] = str_replace('<value>', '', $post['categories']);
-            $catename = trim(GetValueInArray(explode('</value>', $post['categories']), 0));
+            $catename = _trim(GetValueInArray(explode('</value>', $post['categories']), 0));
             $_POST['CateID'] = $zbp->GetCategoryByName($catename)->ID;
         }
         if (isset($post['mt_excerpt'])) {

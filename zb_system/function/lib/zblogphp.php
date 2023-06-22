@@ -625,7 +625,7 @@ class ZBlogPHP
 
         /*$var_list_array = explode('|', $var_list);
         foreach ($var_list_array as $var) {
-            $var = trim($var);
+            $var = _trim($var);
             $zbpvar = str_replace('blog', '', $var);
             $this->$zbpvar = &$GLOBALS[$var];
         }*/
@@ -785,7 +785,7 @@ class ZBlogPHP
 
         if (defined('ZBP_PRESET_HOST_USED')) {
             //如果环境变量已预设了bloghost
-            $this->host = rtrim($this->host, '/') . '/';
+            $this->host = _rtrim($this->host, '/') . '/';
             $this->option['ZC_BLOG_HOST'] = $this->host;
         } else {
             //ZC_PERMANENT_DOMAIN_WHOLE_DISABLE不存在 或是 ZC_PERMANENT_DOMAIN_WHOLE_DISABLE存在但为假
@@ -794,21 +794,21 @@ class ZBlogPHP
                 $forced_url = GetValueInArray($this->option, 'ZC_PERMANENT_DOMAIN_FORCED_URL');
                 if ($forced_url != '') {
                     //如果ZC_PERMANENT_DOMAIN_FORCED_URL存在 且不为空
-                    $forced_url = rtrim($forced_url, '/') . '/';
+                    $forced_url = _rtrim($forced_url, '/') . '/';
                     $this->host = (string) $forced_url;
                     $this->cookiespath = strstr(str_replace('://', '', $this->host), '/');
                 } elseif ($this->option['ZC_PERMANENT_DOMAIN_ENABLE'] == true) {
                     //如果ZC_PERMANENT_DOMAIN_ENABLE已开启的话
                     $this->host = $this->option['ZC_BLOG_HOST'];
-                    $this->host = rtrim($this->host, '/') . '/';
+                    $this->host = _rtrim($this->host, '/') . '/';
                     $this->cookiespath = strstr(str_replace('://', '', $this->host), '/');
                 } else {
                     //默认自动识别域名
-                    $this->host = rtrim($this->host, '/') . '/';
+                    $this->host = _rtrim($this->host, '/') . '/';
                     $this->option['ZC_BLOG_HOST'] = $this->host;
                 }
             } else {
-                $this->host = rtrim($this->host, '/') . '/';
+                $this->host = _rtrim($this->host, '/') . '/';
                 $this->option['ZC_BLOG_HOST'] = $this->host;
             }
         }
@@ -1189,11 +1189,11 @@ class ZBlogPHP
      */
     public static function InitializeDB($type)
     {
-        if (!trim($type)) {
+        if (!_trim($type)) {
             return null;
         }
 
-        $newtype = 'Database__' . trim($type);
+        $newtype = 'Database__' . _trim($type);
 
         return new $newtype();
     }
@@ -1533,8 +1533,8 @@ class ZBlogPHP
     public function Verify()
     {
         // 在普通 Web 页面中
-        $username = trim(GetVars('username_' . hash("crc32b", $this->guid), 'COOKIE'));
-        $token = trim(GetVars('token_' . hash("crc32b", $this->guid), 'COOKIE'));
+        $username = _trim(GetVars('username_' . hash("crc32b", $this->guid), 'COOKIE'));
+        $token = _trim(GetVars('token_' . hash("crc32b", $this->guid), 'COOKIE'));
         $user = $this->VerifyUserToken($token, $username);
 
         if (is_object($user)) {
@@ -1717,6 +1717,9 @@ class ZBlogPHP
      */
     public function VerifyAPIToken($api_token)
     {
+        if (is_null($api_token)) {
+            return null;
+        }
         $api_token = base64_decode($api_token);
 
         if (empty($api_token)) {
@@ -3083,8 +3086,8 @@ class ZBlogPHP
 
         //如果是多重属性和值查询
         if (is_array($attr) && is_array($val)) {
-            $val1 = trim($val[0]);
-            $val2 = trim($val[1]);
+            $val1 = _trim($val[0]);
+            $val2 = _trim($val[1]);
             $val3 = isset($val[2]) ? $val[2] : null;
             $attr1 = $attr[0];
             $attr2 = $attr[1];
@@ -3100,7 +3103,7 @@ class ZBlogPHP
                 }
             }
         } else {
-            $val = trim($val);
+            $val = _trim($val);
             foreach ($cacheObject as $key => &$value) {
                 if (is_null($value)) {
                     continue;
@@ -3289,7 +3292,7 @@ class ZBlogPHP
      */
     public function GetMemberByName($name)
     {
-        $name = trim($name);
+        $name = _trim($name);
         if (!$name || !CheckRegExp($name, '[username]')) {
             return new Member();
         }
@@ -3328,7 +3331,7 @@ class ZBlogPHP
      */
     public function GetMemberByNameOrAlias($name)
     {
-        $name = trim($name);
+        $name = _trim($name);
         if (!$name || !(CheckRegExp($name, '[username]') || CheckRegExp($name, '[nickname]'))) {
             return new Member();
         }
@@ -3370,7 +3373,7 @@ class ZBlogPHP
      */
     public function GetMemberByAlias($name)
     {
-        $name = trim($name);
+        $name = _trim($name);
         if (!$name || !(CheckRegExp($name, '[nickname]'))) {
             return new Member();
         }
@@ -3409,7 +3412,7 @@ class ZBlogPHP
      */
     public function GetMemberByEmail($email)
     {
-        $email = strtolower(trim($email));
+        $email = strtolower(_trim($email));
         if (!$email || !CheckRegExp($email, '[email]')) {
             return new Member();
         }
@@ -3589,7 +3592,7 @@ class ZBlogPHP
      */
     public function LoadTagsByIDString($s)
     {
-        $s = trim($s);
+        $s = _trim($s);
         if ($s === '') {
             return array();
         }
@@ -3599,7 +3602,7 @@ class ZBlogPHP
         $a = explode('|', $s);
         $b = array();
         foreach ($a as &$value) {
-            $value = trim($value);
+            $value = _trim($value);
             if ($value) {
                 $b[] = $value;
             }
@@ -3643,9 +3646,9 @@ class ZBlogPHP
      */
     public function LoadTagsByNameString($s, $posttype = 0)
     {
-        $s = trim($s);
+        $s = _trim($s);
         $s = str_replace(array(';', '，', '、'), ',', $s);
-        $s = trim($s);
+        $s = _trim($s);
         $s = strip_tags($s);
         if ($s === '' || $s === ',') {
             return array();
@@ -3659,7 +3662,7 @@ class ZBlogPHP
         $unload_tags = array();
         $exist_tags = array();
         foreach ($t as $name) {
-            $name = trim($name);
+            $name = _trim($name);
             if (isset($this->tagsbyname_type[$posttype][$name]) == false) {
                 $unload_tags[] = array('tag_Name', $name);
             } else {
@@ -4066,7 +4069,7 @@ class ZBlogPHP
             if (!isset($typeId['classname']) || $typeId['classname'] == '') {
                 $typeId['classname'] = 'Post';
             }
-            $typeId['name'] = strtolower(trim($typeId['name']));
+            $typeId['name'] = strtolower(_trim($typeId['name']));
             $this->posttype[$id] = $typeId;
             if (!isset($this->tags_type[$id])) {
                 $this->tags_type[$id] = array();
@@ -4098,7 +4101,7 @@ class ZBlogPHP
         }
 
         $typeId = (int) $typeId;
-        $name = strtolower(trim($name));
+        $name = strtolower(_trim($name));
         if ($typeId > 99) {
             if (isset($this->posttype[$typeId])) {
                 $this->ShowError(87, __FILE__, __LINE__);
