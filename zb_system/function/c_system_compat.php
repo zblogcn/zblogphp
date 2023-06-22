@@ -102,10 +102,10 @@ if (!function_exists('rrmdir')) {
                 if ($handle = opendir($dir)) {
                     while (false !== ($file = readdir($handle))) {
                         if ($file != "." && $file != "..") {
-                            if (is_dir(_rtrim(_rtrim($dir, '/'), '\\') . '/' . $file)) {
-                                rrmdir(_rtrim(_rtrim($dir, '/'), '\\') . '/' . $file);
+                            if (is_dir(rtrim(rtrim($dir, '/'), '\\') . '/' . $file)) {
+                                rrmdir(rtrim(rtrim($dir, '/'), '\\') . '/' . $file);
                             } else {
-                                unlink(_rtrim(_rtrim($dir, '/'), '\\') . '/' . $file);
+                                unlink(rtrim(rtrim($dir, '/'), '\\') . '/' . $file);
                             }
                         }
                     }
@@ -208,10 +208,10 @@ if (!function_exists('http_build_url')) {
                 if (isset($url['path']) && substr($parts['path'], 0, 1) !== '/') {
                     // Workaround for trailing slashes
                     $url['path'] .= 'a';
-                    $url['path'] = _rtrim(
+                    $url['path'] = rtrim(
                         str_replace(basename($url['path']), '', $url['path']),
                         '/'
-                    ) . '/' . _ltrim($parts['path'], '/');
+                    ) . '/' . ltrim($parts['path'], '/');
                 } else {
                     $url['path'] = $parts['path'];
                 }

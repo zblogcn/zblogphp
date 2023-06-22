@@ -101,7 +101,7 @@ function api_post_post()
 
     //如果直接给分类名称没有给分类ID的话
     if (!isset($_POST['CateID']) && isset($_POST['CateName'])) {
-        $_POST['CateID'] = $zbp->GetCategoryByName(_trim($_POST['CateName']), $postType)->ID;
+        $_POST['CateID'] = $zbp->GetCategoryByName(trim($_POST['CateName']), $postType)->ID;
     }
 
     try {
@@ -219,7 +219,7 @@ function api_post_list()
     $tagId = (int) GetVars('tag_id');
     $authId = (int) GetVars('auth_id');
     $date = GetVars('date');
-    $mng = (int) _trim(GetVars('manage')); //&manage=1
+    $mng = (int) trim(GetVars('manage')); //&manage=1
     $type = (int) GetVars('type');
     $actions = $zbp->GetPostType($type, 'actions');
     $search = (string) GetVars('search');
@@ -266,7 +266,7 @@ function api_post_list()
     if (!empty($search)) {
         ApiCheckAuth(false, 'search');
         $type = 0;
-        $search = _trim(htmlspecialchars($search));
+        $search = trim(htmlspecialchars($search));
         $where[] = array('search', 'log_Content', 'log_Intro', 'log_Title', $search);
     }
 

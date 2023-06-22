@@ -216,7 +216,7 @@ class Database__MySQLi implements Database__Interface
         //$a=explode(';',str_replace('%pre%', $this->dbpre, $s));
         $a = explode(';', $s);
         foreach ($a as $s) {
-            $s = _trim($s);
+            $s = trim($s);
             if ($s != '') {
                 $result = mysqli_query($this->db, $this->sql->Filter($s));
                 $this->LogsError();

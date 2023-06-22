@@ -179,8 +179,8 @@ class UrlRule
                     if (stripos($subObject, '[') !== false) {
                         $i = preg_match_all('/\[.+\]/', $subObject, $m);
                         if ($i > 0) {
-                            $arrayName = _trim(SplitAndGet($subObject, '[', 0));
-                            $a = _trim(str_replace(array('[', ']'), '', current($m[0])));
+                            $arrayName = trim(SplitAndGet($subObject, '[', 0));
+                            $a = trim(str_replace(array('[', ']'), '', current($m[0])));
                             $object = $object->$arrayName;
                             if (isset($object[$a])) {
                                 $object = $object[$a];
@@ -191,8 +191,8 @@ class UrlRule
                     } elseif (stripos($subObject, '(') !== false) {
                         $i = preg_match_all('/\(.+\)/', $subObject, $m);
                         if ($i > 0) {
-                            $functionName = _trim(SplitAndGet($subObject, '(', 0));
-                            $a = _trim(str_replace(array('(', ')'), '', current($m[0])));
+                            $functionName = trim(SplitAndGet($subObject, '(', 0));
+                            $a = trim(str_replace(array('(', ')'), '', current($m[0])));
                             $array = array();
                             if ($a) {
                                 $array = explode(',', $a);
@@ -241,8 +241,8 @@ class UrlRule
         if (substr($url, -2) == '//') {
             $url = substr($url, 0, (strlen($url) - 1));
         }
-        $url = _rtrim($url, '&');
-        $url = _rtrim($url, '?');
+        $url = rtrim($url, '&');
+        $url = rtrim($url, '?');
 
         $this->Url = htmlspecialchars($url);
 

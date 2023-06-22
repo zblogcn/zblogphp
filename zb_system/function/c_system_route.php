@@ -229,7 +229,7 @@ function ViewAuto_Process_Args_get(&$array, $args_get, $route)
 
     if (isset($args_get) && is_array($args_get)) {
         foreach ($get as $key => $value) {
-            $value = _trim($value);
+            $value = trim($value);
             if ($value !== '') {
                 $args_get[] = $value;
             }
@@ -306,7 +306,7 @@ function ViewAuto_Process_Args_Merge(&$route)
         $route['args'] = array();
     }
     foreach ($array as $key => $value) {
-        $value = _trim($value);
+        $value = trim($value);
         $route['args'][] = array('name' => $key, 'value' => $value);
     }
 }
@@ -400,7 +400,7 @@ function ViewAuto_Get_Parameters_And_Match_with_page($route, &$parameters, &$mat
     $match_with_page = array('remove_page' => false);
 
     //如果指定了无需编译的正则式的规则，就强定指定一次且只有false
-    if (isset($route['urlrule_regex']) && _trim($route['urlrule_regex']) != '') {
+    if (isset($route['urlrule_regex']) && trim($route['urlrule_regex']) != '') {
         return true;
     }
 
@@ -432,8 +432,8 @@ function ViewAuto_Get_Parameters_And_Match_with_page($route, &$parameters, &$mat
 function ViewAuto_Get_Compiled_Urlrule($route, $match)
 {
     //如果直接指定了$route['urlrule_regex']，就不调用UrlRule::OutputUrlRegEx，直接preg_match
-    if (isset($route['urlrule_regex']) && _trim($route['urlrule_regex']) != '') {
-        $r = _trim($route['urlrule_regex']);
+    if (isset($route['urlrule_regex']) && trim($route['urlrule_regex']) != '') {
+        $r = trim($route['urlrule_regex']);
     } else {
         //$r = UrlRule::OutputUrlRegEx_V2($zbp->GetPostType(0, 'list_urlrule'), 'list', $match);
         $r = UrlRule::OutputUrlRegEx_Route($route, $match);
@@ -756,7 +756,7 @@ function ViewSearch()
         $disablebot = true;
     }
 
-    $q = _trim(htmlspecialchars($q));
+    $q = trim(htmlspecialchars($q));
     $page = max(1, (int) $page);
 
     $w = array();
@@ -1474,14 +1474,14 @@ function ViewPost($id = null, $alias = null, $isrewrite = false, $object = array
     $w[] = array('=', 'log_Type', $posttype);
 
     if ($id !== null && is_numeric($id)) {
-        $id = _trim($id);
+        $id = trim($id);
         if (function_exists('ctype_digit') && !ctype_digit((string) $id)) {
             $zbp->ShowError(3, __FILE__, __LINE__);
         }
 
         $w[] = array('=', 'log_ID', $id);
     } elseif ($alias !== null) {
-        $alias = _trim($alias);
+        $alias = trim($alias);
         if ($zbp->option['ZC_POST_ALIAS_USE_ID_NOT_TITLE'] == false) {
             $w[] = array('array', array(array('log_Alias', $alias), array('log_Title', $alias)));
         } else {

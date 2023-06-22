@@ -455,7 +455,7 @@ class Template
      */
     protected function parse_option(&$content)
     {
-        $content = preg_replace('#\{\#([^\}]+)\#\}#', '<?php if(defined(_trim(\'\\1\'))){echo \\1;}else{echo $option[\'\\1\'];} ?>', $content);
+        $content = preg_replace('#\{\#([^\}]+)\#\}#', '<?php if(defined(trim(\'\\1\'))){echo \\1;}else{echo $option[\'\\1\'];} ?>', $content);
     }
 
     /**
@@ -624,7 +624,7 @@ class Template
      */
     protected function parse_switch_case_repalce($matches)
     {
-        return '{php}case ' . _rtrim(_trim($matches[1]), ':') . ':{/php}';
+        return '{php}case ' . rtrim(trim($matches[1]), ':') . ':{/php}';
     }
 
     /**
@@ -826,13 +826,13 @@ class Template
         if (stristr($t, 'Template Name:')) {
             $t = stristr($t, 'Template Name:');
             $t = str_ireplace('Template Name:', '', $t);
-            $name = _trim(strtok($t, '*'));
+            $name = trim(strtok($t, '*'));
         }
         $t = $content;
         if (stristr($t, 'Template Type:')) {
             $t = stristr($t, 'Template Type:');
             $t = str_ireplace('Template Type:', '', $t);
-            $type = _trim(strtok($t, '*'));
+            $type = trim(strtok($t, '*'));
         }
 
         if (is_readable($f = $GLOBALS['blogpath'] . 'zb_users/theme/' . $this->theme . '/template.json')) {
@@ -851,8 +851,8 @@ class Template
                 }
             }
         }
-        $name = _trim($name);
-        $type = _trim($type);
+        $name = trim($name);
+        $type = trim($type);
         $type = str_replace(array(',', '，', ';', '；', '、'), '|', $type);
         if ($type != null) {
             $this->isuse_nameandtype = true;

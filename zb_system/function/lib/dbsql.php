@@ -99,13 +99,13 @@ class DbSql
     {
         $sql = $this->get();
         $sql->create($table)->data($datainfo);
-        if (_trim($engine) != '') {
+        if (trim($engine) != '') {
             $sql->option(array('engine' => $engine));
         }
-        if (_trim($charset) != '') {
+        if (trim($charset) != '') {
             $sql->option(array('charset' => $charset));
         }
-        if (_trim($collate) != '') {
+        if (trim($collate) != '') {
             $sql->option(array('collate' => $collate));
         }
 
@@ -163,7 +163,7 @@ class DbSql
 
         if (!is_array($select)) {
             if (!empty($select)) {
-                $select = array(_trim($select));
+                $select = array(trim($select));
             }
         }
         $sql->column($select);
@@ -343,7 +343,7 @@ class DbSql
     //command = 'begin','commit','rollback'
     public function Transaction($command)
     {
-        $command = strtoupper(_trim($command));
+        $command = strtoupper(trim($command));
         if ($command == 'BEGIN' || $command == 'COMMIT' || $command == 'ROLLBACK') {
             return $command;
         }

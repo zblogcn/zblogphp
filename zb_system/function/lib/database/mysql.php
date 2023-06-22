@@ -222,7 +222,7 @@ class Database__MySQL implements Database__Interface
         //$a=explode(';',str_replace('%pre%', $this->dbpre,$s));
         $a = explode(';', $s);
         foreach ($a as $s) {
-            $s = _trim($s);
+            $s = trim($s);
             if ($s != '') {
                 mysql_query($this->sql->Filter($s), $this->db);
                 $this->LogsError();

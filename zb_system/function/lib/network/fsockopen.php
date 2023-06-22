@@ -532,7 +532,7 @@ class Network__fsockopen implements Network__Interface
             }
 
             $pos = ($newlineAt + 1);
-            $chunkLen = hexdec(_rtrim($chunkLenHex, "\r\n"));
+            $chunkLen = hexdec(rtrim($chunkLenHex, "\r\n"));
             $dechunk .= substr($chunk, $pos, $chunkLen);
             $pos = (strpos($chunk, "\n", ($pos + $chunkLen)) + 1);
         }
@@ -550,7 +550,7 @@ class Network__fsockopen implements Network__Interface
     private function is_hex($hex)
     {
         // regex is for weenies
-        $hex = strtolower(_trim(_ltrim($hex, "0")));
+        $hex = strtolower(trim(ltrim($hex, "0")));
         if (empty($hex)) {
             $hex = 0;
         }

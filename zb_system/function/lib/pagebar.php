@@ -180,7 +180,7 @@ class PageBar
             $end = $pageAll;
         }
 
-        $j = _trim((string) $zbp->langs->msg->numeral_button);
+        $j = trim((string) $zbp->langs->msg->numeral_button);
         $j = ($j == '') ? '%num%' : $j;
         for ($i = $start; $i < $end; $i++) {
             $this->UrlRule->Rules['{%page%}'] = $i;

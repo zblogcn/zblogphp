@@ -341,7 +341,7 @@ function GetList($count = 10, $cate = null, $auth = null, $date = null, $tags = 
     }
 
     if (is_string($search)) {
-        $search = _trim($search);
+        $search = trim($search);
         if ($search !== '') {
             $w[] = array('search', 'log_Content', 'log_Intro', 'log_Title', $search);
         } else {
@@ -475,11 +475,11 @@ function Include_AddonAdminFont()
 {
     global $zbp;
     $f = $s = '';
-    if (isset($zbp->lang['font_family']) && _trim($zbp->lang['font_family'])) {
+    if (isset($zbp->lang['font_family']) && trim($zbp->lang['font_family'])) {
         $f = 'font-family:' . $zbp->lang['font_family'] . ';';
     }
 
-    if (isset($zbp->lang['font_size']) && _trim($zbp->lang['font_size'])) {
+    if (isset($zbp->lang['font_size']) && trim($zbp->lang['font_size'])) {
         $s = 'font-size:' . $zbp->lang['font_size'] . ';';
     }
 
@@ -713,7 +713,7 @@ function FilterComment(&$comment)
     $comment->Content = FormatString($comment->Content, '[nohtml]');
 
     $comment->Content = SubStrUTF8_Start($comment->Content, 0, 1000);
-    $comment->Content = _trim($comment->Content);
+    $comment->Content = trim($comment->Content);
     if (strlen($comment->Content) == 0) {
         $zbp->ShowError(46, __FILE__, __LINE__);
     }
@@ -821,13 +821,13 @@ function FilterCategory(&$category)
 {
     global $zbp;
     $category->Name = strip_tags($category->Name);
-    $category->Name = _trim($category->Name);
+    $category->Name = trim($category->Name);
     $category->Alias = FormatString($category->Alias, '[normalname]');
     //$category->Alias=str_replace('/','',$category->Alias);
     $category->Alias = str_replace('.', '', $category->Alias);
     $category->Alias = str_replace(' ', '', $category->Alias);
     $category->Alias = str_replace('_', '', $category->Alias);
-    $category->Alias = _trim($category->Alias);
+    $category->Alias = trim($category->Alias);
 }
 
 /**
@@ -839,12 +839,12 @@ function FilterTag(&$tag)
 {
     global $zbp;
     $tag->Name = strip_tags($tag->Name);
-    $tag->Name = _trim($tag->Name);
+    $tag->Name = trim($tag->Name);
     $tag->Alias = FormatString($tag->Alias, '[normalname]');
     $tag->Alias = str_replace('.', '', $tag->Alias);
     $tag->Alias = str_replace(' ', '', $tag->Alias);
     $tag->Alias = str_replace('_', '', $tag->Alias);
-    $tag->Alias = _trim($tag->Alias);
+    $tag->Alias = trim($tag->Alias);
 }
 
 //###############################################################################################################

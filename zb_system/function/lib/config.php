@@ -296,8 +296,8 @@ class Config implements Iterator
 
     public function LoadInfoByAssocSingleWithPre($array)
     {
-        $key = _trim($array[$this->datainfo['Key'][0]]);
-        $value = _trim($array[$this->datainfo['Value'][0]]);
+        $key = trim($array[$this->datainfo['Key'][0]]);
+        $value = trim($array[$this->datainfo['Value'][0]]);
         $this->data_pre_key[] = $key;
         $this->data_pre_value[] = $value;
 
@@ -336,8 +336,8 @@ class Config implements Iterator
 
     public function LoadInfoByAssocSingle($array)
     {
-        $key = _trim($array[$this->datainfo['Key'][0]]);
-        $value = _trim($array[$this->datainfo['Value'][0]]);
+        $key = trim($array[$this->datainfo['Key'][0]]);
+        $value = trim($array[$this->datainfo['Value'][0]]);
 
         $value = $this->UnserializeSingle($value);
         $this->kvdata[$key] = $value;

@@ -171,7 +171,7 @@ class Database__PDO_PostgreSQL implements Database__Interface
         //$a=explode(';',str_replace('%pre%', $this->dbpre, $s));
         $a = explode(';', $s);
         foreach ($a as $s) {
-            $s = _trim($s);
+            $s = trim($s);
             if ($s != '') {
                 $result = $this->db->exec($this->sql->Filter($s));
                 $this->LogsError();
@@ -191,7 +191,7 @@ class Database__PDO_PostgreSQL implements Database__Interface
         //$query=str_replace('%pre%', $this->dbpre, $query);
         // 遍历出来
         $results = $this->db->query($this->sql->Filter($query));
-        $e = _trim($this->db->errorCode(), '0');
+        $e = trim($this->db->errorCode(), '0');
         if ($e != '') {
             trigger_error(implode(' ', $this->db->errorInfo()), E_USER_NOTICE);
         }
@@ -306,7 +306,7 @@ class Database__PDO_PostgreSQL implements Database__Interface
 
     protected function LogsError()
     {
-        $e = _trim($this->db->errorCode(), '0');
+        $e = trim($this->db->errorCode(), '0');
         if ($e != '') {
             $this->error[] = array($e, $this->db->errorInfo());
         }

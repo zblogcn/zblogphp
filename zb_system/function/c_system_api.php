@@ -656,7 +656,7 @@ function ApiGetPagebarInfo($option = null)
  */
 function ApiGetAndFilterRelationQuery($info)
 {
-    $relations_req = _trim(GetVars('with_relations'));
+    $relations_req = trim(GetVars('with_relations'));
 
     if (empty($relations_req)) {
         return array();
@@ -666,7 +666,7 @@ function ApiGetAndFilterRelationQuery($info)
     $ret_relations = array();
 
     foreach ($relations as $relation) {
-        $relation = _trim($relation);
+        $relation = trim($relation);
         if (array_key_exists($relation, $info)) {
             $ret_relations[$relation] = $info[$relation];
         }

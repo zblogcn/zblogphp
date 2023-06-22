@@ -358,7 +358,7 @@ class ZbpEncrypt
                 }
             }
             $dedata = $data;
-            //$dedata = _rtrim($data, "\0");
+            //$dedata = rtrim($data, "\0");
         }
         if ($with_hash == false) {
             return $dedata;
@@ -442,7 +442,7 @@ class ZbpEncrypt
      */
     private static function zbp_encrypt($data, $password, $additional = null, $type = 'aes256cbc')
     {
-        $type = _trim(strtolower($type));
+        $type = trim(strtolower($type));
         $type = str_replace('-', '', $type);
         if ($type == 'aes256gcm') {
             if (PHP_VERSION_ID < 70100 && !function_exists('sodium_crypto_aead_aes256gcm_encrypt')) {
@@ -469,7 +469,7 @@ class ZbpEncrypt
      */
     private static function zbp_decrypt($data, $password, $additional = null, $type = 'aes256cbc')
     {
-        $type = _trim(strtolower($type));
+        $type = trim(strtolower($type));
         if ($type == 'aes256gcm') {
             if (PHP_VERSION_ID < 70100 && !function_exists('sodium_crypto_aead_aes256gcm_encrypt')) {
                 return false;

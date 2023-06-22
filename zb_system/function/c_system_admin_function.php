@@ -454,7 +454,7 @@ function OutputOptionItemsOfTemplate($default, $refuse_file_filter = array(), $a
             $c = false;
             foreach ($accept_type as $k1 => $v1) {
                 foreach ($typeArray as $k2 => $v2) {
-                    if (strtolower(_trim($v1)) == strtolower(_trim($v2))) {
+                    if (strtolower(trim($v1)) == strtolower(trim($v2))) {
                         $c = true;
                     }
                 }

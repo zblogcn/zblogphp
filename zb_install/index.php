@@ -944,7 +944,7 @@ function Setup4()
                 $zbp->option['ZC_MYSQL_SERVER'] = GetVars('dbmysql_server', 'POST');
                 if (strpos($zbp->option['ZC_MYSQL_SERVER'], ':') !== false) {
                     $servers = explode(':', $zbp->option['ZC_MYSQL_SERVER']);
-                    $zbp->option['ZC_MYSQL_SERVER'] = _trim($servers[0]);
+                    $zbp->option['ZC_MYSQL_SERVER'] = trim($servers[0]);
                     $zbp->option['ZC_MYSQL_PORT'] = (int) $servers[1];
                     if ($zbp->option['ZC_MYSQL_PORT'] == 0) {
                         $zbp->option['ZC_MYSQL_PORT'] = 3306;
@@ -953,10 +953,10 @@ function Setup4()
                     unset($servers);
                 }
                 //$zbp->option['ZC_MYSQL_CHARSET'] = GetVars('dbcharset', 'POST');
-                $zbp->option['ZC_MYSQL_USERNAME'] = _trim(GetVars('dbmysql_username', 'POST'));
-                $zbp->option['ZC_MYSQL_PASSWORD'] = _trim(GetVars('dbmysql_password', 'POST'));
-                $zbp->option['ZC_MYSQL_NAME'] = _trim(str_replace(array('\'', '"'), array('', ''), GetVars('dbmysql_name', 'POST')));
-                $zbp->option['ZC_MYSQL_PRE'] = _trim(str_replace(array('\'', '"'), array('', ''), GetVars('dbmysql_pre', 'POST')));
+                $zbp->option['ZC_MYSQL_USERNAME'] = trim(GetVars('dbmysql_username', 'POST'));
+                $zbp->option['ZC_MYSQL_PASSWORD'] = trim(GetVars('dbmysql_password', 'POST'));
+                $zbp->option['ZC_MYSQL_NAME'] = trim(str_replace(array('\'', '"'), array('', ''), GetVars('dbmysql_name', 'POST')));
+                $zbp->option['ZC_MYSQL_PRE'] = trim(str_replace(array('\'', '"'), array('', ''), GetVars('dbmysql_pre', 'POST')));
                 if ($zbp->option['ZC_MYSQL_PRE'] == '') {
                     $zbp->option['ZC_MYSQL_PRE'] = 'zbp_';
                 }
@@ -977,8 +977,8 @@ function Setup4()
             case 'sqlite':
                 $cts = file_get_contents($GLOBALS['blogpath'] . 'zb_system/defend/createtable/sqlite.sql');
                 $cts = str_replace(' autoincrement', '', $cts);
-                $zbp->option['ZC_SQLITE_NAME'] = _trim(GetVars('dbsqlite_name', 'POST'));
-                $zbp->option['ZC_SQLITE_PRE'] = _trim(GetVars('dbsqlite_pre', 'POST'));
+                $zbp->option['ZC_SQLITE_NAME'] = trim(GetVars('dbsqlite_name', 'POST'));
+                $zbp->option['ZC_SQLITE_PRE'] = trim(GetVars('dbsqlite_pre', 'POST'));
                 if ($zbp->option['ZC_SQLITE_PRE'] == '') {
                     $zbp->option['ZC_SQLITE_PRE'] = 'zbp_';
                 }
@@ -986,8 +986,8 @@ function Setup4()
             case 'sqlite3':
             case 'pdo_sqlite':
                 $cts = file_get_contents($GLOBALS['blogpath'] . 'zb_system/defend/createtable/sqlite.sql');
-                $zbp->option['ZC_SQLITE_NAME'] = _trim(GetVars('dbsqlite_name', 'POST'));
-                $zbp->option['ZC_SQLITE_PRE'] = _trim(GetVars('dbsqlite_pre', 'POST'));
+                $zbp->option['ZC_SQLITE_NAME'] = trim(GetVars('dbsqlite_name', 'POST'));
+                $zbp->option['ZC_SQLITE_PRE'] = trim(GetVars('dbsqlite_pre', 'POST'));
                 if ($zbp->option['ZC_SQLITE_PRE'] == '') {
                     $zbp->option['ZC_SQLITE_PRE'] = 'zbp_';
                 }
@@ -998,7 +998,7 @@ function Setup4()
                 $zbp->option['ZC_PGSQL_SERVER'] = GetVars('dbpgsql_server', 'POST');
                 if (strpos($zbp->option['ZC_PGSQL_SERVER'], ':') !== false) {
                     $servers = explode(':', $zbp->option['ZC_PGSQL_SERVER']);
-                    $zbp->option['ZC_PGSQL_SERVER'] = _trim($servers[0]);
+                    $zbp->option['ZC_PGSQL_SERVER'] = trim($servers[0]);
                     $zbp->option['ZC_PGSQL_PORT'] = (int) $servers[1];
                     if ($zbp->option['ZC_PGSQL_PORT'] == 0) {
                         $zbp->option['ZC_PGSQL_PORT'] = 5432;
@@ -1007,10 +1007,10 @@ function Setup4()
                     unset($servers);
                 }
                 $zbp->option['ZC_PGSQL_CHARSET'] = 'utf8';
-                $zbp->option['ZC_PGSQL_USERNAME'] = _trim(GetVars('dbpgsql_username', 'POST'));
-                $zbp->option['ZC_PGSQL_PASSWORD'] = _trim(GetVars('dbpgsql_password', 'POST'));
-                $zbp->option['ZC_PGSQL_NAME'] = strtolower(_trim(str_replace(array('\'', '"'), array('', ''), GetVars('dbpgsql_name', 'POST'))));
-                $zbp->option['ZC_PGSQL_PRE'] = _trim(str_replace(array('\'', '"'), array('', ''), GetVars('dbpgsql_pre', 'POST')));
+                $zbp->option['ZC_PGSQL_USERNAME'] = trim(GetVars('dbpgsql_username', 'POST'));
+                $zbp->option['ZC_PGSQL_PASSWORD'] = trim(GetVars('dbpgsql_password', 'POST'));
+                $zbp->option['ZC_PGSQL_NAME'] = strtolower(trim(str_replace(array('\'', '"'), array('', ''), GetVars('dbpgsql_name', 'POST'))));
+                $zbp->option['ZC_PGSQL_PRE'] = trim(str_replace(array('\'', '"'), array('', ''), GetVars('dbpgsql_pre', 'POST')));
                 if ($zbp->option['ZC_PGSQL_PRE'] == '') {
                     $zbp->option['ZC_PGSQL_PRE'] == 'zbp_';
                 }
