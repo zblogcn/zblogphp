@@ -433,6 +433,8 @@ function GetList($count = 10, $cate = null, $auth = null, $date = null, $tags = 
 function Include_ShowError404($errorCode, $errorDescription = null, $file = null, $line = null)
 {
     global $zbp;
+    $signal = &$GLOBALS['hooks']['Filter_Plugin_Debug_Handler_ZEE']['Include_ShowError404'];
+
     if (is_a($errorCode, 'ZbpErrorException')) {
         if ($errorCode->getHttpCode() == 404) {
             Http404();
@@ -440,14 +442,16 @@ function Include_ShowError404($errorCode, $errorDescription = null, $file = null
             $file = $errorCode->getFile();
             $line = $errorCode->getLine();
             $errorCode = $errorCode->getCode();
-            $GLOBALS['hooks']['Filter_Plugin_Debug_Handler_ZEE']['Include_ShowError404'] = PLUGIN_EXITSIGNAL_RETURN;
+            $signal = PLUGIN_EXITSIGNAL_RETURN;
         } elseif (in_array("Status: 404 Not Found", headers_list())) {
-            $GLOBALS['hooks']['Filter_Plugin_Debug_Handler_ZEE']['Include_ShowError404'] = PLUGIN_EXITSIGNAL_RETURN;
+            $signal = PLUGIN_EXITSIGNAL_RETURN;
         } elseif (function_exists('http_response_code') && http_response_code() == 404){
-            $GLOBALS['hooks']['Filter_Plugin_Debug_Handler_ZEE']['Include_ShowError404'] = PLUGIN_EXITSIGNAL_RETURN;
+            $signal = PLUGIN_EXITSIGNAL_RETURN;
         } else {
             return;
         }
+    } elseif (in_array("Status: 404 Not Found", headers_list())) {
+        $signal = PLUGIN_EXITSIGNAL_RETURN;
     } else {
         return;
     }
