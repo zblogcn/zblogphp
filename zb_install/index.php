@@ -307,7 +307,7 @@ Z-BlogPHP官方网址：https://www.zblogcn.com/
 
     Z-BlogPHP免责申明
 
-(一)、ZBLOGCN.COM发布免费、开源的建站程序Z-Blog和Z-BlogPHP（以下简称“本建站程序”），不提供网站运行相关的主机空间服务、建站服务、内容服务、维护服务。
+(一)、ZBLOGCN.COM发布免费、开源的建站程序Z-Blog和Z-BlogPHP（以下简称“本建站程序”），不提供网站运行相关的主机空间、建站、内容、维护等服务。
 
 (二)、用户可自由选择使用或不用本建站程序，ZBLOGCN.COM与用户及使用本建站程序所建立的网站无任何关联，ZBLOGCN.COM对用户及其网站不承担任何责任。
 
