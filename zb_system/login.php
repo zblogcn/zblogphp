@@ -71,6 +71,8 @@ $("#btnPost").click(function(){
     //$("#chkRemember").remove();
 
     $("form").attr("action","cmd.php?act=verify");
+    $("#edtUserName").val("");
+    $("#edtPassWord").val("");
     $("#username").val(strUserName);
     $("#password").val(MD5(strPassWord));
     $("#savedate").val(strSaveDate);
