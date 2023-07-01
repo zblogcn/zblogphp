@@ -48,7 +48,7 @@ function run2(e, d, h)
             var s = '<img src="../../../../../zb_system/image/admin/page_edit.png" alt="编辑" title="编辑" width="16" />';
             if(zbp.options.blogversion>170000)
                 s = '<i class="icon-check-circle-fill" style="color:green;" title="提交" ></i>';
-            $("#configt").append("<tr><td><input type='hidden' value='" + (f) + "'/><input type='text' id='txt" + (f) + "'></td><td><textarea id='ta" + (f) + "' style='width:100%'/></td><td><a href='javascript:;' onclick='run2(\"edit\",\"" + f + '",$(this).parents("#content").children("#name").html())\'>'+s+'</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp</td>');
+            $("#configt").append("<tr><td><input type='hidden' value='" + (f) + "'/><input type='text' id='txt" + (f) + "'></td><td><textarea id='ta" + (f) + "' style='width:100%'></textarea></td><td><a href='javascript:;' onclick='run2(\"edit\",\"" + f + '",$(this).parents("#content").children("#name").html())\'>'+s+'</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp</td></tr>');
             n = true;
             break;
         case "edit":
