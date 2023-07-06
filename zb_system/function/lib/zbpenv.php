@@ -14,9 +14,12 @@ class ZbpEnv
         if (self::$isinitialized == false) {
             self::initialize();
         }
-        $item = strtoupper($item);
+        //$item = strtoupper($item);
         if (array_key_exists($item, $_ENV)) {
             return $_ENV[$item];
+        }
+        if (getenv($item) !== false) {
+            return getenv($item);
         }
         return $default;
     }
