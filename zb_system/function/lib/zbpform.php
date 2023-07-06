@@ -5,7 +5,7 @@ if (!defined('ZBP_PATH')) {
 }
 
 /**
- * form creat.
+ * Form creator.
  *
  * @author 未寒 <im@imzhou.com>
  *

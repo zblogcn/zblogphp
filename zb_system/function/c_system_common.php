@@ -2573,6 +2573,18 @@ function GetDbName()
 }
 
 /**
+ * 环境变量获取辅助函数.
+ *
+ * @param string $item
+ * @param string|null $default
+ * @return void
+ */
+function Env($item, $default = null)
+{
+    return ZbpEnv::Get($item, $default);
+}
+
+/**
  * 安全检测判断类函数**************************************************************.
  */
 
