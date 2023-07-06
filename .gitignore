@@ -93,3 +93,4 @@ test4.php
 .history
 zbp*.zip
 nginx.htaccess
+.env
