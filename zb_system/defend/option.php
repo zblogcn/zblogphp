@@ -113,6 +113,10 @@ return array(
     // '后台管理
     'ZC_MANAGE_COUNT' => 50,
     'ZC_MANAGE_ORDER' => 'log_PostTime',
+    
+    // 登录相关
+    'ZC_LOGIN_CSRFCHECK_ENABLE' => true,
+    'ZC_LOGIN_VERIFY_ENABLE'    => true,
 
     // '表情相关
     'ZC_EMOTICONS_FILENAME' => 'face',

@@ -282,6 +282,8 @@ return array(
         'change_default_password'           => 'Please change the default password immediately.',
         'delete_member_with_alldata'        => 'Delete user and delete user\'s data',
         'api_display_count'                 => 'API Displays the Number of Posts',
+        'enable_login_csrfcheck'            => 'Enable Login CSRF Token Verification',
+        'enable_login_verify'               => 'Enable Login Captcha',
         ''                                  => '',
     ),
 

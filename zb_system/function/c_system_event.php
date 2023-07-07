@@ -23,7 +23,7 @@ function VerifyLogin($throwException = true)
 {
     global $zbp;
 
-    if ($zbp->CheckValidCode(GetVars('verify'), 'login') == false) {
+    if ($zbp->option['ZC_LOGIN_VERIFY_ENABLE'] && $zbp->CheckValidCode(GetVars('verify'), 'login') == false) {
         $zbp->ShowError(38, __FILE__, __LINE__);
     }
 
@@ -81,7 +81,7 @@ function SetLoginCookie($user, $cookieTime)
     $secure = HTTP_SCHEME == 'https://';
     setcookie('username_' . hash("crc32b", $zbp->guid), $user->Name, $cookieTime, $zbp->cookiespath, $zbp->cookie_domain, $secure, $zbp->cookie_httponly);
     setcookie('token_' . hash("crc32b", $zbp->guid), $token, $cookieTime, $zbp->cookiespath, $zbp->cookie_domain, $secure, $zbp->cookie_httponly);
-    setcookie('addinfo' . str_replace('/', '', $zbp->cookiespath), json_encode($addinfo), $cookieTime, $zbp->cookiespath,  $zbp->cookie_domain, $secure, false);
+    setcookie('addinfo' . str_replace('/', '', $zbp->cookiespath), json_encode($addinfo), $cookieTime, $zbp->cookiespath, $zbp->cookie_domain, $secure, false);
 
     return true;
 }
@@ -135,7 +135,8 @@ function Redirect_cmd_to_search($post_type = 0)
     Redirect_cmd_end($url);
 }
 
-function Redirect_to_inside($url) {
+function Redirect_to_inside($url)
+{
     Redirect_cmd_from_args_with_loggedin($url);
 }
 
@@ -1850,11 +1851,11 @@ function PostModule()
     if (!isset($_POST['Type'])) {
         $_POST['Type'] = 'div';
     }
-    if (isset($_POST['Content'])) {
-        if ($_POST['Type'] != 'div') {
-            //div不再过滤\r和\n//$_POST['Content'] = str_replace(array("\r", "\n"), array('', ''), $_POST['Content']);
-        }
-    }
+    // if (isset($_POST['Content'])) {
+    //     if ($_POST['Type'] != 'div') {
+    //         // div不再过滤\r和\n//$_POST['Content'] = str_replace(array("\r", "\n"), array('', ''), $_POST['Content']);
+    //     }
+    // }
 
     /* @var Module $mod */
     $mod = $zbp->GetModuleByID(GetVars('ID', 'POST'));

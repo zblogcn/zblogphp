@@ -285,6 +285,8 @@ return array(
         'change_default_password'           => '請立即更改默認密碼！',
         'delete_member_with_alldata'        => '刪除用戶同時刪除其文章和評論',
         'api_display_count'                 => 'API頁顯示文章的數量',
+        'enable_login_csrfcheck'            => '啟用登入頁CSRF Token校驗',
+        'enable_login_verify'               => '啟用登入頁驗證碼功能',
         ''                                  => '',
     ),
 

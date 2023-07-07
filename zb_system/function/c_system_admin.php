@@ -1685,6 +1685,8 @@ function checkDomain(){
                     echo '<tr><td><p><b>' . @$zbp->langs->msg->enable_post_batch_delete . '</b></p></td><td><p><input id="ZC_POST_BATCH_DELETE" name="ZC_POST_BATCH_DELETE" type="text" value="' . $zbp->option['ZC_POST_BATCH_DELETE'] . '" class="checkbox"/></p></td></tr>';
                     echo '<tr><td><p><b>' . @$zbp->langs->msg->delete_member_with_alldata . '</b></p></td><td><p><input id="ZC_DELMEMBER_WITH_ALLDATA" name="ZC_DELMEMBER_WITH_ALLDATA" type="text" value="' . $zbp->option['ZC_DELMEMBER_WITH_ALLDATA'] . '" class="checkbox"/></p></td></tr>';
                     echo '<tr><td><p><b>' . @$zbp->langs->msg->category_legacy_display . '</b></p></td><td><p><input id="ZC_CATEGORY_MANAGE_LEGACY_DISPLAY" name="ZC_CATEGORY_MANAGE_LEGACY_DISPLAY" type="text" value="' . $zbp->option['ZC_CATEGORY_MANAGE_LEGACY_DISPLAY'] . '" class="checkbox"/></p></td></tr>';
+                    echo '<tr><td><p><b>' . @$zbp->langs->msg->enable_login_csrfcheck . '</b></p></td><td><p><input id="ZC_LOGIN_CSRFCHECK_ENABLE" name="ZC_LOGIN_CSRFCHECK_ENABLE" type="text" value="' . $zbp->option['ZC_LOGIN_CSRFCHECK_ENABLE'] . '" class="checkbox"/></p></td></tr>';
+                    echo '<tr><td><p><b>' . @$zbp->langs->msg->enable_login_verify . '</b></p></td><td><p><input id="ZC_LOGIN_VERIFY_ENABLE" name="ZC_LOGIN_VERIFY_ENABLE" type="text" value="' . $zbp->option['ZC_LOGIN_VERIFY_ENABLE'] . '" class="checkbox"/></p></td></tr>';
                     echo '</table>';
                     echo '</div>';
 
