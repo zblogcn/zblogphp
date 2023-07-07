@@ -101,7 +101,9 @@ class ValidateCode
 
     protected $height = 30; //高度
 
-    protected $font; //字体
+    protected $font = 'zb_system/defend/arial.ttf'; //字体
+
+    protected $fullfont;//字体全路径
 
     protected $fontsize = 15; //字体大小
 
@@ -140,18 +142,21 @@ class ValidateCode
     public function __construct()
     {
         global $zbp;
-        $this->font = $zbp->path . (isset($zbp->option['ZC_VERIFYCODE_FONT']) ? $zbp->option['ZC_VERIFYCODE_FONT'] : 'zb_system/defend/arial.ttf');
-        $this->charset = $zbp->option['ZC_VERIFYCODE_STRING'];
-        if ($this->charset == null) {
-            $this->charset = 'ABCDEFGHKMNPRSTUVWXYZ123456789';
+        if (isset($zbp->option['ZC_VERIFYCODE_FONT']) && !empty($zbp->option['ZC_VERIFYCODE_FONT'])) {
+            $this->font = $zbp->option['ZC_VERIFYCODE_FONT'];
         }
-        $this->width = $zbp->option['ZC_VERIFYCODE_WIDTH'];
-        if ($this->width == 0) {
-            $this->width = 90;
+        $this->fullfont = $zbp->path . $this->font;
+        $zc_charset = $zbp->option['ZC_VERIFYCODE_STRING'];
+        if (!empty($zc_charset)) {
+            $this->charset = $zc_charset;
         }
-        $this->height = $zbp->option['ZC_VERIFYCODE_HEIGHT'];
-        if ($this->height == 0) {
-            $this->height = 30;
+        $zc_width = (int) $zbp->option['ZC_VERIFYCODE_WIDTH'];
+        if ($zc_width > 0) {
+            $this->width = $zc_width;
+        }
+        $zc_height = (int) $zbp->option['ZC_VERIFYCODE_HEIGHT'];
+        if ($zc_height > 0) {
+            $this->height = $zc_height;
         }
     }
 
@@ -288,7 +293,7 @@ class ValidateCode
      */
     protected function drawLine($image, $width, $height, $tcol = null)
     {
-        return;
+        //return;
         if ($tcol === null) {
             $tcol = imagecolorallocate($image, $this->rand(100, 255), $this->rand(100, 255), $this->rand(100, 255));
         }
@@ -304,7 +309,7 @@ class ValidateCode
             $Xb = $this->rand(0, $width);
             $Yb = $this->rand(($height / 2), $height);
         }
-        imagesetthickness($image, $this->rand(1, 3));
+        imagesetthickness($image, $this->rand(1, 2));
         imageline($image, $Xa, $Ya, $Xb, $Yb, $tcol);
     }
 
@@ -423,7 +428,7 @@ class ValidateCode
         }
 
         // Write CAPTCHA text
-        $color = $this->writePhrase($image, $this->phrase, $this->font, $width, $height);
+        $color = $this->writePhrase($image, $this->phrase, $this->fullfont, $width, $height);
 
         // Apply effects
         if (!$this->ignoreAllEffects) {
