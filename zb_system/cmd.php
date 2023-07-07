@@ -46,7 +46,7 @@ switch ($zbp->action) {
         Redirect_cmd_end('admin/index.php?act=admin');
         break;
     case 'verify':
-        // 考虑兼容原因，此处不加CSRF验证。logout加的原因是主题的退出无大碍。
+        CheckIsRefererValid();
         if (VerifyLogin()) {
             Redirect_cmd_from_args_with_loggedin(GetVars('redirect', 'COOKIE'));
             Redirect_cmd_end('admin/index.php?act=admin');

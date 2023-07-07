@@ -22,6 +22,11 @@ if (!defined('ZBP_PATH')) {
 function VerifyLogin($throwException = true)
 {
     global $zbp;
+
+    if ($zbp->CheckValidCode(GetVars('verify'), 'login') == false) {
+        $zbp->ShowError(38, __FILE__, __LINE__);
+    }
+
     /* @var Member $m */
     $m = null;
     if ($zbp->Verify_MD5(trim(GetVars('username', 'POST')), trim(GetVars('password', 'POST')), $m)) {
