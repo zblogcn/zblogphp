@@ -2579,7 +2579,7 @@ function GetDbName()
  * @param string|null $default
  * @return void
  */
-function Env($item, $default = null)
+function ZbpEnv($item, $default = null)
 {
     return ZbpEnv::Get($item, $default);
 }

@@ -7,7 +7,7 @@ if (!defined('ZBP_PATH')) {
 /**
  * Z-BlogPHP 环境变量读取类.
  * 
- * 注：使用环境变量默认为
+ * 注：请务必禁止环境变量存放文件 .env 的访问.
  */
 class ZbpEnv
 {
