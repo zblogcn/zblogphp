@@ -42,7 +42,7 @@ HookFilterPlugin('Filter_Plugin_Login_Header');
       <dt></dt>
       <dd class="username"><label for="edtUserName"><?php echo $lang['msg']['username']; ?></label><input type="text" id="edtUserName" name="edtUserName" size="20" value="<?php echo GetVars('username', 'COOKIE'); ?>" tabindex="1" /></dd>
       <dd class="password"><label for="edtPassWord"><?php echo $lang['msg']['password']; ?></label><input type="password" id="edtPassWord" name="edtPassWord" size="20" tabindex="2" /></dd>
-      <?php if ($zbp->option['ZC_LOGIN_VERIFY_ENABLE']): ?>
+      <?php if ($zbp->option['ZC_LOGIN_VERIFY_ENABLE']) : ?>
       <dd class="validcode"><label for="edtValidcode"><?php echo $lang['msg']['validcode']; ?></label><input type="text" id="edtValidcode" name="verify" size="20" tabindex="2" /></dd>
       <img style="width:90px;height:30px;cursor:pointer;" src="<?php echo $zbp->host; ?>zb_system/script/c_validcode.php?id=login" onClick="javascript:this.src='<?php echo $zbp->host; ?>zb_system/script/c_validcode.php?id=login&tm='+Math.random();"/>
       <?php endif; ?>
