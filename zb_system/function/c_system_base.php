@@ -167,14 +167,13 @@ $GLOBALS['activeapps'] = &$GLOBALS['activedapps'];
  * 加载设置
  */
 $GLOBALS['option'] = include ZBP_PATH . 'zb_system/defend/option.php';
-$op_users = null;
-if (!ZBP_HOOKERROR && isset($_ENV['ZBP_USER_OPTION']) && is_readable($file_base = $_ENV['ZBP_USER_OPTION'])) {
+$op_users = array();
+if (!ZBP_HOOKERROR && is_readable($file_base = GetVarsFromEnv('ZBP_USER_OPTION'))) {
     $op_users = include $file_base;
-    $GLOBALS['option'] = array_merge($GLOBALS['option'], $op_users);
 } elseif (is_readable($file_base = $GLOBALS['usersdir'] . 'c_option.php')) {
     $op_users = include $file_base;
-    $GLOBALS['option'] = array_merge($GLOBALS['option'], $op_users);
 }
+$GLOBALS['option'] = array_merge($GLOBALS['option'], $op_users);
 
 $GLOBALS['blogtitle'] = $GLOBALS['option']['ZC_BLOG_SUBNAME']; // 不是漏写！
 $GLOBALS['blogname'] = &$GLOBALS['option']['ZC_BLOG_NAME'];
@@ -242,7 +241,7 @@ if (ZBP_SAFEMODE === false) {
         }
         $aps = array_unique($aps);
     } else {
-        $aps = $aps2;
+        $aps = &$aps2;
     }
 
     foreach ($aps as $ap) {
