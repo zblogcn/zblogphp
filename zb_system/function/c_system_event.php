@@ -19,11 +19,11 @@ if (!defined('ZBP_PATH')) {
  *
  * @return bool
  */
-function VerifyLogin($throwException = true)
+function VerifyLogin($throwException = true, $ignoreValidcode = false)
 {
     global $zbp;
 
-    if ($zbp->option['ZC_LOGIN_VERIFY_ENABLE'] && $zbp->CheckValidCode(GetVars('verify'), 'login') == false) {
+    if ($zbp->option['ZC_LOGIN_VERIFY_ENABLE'] && $zbp->CheckValidCode(GetVars('verify'), 'login') == false && $ignoreValidcode == false) {
         $zbp->ShowError(38, __FILE__, __LINE__);
     }
 
