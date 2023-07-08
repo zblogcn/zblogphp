@@ -516,7 +516,7 @@ return array(
         '63' => 'Disable browse draft post.',
         '64' => 'Activate failed, the application does not apply to Z-BlogPHP.',
         '65' => 'Windows Phone users upgrade to Windows Phone 8.1 before uploading files.',
-        '66' => 'Username and password cannot be empty.',
+        '66' => 'Username and password or validcode cannot be empty.',
         '67' => 'MySQL database is not connected.',
         '68' => 'SQLite database could not be opened.',
         '69' => 'Not query to relevant data.',
