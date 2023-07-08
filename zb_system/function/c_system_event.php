@@ -2235,6 +2235,7 @@ function SaveSetting()
             || $key == 'ZC_ARTICLE_THUMB_SWITCH'
             || $key == 'ZC_API_THROTTLE_ENABLE'
             || $key == 'ZC_API_ENABLE'
+            || $key == 'ZC_LOGIN_VERIFY_ENABLE'
         ) {
             $zbp->option[$key] = (bool) $value;
             continue;
