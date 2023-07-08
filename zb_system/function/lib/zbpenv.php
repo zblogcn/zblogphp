@@ -24,7 +24,7 @@ class ZbpEnv
      *
      * @var string|null
      */
-    private static $EnvPath;
+    private static $EnvPath = null;
 
     /**
      * 获取环境变量值.
@@ -97,12 +97,13 @@ class ZbpEnv
 
         // 如果 SetPath 之后 $EnvPath 还是 null，说明没有任何 .env 文件可以被加载
         if (! is_null(self::$EnvPath)) {
-            $env = parse_ini_file(ZBP_PATH . '.env');
+            $env = parse_ini_file(self::$EnvPath);
             $env = array_change_key_case($env, CASE_UPPER);
             $_ENV = array_merge($_ENV, $env);
+            self::$IsInitialized = true;
         }
 
-        self::$IsInitialized = true;
+
     }
 
 }

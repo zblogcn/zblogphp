@@ -1254,17 +1254,11 @@ function GetVarsFromEnv($name, $source = '', $default = '')
         $value = constant($name);
         return $value;
     }
-    if ((strpos($type, '|getenv|') !== false) && function_exists('getenv') && getenv($name) != '') {
-        $value = getenv($name);
-        return $value;
-    }
-    if ((strpos($type, '|env|') !== false) && function_exists('getenv') && getenv($name) != '') {
-        $value = getenv($name);
-        return $value;
-    }
-    if ((strpos($type, '|env|') !== false) && isset($_ENV[$name]) && $_ENV[$name] != '') {
-        $value = $_ENV[$name];
-        return $value;
+    if (strpos($type, '|getenv|') !== false || strpos($type, '|env|') !== false) {
+        $value = Zbp_GetEnv($name, $default);
+        if ($value != $default) {
+            return $value;
+        }
     }
     if ((strpos($type, '|server|') !== false) && isset($_SERVER[$name]) && $_SERVER[$name] != '') {
         $value = $_SERVER[$name];
@@ -2577,11 +2571,32 @@ function GetDbName()
  *
  * @param string $item
  * @param string|null $default
+ * @return string
+ */
+function Zbp_GetEnv($item, $default = null)
+{
+    if (class_exists('ZbpEnv')) {
+        return ZbpEnv::Get($item, $default);
+    } else {
+        return getenv($item);
+    }
+
+}
+
+/**
+ * 环境变量设置辅助函数.
+ *
+ * @param string $item
+ * @param string $value
  * @return void
  */
-function ZbpEnv($item, $default = null)
+function Zbp_PutEnv($item, $value)
 {
-    return ZbpEnv::Get($item, $default);
+    if (class_exists('ZbpEnv')) {
+        return ZbpEnv::Put($item, $value);
+    } else {
+        return putenv("$item=$value");
+    }
 }
 
 /**
