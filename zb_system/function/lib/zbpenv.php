@@ -40,11 +40,9 @@ class ZbpEnv
         }
         
         //$item = strtoupper($item);
-
         if (array_key_exists($item, $_ENV)) {
             return $_ENV[$item];
         }
-
         if (getenv($item) !== false) {
             return getenv($item);
         }
@@ -69,7 +67,7 @@ class ZbpEnv
     }
 
     /**
-     * 设置 env 文件路径.
+     * 设置 env 文件路径并读取已存在的 env.
      *
      * @param string $path
      * @return boolean
@@ -77,7 +75,13 @@ class ZbpEnv
     public static function SetPath($path)
     {
         if (is_readable($path)) {
+
             self::$EnvPath = $path;
+
+            $env = parse_ini_file(self::$EnvPath);
+            $env = array_change_key_case($env, CASE_UPPER);
+            $_ENV = array_merge($_ENV, $env);
+
             return true;
         }
 
@@ -95,15 +99,7 @@ class ZbpEnv
             self::SetPath(ZBP_PATH . '.env');
         }
 
-        // 如果 SetPath 之后 $EnvPath 还是 null，说明没有任何 .env 文件可以被加载
-        if (! is_null(self::$EnvPath)) {
-            $env = parse_ini_file(self::$EnvPath);
-            $env = array_change_key_case($env, CASE_UPPER);
-            $_ENV = array_merge($_ENV, $env);
-            self::$IsInitialized = true;
-        }
-
-
+        self::$IsInitialized = true;
     }
 
 }
