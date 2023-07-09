@@ -46,9 +46,6 @@ switch ($zbp->action) {
         Redirect_cmd_end('admin/index.php?act=admin');
         break;
     case 'verify':
-        if ($zbp->option['ZC_LOGIN_CSRFCHECK_ENABLE']) {
-            CheckIsRefererValid();
-        }
         if (VerifyLogin()) {
             Redirect_cmd_from_args_with_loggedin(GetVars('redirect', 'COOKIE'));
             Redirect_cmd_end('admin/index.php?act=admin');

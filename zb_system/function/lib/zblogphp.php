@@ -454,6 +454,21 @@ class ZBlogPHP
     public $csrfExpiration = 1;
 
     /**
+     * @var int 当前实例下CSRF Token过期时间（分钟数）
+     */
+    public $csrfExpirationMinute = 15;
+
+    /**
+     * @var int 当前实例下VerifyCode过期时间（小时）
+     */
+    public $verifyCodeExpiration = 1;
+
+    /**
+     * @var int 当前实例下VerifyCode过期时间（分钟数）
+     */
+    public $verifyCodeExpirationMinute = 15;
+
+    /**
      * @var App 当前主题类
      */
     public $themeapp = null;
@@ -3691,7 +3706,7 @@ class ZBlogPHP
      */
     public function GetCmtKey($id)
     {
-        return md5($this->guid . $id . date('Ymdh'));
+        return md5($this->guid . $id . date('YmdH'));
     }
 
     /**
@@ -3704,8 +3719,8 @@ class ZBlogPHP
      */
     public function ValidCmtKey($id, $key)
     {
-        $nowkey = md5($this->guid . $id . date('Ymdh'));
-        $nowkey2 = md5($this->guid . $id . date('Ymdh', (time() - (3600 * 1))));
+        $nowkey = md5($this->guid . $id . date('YmdH'));
+        $nowkey2 = md5($this->guid . $id . date('YmdH', (time() - (3600 * 1))));
 
         return $key == $nowkey || $key == $nowkey2;
     }
@@ -3714,15 +3729,20 @@ class ZBlogPHP
      * 获取CSRF Token.
      *
      * @param string $id 应用ID，可以保证每个应用获取不同的Token
+     * @param string $timecompare hour|minute
      *
      * @return string
      */
-    public function GetCSRFToken($id = '')
+    public function GetCSRFToken($id = '', $timecompare = 'hour')
     {
         $oldZone = date_default_timezone_get();
         date_default_timezone_set($this->option['ZC_TIME_ZONE_NAME']);
 
-        $time = date('Ymdh');
+        if (strtolower($timecompare) == 'minute' || strtolower($timecompare) == 'm') {
+            $time = date('YmdHi');
+        } else {
+            $time = date('YmdH');
+        }
         $s = $this->user->ID . $this->user->Password . $this->user->Status;
 
         date_default_timezone_set($oldZone);
@@ -3734,10 +3754,11 @@ class ZBlogPHP
      *
      * @param string $token
      * @param string $id    应用ID，可为每个应用生成一个专属token
+     * @param string $timecompare hour|minute
      *
      * @return bool
      */
-    public function VerifyCSRFToken($token, $id = '')
+    public function VerifyCSRFToken($token, $id = '', $timecompare = 'hour')
     {
         $oldZone = date_default_timezone_get();
         date_default_timezone_set($this->option['ZC_TIME_ZONE_NAME']);
@@ -3745,10 +3766,19 @@ class ZBlogPHP
         $userString = $this->user->ID . $this->user->Password . $this->user->Status;
         $tokenString = $this->guid . $userString . $id;
 
-        for ($i = 0; $i <= $this->csrfExpiration; $i++) {
-            if ($token === md5($tokenString . date('Ymdh', (time() - (3600 * $i))))) {
-                date_default_timezone_set($oldZone);
-                return true;
+        if (strtolower($timecompare) == 'minute' || strtolower($timecompare) == 'm') {
+            for ($i = 0; $i <= $this->csrfExpirationMinute; $i++) {
+                if ($token === md5($tokenString . date('YmdHi', (time() - (60 * $i))))) {
+                    date_default_timezone_set($oldZone);
+                    return true;
+                }
+            }
+        } else {
+            for ($i = 0; $i <= $this->csrfExpiration; $i++) {
+                if ($token === md5($tokenString . date('YmdH', (time() - (3600 * $i))))) {
+                    date_default_timezone_set($oldZone);
+                    return true;
+                }
             }
         }
 
@@ -3762,10 +3792,11 @@ class ZBlogPHP
      * @api Filter_Plugin_Zbp_ShowValidCode 如该接口未被挂载则显示默认验证图片
      *
      * @param string $id 命名事件
+     * @param string $timecompare hour|minute
      *
      * @return bool
      */
-    public function ShowValidCode($id = '')
+    public function ShowValidCode($id = '', $timecompare = 'hour')
     {
         foreach ($GLOBALS['hooks']['Filter_Plugin_Zbp_ShowValidCode'] as $fpname => &$fpsignal) {
             return $fpname($id); //*
@@ -3773,7 +3804,12 @@ class ZBlogPHP
 
         $_vc = new ValidateCode();
         $_vc->GetImg();
-        setcookie('captcha_' . crc32($this->guid . $id), md5($this->guid . date("Ymdh") . $_vc->GetCode()), null, $this->cookiespath);
+
+        if (strtolower($timecompare) == 'minute' || strtolower($timecompare) == 'm') {
+            setcookie('captcha_' . crc32($this->guid . $id), md5($this->path . $this->guid . date("YmdHi") . $_vc->GetCode()), null, $this->cookiespath);
+        } else {
+            setcookie('captcha_' . crc32($this->guid . $id), md5($this->path . $this->guid . date("YmdH") . $_vc->GetCode()), null, $this->cookiespath);
+        }
 
         return true;
     }
@@ -3785,10 +3821,11 @@ class ZBlogPHP
      *
      * @param string $verifyCode 验证码数值
      * @param string $id         命名事件
+     * @param string $timecompare hour|minute
      *
      * @return bool
      */
-    public function CheckValidCode($verifyCode, $id = '')
+    public function CheckValidCode($verifyCode, $id = '', $timecompare = 'hour')
     {
         $verifyCode = strtolower($verifyCode);
         foreach ($GLOBALS['hooks']['Filter_Plugin_Zbp_CheckValidCode'] as $fpname => &$fpsignal) {
@@ -3798,9 +3835,23 @@ class ZBlogPHP
         $original = GetVars('captcha_' . crc32($this->guid . $id), 'COOKIE');
         setcookie('captcha_' . crc32($this->guid . $id), '', (time() - 3600), $this->cookiespath);
 
-        return md5($this->guid . date("Ymdh") . strtolower($verifyCode)) == $original
-            ||
-            md5($this->guid . date("Ymdh", (time() - (3600 * 1))) . strtolower($verifyCode)) == $original;
+        if (strtolower($timecompare) == 'minute' || strtolower($timecompare) == 'm') {
+            for ($i = 0; $i <= $this->verifyCodeExpirationMinute; $i++) {
+                $r = md5($this->path . $this->guid . date("YmdHi", (time() - (60 * $i))) . strtolower($verifyCode));
+                if ($r == $original) {
+                    return true;
+                }
+            }
+        } else {
+            for ($i = 0; $i <= $this->verifyCodeExpiration; $i++) {
+                $r = md5($this->path . $this->guid . date("YmdH", (time() - (3600 * $i))) . strtolower($verifyCode));
+                if ($r == $original) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     /**

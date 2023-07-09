@@ -37,7 +37,7 @@ HookFilterPlugin('Filter_Plugin_Login_Header');
   <div class="logo"><img src="image/admin/none.gif" title="<?php echo htmlspecialchars($blogname); ?>" alt="<?php echo htmlspecialchars($blogname); ?>"/></div>
   <div class="login">
     <form method="post" action="#">
-    <?php echo $zbp->option['ZC_LOGIN_CSRFCHECK_ENABLE'] ? '<input type="hidden" name="csrfToken" value="' . $zbp->GetCSRFToken() . '">' : ''; ?>
+    <input type="hidden" name="csrfToken" value="<?php echo $zbp->GetCSRFToken('login', 'minute');?>">
     <dl>
       <dt></dt>
       <dd class="username"><label for="edtUserName"><?php echo $lang['msg']['username']; ?></label><input type="text" id="edtUserName" name="edtUserName" size="20" value="<?php echo GetVars('username', 'COOKIE'); ?>" tabindex="1" /></dd>
@@ -46,7 +46,7 @@ HookFilterPlugin('Filter_Plugin_Login_Header');
 
       <?php if ($zbp->option['ZC_LOGIN_VERIFY_ENABLE']) : ?>
       <dd class="password validcode" style=""><label for="edtValidcode"><?php echo $lang['msg']['validcode']; ?></label><input type="text" id="edtValidcode" name="verify" size="20" tabindex="2" />
-          <img src="<?php echo $zbp->host; ?>zb_system/script/c_validcode.php?id=login" onClick="javascript:this.src='<?php echo $zbp->host; ?>zb_system/script/c_validcode.php?id=login&tm='+Math.random();" alt="validcode"/>
+          <img src="<?php echo $zbp->host; ?>zb_system/script/c_validcode.php?id=login&time=m" onClick="javascript:this.src='<?php echo $zbp->host; ?>zb_system/script/c_validcode.php?id=login&time=m&tm='+Math.random();" alt="validcode"/>
       </dd>
       <?php endif; ?>
 
@@ -81,10 +81,6 @@ $("#btnPost").click(function(){
         return false;
     }
     <?php endif; ?>
-    //$("#edtUserName").remove();
-    //$("#edtPassWord").remove();
-    //$("#chkRemember").remove();
-
     $("form").attr("action","cmd.php?act=verify");
     $("#edtUserName").val("");
     $("#edtPassWord").val("");

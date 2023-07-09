@@ -9,4 +9,4 @@ require '../function/c_system_base.php';
 $zbp->Load();
 ob_clean();
 
-$zbp->ShowValidCode(GetVars('id', 'GET'));
+$zbp->ShowValidCode(GetVars('id', 'GET'), GetVars('time', 'GET'));
