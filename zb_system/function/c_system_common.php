@@ -1899,7 +1899,7 @@ function Ucs2Utf8($matchs)
 }
 
 /**
- * 将Null转换为空字符串
+ * 将Null转换为空字符串 (适应php8.2)
  *
  * @param $s
  *
@@ -1907,10 +1907,7 @@ function Ucs2Utf8($matchs)
  */
 function Null2Empty($s)
 {
-    if (is_null($s)) {
-        return '';
-    }
-    return $s;
+    return (!is_null($s)) ? $s : '';
 }
 
 /**
