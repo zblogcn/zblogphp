@@ -2292,7 +2292,7 @@ function get_http_raw_post_data(&$request = null)
  * @param $file
  * @param $line
  */
-function JsonError4ShowErrorHook($errorCode, $errorString, $file, $line)
+function JsonError4ShowErrorHook($errorCode, $errorString, $file = null, $line = null)
 {
     if ($errorCode === 0) {
         $errorCode = 1;
