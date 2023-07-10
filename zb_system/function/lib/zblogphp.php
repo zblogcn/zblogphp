@@ -1732,7 +1732,7 @@ class ZBlogPHP
      */
     public function VerifyAPIToken($api_token)
     {
-        $api_token = base64_decode($api_token);
+        $api_token = base64_decode(Null2Empty($api_token));
 
         if (empty($api_token)) {
             return null;

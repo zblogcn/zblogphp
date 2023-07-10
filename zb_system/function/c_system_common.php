@@ -1899,6 +1899,21 @@ function Ucs2Utf8($matchs)
 }
 
 /**
+ * 将Null转换为空字符串
+ *
+ * @param $s
+ *
+ * @return string
+ */
+function Null2Empty($s)
+{
+    if (is_null($s)) {
+        return '';
+    }
+    return $s;
+}
+
+/**
  * HTML文本处理转换类函数**************************************************************.
  */
 
