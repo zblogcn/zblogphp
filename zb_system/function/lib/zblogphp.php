@@ -1467,17 +1467,10 @@ class ZBlogPHP
                 $value = str_replace('|', '', $value);
             }
 
-            if (in_array($key, $reserve_keys)) {
+            if (in_array($key, $reserve_keys) || isset($this->option_user_file[$key])) {
                 continue;
             }
 
-            $this->option[$key] = $value;
-        }
-
-        foreach ($this->option_user_file as $key => $value) {
-            if (in_array($key, $reserve_keys)) {
-                continue;
-            }
             $this->option[$key] = $value;
         }
 
