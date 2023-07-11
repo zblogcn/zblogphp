@@ -72,7 +72,7 @@ class ZbpEnv
      * @param string $path
      * @return boolean
      */
-    public static function SetPath($path)
+    public static function LoadByPath($path)
     {
         if (is_readable($path)) {
 
@@ -96,7 +96,7 @@ class ZbpEnv
     private static function Initialize()
     {
         if (is_null(self::$EnvPath)) {
-            self::SetPath(ZBP_PATH . '.env');
+            self::LoadByPath(ZBP_PATH . '.env');
         }
 
         self::$IsInitialized = true;
