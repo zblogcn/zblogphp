@@ -1981,12 +1981,14 @@ class ZBlogPHP
         $array = $this->GetModuleList();
 
         //兼容处理
-        $mix_list = SerializeString2Array($this->cache->module_mixed_filename_list);
-        foreach ($mix_list as $mixname) {
-            if (!array_key_exists($mixname, $this->modulesbyfilename)) {
-                $lower_mixname = strtolower($mixname);
-                if (array_key_exists($lower_mixname, $this->modulesbyfilename)) {
-                    $this->modulesbyfilename[$mixname] = &$this->modulesbyfilename[$lower_mixname];
+        if ($this->option['ZC_FIX_MODULE_MIXED_FILENAME']) {
+            $mix_list = SerializeString2Array($this->cache->module_mixed_filename_list);
+            foreach ($mix_list as $mixname) {
+                if (!array_key_exists($mixname, $this->modulesbyfilename)) {
+                    $lower_mixname = strtolower($mixname);
+                    if (array_key_exists($lower_mixname, $this->modulesbyfilename)) {
+                        $this->modulesbyfilename[$mixname] = &$this->modulesbyfilename[$lower_mixname];
+                    }
                 }
             }
         }
@@ -3293,12 +3295,14 @@ class ZBlogPHP
     public function GetModuleByFileName($fn)
     {
         //兼容处理
-        if (array_key_exists($fn, $this->modulesbyfilename)) {
-            return $this->modulesbyfilename[$fn];
-        } else {
-            $lower_fn = strtolower($fn);
-            if (array_key_exists($lower_fn, $this->modulesbyfilename)) {
-                return $this->modulesbyfilename[$lower_fn];
+        if ($this->option['ZC_FIX_MODULE_MIXED_FILENAME']) {
+            if (array_key_exists($fn, $this->modulesbyfilename)) {
+                return $this->modulesbyfilename[$fn];
+            } else {
+                $lower_fn = strtolower($fn);
+                if (array_key_exists($lower_fn, $this->modulesbyfilename)) {
+                    return $this->modulesbyfilename[$lower_fn];
+                }
             }
         }
 

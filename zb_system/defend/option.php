@@ -229,6 +229,7 @@ return array(
     'ZC_JS_304_ENABLE'               => true,
     'ZC_DELMEMBER_WITH_ALLDATA'      => false,
     'ZC_THUMB_DEFAULT_QUALITY'       => 90,
+    'ZC_FIX_MODULE_MIXED_FILENAME'   => true,
 
     // API 相关
     'ZC_API_ENABLE'                     => false,

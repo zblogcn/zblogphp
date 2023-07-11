@@ -115,15 +115,17 @@ abstract class Base__Module extends Base
         global $zbp;
 
         //强制处理转小写的问题
-        if ($this->FileName !== strtolower($this->FileName)) {
-            $list = SerializeString2Array($zbp->cache->module_mixed_filename_list);
-            if (!in_array($this->FileName, $list)) {
-                $list[] = $this->FileName;
-                $zbp->cache->module_mixed_filename_list = serialize($list);
-                $zbp->SaveCache();
+        if ($zbp->option['ZC_FIX_MODULE_MIXED_FILENAME']) {
+            if ($this->FileName !== strtolower($this->FileName)) {
+                $list = SerializeString2Array($zbp->cache->module_mixed_filename_list);
+                if (!in_array($this->FileName, $list)) {
+                    $list[] = $this->FileName;
+                    $zbp->cache->module_mixed_filename_list = serialize($list);
+                    $zbp->SaveCache();
+                }
             }
+            $this->FileName = strtolower($this->FileName);
         }
-        $this->FileName = strtolower($this->FileName);
 
         foreach ($GLOBALS['hooks']['Filter_Plugin_Module_Save'] as $fpname => &$fpsignal) {
             $fpreturn = $fpname($this);
@@ -172,17 +174,19 @@ abstract class Base__Module extends Base
         global $zbp;
 
         //强制处理转小写的遗留问题
-        $list = SerializeString2Array($zbp->cache->module_mixed_filename_list);
-        $has_mixed = false;
-        foreach ($list as $key => $value) {
-            if (strtolower($value) == strtolower($this->FileName)) {
-                unset($list[$key]);
-                $has_mixed = true;
+        if ($zbp->option['ZC_FIX_MODULE_MIXED_FILENAME']) {
+            $list = SerializeString2Array($zbp->cache->module_mixed_filename_list);
+            $has_mixed = false;
+            foreach ($list as $key => $value) {
+                if (strtolower($value) == strtolower($this->FileName)) {
+                    unset($list[$key]);
+                    $has_mixed = true;
+                }
             }
-        }
-        if ($has_mixed == true) {
-            $zbp->cache->module_mixed_filename_list = serialize($list);
-            $zbp->SaveCache();
+            if ($has_mixed == true) {
+                $zbp->cache->module_mixed_filename_list = serialize($list);
+                $zbp->SaveCache();
+            }
         }
 
         foreach ($GLOBALS['hooks']['Filter_Plugin_Module_Del'] as $fpname => &$fpsignal) {

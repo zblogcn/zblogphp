@@ -114,8 +114,8 @@ function LinksManage_ModuleMenu()
 }
 function LinksManage_Head()
 {
-  echo '<link rel="stylesheet" href="'. LinksManage_Path("style", "host") .'?v=2021-02-05">';
-  echo '<script src="' . LinksManage_Path("script", "host") . '?v=2021-02-05"></script>';
+  echo '<link rel="stylesheet" href="'. LinksManage_Path("style", "host") .'?v=20230711123">';
+  echo '<script src="' . LinksManage_Path("script", "host") . '?v=20230711123"></script>';
   $action = GetVars('act', 'GET');
   if ($action === "ThemeMng" && GetVars('install', 'GET') !== null) {
     $files = explode('|', LinksManage_Path("bakfile"));
@@ -260,7 +260,8 @@ function InstallPlugin_LinksManage()
   }
   $links = explode('|', LinksManage_Path("bakfile"));
   foreach ($links as $mod) {
-    $backup = $zbp->modulesbyfilename[$mod]->Content;
+    // $backup = $zbp->modulesbyfilename[$mod]->Content;
+    $backup = $zbp->GetModuleByFileName($mod)->Content;
     $bakFile = LinksManage_Path("bakdir") . $mod . '.txt';
     if (!is_file($bakFile)) {
       file_put_contents($bakFile, $backup);
@@ -286,7 +287,8 @@ function UninstallPlugin_LinksManage()
     $file = LinksManage_Path("bakdir") . $mod . '.txt';
     if (is_file($file)) {
       $backup = file_get_contents($file);
-      $module = $zbp->modulesbyfilename[$mod];
+      // $module = $zbp->modulesbyfilename[$mod];
+      $module = $zbp->GetModuleByFileName($mod);
       $module->Content = $backup;
       $module->Save();
       $zbp->AddBuildModule($module->FileName);

@@ -1,10 +1,12 @@
+
+// eslint-disable-next-line no-unused-vars
 function checkInfo() {
   if (!$("#edtName").val()) {
-    alert("<?php echo $lang['error']['72'] ?>");
+    alert("名称不能为空");
     return false;
   }
   if (!$("#edtFileName").val()) {
-    alert("<?php echo $lang['error']['75'] ?>");
+    alert("文件名不能为空");
     return false;
   }
   if (!$("#edtHtmlID").val()) {
@@ -14,6 +16,7 @@ function checkInfo() {
 }
 
 // fnReplaceHost("旧内容","新内容");
+// eslint-disable-next-line no-unused-vars
 function fnReplaceHost(o, n) {
   $("input[name='href[]']").each(function () {
     let curVal = $(this).val();
@@ -26,21 +29,21 @@ $(function () {
   if ($(".js-mod").length > 0) {
     let LinksManage = $(".js-mod").val().split("|"),
       mod;
-    for (link in LinksManage) {
+    for (let link in LinksManage) {
       if ((mod = LinksManage[link])) {
         $(".widget-list .widget_id_" + mod)
           .addClass("LinksManage")
           .find("a:first")
           .attr(
             "href",
-            bloghost + "zb_users/plugin/LinksManage/main.php" + "?edit=" + mod
+            bloghost + "zb_users/plugin/LinksManage/main.php" + "?edit=" + mod,
           );
         $(".SubMenu")
           .find("a[href$='" + mod + "']")
           .addClass("LinksManage")
           .attr(
             "href",
-            bloghost + "zb_users/plugin/LinksManage/main.php" + "?edit=" + mod
+            bloghost + "zb_users/plugin/LinksManage/main.php" + "?edit=" + mod,
           );
       }
     }
@@ -51,7 +54,7 @@ $(function () {
     //   }
     // });
   }
-  ///////////
+  // /////////
   $(".js-add").click(function () {
     if ($(".LinksManageAdd").length === 1) {
       $("#LinksManageList").append($("tfoot .LinksManageAdd").clone());
@@ -78,9 +81,8 @@ $(function () {
           var me = this;
           setTimeout(function () {
             $(me)
-              .closest("tr")
-              [$(me).hasClass("imgcheck-on") ? "addClass" : "removeClass"](
-                "LinksManageSub"
+              .closest("tr")[$(me).hasClass("imgcheck-on") ? "addClass" : "removeClass"](
+                "LinksManageSub",
               );
           }, 20);
         });
@@ -108,10 +110,9 @@ $(function () {
       let me = this;
       setTimeout(function () {
         $(me)
-          .closest("tr")
-          [$(me).hasClass("imgcheck-on") ? "addClass" : "removeClass"](
-            "LinksManageSub"
-          );
+          .closest("tr")[$(me).hasClass("imgcheck-on") ? "addClass" : "removeClass"](
+          "LinksManageSub",
+        );
       }, 20);
     });
 
@@ -136,8 +137,8 @@ $(function () {
       opt.top =
         opt.top ||
         ($(window).height() - $el.outerHeight()) / 2 +
-          $(window).scrollTop() -
-          37;
+        $(window).scrollTop() -
+        37;
       opt.left = opt.left || ($(window).width() - $el.outerWidth()) / 2;
       opt.left = opt.mid - $el.outerWidth() / 2 || opt.left;
       if ($el.data("fixed")) {
@@ -180,7 +181,7 @@ $(function () {
           .click(function () {
             $("#search-result").val(obj.Url);
             $("#search-view").html(
-              [obj.Title, obj.Url].map((a) => "<p>" + a + "</p>")
+              [obj.Title, obj.Url].map(a => "<p>" + a + "</p>"),
             );
             // fnShowBox($("#search-box"), 0);
             $("#search-fill").removeAttr("disabled");
@@ -239,7 +240,7 @@ $(function () {
     q,
     fnback = function (n) {
       console.log(n);
-    }
+    },
   ) {
     let objRlt;
     $.getJSON(ajaxurl + "LinksManage&q=" + q, function (data) {

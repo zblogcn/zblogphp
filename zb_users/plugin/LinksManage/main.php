@@ -33,10 +33,14 @@ if (GetVars('act', 'GET') == 'save') {
     }
     $item->href = $_POST['href'][$k];
     $item->href = str_replace($zbp->host, "{#ZC_BLOG_HOST#}", $item->href);
-    $item->ico = $_POST['ico'][$k];
     $item->title = $_POST['title'][$k];
-    $item->target = (bool) $_POST['target'][$k] ? '_blank' : '';
     $item->text = trim($_POST['text'][$k]);
+    // title 或 text 有一个等于「删除」时跳过
+    if ($item->title == '删除' || $item->text == '删除') {
+      continue;
+    }
+    $item->target = (bool) $_POST['target'][$k] ? '_blank' : '';
+    $item->ico = $_POST['ico'][$k];
     $item->subs = array();
     $item->issub = 0;
     if ($k > 0 && $_POST['sub'][$k]) {
@@ -87,7 +91,8 @@ $delbtn = '';
 
 if ($edit = GetVars('edit', 'GET')) {
   if (!empty($edit)) {
-    $mod = $zbp->modulesbyfilename[$edit];
+    // $mod = $zbp->modulesbyfilename[$edit];
+    $mod = $zbp->GetModuleByFileName($edit);
   }
   $file_contents = $mod->Metas->LM_json;
   if (strlen($file_contents) > 0 && $items = json_decode($file_contents)) {
@@ -179,7 +184,7 @@ require $blogpath . 'zb_system/admin/admin_top.php';
             <th class="td10">文本</th>
             <th class="td5"><abbr title="是否在新窗口打开">新窗</abbr></th>
             <th class="td5"><abbr title="作为前一个一级链接的二级链接">二级</abbr></th>
-            <th>图标（class属性值）</th>
+            <th>图标（class 属性值）</th>
           </tr>
         </thead>
         <tbody id="LinksManageList">
@@ -225,11 +230,12 @@ require $blogpath . 'zb_system/admin/admin_top.php';
         <?php } ?>
       </p>
       ------
-      <p>对于每个li，会默认添加 "文件名-item" 作为类名，当前为：<?php echo "{$mod->FileName}-item"; ?></p>
-      <p>主题作者可设置<b>lm-module-<?php echo "{$mod->FileName}"; ?></b>模板对当前模块进行自定义</p>
-      <p>参考：zb_users/plugin/LinksManage/var/li.html</p>
-      <p>自定义通用模板：zb_users/plugin/LinksManage/usr/li.html（不推荐）</p>
-      <p>通用模板编译为<b>lm-module-defend</b></p>
+      <p>对于每个 li，会默认添加 "文件名-item" 作为类名，当前为：<?php echo "{$mod->FileName}-item"; ?>；</p>
+      <p>主题作者可设置 <b>lm-module-<?php echo "{$mod->FileName}"; ?></b> 模板对当前模块进行自定义；</p>
+      <p>参考：zb_users/plugin/LinksManage/var/li.html；</p>
+      <p>自定义通用模板：zb_users/plugin/LinksManage/usr/li.html（不推荐）；</p>
+      <p>通用模板编译为 <b>lm-module-defend</b>；</p>
+      <p><b>如果无法拖动删除，可以在「描述」或「文本」任意一项内填入「删除」即可删除该行；</b></p>
     </form>
   </div>
 </div>
