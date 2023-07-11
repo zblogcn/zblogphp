@@ -509,6 +509,9 @@ class ZBlogPHP
      */
     public $autofill_template_htmltags = true;
 
+    //没有被数据库中option覆盖之前的数据
+    public $option_user_file = array();
+
     const OPTION_RESERVE_KEYS = 'ZC_DATABASE_TYPE|ZC_SQLITE_NAME|ZC_SQLITE_PRE|ZC_MYSQL_SERVER|ZC_MYSQL_USERNAME|ZC_MYSQL_PASSWORD|ZC_MYSQL_NAME|ZC_MYSQL_CHARSET|ZC_MYSQL_COLLATE|ZC_MYSQL_PRE|ZC_MYSQL_ENGINE|ZC_MYSQL_PORT|ZC_MYSQL_PERSISTENT|ZC_MYSQL_PORT|ZC_PGSQL_SERVER|ZC_PGSQL_USERNAME|ZC_PGSQL_PASSWORD|ZC_PGSQL_NAME|ZC_PGSQL_CHARSET|ZC_PGSQL_PRE|ZC_PGSQL_PORT|ZC_PGSQL_PERSISTENT|ZC_CLOSE_WHOLE_SITE|ZC_PERMANENT_DOMAIN_FORCED_URL|ZC_PERMANENT_DOMAIN_FORCED_DISABLE|ZC_INSTALL_AFTER_CONFIG';
 
     /**
@@ -632,7 +635,8 @@ class ZBlogPHP
             $logsdir, $datadir, $table, $datainfo, $actions, $action, $blogversion,
             $blogtitle, $blogname, $blogsubname, $routes, $blogtheme, $blogstyle,$currenturl,
             $fullcurrenturl, $currentscript, $fullcurrentscript, $activedapps, $posttype,
-            $usersdir, $systemdir, $admindir, $usersurl, $systemurl, $adminurl, $apimodsdir;
+            $usersdir, $systemdir, $admindir, $usersurl, $systemurl, $adminurl,
+            $option_user_file, $apimodsdir;
 
         if ((defined('ZBP_DEBUGMODE') && constant('ZBP_DEBUGMODE') == true)) {
             $this->isdebug = true;
@@ -647,6 +651,7 @@ class ZBlogPHP
 
         //基本配置加载到$zbp内
         $this->version = &$blogversion;
+        $this->option_user_file = &$option_user_file;
         $this->option = &$option;
         $this->lang = &$lang;
         $this->langs = &$langs;
@@ -1468,8 +1473,17 @@ class ZBlogPHP
 
             $this->option[$key] = $value;
         }
+
+        foreach ($this->option_user_file as $key => $value) {
+            if (in_array($key, $reserve_keys)) {
+                continue;
+            }
+            $this->option[$key] = $value;
+        }
+
         if (!extension_loaded('gd')) {
             $this->option['ZC_COMMENT_VERIFY_ENABLE'] = false;
+            $this->option['ZC_LOGIN_VERIFY_ENABLE'] = false;
         }
 
         return true;
@@ -3743,10 +3757,15 @@ class ZBlogPHP
         } else {
             $time = date('YmdH');
         }
-        $s = $this->user->ID . $this->user->Password . $this->user->Status;
+
+        $hash_pre = $this->guid . $this->path;
+        if ($this->option['ZC_ADDITIONAL_SECURITY']) {
+            $hash_pre .= GetGuestAgent();
+        }
+        $hash_pre .= $this->user->ID . $this->user->Password . $this->user->Status . $id;
 
         date_default_timezone_set($oldZone);
-        return md5($this->guid . $s . $id . $time);
+        return md5($hash_pre . $time);
     }
 
     /**
@@ -3763,19 +3782,22 @@ class ZBlogPHP
         $oldZone = date_default_timezone_get();
         date_default_timezone_set($this->option['ZC_TIME_ZONE_NAME']);
 
-        $userString = $this->user->ID . $this->user->Password . $this->user->Status;
-        $tokenString = $this->guid . $userString . $id;
+        $hash_pre = $this->guid . $this->path;
+        if ($this->option['ZC_ADDITIONAL_SECURITY']) {
+            $hash_pre .= GetGuestAgent();
+        }
+        $hash_pre .= $this->user->ID . $this->user->Password . $this->user->Status . $id;
 
         if (strtolower($timecompare) == 'minute' || strtolower($timecompare) == 'm') {
             for ($i = 0; $i <= $this->csrfExpirationMinute; $i++) {
-                if ($token === md5($tokenString . date('YmdHi', (time() - (60 * $i))))) {
+                if ($token === md5($hash_pre . date('YmdHi', (time() - (60 * $i))))) {
                     date_default_timezone_set($oldZone);
                     return true;
                 }
             }
         } else {
             for ($i = 0; $i <= $this->csrfExpiration; $i++) {
-                if ($token === md5($tokenString . date('YmdH', (time() - (3600 * $i))))) {
+                if ($token === md5($hash_pre . date('YmdH', (time() - (3600 * $i))))) {
                     date_default_timezone_set($oldZone);
                     return true;
                 }
@@ -3799,16 +3821,21 @@ class ZBlogPHP
     public function ShowValidCode($id = '', $timecompare = 'hour')
     {
         foreach ($GLOBALS['hooks']['Filter_Plugin_Zbp_ShowValidCode'] as $fpname => &$fpsignal) {
-            return $fpname($id); //*
+            return $fpname($id, $timecompare); //*
         }
 
         $_vc = new ValidateCode();
         $_vc->GetImg();
 
+        $hash_pre = $this->guid . $this->path;
+        if ($this->option['ZC_ADDITIONAL_SECURITY']) {
+            $hash_pre .= GetGuestIP();
+        }
+
         if (strtolower($timecompare) == 'minute' || strtolower($timecompare) == 'm') {
-            setcookie('captcha_' . crc32($this->guid . $id), md5($this->path . $this->guid . date("YmdHi") . $_vc->GetCode()), null, $this->cookiespath);
+            setcookie('captcha_' . crc32($this->guid . $id), md5($hash_pre . date("YmdHi") . $_vc->GetCode()), null, $this->cookiespath);
         } else {
-            setcookie('captcha_' . crc32($this->guid . $id), md5($this->path . $this->guid . date("YmdH") . $_vc->GetCode()), null, $this->cookiespath);
+            setcookie('captcha_' . crc32($this->guid . $id), md5($hash_pre . date("YmdH") . $_vc->GetCode()), null, $this->cookiespath);
         }
 
         return true;
@@ -3829,22 +3856,27 @@ class ZBlogPHP
     {
         $verifyCode = strtolower($verifyCode);
         foreach ($GLOBALS['hooks']['Filter_Plugin_Zbp_CheckValidCode'] as $fpname => &$fpsignal) {
-            return $fpname($verifyCode, $id); //*
+            return $fpname($verifyCode, $id, $timecompare); //*
         }
 
         $original = GetVars('captcha_' . crc32($this->guid . $id), 'COOKIE');
         setcookie('captcha_' . crc32($this->guid . $id), '', (time() - 3600), $this->cookiespath);
 
+        $hash_pre = $this->guid . $this->path;
+        if ($this->option['ZC_ADDITIONAL_SECURITY']) {
+            $hash_pre .= GetGuestIP();
+        }
+
         if (strtolower($timecompare) == 'minute' || strtolower($timecompare) == 'm') {
             for ($i = 0; $i <= $this->verifyCodeExpirationMinute; $i++) {
-                $r = md5($this->path . $this->guid . date("YmdHi", (time() - (60 * $i))) . strtolower($verifyCode));
+                $r = md5($hash_pre . date("YmdHi", (time() - (60 * $i))) . strtolower($verifyCode));
                 if ($r == $original) {
                     return true;
                 }
             }
         } else {
             for ($i = 0; $i <= $this->verifyCodeExpiration; $i++) {
-                $r = md5($this->path . $this->guid . date("YmdH", (time() - (3600 * $i))) . strtolower($verifyCode));
+                $r = md5($hash_pre . date("YmdH", (time() - (3600 * $i))) . strtolower($verifyCode));
                 if ($r == $original) {
                     return true;
                 }

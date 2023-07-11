@@ -557,7 +557,7 @@ return array(
     'offical_urls' => array(
         'more_help' => 'https://www.zblogcn.com/help/?id={%id%}&message={%message%}',
         'bing_help' => 'https://cn.bing.com/search?q={%message%}',
-        'office_docs' => 'https://docs.zblogcn.com/php/#/books/start-faq',
+        'office_docs' => 'https://docs.zblogcn.com/php/#/books/start-25-faq',
         'office_bbs' => 'https://bbs.zblogcn.com/',
     ),
 

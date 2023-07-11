@@ -167,13 +167,13 @@ $GLOBALS['activeapps'] = &$GLOBALS['activedapps'];
  * 加载设置
  */
 $GLOBALS['option'] = include ZBP_PATH . 'zb_system/defend/option.php';
-$op_users = array();
+$GLOBALS['option_user_file'] = array();
 if (!ZBP_HOOKERROR && is_readable($file_base = GetVarsFromEnv('ZBP_USER_OPTION'))) {
-    $op_users = include $file_base;
+    $GLOBALS['option_user_file'] = include $file_base;
 } elseif (is_readable($file_base = $GLOBALS['usersdir'] . 'c_option.php')) {
-    $op_users = include $file_base;
+    $GLOBALS['option_user_file'] = include $file_base;
 }
-$GLOBALS['option'] = array_merge($GLOBALS['option'], $op_users);
+$GLOBALS['option'] = array_merge($GLOBALS['option'], $GLOBALS['option_user_file']);
 
 $GLOBALS['blogtitle'] = $GLOBALS['option']['ZC_BLOG_SUBNAME']; // 不是漏写！
 $GLOBALS['blogname'] = &$GLOBALS['option']['ZC_BLOG_NAME'];
@@ -260,7 +260,7 @@ if (ZBP_SAFEMODE === false) {
     }
 }
 
-unset($file_base, $aps, $aps2, $fn, $ap, $op_users, $opk, $opv);
+unset($file_base, $aps, $aps2, $fn, $ap, $opk, $opv);
 unset($theme_name, $theme_include, $theme_preset, $style_preset);
 
 //1.7新加入的
