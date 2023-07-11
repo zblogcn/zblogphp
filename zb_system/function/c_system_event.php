@@ -30,6 +30,7 @@ function VerifyLogin($throwException = true, $ignoreValidCode = false, $ignoreCs
     }
 
     if ($zbp->option['ZC_LOGIN_VERIFY_ENABLE'] && $ignoreValidCode == false) {
+        $zbp->verifyCodeExpirationMinute = 5;
         if ($zbp->CheckValidCode(GetVars('verify' , 'POST'), 'login', 'minute') == false) {
             $zbp->ShowError(38, __FILE__, __LINE__);
         }
