@@ -75,7 +75,6 @@ class ZbpEnv
     public static function LoadByPath($path)
     {
         if (is_readable($path)) {
-
             self::$EnvPath = $path;
 
             $env = parse_ini_file(self::$EnvPath);
