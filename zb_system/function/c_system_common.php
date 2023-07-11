@@ -1910,6 +1910,30 @@ function Null2Empty($s)
     return (!is_null($s)) ? $s : '';
 }
 
+
+/**
+ * 将序列化后的string还原为array(自动判断empty,null)
+ *
+ * @param $list
+ *
+ * @return array
+ */
+function SerializeString2Array($list)
+{
+    $array = array();
+    if (is_null($list) || empty($list)) {
+        return $array;
+    }
+    if (!is_string($list)) {
+        return $array;
+    }
+    $array = unserialize($list);
+    if (!is_array($array)) {
+        $array = array();
+    }
+    return $array;
+}
+
 /**
  * HTML文本处理转换类函数**************************************************************.
  */
