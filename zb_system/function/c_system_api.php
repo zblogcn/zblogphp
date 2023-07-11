@@ -692,7 +692,7 @@ function ApiVerifyCSRF($force_check = false)
                 return;
             }
 
-            if (php_sapi_name() == 'cli') {
+            if (IS_CLI) {
                 return;
             }
 

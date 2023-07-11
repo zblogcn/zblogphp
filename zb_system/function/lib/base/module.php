@@ -114,7 +114,7 @@ abstract class Base__Module extends Base
     {
         global $zbp;
 
-        //强制处理转小写的问题
+        //强制处理转小写的遗留问题
         if ($zbp->option['ZC_FIX_MODULE_MIXED_FILENAME']) {
             if ($this->FileName !== strtolower($this->FileName)) {
                 $list = SerializeString2Array($zbp->cache->module_mixed_filename_list);
@@ -124,8 +124,8 @@ abstract class Base__Module extends Base
                     $zbp->SaveCache();
                 }
             }
-            $this->FileName = strtolower($this->FileName);
         }
+        $this->FileName = strtolower($this->FileName);
 
         foreach ($GLOBALS['hooks']['Filter_Plugin_Module_Save'] as $fpname => &$fpsignal) {
             $fpreturn = $fpname($this);
