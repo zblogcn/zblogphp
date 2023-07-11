@@ -24,6 +24,7 @@ function VerifyLogin($throwException = true, $ignoreValidCode = false, $ignoreCs
     global $zbp;
 
     if ($zbp->option['ZC_LOGIN_CSRFCHECK_ENABLE'] && $ignoreCsrfCheck == false) {
+        $zbp->csrfExpirationMinute = 5;
         if ($zbp->VerifyCSRFToken(GetVars('csrfToken' , 'POST'), 'login', 'minute') == false) {
             $zbp->ShowError(5, __FILE__, __LINE__);
         }
