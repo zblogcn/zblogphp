@@ -55,7 +55,7 @@ function ApiDebugHandler($error)
 {
     $GLOBALS['hooks']['Filter_Plugin_Debug_Handler_ZEE']['ApiDebugHandler'] = PLUGIN_EXITSIGNAL_RETURN;
     //全局拦截error,exception
-    echo ApiResponse(null, $error);
+    echo ApiResponse(null, $error, method_exists($error, 'getHttpCode') ? $error->getHttpCode() : 500);
     if (!IS_CLI) {
         exit(1);
     }
@@ -400,7 +400,7 @@ function ApiResponse($data = null, $error = null, $code = 200, $message = null)
 
     //输出错误
     if (!is_null($error)) {
-        SetHttpStatusCode(500, true);
+        SetHttpStatusCode($code, true);
         $r = JsonEncode($response);
         return $r;
     }
