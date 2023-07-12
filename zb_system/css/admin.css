@@ -45,7 +45,7 @@ label { line-height: 30px; float: left; vertical-align: text-bottom; padding: 0 
 .login dd { width: 300px; float: left; margin-bottom:20px;}
 .login dd.floatright {float: right;}
 .login dd.checkbox { margin-left: 100px; width: 200px; text-align: left; }
-.login dd.submit ,.login dd.password ,.login dd.username { overflow: hidden; width: 300px; }
+.login dd.submit ,.login dd.password ,.login dd.username ,.login dd.validcode { overflow: hidden; width: 300px; }
 .login label { width: 100px; text-align: right;overflow :hidden;text-overflow : clip;white-space:nowrap; }
 .login input[type="checkbox"]+label {width:auto;}
 .login input[type="text"],.login input[type="password"]{ float: left; width: 200px; height: 2.4em; padding: 0.1em 5px; line-height: 2.4em; }
