@@ -46,7 +46,7 @@ switch ($zbp->action) {
         Redirect_cmd_end('admin/index.php?act=admin');
         break;
     case 'verify':
-        if (VerifyLogin(true, true, true)) {
+        if (VerifyLogin(true, false, false)) {
             Redirect_cmd_from_args_with_loggedin(GetVars('redirect', 'COOKIE'));
             Redirect_cmd_end('admin/index.php?act=admin');
         } else {
