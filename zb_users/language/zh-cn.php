@@ -252,7 +252,7 @@ return array(
         'comment_audit'                     => '审核评论',
         'comment_audit_comment'             => '打开后所有非管理员发布的评论都将进入审核状态',
         'debugging_warning'                 => '您的Z-BlogPHP打开了调试模式。此模式下网站有被黑的风险，实际部署在线上的网站请及时关闭调试模式！',
-        'permanent_domain_with_admin'       => '后台也使用固定域名',
+        'permanent_domain_is_enable'        => '固定域名功能已开启',
         'current_template'                  => '当前模板',
         'additional_security'               => '安全增强',
         'using_cdn_guest_type'              => '客户IP获取来源',

@@ -1568,11 +1568,14 @@ function Admin_SettingMng()
                     echo '<div class="tab-content default-tab" style="border:none;padding:0px;margin:0;" id="tab1">';
                     echo '<table style="padding:0px;margin:0px;width:100%;" class="table_hover table_striped">';
                     echo '<tr><td class="td25"><p><b>' . $zbp->lang['msg']['blog_host'] . '</b><br/>';
-                    if ($zbp->option['ZC_PERMANENT_DOMAIN_ENABLE'] == true) {
+                    if ($zbp->ispermanent_domain) {
+                        echo '<span class="note">' . $zbp->lang['msg']['permanent_domain_is_enable'] . '</span><br/>';
+                    }
+                    if ($zbp->ispermanent_domain && empty(Null2Empty(GetValueInArray($zbp->option, 'ZC_PERMANENT_DOMAIN_FORCED_URL'))) &&$zbp->option['ZC_PERMANENT_DOMAIN_ENABLE']) {
                         echo '<span class="note">' . $zbp->lang['msg']['blog_host_add'] . '</span>';
                     }
-                    echo '</p></td><td><p><input id="ZC_BLOG_HOST" name="ZC_BLOG_HOST" style="max-width:600px;width:90%;" type="text" value="' . $decodedBlogHost . '" ' . ($zbp->option['ZC_PERMANENT_DOMAIN_ENABLE'] ? '' : 'readonly="readonly" ') . 'oninput="disableSubmit($(this).val())" />&nbsp;&nbsp;';
-                    if ($zbp->option['ZC_PERMANENT_DOMAIN_ENABLE'] == true) {
+                    echo '</p></td><td><p><input id="ZC_BLOG_HOST" name="ZC_BLOG_HOST" style="max-width:600px;width:90%;" type="text" value="' . $decodedBlogHost . '" ' . (($zbp->option['ZC_PERMANENT_DOMAIN_ENABLE'] && empty(Null2Empty(GetValueInArray($zbp->option, 'ZC_PERMANENT_DOMAIN_FORCED_URL')))) ? '' : 'readonly="readonly" ') . 'oninput="disableSubmit($(this).val())" />&nbsp;&nbsp;';
+                    if ($zbp->ispermanent_domain && empty(Null2Empty(GetValueInArray($zbp->option, 'ZC_PERMANENT_DOMAIN_FORCED_URL'))) && $zbp->option['ZC_PERMANENT_DOMAIN_ENABLE']) {
                         echo '<span class="js-tip"></span>';
                         echo '<p><label onclick="$(\'#ZC_BLOG_HOST\').prop(\'readonly\', $(\'#ZC_PERMANENT_DOMAIN_ENABLE\').val()==0?true:false);   if($(\'#ZC_PERMANENT_DOMAIN_ENABLE\').val()==0){enableSubmit();$(\'.js-tip\').html(\'\');}else {disableSubmit();}"><input type="text" id="ZC_PERMANENT_DOMAIN_ENABLE" name="ZC_PERMANENT_DOMAIN_ENABLE" class="checkbox" value="' . $zbp->option['ZC_PERMANENT_DOMAIN_ENABLE'] . '"/></label>' . $zbp->lang['msg']['permanent_domain'] . '<span style="display:none;"></span></p>';
                         echo '<script>

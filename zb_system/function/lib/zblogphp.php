@@ -372,6 +372,8 @@ class ZBlogPHP
 
     public $isloggedin = false; //链接至islogin
 
+    public $ispermanent_domain = false; //指示是否开启固定域名功能
+
     /**
      * @var Template 当前模板
      */
@@ -815,30 +817,31 @@ class ZBlogPHP
             //4.ZC_PERMANENT_DOMAIN_FORCED_URL优先级高于ZC_PERMANENT_DOMAIN_ENABLE是因为ZC_PERMANENT_DOMAIN_ENABLE使用的ZC_BLOG_HOST有可能出错且不方便修改
             //5.终结了！
             $permanent_domain_disable = GetValueInArray($this->option, 'ZC_PERMANENT_DOMAIN_FORCED_DISABLE');
-            if ($permanent_domain_disable == false) {
-                $forced_url = GetValueInArray($this->option, 'ZC_PERMANENT_DOMAIN_FORCED_URL');
-                if ($forced_url != '') {
-                    //如果ZC_PERMANENT_DOMAIN_FORCED_URL存在 且不为空
-                    $forced_url = rtrim($forced_url, '/') . '/';
-                    $this->host = (string) $forced_url;
-                    $this->cookiespath = strstr(str_replace('://', '', $this->host), '/');
-                    $this->option['ZC_BLOG_HOST'] = $forced_url;
-                } elseif ($this->option['ZC_PERMANENT_DOMAIN_ENABLE'] == true) {
-                    //如果ZC_PERMANENT_DOMAIN_ENABLE已开启的话
-                    $this->host = $this->option['ZC_BLOG_HOST'];
-                    $this->host = rtrim($this->host, '/') . '/';
-                    $this->cookiespath = strstr(str_replace('://', '', $this->host), '/');
-                } else {
-                    //默认自动识别域名
-                    $this->host = rtrim($this->host, '/') . '/';
-                    $this->option['ZC_BLOG_HOST'] = $this->host;
-                }
+            $permanent_domain_forced_url = GetValueInArray($this->option, 'ZC_PERMANENT_DOMAIN_FORCED_URL');
+            $permanent_domain_enable = $this->option['ZC_PERMANENT_DOMAIN_ENABLE'];
+
+            if (!$permanent_domain_disable && $permanent_domain_forced_url != '') {
+                //如果ZC_PERMANENT_DOMAIN_FORCED_URL存在 且不为空
+                $permanent_domain_forced_url = rtrim($permanent_domain_forced_url, '/') . '/';
+                $this->option['ZC_BLOG_HOST'] = $this->host = $permanent_domain_forced_url;
+                $this->cookiespath = strstr(str_replace('://', '', $this->host), '/');
+                $this->ispermanent_domain = true;
+            } elseif (!$permanent_domain_disable && $permanent_domain_enable) {
+                //如果ZC_PERMANENT_DOMAIN_ENABLE已开启的话
+                $this->host = $this->option['ZC_BLOG_HOST'];
+                $this->host = rtrim($this->host, '/') . '/';
+                $this->cookiespath = strstr(str_replace('://', '', $this->host), '/');
+                $this->ispermanent_domain = true;
             } else {
-                //ZC_PERMANENT_DOMAIN_FORCED_DISABLE = true就直接进入了默认自动识别域名流程
-                //并且会关闭ZC_PERMANENT_DOMAIN_ENABLE功能
-                $this->option['ZC_PERMANENT_DOMAIN_ENABLE'] = false;
+                //默认自动识别域名
                 $this->host = rtrim($this->host, '/') . '/';
                 $this->option['ZC_BLOG_HOST'] = $this->host;
+                //ZC_PERMANENT_DOMAIN_FORCED_DISABLE = true就直接进入了默认自动识别域名流程
+                //并且会关闭ZC_PERMANENT_DOMAIN_ENABLE功能
+                if ($permanent_domain_disable == true) {
+                    $this->option['ZC_PERMANENT_DOMAIN_ENABLE'] = false;
+                }
+                $this->ispermanent_domain = false;
             }
         }
 
