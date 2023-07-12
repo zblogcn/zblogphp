@@ -809,10 +809,11 @@ class ZBlogPHP
             $this->option['ZC_BLOG_HOST'] = $this->host;
         } else {
             //关于固定域名的逻辑
-            //1.设置了ZC_PERMANENT_DOMAIN_FORCED_DISABLE = true 就会强制跳过固定域名流程,优先级最高
-            //2.设置了ZC_PERMANENT_DOMAIN_FORCED_URL就会开启固定域名并指定$zbp->host为该域名
+            //1.option.php里设置了ZC_PERMANENT_DOMAIN_FORCED_DISABLE = true 就会强制跳过固定域名流程,优先级最高，并且会强制ZC_PERMANENT_DOMAIN_ENABLE = false
+            //2.设置了ZC_PERMANENT_DOMAIN_FORCED_URL就会开启固定域名并指定$zbp->host为该域名,并将ZC_BLOG_HOST覆盖为该域名
             //3.设置了ZC_PERMANENT_DOMAIN_ENABLE = true 就会开启固定域名并指定$zbp->host为ZC_BLOG_HOST
-            //4.ZC_PERMANENT_DOMAIN_FORCED_URL优先级高于ZC_PERMANENT_DOMAIN_ENABLE
+            //4.ZC_PERMANENT_DOMAIN_FORCED_URL优先级高于ZC_PERMANENT_DOMAIN_ENABLE是因为ZC_PERMANENT_DOMAIN_ENABLE使用的ZC_BLOG_HOST有可能出错且不方便修改
+            //5.终结了！
             $permanent_domain_disable = GetValueInArray($this->option, 'ZC_PERMANENT_DOMAIN_FORCED_DISABLE');
             if ($permanent_domain_disable == false) {
                 $forced_url = GetValueInArray($this->option, 'ZC_PERMANENT_DOMAIN_FORCED_URL');
@@ -821,6 +822,7 @@ class ZBlogPHP
                     $forced_url = rtrim($forced_url, '/') . '/';
                     $this->host = (string) $forced_url;
                     $this->cookiespath = strstr(str_replace('://', '', $this->host), '/');
+                    $this->option['ZC_BLOG_HOST'] = $forced_url;
                 } elseif ($this->option['ZC_PERMANENT_DOMAIN_ENABLE'] == true) {
                     //如果ZC_PERMANENT_DOMAIN_ENABLE已开启的话
                     $this->host = $this->option['ZC_BLOG_HOST'];
@@ -833,6 +835,8 @@ class ZBlogPHP
                 }
             } else {
                 //ZC_PERMANENT_DOMAIN_FORCED_DISABLE = true就直接进入了默认自动识别域名流程
+                //并且会关闭ZC_PERMANENT_DOMAIN_ENABLE功能
+                $this->option['ZC_PERMANENT_DOMAIN_ENABLE'] = false;
                 $this->host = rtrim($this->host, '/') . '/';
                 $this->option['ZC_BLOG_HOST'] = $this->host;
             }
