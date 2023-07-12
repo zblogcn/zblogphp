@@ -19,23 +19,9 @@ if (!defined('ZBP_PATH')) {
  *
  * @return bool
  */
-function VerifyLogin($throwException = true, $ignoreValidCode = false, $ignoreCsrfCheck = false)
+function VerifyLogin($throwException = true, $ignoreValidCode = true, $ignoreCsrfCheck = true)
 {
     global $zbp;
-
-    if ($zbp->option['ZC_LOGIN_CSRFCHECK_ENABLE'] && $ignoreCsrfCheck == false) {
-        $zbp->csrfExpirationMinute = 5;
-        if ($zbp->VerifyCSRFToken(GetVars('csrfToken' , 'POST'), 'login', 'minute') == false) {
-            $zbp->ShowError(5, __FILE__, __LINE__);
-        }
-    }
-
-    if ($zbp->option['ZC_LOGIN_VERIFY_ENABLE'] && $ignoreValidCode == false) {
-        $zbp->verifyCodeExpirationMinute = 5;
-        if ($zbp->CheckValidCode(GetVars('verify' , 'POST'), 'login', 'minute') == false) {
-            $zbp->ShowError(38, __FILE__, __LINE__);
-        }
-    }
 
     /* @var Member $m */
     $m = null;
