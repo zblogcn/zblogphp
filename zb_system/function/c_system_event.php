@@ -23,6 +23,20 @@ function VerifyLogin($throwException = true, $ignoreValidCode = true, $ignoreCsr
 {
     global $zbp;
 
+    if ($zbp->option['ZC_LOGIN_CSRFCHECK_ENABLE'] && $ignoreCsrfCheck == false) {
+        $zbp->csrfExpirationMinute = 5;
+        if ($zbp->VerifyCSRFToken(GetVars('csrfToken' , 'POST'), 'login', 'minute') == false) {
+            $zbp->ShowError(5, __FILE__, __LINE__);
+        }
+    }
+
+    if ($zbp->option['ZC_LOGIN_VERIFY_ENABLE'] && $ignoreValidCode == false) {
+        $zbp->verifyCodeExpirationMinute = 5;
+        if ($zbp->CheckValidCode(GetVars('verify' , 'POST'), 'login', 'minute') == false) {
+            $zbp->ShowError(38, __FILE__, __LINE__);
+        }
+    }
+
     /* @var Member $m */
     $m = null;
     if ($zbp->Verify_MD5(trim(GetVars('username', 'POST')), trim(GetVars('password', 'POST')), $m)) {
