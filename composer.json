@@ -33,5 +33,10 @@
     },
     "scripts": {
         "test": "sh ./vendor/bin/phpunit ./tests/phpunit"
+    },
+    "config": {
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": true
+        }
     }
 }
