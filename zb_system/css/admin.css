@@ -91,3 +91,11 @@ table.table_striped > tbody > tr:nth-of-type(odd) {background-color: #F4F4F4;}
 
 .blodcolor{color:#1d4c7d}.normalcolor{color:#3a6ea5}.lightcolor{color:#b0cdee}.highcolor{color:#3399cc}.anticolor{color:#d60000}
 .bg-blodcolor{background-color:#1d4c7d}.bg-normalcolor{background-color:#3a6ea5}.bg-lightcolor{background-color:#b0cdee}.bg-highcolor{background-color:#3399cc}.bg-anticolor{background-color:#d60000}
+
+/*safari css hack*/
+@media not all and (min-resolution:.001dpcm) { @media {
+    .login dd.validcode > img {right:-108px;}
+    @media only screen and (max-width:800px) {
+        .login dd.validcode > img {right:-98px;top:30px;}
+    }
+}}
