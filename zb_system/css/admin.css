@@ -99,3 +99,9 @@ table.table_striped > tbody > tr:nth-of-type(odd) {background-color: #F4F4F4;}
         .login dd.validcode > img {right:-98px;top:30px;}
     }
 }}
+@supports (-webkit-hyphens:none){
+    .login dd.validcode > img {right:-108px;}
+    @media only screen and (max-width:800px) {
+        .login dd.validcode > img {right:-98px;top:30px;}
+    }
+}
