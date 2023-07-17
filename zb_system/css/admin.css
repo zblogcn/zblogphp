@@ -75,7 +75,7 @@ body.short .logo { height: 70px; width:200px; margin: 60px auto 60px auto; }
 
     .login dd.checkbox { margin-left: 10px; width: 300px; float: left; padding: 5px 0; }
     .login dd.submit { width: 300px; float: right; padding: 5px 0; margin-right: 10px; }
-    .login dd.username label,.login dd.password label { width: 300px;clear:float;text-align: left;}
+    .login dd.username label,.login dd.password label,.login dd.validcode label { width: 300px;text-align: left;}
     .login input[type="text"],.login input[type="password"]{ float: right; width: 285px; }
     input[type="checkbox"] { margin: 8px 0 0 5px; }
     .loginw { width: 90%; }
