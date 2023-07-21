@@ -3,7 +3,7 @@
 } ?>
 </head>
 
-<body class="admin admin-<?php echo $action; ?>">
+<body class="body-admin admin-<?php echo $action; ?>">
   <header class="header">
     <div class="logo">
       <?php if (CheckIsMobile()) { ?>

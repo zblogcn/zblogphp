@@ -31,7 +31,7 @@ if ($zbp->CheckRights('admin')) {
 HookFilterPlugin('Filter_Plugin_Login_Header');
 ?>
 </head>
-<body class="login">
+<body class="body-login">
 <div class="bg">
 <div id="wrapper">
   <div class="logo"><img src="image/admin/none.gif" title="<?php echo htmlspecialchars($blogname); ?>" alt="<?php echo htmlspecialchars($blogname); ?>"/></div>
