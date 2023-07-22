@@ -762,7 +762,6 @@ function ApiDispatch($mods, $mod, $act)
         include_once $mod_file;
         $func = 'api_' . $mod . '_' . $act;
         if (function_exists($func)) {
-
             $result = call_user_func($func);
 
             ApiResultData($result);
