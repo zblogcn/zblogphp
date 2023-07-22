@@ -78,10 +78,13 @@ class ZbpEnv
             self::$EnvPath = $path;
 
             $env = parse_ini_file(self::$EnvPath);
-            $env = array_change_key_case($env, CASE_UPPER);
-            $_ENV = array_merge($_ENV, $env);
-
-            return true;
+            if (is_array($env)) {
+                $env = array_change_key_case($env, CASE_UPPER);
+                foreach ($env as $k => $v) {
+                    self::Put($k, $v);
+                }
+                return true;
+            }
         }
 
         return false;
