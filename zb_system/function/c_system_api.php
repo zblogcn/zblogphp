@@ -707,15 +707,14 @@ function ApiVerifyCSRF($force_check = false)
             }
 
             foreach ($skip_acts as $api_act) {
+                $api_act = array_map('strtolower', $api_act);
                 if (!isset($api_act['mod'])) {
                     continue;
                 }
-                $api_act['mod'] = strtolower($api_act['mod']);
                 if (!isset($api_act['act']) && $api_act['mod'] == $mod) {
                     // 如果只定义了 mod 并匹配，放行(比如说定义了 mod=member ，那 member mod 下所有 POST 都放行)
                     return;
                 }
-                $api_act['act'] = strtolower($api_act['act']);
                 if ($api_act['mod'] == $mod && $api_act['act'] == $act) {
                     // 匹配了 mod 和 act，放行
                     return;
