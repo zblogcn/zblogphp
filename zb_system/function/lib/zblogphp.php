@@ -4085,10 +4085,10 @@ class ZBlogPHP
 
         if (stripos('{' . sha1('mustshowerror') . '}', $errorText) === 0) {
             $errorText = str_replace('{' . sha1('mustshowerror') . '}', '', $errorText);
-            Clear_Filter_Plugin('Filter_Plugin_Debug_Display');
-            Clear_Filter_Plugin('Filter_Plugin_Debug_Handler');
-            Clear_Filter_Plugin('Filter_Plugin_Debug_Handler_Common');
-            Clear_Filter_Plugin('Filter_Plugin_Debug_Handler_ZEE');
+            ClearFilterPlugin('Filter_Plugin_Debug_Display');
+            ClearFilterPlugin('Filter_Plugin_Debug_Handler');
+            ClearFilterPlugin('Filter_Plugin_Debug_Handler_Common');
+            ClearFilterPlugin('Filter_Plugin_Debug_Handler_ZEE');
             throw new Exception($errorText);
         }
 

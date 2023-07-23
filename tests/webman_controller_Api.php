@@ -17,7 +17,7 @@ class Api
         http_request_convert_to_global($request, \Webman\App::connection());
         RunTime_Begin();
 
-        Clear_Filter_Plugin('Filter_Plugin_Zbp_ShowError');
+        ClearFilterPlugin('Filter_Plugin_Zbp_ShowError');
 
         ApiCheckEnable();
 

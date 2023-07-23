@@ -20,7 +20,7 @@ class Index
 
         //\ZBlogPHP::ThrowException('index');
 
-        Clear_Filter_Plugin('Filter_Plugin_Zbp_ShowError');
+        ClearFilterPlugin('Filter_Plugin_Zbp_ShowError');
         ob_start();
         ViewAuto();
         $r = ob_get_clean();

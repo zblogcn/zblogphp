@@ -33,7 +33,7 @@ $http_worker->onMessage = function(TcpConnection $connection, Request $request)
     RunTime_Begin();
 
     try {
-        Clear_Filter_Plugin('Filter_Plugin_Zbp_ShowError');
+        ClearFilterPlugin('Filter_Plugin_Zbp_ShowError');
         ob_start();
         ViewAuto();
         $r = ob_get_clean();
