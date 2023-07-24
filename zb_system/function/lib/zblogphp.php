@@ -514,7 +514,7 @@ class ZBlogPHP
     //没有被数据库中option覆盖之前的数据
     public $option_user_file = array();
 
-    const OPTION_RESERVE_KEYS = 'ZC_DATABASE_TYPE|ZC_SQLITE_NAME|ZC_SQLITE_PRE|ZC_MYSQL_SERVER|ZC_MYSQL_USERNAME|ZC_MYSQL_PASSWORD|ZC_MYSQL_NAME|ZC_MYSQL_CHARSET|ZC_MYSQL_COLLATE|ZC_MYSQL_PRE|ZC_MYSQL_ENGINE|ZC_MYSQL_PORT|ZC_MYSQL_PERSISTENT|ZC_MYSQL_PORT|ZC_PGSQL_SERVER|ZC_PGSQL_USERNAME|ZC_PGSQL_PASSWORD|ZC_PGSQL_NAME|ZC_PGSQL_CHARSET|ZC_PGSQL_PRE|ZC_PGSQL_PORT|ZC_PGSQL_PERSISTENT|ZC_CLOSE_WHOLE_SITE|ZC_PERMANENT_DOMAIN_FORCED_URL|ZC_PERMANENT_DOMAIN_FORCED_DISABLE|ZC_INSTALL_AFTER_CONFIG';
+    const OPTION_RESERVE_KEYS = 'ZC_DATABASE_TYPE|ZC_SQLITE_NAME|ZC_SQLITE_PRE|ZC_MYSQL_SERVER|ZC_MYSQL_USERNAME|ZC_MYSQL_PASSWORD|ZC_MYSQL_NAME|ZC_MYSQL_CHARSET|ZC_MYSQL_COLLATE|ZC_MYSQL_PRE|ZC_MYSQL_ENGINE|ZC_MYSQL_PORT|ZC_MYSQL_PERSISTENT|ZC_MYSQL_PORT|ZC_PGSQL_SERVER|ZC_PGSQL_USERNAME|ZC_PGSQL_PASSWORD|ZC_PGSQL_NAME|ZC_PGSQL_CHARSET|ZC_PGSQL_PRE|ZC_PGSQL_PORT|ZC_PGSQL_PERSISTENT|ZC_CLOSE_WHOLE_SITE|ZC_PERMANENT_DOMAIN_FORCED_URL|ZC_INSTALL_AFTER_CONFIG';
 
     /**
      * ZBP魔术方法函数**************************************************************.
@@ -809,24 +809,23 @@ class ZBlogPHP
             //如果环境变量已预设了bloghost
             $this->host = rtrim($this->host, '/') . '/';
             $this->option['ZC_BLOG_HOST'] = $this->host;
+            $this->ispermanent_domain = true;
         } else {
             //关于固定域名的逻辑
-            //1.option.php里设置了ZC_PERMANENT_DOMAIN_FORCED_DISABLE = true 就会强制跳过固定域名流程,优先级最高，并且会强制ZC_PERMANENT_DOMAIN_ENABLE = false
-            //2.设置了ZC_PERMANENT_DOMAIN_FORCED_URL就会开启固定域名并指定$zbp->host为该域名,并将ZC_BLOG_HOST覆盖为该域名
-            //3.设置了ZC_PERMANENT_DOMAIN_ENABLE = true 就会开启固定域名并指定$zbp->host为ZC_BLOG_HOST
-            //4.ZC_PERMANENT_DOMAIN_FORCED_URL优先级高于ZC_PERMANENT_DOMAIN_ENABLE是因为ZC_PERMANENT_DOMAIN_ENABLE使用的ZC_BLOG_HOST有可能出错且不方便修改
-            //5.终结了！
-            $permanent_domain_disable = GetValueInArray($this->option, 'ZC_PERMANENT_DOMAIN_FORCED_DISABLE');
+            //1.设置了ZC_PERMANENT_DOMAIN_FORCED_URL就会开启固定域名并指定$zbp->host为该域名,并将ZC_BLOG_HOST覆盖为该域名
+            //2.设置了ZC_PERMANENT_DOMAIN_ENABLE = true 就会开启固定域名并指定$zbp->host为ZC_BLOG_HOST
+            //3.ZC_PERMANENT_DOMAIN_FORCED_URL优先级高于ZC_PERMANENT_DOMAIN_ENABLE是因为ZC_PERMANENT_DOMAIN_ENABLE使用的ZC_BLOG_HOST有可能出错且不方便修改
+            //4.没有这2个设置的，转入默认自动识别域名流程，终结了！
             $permanent_domain_forced_url = GetValueInArray($this->option, 'ZC_PERMANENT_DOMAIN_FORCED_URL');
             $permanent_domain_enable = $this->option['ZC_PERMANENT_DOMAIN_ENABLE'];
 
-            if (!$permanent_domain_disable && $permanent_domain_forced_url != '') {
+            if ($permanent_domain_forced_url != '') {
                 //如果ZC_PERMANENT_DOMAIN_FORCED_URL存在 且不为空
                 $permanent_domain_forced_url = rtrim($permanent_domain_forced_url, '/') . '/';
                 $this->option['ZC_BLOG_HOST'] = $this->host = $permanent_domain_forced_url;
                 $this->cookiespath = strstr(str_replace('://', '', $this->host), '/');
                 $this->ispermanent_domain = true;
-            } elseif (!$permanent_domain_disable && $permanent_domain_enable) {
+            } elseif ($permanent_domain_enable) {
                 //如果ZC_PERMANENT_DOMAIN_ENABLE已开启的话
                 $this->host = $this->option['ZC_BLOG_HOST'];
                 $this->host = rtrim($this->host, '/') . '/';
@@ -836,11 +835,7 @@ class ZBlogPHP
                 //默认自动识别域名
                 $this->host = rtrim($this->host, '/') . '/';
                 $this->option['ZC_BLOG_HOST'] = $this->host;
-                //ZC_PERMANENT_DOMAIN_FORCED_DISABLE = true就直接进入了默认自动识别域名流程
-                //并且会关闭ZC_PERMANENT_DOMAIN_ENABLE功能
-                if ($permanent_domain_disable == true) {
-                    $this->option['ZC_PERMANENT_DOMAIN_ENABLE'] = false;
-                }
+                $this->option['ZC_PERMANENT_DOMAIN_ENABLE'] = false;
                 $this->ispermanent_domain = false;
             }
         }
@@ -1419,7 +1414,6 @@ class ZBlogPHP
     {
         $this->option['ZC_BLOG_CLSID'] = $this->guid;
 
-        unset($this->option['ZC_PERMANENT_DOMAIN_FORCED_DISABLE']);
         unset($this->option['ZC_PERMANENT_DOMAIN_FORCED_URL']);
         unset($this->option['ZC_CLOSE_WHOLE_SITE']);
         unset($this->option['ZC_INSTALL_AFTER_CONFIG']);
