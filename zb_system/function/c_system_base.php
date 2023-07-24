@@ -190,10 +190,16 @@ $GLOBALS['activeapps'] = &$GLOBALS['activedapps'];
 /*
  * 加载设置
  */
+//有ZBP_USER_OPTION，ZBP_PRESET_ENV，ZBP_PRESET_HOST，ZBP_PRESET_COOKIESPATH，ZBP_PRESET_THEME，ZBP_PRESET_THEME_STYLE，ZBP_PRESET_PLUGINS 7个预设的环境变量
+$file_base = GetVarsFromEnv('ZBP_PRESET_ENV', 'constant|environment|server');
+if (!empty($file_base) && is_readable($file_base) && class_exists('ZbpEnv')) {
+    ZbpEnv::LoadByPath($file_base);
+}
 $GLOBALS['option'] = include ZBP_PATH . 'zb_system/defend/option.php';
 $GLOBALS['option_user_file'] = array();
 if (!ZBP_HOOKERROR && is_readable($file_base = GetVarsFromEnv('ZBP_USER_OPTION'))) {
     $GLOBALS['option_user_file'] = include $file_base;
+    define('ZBP_PRESET_OPTION_USED', true);
 } elseif (is_readable($file_base = $GLOBALS['usersdir'] . 'c_option.php')) {
     $GLOBALS['option_user_file'] = include $file_base;
 }
@@ -205,7 +211,18 @@ $GLOBALS['blogsubname'] = &$GLOBALS['option']['ZC_BLOG_SUBNAME'];
 $GLOBALS['blogtheme'] = &$GLOBALS['option']['ZC_BLOG_THEME'];
 $GLOBALS['blogstyle'] = &$GLOBALS['option']['ZC_BLOG_CSS'];
 $GLOBALS['cookiespath'] = null;
-$GLOBALS['bloghost'] = GetCurrentHost($GLOBALS['blogpath'], $GLOBALS['cookiespath']);
+
+$preset_bloghost = GetVarsFromEnv('ZBP_PRESET_HOST');
+$preset_cookiespath = GetVarsFromEnv('ZBP_PRESET_COOKIESPATH');
+if ($preset_bloghost != '') {
+    define('ZBP_PRESET_HOST_USED', true);
+    $preset_bloghost = rtrim($preset_bloghost, '/');
+    $preset_cookiespath = rtrim($preset_cookiespath, '/') . '/';
+    $GLOBALS['bloghost'] = $preset_bloghost . $preset_cookiespath;
+} else {
+   $GLOBALS['bloghost'] = GetCurrentHost($GLOBALS['blogpath'], $GLOBALS['cookiespath']); 
+}
+
 $GLOBALS['usersurl'] = $GLOBALS['bloghost'] . 'zb_users/';
 $GLOBALS['systemurl'] = $GLOBALS['bloghost'] . 'zb_system/';
 $GLOBALS['adminurl'] = $GLOBALS['bloghost'] . 'zb_system/admin/';
@@ -284,7 +301,7 @@ if (ZBP_SAFEMODE === false) {
     }
 }
 
-unset($file_base, $aps, $aps2, $fn, $ap, $opk, $opv);
+unset($file_base, $aps, $aps2, $fn, $ap, $opk, $opv, $preset_bloghost, $preset_cookiespath);
 unset($theme_name, $theme_include, $theme_preset, $style_preset);
 
 //1.7新加入的

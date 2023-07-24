@@ -145,20 +145,6 @@ function GetCurrentHost($blogpath, &$cookiesPath)
 {
     $host = HTTP_SCHEME;
 
-    $preset_bloghost = GetVarsFromEnv('ZBP_PRESET_HOST');
-    $preset_cookiespath = GetVarsFromEnv('ZBP_PRESET_COOKIESPATH');
-    if ($preset_bloghost != '') {
-        defined('ZBP_PRESET_HOST_USED') || define('ZBP_PRESET_HOST_USED', true);
-        $host = $preset_bloghost;
-        $host = rtrim($host, '/');
-        $cookiesPath = '/';
-        if ($preset_cookiespath != '') {
-            $cookiesPath = $preset_cookiespath;
-            $cookiesPath = rtrim($cookiesPath, '/') . '/';
-        }
-        return $host . $cookiesPath;
-    }
-
     if (isset($_SERVER['HTTP_X_FORWARDED_HOST'])) {
         $host .= $_SERVER['HTTP_X_FORWARDED_HOST'];
     } elseif (isset($_SERVER['HTTP_TENCENT_ACCELERATION_DOMAIN_NAME'])) {
@@ -1258,6 +1244,13 @@ function GetVarsFromEnv($name, $source = '', $default = '')
         $value = Zbp_GetEnv($name, $default);
         if ($value != $default) {
             return $value;
+        }
+    }
+    if (strpos($type, '|environment|') !== false) {
+        if (function_exists('getenv') && getenv($name) !== false) {
+            return getenv($name);
+        } elseif (isset($_ENV[$name])) {
+            return $_ENV[$name];
         }
     }
     if ((strpos($type, '|server|') !== false) && isset($_SERVER[$name]) && $_SERVER[$name] != '') {
@@ -2631,7 +2624,9 @@ function Zbp_PutEnv($item, $value)
     if (class_exists('ZbpEnv')) {
         return ZbpEnv::Put($item, $value);
     } else {
-        return putenv("$item=$value");
+        if (function_exists('putenv')) {
+            return putenv("$item=$value");
+        }
     }
 }
 
