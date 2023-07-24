@@ -273,16 +273,15 @@ if (ZBP_SAFEMODE === false) {
         }
     }
 
-    $aps = GetVarsFromEnv('ZBP_PRESET_PLUGINS');
-    $aps2 = $GLOBALS['zbp']->GetPreActivePlugin();
-    if ($aps != '') {
-        $aps = explode('|', $aps);
-        foreach ($aps2 as $ap) {
-            $aps[] = $ap;
+    $aps = $GLOBALS['zbp']->GetPreActivePlugin();
+    $aps_preset = GetVarsFromEnv('ZBP_PRESET_PLUGINS');
+    if ($aps_preset != '') {
+        $aps = array();
+        $aps_preset = explode('|', $aps_preset);
+        foreach ($aps as $ap) {
+            $aps[] = trim($ap);
         }
         $aps = array_unique($aps);
-    } else {
-        $aps = &$aps2;
     }
 
     foreach ($aps as $ap) {
@@ -301,7 +300,7 @@ if (ZBP_SAFEMODE === false) {
     }
 }
 
-unset($file_base, $aps, $aps2, $fn, $ap, $opk, $opv, $preset_bloghost, $preset_cookiespath);
+unset($file_base, $aps, $aps_preset, $fn, $ap, $opk, $opv, $preset_bloghost, $preset_cookiespath);
 unset($theme_name, $theme_include, $theme_preset, $style_preset);
 
 //1.7新加入的
