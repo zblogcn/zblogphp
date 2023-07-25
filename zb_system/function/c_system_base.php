@@ -190,7 +190,7 @@ $GLOBALS['activeapps'] = &$GLOBALS['activedapps'];
 /*
  * 加载设置
  */
-//有ZBP_USER_OPTION，ZBP_PRESET_ENV，ZBP_PRESET_HOST，ZBP_PRESET_COOKIESPATH，ZBP_PRESET_THEME，ZBP_PRESET_THEME_STYLE，ZBP_PRESET_PLUGINS 7个预设的环境变量
+//有ZBP_USER_OPTION，ZBP_PRESET_ENV，ZBP_PRESET_HOST，ZBP_PRESET_COOKIESPATH，ZBP_PRESET_THEME，ZBP_PRESET_THEME_STYLE，ZBP_PRESET_PLUGINS，ZBP_PRESET_DISABLE_ROOT 等数个预设的环境变量
 $file_base = GetVarsFromEnv('ZBP_PRESET_ENV', 'constant|environment|server');
 if (!empty($file_base) && is_readable($file_base) && class_exists('ZbpEnv')) {
     ZbpEnv::LoadByPath($file_base);
@@ -213,12 +213,13 @@ $GLOBALS['blogstyle'] = &$GLOBALS['option']['ZC_BLOG_CSS'];
 $GLOBALS['cookiespath'] = null;
 
 $preset_bloghost = GetVarsFromEnv('ZBP_PRESET_HOST');
-$preset_cookiespath = GetVarsFromEnv('ZBP_PRESET_COOKIESPATH');
 if ($preset_bloghost != '') {
+    $preset_cookiespath = GetVarsFromEnv('ZBP_PRESET_COOKIESPATH');
     define('ZBP_PRESET_HOST_USED', true);
     $preset_bloghost = rtrim($preset_bloghost, '/');
     $preset_cookiespath = rtrim($preset_cookiespath, '/') . '/';
     $GLOBALS['bloghost'] = $preset_bloghost . $preset_cookiespath;
+    $GLOBALS['cookiespath'] = $preset_cookiespath;
 } else {
    $GLOBALS['bloghost'] = GetCurrentHost($GLOBALS['blogpath'], $GLOBALS['cookiespath']); 
 }
