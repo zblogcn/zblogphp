@@ -76,11 +76,12 @@ body.short .logo { height: 70px; width:200px; margin: 60px auto 60px auto; }
     .login dd.checkbox { margin-left: 10px; width: 300px; float: left; padding: 5px 0; }
     .login dd.submit { width: 300px; float: right; padding: 5px 0; margin-right: 10px; }
     .login dd.username label,.login dd.password label,.login dd.validcode label { width: 300px;text-align: left;}
-    .login input[type="text"],.login input[type="password"]{ float: right; width: 285px; }
+    .login input[type="text"],.login input[type="password"]{float: left; width: 285px; margin-left:5px;}
     input[type="checkbox"] { margin: 8px 0 0 5px; }
     .loginw { width: 90%; }
-    .login dd.validcode {height: 65px;}
-    .login dd.validcode > img {right:-198px;}
+    .login dd.validcode {height: 65px;width:300px;}
+    .login dd.validcode #edtValidcode{width:190px;}
+    .login dd.validcode > img {position:static;float:right;height:30px;}
 }
 
 table.table_hover > tbody > tr > td:hover,
@@ -95,13 +96,7 @@ table.table_striped > tbody > tr:nth-of-type(odd) {background-color: #F4F4F4;}
 /*safari css hack*/
 @media not all and (min-resolution:.001dpcm) { @media {
     .login dd.validcode > img {right:-108px;}
-    @media only screen and (max-width:800px) {
-        .login dd.validcode > img {right:-98px;top:30px;}
-    }
 }}
 @supports (-webkit-hyphens:none){
     .login dd.validcode > img {right:-108px;}
-    @media only screen and (max-width:800px) {
-        .login dd.validcode > img {right:-98px;top:30px;}
-    }
 }
