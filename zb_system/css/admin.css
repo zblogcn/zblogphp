@@ -97,6 +97,7 @@ table.table_striped > tbody > tr:nth-of-type(odd) {background-color: #F4F4F4;}
 @media not all and (min-resolution:.001dpcm) { @media {
     .login dd.validcode > img {right:-108px;}
 }}
-@supports (-webkit-hyphens:none){
+
+@media screen and (min-color-index:0) and(-webkit-min-device-pixel-ratio:0) { @media {
     .login dd.validcode > img {right:-108px;}
-}
+}}
