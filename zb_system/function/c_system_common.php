@@ -145,20 +145,6 @@ function GetCurrentHost($blogpath, &$cookiesPath)
 {
     $host = HTTP_SCHEME;
 
-    $preset_bloghost = GetVarsFromEnv('ZBP_PRESET_HOST');
-    $preset_cookiespath = GetVarsFromEnv('ZBP_PRESET_COOKIESPATH');
-    if ($preset_bloghost != '') {
-        defined('ZBP_PRESET_HOST_USED') || define('ZBP_PRESET_HOST_USED', true);
-        $host = $preset_bloghost;
-        $host = rtrim($host, '/');
-        $cookiesPath = '/';
-        if ($preset_cookiespath != '') {
-            $cookiesPath = $preset_cookiespath;
-            $cookiesPath = rtrim($cookiesPath, '/') . '/';
-        }
-        return $host . $cookiesPath;
-    }
-
     if (isset($_SERVER['HTTP_X_FORWARDED_HOST'])) {
         $host .= $_SERVER['HTTP_X_FORWARDED_HOST'];
     } elseif (isset($_SERVER['HTTP_TENCENT_ACCELERATION_DOMAIN_NAME'])) {
@@ -1240,24 +1226,31 @@ function GetVarsByDefault($name, $type = 'REQUEST', $default = null)
 
 /**
  * 从一系列指定的环境变量获得参数值
- * $source = all,constant,getenv,env,server
+ * $source = all,constant,env,server
  */
 function GetVarsFromEnv($name, $source = '', $default = '')
 {
     $value = $default;
     $type = strtolower($source);
     if ($type == '' || $type == 'all') {
-        $type = 'constant|getenv|env|server';
+        $type = 'constant|env|server';
     }
     $type = '|' . $type . '|';
     if ((strpos($type, '|constant|') !== false) && defined($name) && constant($name) != '') {
         $value = constant($name);
         return $value;
     }
-    if (strpos($type, '|getenv|') !== false || strpos($type, '|env|') !== false) {
+    if (strpos($type, '|env|') !== false || strpos($type, '|getenv|') !== false) {
         $value = Zbp_GetEnv($name, $default);
         if ($value != $default) {
             return $value;
+        }
+    }
+    if (strpos($type, '|environment|') !== false) {
+        if (function_exists('getenv') && getenv($name) !== false) {
+            return getenv($name);
+        } elseif (isset($_ENV[$name])) {
+            return $_ENV[$name];
         }
     }
     if ((strpos($type, '|server|') !== false) && isset($_SERVER[$name]) && $_SERVER[$name] != '') {
@@ -1284,12 +1277,7 @@ function GetOptionVarsFromEnv($value)
         $arg = explode(':', $value);
         $arg = $arg[1];
     }
-    if (strpos($value, 'getenv:') === 0) {
-        $type = 'getenv';
-        $arg = explode(':', $value);
-        $arg = $arg[1];
-    }
-    if (strpos($value, 'env:') === 0) {
+    if (strpos($value, 'env:') === 0 || strpos($value, 'getenv:') === 0) {
         $type = 'env';
         $arg = explode(':', $value);
         $arg = $arg[1];
@@ -2631,7 +2619,9 @@ function Zbp_PutEnv($item, $value)
     if (class_exists('ZbpEnv')) {
         return ZbpEnv::Put($item, $value);
     } else {
-        return putenv("$item=$value");
+        if (function_exists('putenv')) {
+            return putenv("$item=$value");
+        }
     }
 }
 

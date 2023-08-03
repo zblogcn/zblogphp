@@ -798,9 +798,11 @@ class ZbpErrorControl
 
         // 根据关键词查找错误
         $lowerErrorReason = strtolower($this->message);
-        foreach ($lang['error_reasons']['other'] as $key => $value) {
-            if (strpos($lowerErrorReason, $key) > -1) {
-                $result .= $value;
+        if (isset($lang['error_reasons']) && isset($lang['error_reasons']['other']) && is_array($lang['error_reasons']['other'])) {
+            foreach ($lang['error_reasons']['other'] as $key => $value) {
+                if (strpos($lowerErrorReason, $key) > -1) {
+                    $result .= $value;
+                }
             }
         }
 
