@@ -158,6 +158,10 @@ class ValidateCode
         if ($zc_height > 0) {
             $this->height = $zc_height;
         }
+        $zc_codelen = (int) $zbp->option['ZC_VERIFYCODE_LENGTH'];
+        if ($zc_codelen > 0) {
+            $this->codelen = $zc_codelen;
+        }
     }
 
     /**
