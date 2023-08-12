@@ -79,7 +79,8 @@ if ($handle = GetVars('handle')) {
                 <td>调用方式</td>
                 <td>
                     在您的服务器 crontab 中增加一条：<br/>
-                    * * * * * <?php echo $filepath ?> >> /dev/null 2>&1
+                    * * * * * php <?php echo $filepath ?> >> /dev/null 2>&1<br/>
+                    （如果您的 php bin 目录未在环境变量 PATH 中，请将 php 替换为 php cli 可执行文件的具体位置）
                 </td>
             </tr>
             <tr><td colspan="2"></td></tr>
