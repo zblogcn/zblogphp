@@ -43,6 +43,7 @@ function InstallPlugin_Scheduler()
     global $zbp;
     if (! $zbp->Config('Scheduler')->token) {
         $zbp->Config('Scheduler')->token = Scheduler_RandomChars(32);
+        $zbp->SaveConfig('Scheduler');
     }
 }
 
