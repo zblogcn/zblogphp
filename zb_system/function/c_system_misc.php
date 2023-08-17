@@ -420,6 +420,9 @@ function misc_php_zbp_info()
                 $ca = $ca['user'];
                 echo '<table class="table_striped table_hover"><tbody><tr class="h"><th colspan="2">Z-BlogPHP Constants</th></tr>';
                 foreach ($ca as $key => $value) {
+                    if (!is_scalar($value)) {
+                        $value = json_encode($value);
+                    }
                     echo '<tr><td class="e">' . $key . '</td><td class="v">' . TransferHTML($value, '[nohtml]') . '</td></tr>';
                 }
                 echo '</tbody></table>';
