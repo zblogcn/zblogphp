@@ -31,7 +31,7 @@ class Network__curl implements Network__Interface
 
     private $url = '';
 
-    private $query = array();
+    private $getdata = array();
 
     private $postdata = array();
 
@@ -173,9 +173,6 @@ class Network__curl implements Network__Interface
                 $this->parsed_url['port'] = 80;
             }
         }
-        if (isset($this->parsed_url['query'])) {
-            parse_str($this->parsed_url['query'], $this->query);
-        }
 
         curl_setopt($this->ch, CURLOPT_URL, $bstrUrl);
         curl_setopt($this->ch, CURLOPT_HEADER, 1);
@@ -204,14 +201,28 @@ class Network__curl implements Network__Interface
 
     /**
      * 设置 querystring.
-     *
-     * @param string $query_string
      */
-    public function setQueryString($query_string)
+    private function set_querystring()
     {
         $url = curl_getinfo($this->ch, CURLINFO_EFFECTIVE_URL);
+
+        $this->parsed_url = parse_url($url);
+
+        $breforedata = array();
+        if (isset($this->parsed_url['query'])) {
+            parse_str($this->parsed_url['query'], $breforedata);
+        }
+
+        $newdata = array_merge($breforedata, $this->getdata);
+        $query_string = http_build_query($newdata);
+
+        $fragment = '';
+        if (stripos($url, '#') !== false) {
+            $url = SplitAndGet($url, '#');
+            $fragment = '#' . SplitAndGet($url, '#', 1);
+        }
         $url = SplitAndGet($url, '?');
-        curl_setopt($this->ch, CURLOPT_URL, $url . '?' . $query_string);
+        curl_setopt($this->ch, CURLOPT_URL, $url . '?' . $query_string . $fragment);
     }
 
     /**
@@ -221,7 +232,7 @@ class Network__curl implements Network__Interface
      */
     public function addQuery($name, $entity)
     {
-        $this->query[$name] = $entity;
+        $this->getdata[$name] = $entity;
     }
 
     /**
@@ -237,7 +248,7 @@ class Network__curl implements Network__Interface
         }
         curl_setopt($this->ch, CURLOPT_HTTPHEADER, $this->httpheader);
 
-        $this->setQueryString(http_build_query($this->query));
+        $this->set_querystring();
 
         if ($this->option['method'] == 'POST') {
             if (is_string($varBody) && count($this->postdata) > 0) {
@@ -431,6 +442,7 @@ class Network__curl implements Network__Interface
 
         $this->option = array();
         $this->url = '';
+        $this->getdata = array();
         $this->postdata = array();
         $this->httpheader = array();
         $this->responseHeader = array();
