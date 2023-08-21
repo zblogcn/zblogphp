@@ -29,6 +29,8 @@ class Network__fsockopen implements Network__Interface
 
     private $url = '';
 
+    private $getdata = array();
+
     private $postdata = array();
 
     private $httpheader = array();
@@ -135,6 +137,53 @@ class Network__fsockopen implements Network__Interface
     }
 
     /**
+     * 处理 querystring 到 url.
+     */
+    private function load_querystring()
+    {
+        $url = $this->url;
+
+        $this->parsed_url = parse_url($url);
+
+        if (!isset($this->parsed_url['port'])) {
+            if ($this->parsed_url['scheme'] == 'https') {
+                $this->parsed_url['port'] = 443;
+            } else {
+                $this->parsed_url['port'] = 80;
+            }
+        }
+
+        $breforedata = array();
+        if (isset($this->parsed_url['query'])) {
+            parse_str($this->parsed_url['query'], $breforedata);
+        }
+
+        $newdata = array_merge($breforedata, $this->getdata);
+        $query_string = http_build_query($newdata);
+
+        $fragment = '';
+        if (stripos($url, '#') !== false) {
+            $url = SplitAndGet($url, '#');
+            $fragment = '#' . SplitAndGet($url, '#', 1);
+        }
+        $url = SplitAndGet($url, '?');
+        $url = $url . '?' . $query_string . $fragment;
+
+        $this->url = $url;
+        $this->parsed_url['query'] = $query_string;
+}
+
+    /**
+     * 新增查询.
+     *
+     * @param array $query
+     */
+    public function addQuery($name, $entity)
+    {
+        $this->getdata[$name] = $entity;
+    }
+
+    /**
      * @param $bstrMethod
      * @param $bstrUrl
      * @param bool   $varAsync
@@ -154,6 +203,7 @@ class Network__fsockopen implements Network__Interface
         $this->option['method'] = $method;
 
         $this->parsed_url = parse_url($bstrUrl);
+        $this->url = $bstrUrl;
         if (!$this->parsed_url) {
             throw new Exception('URL Syntax Error!');
         } else {
@@ -183,6 +233,8 @@ class Network__fsockopen implements Network__Interface
         if (is_array($data)) {
             $data = http_build_query($data);
         }
+
+        $this->load_querystring();
 
         if ($this->option['method'] == 'POST') {
             if (is_array($varBody) && count($this->postdata) > 0) {
@@ -426,6 +478,17 @@ class Network__fsockopen implements Network__Interface
     }
 
     /**
+     * @param string $name
+     * @param string $entity
+     *
+     * @return void
+     */
+    public function addFormParam($name, $entity)
+    {
+        $this->addText($name, $entity);
+    }
+
+    /**
      * @return string
      */
     private function private_buildPostData()
@@ -496,6 +559,7 @@ class Network__fsockopen implements Network__Interface
 
         $this->option = array();
         $this->url = '';
+        $this->getdata = array();
         $this->postdata = array();
         $this->responseHeader = array();
         $this->parsed_url = array();

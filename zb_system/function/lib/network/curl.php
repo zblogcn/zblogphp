@@ -200,9 +200,9 @@ class Network__curl implements Network__Interface
     }
 
     /**
-     * 设置 querystring.
+     * 处理 querystring 到 url.
      */
-    private function set_querystring()
+    private function load_querystring()
     {
         $url = curl_getinfo($this->ch, CURLINFO_EFFECTIVE_URL);
 
@@ -248,7 +248,7 @@ class Network__curl implements Network__Interface
         }
         curl_setopt($this->ch, CURLOPT_HTTPHEADER, $this->httpheader);
 
-        $this->set_querystring();
+        $this->load_querystring();
 
         if ($this->option['method'] == 'POST') {
             if (is_string($varBody) && count($this->postdata) > 0) {
