@@ -133,7 +133,7 @@ class Network__filegetcontents implements Network__Interface
     /**
      * 处理 querystring 到 url.
      */
-    private function load_querystring()
+    private function load_query_to_url()
     {
         $url = $this->url;
 
@@ -217,7 +217,7 @@ class Network__filegetcontents implements Network__Interface
             $data = http_build_query($data);
         }
 
-        $this->load_querystring();
+        $this->load_query_to_url();
 
         if ($this->option['method'] == 'POST') {
             if (is_array($varBody) && count($this->postdata) > 0) {
