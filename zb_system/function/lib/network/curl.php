@@ -31,6 +31,8 @@ class Network__curl implements Network__Interface
 
     private $url = '';
 
+    private $query = array();
+
     private $postdata = array();
 
     private $httpheader = array();
@@ -171,6 +173,9 @@ class Network__curl implements Network__Interface
                 $this->parsed_url['port'] = 80;
             }
         }
+        if (isset($this->parsed_url['query'])) {
+            parse_str($this->parsed_url['query'], $this->query);
+        }
 
         curl_setopt($this->ch, CURLOPT_URL, $bstrUrl);
         curl_setopt($this->ch, CURLOPT_HEADER, 1);
@@ -198,6 +203,28 @@ class Network__curl implements Network__Interface
     }
 
     /**
+     * 设置 querystring.
+     *
+     * @param string $query_string
+     */
+    public function setQueryString($query_string)
+    {
+        $url = curl_getinfo($this->ch, CURLINFO_EFFECTIVE_URL);
+        $url = SplitAndGet($url, '?');
+        curl_setopt($this->ch, CURLOPT_URL, $url . '?' . $query_string);
+    }
+
+    /**
+     * 新增查询.
+     *
+     * @param array $query
+     */
+    public function addQuery($name, $entity)
+    {
+        $this->query[$name] = $entity;
+    }
+
+    /**
      * 发送数据.
      *
      * @param string $varBody
@@ -209,6 +236,8 @@ class Network__curl implements Network__Interface
             $data = http_build_query($data);
         }
         curl_setopt($this->ch, CURLOPT_HTTPHEADER, $this->httpheader);
+
+        $this->setQueryString(http_build_query($this->query));
 
         if ($this->option['method'] == 'POST') {
             if (is_string($varBody) && count($this->postdata) > 0) {
@@ -372,6 +401,17 @@ class Network__curl implements Network__Interface
     public function addText($name, $entity)
     {
         $this->add_postdata($name, $entity);
+    }
+
+    /**
+     * @param string $name
+     * @param string $entity
+     *
+     * @return void
+     */
+    public function addFormParam($name, $entity)
+    {
+        $this->addText($name, $entity);
     }
 
     /**
