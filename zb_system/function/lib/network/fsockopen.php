@@ -171,12 +171,13 @@ class Network__fsockopen implements Network__Interface
 
         $this->url = $url;
         $this->parsed_url['query'] = $query_string;
-}
+    }
 
     /**
      * 新增查询.
      *
-     * @param array $query
+     * @param string $name
+     * @param string $entity
      */
     public function addQuery($name, $entity)
     {

@@ -10,14 +10,14 @@
  *    如您使用虚拟主机：
  *
  *        > 联系空间商，更换空间为支持 PHP 的空间。
- *        > Contact your service provider, and let them provice a new service which supports PHP.
+ *        > Contact your service provider, and let them provide a new service which supports PHP.
  *
  *
  *    如您自行搭建服务器，推荐您：
  *    Configuring manually? Recommend:
  *
  *        > 访问 PHP 官方网站获取安装帮助。
- *        > Visit PHP Official Website to get the documentation of installion and configuration.
+ *        > Visit PHP Official Website to get the documentation of installation and configuration.
  *        > http://php.net
  *
  ******************************************************************************************************

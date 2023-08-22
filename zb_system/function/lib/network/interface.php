@@ -91,6 +91,14 @@ interface Network__Interface
     public function addText($name, $entity);
 
     /**
+     * @param string $name
+     * @param string $entity
+     *
+     * @return mixed
+     */
+    public function addFormParam($name, $entity);
+
+    /**
      * @param $resolveTimeout
      * @param $connectTimeout
      * @param $sendTimeout
@@ -99,6 +107,14 @@ interface Network__Interface
      * @return mixed
      */
     public function setTimeOuts($resolveTimeout, $connectTimeout, $sendTimeout, $receiveTimeout);
+
+    /**
+     * 新增查询.
+     *
+     * @param string $name
+     * @param string $entity
+     */
+    public function addQuery($name, $entity);
 
     /**
      * @return mixed

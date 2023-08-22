@@ -161,7 +161,8 @@ class Network__filegetcontents implements Network__Interface
     /**
      * 新增查询.
      *
-     * @param array $query
+     * @param string $name
+     * @param string $entity
      */
     public function addQuery($name, $entity)
     {
