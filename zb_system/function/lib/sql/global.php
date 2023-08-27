@@ -1152,8 +1152,13 @@ class SQL__Global
                 continue;
             }
             if (is_array($value)) {
-                $escapedValue = $this->db->EscapeString($value[1]);
-                $updateData[] = "$index = $value[0] $escapedValue";
+                if (count($value) == 2) {
+                    $escapedValue = $this->db->EscapeString($value[1]);
+                    $updateData[] = "$index = $value[0] $escapedValue";
+                } elseif (count($value) == 3) {
+                    $escapedValue = $this->db->EscapeString($value[2]);
+                    $updateData[] = "$index = $value[0] $value[1] $escapedValue";
+                }
             } else {
                 $escapedValue = $this->db->EscapeString($value);
                 $updateData[] = "$index = '$escapedValue'";
