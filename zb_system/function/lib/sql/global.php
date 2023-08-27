@@ -1151,8 +1151,13 @@ class SQL__Global
             if (is_null($value)) {
                 continue;
             }
-            $escapedValue = $this->db->EscapeString($value);
-            $updateData[] = "$index = '$escapedValue'";
+            if (is_array($value)) {
+                $escapedValue = $this->db->EscapeString($value[1]);
+                $updateData[] = "$index = $value[0] $escapedValue";
+            } else {
+                $escapedValue = $this->db->EscapeString($value);
+                $updateData[] = "$index = '$escapedValue'";
+            }
         }
         $sql[] = implode(', ', $updateData);
         $this->buildWhere();
