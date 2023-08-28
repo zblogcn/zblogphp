@@ -268,7 +268,7 @@ function ApiCheckMods()
     }
 
     if (ApiCheckModAndAct($mod, $act) === false) {
-        $zbp->ShowError(96, __FILE__, __LINE__);
+        $zbp->ShowError($GLOBALS['lang']['error']['95'], __FILE__, __LINE__, array('mod' => $mod, 'act' => $act), 503);
     }
 }
 
@@ -460,7 +460,7 @@ function ApiCheckAuth($loginRequire = false, $action = 'view', $throwException =
     // 登录认证
     if ($loginRequire && !$GLOBALS['zbp']->user->ID) {
         if ($throwException == true) {
-            $GLOBALS['zbp']->ShowError($GLOBALS['lang']['error']['6'], __FILE__, __LINE__, null, 401);
+            $GLOBALS['zbp']->ShowError($GLOBALS['lang']['error']['6'], __FILE__, __LINE__, array('action' => $action), 401);
         } else {
             return false;
         }
@@ -469,7 +469,7 @@ function ApiCheckAuth($loginRequire = false, $action = 'view', $throwException =
     // 权限认证
     if (!$GLOBALS['zbp']->CheckRights($action)) {
         if ($throwException == true) {
-            $GLOBALS['zbp']->ShowError($GLOBALS['lang']['error']['6'], __FILE__, __LINE__, null, 403);
+            $GLOBALS['zbp']->ShowError($GLOBALS['lang']['error']['6'], __FILE__, __LINE__, array('action' => $action), 403);
         } else {
             return false;
         }
@@ -930,6 +930,6 @@ function ApiResultData(&$result)
 function ApiCheckHttpMethod($allow_method = 'GET|POST|PUT|DELETE')
 {
     if (isset($_SERVER['REQUEST_METHOD']) && stripos($allow_method, $_SERVER['REQUEST_METHOD']) === false) {
-        $GLOBALS['zbp']->ShowError($GLOBALS['lang']['error']['5'], __FILE__, __LINE__, null, 405);
+        $GLOBALS['zbp']->ShowError($GLOBALS['lang']['error']['5'], __FILE__, __LINE__, array('method' => $allow_method), 405);
     }
 }
