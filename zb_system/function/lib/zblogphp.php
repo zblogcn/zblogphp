@@ -4049,7 +4049,7 @@ class ZBlogPHP
      *
      * @return mixed
      */
-    public function ShowError($errorText, $file = null, $line = null, $moreinfo = null, $httpcode = null)
+    public function ShowError($errorText, $file = null, $line = null, $moreinfo = null, $httpcode = null, $messagefull = null)
     {
         $args = func_get_args();
         $errorCode = 0;
@@ -4062,7 +4062,9 @@ class ZBlogPHP
             $file = __FILE__;
             $line = __LINE__ - 11;
         }
-        $messagefull = $errorText . ' (set_exception_handler) ';
+        if (is_null($messagefull) or empty($messagefull)) {
+            $messagefull = $errorText . ' (set_exception_handler) ';
+        }
         if (!is_array($moreinfo) && !is_null($moreinfo)) {
             $moreinfo = array($moreinfo);
         }

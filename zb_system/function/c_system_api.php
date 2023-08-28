@@ -784,7 +784,7 @@ function ApiDispatch($mods, $mod, $act)
         }
     }
 
-    $GLOBALS['zbp']->ShowError($GLOBALS['lang']['error']['96'], __FILE__, __LINE__, null, 404);
+    $GLOBALS['zbp']->ShowError($GLOBALS['lang']['error']['96'], __FILE__, __LINE__, array('mod' => $mod, 'act' => $act), 404);
 }
 
 /**
