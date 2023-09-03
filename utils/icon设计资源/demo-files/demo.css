@@ -22,7 +22,7 @@ a:hover, a:focus {
   box-shadow: 0 1px #e74c3c;
 }
 .bshadow0, input {
-  /* box-shadow: inset 0 -2px #e7e7e7; */
+  box-shadow: inset 0 -2px #e7e7e7;
 }
 input:hover {
   box-shadow: inset 0 -2px #ccc;
@@ -46,10 +46,10 @@ input:focus {
 }
 .glyph {
   font-size: 16px;
-  width: 340px;
-  padding-bottom: 0;
-  margin-right: 0;
-  margin-bottom: 0;
+  width: 15em;
+  padding-bottom: 1em;
+  margin-right: 4em;
+  margin-bottom: 1em;
   float: left;
   overflow: hidden;
 }
@@ -64,8 +64,7 @@ input:focus {
   text-align: center;
 }
 .bgc1 {
-  background: #f5f5f5;
-  margin-top: 0;
+  background: #f1f1f1;
 }
 .fgc1 {
   color: #999;
@@ -100,13 +99,12 @@ p {
 }
 .mls {
   margin-left: .25em;
-  font-size: 15px;
 }
 .ptl {
   padding-top: 1.5em;
 }
 .pbs, .pvs {
-  /* padding-bottom: .25em; */
+  padding-bottom: .25em;
 }
 .pvs, .pts {
   padding-top: .25em;
@@ -116,14 +114,12 @@ p {
 }
 .unitRight {
   float: right;
-  display: none;
 }
 .size1of2 {
   width: 50%;
 }
 .size1of1 {
   width: 100%;
-  display: none;
 }
 .clearfix:before, .clearfix:after {
   content: " ";
@@ -151,18 +147,6 @@ p {
   font-size: 16px;
 }
 .fs1 {
-  font-size: 16px;
-}
-.mhl.clearfix.mbl {
-    display: none;
-}
-h1.mvm.mtn.fgc1 {
-    display: none;
+  font-size: 32px;
 }
 
-.bgc1.clearfix{
-    margin-top: 20px;
-}
-.bgc1.clearfix:nth-child(1){
-    margin-top: 0;
-}
