@@ -411,7 +411,7 @@ class Thumb
         $this->syncSrcFromTmp();
 
         $this->tmpRes = imagecreatetruecolor($clip_width, $clip_height);
-        //imagefill($this->tmpRes, 0, 0, 0xffffff);
+        imagefill($this->tmpRes, 0, 0, 0xffffff);
         imagecopyresampled($this->tmpRes, $this->srcRes, 0, 0, $clipx, $clipy, $this->srcWidth, $this->srcHeight, $this->srcWidth, $this->srcHeight);
     }
 
