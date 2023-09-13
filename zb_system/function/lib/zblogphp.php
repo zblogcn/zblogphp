@@ -853,7 +853,7 @@ class ZBlogPHP
         }
 
         /*if(isset($_COOKIE['timezone'])){
-            $tz=GetVars('timezone','COOKIE');
+            $tz=GetVars('timezone', 'COOKIE');
             if(is_numeric($tz)){
             $tz=sprintf('%+d',-$tz);
             date_default_timezone_set('Etc/GMT' . $tz);
@@ -4837,7 +4837,7 @@ class ZBlogPHP
     public function RedirectInstall()
     {
         if (!$this->option['ZC_DATABASE_TYPE']) {
-            $s = $_SERVER['QUERY_STRING'];
+            $s = GetVars('QUERY_STRING', 'GET');
             $s = empty($s) ? '' : '?' . $s;
             Redirect302('./zb_install/index.php' . $s);
         }
