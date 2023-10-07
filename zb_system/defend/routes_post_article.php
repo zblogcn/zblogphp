@@ -111,6 +111,16 @@ return array (
       1 => 'alias',
     ),
   ),
+// 添加外部链接跳转路由
+  'active_post_article_view_external_link' =>
+  array(
+    'posttype' => 0,
+    'type' => 'active',
+    'name' => 'post_article_view_external_link',
+    'call' => 'ViewExternalLink',
+    'urlrule' => '',
+    'must_get' => array('external_link'),
+  ),
 //  添加 文章页单页 伪静路由
   'rewrite_post_article_single' => 
   array (

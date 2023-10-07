@@ -2850,3 +2850,22 @@ function is_intranet_ip($check_ip) {
     }
     return null;
 }
+
+/**
+ * 外部链接替换成内部链接.
+ *
+ * @param string $link
+ * @return string
+ */
+function ReplaceExternalLink($link)
+{
+    global $zbp;
+    
+    $parsed_link = parse_url($link);
+    $parsed_host = parse_url($zbp->host);
+    if (isset($parsed_link['host']) && $parsed_link['host'] !== $parsed_host['host']) {
+        $link = $zbp->host . '?external_link=' . rawurlencode($link);
+    }
+
+    return $link;
+}

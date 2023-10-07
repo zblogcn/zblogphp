@@ -12,7 +12,7 @@
             "version": "v0.7.2",
             "dist": {
                 "type": "zip",
-                "url": "https://mirrors.tencent.com/repository/composer/dealerdirect/phpcodesniffer-composer-installer/v0.7.2/dealerdirect-phpcodesniffer-composer-installer-v0.7.2.zip",
+                "url": "https://mirrors.cloud.tencent.com/repository/composer/dealerdirect/phpcodesniffer-composer-installer/v0.7.2/dealerdirect-phpcodesniffer-composer-installer-v0.7.2.zip",
                 "reference": "1c968e542d8843d7cd71de3c5c9c3ff3ad71a1db",
                 "shasum": ""
             },
@@ -77,7 +77,7 @@
             "version": "v0.2.1",
             "dist": {
                 "type": "zip",
-                "url": "https://mirrors.tencent.com/repository/composer/dms/phpunit-arraysubset-asserts/v0.2.1/dms-phpunit-arraysubset-asserts-v0.2.1.zip",
+                "url": "https://mirrors.cloud.tencent.com/repository/composer/dms/phpunit-arraysubset-asserts/v0.2.1/dms-phpunit-arraysubset-asserts-v0.2.1.zip",
                 "reference": "8e3673a70019a60df484e36fc3271d63cbdc40ea",
                 "shasum": ""
             },
@@ -112,7 +112,7 @@
             "version": "2.0.0",
             "dist": {
                 "type": "zip",
-                "url": "https://mirrors.cloud.tencent.com/repository/composer/doctrine/instantiator/2.0.0/doctrine-instantiator-2.0.0.zip",
+                "url": "https://mirrors.tencent.com/repository/composer/doctrine/instantiator/2.0.0/doctrine-instantiator-2.0.0.zip",
                 "reference": "c6222283fa3f4ac679f8b9ced9a4e23f163e80d0",
                 "shasum": ""
             },
@@ -198,11 +198,11 @@
         },
         {
             "name": "nikic/php-parser",
-            "version": "v4.16.0",
+            "version": "v4.17.1",
             "dist": {
                 "type": "zip",
-                "url": "https://mirrors.cloud.tencent.com/repository/composer/nikic/php-parser/v4.16.0/nikic-php-parser-v4.16.0.zip",
-                "reference": "19526a33fb561ef417e822e85f08a00db4059c17",
+                "url": "https://mirrors.cloud.tencent.com/repository/composer/nikic/php-parser/v4.17.1/nikic-php-parser-v4.17.1.zip",
+                "reference": "a6303e50c90c355c7eeee2c4a8b27fe8dc8fef1d",
                 "shasum": ""
             },
             "require": {
@@ -240,14 +240,14 @@
                 "parser",
                 "php"
             ],
-            "time": "2023-06-25T14:52:30+00:00"
+            "time": "2023-08-13T19:53:39+00:00"
         },
         {
             "name": "phar-io/manifest",
             "version": "2.0.3",
             "dist": {
                 "type": "zip",
-                "url": "https://mirrors.cloud.tencent.com/repository/composer/phar-io/manifest/2.0.3/phar-io-manifest-2.0.3.zip",
+                "url": "https://mirrors.tencent.com/repository/composer/phar-io/manifest/2.0.3/phar-io-manifest-2.0.3.zip",
                 "reference": "97803eca37d319dfa7826cc2437fc020857acb53",
                 "shasum": ""
             },
@@ -338,7 +338,7 @@
             "version": "9.3.5",
             "dist": {
                 "type": "zip",
-                "url": "https://mirrors.tencent.com/repository/composer/phpcompatibility/php-compatibility/9.3.5/phpcompatibility-php-compatibility-9.3.5.zip",
+                "url": "https://mirrors.cloud.tencent.com/repository/composer/phpcompatibility/php-compatibility/9.3.5/phpcompatibility-php-compatibility-9.3.5.zip",
                 "reference": "9fb324479acf6f39452e0655d2429cc0d3914243",
                 "shasum": ""
             },
@@ -387,11 +387,11 @@
         },
         {
             "name": "phpunit/php-code-coverage",
-            "version": "9.2.27",
+            "version": "9.2.29",
             "dist": {
                 "type": "zip",
-                "url": "https://mirrors.tencent.com/repository/composer/phpunit/php-code-coverage/9.2.27/phpunit-php-code-coverage-9.2.27.zip",
-                "reference": "b0a88255cb70d52653d80c890bd7f38740ea50d1",
+                "url": "https://mirrors.tencent.com/repository/composer/phpunit/php-code-coverage/9.2.29/phpunit-php-code-coverage-9.2.29.zip",
+                "reference": "6a3a87ac2bbe33b25042753df8195ba4aa534c76",
                 "shasum": ""
             },
             "require": {
@@ -444,14 +444,14 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2023-07-26T13:44:30+00:00"
+            "time": "2023-09-19T04:57:46+00:00"
         },
         {
             "name": "phpunit/php-file-iterator",
             "version": "3.0.6",
             "dist": {
                 "type": "zip",
-                "url": "https://mirrors.cloud.tencent.com/repository/composer/phpunit/php-file-iterator/3.0.6/phpunit-php-file-iterator-3.0.6.zip",
+                "url": "https://mirrors.tencent.com/repository/composer/phpunit/php-file-iterator/3.0.6/phpunit-php-file-iterator-3.0.6.zip",
                 "reference": "cf1c2e7c203ac650e352f4cc675a7021e7d1b3cf",
                 "shasum": ""
             },
@@ -625,11 +625,11 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "9.6.10",
+            "version": "9.6.13",
             "dist": {
                 "type": "zip",
-                "url": "https://mirrors.cloud.tencent.com/repository/composer/phpunit/phpunit/9.6.10/phpunit-phpunit-9.6.10.zip",
-                "reference": "a6d351645c3fe5a30f5e86be6577d946af65a328",
+                "url": "https://mirrors.cloud.tencent.com/repository/composer/phpunit/phpunit/9.6.13/phpunit-phpunit-9.6.13.zip",
+                "reference": "f3d767f7f9e191eab4189abe41ab37797e30b1be",
                 "shasum": ""
             },
             "require": {
@@ -644,7 +644,7 @@
                 "phar-io/manifest": "^2.0.3",
                 "phar-io/version": "^3.0.2",
                 "php": ">=7.3",
-                "phpunit/php-code-coverage": "^9.2.13",
+                "phpunit/php-code-coverage": "^9.2.28",
                 "phpunit/php-file-iterator": "^3.0.5",
                 "phpunit/php-invoker": "^3.1.1",
                 "phpunit/php-text-template": "^2.0.3",
@@ -699,14 +699,14 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2023-07-10T04:04:23+00:00"
+            "time": "2023-09-19T05:39:22+00:00"
         },
         {
             "name": "sebastian/cli-parser",
             "version": "1.0.1",
             "dist": {
                 "type": "zip",
-                "url": "https://mirrors.cloud.tencent.com/repository/composer/sebastian/cli-parser/1.0.1/sebastian-cli-parser-1.0.1.zip",
+                "url": "https://mirrors.tencent.com/repository/composer/sebastian/cli-parser/1.0.1/sebastian-cli-parser-1.0.1.zip",
                 "reference": "442e7c7e687e42adc03470c7b668bc4b2402c0b2",
                 "shasum": ""
             },
@@ -883,7 +883,7 @@
             "version": "2.0.2",
             "dist": {
                 "type": "zip",
-                "url": "https://mirrors.cloud.tencent.com/repository/composer/sebastian/complexity/2.0.2/sebastian-complexity-2.0.2.zip",
+                "url": "https://mirrors.tencent.com/repository/composer/sebastian/complexity/2.0.2/sebastian-complexity-2.0.2.zip",
                 "reference": "739b35e53379900cc9ac327b2147867b8b6efd88",
                 "shasum": ""
             },
@@ -974,7 +974,7 @@
             "version": "5.1.5",
             "dist": {
                 "type": "zip",
-                "url": "https://mirrors.cloud.tencent.com/repository/composer/sebastian/environment/5.1.5/sebastian-environment-5.1.5.zip",
+                "url": "https://mirrors.tencent.com/repository/composer/sebastian/environment/5.1.5/sebastian-environment-5.1.5.zip",
                 "reference": "830c43a844f1f8d5b7a1f6d6076b784454d8b7ed",
                 "shasum": ""
             },
@@ -1021,7 +1021,7 @@
             "version": "4.0.5",
             "dist": {
                 "type": "zip",
-                "url": "https://mirrors.cloud.tencent.com/repository/composer/sebastian/exporter/4.0.5/sebastian-exporter-4.0.5.zip",
+                "url": "https://mirrors.tencent.com/repository/composer/sebastian/exporter/4.0.5/sebastian-exporter-4.0.5.zip",
                 "reference": "ac230ed27f0f98f597c8a2b6eb7ac563af5e5b9d",
                 "shasum": ""
             },
@@ -1082,7 +1082,7 @@
             "version": "5.0.6",
             "dist": {
                 "type": "zip",
-                "url": "https://mirrors.cloud.tencent.com/repository/composer/sebastian/global-state/5.0.6/sebastian-global-state-5.0.6.zip",
+                "url": "https://mirrors.tencent.com/repository/composer/sebastian/global-state/5.0.6/sebastian-global-state-5.0.6.zip",
                 "reference": "bde739e7565280bda77be70044ac1047bc007e34",
                 "shasum": ""
             },
@@ -1171,7 +1171,7 @@
             "version": "4.0.4",
             "dist": {
                 "type": "zip",
-                "url": "https://mirrors.cloud.tencent.com/repository/composer/sebastian/object-enumerator/4.0.4/sebastian-object-enumerator-4.0.4.zip",
+                "url": "https://mirrors.tencent.com/repository/composer/sebastian/object-enumerator/4.0.4/sebastian-object-enumerator-4.0.4.zip",
                 "reference": "5c9eeac41b290a3712d88851518825ad78f45c71",
                 "shasum": ""
             },
@@ -1298,7 +1298,7 @@
             "version": "3.0.3",
             "dist": {
                 "type": "zip",
-                "url": "https://mirrors.cloud.tencent.com/repository/composer/sebastian/resource-operations/3.0.3/sebastian-resource-operations-3.0.3.zip",
+                "url": "https://mirrors.tencent.com/repository/composer/sebastian/resource-operations/3.0.3/sebastian-resource-operations-3.0.3.zip",
                 "reference": "0f4443cb3a1d92ce809899753bc0d5d5a8dd19a8",
                 "shasum": ""
             },
@@ -1337,7 +1337,7 @@
             "version": "3.2.1",
             "dist": {
                 "type": "zip",
-                "url": "https://mirrors.tencent.com/repository/composer/sebastian/type/3.2.1/sebastian-type-3.2.1.zip",
+                "url": "https://mirrors.cloud.tencent.com/repository/composer/sebastian/type/3.2.1/sebastian-type-3.2.1.zip",
                 "reference": "75e2c2a32f5e0b3aef905b9ed0b179b953b3d7c7",
                 "shasum": ""
             },

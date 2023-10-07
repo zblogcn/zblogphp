@@ -1708,12 +1708,14 @@ function ViewComments($postid, $page)
         if ($zbp->autofill_template_htmltags && strpos($zbp->template->templates['comment'], 'id="AjaxComment') === false) {
             $comment->Content .= '<label id="AjaxComment' . $comment->ID . '"></label>';
         }
+        $comment->HomePage = ReplaceExternalLink($comment->HomePage);
     }
     foreach ($comments2 as &$comment) {
         $comment->Content = FormatString($comment->Content, '[enter]');
         if ($zbp->autofill_template_htmltags && strpos($zbp->template->templates['comment'], 'id="AjaxComment') === false) {
             $comment->Content .= '<label id="AjaxComment' . $comment->ID . '"></label>';
         }
+        $comment->HomePage = ReplaceExternalLink($comment->HomePage);
     }
 
     $template = &$zbp->GetTemplate();
@@ -1766,6 +1768,7 @@ function ViewComment($id)
     $post = new Post();
     $post = $zbp->GetPostByID($comment->LogID);
 
+    $comment->HomePage = ReplaceExternalLink($comment->HomePage);
     $comment->Content = FormatString(htmlspecialchars($comment->Content), '[enter]');
     if ($zbp->autofill_template_htmltags && strpos($zbp->template->templates['comment'], 'id="AjaxComment') === false) {
         $comment->Content .= '<label id="AjaxComment' . $comment->ID . '"></label>';
@@ -1781,6 +1784,36 @@ function ViewComment($id)
     $template->SetTemplate($cmt_template);
 
     foreach ($GLOBALS['hooks']['Filter_Plugin_ViewComment_Template'] as $fpname => &$fpsignal) {
+        $fpreturn = $fpname($template);
+    }
+
+    $template->Display();
+
+    return true;
+}
+
+function ViewExternalLink()
+{
+    global $zbp;
+
+    $args = func_get_arg(0);
+    $ok = true;
+    if (!isset($args['_route']['args'][0]) || $args['_route']['args'][0]['name'] !== 'external_link') {
+        $ok = false;
+    }
+    $link = $args['_route']['args'][0]['value'];
+    $parsed_url = parse_url($link);
+    if (!isset($parsed_url['host'])) {
+        $ok = false;
+    }
+
+    $template = &$zbp->GetTemplate();
+    $template->SetTags('title', $zbp->title);
+    $template->SetTags('ok', $ok);
+    $template->SetTags('link', $link);
+    $template->SetTemplate('external-link');
+
+    foreach ($GLOBALS['hooks']['Filter_Plugin_ViewExternalLink_Template'] as $fpname => &$fpsignal) {
         $fpreturn = $fpname($template);
     }
 
