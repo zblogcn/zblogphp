@@ -113,7 +113,8 @@
         }
 
         h1 {
-            margin-bottom: 12px;
+            margin-top: 6px;
+            margin-bottom: 22px;
             font-size: 20px;
             font-weight: 700;
             line-height: 1;
@@ -127,7 +128,7 @@
         }
 
         .link {
-            margin-top: 12px;
+            margin-top: 8px;
             word-wrap: normal;
             white-space: nowrap;
             overflow: hidden;
