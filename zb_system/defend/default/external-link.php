@@ -53,6 +53,7 @@
             padding: 12px;
             background: #f7f8f9;
             color: #a3a3a3;
+            line-height: 1.6;
         }
 
         .link {
@@ -63,7 +64,7 @@
             vertical-align: middle;
         }
 
-        @media (max-width: 620px) {
+        @media (max-width: 490px) {
             body {
                 font-size: 14px;
             }
@@ -79,7 +80,7 @@
             border-radius: 3px;
         }
 
-        @media (max-width: 620px) {
+        @media (max-width: 490px) {
             .button {
                 font-size: 16px;
             }
@@ -97,7 +98,7 @@
             margin: auto;
             padding-left: 30px;
             padding-right: 30px;
-            max-width: 540px;
+            max-width: 420px;
             padding-top: 25px;
             padding-bottom: 25px;
             background: #fff;
@@ -106,7 +107,7 @@
             border: 1px solid #E1E1E1;
         }
 
-        @media (max-width: 620px) {
+        @media (max-width: 490px) {
             .wrapper {
                 margin: 0 10px;
             }
@@ -121,7 +122,7 @@
             text-align: center;
         }
 
-        @media (max-width: 620px) {
+        @media (max-width: 490px) {
             h1 {
                 font-size: 18px;
             }

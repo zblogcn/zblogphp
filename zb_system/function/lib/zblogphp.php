@@ -913,15 +913,6 @@ class ZBlogPHP
         $this->LoadPostType();
         $this->LoadRoutes();
 
-        $this->RegRoute(array(
-            'posttype' => 0,
-            'type' => 'active',
-            'name' => 'post_article_view_external_link',
-            'call' => 'ViewExternalLink',
-            'urlrule' => '',
-            'must_get' => array('external_link'),
-        ));
-
         $this->themeapp = new App();
         $this->themeinfo = $this->themeapp->GetInfoArray();
 

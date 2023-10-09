@@ -284,7 +284,7 @@ return array(
         'enable_login_csrfcheck'            => '启用登录CSRF Token校验',
         'enable_login_verify'               => '启用登录验证码功能',
         'external_link_about_to_leave'      => '即将离开',
-        'external_link_info'                => '即将跳转到外部网站，请注意您的账号和财产安全。',
+        'external_link_info'                => '即将跳转到外部网站。我们不对该网站的安全性和内容负责，请注意您的账号和财产安全。',
         'external_link_no_url_error'        => '您所访问的页面由于未知原因无法打开',
         'external_link_continue'            => '继续访问',
         ''                                  => '',

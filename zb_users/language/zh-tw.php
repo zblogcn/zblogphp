@@ -288,7 +288,7 @@ return array(
         'enable_login_csrfcheck'            => '啟用登入CSRF Token校驗',
         'enable_login_verify'               => '啟用登入驗證碼功能',
         'external_link_about_to_leave'      => '即將離開',
-        'external_link_info'                => '即將跳轉到外部網站，請注意您的帳號和財產安全。',
+        'external_link_info'                => '即將跳轉到外部網站。我們不對該網站的安全性和內容負責，請注意您的帳號和財產安全。',
         'external_link_no_url_error'        => '您所訪問的頁面由於未知原因無法打開',
         'external_link_continue'            => '繼續訪問',
         ''                                  => '',

@@ -285,7 +285,7 @@ return array(
         'enable_login_csrfcheck'            => 'Enable Login CSRF Token Verification',
         'enable_login_verify'               => 'Enable Login Captcha',
         'external_link_about_to_leave'      => 'About to leave',
-        'external_link_info'                => 'About to redirect to an external link, please pay attention to the security of your account and property.',
+        'external_link_info'                => 'About to redirect to an external link, please pay attention to the security of your account and property. We are not responsible for the security and content of this website.',
         'external_link_no_url_error'        => 'The page you are visiting cannot be opened due to unknown reasons.',
         'external_link_continue'            => 'Continue',
         ''                                  => '',

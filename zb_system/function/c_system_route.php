@@ -1798,6 +1798,13 @@ function ViewExternalLink()
 
     $args = func_get_arg(0);
     $ok = true;
+
+    // 检查来源
+    $referer = GetVars('HTTP_REFERER', 'SERVER');
+    if (!is_null($referer) && strpos($referer, $zbp->host) !== 0) {
+        $ok = false;
+    }
+
     if (!isset($args['_route']['args'][0]) || $args['_route']['args'][0]['name'] !== 'external_link') {
         $ok = false;
     }
@@ -1806,6 +1813,7 @@ function ViewExternalLink()
     if (!isset($parsed_url['host'])) {
         $ok = false;
     }
+    $link = FormatString($link, '[nohtml][noscript]');
 
     $template = &$zbp->GetTemplate();
     $template->SetTags('title', $zbp->title);
