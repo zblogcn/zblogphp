@@ -175,7 +175,7 @@ class SQL__Global
 
             return $this;
         } elseif (in_array($upperKeyword, $this->extendKeyword)) {
-            $this->extend[$upperKeyword] = $argu;
+            $this->extend[$upperKeyword][] = $argu;
             if ($upperKeyword == 'DISTINCT' || $upperKeyword == 'DISTINCTROW' || $upperKeyword == 'SELECTANY') {
                 foreach ($argu as $key => $value) {
                     $this->column($value);
@@ -885,7 +885,7 @@ class SQL__Global
             }
         } elseif (array_key_exists('LEFTJOIN', $this->extend)) {
             $this->buildLEFTJOIN();
-            $this->buildON();
+            // $this->buildON();
         } elseif (array_key_exists('RIGHTJOIN', $this->extend)) {
             $this->buildRIGHTJOIN();
             $this->buildON();
@@ -1051,14 +1051,19 @@ class SQL__Global
     protected function buildLEFTJOIN()
     {
         $sql = &$this->pri_sql;
-        $sql[] = 'LEFT JOIN';
-        if (is_array($this->extend['LEFTJOIN'][0]) == true) {
-            $sql[] = key($this->extend['LEFTJOIN'][0]);
-            $sql[] = 'AS';
-            $sql[] = current($this->extend['LEFTJOIN'][0]);
-        } else {
-            $sql[] = implode(' ,', $this->extend['LEFTJOIN']);
+        foreach($this->extend['LEFTJOIN'] as $k=>$v){
+            $sql[] = 'LEFT JOIN';
+            if (is_array($v[0]) == true) {
+                $sql[] = key($v[0]);
+                $sql[] = 'AS';
+                $sql[] = current($v[0]);
+            } else {
+                $sql[] = implode(' ,', $v);
+            }
+            $sql[] = 'ON';
+            $sql[] = implode(' AND ', $this->extend['ON'][$k]);
         }
+
     }
 
     protected function buildRIGHTJOIN()
