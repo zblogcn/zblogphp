@@ -175,7 +175,11 @@ class SQL__Global
 
             return $this;
         } elseif (in_array($upperKeyword, $this->extendKeyword)) {
-            $this->extend[$upperKeyword] = $argu;
+            if (in_array($upperKeyword, array('INNERJOIN', 'LEFTJOIN', 'RIGHTJOIN', 'JOIN', 'FULLJOIN'))) {
+                $this->extend[$upperKeyword][] = $argu;
+            } else {
+                $this->extend[$upperKeyword] = $argu;
+            }
             if ($upperKeyword == 'DISTINCT' || $upperKeyword == 'DISTINCTROW' || $upperKeyword == 'SELECTANY') {
                 foreach ($argu as $key => $value) {
                     $this->column($value);
@@ -875,25 +879,14 @@ class SQL__Global
 
         if (array_key_exists('JOIN', $this->extend)) {
             $this->buildJOIN();
-            if (array_key_exists('ON', $this->extend)) {
-                $this->buildON();
-            }
         } elseif (array_key_exists('INNERJOIN', $this->extend)) {
             $this->buildINNERJOIN();
-            if (array_key_exists('ON', $this->extend)) {
-                $this->buildON();
-            }
         } elseif (array_key_exists('LEFTJOIN', $this->extend)) {
             $this->buildLEFTJOIN();
-            $this->buildON();
         } elseif (array_key_exists('RIGHTJOIN', $this->extend)) {
             $this->buildRIGHTJOIN();
-            $this->buildON();
         } elseif (array_key_exists('FULLJOIN', $this->extend)) {
             $this->buildFULLJOIN();
-            if (array_key_exists('ON', $this->extend)) {
-                $this->buildON();
-            }
         }
 
         $this->buildBeforeWhere();
@@ -1014,18 +1007,34 @@ class SQL__Global
         $sql = &$this->pri_sql;
         $sql[] = 'ON';
         $sql[] = implode(' AND ', $this->extend['ON']);
+        unset($this->extend['ON']);
     }
 
     protected function buildJOIN()
     {
         $sql = &$this->pri_sql;
-        $sql[] = 'JOIN';
-        if (is_array($this->extend['JOIN'][0]) == true) {
-            $sql[] = key($this->extend['JOIN'][0]);
-            $sql[] = 'AS';
-            $sql[] = current($this->extend['JOIN'][0]);
-        } else {
-            $sql[] = implode(' ,', $this->extend['JOIN']);
+        foreach ($this->extend['JOIN'] as $key => $value) {
+            $sql[] = 'JOIN';
+            if (is_array($this->extend['JOIN'][$key][0]) == true) {
+                $sql[] = key($this->extend['JOIN'][$key][0]);
+                $sql[] = 'AS';
+                $sql[] = current($this->extend['JOIN'][$key][0]);
+            } else {
+                $sql[] = $this->extend['JOIN'][$key][0];
+            }
+            if (count($this->extend['JOIN'][$key]) > 1) {
+                $sql[] = 'ON';
+                if (is_array($this->extend['JOIN'][$key][1]) == true) {
+                    $array = $this->extend['JOIN'][$key][1];
+                    $sql[] = implode(' AND ', $array);
+                } else {
+                    $sql[] = $this->extend['JOIN'][$key][1];
+                }
+            } else {
+                if (array_key_exists('ON', $this->extend)) {
+                    $this->buildON();
+                }
+            }
         }
     }
 
@@ -1038,52 +1047,112 @@ class SQL__Global
                 $s = 'STRAIGHT_JOIN';
             }
         }
-        $sql[] = $s;
-        if (is_array($this->extend['INNERJOIN'][0]) == true) {
-            $sql[] = key($this->extend['INNERJOIN'][0]);
-            $sql[] = 'AS';
-            $sql[] = current($this->extend['INNERJOIN'][0]);
-        } else {
-            $sql[] = implode(' ,', $this->extend['INNERJOIN']);
+        foreach ($this->extend['INNERJOIN'] as $key => $value) {
+            $sql[] = $s;
+            if (is_array($this->extend['INNERJOIN'][$key][0]) == true) {
+                $sql[] = key($this->extend['INNERJOIN'][$key][0]);
+                $sql[] = 'AS';
+                $sql[] = current($this->extend['INNERJOIN'][$key][0]);
+            } else {
+                $sql[] = $this->extend['INNERJOIN'][$key][0];
+            }
+            if (count($this->extend['INNERJOIN'][$key]) > 1) {
+                $sql[] = 'ON';
+                if (is_array($this->extend['INNERJOIN'][$key][1]) == true) {
+                    $array = $this->extend['INNERJOIN'][$key][1];
+                    $sql[] = implode(' AND ', $array);
+                } else {
+                    $sql[] = $this->extend['INNERJOIN'][$key][1];
+                }
+            } else {
+                if (array_key_exists('ON', $this->extend)) {
+                    $this->buildON();
+                }
+            }
         }
     }
 
     protected function buildLEFTJOIN()
     {
         $sql = &$this->pri_sql;
-        $sql[] = 'LEFT JOIN';
-        if (is_array($this->extend['LEFTJOIN'][0]) == true) {
-            $sql[] = key($this->extend['LEFTJOIN'][0]);
-            $sql[] = 'AS';
-            $sql[] = current($this->extend['LEFTJOIN'][0]);
-        } else {
-            $sql[] = implode(' ,', $this->extend['LEFTJOIN']);
+        foreach ($this->extend['LEFTJOIN'] as $key => $value) {
+            $sql[] = 'LEFT JOIN';
+            if (is_array($this->extend['LEFTJOIN'][$key][0]) == true) {
+                $sql[] = key($this->extend['LEFTJOIN'][$key][0]);
+                $sql[] = 'AS';
+                $sql[] = current($this->extend['LEFTJOIN'][$key][0]);
+            } else {
+                $sql[] = $this->extend['LEFTJOIN'][$key][0];
+            }
+            if (count($this->extend['LEFTJOIN'][$key]) > 1) {
+                $sql[] = 'ON';
+                if (is_array($this->extend['LEFTJOIN'][$key][1]) == true) {
+                    $array = $this->extend['LEFTJOIN'][$key][1];
+                    $sql[] = implode(' AND ', $array);
+                } else {
+                    $sql[] = $this->extend['LEFTJOIN'][$key][1];
+                }
+            } else {
+                if (array_key_exists('ON', $this->extend)) {
+                    $this->buildON();
+                }
+            }
         }
     }
 
     protected function buildRIGHTJOIN()
     {
         $sql = &$this->pri_sql;
-        $sql[] = 'RIGHT JOIN';
-        if (is_array($this->extend['RIGHTJOIN'][0]) == true) {
-            $sql[] = key($this->extend['RIGHTJOIN'][0]);
-            $sql[] = ' AS ';
-            $sql[] = current($this->extend['RIGHTJOIN'][0]);
-        } else {
-            $sql[] = implode(' ,', $this->extend['RIGHTJOIN']);
+        foreach ($this->extend['RIGHTJOIN'] as $key => $value) {
+            $sql[] = 'RIGHT JOIN';
+            if (is_array($this->extend['RIGHTJOIN'][$key][0]) == true) {
+                $sql[] = key($this->extend['RIGHTJOIN'][$key][0]);
+                $sql[] = ' AS ';
+                $sql[] = current($this->extend['RIGHTJOIN'][$key][0]);
+            } else {
+                $sql[] = $this->extend['RIGHTJOIN'][$key][0];
+            }
+            if (count($this->extend['RIGHTJOIN'][$key]) > 1) {
+                $sql[] = 'ON';
+                if (is_array($this->extend['RIGHTJOIN'][$key][1]) == true) {
+                    $array = $this->extend['RIGHTJOIN'][$key][1];
+                    $sql[] = implode(' AND ', $array);
+                } else {
+                    $sql[] = $this->extend['RIGHTJOIN'][$key][1];
+                }
+            } else {
+                if (array_key_exists('ON', $this->extend)) {
+                    $this->buildON();
+                }
+            }
         }
     }
 
     protected function buildFULLJOIN()
     {
         $sql = &$this->pri_sql;
-        $sql[] = 'FULL JOIN';
-        if (is_array($this->extend['FULLJOIN'][0]) == true) {
-            $sql[] = key($this->extend['FULLJOIN'][0]);
-            $sql[] = 'AS';
-            $sql[] = current($this->extend['FULLJOIN'][0]);
-        } else {
-            $sql[] = implode(' ,', $this->extend['FULLJOIN']);
+        foreach ($this->extend['FULLJOIN'] as $key => $value) {
+            $sql[] = 'FULL JOIN';
+            if (is_array($this->extend['FULLJOIN'][$key][0]) == true) {
+                $sql[] = key($this->extend['FULLJOIN'][$key][0]);
+                $sql[] = 'AS';
+                $sql[] = current($this->extend['FULLJOIN'][$key][0]);
+            } else {
+                $sql[] = $this->extend['FULLJOIN'][$key][0];
+            }
+            if (count($this->extend['FULLJOIN'][$key]) > 1) {
+                $sql[] = 'ON';
+                if (is_array($this->extend['FULLJOIN'][$key][1]) == true) {
+                    $array = $this->extend['FULLJOIN'][$key][1];
+                    $sql[] = implode(' AND ', $array);
+                } else {
+                    $sql[] = $this->extend['FULLJOIN'][$key][1];
+                }
+            } else {
+                if (array_key_exists('ON', $this->extend)) {
+                    $this->buildON();
+                }
+            }
         }
     }
 
@@ -1106,9 +1175,14 @@ class SQL__Global
     {
         $sql = &$this->pri_sql;
         $sql = array();
-        $sql[] = $this->extend['UNION'][0];
-        $sql[] = ' UNION ';
-        $sql[] = $this->extend['UNION'][1];
+        $sql[] = implode(' UNION ', $this->extend['UNION']);
+    }
+
+    protected function buildUnionALL()
+    {
+        $sql = &$this->pri_sql;
+        $sql = array();
+        $sql[] = implode(' UNION ALL ', $this->extend['UNIONALL']);
     }
 
     protected function buildTransaction()
@@ -1125,15 +1199,6 @@ class SQL__Global
         if (strtoupper($args) == 'ROLLBACK') {
             $sql[] = 'ROLLBACK';
         }
-    }
-
-    protected function buildUnionALL()
-    {
-        $sql = &$this->pri_sql;
-        $sql = array();
-        $sql[] = $this->extend['UNIONALL'][0];
-        $sql[] = ' UNION ALL ';
-        $sql[] = $this->extend['UNIONALL'][1];
     }
 
     protected function buildUpdate()

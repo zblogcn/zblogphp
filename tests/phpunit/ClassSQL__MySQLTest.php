@@ -144,4 +144,18 @@ class ClassSQL__MySQLTest extends PHPUnit\Framework\TestCase
         ->option(array('collate' => 'utf8_general_ci'));
         $this->assertEquals('CREATE TEMPORARY TABLE IF NOT EXISTS zbp_post2  ( a int(11) NOT NULL AUTO_INCREMENT, i tinyint(1) NOT NULL DEFAULT \'0\', j char(250) NOT NULL DEFAULT \'\', k varchar(250) NOT NULL DEFAULT \'\', o longtext NOT NULL , p longtext NOT NULL , PRIMARY KEY (a) ) ENGINE=Memory DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci AUTO_INCREMENT=1 ;', self::$db->sql);
     }
+
+    public function testJoin(): void
+    {
+        $this->assertEquals(
+            'SELECT  log_ID  FROM zbp_post AS p LEFT JOIN zbp_postrelation AS pr ON p.log_ID = pr.pr_PostID LEFT JOIN zbp_postrelation2 AS pr2 ON p.log_ID = pr2.pr_PostID AND p.log_DD = pr2.pr_DD WHERE 1 = 1',
+                  self::$db->selectany('log_ID')
+                           ->from(array('zbp_post'=>'p'))
+                           ->leftjoin(array('zbp_postrelation'=>'pr'), 'p.log_ID = pr.pr_PostID')
+                           ->leftjoin('zbp_postrelation2 AS pr2', array('p.log_ID = pr2.pr_PostID', 'p.log_DD = pr2.pr_DD'))
+                           ->where('1 = 1')
+                           ->sql
+        );
+
+    }
 }

@@ -562,16 +562,26 @@ class ClassSQLGlobalTest extends PHPUnit\Framework\TestCase
     public function testUnion()
     {
         self::$db = new SQL__MySQL($GLOBALS['zbp']->db);
-        self::$db->unionall(
+
+        $this->assertEquals(
+            'SELECT * FROM  zbp_table  UNION ALL SELECT * FROM  zbp_table3  UNION ALL SELECT * FROM  zbp_table2 ',
+            self::$db->unionall(
                               self::$db->select('zbp_table')->sql,
+                              self::$db->select('zbp_table3')->sql,
                               self::$db->select('zbp_table2')->sql
-                           );
-        $this->assertEquals('SELECT * FROM  zbp_table   UNION ALL  SELECT * FROM  zbp_table2 ', self::$db->sql);
-        self::$db->union(
+                           )
+                           ->sql
+        );
+
+        $this->assertEquals(
+            'SELECT * FROM  zbp_table  UNION SELECT * FROM  zbp_table2  UNION SELECT * FROM  zbp_table3 ',
+            self::$db->union(
                               self::$db->select('zbp_table')->sql,
-                              self::$db->select('zbp_table2')->sql
-                           );
-        $this->assertEquals('SELECT * FROM  zbp_table   UNION  SELECT * FROM  zbp_table2 ', self::$db->sql);
+                              self::$db->select('zbp_table2')->sql,
+                              self::$db->select('zbp_table3')->sql
+                           )
+                           ->sql
+        );
     }
 
     public function testGroupbyHaving()
