@@ -157,5 +157,16 @@ class ClassSQL__MySQLTest extends PHPUnit\Framework\TestCase
                            ->sql
         );
 
+        $this->assertEquals(
+            'SELECT  log_ID  FROM zbp_post AS p LEFT JOIN zbp_postrelation AS pr ON p.log_ID = pr.pr_PostID LEFT JOIN zbp_postrelation2 AS pr2 ON p.log_ID = pr2.pr_PostID AND p.log_DD = pr2.pr_DD WHERE 1 = 1',
+                  self::$db->selectany('log_ID')
+                           ->from(array('zbp_post'=>'p'))
+                           ->leftjoin(array('zbp_postrelation'=>'pr'))
+                           ->on('p.log_ID = pr.pr_PostID')
+                           ->leftjoin('zbp_postrelation2 AS pr2')
+                           ->on('p.log_ID = pr2.pr_PostID', 'p.log_DD = pr2.pr_DD')
+                           ->where('1 = 1')
+                           ->sql
+        );
     }
 }

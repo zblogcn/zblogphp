@@ -175,7 +175,7 @@ class SQL__Global
 
             return $this;
         } elseif (in_array($upperKeyword, $this->extendKeyword)) {
-            if (in_array($upperKeyword, array('INNERJOIN', 'LEFTJOIN', 'RIGHTJOIN', 'JOIN', 'FULLJOIN'))) {
+            if (in_array($upperKeyword, array('INNERJOIN', 'LEFTJOIN', 'RIGHTJOIN', 'JOIN', 'FULLJOIN', 'ON'))) {
                 $this->extend[$upperKeyword][] = $argu;
             } else {
                 $this->extend[$upperKeyword] = $argu;
@@ -1005,9 +1005,16 @@ class SQL__Global
     protected function buildON()
     {
         $sql = &$this->pri_sql;
-        $sql[] = 'ON';
-        $sql[] = implode(' AND ', $this->extend['ON']);
-        unset($this->extend['ON']);
+        if (isset($this->extend['ON'][0])) {
+            $sql[] = 'ON';
+            $sql[] = implode(' AND ', $this->extend['ON'][0]);
+            unset($this->extend['ON'][0]);
+            $array = array();
+            foreach ($this->extend['ON'] as $value) {
+                $array[] = $value;
+            }
+            $this->extend['ON'] = $array;
+        }
     }
 
     protected function buildJOIN()
