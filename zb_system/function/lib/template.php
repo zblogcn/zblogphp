@@ -218,7 +218,7 @@ class Template
             }
         }
         foreach ($this->templates as $name => $content) {
-            $s = RemoveBOM($this->CompileFile($content));
+            $s = RemoveBOM($this->CompileFile($content, $name));
             @file_put_contents($this->path . $name . '.php', $s);
         }
     }
@@ -324,10 +324,10 @@ class Template
      *
      * @return mixed
      */
-    public function CompileFile($content)
+    public function CompileFile($content, $filename = '')
     {
         foreach ($GLOBALS['hooks']['Filter_Plugin_Template_Compiling_Begin'] as $fpname => &$fpsignal) {
-            $fpreturn = $fpname($this, $content);
+            $fpreturn = $fpname($this, $content, $filename);
             if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
                 $fpsignal = PLUGIN_EXITSIGNAL_NONE;
 
