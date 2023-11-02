@@ -509,9 +509,9 @@ function OutputOptionItemsOfMemberLevel($default)
     if (!$zbp->CheckRights('MemberAll')) {
         $tz[$default] = $zbp->lang['user_level_name'][$default];
     } else {
-        for ($i = 1; $i < (count($zbp->lang['user_level_name']) + 1); $i++) {
-            $tz[$i] = $zbp->lang['user_level_name'][$i];
-        }
+		foreach ($zbp->lang['user_level_name'] as $level => $levelname){
+			$tz[$level] = $levelname;			
+		}        
     }
 
     foreach ($GLOBALS['hooks']['Filter_Plugin_OutputOptionItemsOfMemberLevel'] as $fpname => &$fpsignal) {
