@@ -1486,7 +1486,7 @@ function CheckRegExp($source, $para)
     } elseif (strpos($para, '[nickname]') !== false) {
         $para = '/([^\x{01}-\x{1F}\x{80}-\x{FF}\/:\\~&%;@\'"?<>|#$\*}{,\+=\[\]\(\)\{\}\t\r\n\p{C}])/u';
     } elseif (strpos($para, '[password]') !== false) {
-        $para = "/^[A-Za-z0-9`~!@#\$%\^&\*\-_\?]+$/u";
+        $para = "/^[A-Za-z0-9`~!@#\$%\^&\*\-_\?\.]+$/u";
     } elseif (strpos($para, '[email]') !== false) {
         $para = "/^([0-9a-zA-Z]([-.\w]*[0-9a-zA-Z])*@([0-9a-zA-Z][-\w]*\.)+[a-zA-Z]*)$/u";
     } elseif (strpos($para, '[homepage]') !== false) {
