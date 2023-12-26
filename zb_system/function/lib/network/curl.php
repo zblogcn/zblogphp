@@ -251,18 +251,14 @@ class Network__curl implements Network__Interface
 
         $this->load_query_to_url();
 
-        if ($this->option['method'] == 'POST') {
+        if ($this->option['method'] == 'POST' || $this->option['method'] == 'PUT') {
             if (is_string($varBody) && count($this->postdata) > 0) {
                 parse_str($varBody, $data);
                 $data = ($data + $this->postdata);
             } elseif (is_array($varBody) && count($this->postdata) > 0) {
                 $data = ($varBody + $this->postdata);
             }
-            if ($this->private_isBinary) {
-                curl_setopt($this->ch, CURLOPT_CUSTOMREQUEST, 'POST');
-            } else {
-                curl_setopt($this->ch, CURLOPT_POST, 1);
-            }
+            curl_setopt($this->ch, CURLOPT_CUSTOMREQUEST, $this->option['method']);
             curl_setopt($this->ch, CURLOPT_POSTFIELDS, $data);
         } else {
             curl_setopt($this->ch, CURLOPT_CUSTOMREQUEST, $this->option['method']);

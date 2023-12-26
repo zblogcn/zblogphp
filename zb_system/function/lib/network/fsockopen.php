@@ -237,7 +237,7 @@ class Network__fsockopen implements Network__Interface
 
         $this->load_query_to_url();
 
-        if ($this->option['method'] == 'POST') {
+        if ($this->option['method'] == 'POST' || $this->option['method'] == 'PUT') {
             if (is_array($varBody) && count($this->postdata) > 0) {
                 foreach ($varBody as $key => $value) {
                     $this->add_postdata($key, $value);
