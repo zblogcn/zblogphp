@@ -4839,12 +4839,16 @@ class ZBlogPHP
         if (!$this->option['ZC_DATABASE_TYPE']) {
             $s = GetVars('QUERY_STRING', 'GET');
             $s = empty($s) ? '' : '?' . $s;
-            Redirect302('./zb_install/index.php' . $s);
+            if (is_readable(ZBP_PATH . 'zb_install/index.php')) {
+                Redirect302('./zb_install/index.php' . $s);
+            }
         }
         if (isset($this->option['ZC_INSTALL_AFTER_CONFIG']) && $this->option['ZC_INSTALL_AFTER_CONFIG'] == true) {
             $r = $this->db->ExistTable($GLOBALS['table']['Config']);
             if ($r == false) {
-                Redirect302('./zb_install/index.php');
+                if (is_readable(ZBP_PATH . 'zb_install/index.php')) {
+                    Redirect302('./zb_install/index.php');
+                }
             }
         }
     }

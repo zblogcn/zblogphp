@@ -4,7 +4,6 @@
     <div class="wrap">
         <h3>{$copyright}</h3>
         <h4>Powered By {$zblogphpabbrhtml}. Theme by <a href="https://www.toyean.com/" target="_blank" title="拓源网">TOYEAN</a>.</h4>
-        {$footer}
     </div>
 </div>
 <div class="edgebar">
@@ -15,3 +14,4 @@
 {/if}
 {if $zbp->Config('tpure')->PostSETNIGHTON}<a href="javascript:;" target="_self" class="setnight"></a>{/if}
 </div>
+{$footer}
