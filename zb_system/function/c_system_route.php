@@ -1186,7 +1186,10 @@ function ViewList($page = null, $cate = null, $auth = null, $date = null, $tags 
                 $zbp->title = $datetitle . ' ' . str_replace('%num%', $page, $zbp->lang['msg']['number_page']);
             }
 
-            $zbp->modulesbyfilename['calendar']->Content = ModuleBuilder::Calendar(date('Y', $datetime) . '-' . date('n', $datetime));
+            $calendar_sidebarinused = $zbp->modulesbyfilename['calendar']->GetSideBarInUsed();
+            if (!empty($calendar_sidebarinused)) {
+                $zbp->modulesbyfilename['calendar']->Content = ModuleBuilder::Calendar(date('Y', $datetime) . '-' . date('n', $datetime));
+            }
 
             $list_template = $zbp->GetPostType($posttype, 'date_template');
 
