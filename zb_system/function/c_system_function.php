@@ -897,11 +897,17 @@ function CountCommentNums($allplus = null, $chkplus = null)
         $zbp->cache->all_comment_nums = (int) GetValueInArrayByCurrent($zbp->db->sql->get()->select($GLOBALS['table']['Comment'])->count(array('*' => 'num'))->query, 'num');
     } else {
         $zbp->cache->all_comment_nums += $allplus;
+        if ($zbp->cache->all_comment_nums < 0) {
+            $zbp->cache->all_comment_nums = 0;
+        }
     }
     if ($chkplus === null) {
         $zbp->cache->check_comment_nums = (int) GetValueInArrayByCurrent($zbp->db->sql->get()->select($GLOBALS['table']['Comment'])->count(array('*' => 'num'))->where('=', 'comm_Ischecking', '1')->query, 'num');
     } else {
         $zbp->cache->check_comment_nums += $chkplus;
+        if ($zbp->cache->check_comment_nums < 0) {
+            $zbp->cache->check_comment_nums = 0;
+        }
     }
     $zbp->cache->normal_comment_nums = (int) ($zbp->cache->all_comment_nums - $zbp->cache->check_comment_nums);
 }
@@ -922,6 +928,9 @@ function CountNormalArticleNums($plus = null)
         $zbp->cache->normal_article_nums = $num;
     } else {
         $zbp->cache->normal_article_nums += $plus;
+        if ($zbp->cache->normal_article_nums < 0) {
+            $zbp->cache->normal_article_nums = 0;
+        }
     }
 }
 
@@ -944,6 +953,9 @@ function CountPost(&$article, $plus = null)
         $article->CommNums = $num;
     } else {
         $article->CommNums += $plus;
+        if ($article->CommNums < 0) {
+            $article->CommNums = 0;
+        }
     }
 }
 
@@ -991,6 +1003,9 @@ function CountCategory(&$category, $plus = null, $type = 0)
         $category->Count = $num;
     } else {
         $category->Count += $plus;
+        if ($category->Count < 0) {
+            $category->Count = 0;
+        }
     }
 }
 
@@ -1038,6 +1053,9 @@ function CountTag(&$tag, $plus = null, $type = 0)
         $tag->Count = $num;
     } else {
         $tag->Count += $plus;
+        if ($tag->Count < 0) {
+            $tag->Count = 0;
+        }
     }
 }
 
@@ -1095,6 +1113,9 @@ function CountMember(&$member, $plus = array(null, null, null, null))
         $member->Articles = $member_Articles;
     } else {
         $member->Articles += $plus[0];
+        if ($member->Articles < 0) {
+            $member->Articles = 0;
+        }
     }
 
     if ($plus[1] === null) {
@@ -1103,6 +1124,9 @@ function CountMember(&$member, $plus = array(null, null, null, null))
         $member->Pages = $member_Pages;
     } else {
         $member->Pages += $plus[1];
+        if ($member->Pages < 0) {
+            $member->Pages = 0;
+        }
     }
 
     if ($plus[2] === null) {
@@ -1113,6 +1137,9 @@ function CountMember(&$member, $plus = array(null, null, null, null))
         }
     } else {
         $member->Comments += $plus[2];
+        if ($member->Comments < 0) {
+            $member->Comments = 0;
+        }
     }
 
     if ($plus[3] === null) {
@@ -1121,6 +1148,9 @@ function CountMember(&$member, $plus = array(null, null, null, null))
         $member->Uploads = $member_Uploads;
     } else {
         $member->Uploads += $plus[3];
+        if ($member->Uploads < 0) {
+            $member->Uploads = 0;
+        }
     }
 }
 
