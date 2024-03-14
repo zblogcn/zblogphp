@@ -1304,7 +1304,7 @@ function InsertInfo()
     $t->FileName = "navbar";
     $t->Source = "system";
     $t->SidebarID = 0;
-    $t->Content = '<li id="nvabar-item-index"><a href="{#ZC_BLOG_HOST#}">' . $zbp->lang['zb_install']['index'] . '</a></li><li id="navbar-page-2"><a href="{#ZC_BLOG_HOST#}?id=2">' . $zbp->lang['zb_install']['guestbook'] . '</a></li>';
+    $t->Content = '<li id="navbar-item-index"><a href="{#ZC_BLOG_HOST#}">' . $zbp->lang['zb_install']['index'] . '</a></li><li id="navbar-page-2"><a href="{#ZC_BLOG_HOST#}?id=2">' . $zbp->lang['zb_install']['guestbook'] . '</a></li>';
     $t->HtmlID = "divNavBar";
     $t->Type = "ul";
     $t->Save();
