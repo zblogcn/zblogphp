@@ -5,7 +5,9 @@ if (!defined('ZBP_PATH')) {
 }
 
 // 系统提供的默认缩略图
-define('ZBP_THUMB_DEFAULT_IMG', ZBP_PATH . 'zb_system/image/default/thumb.png');
+if (!defined('ZBP_THUMB_DEFAULT_IMG')) {
+    define('ZBP_THUMB_DEFAULT_IMG', ZBP_PATH . 'zb_system/image/default/thumb.png');
+}
 
 /**
  * 缩略图类.
