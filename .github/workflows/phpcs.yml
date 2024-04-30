@@ -17,14 +17,6 @@ jobs:
       - name: Get file changes
         id: get_file_changes
         uses: tj-actions/changed-files@v44
-      - name: PHPCS check
-        if: steps.get_file_changes.outputs.any_changed == 'true'
-        env:
-          ALL_CHANGED_FILES: ${{ steps.get_file_changes.outputs.all_changed_files }}
-        run: |
-          echo "Running PHPCS on the following files:"
-          echo "${ALL_CHANGED_FILES}"
-          ./vendor/bin/phpcs ${ALL_CHANGED_FILES}
       - name: PHPCBF
         if: steps.get_file_changes.outputs.any_changed == 'true' && github.event_name == 'push'
         env:
@@ -35,6 +27,7 @@ jobs:
           ./vendor/bin/phpcbf ${ALL_CHANGED_FILES}
         continue-on-error: true
       - name: Commit files
+        if: github.event_name == 'push'
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
@@ -46,3 +39,11 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: ${{ github.ref }}
+      - name: PHPCS check
+        if: steps.get_file_changes.outputs.any_changed == 'true'
+        env:
+          ALL_CHANGED_FILES: ${{ steps.get_file_changes.outputs.all_changed_files }}
+        run: |
+          echo "Running PHPCS on the following files:"
+          echo "${ALL_CHANGED_FILES}"
+          ./vendor/bin/phpcs ${ALL_CHANGED_FILES}
