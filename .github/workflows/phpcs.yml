@@ -24,7 +24,7 @@ jobs:
         run: |
           echo "Running PHPCS on the following files:"
           echo "${ALL_CHANGED_FILES}"
-          ./vendor/bin/phpcs "${ALL_CHANGED_FILES}"
+          ./vendor/bin/phpcs ${ALL_CHANGED_FILES}
       - name: PHPCBF
         if: steps.get_file_changes.outputs.any_changed == 'true' && github.event_name == 'push'
         env:
@@ -32,7 +32,7 @@ jobs:
         run: |
           echo "Running PHPCBF on the following files:"
           echo "${ALL_CHANGED_FILES}"
-          ./vendor/bin/phpcbf "${ALL_CHANGED_FILES}"
+          ./vendor/bin/phpcbf ${ALL_CHANGED_FILES}
         continue-on-error: true
       - name: Commit files
         run: |
