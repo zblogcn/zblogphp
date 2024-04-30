@@ -41,6 +41,7 @@ jobs:
           git status
           git diff-index --quiet HEAD || (git commit -m "Auto Commit - phpcbf" -a --no-verify)
       - name: Push changes
+        if: github.event_name == 'push'
         uses: ad-m/github-push-action@master
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
