@@ -9,17 +9,19 @@ jobs:
   phpcs:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
       with:
         ref: ${{ github.event.pull_request.head.sha }}
     - name: Install dependencies
       run: composer install --prefer-dist --no-progress --no-interaction
     - name: Get file changes
       id: get_file_changes
-      uses: trilom/file-changes-action@v1.2.4
-      with:
-        githubToken: ${{ secrets.GH_BOT_TOKEN }}
-        output: '" "'
+      uses: tj-actions/changed-files@v44
     - name: PHPCS check
-      if: ${{ steps.get_file_changes.outputs.files_added != '' || steps.get_file_changes.outputs.files_modified }}
-      run: ./vendor/bin/phpcs "${{ steps.get_file_changes.outputs.files_added }}" "${{ steps.get_file_changes.outputs.files_modified }}" --report=checkstyle
+      if: steps.get_file_changes.outputs.any_changed == 'true'
+      env:
+        ALL_CHANGED_FILES: ${{ steps.get_file_changes.outputs.all_changed_files }}
+      run: |
+        echo "Running PHPCS on the following files:"
+        echo "${ALL_CHANGED_FILES}"
+        ./vendor/bin/phpcs "${ALL_CHANGED_FILES}" --report=checkstyle
