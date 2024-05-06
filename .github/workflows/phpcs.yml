@@ -1,27 +1,49 @@
 name: Run PHPCS
 on:
   push:
-    branches: [ master ]
+    branches: [master]
   pull_request:
-    branches: [ master ]
+    branches: [master]
 
 jobs:
   phpcs:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
-      with:
-        ref: ${{ github.event.pull_request.head.sha }}
-    - name: Install dependencies
-      run: composer install --prefer-dist --no-progress --no-interaction
-    - name: Get file changes
-      id: get_file_changes
-      uses: tj-actions/changed-files@v44
-    - name: PHPCS check
-      if: steps.get_file_changes.outputs.any_changed == 'true'
-      env:
-        ALL_CHANGED_FILES: ${{ steps.get_file_changes.outputs.all_changed_files }}
-      run: |
-        echo "Running PHPCS on the following files:"
-        echo "${ALL_CHANGED_FILES}"
-        ./vendor/bin/phpcs "${ALL_CHANGED_FILES}" --report=checkstyle
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - name: Install dependencies
+        run: composer install --prefer-dist --no-progress --no-interaction
+      - name: Get file changes
+        id: get_file_changes
+        uses: tj-actions/changed-files@v44
+      - name: PHPCBF
+        if: steps.get_file_changes.outputs.any_changed == 'true' && github.event_name == 'push'
+        env:
+          ALL_CHANGED_FILES: ${{ steps.get_file_changes.outputs.all_changed_files }}
+        run: |
+          echo "Running PHPCBF on the following files:"
+          echo "${ALL_CHANGED_FILES}"
+          ./vendor/bin/phpcbf ${ALL_CHANGED_FILES}
+        continue-on-error: true
+      - name: Commit files
+        if: github.event_name == 'push'
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git status
+          git diff-index --quiet HEAD || (git commit -m "Auto Commit - phpcbf" -a --no-verify)
+      - name: Push changes
+        if: github.event_name == 'push'
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.ref }}
+      - name: PHPCS check
+        if: steps.get_file_changes.outputs.any_changed == 'true'
+        env:
+          ALL_CHANGED_FILES: ${{ steps.get_file_changes.outputs.all_changed_files }}
+        run: |
+          echo "Running PHPCS on the following files:"
+          echo "${ALL_CHANGED_FILES}"
+          ./vendor/bin/phpcs ${ALL_CHANGED_FILES}
