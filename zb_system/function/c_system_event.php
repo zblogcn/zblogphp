@@ -1001,6 +1001,14 @@ function PostComment()
         }
     }
 
+    //判断文章表里ID是否存在
+    $post = $zbp->GetPostByID($cmt->LogID);
+    if (empty($post->ID)) {
+        $zbp->ShowError(2, __FILE__, __LINE__);
+
+        return false;
+    }
+
     if ($zbp->option['ZC_COMMENT_AUDIT'] && !$zbp->CheckRights('root')) {
         $cmt->IsChecking = true;
     }
