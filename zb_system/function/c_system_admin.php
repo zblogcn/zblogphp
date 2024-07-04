@@ -1571,7 +1571,7 @@ function Admin_SettingMng()
                     if ($zbp->ispermanent_domain) {
                         echo '<span class="note">' . $zbp->lang['msg']['permanent_domain_is_enable'] . '</span><br/>';
                     }
-                    if ($zbp->ispermanent_domain && (Null2Empty(GetValueInArray($zbp->option, 'ZC_PERMANENT_DOMAIN_FORCED_URL')) == '') &&$zbp->option['ZC_PERMANENT_DOMAIN_ENABLE']) {
+                    if ($zbp->ispermanent_domain && (Null2Empty(GetValueInArray($zbp->option, 'ZC_PERMANENT_DOMAIN_FORCED_URL')) == '') && $zbp->option['ZC_PERMANENT_DOMAIN_ENABLE']) {
                         echo '<span class="note">' . $zbp->lang['msg']['blog_host_add'] . '</span>';
                     }
                     echo '</p></td><td><p><input id="ZC_BLOG_HOST" name="ZC_BLOG_HOST" style="max-width:600px;width:90%;" type="text" value="' . $decodedBlogHost . '" ' . (($zbp->option['ZC_PERMANENT_DOMAIN_ENABLE'] && (Null2Empty(GetValueInArray($zbp->option, 'ZC_PERMANENT_DOMAIN_FORCED_URL'))) == '') ? '' : 'readonly="readonly" ') . 'oninput="disableSubmit($(this).val())" />&nbsp;&nbsp;';
