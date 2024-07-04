@@ -1567,7 +1567,7 @@ function ViewPost($id = null, $alias = null, $isrewrite = false, $object = array
                 array('=', 'comm_RootID', 0),
                 array('=', 'comm_IsChecking', 0),
             ),
-            array('comm_ID' => ($zbp->option['ZC_COMMENT_REVERSE_ORDER'] ? 'DESC' : 'ASC')),
+            array(($zbp->option['ZC_COMMENT_ORDERBY_TIME'] ? 'comm_PostTime' : 'comm_ID') => ($zbp->option['ZC_COMMENT_REVERSE_ORDER'] ? 'DESC' : 'ASC')),
             array(($pagebar->PageNow - 1) * $pagebar->PageCount, $pagebar->PageCount),
             array('pagebar' => $pagebar)
         );
@@ -1582,7 +1582,7 @@ function ViewPost($id = null, $alias = null, $isrewrite = false, $object = array
                 array('IN', 'comm_RootID', $rootid),
                 array('=', 'comm_IsChecking', 0),
             ),
-            array('comm_ID' => ($zbp->option['ZC_COMMENT_REVERSE_ORDER'] ? 'DESC' : 'ASC')),
+            array(($zbp->option['ZC_COMMENT_ORDERBY_TIME'] ? 'comm_PostTime' : 'comm_ID') => ($zbp->option['ZC_COMMENT_REVERSE_ORDER'] ? 'DESC' : 'ASC')),
             null,
             null
         );
@@ -1683,7 +1683,7 @@ function ViewComments($postid, $page)
             array('=', 'comm_RootID', 0),
             array('=', 'comm_IsChecking', 0),
         ),
-        array('comm_ID' => ($zbp->option['ZC_COMMENT_REVERSE_ORDER'] ? 'DESC' : 'ASC')),
+        array(($zbp->option['ZC_COMMENT_ORDERBY_TIME'] ? 'comm_PostTime' : 'comm_ID') => ($zbp->option['ZC_COMMENT_REVERSE_ORDER'] ? 'DESC' : 'ASC')),
         array(($pagebar->PageNow - 1) * $pagebar->PageCount, $pagebar->PageCount),
         array('pagebar' => $pagebar)
     );
@@ -1698,7 +1698,7 @@ function ViewComments($postid, $page)
             array('array', $rootid),
             array('=', 'comm_IsChecking', 0),
         ),
-        array('comm_ID' => ($zbp->option['ZC_COMMENT_REVERSE_ORDER'] ? 'DESC' : 'ASC')),
+        array(($zbp->option['ZC_COMMENT_ORDERBY_TIME'] ? 'comm_PostTime' : 'comm_ID') => ($zbp->option['ZC_COMMENT_REVERSE_ORDER'] ? 'DESC' : 'ASC')),
         null,
         null
     );

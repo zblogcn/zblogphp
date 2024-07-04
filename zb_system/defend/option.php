@@ -87,6 +87,7 @@ return array(
     'ZC_COMMENT_TURNOFF'           => false,
     'ZC_COMMENT_VERIFY_ENABLE'     => false,
     'ZC_COMMENT_REVERSE_ORDER'     => false,
+    'ZC_COMMENT_ORDERBY_TIME'      => false,
     'ZC_COMMENT_AUDIT'             => false,
     'ZC_COMMENT_VALIDCMTKEY_ENABLE' => false,
 

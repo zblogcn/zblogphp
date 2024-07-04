@@ -646,7 +646,7 @@ function Admin_CommentMng()
     } elseif ($order_get == 'parentid_asc') {
         $or = array('comm_ParentID' => 'ASC');
     } else {
-        $or = array('comm_ID' => 'DESC');
+        $or = array(($zbp->option['ZC_COMMENT_ORDERBY_TIME'] ? 'comm_PostTime' : 'comm_ID') => 'DESC');
     }
     $l = array(($p->PageNow - 1) * $p->PageCount, $p->PageCount);
     $op = array('pagebar' => $p);
