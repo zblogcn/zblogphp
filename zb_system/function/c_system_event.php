@@ -931,6 +931,10 @@ function PostComment()
         $_POST['LogID'] = 0;
     }
 
+    if ($zbp->option['ZC_COMMENT_TURNOFF']) {
+        $zbp->ShowError(40, __FILE__, __LINE__);
+    }
+
     if ($zbp->option['ZC_COMMENT_VALIDCMTKEY_ENABLE']) {
         if ($zbp->ValidCmtKey($_POST['LogID'], $_GET['key']) == false) {
             $zbp->ShowError(43, __FILE__, __LINE__);
