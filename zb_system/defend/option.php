@@ -84,7 +84,7 @@ return array(
     'ZC_BLOG_PRODUCT_FULLHTML' => '',
 
     // '留言评论
-    'ZC_COMMENT_TURNOFF'           => false,
+    'ZC_COMMENT_TURNOFF'           => true,
     'ZC_COMMENT_VERIFY_ENABLE'     => false,
     'ZC_COMMENT_REVERSE_ORDER'     => false,
     'ZC_COMMENT_ORDERBY_TIME'      => false,
