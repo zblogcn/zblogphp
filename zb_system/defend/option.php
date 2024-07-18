@@ -97,6 +97,8 @@ return array(
     'ZC_VERIFYCODE_HEIGHT' => 30,
     'ZC_VERIFYCODE_FONT'   => 'zb_system/defend/arial.ttf',
     'ZC_VERIFYCODE_LENGTH' => 5,
+    'ZC_VERIFYCODE_MAXANGLE' => 45,
+    'ZC_VERIFYCODE_MAXOFFSET' => 10,
 
     // '页面各项列数
     'ZC_DISPLAY_COUNT'          => 10,
