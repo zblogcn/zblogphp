@@ -85,7 +85,7 @@ return array(
 
     // '留言评论
     'ZC_COMMENT_TURNOFF'           => true,
-    'ZC_COMMENT_VERIFY_ENABLE'     => false,
+    'ZC_COMMENT_VERIFY_ENABLE'     => true,
     'ZC_COMMENT_REVERSE_ORDER'     => false,
     'ZC_COMMENT_ORDERBY_TIME'      => false,
     'ZC_COMMENT_AUDIT'             => false,
@@ -97,7 +97,7 @@ return array(
     'ZC_VERIFYCODE_HEIGHT' => 30,
     'ZC_VERIFYCODE_FONT'   => 'zb_system/defend/arial.ttf',
     'ZC_VERIFYCODE_LENGTH' => 5,
-    'ZC_VERIFYCODE_MAXANGLE' => 45,
+    'ZC_VERIFYCODE_MAXANGLE' => 20,
     'ZC_VERIFYCODE_MAXOFFSET' => 10,
 
     // '页面各项列数
