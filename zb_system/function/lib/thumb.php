@@ -414,19 +414,7 @@ class Thumb
 
         $this->tmpRes = imagecreatetruecolor($clip_width, $clip_height);
 
-        $ml = ini_get('memory_limit');
-        $ml = str_ireplace('m', '000000', $ml);
-        $ml = str_ireplace('g', '000000000', $ml);
-        $ml = (int) $ml;
-        if ($this->srcWidth * $this->srcHeight > 8000000) {
-            if ($ml > 90000000) {
-                imagefill($this->tmpRes, 0, 0, 0xffffff);
-            }
-        } elseif ($this->srcWidth * $this->srcHeight > 2000000) {
-            if ($ml > 30000000) {
-                imagefill($this->tmpRes, 0, 0, 0xffffff);
-            }
-        } else {
+        if (defined('ZC_THUMB_IMAGE_FILL') && ZC_THUMB_IMAGE_FILL == true) {
             imagefill($this->tmpRes, 0, 0, 0xffffff);
         }
 
@@ -471,19 +459,7 @@ class Thumb
 
         $this->tmpRes = imagecreatetruecolor($dst_width, $dst_height);
 
-        $ml = ini_get('memory_limit');
-        $ml = str_ireplace('m', '000000', $ml);
-        $ml = str_ireplace('g', '000000000', $ml);
-        $ml = (int) $ml;
-        if ($this->srcWidth * $this->srcHeight > 8000000) {
-            if ($ml > 90000000) {
-                imagefill($this->tmpRes, 0, 0, 0xffffff);
-            }
-        } elseif ($this->srcWidth * $this->srcHeight > 2000000) {
-            if ($ml > 30000000) {
-                imagefill($this->tmpRes, 0, 0, 0xffffff);
-            }
-        } else {
+        if (defined('ZC_THUMB_IMAGE_FILL') && ZC_THUMB_IMAGE_FILL == true) {
             imagefill($this->tmpRes, 0, 0, 0xffffff);
         }
 
