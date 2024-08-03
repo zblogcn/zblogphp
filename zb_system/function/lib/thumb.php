@@ -413,8 +413,24 @@ class Thumb
         $this->syncSrcFromTmp();
 
         $this->tmpRes = imagecreatetruecolor($clip_width, $clip_height);
-        imagefill($this->tmpRes, 0, 0, 0xffffff);
-        imagecopyresampled($this->tmpRes, $this->srcRes, 0, 0, $clipx, $clipy, $this->srcWidth, $this->srcHeight, $this->srcWidth, $this->srcHeight);
+
+        $ml = ini_get('memory_limit');
+        $ml = str_ireplace('m', '000000', $ml);
+        $ml = str_ireplace('g', '000000000', $ml);
+        $ml = (int) $ml;
+        if ($this->srcWidth * $this->srcHeight > 8000000) {
+            if ($ml > 90000000) {
+                imagefill($this->tmpRes, 0, 0, 0xffffff);
+            }
+        } elseif ($this->srcWidth * $this->srcHeight > 2000000) {
+            if ($ml > 30000000) {
+                imagefill($this->tmpRes, 0, 0, 0xffffff);
+            }
+        } else {
+            imagefill($this->tmpRes, 0, 0, 0xffffff);
+        }
+
+        imagecopyresampled($this->tmpRes, $this->srcRes, 0, 0, $clipx, $clipy, $this->srcWidth, $this->srcHeight, $this->   , $this->srcHeight);
     }
 
     /**
@@ -454,7 +470,23 @@ class Thumb
         }
 
         $this->tmpRes = imagecreatetruecolor($dst_width, $dst_height);
-        imagefill($this->tmpRes, 0, 0, 0xffffff);
+
+        $ml = ini_get('memory_limit');
+        $ml = str_ireplace('m', '000000', $ml);
+        $ml = str_ireplace('g', '000000000', $ml);
+        $ml = (int) $ml;
+        if ($this->srcWidth * $this->srcHeight > 8000000) {
+            if ($ml > 90000000) {
+                imagefill($this->tmpRes, 0, 0, 0xffffff);
+            }
+        } elseif ($this->srcWidth * $this->srcHeight > 2000000) {
+            if ($ml > 30000000) {
+                imagefill($this->tmpRes, 0, 0, 0xffffff);
+            }
+        } else {
+            imagefill($this->tmpRes, 0, 0, 0xffffff);
+        }
+
         imagecopyresampled($this->tmpRes, $this->srcRes, 0, 0, 0, 0, $dst_width, $dst_height, $this->srcWidth, $this->srcHeight);
     }
 

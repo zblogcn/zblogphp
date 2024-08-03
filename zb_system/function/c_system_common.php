@@ -1285,7 +1285,7 @@ function GetOptionVarsFromEnv($value)
     if ($type === null) {
         return $value;
     }
-    return GetVarsFromEnv($arg, $type, $arg);
+    return GetVarsFromEnv($arg, $type);
 }
 
 /**
