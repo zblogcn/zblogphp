@@ -418,11 +418,11 @@ class Thumb
         $ml = str_ireplace('m', '000000', $ml);
         $ml = str_ireplace('g', '000000000', $ml);
         $ml = (int) $ml;
-        if ($this->srcWidth * $this->srcHeight > 8000000) {
+        if (($this->srcWidth * $this->srcHeight) > 8000000) {
             if ($ml > 90000000) {
                 imagefill($this->tmpRes, 0, 0, 0xffffff);
             }
-        } elseif ($this->srcWidth * $this->srcHeight > 2000000) {
+        } elseif (($this->srcWidth * $this->srcHeight) > 2000000) {
             if ($ml > 30000000) {
                 imagefill($this->tmpRes, 0, 0, 0xffffff);
             }
@@ -430,7 +430,7 @@ class Thumb
             imagefill($this->tmpRes, 0, 0, 0xffffff);
         }
 
-        imagecopyresampled($this->tmpRes, $this->srcRes, 0, 0, $clipx, $clipy, $this->srcWidth, $this->srcHeight, $this->   , $this->srcHeight);
+        imagecopyresampled($this->tmpRes, $this->srcRes, 0, 0, $clipx, $clipy, $this->srcWidth, $this->srcHeight, $this->, $this->srcHeight);
     }
 
     /**
@@ -475,11 +475,11 @@ class Thumb
         $ml = str_ireplace('m', '000000', $ml);
         $ml = str_ireplace('g', '000000000', $ml);
         $ml = (int) $ml;
-        if ($this->srcWidth * $this->srcHeight > 8000000) {
+        if (($this->srcWidth * $this->srcHeight) > 8000000) {
             if ($ml > 90000000) {
                 imagefill($this->tmpRes, 0, 0, 0xffffff);
             }
-        } elseif ($this->srcWidth * $this->srcHeight > 2000000) {
+        } elseif (($this->srcWidth * $this->srcHeight) > 2000000) {
             if ($ml > 30000000) {
                 imagefill($this->tmpRes, 0, 0, 0xffffff);
             }

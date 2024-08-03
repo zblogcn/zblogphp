@@ -1898,7 +1898,6 @@ function Null2Empty($s)
     return (!is_null($s)) ? $s : '';
 }
 
-
 /**
  * 将序列化后的string还原为array(自动判断empty,null)
  *
@@ -2443,10 +2442,10 @@ function Logs($logString, $level = 'INFO', $source = 'system')
         unset($addinfo['header']['User-Agent']);
         unset($addinfo['header']['Cookie']);
     }
-    ob_start(); 
-    debug_print_backtrace(); 
-    $trace = ob_get_contents(); 
-    ob_end_clean(); 
+    ob_start();
+    debug_print_backtrace();
+    $trace = ob_get_contents();
+    ob_end_clean();
     $addinfo['debug_backtrace'] = $trace;
     
     foreach ($GLOBALS['hooks']['Filter_Plugin_Logs'] as $fpname => &$fpsignal) {
@@ -2478,7 +2477,7 @@ function Logs($logString, $level = 'INFO', $source = 'system')
         $s .= var_export($addinfo, true) . "\r\n";
     }
 
-    @file_put_contents($f, $s, FILE_APPEND | LOCK_EX);
+    @file_put_contents($f, $s, (FILE_APPEND | LOCK_EX));
 
     return true;
 }
@@ -2604,7 +2603,6 @@ function Zbp_GetEnv($item, $default = null)
     } else {
         return getenv($item);
     }
-
 }
 
 /**
@@ -2786,63 +2784,61 @@ function zbp_throttle($name = 'default', $max_reqs = 60, $period = 60)
  *
  * @return boolean true通过，false拒绝，null为IP格式不合法
  */
-function is_intranet_ip($check_ip) {
+function is_intranet_ip($check_ip)
+{
     if (filter_var($check_ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4) !== false) {
-        if (filter_var($check_ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_RES_RANGE | FILTER_FLAG_NO_PRIV_RANGE) === false) {
+        if (filter_var($check_ip, FILTER_VALIDATE_IP, (FILTER_FLAG_NO_RES_RANGE | FILTER_FLAG_NO_PRIV_RANGE)) === false) {
             return true;
         } else {
             $ip = explode('.', $check_ip);
-            if (
-                ($ip[0] == 0) ||
-                ($ip[0] >= 240) ||
-                ($ip[0] == 127) ||
-                ($ip[0] == 169 && $ip[1] == 254)
+            if (($ip[0] == 0)
+                || ($ip[0] >= 240)
+                || ($ip[0] == 127)
+                || ($ip[0] == 169 && $ip[1] == 254)
             ) {
                 return true;
             }
-            if (
-                ($ip[0] == 0) ||
-                ($ip[0] >= 240) ||
-                ($ip[0] == 127) ||
-                ($ip[0] == 169 && $ip[1] == 254)
+            if (($ip[0] == 0)
+                || ($ip[0] >= 240)
+                || ($ip[0] == 127)
+                || ($ip[0] == 169 && $ip[1] == 254)
             ) {
                 return true;
             }
-            if (
-                    ($ip[0] == 100 && $ip[1] >= 64 && $ip[1] <= 127 ) ||
-                    ($ip[0] == 192 && $ip[1] == 0 && $ip[2] == 0 ) ||
-                    ($ip[0] == 192 && $ip[1] == 0 && $ip[2] == 2 ) ||
-                    ($ip[0] == 198 && $ip[1] >= 18 && $ip[1] <= 19 ) ||
-                    ($ip[0] == 198 && $ip[1] == 51 && $ip[2] == 100 ) ||
-                    ($ip[0] == 203 && $ip[1] == 0 && $ip[2] == 113 )
+            if (($ip[0] == 100 && $ip[1] >= 64 && $ip[1] <= 127 )
+                || ($ip[0] == 192 && $ip[1] == 0 && $ip[2] == 0 )
+                || ($ip[0] == 192 && $ip[1] == 0 && $ip[2] == 2 )
+                || ($ip[0] == 198 && $ip[1] >= 18 && $ip[1] <= 19 )
+                || ($ip[0] == 198 && $ip[1] == 51 && $ip[2] == 100 )
+                || ($ip[0] == 203 && $ip[1] == 0 && $ip[2] == 113 )
             ) {
                 return true;
             }
             return false;
         }
-    } elseif(filter_var($check_ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6) !== false) {
+    } elseif (filter_var($check_ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6) !== false) {
         if (filter_var($check_ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_RES_RANGE) === false) {
             return true;
-        }else{
+        } else {
             $ip = explode(':', $check_ip);
             if (($ip[0] == 0 && $ip[1] == 0 && $ip[2] == 0 && $ip[3] == 0
-                            && $ip[4] == 0 && $ip[5] == 0 && $ip[6] == 0 && ($ip[7] == 0 || $ip[7] == 1))
-                        || ($ip[0] == 0x5f)
-                        || ($ip[0] >= 0xfe80 && $ip[0] <= 0xfebf)
-                        || ($ip[0] == 0x2001 && ($ip[1] == 0x0db8 || ($ip[1] >= 0x0010 && $ip[1] <= 0x001f)))
-                        || ($ip[0] == 0x3ff3)
-                ) {
+                && $ip[4] == 0 && $ip[5] == 0 && $ip[6] == 0 && ($ip[7] == 0 || $ip[7] == 1))
+                || ($ip[0] == 0x5f)
+                || ($ip[0] >= 0xfe80 && $ip[0] <= 0xfebf)
+                || ($ip[0] == 0x2001 && ($ip[1] == 0x0db8 || ($ip[1] >= 0x0010 && $ip[1] <= 0x001f)))
+                || ($ip[0] == 0x3ff3)
+            ) {
                 return true;
             }
             if ($ip[0] >= 0xfc00 && $ip[0] <= 0xfdff) {
                 return true;
             }
-            if (($ip[0] == 0 && $ip[1] == 0 && $ip[2] == 0 && $ip[3] == 0 && $ip[4] == 0 && $ip[5] == 0xffff) ||
-                    ($ip[0] == 0x0100 && $ip[1] == 0 && $ip[2] == 0 && $ip[3] == 0) ||
-                    ($ip[0] == 0x2001 && $ip[1] <= 0x01ff) ||
-                    ($ip[0] == 0x2001 && $ip[1] == 0x0002 && $ip[2] == 0) ||
-                    ($ip[0] >= 0xfc00 && $ip[0] <= 0xfdff)
-               ) {
+            if (($ip[0] == 0 && $ip[1] == 0 && $ip[2] == 0 && $ip[3] == 0 && $ip[4] == 0 && $ip[5] == 0xffff)
+                || ($ip[0] == 0x0100 && $ip[1] == 0 && $ip[2] == 0 && $ip[3] == 0)
+                || ($ip[0] == 0x2001 && $ip[1] <= 0x01ff)
+                || ($ip[0] == 0x2001 && $ip[1] == 0x0002 && $ip[2] == 0)
+                || ($ip[0] >= 0xfc00 && $ip[0] <= 0xfdff)
+            ) {
                 return true;
             }
             return false;
