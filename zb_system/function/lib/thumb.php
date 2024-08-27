@@ -418,7 +418,7 @@ class Thumb
             imagefill($this->tmpRes, 0, 0, 0xffffff);
         }
 
-        imagecopyresampled($this->tmpRes, $this->srcRes, 0, 0, $clipx, $clipy, $this->srcWidth, $this->srcHeight, $this->, $this->srcHeight);
+        imagecopyresampled($this->tmpRes, $this->srcRes, 0, 0, $clipx, $clipy, $this->srcWidth, $this->srcHeight, $this->srcWidth, $this->srcHeight);
     }
 
     /**
