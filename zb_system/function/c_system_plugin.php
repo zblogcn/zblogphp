@@ -258,7 +258,6 @@ function ClearFilterPlugin($plugname)
  */
 function SuspendFilterPlugin($plugname)
 {
-
     if (isset($GLOBALS['hooks'][$plugname])) {
         $array = $GLOBALS['hooks'][$plugname];
         $GLOBALS['hooks'][$plugname] = array();
@@ -266,7 +265,6 @@ function SuspendFilterPlugin($plugname)
         return true;
     }
     return false;
-
 }
 
 /**
@@ -278,7 +276,6 @@ function SuspendFilterPlugin($plugname)
  */
 function ResumeFilterPlugin($plugname)
 {
-    
     if (isset($GLOBALS['hooks'][$plugname])) {
         $array = GetFilterPluginAddition($plugname, 'func_data');
         if (!is_null($array) && is_array($array)) {
@@ -354,7 +351,7 @@ function HookFilterPlugin_Ref($plugname, &...$args)
  * 插入钩子 Filter接口 的带返回值版
  * 获取 Filter接口信号 请用GetFilterPluginSignal
  * 与HookFilterPlugin的区别是HookFilterPluginBack可以被插件退出返回，中断，GOTO
- * 
+ *
  * @param string $plugname 接口名称
  */
 function HookFilterPluginBack($plugname)
@@ -374,7 +371,7 @@ function HookFilterPluginBack($plugname)
 /**
  * 插入钩子 Filter接口带返回值的引用版 (php>=5.6)
  * 获取 Filter接口信号 请用GetFilterPluginSignal
- * 
+ *
  * @param string $plugname 接口名称
  */
 /*

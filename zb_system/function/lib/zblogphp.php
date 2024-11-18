@@ -403,7 +403,9 @@ class ZBlogPHP
 
     //不保存进Option的单次开关
     public $cookie_tooken_httponly = true;//已废弃
+
     public $cookie_httponly = true;
+
     public $cookie_domain = '';
 
     public $logs_more_info = false;
@@ -633,7 +635,7 @@ class ZBlogPHP
      */
     public function __construct()
     {
-        global $option, $lang, $langs, $blogpath, $bloghost, $cookiespath, $cachedir, 
+        global $option, $lang, $langs, $blogpath, $bloghost, $cookiespath, $cachedir,
             $logsdir, $datadir, $table, $datainfo, $actions, $action, $blogversion,
             $blogtitle, $blogname, $blogsubname, $routes, $blogtheme, $blogstyle,$currenturl,
             $fullcurrenturl, $currentscript, $fullcurrentscript, $activedapps, $posttype,
