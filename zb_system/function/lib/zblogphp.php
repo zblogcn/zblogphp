@@ -4824,6 +4824,13 @@ class ZBlogPHP
      */
     public function CheckSiteClosed()
     {
+        foreach ($GLOBALS['hooks']['Filter_Plugin_Zbp_CheckSiteClosed'] as $fpname => &$fpsignal) {
+            $fpreturn = call_user_func_array($fpname);
+            if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
+                $fpsignal = PLUGIN_EXITSIGNAL_NONE;
+                return $fpreturn;
+            }
+        }
         if ($this->option['ZC_CLOSE_SITE']) {
             Http503();
             $this->ShowError(82, __FILE__, __LINE__);

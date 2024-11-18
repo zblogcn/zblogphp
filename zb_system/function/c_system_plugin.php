@@ -749,6 +749,17 @@ DefinePluginFilter('Filter_Plugin_Zbp_LoadManage');
  */
 DefinePluginFilter('Filter_Plugin_Zbp_Terminate');
 
+/*
+'**************************************************<
+'类型:Filter
+'名称:Filter_Plugin_Zbp_CheckSiteClosed
+'参数:
+'说明:Zbp类的跳出关站检查接口
+'调用:
+'**************************************************>
+ */
+DefinePluginFilter('Filter_Plugin_Zbp_CheckSiteClosed');
+
 //###############################################################################################################
 //<前台view,index>
 
