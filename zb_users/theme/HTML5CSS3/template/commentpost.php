@@ -3,7 +3,7 @@
   <dd>
   <h5><!--◎欢迎参与讨论，请在这里发表您的看法、交流您的观点。--></h5>
 <figure><img src="{$user.Avatar}" alt="来宾的头像" border="0">{if $user.ID>0}<b>{$user.StaticName}</b>{/if}</figure>
-  <form id="frmSumbit" target="_self" method="post" action="{$article.CommentPostUrl}">
+  <form id="frmSubmit" target="_self" method="post" action="{$article.CommentPostUrl}">
 	<input type="hidden" name="inpId" id="inpId" value="{$article.ID}" />
 	<input type="hidden" name="inpRevID" id="inpRevID" value="0" />
 {if $user.ID>0}
@@ -42,7 +42,7 @@
       <textarea name="txaArticle" id="txaArticle" class="txt" cols="50" rows="4" tabindex="1" required></textarea>
     </p>
     <p>
-      <button name="btnSumbit" type="submit" tabindex="6" onclick="return zbp.comment.post()">提交</button>
+      <button name="btnsubmit" type="submit" tabindex="6" onclick="return zbp.comment.post()">提交</button>
     </p>
   </form>
   </dd>
