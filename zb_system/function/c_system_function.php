@@ -168,7 +168,7 @@ function GetList($count = 10, $cate = null, $auth = null, $date = null, $tags = 
     if (is_array($count)) {
         $args = $count;
         if (array_key_exists('count', $args)) {
-            $count = (int) $args['count'];
+            $count = $args['count'];
             unset($args['count']);
         } else {
             $count = 10;
