@@ -445,7 +445,7 @@ function Include_ShowError404($errorCode, $errorDescription = null, $file = null
             $signal = PLUGIN_EXITSIGNAL_RETURN;
         } elseif (in_array("Status: 404 Not Found", headers_list())) {
             $signal = PLUGIN_EXITSIGNAL_RETURN;
-        } elseif (function_exists('http_response_code') && http_response_code() == 404){
+        } elseif (function_exists('http_response_code') && http_response_code() == 404) {
             $signal = PLUGIN_EXITSIGNAL_RETURN;
         } else {
             return;
