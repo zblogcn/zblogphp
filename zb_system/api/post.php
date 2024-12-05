@@ -219,7 +219,7 @@ function api_post_list()
     $tagId = (int) GetVars('tag_id');
     $authId = (int) GetVars('auth_id');
     $date = GetVars('date');
-    $mng = (int) trim(GetVars('manage')); //&manage=1
+    $mng = (int) trim(GetVars('manage', '', '')); //&manage=1
     $type = (int) GetVars('type');
     $actions = $zbp->GetPostType($type, 'actions');
     $search = (string) GetVars('search');

@@ -1563,8 +1563,8 @@ class ZBlogPHP
     public function Verify()
     {
         // 在普通 Web 页面中
-        $username = trim(GetVars('username_' . hash("crc32b", $this->guid), 'COOKIE'));
-        $token = trim(GetVars('token_' . hash("crc32b", $this->guid), 'COOKIE'));
+        $username = trim(GetVars('username_' . hash("crc32b", $this->guid), 'COOKIE', ''));
+        $token = trim(GetVars('token_' . hash("crc32b", $this->guid), 'COOKIE', ''));
         $user = $this->VerifyUserToken($token, $username);
 
         if (is_object($user)) {

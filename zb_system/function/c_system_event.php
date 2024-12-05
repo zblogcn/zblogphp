@@ -39,7 +39,7 @@ function VerifyLogin($throwException = true, $ignoreValidCode = true, $ignoreCsr
 
     /* @var Member $m */
     $m = null;
-    if ($zbp->Verify_MD5(trim(GetVars('username', 'POST')), trim(GetVars('password', 'POST')), $m)) {
+    if ($zbp->Verify_MD5(trim(GetVars('username', 'POST', '')), trim(GetVars('password', 'POST', '')), $m)) {
         $zbp->user = $m;
         $zbp->islogin = true;
         $sd = (float) GetVars('savedate');
@@ -2224,7 +2224,7 @@ function SetSidebar()
         $optionName = $i === 1 ? 'ZC_SIDEBAR_ORDER' : "ZC_SIDEBAR{$i}_ORDER";
         $formName = $i === 1 ? 'sidebar' : "sidebar{$i}";
         if (isset($_POST[$formName])) {
-            $zbp->option[$optionName] = trim(GetVars($formName, 'POST'), '|');
+            $zbp->option[$optionName] = trim(GetVars($formName, 'POST', ''), '|');
         }
     }
     $zbp->SaveOption();

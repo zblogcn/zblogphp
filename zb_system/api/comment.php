@@ -144,7 +144,7 @@ function api_comment_list()
 {
     global $zbp;
 
-    $mng = (int) trim(GetVars('manage')); //&manage=1
+    $mng = (int) trim(GetVars('manage', '', '')); //&manage=1
     $postId = (int) GetVars('post_id');
     $authId = (int) GetVars('auth_id');
     $ischecking = (int) GetVars('ischecking');

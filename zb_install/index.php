@@ -932,7 +932,7 @@ function Setup4()
       <div id="content">
         <?php
         $isInstallFlag = true;
-        $zbp->option['ZC_DATABASE_TYPE'] = GetVars('dbtype', 'POST');
+        $zbp->option['ZC_DATABASE_TYPE'] = GetVars('dbtype', 'POST', '');
 
         $cts = '';
 
@@ -941,7 +941,7 @@ function Setup4()
             case 'mysqli':
             case 'pdo_mysql':
                 $cts = file_get_contents($GLOBALS['blogpath'] . 'zb_system/defend/createtable/mysql.sql');
-                $zbp->option['ZC_MYSQL_SERVER'] = GetVars('dbmysql_server', 'POST');
+                $zbp->option['ZC_MYSQL_SERVER'] = GetVars('dbmysql_server', 'POST', '');
                 if (strpos($zbp->option['ZC_MYSQL_SERVER'], ':') !== false) {
                     $servers = explode(':', $zbp->option['ZC_MYSQL_SERVER']);
                     $zbp->option['ZC_MYSQL_SERVER'] = trim($servers[0]);
@@ -952,16 +952,16 @@ function Setup4()
 
                     unset($servers);
                 }
-                //$zbp->option['ZC_MYSQL_CHARSET'] = GetVars('dbcharset', 'POST');
-                $zbp->option['ZC_MYSQL_USERNAME'] = trim(GetVars('dbmysql_username', 'POST'));
-                $zbp->option['ZC_MYSQL_PASSWORD'] = trim(GetVars('dbmysql_password', 'POST'));
-                $zbp->option['ZC_MYSQL_NAME'] = trim(str_replace(array('\'', '"'), array('', ''), GetVars('dbmysql_name', 'POST')));
-                $zbp->option['ZC_MYSQL_PRE'] = trim(str_replace(array('\'', '"'), array('', ''), GetVars('dbmysql_pre', 'POST')));
+                //$zbp->option['ZC_MYSQL_CHARSET'] = GetVars('dbcharset', 'POST', '');
+                $zbp->option['ZC_MYSQL_USERNAME'] = trim(GetVars('dbmysql_username', 'POST', ''));
+                $zbp->option['ZC_MYSQL_PASSWORD'] = trim(GetVars('dbmysql_password', 'POST', ''));
+                $zbp->option['ZC_MYSQL_NAME'] = trim(str_replace(array('\'', '"'), array('', ''), GetVars('dbmysql_name', 'POST', '')));
+                $zbp->option['ZC_MYSQL_PRE'] = trim(str_replace(array('\'', '"'), array('', ''), GetVars('dbmysql_pre', 'POST', '')));
                 if ($zbp->option['ZC_MYSQL_PRE'] == '') {
                     $zbp->option['ZC_MYSQL_PRE'] = 'zbp_';
                 }
 
-                $zbp->option['ZC_MYSQL_ENGINE'] = GetVars('dbengine', 'POST');
+                $zbp->option['ZC_MYSQL_ENGINE'] = GetVars('dbengine', 'POST', '');
                 $cts = str_replace('MyISAM', $zbp->option['ZC_MYSQL_ENGINE'], $cts);
 
                 if (!(isset($zbp->option['ZC_INSTALL_AFTER_CONFIG']) && $zbp->option['ZC_INSTALL_AFTER_CONFIG'] == true)) {
@@ -977,8 +977,8 @@ function Setup4()
             case 'sqlite':
                 $cts = file_get_contents($GLOBALS['blogpath'] . 'zb_system/defend/createtable/sqlite.sql');
                 $cts = str_replace(' autoincrement', '', $cts);
-                $zbp->option['ZC_SQLITE_NAME'] = trim(GetVars('dbsqlite_name', 'POST'));
-                $zbp->option['ZC_SQLITE_PRE'] = trim(GetVars('dbsqlite_pre', 'POST'));
+                $zbp->option['ZC_SQLITE_NAME'] = trim(GetVars('dbsqlite_name', 'POST', ''));
+                $zbp->option['ZC_SQLITE_PRE'] = trim(GetVars('dbsqlite_pre', 'POST', ''));
                 if ($zbp->option['ZC_SQLITE_PRE'] == '') {
                     $zbp->option['ZC_SQLITE_PRE'] = 'zbp_';
                 }
@@ -986,8 +986,8 @@ function Setup4()
             case 'sqlite3':
             case 'pdo_sqlite':
                 $cts = file_get_contents($GLOBALS['blogpath'] . 'zb_system/defend/createtable/sqlite.sql');
-                $zbp->option['ZC_SQLITE_NAME'] = trim(GetVars('dbsqlite_name', 'POST'));
-                $zbp->option['ZC_SQLITE_PRE'] = trim(GetVars('dbsqlite_pre', 'POST'));
+                $zbp->option['ZC_SQLITE_NAME'] = trim(GetVars('dbsqlite_name', 'POST', ''));
+                $zbp->option['ZC_SQLITE_PRE'] = trim(GetVars('dbsqlite_pre', 'POST', ''));
                 if ($zbp->option['ZC_SQLITE_PRE'] == '') {
                     $zbp->option['ZC_SQLITE_PRE'] = 'zbp_';
                 }
@@ -995,7 +995,7 @@ function Setup4()
             case 'postgresql':
             case 'pdo_postgresql':
                 $cts = file_get_contents($GLOBALS['blogpath'] . 'zb_system/defend/createtable/pgsql.sql');
-                $zbp->option['ZC_PGSQL_SERVER'] = GetVars('dbpgsql_server', 'POST');
+                $zbp->option['ZC_PGSQL_SERVER'] = GetVars('dbpgsql_server', 'POST', '');
                 if (strpos($zbp->option['ZC_PGSQL_SERVER'], ':') !== false) {
                     $servers = explode(':', $zbp->option['ZC_PGSQL_SERVER']);
                     $zbp->option['ZC_PGSQL_SERVER'] = trim($servers[0]);
@@ -1007,10 +1007,10 @@ function Setup4()
                     unset($servers);
                 }
                 $zbp->option['ZC_PGSQL_CHARSET'] = 'utf8';
-                $zbp->option['ZC_PGSQL_USERNAME'] = trim(GetVars('dbpgsql_username', 'POST'));
-                $zbp->option['ZC_PGSQL_PASSWORD'] = trim(GetVars('dbpgsql_password', 'POST'));
-                $zbp->option['ZC_PGSQL_NAME'] = strtolower(trim(str_replace(array('\'', '"'), array('', ''), GetVars('dbpgsql_name', 'POST'))));
-                $zbp->option['ZC_PGSQL_PRE'] = trim(str_replace(array('\'', '"'), array('', ''), GetVars('dbpgsql_pre', 'POST')));
+                $zbp->option['ZC_PGSQL_USERNAME'] = trim(GetVars('dbpgsql_username', 'POST', ''));
+                $zbp->option['ZC_PGSQL_PASSWORD'] = trim(GetVars('dbpgsql_password', 'POST', ''));
+                $zbp->option['ZC_PGSQL_NAME'] = strtolower(trim(str_replace(array('\'', '"'), array('', ''), GetVars('dbpgsql_name', 'POST', ''))));
+                $zbp->option['ZC_PGSQL_PRE'] = trim(str_replace(array('\'', '"'), array('', ''), GetVars('dbpgsql_pre', 'POST', '')));
                 if ($zbp->option['ZC_PGSQL_PRE'] == '') {
                     $zbp->option['ZC_PGSQL_PRE'] == 'zbp_';
                 }
@@ -1285,8 +1285,8 @@ function InsertInfo()
 
     $mem->Guid = $guid;
     $mem->Level = 1;
-    $mem->Name = GetVars('username', 'POST');
-    $mem->Password = Member::GetPassWordByGuid(GetVars('password', 'POST'), $guid);
+    $mem->Name = GetVars('username', 'POST', '');
+    $mem->Password = Member::GetPassWordByGuid(GetVars('password', 'POST', ''), $guid);
     $mem->IP = GetGuestIP();
     $mem->PostTime = time();
 
@@ -1488,11 +1488,11 @@ function SaveConfig()
     global $zbp;
 
     $zbp->option['ZC_BLOG_VERSION'] = ZC_BLOG_VERSION;
-    $zbp->option['ZC_BLOG_NAME'] = GetVars('blogtitle', 'POST');
+    $zbp->option['ZC_BLOG_NAME'] = GetVars('blogtitle', 'POST', '');
     $zbp->option['ZC_USING_PLUGIN_LIST'] = 'AppCentre|UEditor|Totoro|LinksManage';
 
-    $zbp->option['ZC_BLOG_THEME'] = SplitAndGet(GetVars('blogtheme', 'POST'), '|', 0);
-    $zbp->option['ZC_BLOG_CSS'] = SplitAndGet(GetVars('blogtheme', 'POST'), '|', 1);
+    $zbp->option['ZC_BLOG_THEME'] = SplitAndGet(GetVars('blogtheme', 'POST', ''), '|', 0);
+    $zbp->option['ZC_BLOG_CSS'] = SplitAndGet(GetVars('blogtheme', 'POST', ''), '|', 1);
     $zbp->option['ZC_DEBUG_MODE'] = false;
     $zbp->option['ZC_LAST_VERSION'] = ZC_LAST_VERSION;
     $zbp->option['ZC_NOW_VERSION'] = $zbp->version;

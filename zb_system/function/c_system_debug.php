@@ -78,7 +78,7 @@ function Debug_IgnoreError($errno)
         }
     }
     if (ZbpErrorControl::$isstrict == false) {
-        if ($errno == E_STRICT) {
+        if (PHP_VERSION_ID < 80400 && defined('E_STRICT') && $errno == constant("E_STRICT")) {
             return true;
         }
 

@@ -24,15 +24,15 @@ function api_member_login()
 
     $member = null;
 
-    $password = trim(GetVars('password', 'POST'));
+    $password = trim(GetVars('password', 'POST', ''));
     $verify_ret = false;
     if ((bool) preg_match("/^[a-z0-9]{32}$/", $password) === true) {
         // 如果格式是 md5，优先直接验证（只是大概猜测是 md5，不保证是，所以如果失败会在下面重新验）
-        $verify_ret = $zbp->Verify_MD5(trim(GetVars('username', 'POST')), $password, $member);
+        $verify_ret = $zbp->Verify_MD5(trim(GetVars('username', 'POST', '')), $password, $member);
     }
     if ($verify_ret === false) {
         // 如果直接验证失败，或者没有验证，再接着验证
-        $verify_ret = $zbp->Verify_MD5(trim(GetVars('username', 'POST')), md5($password), $member);
+        $verify_ret = $zbp->Verify_MD5(trim(GetVars('username', 'POST', '')), md5($password), $member);
     }
 
     if ($verify_ret) {
