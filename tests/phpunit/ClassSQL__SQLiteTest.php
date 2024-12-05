@@ -22,6 +22,11 @@ class ClassSQL__SQLiteTest extends PHPUnit\Framework\TestCase
         $this->assertEquals('SELECT COUNT(*) FROM sqlite_master WHERE type=\'table\' AND name=\'zbp_post\'', self::$db->sql);
     }
 
+    public function testTruncate(): void
+    {
+        $this->assertEquals('DELETE FROM  zbp_post ', self::$db->truncate("zbp_post")->sql);
+    }
+
     public function testIndex()
     {
         self::$db->create('zbp_post')->index(array('indexname' => array('ddd', 'eee', 'eeee')));

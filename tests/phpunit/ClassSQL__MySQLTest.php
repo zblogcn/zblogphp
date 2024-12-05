@@ -16,6 +16,11 @@ class ClassSQL__MySQLTest extends PHPUnit\Framework\TestCase
         self::$db = null;
     }
 
+    public function testTruncate(): void
+    {
+        $this->assertEquals('TRUNCATE TABLE  zbp_post ', self::$db->truncate("zbp_post")->sql);
+    }
+
     public function testExist(): void
     {
         self::$db->exist('zbp_post', 'zbphp');

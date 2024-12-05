@@ -22,6 +22,11 @@ class ClassSQL__PostgreSQLTest extends PHPUnit\Framework\TestCase
         $this->assertEquals('SELECT COUNT(*) FROM information_schema.tables WHERE table_schema=\'public\' AND  table_name =\'zbp_post\'', self::$db->sql);
     }
 
+    public function testTruncate(): void
+    {
+        $this->assertEquals('TRUNCATE TABLE  zbp_post ', self::$db->truncate("zbp_post")->sql);
+    }
+
     public function testIndex()
     {
         self::$db->create('zbp_post')->index(array('indexname' => array('ddd', 'eee', 'eeee')));

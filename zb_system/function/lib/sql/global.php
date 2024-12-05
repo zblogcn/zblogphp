@@ -1285,7 +1285,12 @@ class SQL__Global
     protected function buildTRUNCATE()
     {
         $sql = &$this->pri_sql;
-        $sql[] = 'TABLE';
+        if (get_class($this) == 'SQL__SQLite') {
+            $sql = array('DELETE');
+            $sql[] = 'FROM';
+        } else {
+            $sql[] = 'TABLE';
+        }
         $this->buildTable();
     }
 
