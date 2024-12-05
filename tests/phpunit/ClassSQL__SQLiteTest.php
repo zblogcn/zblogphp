@@ -2,7 +2,9 @@
 
 class ClassSQL__SQLiteTest extends PHPUnit\Framework\TestCase
 {
+
     protected $backupGlobalsBlacklist = array('zbp');
+
     protected static $db = null;
 
     public function setUp(): void
@@ -49,4 +51,5 @@ class ClassSQL__SQLiteTest extends PHPUnit\Framework\TestCase
         self::$db->create('zbp_post')->data($tableData);
         $this->assertEquals('CREATE TABLE zbp_post  ( a integer primary key autoincrement, b integer NOT NULL DEFAULT \'0\', i bit NOT NULL DEFAULT \'0\', j char(250) NOT NULL DEFAULT \'\', k varchar(250) NOT NULL DEFAULT \'\', p text NOT NULL DEFAULT \'\', q datetime NOT NULL, r float NOT NULL DEFAULT 0, s timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ); CREATE UNIQUE INDEX zbp_post_a  on zbp_post (a);', self::$db->sql);
     }
+
 }

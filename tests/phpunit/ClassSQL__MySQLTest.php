@@ -2,7 +2,9 @@
 
 class ClassSQL__MySQLTest extends PHPUnit\Framework\TestCase
 {
+
     protected $backupGlobalsBlacklist = array('zbp');
+
     protected static $db = null;
 
     public function setUp(): void
@@ -63,76 +65,43 @@ class ClassSQL__MySQLTest extends PHPUnit\Framework\TestCase
     {
         $this->assertEquals(
             'SELECT * FROM  zbp_post   USE INDEX ( test )',
-            self::$db
-                ->select("zbp_post")
-                ->useindex('test')
-                ->sql
+            self::$db->select("zbp_post")->useindex('test')->sql
         );
         $this->assertEquals(
             'SELECT * FROM  zbp_post   USE INDEX ( a, b )',
-            self::$db
-                ->select("zbp_post")
-                ->useindex(array('a, b'))
-                ->sql
+            self::$db->select("zbp_post")->useindex(array('a, b'))->sql
         );
         $this->assertEquals(
             'SELECT * FROM  zbp_post   FORCE INDEX ( test )',
-            self::$db
-                ->select("zbp_post")
-                ->forceindex('test')
-                ->sql
+            self::$db->select("zbp_post")->forceindex('test')->sql
         );
         $this->assertEquals(
             'SELECT * FROM  zbp_post   FORCE INDEX ( a, b )',
-            self::$db
-                ->select("zbp_post")
-                ->forceindex('a, b')
-                ->sql
+            self::$db->select("zbp_post")->forceindex('a, b')->sql
         );
         $this->assertEquals(
             'SELECT * FROM  zbp_post   IGNORE INDEX ( test )',
-            self::$db
-                ->select("zbp_post")
-                ->ignoreindex('test')
-                ->sql
+            self::$db->select("zbp_post")->ignoreindex('test')->sql
         );
         $this->assertEquals(
             'SELECT * FROM  zbp_post   IGNORE INDEX ( a, b )',
-            self::$db
-                ->select("zbp_post")
-                ->ignoreindex(array('a, b'))
-                ->sql
+            self::$db->select("zbp_post")->ignoreindex(array('a, b'))->sql
         );
         $this->assertEquals(
             'SELECT SQL_NO_CACHE  * FROM  zbp_post ',
-            self::$db
-                ->select("zbp_post")
-                ->option(array('sql_no_cache' => true))
-                ->sql
+            self::$db->select("zbp_post")->option(array('sql_no_cache' => true))->sql
         );
         $this->assertEquals(
             'SELECT SQL_CACHE  * FROM  zbp_post ',
-            self::$db
-                ->select("zbp_post")
-                ->option(array('sql_cache' => true))
-                ->sql
+            self::$db->select("zbp_post")->option(array('sql_cache' => true))->sql
         );
         $this->assertEquals(
             'SELECT SQL_BUFFER_RESULT  * FROM  zbp_post ',
-            self::$db
-                ->select("zbp_post")
-                ->option(array('sql_buffer_result' => true))
-                ->sql
+            self::$db->select("zbp_post")->option(array('sql_buffer_result' => true))->sql
         );
         $this->assertEquals(
             'SELECT  log_ID  FROM zbp_post AS p STRAIGHT_JOIN zbp_postrelation AS pr ON p.log_ID = pr.pr_PostID WHERE 1 = 1',
-                  self::$db->selectany('log_ID')
-                           ->from(array('zbp_post'=>'p'))
-                           ->innerjoin(array('zbp_postrelation'=>'pr'))
-                           ->on('p.log_ID = pr.pr_PostID')
-                           ->where('1 = 1')
-                           ->option(array('straight_join' => true))
-                           ->sql
+            self::$db->selectany('log_ID')->from(array('zbp_post' => 'p'))->innerjoin(array('zbp_postrelation' => 'pr'))->on('p.log_ID = pr.pr_PostID')->where('1 = 1')->option(array('straight_join' => true))->sql
         );
         $tableData = array(
             'a' => array('a', 'integer', '', 0),
@@ -142,11 +111,7 @@ class ClassSQL__MySQLTest extends PHPUnit\Framework\TestCase
             'o' => array('o', 'string', 'longtext', ''),
             'p' => array('p', 'string', '', ''),
         );
-        self::$db->create('zbp_post2')->data($tableData)
-        ->option(array('temporary' => true))
-        ->option(array('engine' => 'Memory'))
-        ->option(array('charset' => 'utf8'))
-        ->option(array('collate' => 'utf8_general_ci'));
+        self::$db->create('zbp_post2')->data($tableData)->option(array('temporary' => true))->option(array('engine' => 'Memory'))->option(array('charset' => 'utf8'))->option(array('collate' => 'utf8_general_ci'));
         $this->assertEquals('CREATE TEMPORARY TABLE IF NOT EXISTS zbp_post2  ( a int(11) NOT NULL AUTO_INCREMENT, i tinyint(1) NOT NULL DEFAULT \'0\', j char(250) NOT NULL DEFAULT \'\', k varchar(250) NOT NULL DEFAULT \'\', o longtext NOT NULL , p longtext NOT NULL , PRIMARY KEY (a) ) ENGINE=Memory DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci AUTO_INCREMENT=1 ;', self::$db->sql);
     }
 
@@ -154,24 +119,13 @@ class ClassSQL__MySQLTest extends PHPUnit\Framework\TestCase
     {
         $this->assertEquals(
             'SELECT  log_ID  FROM zbp_post AS p LEFT JOIN zbp_postrelation AS pr ON p.log_ID = pr.pr_PostID LEFT JOIN zbp_postrelation2 AS pr2 ON p.log_ID = pr2.pr_PostID AND p.log_DD = pr2.pr_DD WHERE 1 = 1',
-                  self::$db->selectany('log_ID')
-                           ->from(array('zbp_post'=>'p'))
-                           ->leftjoin(array('zbp_postrelation'=>'pr'), 'p.log_ID = pr.pr_PostID')
-                           ->leftjoin('zbp_postrelation2 AS pr2', array('p.log_ID = pr2.pr_PostID', 'p.log_DD = pr2.pr_DD'))
-                           ->where('1 = 1')
-                           ->sql
+            self::$db->selectany('log_ID')->from(array('zbp_post' => 'p'))->leftjoin(array('zbp_postrelation' => 'pr'), 'p.log_ID = pr.pr_PostID')->leftjoin('zbp_postrelation2 AS pr2', array('p.log_ID = pr2.pr_PostID', 'p.log_DD = pr2.pr_DD'))->where('1 = 1')->sql
         );
 
         $this->assertEquals(
             'SELECT  log_ID  FROM zbp_post AS p LEFT JOIN zbp_postrelation AS pr ON p.log_ID = pr.pr_PostID LEFT JOIN zbp_postrelation2 AS pr2 ON p.log_ID = pr2.pr_PostID AND p.log_DD = pr2.pr_DD WHERE 1 = 1',
-                  self::$db->selectany('log_ID')
-                           ->from(array('zbp_post'=>'p'))
-                           ->leftjoin(array('zbp_postrelation'=>'pr'))
-                           ->on('p.log_ID = pr.pr_PostID')
-                           ->leftjoin('zbp_postrelation2 AS pr2')
-                           ->on('p.log_ID = pr2.pr_PostID', 'p.log_DD = pr2.pr_DD')
-                           ->where('1 = 1')
-                           ->sql
+            self::$db->selectany('log_ID')->from(array('zbp_post' => 'p'))->leftjoin(array('zbp_postrelation' => 'pr'))->on('p.log_ID = pr.pr_PostID')->leftjoin('zbp_postrelation2 AS pr2')->on('p.log_ID = pr2.pr_PostID', 'p.log_DD = pr2.pr_DD')->where('1 = 1')->sql
         );
     }
+
 }

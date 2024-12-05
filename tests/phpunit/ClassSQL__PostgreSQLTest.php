@@ -2,7 +2,9 @@
 
 class ClassSQL__PostgreSQLTest extends PHPUnit\Framework\TestCase
 {
+
     protected $backupGlobalsBlacklist = array('zbp');
+
     protected static $db = null;
 
     public function setUp(): void
@@ -66,4 +68,5 @@ class ClassSQL__PostgreSQLTest extends PHPUnit\Framework\TestCase
         self::$db->drop('zbp_post');
         $this->assertEquals('DROP TABLE  zbp_post   ; DROP SEQUENCE zbp_post_seq;', self::$db->sql);
     }
+
 }
