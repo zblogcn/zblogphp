@@ -776,10 +776,10 @@ class SQL__Global
 
         if (isset($this->option['limit'])) {
             if ($this->option['limit'] > 0) {
-                $sql[] = "LIMIT " . str_replace(array('"',"'"), '', $this->option['limit']);
+                $sql[] = "LIMIT " . str_replace(array('"',"'",';'), '', $this->option['limit']);
 
                 if (isset($this->option['offset'])) {
-                    $sql[] = "OFFSET " . str_replace(array('"',"'"), '', $this->option['offset']);
+                    $sql[] = "OFFSET " . str_replace(array('"',"'",';'), '', $this->option['offset']);
                 }
             }
         }
