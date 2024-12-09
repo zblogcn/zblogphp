@@ -2137,7 +2137,7 @@ DefinePluginFilter('Filter_Plugin_DelModule_Succeed');
 '调用:
 '**************************************************>
  */
-DefinePluginFilter('Filter_Plugin_PostArticle_Core');
+DefinePluginFilter('Filter_Plugin_PostPost_Core');
 
 /*
 '**************************************************<
@@ -2159,7 +2159,7 @@ DefinePluginFilter('Filter_Plugin_DelPost_Core');
 '调用:
 '**************************************************>
  */
-DefinePluginFilter('Filter_Plugin_PostArticle_Succeed');
+DefinePluginFilter('Filter_Plugin_PostPost_Succeed');
 
 /*
 '**************************************************<
