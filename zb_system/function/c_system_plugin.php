@@ -232,7 +232,6 @@ function Remove_Filter_Plugin($plugname, $functionname)
     return false;
 }
 
-
 /**
  * 获取Filter接口的全部挂载函数列表数组
  *
@@ -248,7 +247,6 @@ function List_Filter_Plugin($plugname)
 
     return array();
 }
-
 
 /**
  * 清除Filter接口的所有挂载函数

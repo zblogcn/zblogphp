@@ -37,7 +37,7 @@ HookFilterPlugin('Filter_Plugin_Login_Header');
   <div class="logo"><img src="image/admin/none.gif" title="<?php echo htmlspecialchars($blogname); ?>" alt="<?php echo htmlspecialchars($blogname); ?>"/></div>
   <div class="login">
     <form method="post" action="#">
-    <input type="hidden" name="csrfToken" value="<?php echo $zbp->GetCSRFToken('login', 'minute');?>">
+    <input type="hidden" name="csrfToken" value="<?php echo $zbp->GetCSRFToken('login', 'minute'); ?>">
     <dl>
       <dt></dt>
       <dd class="username"><label for="edtUserName"><?php echo $lang['msg']['username']; ?></label><input type="text" id="edtUserName" name="edtUserName" size="20" value="<?php echo GetVars('username', 'COOKIE'); ?>" tabindex="1" /></dd>
