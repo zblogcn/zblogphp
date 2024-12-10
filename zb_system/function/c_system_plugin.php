@@ -232,6 +232,24 @@ function Remove_Filter_Plugin($plugname, $functionname)
     return false;
 }
 
+
+/**
+ * 获取Filter接口的全部挂载函数列表数组
+ *
+ * @param string $plugname 接口名称
+ *
+ * @return array
+ */
+function List_Filter_Plugin($plugname)
+{
+    if (isset($GLOBALS['hooks'][$plugname])) {
+        return $GLOBALS['hooks'][$plugname];
+    }
+
+    return array();
+}
+
+
 /**
  * 清除Filter接口的所有挂载函数
  *
