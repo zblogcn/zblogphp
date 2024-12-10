@@ -92,10 +92,10 @@ class ZbpForm
         echo $s;
     }
 
-    public static function text($name, $value, $width = '150px')
+    public static function text($name, $value, $width = '150px', $placeholder = '')
     {
         $style = $width ? ' style="width: ' . $width . ';"' : '';
-        $s = "<input type=\"text\" name=\"$name\" id=\"$name\" class=\"$name\" value=\"$value\"$style/>\r\n";
+        $s = "<input type=\"text\" name=\"$name\" id=\"$name\" class=\"$name\" value=\"$value\" placeholder=\"$placeholder\" $style/>\r\n";
         if (self::$setreturn) {
             return $s;
         }
@@ -108,10 +108,10 @@ class ZbpForm
         echo $s;
     }
 
-    public static function textarea($name, $value, $width = '250px', $height = '100px')
+    public static function textarea($name, $value, $width = '250px', $height = '100px', $placeholder = '')
     {
         $style = $width ? ' style="width: ' . $width . '; height: ' . $height . '"' : '';
-        $s = "<textarea name=\"$name\" id=\"$name\" class=\"$name\"$style>$value</textarea>\r\n";
+        $s = "<textarea name=\"$name\" id=\"$name\" class=\"$name\" placeholder=\"$placeholder\" $style>$value</textarea>\r\n";
         if (self::$setreturn) {
             return $s;
         }
