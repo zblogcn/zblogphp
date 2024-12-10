@@ -1,5 +1,5 @@
 <div id="respond" class="no_webshot">
-	<form id="frmSumbit" target="_self" method="post" action="{$article.CommentPostUrl}">
+	<form id="frmSubmit" target="_self" method="post" action="{$article.CommentPostUrl}">
 		<input type="hidden" name="inpId" id="inpId" value="{$article.ID}" />
 		<input type="hidden" name="inpRevID" id="inpRevID" value="0" />
 		<h3 class="base-tit">发表我的评论</h3>
