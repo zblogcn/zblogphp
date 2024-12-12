@@ -421,7 +421,9 @@ function GetGuestIP()
 
     $user_ip = null;
 
-    if ($zbp->option['ZC_USING_CDN_GUESTIP_TYPE'] != 'REMOTE_ADDR') {
+    if ($zbp->option['ZC_USING_CDN_GUESTIP_TYPE'] == '') {
+        $user_ip = GetVars("REMOTE_ADDR", "SERVER");
+    } else {
         $user_ip = GetVars($zbp->option['ZC_USING_CDN_GUESTIP_TYPE'], "SERVER");
     }
 

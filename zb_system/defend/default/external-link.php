@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge,chrome=1" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="robots" content="none" />
     <meta name="viewport" content="width=device-width,viewport-fit=cover" />
     <meta name="generator" content="{$option['ZC_BLOG_PRODUCT_FULL']}" />

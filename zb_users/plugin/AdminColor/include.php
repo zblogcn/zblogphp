@@ -68,26 +68,26 @@ function AdminColor_Css()
 
     list($fontsize, $leftwidth, $rightwidth, $background_positionX, $background_color) = AdminColor_GetValue();
 
-    echo '<script type="text/javascript">var lang_admincolor_closemenu2 = "' . $zbp->lang['AdminColor']['closemenu'] . '";var lang_admincolor_closemenu = "<i class=icon-caret-left-fill></i>' . $zbp->lang['AdminColor']['closemenu'] . '";var lang_admincolor_expandmenu2 = "' . $zbp->lang['AdminColor']['expandmenu'] . '";var lang_admincolor_expandmenu = "<i class=icon-caret-right-fill></i>' . $zbp->lang['AdminColor']['expandmenu'] . '"</script>' . "\r\n";
+    echo '<script>var lang_admincolor_closemenu2 = "' . $zbp->lang['AdminColor']['closemenu'] . '";var lang_admincolor_closemenu = "<i class=icon-caret-left-fill></i>' . $zbp->lang['AdminColor']['closemenu'] . '";var lang_admincolor_expandmenu2 = "' . $zbp->lang['AdminColor']['expandmenu'] . '";var lang_admincolor_expandmenu = "<i class=icon-caret-right-fill></i>' . $zbp->lang['AdminColor']['expandmenu'] . '"</script>' . "\r\n";
 
     if ($zbp->Config('AdminColor')->ColorID < 10) {
         Add_Filter_Plugin('Filter_Plugin_Admin_LeftMenu', 'AdminColor_Add_Button');
         $hm = GetVars('admincolor_hm', 'COOKIE');
         if ($hm == '1') {
-            echo '<style type="text/css">.left{width:36px;background-color:#ededed;}.left #leftmenu span{margin-left:11px;font-size:0;}.left #leftmenu span i{font-size:'.$fontsize.'px;}div.main,section.main{padding-left:46px;}.left #leftmenu li,.left #leftmenu a{width:'.$leftwidth.'px}';
+            echo '<style>.left{width:36px;background-color:#ededed;}.left #leftmenu span{margin-left:11px;font-size:0;}.left #leftmenu span i{font-size:'.$fontsize.'px;}div.main,section.main{padding-left:46px;}.left #leftmenu li,.left #leftmenu a{width:'.$leftwidth.'px}';
             if ($zbp->Config('AdminColor')->ColorID == 9)
                 echo '.left{background-color:rgb(227, 234, 243);}';
             echo '</style>';
         }else{
-            echo '<style type="text/css">.left{width:'.$leftwidth.'px}.main{padding-left:'.$rightwidth.'px}.left #leftmenu li,.left #leftmenu a{width:'.$leftwidth.'px}</style>';
+            echo '<style>.left{width:'.$leftwidth.'px}.main{padding-left:'.$rightwidth.'px}.left #leftmenu li,.left #leftmenu a{width:'.$leftwidth.'px}</style>';
         }
     } elseif ($zbp->Config('AdminColor')->ColorID == 10) {
         Add_Filter_Plugin('Filter_Plugin_Admin_LeftMenu', 'AdminColor_Add_Button');
         $hm = GetVars('admincolor_hm', 'COOKIE');
         if ($hm == '1') {
-            echo '<style type="text/css">.left{width:36px;background-color:#333333;}.left #leftmenu span{margin-left:11px;font-size:0;}.left #leftmenu span i{font-size:'.$fontsize.'px;}div.main,section.main{padding-left:46px;}body{background-position:-964px top;}.left #leftmenu #nav_admincolor2 span{margin-left:11px;}.left #leftmenu li,.left #leftmenu a{width:'.$leftwidth.'px}</style>';
+            echo '<style>.left{width:36px;background-color:#333333;}.left #leftmenu span{margin-left:11px;font-size:0;}.left #leftmenu span i{font-size:'.$fontsize.'px;}div.main,section.main{padding-left:46px;}body{background-position:-964px top;}.left #leftmenu #nav_admincolor2 span{margin-left:11px;}.left #leftmenu li,.left #leftmenu a{width:'.$leftwidth.'px}</style>';
         }else{
-            echo '<style type="text/css">.left{width:'.$leftwidth.'px}.main{padding-left:'.$rightwidth.'px}body{background-position:'.$background_positionX.'px top;}.left #leftmenu li,.left #leftmenu a{width:'.$leftwidth.'px}</style>';
+            echo '<style>.left{width:'.$leftwidth.'px}.main{padding-left:'.$rightwidth.'px}body{background-position:'.$background_positionX.'px top;}.left #leftmenu li,.left #leftmenu a{width:'.$leftwidth.'px}</style>';
         }
     }
 

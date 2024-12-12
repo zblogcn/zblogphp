@@ -13,10 +13,10 @@ if ($zbp->CheckRights('admin')) {
     Redirect302('cmd.php?act=admin');
 }
 ?><!DOCTYPE HTML>
-<html>
+<html lang="<?php echo $lang['lang_bcp47']; ?>">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge,chrome=1" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="robots" content="none" />
     <meta name="viewport" content="width=device-width,viewport-fit=cover" />
     <meta name="generator" content="<?php echo $option['ZC_BLOG_PRODUCT_FULL']; ?>" />
