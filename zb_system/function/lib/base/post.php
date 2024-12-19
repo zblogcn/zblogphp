@@ -391,7 +391,7 @@ abstract class Base__Post extends Base
                     return $this->Title;
                 }
             case 'AllImages':
-                return is_array($this->allImages) ? $this->allImages : GetImagesFromHtml($this->Content);
+                return is_array($this->allImages) ? $this->allImages : ($this->allImages = GetImagesFromHtml($this->Content));
             case 'ImageCount':
                 return count($this->AllImages);
             default:
