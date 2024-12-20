@@ -402,7 +402,7 @@ class ZBlogPHP
     public $activeapps;
 
     //不保存进Option的单次开关
-    public $cookie_tooken_httponly = true;//已废弃
+    public $cookie_tooken_httponly = true; //已废弃
 
     public $cookie_httponly = true;
 
@@ -800,6 +800,10 @@ class ZBlogPHP
             ZbpErrorControl::$iswarning = true;
             ZbpErrorControl::$isstrict = true;
             ZbpErrorControl::$islogerror = true;
+        }
+
+        if (isset($this->option['ZC_LOGS_MORE_INFO'])) {
+            $this->logs_more_info = (bool) $this->option['ZC_LOGS_MORE_INFO'];
         }
 
         //消除16升级17又退回16后再升级17出的bug;
@@ -3859,9 +3863,9 @@ class ZBlogPHP
         }
 
         if (strtolower($timecompare) == 'minute' || strtolower($timecompare) == 'm') {
-            setcookie('captcha_' . crc32($this->guid . $id), md5($hash_pre . date("YmdHi") . $_vc->GetCode()), null, $this->cookiespath);
+            setcookie('captcha_' . crc32($this->guid . $id), md5($hash_pre . date("YmdHi") . $_vc->GetCode()), 0, $this->cookiespath);
         } else {
-            setcookie('captcha_' . crc32($this->guid . $id), md5($hash_pre . date("YmdH") . $_vc->GetCode()), null, $this->cookiespath);
+            setcookie('captcha_' . crc32($this->guid . $id), md5($hash_pre . date("YmdH") . $_vc->GetCode()), 0, $this->cookiespath);
         }
 
         return true;

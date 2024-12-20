@@ -140,7 +140,7 @@ return array(
 
     'ZC_PASSWORD_MIN' => 8,
 
-    'ZC_PASSWORD_MAX' => 20,
+    'ZC_PASSWORD_MAX' => 40,
 
     'ZC_EMAIL_MAX' => 50,
 
@@ -234,6 +234,7 @@ return array(
     'ZC_THUMB_DEFAULT_QUALITY'       => 90,
     'ZC_THUMB_IMAGE_FILL'            => true,
     'ZC_FIX_MODULE_MIXED_FILENAME'   => true,
+    'ZC_LOGS_MORE_INFO'              => false,
 
     // API 相关
     'ZC_API_ENABLE'                     => false,
