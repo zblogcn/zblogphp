@@ -98,7 +98,7 @@ abstract class Base__Post extends Base
         }
         if (func_num_args() == 2 && !array_key_exists($type, $this->data) && array_key_exists($s, $this->data)) {
             list($type, $s) = array($s, $type);
-        } elseif (func_num_args() == 1 && array_key_exists($s, $this->data)){
+        } elseif (func_num_args() == 1 && array_key_exists($s, $this->data)) {
             list($type, $s) = array($s, 'Y-m-d H:i:s');
         }
         if (array_key_exists($type, $this->data)) {
