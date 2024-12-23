@@ -142,11 +142,16 @@ abstract class Base__Module extends Base
 
             $c = RemovePHPCode($this->Content);
             $d = $zbp->usersdir . 'theme/' . $zbp->theme . '/include/';
-            $f = $d . $this->FileName . '.php';
+            $f = $d . $this->FileName . '.htm';
             if (!file_exists($d)) {
                 @mkdir($d, 0755);
             }
             @file_put_contents($f, $c);
+
+            $fp = $d . $this->FileName . '.php';
+            if (file_exists($fp)) {
+                @unlink($fp);
+            }
 
             if ($this->ID == 0) {
                 $this->ID = (0 - (int) crc32($this->Source . $this->FileName));
@@ -201,6 +206,11 @@ abstract class Base__Module extends Base
         if ($this->SourceType == 'themeinclude') {
             if (empty($this->FileName)) {
                 return true;
+            }
+
+            $f = $zbp->usersdir . 'theme/' . $zbp->theme . '/include/' . $this->FileName . '.htm';
+            if (file_exists($f)) {
+                @unlink($f);
             }
 
             $f = $zbp->usersdir . 'theme/' . $zbp->theme . '/include/' . $this->FileName . '.php';

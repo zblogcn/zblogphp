@@ -1294,7 +1294,7 @@ function Admin_ModuleMng()
         CreateModuleDiv($m);
     }
 
-    echo '<div class="widget-list-header">' . $zbp->lang['msg']['theme_module'] . '</div>';
+    echo '<div class="widget-list-header">' . $zbp->lang['msg']['theme_module'] . '(htm)</div>';
     echo "\r\n";
     foreach ($tm as $m) {
         CreateModuleDiv($m);

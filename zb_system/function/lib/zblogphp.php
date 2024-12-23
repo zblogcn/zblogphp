@@ -2007,6 +2007,22 @@ class ZBlogPHP
 
         $dir = $this->usersdir . 'theme/' . $this->theme . '/include/';
         if (file_exists($dir)) {
+            $files = GetFilesInDir($dir, 'htm');
+            foreach ($files as $sortname => $fullname) {
+                $m = new Module();
+                $m->FileName = $sortname;
+                $m->Name = $sortname;
+                $m->HtmlID = $sortname;
+                $m->Content = file_get_contents($fullname);
+                if (stripos($m->Content, '<li') !== false && stripos($m->Content, '</li>') !== false) {
+                    $m->Type = 'ul';
+                } else {
+                    $m->Type = 'div';
+                }
+                $m->Source = 'themeinclude_' . $this->theme;
+                $m->ID = (0 - (int) crc32($m->Source . $m->FileName));
+                $this->AddCache($m);
+            }
             $files = GetFilesInDir($dir, 'php');
             foreach ($files as $sortname => $fullname) {
                 $m = new Module();

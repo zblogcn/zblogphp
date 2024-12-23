@@ -1903,14 +1903,6 @@ function PostModule()
 
     FilterModule($mod);
 
-    //不能新存themeinclude
-    if ($mod->SourceType == 'themeinclude') {
-        $f = $zbp->usersdir . 'theme/' . $zbp->theme . '/include/' . $mod->FileName . '.php';
-        if (!file_exists($f)) {
-            return false;
-        }
-    }
-
     $mod->Save();
     $zbp->AddCache($mod);
 
