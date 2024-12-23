@@ -108,7 +108,6 @@ $member = $zbp->GetMemberByID($memberid);
             <p>
                 <span class="title">
                     <?php echo $lang['msg']['email']; ?>:</span>
-                <span class="star">(*)</span>
                 <br />
                 <input id="edtEmail" class="edit" size="40" name="Email" type="text" value="<?php echo $member->Email; ?>" /></p>
             <p>
@@ -151,13 +150,6 @@ $member = $zbp->GetMemberByID($memberid);
         <script>
             function checkInfo() {
                 document.getElementById("edit").action = "<?php echo BuildSafeCmdURL('act=MemberPst'); ?>";
-
-
-                if (!$("#edtEmail").val()) {
-                    alert("<?php echo $lang['error']['29']; ?>");
-                    return false
-                }
-
 
                 if (!$("#edtName").val()) {
                     alert("<?php echo $lang['error']['72']; ?>");
