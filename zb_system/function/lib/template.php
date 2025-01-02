@@ -709,8 +709,8 @@ class Template
         }
 
         // 入口处将tags里的变量提升全局
-        foreach ($this->templateTags as $key => &$value) {
-            $$key = &$value;
+        foreach ($this->templateTags as $tagKey => &$tagValue) {
+            $$tagKey = &$tagValue;
         }
 
         include $file;
