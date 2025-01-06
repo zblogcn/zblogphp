@@ -1,7 +1,7 @@
 {* Template Name:评论发布框 *}
 <div class="post" id="divCommentPost">
 	<p class="posttop"><a name="comment">{if $user.ID>0}{$user.StaticName}{/if}{$lang['default']['add_reply']}:</a><a rel="nofollow" id="cancel-reply" href="#divCommentPost" style="display:none;"><small>{$lang['default']['cancel_reply']}</small></a></p>
-	<form id="frmSumbit" target="_self" method="post" action="{$article.CommentPostUrl}" >
+	<form id="frmSubmit" target="_self" method="post" action="{$article.CommentPostUrl}" >
 	<input type="hidden" name="inpId" id="inpId" value="{$article.ID}" />
 	<input type="hidden" name="inpRevID" id="inpRevID" value="0" />
 {if $user.ID>0}
@@ -16,7 +16,7 @@
 {/if}
 	<p style="display:none;"><label for="txaArticle">{$lang['msg']['content']}(*)</label></p>
 	<p><textarea name="txaArticle" id="txaArticle" class="text" cols="50" rows="4" tabindex="5" ></textarea></p>
-	<p><input name="sumbit" type="submit" tabindex="6" value="提交" onclick="return zbp.comment.post()" class="button" /></p>
+	<p><input name="submit" type="submit" tabindex="6" value="提交" onclick="return zbp.comment.post()" class="button" /></p>
 	</form>
 	<p class="postbottom">{$lang['default']['reply_notice']}</p>
 </div>
