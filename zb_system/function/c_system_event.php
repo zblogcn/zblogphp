@@ -546,21 +546,34 @@ function PostArticle()
 
         CountMemberArray(array($article->AuthorID), array(+1, 0, 0, 0));
     }
-    if ($pre_category != $article->CateID) {
-        if ($pre_category > 0) {
-            CountCategoryArray(array($pre_category), -1);
-        }
-
-        CountCategoryArray(array($article->CateID), +1);
-    }
     if ($orig_id == 0 && $article->IsTop == 0 && $article->Status == ZC_POST_STATUS_PUBLIC) {
         CountNormalArticleNums(+1);
+        if ($pre_category != $article->CateID) {
+            if ($pre_category > 0) {
+                CountCategoryArray(array($pre_category), -1);
+            }
+            CountCategoryArray(array($article->CateID), +1);
+        }
     } elseif ($orig_id > 0) {
         if (($pre_istop == 0 && $pre_status == 0) && ($article->IsTop != 0 || $article->Status != 0)) {
             CountNormalArticleNums(-1);
+            if ($pre_category != $article->CateID) {
+                if ($pre_category > 0) {
+                    CountCategoryArray(array($pre_category), -1);
+                }
+            } else {
+                CountCategoryArray(array($article->CateID), -1);
+            }
         }
         if (($pre_istop != 0 || $pre_status != 0) && ($article->IsTop == 0 && $article->Status == 0)) {
             CountNormalArticleNums(+1);
+            if ($pre_category != $article->CateID) {
+                if ($pre_category > 0) {
+                    //CountCategoryArray(array($pre_category), -1);
+                }
+            } else {
+                CountCategoryArray(array($article->CateID), +1);
+            }
         }
     }
     if ($article->IsTop == true && $article->Status == ZC_POST_STATUS_PUBLIC) {
@@ -618,7 +631,9 @@ function DelArticle()
 
         CountTagArrayString($pre_tag, -1, $article->ID);
         CountMemberArray(array($pre_author), array(-1, 0, 0, 0));
-        CountCategoryArray(array($pre_category), -1);
+        if (($pre_istop == 0 && $pre_status == 0)) {
+            CountCategoryArray(array($pre_category), -1);
+        }
         if (($pre_istop == 0 && $pre_status == 0)) {
             CountNormalArticleNums(-1);
         }
