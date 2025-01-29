@@ -1594,12 +1594,14 @@ function ViewPost($id = null, $alias = null, $isrewrite = false, $object = array
             if ($zbp->autofill_template_htmltags && strpos($zbp->template->templates['comment'], 'id="AjaxComment') === false) {
                 $comment->Content .= '<label id="AjaxComment' . $comment->ID . '"></label>';
             }
+            $comment->HomePage = ReplaceExternalLink($comment->HomePage);
         }
         foreach ($comments2 as &$comment) {
             $comment->Content = FormatString($comment->Content, '[enter]');
             if ($zbp->autofill_template_htmltags && strpos($zbp->template->templates['comment'], 'id="AjaxComment') === false) {
                 $comment->Content .= '<label id="AjaxComment' . $comment->ID . '"></label>';
             }
+            $comment->HomePage = ReplaceExternalLink($comment->HomePage);
         }
     }
 
