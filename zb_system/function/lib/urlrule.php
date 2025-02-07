@@ -122,8 +122,9 @@ class UrlRule
 
         //处理之前Active的过程
         if (strpos($url, '{&') !== false) {
-            $url = str_ireplace('{&', '&', $url);
-            $url = str_ireplace('=%', '={%', $url);
+            //$url = str_ireplace('{&', '&', $url);
+            //$url = str_ireplace('=%', '={%', $url);
+            $url = preg_replace_callback("|{&([^=]+)\=%|", "UrlRule::preg_replace_helper", $url);
         }
 
         //如果没有page页，就删除{%page%}
@@ -849,6 +850,10 @@ class UrlRule
      */
     public function Rewrite_httpdini($url, $type)
     {
+    }
+
+    public static function preg_replace_helper($matches) {
+        return '&' . $matches[1] . '={%';
     }
 
 }
