@@ -852,7 +852,8 @@ class UrlRule
     {
     }
 
-    public static function preg_replace_helper($matches) {
+    public static function preg_replace_helper($matches)
+    {
         return '&' . $matches[1] . '={%';
     }
 
