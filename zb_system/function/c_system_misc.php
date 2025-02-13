@@ -207,7 +207,7 @@ function misc_vrs()
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <?php
-        if (strpos(GetVars('HTTP_USER_AGENT', 'SERVER'), 'Trident/')) {
+        if (strpos(GetVars('HTTP_USER_AGENT', 'SERVER', ''), 'Trident/')) {
             ?>
             <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
             <?php
@@ -281,7 +281,7 @@ function misc_php_zbp_info()
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <?php
-        if (strpos(GetVars('HTTP_USER_AGENT', 'SERVER'), 'Trident/')) {
+        if (strpos(GetVars('HTTP_USER_AGENT', 'SERVER', ''), 'Trident/')) {
             ?>
             <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
             <?php

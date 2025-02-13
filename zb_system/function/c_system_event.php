@@ -123,7 +123,7 @@ function Redirect_to_search()
 function Redirect_cmd_to_search($post_type = 0)
 {
     global $zbp, $action;
-    //$q = rawurlencode(trim(strip_tags(GetVars('q', 'POST'))));
+    //$q = rawurlencode(trim(strip_tags(GetVars('q', 'POST', ''))));
     //Redirect302($zbp->searchurl . '?q=' . $q);
 
     $route = $zbp->GetPostType_Sub($post_type, 'routes', 'post_article_search');
@@ -134,7 +134,7 @@ function Redirect_cmd_to_search($post_type = 0)
         $r = new UrlRule($urlrule);
     }
 
-    $q = rawurlencode(trim(strip_tags(GetVars('q', 'POST'))));
+    $q = rawurlencode(trim(strip_tags(GetVars('q', 'POST', ''))));
     $r->Rules['{%page%}'] = '';
     $r->Rules['{%q%}'] = $q;
     $r->Rules['{%search%}'] = $q;

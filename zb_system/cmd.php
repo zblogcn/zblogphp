@@ -33,7 +33,7 @@ switch ($zbp->action) {
             Redirect_cmd_end('admin/index.php?act=admin');
         }
         if (empty($zbp->user->ID) && GetVars('redirect', 'GET')) {
-            setcookie("redirect", GetVars('redirect', 'GET'), 0, $zbp->cookiespath);
+            setcookie("redirect", GetVars('redirect', 'GET', ''), 0, $zbp->cookiespath);
         }
         Redirect_cmd_end('login.php');
         break;

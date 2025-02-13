@@ -4866,7 +4866,7 @@ class ZBlogPHP
     public function RedirectInstall()
     {
         if (!$this->option['ZC_DATABASE_TYPE']) {
-            $s = GetVars('QUERY_STRING', 'GET');
+            $s = GetVars('QUERY_STRING', 'GET', '');
             $s = empty($s) ? '' : '?' . $s;
             if (is_readable(ZBP_PATH . 'zb_install/index.php')) {
                 Redirect302('./zb_install/index.php' . $s);

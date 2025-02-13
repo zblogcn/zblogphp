@@ -607,7 +607,7 @@ function GetEnvironment($more = false)
         GetValueInArray(
             explode(
                 ' ',
-                str_replace(array('Microsoft-', '/'), array('', ''), GetVars('SERVER_SOFTWARE', 'SERVER'))
+                str_replace(array('Microsoft-', '/'), array('', ''), GetVars('SERVER_SOFTWARE', 'SERVER', ''))
             ),
             0
         ) . '; PHP' . GetPHPVersion() . (IS_X64 ? 'x64' : '') . '; ';
