@@ -259,7 +259,9 @@ class Network__curl implements Network__Interface
                 $data = ($varBody + $this->postdata);
             }
             curl_setopt($this->ch, CURLOPT_CUSTOMREQUEST, $this->option['method']);
-            curl_setopt($this->ch, CURLOPT_POSTFIELDS, $data);
+            if (!empty($data)) {
+                curl_setopt($this->ch, CURLOPT_POSTFIELDS, $data);
+            }
         } else {
             curl_setopt($this->ch, CURLOPT_CUSTOMREQUEST, $this->option['method']);
         }
