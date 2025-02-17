@@ -256,7 +256,7 @@ function api_post_list()
         $where[] = array('=', 'log_AuthorID', $authId);
     }
     if (!empty($date)) {
-        $time = strtotime(GetVars('date', 'GET'));
+        $time = strtotime(GetVars('date', 'GET', ''));
         if (strrpos($date, '-') !== strpos($date, '-')) {
             $where[] = array('BETWEEN', 'log_PostTime', $time, strtotime('+1 day', $time));
         } else {

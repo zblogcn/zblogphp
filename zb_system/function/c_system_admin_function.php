@@ -81,7 +81,7 @@ function Include_Admin_Addcmtsubmenu()
         } else {
             $n = '';
         }
-        echo MakeSubMenu($GLOBALS['lang']['msg']['check_comment'] . $n, $zbp->cmdurl . '?act=CommentMng&amp;ischecking=1', 'm-left ' . (GetVars('ischecking') ? 'm-now' : ''), null, null, null, 'icon-shield-shaded');
+        echo MakeSubMenu($GLOBALS['lang']['msg']['check_comment'] . $n, $zbp->cmdurl . '?act=CommentMng&amp;ischecking=1', 'm-left ' . (strval(GetVars('ischecking')) ? 'm-now' : ''), null, null, null, 'icon-shield-shaded');
     }
 }
 
