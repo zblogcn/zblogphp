@@ -140,17 +140,6 @@ function Debug_Error_Handler($errno, $errstr, $errfile, $errline)
         $fpreturn = $fpname('Error', array($errno, $errstr, $errfile, $errline));
     }
 
-    $zec = new ZbpErrorControl();
-    $zee = $zec->ParseError($errno, $errstr, $errfile, $errline);
-
-    foreach ($GLOBALS['hooks']['Filter_Plugin_Debug_Handler_ZEE'] as $fpname => &$fpsignal) {
-        $fpsignal = PLUGIN_EXITSIGNAL_NONE;
-        $fpreturn = $fpname($zee, 'Error');
-        if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
-            return $fpreturn;
-        }
-    }
-
     if (ZbpErrorControl::$islogerror == true) {
         $err = ZbpErrorControl::$errarray[$errno];
         Logs(var_export(array($err, $errno, $errstr, $errfile, $errline), true), 'ERROR');
@@ -166,6 +155,17 @@ function Debug_Error_Handler($errno, $errstr, $errfile, $errline)
 
     if (Debug_IgnoreError($errno)) {
         return true;
+    }
+
+    $zec = new ZbpErrorControl();
+    $zee = $zec->ParseError($errno, $errstr, $errfile, $errline);
+
+    foreach ($GLOBALS['hooks']['Filter_Plugin_Debug_Handler_ZEE'] as $fpname => &$fpsignal) {
+        $fpsignal = PLUGIN_EXITSIGNAL_NONE;
+        $fpreturn = $fpname($zee, 'Error');
+        if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
+            return $fpreturn;
+        }
     }
 
     //这是Filter_Plugin_Zbp_ShowError接口的替代品，无须改动插件函数的参数
@@ -210,17 +210,6 @@ function Debug_Exception_Handler($exception)
         $fpreturn = $fpname('Exception', $exception);
     }
 
-    $zec = new ZbpErrorControl();
-    $zee = $zec->ParseException($exception);
-
-    foreach ($GLOBALS['hooks']['Filter_Plugin_Debug_Handler_ZEE'] as $fpname => &$fpsignal) {
-        $fpsignal = PLUGIN_EXITSIGNAL_NONE;
-        $fpreturn = $fpname($zee, 'Exception');
-        if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
-            return $fpreturn;
-        }
-    }
-
     if (ZbpErrorControl::$islogerror) {
         Logs(
             var_export(
@@ -232,6 +221,17 @@ function Debug_Exception_Handler($exception)
             ),
             'EXCEPTION'
         );
+    }
+
+    $zec = new ZbpErrorControl();
+    $zee = $zec->ParseException($exception);
+
+    foreach ($GLOBALS['hooks']['Filter_Plugin_Debug_Handler_ZEE'] as $fpname => &$fpsignal) {
+        $fpsignal = PLUGIN_EXITSIGNAL_NONE;
+        $fpreturn = $fpname($zee, 'Exception');
+        if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
+            return $fpreturn;
+        }
     }
 
     foreach ($GLOBALS['hooks']['Filter_Plugin_Debug_Handler_Common'] as $fpname => &$fpsignal) {
@@ -274,6 +274,14 @@ function Debug_Shutdown_Handler()
             $fpreturn = $fpname('Shutdown', $error);
         }
 
+        if (ZbpErrorControl::$islogerror) {
+            Logs(var_export(array('Fatal', $error['type'], $error['message'], $error['file'], $error['line']), true), 'FATAL');
+        }
+
+        if (Debug_IgnoreError($error['type'])) {
+            return true;
+        }
+
         $zec = new ZbpErrorControl();
         $zee = $zec->ParseFatal($error);
 
@@ -283,14 +291,6 @@ function Debug_Shutdown_Handler()
             if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
                 return $fpreturn;
             }
-        }
-
-        if (ZbpErrorControl::$islogerror) {
-            Logs(var_export(array('Fatal', $error['type'], $error['message'], $error['file'], $error['line']), true), 'FATAL');
-        }
-
-        if (Debug_IgnoreError($error['type'])) {
-            return true;
         }
 
         foreach ($GLOBALS['hooks']['Filter_Plugin_Debug_Handler_Common'] as $fpname => &$fpsignal) {
