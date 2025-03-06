@@ -786,12 +786,18 @@ function plugin_dir_url($file)
 {
     global $zbp;
     $s1 = $zbp->path;
-    $s2 = str_replace('\\', '/', dirname($file) . '/');
-    $s = substr($s2, strspn($s1, $s2, 0));
-    if (strpos($s, 'zb_users/plugin/') !== false) {
-        $s = substr($s, strspn($s, $s3 = 'zb_users/plugin/', 0));
+    if (is_file($file)) {
+        $s2 = str_replace('\\', '/', dirname($file) . '/');
     } else {
-        $s = substr($s, strspn($s, $s3 = 'zb_users/theme/', 0));
+        $s2 = str_replace('\\', '/', $file . '/');
+    }
+    $s = substr($s2, strspn($s1, $s2, 0));
+    $s3 = '';
+    if (strpos($s, $s3 = 'zb_users/plugin/') === 0) {
+        $s = substr($s, 16);
+    }
+    if (strpos($s, $s3 = 'zb_users/theme/') === 0) {
+        $s = substr($s, 15);
     }
     $a = explode('/', $s);
     $s = $a[0];
@@ -811,12 +817,18 @@ function plugin_dir_path($file)
 {
     global $zbp;
     $s1 = $zbp->path;
-    $s2 = str_replace('\\', '/', dirname($file) . '/');
-    $s = substr($s2, strspn($s1, $s2, 0));
-    if (strpos($s, 'zb_users/plugin/') !== false) {
-        $s = substr($s, strspn($s, $s3 = 'zb_users/plugin/', 0));
+    if (is_file($file)) {
+        $s2 = str_replace('\\', '/', dirname($file) . '/');
     } else {
-        $s = substr($s, strspn($s, $s3 = 'zb_users/theme/', 0));
+        $s2 = str_replace('\\', '/', $file . '/');
+    }
+    $s = substr($s2, strspn($s1, $s2, 0));
+    $s3 = '';
+    if (strpos($s, $s3 = 'zb_users/plugin/') === 0) {
+        $s = substr($s, 16);
+    }
+    if (strpos($s, $s3 = 'zb_users/theme/') === 0) {
+        $s = substr($s, 15);
     }
     $a = explode('/', $s);
     $s = $a[0];
