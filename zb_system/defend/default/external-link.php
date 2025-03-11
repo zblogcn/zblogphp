@@ -1,3 +1,4 @@
+{* Template Name:跳转链接 * Template Type:none *}
 <!DOCTYPE HTML>
 <html>
 <head>
