@@ -29,8 +29,6 @@ class Network__fsockopen implements Network__Interface
 
     private $url = '';
 
-    private $getdata = array();
-
     private $postdata = array();
 
     private $httpheader = array();
@@ -137,54 +135,6 @@ class Network__fsockopen implements Network__Interface
     }
 
     /**
-     * 处理 querystring 到 url.
-     */
-    private function load_query_to_url()
-    {
-        $url = $this->url;
-
-        $this->parsed_url = parse_url($url);
-
-        if (!isset($this->parsed_url['port'])) {
-            if ($this->parsed_url['scheme'] == 'https') {
-                $this->parsed_url['port'] = 443;
-            } else {
-                $this->parsed_url['port'] = 80;
-            }
-        }
-
-        $breforedata = array();
-        if (isset($this->parsed_url['query'])) {
-            parse_str($this->parsed_url['query'], $breforedata);
-        }
-
-        $newdata = array_merge($breforedata, $this->getdata);
-        $query_string = http_build_query($newdata);
-
-        $fragment = '';
-        if (stripos($url, '#') !== false) {
-            $url = SplitAndGet($url, '#');
-            $fragment = '#' . SplitAndGet($url, '#', 1);
-        }
-        $url = SplitAndGet($url, '?');
-        $url = $url . '?' . $query_string . $fragment;
-
-        $this->url = $url;
-        $this->parsed_url['query'] = $query_string;
-    }
-
-    /**
-     * 新增查询.
-     *
-     * @param string $name
-     * @param string $entity
-     */
-    public function addQuery($name, $entity)
-    {
-        $this->getdata[$name] = $entity;
-    }
-
-    /**
      * @param $bstrMethod
      * @param $bstrUrl
      * @param bool   $varAsync
@@ -235,7 +185,6 @@ class Network__fsockopen implements Network__Interface
             $data = http_build_query($data);
         }
 
-        $this->load_query_to_url();
 
         if ($this->option['method'] == 'POST' || $this->option['method'] == 'PUT') {
             if (is_array($varBody) && count($this->postdata) > 0) {
@@ -560,7 +509,6 @@ class Network__fsockopen implements Network__Interface
 
         $this->option = array();
         $this->url = '';
-        $this->getdata = array();
         $this->postdata = array();
         $this->responseHeader = array();
         $this->parsed_url = array();
@@ -700,6 +648,10 @@ class Network__fsockopen implements Network__Interface
     {
         $headers = $this->getHeaders();
         return isset($headers[$name]);
+    }
+
+    public function addQuery($name, $entity)
+    {
     }
 
 }
