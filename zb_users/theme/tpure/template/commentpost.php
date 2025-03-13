@@ -12,7 +12,7 @@ if($zbp->CheckPlugin('Gravatar')){
     <div class="comment">
         <div id="cmtimg" class="cmtimg"><img src="{tpure_MemberAvatar($user)}" alt="{$user.Name}" /><p>{if $user.ID>0}{$user.StaticName}{/if}</p></div>
         <div class="cmtarea">
-            <form id="frmSumbit" target="_self" method="post" action="{$article.CommentPostUrl}" >
+            <form id="frmSubmit" target="_self" method="post" action="{$article.CommentPostUrl}" >
             <input type="hidden" id="gravatar" value="{$default_url}" />
 			<input type="hidden" name="inpId" id="inpId" value="{$article.ID}" />
 			<input type="hidden" name="inpRevID" id="inpRevID" value="0" />
@@ -32,7 +32,7 @@ if($zbp->CheckPlugin('Gravatar')){
             </div>
 {/if}
             <div class="cmtsubmit">
-                <button type="submit" name="btnSumbit" onclick="return zbp.comment.post()" class="cmtbtn" tabindex="6">{$lang['tpure']['cmt']}</button>
+                <button type="submit" name="btnsubmit" onclick="return zbp.comment.post()" class="cmtbtn" tabindex="6">{$lang['tpure']['cmt']}</button>
                 <span>{$lang['tpure']['cmttip']}</span>
             </div>
             </form>
