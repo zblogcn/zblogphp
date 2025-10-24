@@ -4051,7 +4051,7 @@ class ZBlogPHP
                 $content = $this->lang['msg']['operation_failed'];
             }
         }
-        $delay = ($delay * 10000);
+        $delay = ($delay * 1000);
         echo "<script type='text/javascript'>$('.main').prepend('<div class=\"hint\"><p class=\"hint hint_" . $signal . "\" data-delay=\"" . $delay . "\">";
         echo str_replace("'", "\'", $content);
         echo "</p></div>');</script>";
