@@ -24,7 +24,7 @@ class recount_category extends clinic
         $sql = $zbp->db->sql->Count($zbp->table['Category'], array(array('MAX', 'cate_ID', 'num')), null, null, null, null);
         $max_id = $zbp->db->Query($sql);
 
-        if (count($max_id > 0)) {
+        if (count($max_id) > 0) {
             $max = $max_id[0]['num'];
             $this->set_queue('output_message', json_encode(array('success', '初始化成功')));
             for ($i = 1; $i <= $max; $i++) {
