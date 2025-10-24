@@ -1217,6 +1217,10 @@ function GetVars($name, $type = 'REQUEST', $default = null)
     }
     $array = &$GLOBALS[strtoupper("_$type")];
 
+    if (!is_array($array)) {
+        return $default;
+    }
+
     if (array_key_exists($name, $array)) {
         return $array[$name];
     } else {

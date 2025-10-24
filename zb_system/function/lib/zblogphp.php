@@ -4096,11 +4096,11 @@ class ZBlogPHP
             $errorText = $this->lang['error'][$errorText];
         }
 
-        if ($file == null or $line == null) {
+        if ($file == null || $line == null) {
             $file = __FILE__;
             $line = __LINE__ - 11;
         }
-        if (is_null($messagefull) or empty($messagefull)) {
+        if (is_null($messagefull) || empty($messagefull)) {
             $messagefull = $errorText . ' (set_exception_handler) ';
         }
         if (!is_array($moreinfo) && !is_null($moreinfo)) {
