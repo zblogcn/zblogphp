@@ -577,7 +577,7 @@ class SQL__Global
             return $this->buildWhere_Single($value[0]);
         }
         $eq = strtoupper($value[0]);
-        if (in_array($eq, array('=', '<>', '>', '<', '>=', '!=', '<=', 'NOT LIKE', 'LIKE', 'ILIKE', 'NOT ILIKE'))) {
+        if (in_array($eq, array('=', '<>', '>', '<', '>=', '!=', '<=', 'NOT LIKE', 'LIKE', 'ILIKE', 'NOT ILIKE', 'ESCAPE_LIKE', 'NOT ESCAPE_LIKE'))) {
             $x = (string) $value[1];
             if ($this->db->type != 'postgresql' && $eq == 'ILIKE') {
                 $eq = 'LIKE';
@@ -589,7 +589,13 @@ class SQL__Global
                 $eq = '<>';
             }
             $y = $this->db->EscapeString((string) $value[2]);
-            $whereData = " $x $eq '$y' ";
+            if ($eq == 'ESCAPE_LIKE' || $eq == 'NOT ESCAPE_LIKE') {
+                $eq = str_replace('ESCAPE_', '', $eq);
+                $y = str_replace('_', '!_', $y);
+                $whereData = " $x $eq '$y' ESCAPE '!'";
+            } else {
+                $whereData = " $x $eq '$y' ";
+            }
         } elseif (($eq == 'AND') && count($value) > 2) {
             $sqlArray = array();
             foreach ($value as $x => $y) {

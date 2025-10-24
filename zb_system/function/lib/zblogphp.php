@@ -3381,6 +3381,12 @@ class ZBlogPHP
         }
 
         $like = ($this->db->type == 'pgsql') ? 'ILIKE' : 'LIKE';
+        if ($this->db->type == 'pgsql' || $this->db->type == 'mysql') {
+            $name = str_replace('_', '\_', $name);
+        } elseif ($this->db->type == 'sqlite') {
+            $like = 'ESCAPE_LIKE';
+        }
+
         $sql = $this->db->sql->Select($this->table['Member'], '*', array(array($like, 'mem_Name', $name)), array('mem_ID' => 'ASC'), 1, null);
 
         /** @var Member[] $am */
@@ -3415,6 +3421,11 @@ class ZBlogPHP
         }
 
         $like = ($this->db->type == 'pgsql') ? 'ILIKE' : 'LIKE';
+        if ($this->db->type == 'pgsql' || $this->db->type == 'mysql') {
+            $name = str_replace('_', '\_', $name);
+        } elseif ($this->db->type == 'sqlite') {
+            $like = 'ESCAPE_LIKE';
+        }
 
         $sql = $this->db->sql->get()->select($this->table['Member'])->where(
             array(
@@ -3423,7 +3434,7 @@ class ZBlogPHP
                     array('mem_Alias', $name),
                 )
             )
-        )->orderBy(array('mem_ID' => 'asc'))->limit(1)->sql;
+        )->orderBy(array('mem_ID' => 'ASC'))->limit(1)->sql;
 
         /** @var Member[] $am */
         $am = $this->GetListType('Member', $sql);
@@ -3457,12 +3468,17 @@ class ZBlogPHP
         }
 
         $like = ($this->db->type == 'pgsql') ? 'ILIKE' : 'LIKE';
+        if ($this->db->type == 'pgsql' || $this->db->type == 'mysql') {
+            $name = str_replace('_', '\_', $name);
+        } elseif ($this->db->type == 'sqlite') {
+            $like = 'ESCAPE_LIKE';
+        }
 
         $sql = $this->db->sql->get()->select($this->table['Member'])->where(
             array(
                 array('=', 'mem_Alias', $name)
             )
-        )->orderBy(array('mem_ID' => 'asc'))->limit(1)->sql;
+        )->orderBy(array('mem_ID' => 'ASC'))->limit(1)->sql;
 
         /** @var Member[] $am */
         $am = $this->GetListType('Member', $sql);
