@@ -775,7 +775,7 @@ class SQL__Global
         $sql = &$this->pri_sql;
 
         if (isset($this->option['limit'])) {
-            if ($this->option['limit'] > 0) {
+            if ($this->option['limit'] >= 0) {
                 $sql[] = "LIMIT " . str_replace(array('"',"'",';'), '', $this->option['limit']);
 
                 if (isset($this->option['offset'])) {
