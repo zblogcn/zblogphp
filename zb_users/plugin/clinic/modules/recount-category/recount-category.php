@@ -41,7 +41,6 @@ class recount_category extends clinic
      */
     public function category_recount($id)
     {
-
         CountCategoryArray(array($id));
         $this->output('success', '分类' . '（ID = ' . $id . '）重建成功');
     }
@@ -55,4 +54,5 @@ class recount_category extends clinic
         $str = json_decode($str);
         $this->output($str[0], $str[1]);
     }
+
 }
