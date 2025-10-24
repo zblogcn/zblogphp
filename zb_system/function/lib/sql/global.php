@@ -1372,6 +1372,8 @@ class SQL__Global
             $indexname = str_replace('%pre%', $this->db->dbpre, $indexname);
             if (isset($this->option['uniqueindex']) && $this->option['uniqueindex'] == true) {
                 $sql[] = 'CREATE UNIQUE INDEX ' . $indexname;
+            } elseif (isset($this->option['fulltext']) && $this->option['fulltext'] == true) {
+                $sql[] = 'CREATE FULLTEXT INDEX ' . $indexname;
             } else {
                 $sql[] = 'CREATE INDEX ' . $indexname;
             }
