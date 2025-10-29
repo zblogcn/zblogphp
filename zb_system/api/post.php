@@ -104,6 +104,30 @@ function api_post_post()
         $_POST['CateID'] = $zbp->GetCategoryByName(trim($_POST['CateName']), $postType)->ID;
     }
 
+    // 统一兼容：PostTime 可为时间字符串或时间戳（秒/毫秒）
+    // - 数字：支持秒/毫秒时间戳
+    // - 字符串：尝试 strtotime 解析并格式化为 'Y-m-d H:i:s'
+    if (isset($_POST['PostTime'])) {
+        $pt = $_POST['PostTime'];
+        if (is_numeric($pt)) {
+            $ptStr = (string) $pt;
+            if (strlen($ptStr) >= 13) {
+                $ts = (int) floor(((float) $ptStr) / 1000);
+            } else {
+                $ts = (int) $ptStr;
+            }
+        } else {
+            $ts = strtotime((string) $pt);
+            if ($ts === false || $ts === -1) {
+                return array(
+                    'code' => 400,
+                    'message' => 'PostTime 格式不正确，应为时间戳或可被解析的时间字符串',
+                );
+            }
+        }
+        $_POST['PostTime'] = date('Y-m-d H:i:s', $ts);
+    }
+
     try {
         if ($postType == ZC_POST_TYPE_ARTICLE) {
             // 默认为新增/修改文章
