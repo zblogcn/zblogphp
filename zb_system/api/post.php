@@ -120,8 +120,8 @@ function api_post_post()
             $ts = strtotime((string) $pt);
             if ($ts === false || $ts === -1) {
                 return array(
-                    'code' => 400,
-                    'message' => 'PostTime 格式不正确，应为时间戳或可被解析的时间字符串',
+                    'code' => 500,
+                    'message' => $GLOBALS['lang']['error']['103'],
                 );
             }
         }
