@@ -557,6 +557,7 @@ return array(
         '100' => 'Remote picture request failed',
         '101' => 'Image failed to load',
         '102' => 'Image aspect ratio error',
+        '103' => 'Invalid PostTime format. Expected a timestamp or a parseable datetime string.',
     ),
 
     'offical_urls' => array(
