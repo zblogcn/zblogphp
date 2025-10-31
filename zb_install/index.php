@@ -858,48 +858,37 @@ function Setup3()
         </p>
         <p><b><?php echo $zbp->lang['zb_install']['theme']; ?></b><span class="themelist">
             <?php
-
             $all_themes = array();
             $all_themes_name = GetDirsInDir(ZBP_PATH . 'zb_users/theme');
 
             foreach ($all_themes_name as $key => $value) {
-              $css_file = '';
-              if (is_readable($css_file = ZBP_PATH . 'zb_users/theme/' . $value . '/style/style.css')) {
-                $css_file = 'style';
-              }
-              elseif (is_readable($css_file = ZBP_PATH . 'zb_users/theme/' . $value . '/style/style.php')) {
-                $css_file = 'style';
-              }
-              elseif (is_readable($css_file = ZBP_PATH . 'zb_users/theme/' . $value . '/style/style.css.php')) {
-                $css_file = 'style';
-              }
-              elseif (is_readable($css_file = ZBP_PATH . 'zb_users/theme/' . $value . '/style/' . $value .'.css')) {
-                $css_file = $value;
-              }
-              elseif (is_readable($css_file = ZBP_PATH . 'zb_users/theme/' . $value . '/style/' . strtolower($value) .'.css')) {
-                $css_file = strtolower($value);
-              }
-              elseif (is_readable($css_file = ZBP_PATH . 'zb_users/theme/' . $value . '/style/' . strtolower($value) .'.css')) {
-                $css_file = 'style';
-              }
-              elseif (is_readable($css_file = ZBP_PATH . 'zb_users/theme/' . $value . '/style.css')) {
-                $css_file = 'style';
-              }
-              elseif (is_readable($css_file = ZBP_PATH . 'zb_users/theme/' . $value . '/style.php')) {
-                $css_file = 'style';
-              }
-              elseif (is_readable($css_file = ZBP_PATH . 'zb_users/theme/' . $value . '/style.css.php')) {
-                $css_file = 'style';
-              }
-              elseif (is_readable($css_file = ZBP_PATH . 'zb_users/theme/' . $value . '/' . $value .'.css')) {
-                $css_file = $value;
-              }
-              elseif (is_readable($css_file = ZBP_PATH . 'zb_users/theme/' . $value . '/' . strtolower($value) .'.css')) {
-                $css_file = strtolower($value);
-              }else {
-                $css_file = 'default';
-              }
-              $all_themes[$value] = $css_file;
+                $css_file = '';
+                if (is_readable($css_file = ZBP_PATH . 'zb_users/theme/' . $value . '/style/style.css')) {
+                    $css_file = 'style';
+                } elseif (is_readable($css_file = ZBP_PATH . 'zb_users/theme/' . $value . '/style/style.php')) {
+                    $css_file = 'style';
+                } elseif (is_readable($css_file = ZBP_PATH . 'zb_users/theme/' . $value . '/style/style.css.php')) {
+                    $css_file = 'style';
+                } elseif (is_readable($css_file = ZBP_PATH . 'zb_users/theme/' . $value . '/style/' . $value . '.css')) {
+                    $css_file = $value;
+                } elseif (is_readable($css_file = ZBP_PATH . 'zb_users/theme/' . $value . '/style/' . strtolower($value) . '.css')) {
+                    $css_file = strtolower($value);
+                } elseif (is_readable($css_file = ZBP_PATH . 'zb_users/theme/' . $value . '/style/' . strtolower($value) . '.css')) {
+                    $css_file = 'style';
+                } elseif (is_readable($css_file = ZBP_PATH . 'zb_users/theme/' . $value . '/style.css')) {
+                    $css_file = 'style';
+                } elseif (is_readable($css_file = ZBP_PATH . 'zb_users/theme/' . $value . '/style.php')) {
+                    $css_file = 'style';
+                } elseif (is_readable($css_file = ZBP_PATH . 'zb_users/theme/' . $value . '/style.css.php')) {
+                    $css_file = 'style';
+                } elseif (is_readable($css_file = ZBP_PATH . 'zb_users/theme/' . $value . '/' . $value . '.css')) {
+                    $css_file = $value;
+                } elseif (is_readable($css_file = ZBP_PATH . 'zb_users/theme/' . $value . '/' . strtolower($value) . '.css')) {
+                    $css_file = strtolower($value);
+                } else {
+                    $css_file = 'default';
+                }
+                $all_themes[$value] = $css_file;
             }
             //add four themes
             //$themes2 = array(
@@ -909,18 +898,18 @@ function Setup3()
             //    'WhitePage' => 'default',
             //);
             if (count($all_themes) == 0) {
-              $all_themes = array('default' => 'default');
+                $all_themes = array('default' => 'default');
             }
 
             $themes = array();
             foreach ($all_themes as $key => $value) {
-              $app = $zbp->LoadApp('theme', $key);
-              if ($app->isloaded == true) {
-                $themes[$key] = $value;
-              }
+                $app = $zbp->LoadApp('theme', $key);
+                if ($app->isloaded == true) {
+                    $themes[$key] = $value;
+                }
             }
             if (count($themes) == 0) {
-              $themes = array('default' => 'default');
+                $themes = array('default' => 'default');
             }
 
             foreach ($themes as $key => $value) {
