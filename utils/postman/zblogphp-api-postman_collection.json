@@ -1,0 +1,1528 @@
+{
+	"info": {
+		"_postman_id": "53d499c6-5057-440b-8ddc-5762f85e9584",
+		"name": "Z-BlogPHP API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "25924293"
+	},
+	"item": [
+		{
+			"name": "member",
+			"item": [
+				{
+					"name": "get_auth",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{ZB_HOST}}zb_system/api.php?mod=member&act=get_auth",
+							"host": [
+								"{{ZB_HOST}}zb_system"
+							],
+							"path": [
+								"api.php"
+							],
+							"query": [
+								{
+									"key": "mod",
+									"value": "member"
+								},
+								{
+									"key": "act",
+									"value": "get_auth"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{ZB_HOST}}zb_system/api.php?mod=member&act=get&id=1",
+							"host": [
+								"{{ZB_HOST}}zb_system"
+							],
+							"path": [
+								"api.php"
+							],
+							"query": [
+								{
+									"key": "mod",
+									"value": "member"
+								},
+								{
+									"key": "act",
+									"value": "get"
+								},
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "list",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{ZB_HOST}}zb_system/api.php?mod=member&act=list",
+							"host": [
+								"{{ZB_HOST}}zb_system"
+							],
+							"path": [
+								"api.php"
+							],
+							"query": [
+								{
+									"key": "mod",
+									"value": "member"
+								},
+								{
+									"key": "act",
+									"value": "list"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{ZB_HOST}}zb_system/api.php?mod=member&act=delete&id=2",
+							"host": [
+								"{{ZB_HOST}}zb_system"
+							],
+							"path": [
+								"api.php"
+							],
+							"query": [
+								{
+									"key": "mod",
+									"value": "member"
+								},
+								{
+									"key": "act",
+									"value": "delete"
+								},
+								{
+									"key": "id",
+									"value": "2"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "post",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"ID\": \"0\",\r\n    \"Level\": \"3\",\r\n    \"Name\": \"用户名2\",\r\n    \"Password\": \"zblog_pwdd\",\r\n    \"PasswordRe\": \"zblog_pwdd\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{ZB_HOST}}zb_system/api.php?mod=member&act=post",
+							"host": [
+								"{{ZB_HOST}}zb_system"
+							],
+							"path": [
+								"api.php"
+							],
+							"query": [
+								{
+									"key": "mod",
+									"value": "member"
+								},
+								{
+									"key": "act",
+									"value": "post"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "post",
+			"item": [
+				{
+					"name": "list",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{ZB_HOST}}zb_system/api.php?mod=post&act=list",
+							"host": [
+								"{{ZB_HOST}}zb_system"
+							],
+							"path": [
+								"api.php"
+							],
+							"query": [
+								{
+									"key": "mod",
+									"value": "post"
+								},
+								{
+									"key": "act",
+									"value": "list"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{ZB_HOST}}zb_system/api.php?mod=post&act=get&id=2",
+							"host": [
+								"{{ZB_HOST}}zb_system"
+							],
+							"path": [
+								"api.php"
+							],
+							"query": [
+								{
+									"key": "mod",
+									"value": "post"
+								},
+								{
+									"key": "act",
+									"value": "get"
+								},
+								{
+									"key": "id",
+									"value": "2"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "post",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"ID\": \"0\",\r\n    \"Title\": \"用户名\",\r\n    \"Type\": \"0\",\r\n    \"AuthorID\": \"1\",\r\n    \"Intro\": \"Intro\",\r\n    \"Content\": \"Content\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{ZB_HOST}}zb_system/api.php?mod=post&act=post",
+							"host": [
+								"{{ZB_HOST}}zb_system"
+							],
+							"path": [
+								"api.php"
+							],
+							"query": [
+								{
+									"key": "mod",
+									"value": "post"
+								},
+								{
+									"key": "act",
+									"value": "post"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{ZB_HOST}}zb_system/api.php?mod=post&act=delete&id=33",
+							"host": [
+								"{{ZB_HOST}}zb_system"
+							],
+							"path": [
+								"api.php"
+							],
+							"query": [
+								{
+									"key": "mod",
+									"value": "post"
+								},
+								{
+									"key": "act",
+									"value": "delete"
+								},
+								{
+									"key": "id",
+									"value": "33"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "module",
+			"item": [
+				{
+					"name": "list",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{ZB_HOST}}zb_system/api.php?mod=module&act=list",
+							"host": [
+								"{{ZB_HOST}}zb_system"
+							],
+							"path": [
+								"api.php"
+							],
+							"query": [
+								{
+									"key": "mod",
+									"value": "module"
+								},
+								{
+									"key": "act",
+									"value": "list"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{ZB_HOST}}zb_system/api.php?mod=module&act=get&id=1",
+							"host": [
+								"{{ZB_HOST}}zb_system"
+							],
+							"path": [
+								"api.php"
+							],
+							"query": [
+								{
+									"key": "mod",
+									"value": "module"
+								},
+								{
+									"key": "act",
+									"value": "get"
+								},
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "post",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"ID\": \"0\",\r\n    \"Name\": \"导航栏11111\",\r\n    \"FileName\": \"navbar11111\",\r\n    \"Content\": \"&lt;li id=&quot;nvabar-item-index&quot;&gt;&lt;a href=&quot;http://project.com/zblogcn/zblogphp/&quot;&gt;首页&lt;/a&gt;&lt;/li&gt;&lt;li id=&quot;navbar-page-31&quot;&gt;&lt;a href=&quot;http://project.com/zblogcn/zblogphp/?id=31&quot;&gt;留言板&lt;/a&gt;&lt;/li&gt;\",\r\n    \"HtmlID\": \"divNavBar11111\",\r\n    \"Type\": \"ul\",\r\n    \"MaxLi\": \"0\",\r\n    \"Source\": \"theme\",\r\n    \"IsHideTitle\": false\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{ZB_HOST}}zb_system/api.php?mod=module&act=post",
+							"host": [
+								"{{ZB_HOST}}zb_system"
+							],
+							"path": [
+								"api.php"
+							],
+							"query": [
+								{
+									"key": "mod",
+									"value": "module"
+								},
+								{
+									"key": "act",
+									"value": "post"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{ZB_HOST}}zb_system/api.php?mod=module&act=delete&id=33",
+							"host": [
+								"{{ZB_HOST}}zb_system"
+							],
+							"path": [
+								"api.php"
+							],
+							"query": [
+								{
+									"key": "mod",
+									"value": "module"
+								},
+								{
+									"key": "act",
+									"value": "delete"
+								},
+								{
+									"key": "id",
+									"value": "33"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "upload",
+			"item": [
+				{
+					"name": "list",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{ZB_HOST}}zb_system/api.php?mod=upload&act=list",
+							"host": [
+								"{{ZB_HOST}}zb_system"
+							],
+							"path": [
+								"api.php"
+							],
+							"query": [
+								{
+									"key": "mod",
+									"value": "upload"
+								},
+								{
+									"key": "act",
+									"value": "list"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{ZB_HOST}}zb_system/api.php?mod=upload&act=get&id=2",
+							"host": [
+								"{{ZB_HOST}}zb_system"
+							],
+							"path": [
+								"api.php"
+							],
+							"query": [
+								{
+									"key": "mod",
+									"value": "upload"
+								},
+								{
+									"key": "act",
+									"value": "get"
+								},
+								{
+									"key": "id",
+									"value": "2"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "post",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": []
+								}
+							]
+						},
+						"url": {
+							"raw": "{{ZB_HOST}}zb_system/api.php?mod=upload&act=post",
+							"host": [
+								"{{ZB_HOST}}zb_system"
+							],
+							"path": [
+								"api.php"
+							],
+							"query": [
+								{
+									"key": "mod",
+									"value": "upload"
+								},
+								{
+									"key": "act",
+									"value": "post"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{ZB_HOST}}zb_system/api.php?mod=upload&act=delete&id=142",
+							"host": [
+								"{{ZB_HOST}}zb_system"
+							],
+							"path": [
+								"api.php"
+							],
+							"query": [
+								{
+									"key": "mod",
+									"value": "upload"
+								},
+								{
+									"key": "act",
+									"value": "delete"
+								},
+								{
+									"key": "id",
+									"value": "142"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "comment",
+			"item": [
+				{
+					"name": "list",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{ZB_HOST}}zb_system/api.php?mod=comment&act=list&post_id=1",
+							"host": [
+								"{{ZB_HOST}}zb_system"
+							],
+							"path": [
+								"api.php"
+							],
+							"query": [
+								{
+									"key": "mod",
+									"value": "comment"
+								},
+								{
+									"key": "act",
+									"value": "list"
+								},
+								{
+									"key": "post_id",
+									"value": "1"
+								},
+								{
+									"key": "auth_id",
+									"value": null,
+									"disabled": true
+								},
+								{
+									"key": "manage",
+									"value": "1",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{ZB_HOST}}zb_system/api.php?mod=comment&act=get&id=1",
+							"host": [
+								"{{ZB_HOST}}zb_system"
+							],
+							"path": [
+								"api.php"
+							],
+							"query": [
+								{
+									"key": "mod",
+									"value": "comment"
+								},
+								{
+									"key": "act",
+									"value": "get"
+								},
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "post",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"ID\": \"0\",\r\n    \"LogID\": \"20\",\r\n    \"IsChecking\": false,\r\n    \"RootID\": \"0\",\r\n    \"ParentID\": \"0\",\r\n    \"AuthorID\": \"1\",\r\n    \"Name\": \"admin\",\r\n    \"Content\": \"测试评22论啦！\",\r\n    \"Email\": \"\",\r\n    \"HomePage\": \"http://zblogcn.com\",\r\n    \"PostTime\": \"1408461431\",\r\n    \"IP\": \"127.0.0.1\",\r\n    \"Agent\": \"Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/37.0.2062.76 Safari/537.36\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{ZB_HOST}}zb_system/api.php?mod=comment&act=post",
+							"host": [
+								"{{ZB_HOST}}zb_system"
+							],
+							"path": [
+								"api.php"
+							],
+							"query": [
+								{
+									"key": "mod",
+									"value": "comment"
+								},
+								{
+									"key": "act",
+									"value": "post"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{ZB_HOST}}zb_system/api.php?mod=comment&act=delete&id=62",
+							"host": [
+								"{{ZB_HOST}}zb_system"
+							],
+							"path": [
+								"api.php"
+							],
+							"query": [
+								{
+									"key": "mod",
+									"value": "comment"
+								},
+								{
+									"key": "act",
+									"value": "delete"
+								},
+								{
+									"key": "id",
+									"value": "62"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "tag",
+			"item": [
+				{
+					"name": "list",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{ZB_HOST}}zb_system/api.php?act=list&post_id=1&mod=tag",
+							"host": [
+								"{{ZB_HOST}}zb_system"
+							],
+							"path": [
+								"api.php"
+							],
+							"query": [
+								{
+									"key": "act",
+									"value": "list"
+								},
+								{
+									"key": "post_id",
+									"value": "1"
+								},
+								{
+									"key": "auth_id",
+									"value": null,
+									"disabled": true
+								},
+								{
+									"key": "manage",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "mod",
+									"value": "tag"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{ZB_HOST}}zb_system/api.php?mod=tag&act=get&id=1",
+							"host": [
+								"{{ZB_HOST}}zb_system"
+							],
+							"path": [
+								"api.php"
+							],
+							"query": [
+								{
+									"key": "mod",
+									"value": "tag"
+								},
+								{
+									"key": "act",
+									"value": "get"
+								},
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "post",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"ID\": \"0\",\r\n    \"Name\": \"tag\",\r\n    \"Order\": \"0\",\r\n    \"Type\": \"0\",\r\n    \"Count\": \"1\",\r\n    \"Alias\": \"\",\r\n    \"Group\": \"\",\r\n    \"Intro\": \"\",\r\n    \"Template\": \"index\",\r\n    \"Url\": \"http://project.com/zblogcn/zblogphp/?tags=1\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{ZB_HOST}}zb_system/api.php?mod=tag&act=post",
+							"host": [
+								"{{ZB_HOST}}zb_system"
+							],
+							"path": [
+								"api.php"
+							],
+							"query": [
+								{
+									"key": "mod",
+									"value": "tag"
+								},
+								{
+									"key": "act",
+									"value": "post"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{ZB_HOST}}zb_system/api.php?mod=tag&act=delete&id=5",
+							"host": [
+								"{{ZB_HOST}}zb_system"
+							],
+							"path": [
+								"api.php"
+							],
+							"query": [
+								{
+									"key": "mod",
+									"value": "tag"
+								},
+								{
+									"key": "act",
+									"value": "delete"
+								},
+								{
+									"key": "id",
+									"value": "5"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "category",
+			"item": [
+				{
+					"name": "list",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{ZB_HOST}}zb_system/api.php?mod=category&act=list&post_id=1",
+							"host": [
+								"{{ZB_HOST}}zb_system"
+							],
+							"path": [
+								"api.php"
+							],
+							"query": [
+								{
+									"key": "mod",
+									"value": "category"
+								},
+								{
+									"key": "act",
+									"value": "list"
+								},
+								{
+									"key": "post_id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{ZB_HOST}}zb_system/api.php?mod=category&act=get&id=1",
+							"host": [
+								"{{ZB_HOST}}zb_system"
+							],
+							"path": [
+								"api.php"
+							],
+							"query": [
+								{
+									"key": "mod",
+									"value": "category"
+								},
+								{
+									"key": "act",
+									"value": "get"
+								},
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "post",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"ID\": \"0\",\r\n    \"Name\": \"测试测试\",\r\n    \"Order\": \"0\",\r\n    \"Type\": \"0\",\r\n    \"Count\": \"0\",\r\n    \"Group\": \"\",\r\n    \"Intro\": \"\",\r\n    \"RootID\": \"0\",\r\n    \"ParentID\": \"0\",\r\n    \"Template\": \"\",\r\n    \"LogTemplate\": \"\",\r\n    \"Symbol\": \"\",\r\n    \"Level\": 0,\r\n    \"AllCount\": \"0\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{ZB_HOST}}zb_system/api.php?mod=category&act=post",
+							"host": [
+								"{{ZB_HOST}}zb_system"
+							],
+							"path": [
+								"api.php"
+							],
+							"query": [
+								{
+									"key": "mod",
+									"value": "category"
+								},
+								{
+									"key": "act",
+									"value": "post"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{ZB_HOST}}zb_system/api.php?mod=category&act=delete&id=4",
+							"host": [
+								"{{ZB_HOST}}zb_system"
+							],
+							"path": [
+								"api.php"
+							],
+							"query": [
+								{
+									"key": "mod",
+									"value": "category"
+								},
+								{
+									"key": "act",
+									"value": "delete"
+								},
+								{
+									"key": "id",
+									"value": "4"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "{{ZB_TOKEN}}",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "system",
+			"item": [
+				{
+					"name": "basic_info",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{ZB_HOST}}zb_system/api.php?mod=system&act=basic_info",
+							"host": [
+								"{{ZB_HOST}}zb_system"
+							],
+							"path": [
+								"api.php"
+							],
+							"query": [
+								{
+									"key": "mod",
+									"value": "system"
+								},
+								{
+									"key": "act",
+									"value": "basic_info"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get_info",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{ZB_HOST}}zb_system/api.php?mod=system&act=get_info",
+							"host": [
+								"{{ZB_HOST}}zb_system"
+							],
+							"path": [
+								"api.php"
+							],
+							"query": [
+								{
+									"key": "mod",
+									"value": "system"
+								},
+								{
+									"key": "act",
+									"value": "get_info"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "misc_statistic",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{ZB_HOST}}zb_system/api.php?mod=system&act=misc_statistic",
+							"host": [
+								"{{ZB_HOST}}zb_system"
+							],
+							"path": [
+								"api.php"
+							],
+							"query": [
+								{
+									"key": "mod",
+									"value": "system"
+								},
+								{
+									"key": "act",
+									"value": "misc_statistic"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "misc_showtags",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{ZB_HOST}}zb_system/api.php?mod=system&act=misc_showtags",
+							"host": [
+								"{{ZB_HOST}}zb_system"
+							],
+							"path": [
+								"api.php"
+							],
+							"query": [
+								{
+									"key": "mod",
+									"value": "system"
+								},
+								{
+									"key": "act",
+									"value": "misc_showtags"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get_setting",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{ZB_HOST}}zb_system/api.php?mod=system&act=get_setting",
+							"host": [
+								"{{ZB_HOST}}zb_system"
+							],
+							"path": [
+								"api.php"
+							],
+							"query": [
+								{
+									"key": "mod",
+									"value": "system"
+								},
+								{
+									"key": "act",
+									"value": "get_setting"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "save_setting",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"ZC_BLOG_NAME\": \"aaa\",\r\n    \"ZC_BLOG_SUBNAME\": \"Good Luck To You!\",\r\n    \"ZC_BLOG_COPYRIGHT\": \"Copyright Your WebSite.Some Rights Reserved.\",\r\n    \"ZC_TIME_ZONE_NAME\": \"Asia/Shanghai\",\r\n    \"ZC_BLOG_LANGUAGEPACK\": \"zh-cn\",\r\n    \"ZC_API_ENABLE\": true,\r\n    \"ZC_XMLRPC_ENABLE\": true,\r\n    \"ZC_DEBUG_MODE\": true,\r\n    \"ZC_DEBUG_MODE_WARNING\": true,\r\n    \"ZC_ADDITIONAL_SECURITY\": true,\r\n    \"ZC_USING_CDN_GUESTIP_TYPE\": \"REMOTE_ADDR\",\r\n    \"ZC_CLOSE_SITE\": false,\r\n    \"ZC_DISPLAY_COUNT\": 10,\r\n    \"ZC_DISPLAY_SUBCATEGORYS\": true,\r\n    \"ZC_PAGEBAR_COUNT\": 3,\r\n    \"ZC_SEARCH_COUNT\": 10,\r\n    \"ZC_SYNTAXHIGHLIGHTER_ENABLE\": true,\r\n    \"ZC_COMMENT_TURNOFF\": false,\r\n    \"ZC_COMMENT_AUDIT\": false,\r\n    \"ZC_COMMENT_REVERSE_ORDER\": false,\r\n    \"ZC_COMMENTS_DISPLAY_COUNT\": 100,\r\n    \"ZC_COMMENT_VERIFY_ENABLE\": false,\r\n    \"ZC_UPLOAD_FILETYPE\": \"jpg|gif|png|jpeg|bmp|psd|wmf|ico|rpm|deb|tar|gz|sit|7z|bz2|zip|rar|xml|xsl|svg|svgz|rtf|doc|docx|ppt|pptx|xls|xlsx|wps|chm|txt|pdf|mp3|mp4|avi|mpg|rm|ra|rmvb|mov|wmv|wma|swf|fla|torrent|apk|zba|gzba\",\r\n    \"ZC_UPLOAD_FILESIZE\": 2,\r\n    \"ZC_ARTICLE_INTRO_WITH_TEXT\": true,\r\n    \"ZC_ARTICLE_THUMB_SWITCH\": true,\r\n    \"ZC_ARTICLE_THUMB_TYPE\": 1,\r\n    \"ZC_ARTICLE_THUMB_WIDTH\": 300,\r\n    \"ZC_ARTICLE_THUMB_HEIGHT\": 300,\r\n    \"ZC_MANAGE_COUNT\": 50,\r\n    \"ZC_POST_BATCH_DELETE\": false,\r\n    \"ZC_DELMEMBER_WITH_ALLDATA\": false,\r\n    \"ZC_CATEGORY_MANAGE_LEGACY_DISPLAY\": false\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{ZB_HOST}}zb_system/api.php?mod=system&act=save_setting",
+							"host": [
+								"{{ZB_HOST}}zb_system"
+							],
+							"path": [
+								"api.php"
+							],
+							"query": [
+								{
+									"key": "mod",
+									"value": "system"
+								},
+								{
+									"key": "act",
+									"value": "save_setting"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "{{ZB_TOKEN}}",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "getToken",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = pm.response.json();\r",
+							"\r",
+							"if (pm.response.code == 200) {\r",
+							"    pm.collectionVariables.set('ZB_TOKEN', jsonData.data.token)\r",
+							"    pm.collectionVariables.set('ZB_TOKEN_EXPIRE_AT', jsonData.data.expire_time)\r",
+							"}\r",
+							"\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200) ;\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"if (pm.collectionVariables.get('ZB_PASSWORD').length != 0)\r",
+							"    pm.environment.set('ZB_PASSWORD_MD5', CryptoJS.MD5(pm.collectionVariables.get('ZB_PASSWORD')).toString())\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {}
+			},
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json; charset=utf-8",
+						"type": "text"
+					},
+					{
+						"key": "Accept-Language",
+						"value": "zh-cn",
+						"type": "text"
+					},
+					{
+						"key": "Referer",
+						"value": "{{ZB_HOST}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"{{ZB_USERNAME}}\",\r\n    \"password\": \"{{ZB_PASSWORD_MD5}}\",\r\n    \"savedate\": 30\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{ZB_HOST}}zb_system/api.php?mod=member&act=login",
+					"host": [
+						"{{ZB_HOST}}zb_system"
+					],
+					"path": [
+						"api.php"
+					],
+					"query": [
+						{
+							"key": "mod",
+							"value": "member"
+						},
+						{
+							"key": "act",
+							"value": "login"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{ZB_TOKEN}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"requests": {},
+				"exec": [
+					"var username = pm.collectionVariables.get(\"ZB_USERNAME\");",
+					"var md5_password = pm.environment.get('ZB_PASSWORD_MD5');",
+					"",
+					"if (pm.collectionVariables.get('ZB_PASSWORD').length != 0) {",
+					"    md5_password = CryptoJS.MD5(pm.collectionVariables.get(\"ZB_PASSWORD\")).toString();",
+					"    pm.environment.set('ZB_PASSWORD_MD5', CryptoJS.MD5(pm.collectionVariables.get('ZB_PASSWORD')).toString())",
+					"}",
+					"",
+					"var ZB_TOKEN = pm.collectionVariables.get(\"ZB_TOKEN\");",
+					"var ZB_TOKEN_EXPIRE_AT = pm.collectionVariables.get(\"ZB_TOKEN_EXPIRE_AT\");",
+					"",
+					"console.log(ZB_TOKEN);",
+					"console.log(ZB_TOKEN_EXPIRE_AT);",
+					"",
+					"if ( (username !='' && md5_password != '') && (ZB_TOKEN == '' || ZB_TOKEN_EXPIRE_AT < (Date.parse(new Date()) / 1000))){",
+					"",
+					"    var data = {",
+					"        \"username\": username,",
+					"        \"password\": md5_password,",
+					"        \"savedate\": 1",
+					"    }",
+					"",
+					"    const ZB_Request_Token = {",
+					"        url: pm.collectionVariables.get(\"ZB_HOST\")+'zb_system/api.php?mod=member&act=login',",
+					"        method: 'POST',",
+					"        header:'Content-Type:application/json',",
+					"        body: {",
+					"            mode: 'raw',",
+					"            raw: JSON.stringify(data)",
+					"        }",
+					"    };",
+					"    ",
+					"    pm.sendRequest(ZB_Request_Token, function (err, res) {",
+					"        console.log(res.json());",
+					"        var response = res.json();",
+					"        if(response.code == 200){",
+					"            pm.collectionVariables.set(\"ZB_TOKEN\", response.data.token);",
+					"            pm.collectionVariables.set(\"ZB_TOKEN_EXPIRE_AT\", response.data.expire_time);",
+					"        }",
+					"    });",
+					"}",
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"requests": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "ZB_HOST",
+			"value": "http://localhost/",
+			"description": "网站HOST（必填）"
+		},
+		{
+			"key": "ZB_USERNAME",
+			"value": "",
+			"description": "用户名"
+		},
+		{
+			"key": "ZB_PASSWORD",
+			"value": "",
+			"description": "密码"
+		},
+		{
+			"key": "ZB_TOKEN",
+			"value": "",
+			"description": "不需要填写，提交getToken后会刷新"
+		},
+		{
+			"key": "ZB_TOKEN_EXPIRE_AT",
+			"value": "",
+			"description": "不需要填写，提交getToken后会刷新"
+		}
+	]
+}
