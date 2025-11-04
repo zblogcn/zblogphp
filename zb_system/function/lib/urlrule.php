@@ -95,6 +95,10 @@ class UrlRule
     {
         global $zbp;
         $url = $this->GetPreUrl();
+        // 确保 $url 不是 null，兼容 PHP 8+
+        if ($url === null) {
+            $url = '';
+        }
         $route = $this->GetRoute();
 
         $only_match_page = GetValueInArray($route, 'only_match_page', false);
@@ -163,6 +167,10 @@ class UrlRule
         $prefix = ($prefix != '') ? ($prefix . '/') : $prefix;
         $this->Rules['{%host%}'] = $zbp->host . $prefix;
 
+        // 确保 $url 是字符串类型，兼容 PHP 8+
+        if ($url === null) {
+            $url = '';
+        }
         foreach ($this->Rules as $key => $value) {
             if (!is_array($value)) {
                 $url = str_replace($key, (string) $value, $url);
