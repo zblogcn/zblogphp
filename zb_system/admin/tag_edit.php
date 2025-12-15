@@ -59,7 +59,7 @@ if ($tag->ID == 0) {
     </div>
     <div id="divMain2" class="edit tag_edit">
         <form id="edit" name="edit" method="post" action="#">
-            <input id="edtID" name="ID" type="hidden" value="<?php echo $tag->ID;?>" />
+            <input id="edtID" name="ID" type="hidden" value="<?php echo $tag->ID; ?>" />
             <input id="edtType" name="Type" type="hidden" value="<?php echo $tag->Type; ?>" />
             <p>
                 <span class="title">
