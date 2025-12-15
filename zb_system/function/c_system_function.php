@@ -840,6 +840,7 @@ function FilterTag(&$tag)
     global $zbp;
     $tag->Name = strip_tags($tag->Name);
     $tag->Name = trim($tag->Name);
+    $tag->Type = (int) $tag->Type;
     $tag->Alias = FormatString($tag->Alias, '[normalname]');
     $tag->Alias = str_replace('.', '', $tag->Alias);
     $tag->Alias = str_replace(' ', '', $tag->Alias);
