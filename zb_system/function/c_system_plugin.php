@@ -654,17 +654,6 @@ DefinePluginFilter('Filter_Plugin_Zbp_BuildTemplate');
 /*
 '**************************************************<
 '类型:Filter
-'名称:Filter_Plugin_Zbp_BuildTemplate_End
-'参数:$template
-'说明:Zbp类的针对多套模板的重编译
-'调用:
-'**************************************************>
- */
-DefinePluginFilter('Filter_Plugin_Zbp_BuildTemplate_End');
-
-/*
-'**************************************************<
-'类型:Filter
 '名称:Filter_Plugin_Zbp_MakeTemplatetags
 '参数:$template
 '说明:Zbp类的生成模板标签接口
