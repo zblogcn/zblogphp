@@ -2317,6 +2317,11 @@ class ZBlogPHP
             $fpname($this->template->templates);
         }
 
+        $s = implode($this->template->templates);
+        $md5 = md5($s);
+        $this->cache->templates_md5_array = serialize(array($this->template->template_dirname => $md5));
+        $this->SaveCache();
+
         return $this->template->BuildTemplate();
     }
 
@@ -2339,82 +2344,50 @@ class ZBlogPHP
             $fpname($this->template->templates);
         }
 
+        $s = implode($this->template->templates);
+        $md5 = md5($s);
+        $this->cache->templates_md5_array = serialize(array($this->template->template_dirname => $md5));
+        $this->SaveCache();
+
         return $this->template->BuildTemplate();
     }
 
     /**
      * 更新模板缓存.
      *
-     * @param bool $onlycheck  为真的且$forcebuild为假的话，只判断是否需要而不Build，返回false就是需要更新，为true就不需要
-     * @param bool $forcebuild
+     * @param bool $onlycheck 为真时，返回值为false表示需要BuildTemplate
+     * @param bool $forcebuild 强制BuildTemplate
      *
      * @return bool
      */
     public function CheckTemplate($onlycheck = false, $forcebuild = false)
     {
+
+        //$forcebuild = true 强制跳过比较
+        if ($forcebuild == true) {
+            $this->BuildTemplate();
+            return true;
+        }
+
         $s = implode($this->template->templates);
         $md5 = md5($s);
-
-        //本函数的返回值很有意思，为false表示需要rebuild 为true表示已重建完成或是不需要rebuild
-        //$zbp->CheckTemplate(true) == false 的意思，就是判断模板需需要重刷新吗？
-
         $array_md5 = @unserialize($this->cache->templates_md5_array);
         if (!is_array($array_md5)) {
             $array_md5 = array();
         }
-
         $new_md5 = GetValueInArray($array_md5, $this->template->template_dirname);
 
-        //如果对比不一样,$onlycheck就有用了
-        if ($md5 != $new_md5) {
-            if ($onlycheck == true && $forcebuild == false) {
-                return false;
-            }
-            $this->BuildTemplate();
-            $array_md5[$this->template->template_dirname] = $md5;
-            $this->cache->templates_md5_array = serialize($array_md5);
-            $this->SaveCache();
-
-            return true;
-        }
-        //如果对比一样的话，$forcebuild就有用了
-        if ($md5 == $new_md5) {
-            if ($onlycheck == true && $forcebuild == false) {
+        if ($onlycheck == true) {
+            return ($md5 == $new_md5);
+        } elseif ($onlycheck == false) {
+            //$onlycheck = false时
+            if ($md5 != $new_md5) {
+                $this->BuildTemplate();
                 return true;
             }
-            if ($forcebuild == true) {
-                $this->BuildTemplate();
-                $array_md5[$this->template->template_dirname] = $md5;
-                $this->cache->templates_md5_array = serialize($array_md5);
-                $this->SaveCache();
-            }
         }
 
         return true;
-
-        /*
-        //如果对比不一样,$onlycheck就有用了
-        if ($md5 != $this->cache->templates_md5) {
-            if ($onlycheck == true && $forcebuild == false) {
-                return false;
-            }
-            $this->BuildTemplate();
-            $this->cache->templates_md5 = $md5;
-            $this->SaveCache();
-
-            return true;
-        }
-        //如果对比一样的话，$forcebuild就有用了
-        if ($md5 == $this->cache->templates_md5) {
-            if ($forcebuild == true) {
-                $this->BuildTemplate();
-                $this->cache->templates_md5 = $md5;
-                $this->SaveCache();
-            }
-        }
-
-        return true;
-        */
     }
 
     /**
