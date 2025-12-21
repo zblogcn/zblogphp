@@ -2362,7 +2362,6 @@ class ZBlogPHP
      */
     public function CheckTemplate($onlycheck = false, $forcebuild = false)
     {
-
         //$forcebuild = true 强制跳过比较
         if ($forcebuild == true) {
             $this->BuildTemplate();
