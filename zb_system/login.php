@@ -46,7 +46,7 @@ HookFilterPlugin('Filter_Plugin_Login_Header');
 
       <?php if ($zbp->option['ZC_LOGIN_VERIFY_ENABLE']) : ?>
       <dd class="validcode"><label for="edtValidcode"><?php echo $lang['msg']['validcode']; ?></label><input type="text" maxlength="<?php echo $zbp->option['ZC_VERIFYCODE_LENGTH']; ?>" id="edtValidcode" name="verify" size="20" tabindex="10" />
-          <img src="<?php echo $zbp->host; ?>zb_system/script/c_validcode.php?id=login&time=m" onClick="javascript:this.src='<?php echo $zbp->host; ?>zb_system/script/c_validcode.php?id=login&time=m&tm='+Math.random();" alt="validcode"/>
+          <img src="script/c_validcode.php?id=login&time=m" onClick="javascript:this.src='<?php echo $zbp->host; ?>zb_system/script/c_validcode.php?id=login&time=m&tm='+Math.random();" alt="validcode"/>
       </dd>
       <?php endif; ?>
 
