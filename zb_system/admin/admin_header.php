@@ -2,7 +2,7 @@
     exit('Access denied');
 }
 if ($zbp->option['ZC_ADDITIONAL_SECURITY']) {
-    header('X-Frame-Options: DENY');
+    header('X-Frame-Options: SAMEORIGIN‌');
     header('X-XSS-Protection: 1; mode=block');
     header('Content-Security-Policy: ' . GetBackendCSPHeader());
     if ($zbp->isHttps) {
