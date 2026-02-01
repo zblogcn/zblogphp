@@ -238,7 +238,7 @@ abstract class Base__Post extends Base
                     $u->Rules['{%alias%}'] = $this->Alias;
                 } else {
                     if ($zbp->option['ZC_POST_ALIAS_USE_ID_NOT_TITLE'] == false) {
-                        $u->Rules['{%alias%}'] = rawurlencode($this->Title);
+                        $u->Rules['{%alias%}'] = rawurlencode(strip_tags($this->Title));
                     } else {
                         $u->Rules['{%alias%}'] = $this->ID;
                     }
