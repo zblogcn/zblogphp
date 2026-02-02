@@ -1,8 +1,10 @@
 .github                               export-ignore
 .gitattributes                        export-ignore
 .gitignore                            export-ignore
+.editorconfig                         export-ignore
 LICENSE                               export-ignore
 contributing.md                       export-ignore
+SECURITY.md                           export-ignore
 phpcs.xml                             export-ignore
 search.php
 utils/                                export-ignore
@@ -31,6 +33,7 @@ zb_users/plugin/LargeData             export-ignore
 zb_users/plugin/LinksManage
 zb_users/plugin/RegPage               export-ignore
 zb_users/plugin/ScheduledTasks        export-ignore
+zb_users/plugin/Scheduler             export-ignore
 zb_users/plugin/SQLLog                export-ignore
 zb_users/plugin/STACentre
 zb_users/plugin/Totoro
@@ -41,6 +44,7 @@ zb_users/plugin/wearingtheme          export-ignore
 zb_users/plugin/wp2zbp                export-ignore
 zb_users/plugin/ZBPDK                 export-ignore
 zb_users/plugin/ZBPJFExample          export-ignore
+
 composer.json                         export-ignore
 feed.php
 readme.md                             export-ignore
