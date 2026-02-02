@@ -16,7 +16,7 @@ jobs:
         run: composer install --prefer-dist --no-progress --no-interaction
       - name: Get file changes
         id: get_file_changes
-        uses: tj-actions/changed-files@v44
+        uses: tj-actions/changed-files@v46
       - name: PHPCBF
         if: steps.get_file_changes.outputs.any_changed == 'true' && github.event_name == 'push'
         env:
