@@ -1,30 +1,49 @@
 name: Upload pack as Release Asset
+
 on:
-  release:
-    types: [created]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
 jobs:
-  run:
+  upload-pack:
     runs-on: ubuntu-latest
     steps:
       - name: Set git to use CRLF
         run: |
           git config --global core.autocrlf true
           git config --global core.eol crlf
+
       - name: Checkout code
-        uses: actions/checkout@v2
-      - name: Pack as zip
-        run:  git archive -o zblogphp.zip HEAD
-      - name: Put AppCentre Plugin
+        uses: actions/checkout@v6
+
+      - name: Get Version
+        id: get_version
         run: |
-          php ./utils/put_appcentre.php
-          zip -g zblogphp.zip zb_users/plugin/AppCentre/* zb_users/plugin/AppCentre/**/*
-      - name: Upload Release Asset
-        id: upload-release-asset 
-        uses: actions/upload-release-asset@v1
+          echo "Get versions from utils/get_version.php"
+          SHORT=$(php ./utils/get_version.php --short)
+          FULL=$(php ./utils/get_version.php --full)
+          echo "short=$SHORT" >> $GITHUB_OUTPUT
+          echo "full=$FULL" >> $GITHUB_OUTPUT
+
+      - name: Pack as zip
+        run:  git archive -o zblogphp-${{ steps.get_version.outputs.short }}.zip HEAD
+
+      # - name: Put AppCentre Plugin
+      #   run: |
+      #     php ./utils/put_appcentre.php
+      #     zip -g zblogphp-${{ steps.get_version.outputs.short }}.zip zb_users/plugin/AppCentre/* zb_users/plugin/AppCentre/**/*
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          upload_url: ${{ github.event.release.upload_url }}
-          asset_path: ./zblogphp.zip
-          asset_name: zblogphp.zip
-          asset_content_type: application/zip
+          tag_name: ${{ steps.get_version.outputs.short }}
+          name: ${{ steps.get_version.outputs.full }}
+          # draft: true
+          prerelease: false
+          generate_release_notes: true
+          files: |
+            zblogphp-${{ steps.get_version.outputs.short }}.zip
