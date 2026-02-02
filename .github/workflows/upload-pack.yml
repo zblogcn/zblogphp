@@ -1,6 +1,10 @@
 name: Upload pack as Release Asset
 
 on:
+  push:
+    paths:
+      - "zb_system/function/c_system_version.php"
+
   workflow_dispatch:
 
 permissions:
@@ -28,7 +32,7 @@ jobs:
           echo "full=$FULL" >> $GITHUB_OUTPUT
 
       - name: Pack as zip
-        run:  git archive -o zblogphp-${{ steps.get_version.outputs.short }}.zip HEAD
+        run: git archive -o zblogphp-${{ steps.get_version.outputs.short }}.zip HEAD
 
       # - name: Put AppCentre Plugin
       #   run: |
@@ -40,7 +44,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ steps.get_version.outputs.short }}
+          tag_name: v${{ steps.get_version.outputs.short }}
           name: ${{ steps.get_version.outputs.full }}
           # draft: true
           prerelease: false
