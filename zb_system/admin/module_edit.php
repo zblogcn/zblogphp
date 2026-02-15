@@ -85,7 +85,7 @@ if ($mod->SourceType == 'themeinclude') {
                     <?php echo $lang['msg']['name']; ?>:</span>
                 <span class="star">(*)</span>
                 <br />
-                <input id="edtName" class="edit" size="40" name="Name" maxlength="<?php echo $option['ZC_MODULE_NAME_MAX']; ?>" type="text" value="<?php echo FormatString($mod->Name, '[html-format]'); ?>" />
+                <input id="edtName" class="edit" size="40" name="Name" maxlength="<?php echo $zbp->option['ZC_MODULE_NAME_MAX']; ?>" type="text" value="<?php echo FormatString($mod->Name, '[html-format]'); ?>" />
                 (
                 <?php echo $lang['msg']['hide_title']; ?>
                 :

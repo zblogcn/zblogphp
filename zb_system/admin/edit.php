@@ -125,7 +125,7 @@ require ZBP_PATH . 'zb_system/admin/admin_top.php';
                     <div id="titleheader" class="editmod">
                         <label for="edtTitle" class="editinputname"><?php echo $lang['msg']['title']; ?></label>
                         <div>
-                            <input type="text" name="Title" id="edtTitle" maxlength="<?php echo $option['ZC_ARTICLE_TITLE_MAX']; ?>" onBlur="if(this.value==='') this.value='<?php echo $lang['msg']['unnamed']; ?>'" onFocus="if(this.value==='<?php echo $lang['msg']['unnamed']; ?>') this.value=''" value="<?php echo $article->Title; ?>" />
+                            <input type="text" name="Title" id="edtTitle" maxlength="<?php echo $zbp->option['ZC_ARTICLE_TITLE_MAX']; ?>" onBlur="if(this.value==='') this.value='<?php echo $lang['msg']['unnamed']; ?>'" onFocus="if(this.value==='<?php echo $lang['msg']['unnamed']; ?>') this.value=''" value="<?php echo $article->Title; ?>" />
                         </div>
                     </div>
                     <!-- )title -->
