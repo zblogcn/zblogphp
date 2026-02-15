@@ -221,7 +221,7 @@ if ($preset_bloghost != '') {
     $GLOBALS['bloghost'] = $preset_bloghost . $preset_cookiespath;
     $GLOBALS['cookiespath'] = $preset_cookiespath;
 } else {
-   $GLOBALS['bloghost'] = GetCurrentHost($GLOBALS['blogpath'], $GLOBALS['cookiespath']); 
+    $GLOBALS['bloghost'] = GetCurrentHost($GLOBALS['blogpath'], $GLOBALS['cookiespath']);
 }
 
 $GLOBALS['usersurl'] = $GLOBALS['bloghost'] . 'zb_users/';
