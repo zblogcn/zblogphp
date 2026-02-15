@@ -88,7 +88,7 @@ foreach ($zbp->categoriesbyorder_type[$cate->Type] as $k => $v) {
                     <?php echo $lang['msg']['name']; ?>:</span>
                 <span class="star">(*)</span>
                 <br />
-                <input id="edtName" class="edit" size="40" name="Name" maxlength="<?php echo $option['ZC_CATEGORY_NAME_MAX']; ?>" type="text" value="<?php echo $cate->Name; ?>" /></p>
+                <input id="edtName" class="edit" size="40" name="Name" maxlength="<?php echo $zbp->option['ZC_CATEGORY_NAME_MAX']; ?>" type="text" value="<?php echo $cate->Name; ?>" /></p>
             <p>
                 <span class="title">
                     <?php echo $lang['msg']['alias']; ?>:</span>

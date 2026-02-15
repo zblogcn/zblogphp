@@ -922,6 +922,9 @@ class ZBlogPHP
         $this->themeapp = new App();
         $this->themeinfo = $this->themeapp->GetInfoArray();
 
+        $this->option = &$GLOBALS['zbp_option'];
+        $this->option = $GLOBALS['option'];
+
         $this->isinitialized = true;
         return true;
     }

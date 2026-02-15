@@ -66,7 +66,7 @@ if ($tag->ID == 0) {
                     <?php echo $lang['msg']['name']; ?>:</span>
                 <span class="star">(*)</span>
                 <br />
-                <input id="edtName" class="edit" size="40" name="Name" maxlength="<?php echo $option['ZC_TAGS_NAME_MAX']; ?>" type="text" value="<?php echo $tag->Name; ?>" /></p>
+                <input id="edtName" class="edit" size="40" name="Name" maxlength="<?php echo $zbp->option['ZC_TAGS_NAME_MAX']; ?>" type="text" value="<?php echo $tag->Name; ?>" /></p>
             <p>
                 <span class="title">
                     <?php echo $lang['msg']['alias']; ?>:</span>
