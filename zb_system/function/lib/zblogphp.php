@@ -2339,7 +2339,6 @@ class ZBlogPHP
                 return $this->template->BuildTemplate();
             }
         }
-
     }
 
     /**
