@@ -2312,7 +2312,7 @@ class ZBlogPHP
      * 直接在接口中直接调用$zbp->BuildTemplateMore进行重新编译其它模板
      * @return bool
      */
-    public function BuildTemplate()
+    public function BuildTemplate($forcebuild = false)
     {
         $this->template->LoadTemplates();
 
@@ -2321,11 +2321,25 @@ class ZBlogPHP
         }
 
         $s = implode($this->template->templates);
-        $md5 = md5($s);
-        $this->cache->templates_md5_array = serialize(array($this->template->template_dirname => $md5));
-        $this->SaveCache();
+        $now_md5 = md5($s);
 
-        return $this->template->BuildTemplate();
+        $array_md5 = @unserialize($this->cache->templates_md5_array);
+        if (!is_array($array_md5)) {
+            $array_md5 = array();
+        }
+        $old_md5 = GetValueInArray($array_md5, $this->template->template_dirname);
+
+        if ($now_md5 != $old_md5) {
+            $this->cache->templates_md5_array = serialize(array($this->template->template_dirname => $now_md5));
+            $this->SaveCache();
+
+            return $this->template->BuildTemplate();
+        } else {
+            if ($forcebuild == true) {
+                return $this->template->BuildTemplate();
+            }
+        }
+
     }
 
     /**
@@ -2365,29 +2379,7 @@ class ZBlogPHP
      */
     public function CheckTemplate($onlycheck = false, $forcebuild = false)
     {
-        //$forcebuild = true 强制跳过比较
-        if ($forcebuild == true) {
-            $this->BuildTemplate();
-            return true;
-        }
-
-        $s = implode($this->template->templates);
-        $md5 = md5($s);
-        $array_md5 = @unserialize($this->cache->templates_md5_array);
-        if (!is_array($array_md5)) {
-            $array_md5 = array();
-        }
-        $new_md5 = GetValueInArray($array_md5, $this->template->template_dirname);
-
-        if ($onlycheck == true) {
-            return ($md5 == $new_md5);
-        } elseif ($onlycheck == false) {
-            //$onlycheck = false时
-            if ($md5 != $new_md5) {
-                $this->BuildTemplate();
-                return true;
-            }
-        }
+        $this->BuildTemplate($forcebuild);
 
         return true;
     }
