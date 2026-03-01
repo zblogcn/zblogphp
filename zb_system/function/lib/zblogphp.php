@@ -2312,7 +2312,7 @@ class ZBlogPHP
      * 直接在接口中直接调用$zbp->BuildTemplateMore进行重新编译其它模板
      * @return bool
      */
-    public function BuildTemplate($forcebuild = false)
+    public function BuildTemplate($forcebuild = true)
     {
         $this->template->LoadTemplates();
 
