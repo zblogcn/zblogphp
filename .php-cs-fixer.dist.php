@@ -37,7 +37,7 @@ return (new Config())
         // 使用短数组语法 []，替代 array()。
         'array_syntax' => ['syntax' => 'short'],
         // 使用短列表语法 []。
-        'list_syntax' => ['syntax' => 'short'],
+        'list_syntax' => ['syntax' => 'long'],
         // 各种二元运算符周围使用单个空格，但保持 '=>' 对齐方式不变。
         'binary_operator_spaces' => [
             'default' => 'single_space',
