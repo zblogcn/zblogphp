@@ -1,0 +1,51 @@
+name: php-cs-fixer
+
+on:
+  push:
+
+jobs:
+  php-cs-fixer:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Collect changed PHP files
+        id: changed
+        uses: tj-actions/changed-files@v47
+        with:
+          fetch_depth: 0
+          files: |
+            **/*.php
+
+      - name: Setup PHP
+        if: steps.changed.outputs.any_changed == 'true'
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '7.3'
+          coverage: none
+
+      - name: Install dependencies
+        if: steps.changed.outputs.any_changed == 'true'
+        run: composer install --no-interaction --no-progress --prefer-dist
+
+      - name: Run php-cs-fixer on changed files
+        if: steps.changed.outputs.any_changed == 'true'
+        run: |
+          vendor/bin/php-cs-fixer fix --config=.php-cs-fixer.dist.php ${{ steps.changed.outputs.all_changed_files }}
+
+      - name: Commit files
+        if: github.event_name == 'push' && steps.changed.outputs.any_changed == 'true'
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git status
+          git diff-index --quiet HEAD || (git commit -m "Auto Commit - PhpCsFixer" -a --no-verify)
+
+      - name: Push changes
+        if: github.event_name == 'push' && steps.changed.outputs.any_changed == 'true'
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.ref }}
