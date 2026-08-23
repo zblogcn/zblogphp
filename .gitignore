@@ -95,3 +95,4 @@ test4.php
 zbp*.zip
 nginx.htaccess
 .env
+.php-cs-fixer.cache
