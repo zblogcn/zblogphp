@@ -20,7 +20,8 @@
     },
     "require-dev": {
         "phpunit/phpunit": "^9.3.3",
-        "dms/phpunit-arraysubset-asserts": "^0.2.1"
+        "dms/phpunit-arraysubset-asserts": "^0.2.1",
+        "friendsofphp/php-cs-fixer": "^3.4"
     },
     "repositories": {
         "packagist": {
