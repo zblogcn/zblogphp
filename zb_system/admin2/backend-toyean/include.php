@@ -9,7 +9,7 @@ function ActivePlugin_backend_toyean()
     $zbp->lang['msg']['last_button'] = '尾页';
 }
 
-//覆盖ResponseAdmin_TopMenu
+// 覆盖ResponseAdmin_TopMenu
 function ResponseAdmin_TopMenu()
 {
     global $zbp;
@@ -20,7 +20,7 @@ function ResponseAdmin_TopMenu()
     }
 
     //$topmenus[] = MakeTopMenu("admin", $zbp->lang['msg']['dashboard'], $zbp->cmdurl . "?act=admin", "", "", "icon-house-door-fill");
-    $topmenus[] = '<li><a href="" class="rebuild">清空缓存、编译模板</a></li>';
+    $topmenus[] = '<li><a href="javascript:;" class="rebuild">清空缓存、编译模板</a></li>';
 
     //$topmenus[] = MakeTopMenu("SettingMng", @$zbp->lang['msg']['web_settings'], $zbp->cmdurl . "?act=SettingMng", "", "topmenu_setting", "icon-gear-fill");
 

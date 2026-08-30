@@ -82,8 +82,7 @@
 </form>
 <script>
     function checkInfo() {
-        document.getElementById("edit").action = "{BuildSafeCmdURL('act=MemberPst')}";
-
+        $("#edit").attr("action", "{BuildSafeCmdURL('act=MemberPst')}");
         if (!$("#edtEmail").val()) {
             alert("{$zbp->lang['error']['29']}");
             return false

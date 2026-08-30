@@ -4,18 +4,18 @@
  * Z-Blog with PHP.
  *
  * @author Z-BlogPHP Team
+ *
  * @version 2.0 2013-06-14
  */
 
-/**
+/*
  * 返回配置.
  *
  * @param
  *
  * @return array
  */
-return array(
-
+return [
     // '---------------------------------关闭网站-----------------------------------
     'ZC_CLOSE_WHOLE_SITE' => false,
     'ZC_CLOSE_SITE'       => false,
@@ -68,7 +68,6 @@ return array(
     // '固定域名,默认为false
     'ZC_PERMANENT_DOMAIN_ENABLE'     => false,
 
-    //
     'ZC_DEBUG_MODE'         => false,
     'ZC_DEBUG_MODE_STRICT'  => false,
     'ZC_DEBUG_MODE_WARNING' => true,
@@ -243,4 +242,7 @@ return array(
     'ZC_API_THROTTLE_ENABLE'            => false,
     'ZC_API_THROTTLE_MAX_REQS_PER_MIN'  => 60,
     'ZC_API_DISPLAY_COUNT'              => 10,
-);
+    'ZC_AI_API_URL'                     => '',
+    'ZC_AI_API_KEY'                     => '',
+    'ZC_AI_API_MODEL'                   => '',
+];

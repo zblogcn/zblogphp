@@ -120,6 +120,7 @@ return [
         'page_setting'                      => '閱讀設定',
         'comment_setting'                   => '討論設定',
         'api_setting'                       => 'API設定',
+        'ai_setting'                        => 'AI設定',
         'other_setting'                     => '其他設定',
         'blog_host'                         => '網站位址',
         'blog_host_add'                     => '默認自動讀取當前網站位址，如需固定網站位址請點擊按鈕並輸入域名。',
@@ -294,6 +295,9 @@ return [
         ''                                  => '',
         'closemenu'                         => '折疊選單',
         'expandmenu'                        => '展開選單',
+        'ai_url'                            => 'AI Url',
+        'ai_key'                            => 'AI Key',
+        'ai_model'                          => 'AI模型名',
     ],
 
     //Action

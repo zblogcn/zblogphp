@@ -35,12 +35,12 @@
         <td class="td10 tdCenter">
             {if $plugin.type == 'plugin'}
             {if $plugin.IsUsed()}
-            <a href="{php}echo BuildSafeCmdURL('act=PluginDis&name='.$pluginIdEscaped);{/php}" title="{$zbp.lang['msg']['disable']}" class="btn-icon btn-disable" data-pluginid="{$pluginIdEscaped}">
+            <a href="{BuildSafeCmdURL('act=PluginDis')}&name={$pluginIdEscaped}" title="{$zbp.lang['msg']['disable']}" class="btn-icon btn-disable" data-pluginid="{$pluginIdEscaped}">
                 <i class="icon-cancel on"></i>
             </a>
             &nbsp;&nbsp;&nbsp;&nbsp;
             {else}
-            <a href="{php}echo BuildSafeCmdURL('act=PluginEnb&name='.$pluginIdEscaped);{/php}" title="{$zbp.lang['msg']['enable']}" class="btn-icon btn-enable" data-pluginid="{$pluginIdEscaped}">
+            <a href="{BuildSafeCmdURL('act=PluginEnb')}&name={$pluginIdEscaped}" title="{$zbp.lang['msg']['enable']}" class="btn-icon btn-enable" data-pluginid="{$pluginIdEscaped}">
                 <i class="icon-power off"></i>
             </a>
             {/if}

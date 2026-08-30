@@ -67,8 +67,7 @@
 </form>
 <script>
     function checkInfo() {
-        document.getElementById("edit").action = "{BuildSafeCmdURL('act=ModulePst')}";
-
+        $("#edit").attr("action", "{BuildSafeCmdURL('act=ModulePst')}");
         if (!$("#edtName").val()) {
             alert("{$zbp->lang['error']['72']}");
             return false

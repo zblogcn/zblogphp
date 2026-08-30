@@ -112,14 +112,39 @@ function zbp_admin2_statistic_data()
     $data->reload_reload_updateinfo_url = BuildSafeCmdURL('act=misc&type=updateinfo');
 
     // thanks
-    $s = file_get_contents($zbp->path . 'zb_system/defend/thanks.html');
-    $s = str_replace('Z-BlogPHP网站和程序开发', $zbp->lang['msg']['develop_intro'], $s);
-    $s = str_replace('程序', $zbp->lang['msg']['program'], $s);
-    $s = str_replace('界面', $zbp->lang['msg']['interface'], $s);
-    $s = str_replace('支持', $zbp->lang['msg']['support'], $s);
-    $s = str_replace('感谢', $zbp->lang['msg']['thanks'], $s);
-    $s = str_replace('相关链接', $zbp->lang['msg']['website'], $s);
-    $data->thanksinfo = $s;
+    $data->thanksInfo = zbp_admin2_get_thanks();
+    // 替换语言项
+    foreach ($data->thanksInfo as &$group) {
+        switch ($group['category']) {
+            case '程序':
+                $group['category'] = $zbp->lang['msg']['program'];
+
+                break;
+
+            case '界面':
+                $group['category'] = $zbp->lang['msg']['interface'];
+
+                break;
+
+            case '支持':
+                $group['category'] = $zbp->lang['msg']['support'];
+
+                break;
+
+            case '感谢':
+                $group['category'] = $zbp->lang['msg']['thanks'];
+
+                break;
+
+            case '链接':
+                $group['category'] = $zbp->lang['msg']['website'];
+
+                break;
+
+            default:
+                // 保持原样
+        }
+    }
 
     return $data;
 }
@@ -249,4 +274,12 @@ function zbp_admin2_security()
     if ('ArticleEdt' === $zbp->action || 'PageEdt' === $zbp->action) {
         $zbp->csrfExpiration = 48;
     }
+}
+
+/**
+ * 封装一个函数，用于返回 thanks.php.
+ */
+function zbp_admin2_get_thanks()
+{
+    return require $GLOBALS['zbp']->path . 'zb_system/defend/thanks.php';
 }

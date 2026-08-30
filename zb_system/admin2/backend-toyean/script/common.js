@@ -251,6 +251,13 @@
 }(jQuery));
 
 $(function(){
+
+  // 处理 jq-hidden 类，用于后续动画效果
+  $('.jq-hidden').each(function() {
+    $(this).hide();
+    $(this).removeClass('hidden');
+  });
+
 	$("select").niceSelect(); //接管select菜单
 
 	//右上角用户菜单
@@ -272,35 +279,35 @@ $(function(){
 	}();
 	if(toyean.night){
 		if((new Date().getHours() > toyean.setnightstart || new Date().getHours() < toyean.setnightover) && toyean.setnightauto){
-			$(".theme").hide();
+			$(".head .theme").hide();
 			zbp.cookie.set('night','1');
 			$('body').addClass('night');
-			$(".theme").attr("title","开灯").addClass("dark");
+			$(".head .theme").attr("title","开灯").addClass("dark");
 			console.log('夜间模式自动开启');
 		}else if(toyean.setnightauto){
-			$(".theme").hide();
+			$(".head .theme").hide();
 			zbp.cookie.set('night','0');
 			$('body').removeClass('night');
-			$(".theme").attr("title","关灯").removeClass("dark");
+			$(".head .theme").attr("title","关灯").removeClass("dark");
 			console.log('夜间模式自动关闭');
 		}else{
-			$(".theme").show();
+			$(".head .theme").show();
 		}
 		if(zbp.cookie.get('night') == '1' || $('body').hasClass('night')){
-			$(".theme").attr("title","开灯").addClass("dark");
+			$(".head .theme").attr("title","开灯").addClass("dark");
 		}else{
-			$(".theme").attr("title","关灯").removeClass("dark");
+			$(".head .theme").attr("title","关灯").removeClass("dark");
 		}
-		$(".theme").on("click",function(){
+		$(".head .theme").on("click",function(){
 			if(zbp.cookie.get('night') == '1' || $('body').hasClass('night')){
 				zbp.cookie.set('night','0');
 				$('body').removeClass('night');
-				$(".theme").attr("title","关灯").removeClass("dark");
+				$(".head .theme").attr("title","关灯").removeClass("dark");
 				console.log('夜间模式关闭');
 			}else{
 				zbp.cookie.set('night','1');
 				$('body').addClass('night');
-				$(".theme").attr("title","开灯").addClass("dark");
+				$(".head .theme").attr("title","开灯").addClass("dark");
 				console.log('夜间模式开启');
 			}
 		});

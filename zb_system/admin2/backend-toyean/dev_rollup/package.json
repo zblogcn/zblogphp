@@ -1,0 +1,17 @@
+{
+  "scripts": {
+    "build": "rollup -c --environment NODE_ENV:prod",
+    "dev": "rollup -c -w --environment NODE_ENV:dev",
+    "postinstall": "node -e \"const fs=require('fs'); if(!fs.existsSync('.env') && fs.existsSync('.env.sample')) fs.copyFileSync('.env.sample', '.env');\"",
+    "lint": "eslint --ext .js,.mjs ."
+  },
+  "devDependencies": {
+    "@fullhuman/postcss-purgecss": "^7.0.2",
+    "dotenv": "^17.2.3",
+    "less": "^4.5.1",
+    "rollup": "^4.55.1",
+    "rollup-plugin-browsersync": "^1.3.3",
+    "rollup-plugin-copy": "^3.5.0",
+    "rollup-plugin-postcss": "^4.0.2"
+  }
+}

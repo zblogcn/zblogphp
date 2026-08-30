@@ -57,7 +57,7 @@
     <p>
         <label>
             <span class="title">{$zbp->lang['msg']['add_to_navbar']}:</span>
-            <input type="text" name="AddNavbar" id="edtAddNavbar" value="{php}echo (int) $zbp->CheckItemToNavbar('category', $cate->ID);{/php}" class="checkbox" />
+            <input type="text" name="AddNavbar" id="edtAddNavbar" value="{$zbp->CheckItemToNavbar('category', $cate->ID)}" class="checkbox" />
         </label>
     </p>
     <!-- 接口输出 -->
@@ -73,7 +73,7 @@
 </form>
 <script>
     function checkInfo() {
-        document.getElementById("edit").action = "{BuildSafeCmdURL('act=CategoryPst')}";
+        $("#edit").attr("action", "{BuildSafeCmdURL('act=CategoryPst')}");
         if (!$("#edtName").val()) {
             alert("{$zbp->lang['error']['72']}");
             return false;

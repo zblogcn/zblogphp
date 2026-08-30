@@ -15,7 +15,7 @@ table {
       border-right: none;
     }
 
-    .tdCenter {
+    &.center {
       text-align: center;
     }
   }
@@ -29,13 +29,9 @@ table {
   &.tableBorder {
     line-height: 1.8em;
     margin: 0.4em 0 0.8em;
-
-    th {
-      text-align: left;
-    }
   }
 
-  &.tableBorder-thcenter {
+  &.thCenter {
     th {
       text-align: center;
     }
@@ -56,6 +52,13 @@ table {
   &.table_striped {
     >tbody>tr:nth-of-type(odd) {
       background-color: #f4f4f4;
+    }
+  }
+
+  th,
+  td {
+    &>[class^="icon-"] {
+      padding-right: .3em;
     }
   }
 }

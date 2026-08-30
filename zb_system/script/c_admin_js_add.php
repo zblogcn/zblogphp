@@ -235,7 +235,15 @@ function AutoHideTips(){
 }
 
 function ShowCSRFHint() {
-    $('.main').prepend('<div class="hint"><p class="hint_bad"><?php echo $lang['error']['94']; ?></p></div>'.replace('%s', $('meta[name=csrfExpiration]').attr('content')));
+    const hintHTML = '<div class="hint"><p class="hint_bad"><?php echo $lang['error']['94']; ?></p></div>'.replace('%s', $('meta[name=csrfExpiration]').attr('content'))
+    const $hint = $(hintHTML);
+    // 如果存在 .hint-place 元素，则将提示插入该位置，否则插入到 .main 的开头
+    if ($('.hint-place').length > 0) {
+        $('.hint-place').after($hint);
+        return;
+    } else {
+        $('.main').prepend(hintMsg);
+    }
 }
 
 

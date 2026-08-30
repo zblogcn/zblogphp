@@ -30,7 +30,7 @@
     <p>
         <label>
             <span class="title">{$zbp->lang['msg']['add_to_navbar']}:</span>
-            <input type="text" name="AddNavbar" id="edtAddNavbar" value="{php}echo (int) $zbp->CheckItemToNavbar('tag', $tag->ID);{/php}" class="checkbox" />
+            <input type="text" name="AddNavbar" id="edtAddNavbar" value="{$zbp->CheckItemToNavbar('tag', $tag->ID)}" class="checkbox" />
         </label>
     </p>
     <div id='response' class='editmod2'>
@@ -44,7 +44,7 @@
 </form>
 <script>
     function checkInfo() {
-        document.getElementById("edit").action = "{php}echo BuildSafeCmdURL('act=TagPst');{/php}";
+        $("#edit").attr("action", "{BuildSafeCmdURL('act=TagPst')}");
         if (!$("#edtName").val()) {
             alert("{$zbp->lang['error']['72']}");
             return false;

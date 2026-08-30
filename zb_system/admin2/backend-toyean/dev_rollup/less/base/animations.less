@@ -1,0 +1,45 @@
+/* Animations */
+@keyframes shine {
+  100% {
+    left: 125%;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes layer-bounceIn {
+  0% {
+    opacity: 0;
+    transform: scale(.5)
+  }
+
+  100% {
+    opacity: 1;
+    transform: scale(1)
+  }
+}
+
+@keyframes layer-bounceOut {
+  100% {
+    opacity: 0;
+    transform: scale(.7)
+  }
+
+  30% {
+    transform: scale(1.05)
+  }
+
+  0% {
+    transform: scale(1)
+  }
+}
