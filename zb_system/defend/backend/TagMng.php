@@ -5,7 +5,7 @@
 <form class="search" id="search" method="post" action="#">
     <p>
         {$zbp.lang['msg']['search']}:
-        <input name="search" style="width:450px;" type="text" value="" />
+        <input aria-label="search" name="search" type="text" value="" />
         <input type="submit" class="button" value="{$zbp.lang['msg']['submit']}" />
     </p>
 </form>
@@ -14,7 +14,7 @@
 <form method="post" action="{$zbp.cmdurl}?act=TagBat">
     <input type="hidden" name="csrfToken" value="{$zbp.GetCSRFToken()}">
 
-    <table class="tableFull tableBorder tableBorder-thcenter table_hover table_striped">
+    <table class="tableFull tableBorder thCenter table_hover table_striped">
         <tr>
             <th>{$zbp.lang['msg']['id']}{$button_id_html}</th>
             <th>{$zbp.lang['msg']['name']}{$button_name_html}</th>
@@ -54,7 +54,7 @@
         {/if}
         {/foreach}
 
-        <input type="submit" name="all_del" onclick="return confirmDelete();" value="{$zbp.lang['msg']['all_del']}" class="button" style="float:right;" />
+        <input type="submit" name="all_del" onclick="return confirmDelete();" value="{$zbp.lang['msg']['all_del']}" class="button pull-right mr-10" />
     </p>
 
 </form>

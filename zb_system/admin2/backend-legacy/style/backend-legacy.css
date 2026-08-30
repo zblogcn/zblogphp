@@ -58,17 +58,16 @@ i.icon-arrow-repeat.loading-status:before {
   padding: 0.3em 0.5em 0.3em 0.8em;
   line-height: 1.5em;
   border-radius: 4px;
+  display: flex;
+  align-items: center;
 }
 .hint p:before {
+  height: 19px;
+  width: 19px;
   font-family: "zblog" !important;
-  font-style: normal;
-  font-weight: normal;
-  font-variant: normal;
-  text-transform: none;
-  vertical-align: middle;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  margin-right: 8px;
+  margin-right: 4px;
+  display: inline-flex;
+  justify-content: center;
 }
 .hint p.hint_good {
   border-color: #a8de9e;
@@ -101,6 +100,22 @@ img.plugin-off {
 
 .hidden {
   display: none;
+}
+
+.block {
+  display: block;
+}
+
+.overflow-hidden {
+  overflow: hidden;
+}
+
+.pull-right {
+  float: right;
+}
+
+.mr-10 {
+  margin-right: 10px;
 }
 
 /*! 布局组件 */
@@ -187,45 +202,6 @@ body.admin {
   font-weight: bold;
 }
 
-.left {
-  grid-area: left;
-}
-
-#leftmenu {
-  padding: 0;
-  margin: 0;
-}
-#leftmenu a {
-  display: block;
-  color: #333333;
-}
-#leftmenu a span {
-  display: flex;
-  height: 35px;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-}
-#leftmenu li {
-  background-color: #ededed;
-  margin-bottom: 8px;
-}
-#leftmenu li:hover {
-  background-color: #b0cdee;
-}
-#leftmenu li:hover a {
-  color: currentColor;
-}
-#leftmenu li.on {
-  background: #3399cc;
-}
-#leftmenu li.on a {
-  color: #ffffff;
-}
-#leftmenu li.split {
-  display: none;
-}
-
 .main {
   grid-area: main;
   padding-left: 10px;
@@ -266,119 +242,46 @@ body.admin {
   margin: 0;
 }
 
-/*! 通用组件 */
-table {
-  border-collapse: collapse;
-  box-shadow: 0 0 0.1em rgba(0, 0, 0, 0.3);
-}
-table td,
-table th {
-  padding: 0.5em;
-  border-right: 1px solid #efefef;
-}
-table td:last-child,
-table th:last-child {
-  border-right: none;
-}
-table td.center,
-table th.center {
-  text-align: center;
+.left {
+  grid-area: left;
 }
 
-table.tableFull {
-  width: 100%;
+#leftmenu {
+  padding: 0;
+  margin: 0;
 }
-table.tableBorder {
-  line-height: 1.8em;
-  margin: 0.4em 0 0.8em;
-}
-table.thCenter th {
-  text-align: center;
-}
-table.table_hover > tbody > tr:hover > td,
-table.table_hover > tbody > tr:hover > th {
-  background-color: #ffffdd;
-}
-table.table_striped > tbody > tr:nth-of-type(odd) {
-  background-color: #f4f4f4;
-}
-table th > [class^=icon-],
-table td > [class^=icon-] {
-  padding-right: 0.3em;
-}
-
-tr.color1 {
-  background: #ededed;
-}
-tr.color2 {
-  background: #f4f4f4;
-}
-tr.color3 {
-  background: #ffffff;
-}
-tr.color4 {
-  background: #ffffdd;
-}
-
-.td5 {
-  width: 5%;
-}
-
-.td10 {
-  width: 10%;
-}
-
-.td15 {
-  width: 15%;
-}
-
-.td20 {
-  width: 20%;
-}
-
-.td25 {
-  width: 25%;
-}
-
-.td30 {
-  width: 30%;
-}
-
-.td35 {
-  width: 35%;
-}
-
-.content-box ul {
-  padding: 10px 0 0;
-  display: flex;
-  gap: 9px;
-}
-.content-box li {
-  min-height: 2em;
-}
-.content-box .content-box-tabs a {
-  display: inline-flex;
-  padding: 4px 10px;
-}
-.content-box .content-box-tabs a.current {
-  background: #ededed;
+#leftmenu a {
+  display: block;
   color: #333333;
-  font-weight: bold;
 }
-.content-box .content-box-content {
-  margin-top: -1px;
+#leftmenu a span {
+  display: flex;
+  height: 35px;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
 }
-.content-box .content-box-content .tab-content {
+#leftmenu li {
+  background-color: #ededed;
+  margin-bottom: 8px;
+}
+#leftmenu li:hover {
+  background-color: #b0cdee;
+}
+#leftmenu li:hover a {
+  color: currentColor;
+}
+#leftmenu li.on {
+  background: #3399cc;
+}
+#leftmenu li.on a {
+  color: #ffffff;
+}
+#leftmenu li.split {
   display: none;
 }
-.content-box .content-box-content .tab-content td input[type=text],
-.content-box .content-box-content .tab-content td select {
-  height: 33px;
-}
-.content-box .content-box-content .tab-content.default-tab {
-  display: block;
-}
 
+/*! 通用组件 */
 form {
   margin: 0.5em 0;
 }
@@ -403,6 +306,15 @@ form.search input[type=text],
 form.search input.button,
 form.search select {
   height: 33px;
+}
+form.search select {
+  min-width: 150px;
+}
+form.search input[type=text] {
+  width: 200px;
+}
+form.search p > *:not(:last-child) {
+  margin-right: 0.7em;
 }
 
 textarea, select, input {
@@ -455,6 +367,16 @@ input[readonly], input[readonly]:hover {
 
 textarea {
   height: auto;
+}
+
+#edit textarea[name=Intro] {
+  width: 600px;
+}
+
+.label-flex {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3em;
 }
 
 /* checkbox */
@@ -544,55 +466,269 @@ textarea {
   border: 1px solid #ccc;
 }
 
-/*! 独立页面 */
-#frmTheme {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1em;
+table {
+  border-collapse: collapse;
+  box-shadow: 0 0 0.1em rgba(0, 0, 0, 0.3);
+}
+table td,
+table th {
+  padding: 0.5em;
+  border-right: 1px solid #efefef;
+  text-align: left;
+}
+table td:last-child,
+table th:last-child {
+  border-right: none;
+}
+table td.td-center, table td.th-center, table td.center,
+table th.td-center,
+table th.th-center,
+table th.center {
+  text-align: center;
 }
 
-.theme {
-  width: 230px;
-  padding: 0.6em 1em;
-}
-.theme > *:not(:last-child) {
-  margin-bottom: 5px;
-}
-.theme-img span > img {
+table.tableFull {
   width: 100%;
 }
-.theme-style {
+table.tableBorder {
+  line-height: 1.8em;
+  margin: 0.4em 0 0.8em;
+}
+table.thCenter th {
+  text-align: center;
+}
+table.table_hover tr:hover > td,
+table.table_hover tr:hover > th {
+  background-color: #ffffdd;
+}
+table.table_striped > tbody > tr:nth-of-type(odd) {
+  background-color: #f4f4f4;
+}
+table th > [class^=icon-],
+table td > [class^=icon-] {
+  padding-right: 0.3em;
+}
+
+tr.color1 {
+  background: #ededed;
+}
+tr.color2 {
+  background: #f4f4f4;
+}
+tr.color3 {
+  background: #ffffff;
+}
+tr.color4 {
+  background: #ffffdd;
+}
+
+.td5 {
+  width: 5%;
+}
+
+.td10 {
+  width: 10%;
+}
+
+.td15 {
+  width: 15%;
+}
+
+.td20 {
+  width: 20%;
+}
+
+.td25 {
+  width: 25%;
+}
+
+.td30 {
+  width: 30%;
+}
+
+.td35 {
+  width: 35%;
+}
+
+.content-box ul {
+  padding: 10px 0 0;
   display: flex;
-  gap: 0.3em;
+  gap: 9px;
+}
+.content-box li {
+  min-height: 2em;
+}
+.content-box .content-box-tabs a {
+  display: inline-flex;
+  padding: 4px 10px;
+}
+.content-box .content-box-tabs a.current {
+  background: #ededed;
+  color: #333333;
+  font-weight: bold;
+}
+.content-box .content-box-content {
+  margin-top: -1px;
+}
+.content-box .content-box-content .tab-content {
+  display: none;
+}
+.content-box .content-box-content .tab-content td input[type=text],
+.content-box .content-box-content .tab-content td select {
+  height: 33px;
+}
+.content-box .content-box-content .tab-content.default-tab {
+  display: block;
+}
+
+/*! 独立页面 */
+/* 使用 Grid 布局：主内容 + 侧栏 */
+form.post-edit {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 270px;
+  padding-right: 5px;
+}
+form.post-edit .editmod {
+  margin: 1em 0;
+}
+form.post-edit .editmod label {
+  max-width: 65px;
+  text-overflow: ellipsis;
+}
+form.post-edit .editmod .editinputname {
+  vertical-align: middle;
+  padding: 0 2px 0 3px;
+  line-height: 1em;
+  font-size: 1.05em;
+  font-weight: bold;
+}
+form.post-edit #edtTitle,
+form.post-edit #edtAlias,
+form.post-edit #edtTag {
+  max-width: 520px;
+  width: 99% !important;
+}
+
+#divEditLeft {
+  /* 主栏内元素占据第一列 (默认) */
+}
+#divEditLeft #ulTag {
+  margin: 0 3em;
+}
+#divEditLeft #ulTag #ajaxtags {
+  background: #f8f8f8;
+  box-shadow: 0 0 10px #aaa;
+  padding: 1em;
+}
+#divEditLeft #ulTag #ajaxtags a {
+  margin-right: 1em;
+}
+#divEditLeft #ulTag #ajaxtags a.selected {
+  color: black;
+  background: #f8f889;
+}
+#divEditLeft #carea,
+#divEditLeft #tarea,
+#divEditLeft #editor_content,
+#divEditLeft #editor_intro {
+  width: 100%;
+}
+#divEditLeft #carea,
+#divEditLeft #tarea {
+  margin: 5px 0 0;
+}
+#divEditLeft #editor_content {
+  min-height: 320px;
+}
+#divEditLeft #editor_intro {
+  min-height: 160px;
+}
+
+#divEditRight {
+  /* 侧栏在第二列 */
+  justify-self: end;
+  text-align: right;
+}
+#divEditRight .editmod select,
+#divEditRight .editmod input[type=text],
+#divEditRight #btnPost {
+  width: 180px;
+  height: 38px;
+}
+#divEditRight .editmod#istop select {
+  width: 80px;
+}
+
+body.admin-login {
+  min-width: 100%;
+}
+
+.login-header {
+  height: 260px;
+  padding-bottom: 13px;
+  margin-bottom: 37px;
+  background-color: #3a6ea5;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+.login-header .brand img {
+  width: 200px;
+  height: 70px;
+  background: url("image/logo_white.svg");
+}
+
+/* 表单容器 */
+.login-container {
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+}
+.login-container .login-form {
+  width: 600px;
+}
+.login-container .form-row {
+  display: flex;
+  flex-wrap: wrap;
+}
+.login-container {
+  /* 操作区 */
+}
+.login-container .form-row.actions .remember {
+  margin-right: auto;
+  display: inline-flex;
   align-items: center;
-  justify-content: space-between;
 }
-.theme-style input {
-  margin-right: 0;
+.login-container .field {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
 }
-.theme select.edit {
-  height: 29px;
-  padding: 0 5px;
-  border-color: #3a6ea5;
-  max-width: 9.3em;
-  outline: 0;
-  flex-grow: 1;
+.login-container .field label {
+  width: 64px;
+  margin-right: 12px;
+  text-align: right;
 }
-
-.theme-now {
-  background: #c1deff;
-  border: 1px solid #8eb5e2;
-}
-
-.theme-other {
-  background: #f0f0f0;
-  border: 1px solid #e2e2e2;
-}
-.theme-other:hover {
-  border-color: #c3c3c3;
-  box-shadow: 0 2px 2px 0 #ddd;
+.login-container .field input[type=text],
+.login-container .field input[type=password] {
+  flex: 1;
+  height: 32px;
+  border-radius: 2px;
 }
 
+/* 响应式：小屏改为单列 */
+@media (max-width: 720px) {
+  .login-form {
+    width: 100%;
+  }
+  .login-form .form-row {
+    padding: 0 30px 0 20px;
+  }
+  .login-form .form-row .field.placeholder {
+    display: none;
+  }
+}
 .module-layout {
   display: flex;
   margin: 1.3em 0;
@@ -733,79 +869,50 @@ textarea {
   text-align: center;
 }
 
-/* 使用 Grid 布局：主内容 + 侧栏 */
-form.post-edit {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) 270px;
-  padding-right: 5px;
-}
-form.post-edit .editmod {
-  margin: 1em 0;
-}
-form.post-edit .editmod label {
-  max-width: 65px;
-  text-overflow: ellipsis;
-}
-form.post-edit .editmod .editinputname {
-  vertical-align: middle;
-  padding: 0 2px 0 3px;
-  line-height: 1em;
-  font-size: 1.05em;
-  font-weight: bold;
-}
-form.post-edit #edtTitle,
-form.post-edit #edtAlias,
-form.post-edit #edtTag {
-  max-width: 520px;
-  width: 99% !important;
+#frmTheme {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1em;
 }
 
-#divEditLeft {
-  /* 主栏内元素占据第一列 (默认) */
+.theme {
+  width: 230px;
+  padding: 0.6em 1em;
 }
-#divEditLeft #ulTag {
-  margin: 0 3em;
+.theme > *:not(:last-child) {
+  margin-bottom: 5px;
 }
-#divEditLeft #ulTag #ajaxtags {
-  background: #f8f8f8;
-  box-shadow: 0 0 10px #aaa;
-  padding: 1em;
-}
-#divEditLeft #ulTag #ajaxtags a {
-  margin-right: 1em;
-}
-#divEditLeft #ulTag #ajaxtags a.selected {
-  color: black;
-  background: #f8f889;
-}
-#divEditLeft #carea,
-#divEditLeft #tarea,
-#divEditLeft #editor_content,
-#divEditLeft #editor_intro {
+.theme-img span > img {
   width: 100%;
 }
-#divEditLeft #carea,
-#divEditLeft #tarea {
-  margin: 5px 0 0;
+.theme-style {
+  display: flex;
+  gap: 0.3em;
+  align-items: center;
+  justify-content: space-between;
 }
-#divEditLeft #editor_content {
-  min-height: 320px;
+.theme-style input {
+  margin-right: 0;
 }
-#divEditLeft #editor_intro {
-  min-height: 160px;
+.theme select.edit {
+  height: 29px;
+  padding: 0 5px;
+  border-color: #3a6ea5;
+  max-width: 9.3em;
+  outline: 0;
+  flex-grow: 1;
 }
 
-#divEditRight {
-  /* 侧栏在第二列 */
-  justify-self: end;
-  text-align: right;
+.theme-now {
+  background: #c1deff;
+  border: 1px solid #8eb5e2;
 }
-#divEditRight .editmod select,
-#divEditRight .editmod input[type=text],
-#divEditRight #btnPost {
-  width: 180px;
-  height: 38px;
+
+.theme-other {
+  background: #f0f0f0;
+  border: 1px solid #e2e2e2;
 }
-#divEditRight .editmod#istop select {
-  width: 80px;
+.theme-other:hover {
+  border-color: #c3c3c3;
+  box-shadow: 0 2px 2px 0 #ddd;
 }

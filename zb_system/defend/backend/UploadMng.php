@@ -5,15 +5,15 @@
 <form class="search" name="upload" id="upload" method="post" enctype="multipart/form-data" action="{BuildSafeCmdURL('act=UploadPst')}">
     <p>{$zbp.lang['msg']['upload_file']}: </p>
     <p>
-        <input type="file" name="file" size="60" />
-        <label><input type="checkbox" name="auto_rename" checked />{$zbp.lang['msg']['auto_rename_uploadfile']}</label>
+        <input type="file" name="file" aria-label="file" size="60" />
+        <label class="label-flex"><input type="checkbox" name="auto_rename" checked />{$zbp.lang['msg']['auto_rename_uploadfile']}</label>
         <input type="submit" class="button" value="{$zbp.lang['msg']['submit']}" />
         <input class="button" type="reset" value="{$zbp.lang['msg']['reset']}" />
     </p>
 </form>
 
 <!-- 文件列表 -->
-<table class="tableFull tableBorder tableBorder-thcenter table_hover table_striped">
+<table class="tableFull tableBorder thCenter table_hover table_striped">
     <tr>
         <th>{$zbp.lang['msg']['id']}{$button_id_html}</th>
         <th>{$zbp.lang['msg']['author']}{$button_authorid_html}</th>

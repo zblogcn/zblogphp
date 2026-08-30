@@ -23,18 +23,18 @@ i.icon-arrow-repeat.loading-status:before {
     padding: 0.3em 0.5em 0.3em 0.8em;
     line-height: 1.5em;
     border-radius: 4px;
+    display: flex;
+    align-items: center;
 
     // 图标基础样式
     &:before {
+      height: 19px;
+      width: 19px;
       font-family: "zblog" !important;
-      font-style: normal;
-      font-weight: normal;
-      font-variant: normal;
-      text-transform: none;
-      vertical-align: middle;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-      margin-right: 8px;
+      // vertical-align: middle;
+      margin-right: 4px;
+      display: inline-flex;
+      justify-content: center;
     }
 
     // 成功提示
@@ -78,4 +78,20 @@ img.plugin-off {
 
 .hidden {
   display: none;
+}
+
+.block {
+  display: block;
+}
+
+.overflow-hidden {
+  overflow: hidden;
+}
+
+.pull-right {
+  float: right;
+}
+
+.mr-10 {
+  margin-right: 10px;
 }

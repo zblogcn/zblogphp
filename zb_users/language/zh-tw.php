@@ -295,9 +295,15 @@ return [
         ''                                  => '',
         'closemenu'                         => '折疊選單',
         'expandmenu'                        => '展開選單',
-        'ai_url'                            => 'AI Url',
-        'ai_key'                            => 'AI Key',
-        'ai_model'                          => 'AI模型名',
+        'text_ai_url'                       => '文本AI Url',
+        'text_ai_key'                       => '文本AI Key',
+        'text_ai_model'                     => '文本AI模型名',
+        'image_ai_url'                      => '图形AI Url',
+        'image_ai_key'                      => '图形AI Key',
+        'image_ai_model'                    => '图形AI模型名',
+        'video_ai_url'                      => '视频AI Url',
+        'video_ai_key'                      => '视频AI Key',
+        'video_ai_model'                    => '视频AI模型名',
     ],
 
     //Action

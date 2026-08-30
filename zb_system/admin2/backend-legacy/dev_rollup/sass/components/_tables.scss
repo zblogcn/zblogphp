@@ -10,11 +10,14 @@ table {
   th {
     padding: 0.5em;
     border-right: 1px solid $color-border;
+    text-align: left;
 
     &:last-child {
       border-right: none;
     }
 
+    &.td-center,
+    &.th-center,
     &.center {
       text-align: center;
     }
@@ -38,13 +41,10 @@ table {
   }
 
   &.table_hover {
-    >tbody>tr {
-      &:hover {
-
-        >td,
-        >th {
-          background-color: #ffffdd;
-        }
+    tr:hover {
+      >td,
+      >th {
+        background-color: #ffffdd;
       }
     }
   }

@@ -1060,6 +1060,9 @@ class ZBlogPHP
         Add_Filter_Plugin('Filter_Plugin_Search_Begin', 'Include_Index_Begin');
         Add_Filter_Plugin('Filter_Plugin_Feed_Begin', 'Include_Index_Begin');
         Add_Filter_Plugin('Filter_Plugin_Zbp_CheckRights', 'Include_Frontend_CheckRights');
+        if (true == $this->isajax && 2 == $this->option['ZC_MANAGE_UI']) {
+            Add_Filter_Plugin('Filter_Plugin_Cmd_Ajax', 'include_get_c_admin_js_add_data');
+        }
 
         foreach ($GLOBALS['hooks']['Filter_Plugin_Zbp_Load'] as $fpname => &$fpsignal) {
             $fpname();

@@ -5,21 +5,25 @@
 <form class="search" id="search" method="post" action="#">
     <p>
         {$zbp.lang['msg']['search']}:
-        {$zbp.lang['msg']['member_level']}
-        <select class="edit" size="1" name="level" style="width:140px;">
-            <option value="">{$zbp.lang['msg']['any']}</option>
-            {foreach $zbp.lang['user_level_name'] as $curId => $curName}
-            <option value="{$curId}">{$curName}</option>
-            {/foreach}
-        </select>
+        <!-- 用户级别 -->
+        <label>
 
-        <input name="search" style="width:250px;" type="text" value="" />
+            {$zbp.lang['msg']['member_level']}
+            <select class="edit" size="1" name="level">
+                <option value="">{$zbp.lang['msg']['any']}</option>
+                {foreach $zbp.lang['user_level_name'] as $curId => $curName}
+                <option value="{$curId}">{$curName}</option>
+                {/foreach}
+            </select>
+        </label>
+
+        <input aria-label="search" name="search" type="text" value="" />
         <input type="submit" class="button" value="{$zbp.lang['msg']['submit']}" />
     </p>
 </form>
 
 <!-- 用户列表 -->
-<table class="tableFull tableBorder tableBorder-thcenter table_hover table_striped">
+<table class="tableFull tableBorder thCenter table_hover table_striped">
     <tr>
         <th>{$zbp.lang['msg']['id']}{$button_id_html}</th>
         <th>{$zbp.lang['msg']['member_level']}{$button_level_html}</th>

@@ -1375,7 +1375,7 @@ function Fix_16_to_17_and_17_to_16_Error()
  *
  * @param mixed $src
  */
-function get_c_admin_js_add_data($src)
+function include_get_c_admin_js_add_data($src)
 {
     global $zbp;
 

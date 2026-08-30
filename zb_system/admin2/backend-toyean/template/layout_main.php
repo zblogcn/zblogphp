@@ -1,10 +1,10 @@
 <?php exit(); ?>
+<p class="hint-place hidden"></p>
+{php}
+$zbp->GetHint();
+HookFilterPlugin('Filter_Plugin_Admin_Hint');
+{/php}
 <div class="content">
-    <p class="hint-place hidden"></p>
-    {php}
-    $zbp->GetHint();
-    HookFilterPlugin('Filter_Plugin_Admin_Hint');
-    {/php}
     <div class="title">
         <h2><span>{$main->Header}</span>
             <ul id="topmenu">{if $main.Action=='admin'}{ResponseAdmin_TopMenu()}{/if}{$main->SubMenu}</ul>

@@ -10,7 +10,7 @@
                 {$zbp.lang['msg']['site_analyze']}
 
                 {if $zbp->CheckRights('root')}
-                <a href="javascript:statistic('{$reload_url}');" id="statistic" title="{$zbp.lang['msg']['refresh_cache']}" data-time="{$reload_time}"><i class="icon-arrow-repeat" style="font-size:small; margin-right: 0.2em;" alt="{$zbp.lang['msg']['refresh_cache']}"></i><small>{$zbp.lang['msg']['refresh_cache']}</small></a>
+                <a href="javascript:statistic('{$reload_url}');" id="statistic" title="{$zbp.lang['msg']['refresh_cache']}" data-time="{$reload_time}"><i class="icon-arrow-repeat" alt="{$zbp.lang['msg']['refresh_cache']}"></i><small>{$zbp.lang['msg']['refresh_cache']}</small></a>
                 {/if}
 
             </th>
@@ -18,7 +18,7 @@
         {if $zbp.isdebug}
         <!--debug_mode_note-->
         <tr>
-            <td colspan='4' style='text-align: center'>{$zbp.lang['msg']['debugging_warning']}</td>
+            <td colspan='4' class="center">{$zbp.lang['msg']['debugging_warning']}</td>
         </tr>
         {/if}
         <tr>
@@ -72,7 +72,7 @@
                 {$zbp.lang['msg']['latest_news']}
 
                 {if $zbp->CheckRights('root')}
-                <a href="javascript:updateinfo('{$reload_reload_updateinfo_url}');" id="updateinfo" title="{$zbp.lang['msg']['refresh']}" data-time="{$reload_updateinfo_time}"><i class="icon-arrow-repeat" style="font-size:small; margin-right: 0.2em;" alt="{$zbp.lang['msg']['refresh']}"></i><small>{$zbp.lang['msg']['refresh']}</small></a>
+                <a href="javascript:updateinfo('{$reload_reload_updateinfo_url}');" id="updateinfo" title="{$zbp.lang['msg']['refresh']}" data-time="{$reload_updateinfo_time}"><i class="icon-arrow-repeat" alt="{$zbp.lang['msg']['refresh']}"></i><small>{$zbp.lang['msg']['refresh']}</small></a>
                 {/if}
             </th>
         </tr>
@@ -82,15 +82,13 @@
 
 <!-- 感谢信息 -->
 <table class="tableFull tableBorder table_hover table_striped" id="thankslist">
-    <thead>
+    <tbody>
         <tr>
-            <th>
+            <th colspan="2">
                 <i class="icon-flag-fill"></i>
                 {$zbp->lang['msg']['develop_intro']}
             </th>
         </tr>
-    </thead>
-    <tbody>
         {foreach $thanksInfo as $group}
         <tr>
             <td class="td20"><i class="{$group['icon']}"></i>{$group['category']}</td>

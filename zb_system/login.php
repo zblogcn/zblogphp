@@ -5,14 +5,17 @@
  *
  * @author Z-BlogPHP Team
  */
-
 require 'function/c_system_base.php';
 
 $zbp->Load();
 if ($zbp->CheckRights('admin')) {
     Redirect302('cmd.php?act=admin');
 }
-?><!DOCTYPE HTML>
+if (1 != $zbp->option['ZC_MANAGE_UI']) {
+    Redirect("{$zbp->host}zb_system/admin2/login.php");
+}
+?>
+<!DOCTYPE HTML>
 <html lang="<?php echo $lang['lang_bcp47']; ?>">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -25,7 +28,7 @@ if ($zbp->CheckRights('admin')) {
     <script src="script/jquery-latest.min.js?<?php echo $blogversion; ?>"></script>
     <script src="script/zblogphp.js?<?php echo $blogversion; ?>"></script>
     <script src="script/md5.js?<?php echo $blogversion; ?>"></script>
-    <script src="script/c_admin_js_add.php?hash=<?php echo $zbp->html_js_hash; ?>&<?php echo $blogversion; ?>"></script>
+    <script src="script/c_admin_js_add.php?hash=<?php echo $zbp->html_js_hash; ?> & <?php echo $blogversion; ?>"></script>
     <title><?php echo $blogname . '-' . $lang['msg']['login']; ?></title>
 <?php
 HookFilterPlugin('Filter_Plugin_Login_Header');
@@ -44,11 +47,11 @@ HookFilterPlugin('Filter_Plugin_Login_Header');
 
       <dd class="password"><label for="edtPassWord"><?php echo $lang['msg']['password']; ?></label><input type="password" id="edtPassWord" name="edtPassWord" size="20" tabindex="2" /></dd>
 
-      <?php if ($zbp->option['ZC_LOGIN_VERIFY_ENABLE']) : ?>
+      <?php if ($zbp->option['ZC_LOGIN_VERIFY_ENABLE']) { ?>
       <dd class="validcode"><label for="edtValidcode"><?php echo $lang['msg']['validcode']; ?></label><input type="text" maxlength="<?php echo $zbp->option['ZC_VERIFYCODE_LENGTH']; ?>" id="edtValidcode" name="verify" size="20" tabindex="10" />
           <img src="<?php echo $zbp->host; ?>zb_system/script/c_validcode.php?id=login&time=m" onClick="javascript:this.src='<?php echo $zbp->host; ?>zb_system/script/c_validcode.php?id=login&time=m&tm='+Math.random();" alt="validcode"/>
       </dd>
-      <?php endif; ?>
+      <?php } ?>
 
     </dl>
     <dl>
@@ -75,12 +78,12 @@ $("#btnPost").click(function(){
         return false;
     }
 
-    <?php if ($zbp->option['ZC_LOGIN_VERIFY_ENABLE']) : ?>
+    <?php if ($zbp->option['ZC_LOGIN_VERIFY_ENABLE']) { ?>
     if ($("#edtValidcode").val() === ""){
         alert("<?php echo $lang['error']['66']; ?>");
         return false;
     }
-    <?php endif; ?>
+    <?php } ?>
     $("form").attr("action","cmd.php?act=verify");
     $("#edtUserName").val("");
     $("#edtPassWord").val("");
@@ -98,4 +101,3 @@ $("#chkRemember").click(function(){
 </html>
 <?php
 RunTime();
-

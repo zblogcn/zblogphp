@@ -4,63 +4,79 @@
     <input id="edtID" name="ID" type="hidden" value="{$member->ID}" />
     <!-- 用户等级 -->
     <p>
-        <span class="title">{$zbp->lang['msg']['member_level']}:</span>
-        <br />
+        <label for="cmbLevel" class="block">
+            <span class="title">{$zbp->lang['msg']['member_level']}:</span>
+        </label>
         <select class="edit" size="1" name="Level" id="cmbLevel">
             {OutputOptionItemsOfMemberLevel($member->Level)}
         </select>
         {if $zbp->CheckRights('MemberAll') && $zbp->user->ID != $member->ID}
-        &nbsp;(
         <span class="title">{$zbp->lang['msg']['status']}:</span>
-        <input id="user_status_0" name="Status" type="radio" class="radio" value="0" {if $member->Status == 0}checked="checked"{/if}/>&nbsp;
-        <label for="user_status_0">{$zbp->lang['user_status_name'][0]}</label>
-        &nbsp;&nbsp;
-        <input id="user_status_1" name="Status" type="radio" class="radio" value="1" {if $member->Status == 1}checked="checked"{/if}/>&nbsp;
-        <label for="user_status_1">{$zbp->lang['user_status_name'][1]}</label>
-        &nbsp;&nbsp;
-        <input id="user_status_2" name="Status" type="radio" class="radio" value="2" {if $member->Status == 2}checked="checked"{/if}/>&nbsp;
-        <label for="user_status_2">{$zbp->lang['user_status_name'][2]}</label>
-        )
+
+        {for $index = 0; $index < 3; $index++}
+            <label for="user_staus_{$index}">
+            <input id="user_staus_{$index}" name="Status" type="radio" class="radio" value="{$index}" {if $member->Status == $index}checked="checked"{/if}/>&nbsp;{$zbp->lang['user_status_name'][$index]}
+            </label>
+        {/for}
+
         {/if}
     </p>
     <!-- 用户名 -->
     <p>
-        <span class="title">{$zbp->lang['msg']['name']}:</span><span class="star">(*)</span><br />
-        <input id="edtName" class="edit" size="40" name="Name" maxlength="{$zbp->option['ZC_USERNAME_MAX']}" type="text" value="{$member->Name}" {if !$zbp->CheckRights('MemberAll')}readonly="readonly"{/if}/>
+        <label for="edtName" class="block">
+            <span class="title">{$zbp->lang['msg']['name']}:</span>
+            <span class="star">(*)</span>
+        </label>
+        <input id="edtName" class="edit" size="40" name="Name" maxlength="{$zbp->option['ZC_USERNAME_MAX']}" type="text" value="{$member->Name}" autocomplete="off" {if !$zbp->CheckRights('MemberAll')}readonly="readonly"{/if} />
     </p>
     <!-- 用户密码 -->
     <p>
-        <span class="title">{$zbp->lang['msg']['password']}:</span><br />
+        <label for="edtPassword" class="block">
+            <span class="title">{$zbp->lang['msg']['password']}:</span>
+        </label>
         <input id="edtPassword" class="edit" size="40" name="Password" type="password" value="" autocomplete="off" />
     </p>
     <!-- 确认密码 -->
     <p>
-        <span class="title">{$zbp->lang['msg']['re_password']}:</span><br />
+        <label for="edtPasswordRe" class="block">
+            <span class="title">{$zbp->lang['msg']['re_password']}:</span>
+        </label>
         <input id="edtPasswordRe" class="edit" size="40" name="PasswordRe" type="password" value="" autocomplete="off" />
     </p>
     <!-- 电子邮箱 -->
     <p>
-        <span class="title">{$zbp->lang['msg']['email']}:</span><span class="star">(*)</span><br />
+        <label for="edtEmail" class="block">
+            <span class="title">{$zbp->lang['msg']['email']}:</span>
+            <span class="star">(*)</span>
+        </label>
         <input id="edtEmail" class="edit" size="40" name="Email" type="text" value="{$member->Email}" />
     </p>
     <!-- 别名 -->
     <p>
-        <span class="title">{$zbp->lang['msg']['alias']}:</span><br />
+        <label for="edtAlias" class="block">
+            <span class="title">{$zbp->lang['msg']['alias']}:</span>
+        </label>
         <input id="edtAlias" class="edit" size="40" name="Alias" type="text" value="{$member->Alias}" />
     </p>
     <!-- 主页 -->
     <p>
-        <span class="title">{$zbp->lang['msg']['homepage']}:</span><br />
+        <label for="edtHomePage" class="block">
+            <span class="title">{$zbp->lang['msg']['homepage']}:</span>
+        </label>
         <input id="edtHomePage" class="edit" size="40" name="HomePage" type="text" value="{$member->HomePage}" />
     </p>
     <!-- 介绍 -->
     <p>
-        <span class="title">{$zbp->lang['msg']['intro']}:</span><br />
-        <textarea cols="3" rows="6" id="edtIntro" name="Intro" style="width:600px;">{htmlspecialchars($member->Intro)}</textarea>
+        <label for="edtIntro" class="block">
+            <span class="title">{$zbp->lang['msg']['intro']}:</span>
+        </label>
+        <textarea rows="6" id="edtIntro" name="Intro">{htmlspecialchars($member->Intro)}</textarea>
     </p>
     <!-- 模板 -->
     <p>
-        <span class="title">{$zbp->lang['msg']['template']}:</span><br />
+        <label for="cmbTemplate" class="block">
+            <span class="title">{$zbp->lang['msg']['template']}:</span>
+        </label>
         <select class="edit" size="1" name="Template" id="cmbTemplate">
             {OutputOptionItemsOfTemplate($member->Template, array('single', '404', 'module', 'search', 'lm-'), array('list', 'author'))}
         </select>

@@ -5,27 +5,31 @@
     <input id="edtID" name="ID" type="hidden" value="{$tag->ID}" />
     <input id="edtType" name="Type" type="hidden" value="{$tag->Type}" />
     <p>
-        <span class="title">{$zbp->lang['msg']['name']}:</span>
-        <span class="star">(*)</span>
-        <br />
-        <input id="edtName" class="edit" size="40" name="Name" maxlength="{$option['ZC_TAGS_NAME_MAX']}" type="text" value="{$tag->Name}" />
+        <label for="edtName" class="block">
+            <span class="title">{$zbp->lang['msg']['name']}:</span>
+            <span class="star">(*)</span>
+        </label>
+        <input id="edtName" class="edit" size="40" name="Name" maxlength="{$option['ZC_TAGS_NAME_MAX']}" type="text" value="{$tag->Name}" autocomplete="off" />
     </p>
     <p>
-        <span class="title">{$zbp->lang['msg']['alias']}:</span>
-        <br />
+        <label for="edtAlias" class="block">
+            <span class="title">{$zbp->lang['msg']['alias']}:</span>
+        </label>
         <input id="edtAlias" class="edit" size="40" name="Alias" type="text" value="{$tag->Alias}" />
     </p>
     <p>
-        <span class="title">{$zbp->lang['msg']['template']}:</span>
-        <br />
+        <label for="cmbTemplate" class="block">
+            <span class="title">{$zbp->lang['msg']['template']}:</span>
+        </label>
         <select class="edit" size="1" name="Template" id="cmbTemplate">
             {OutputOptionItemsOfTemplate($tag->Template, array('single', '404', 'module', 'search', 'lm-'), array('list', 'tag'))}
         </select>
     </p>
     <p>
-        <span class='title'>{$zbp->lang['msg']['intro']}:</span>
-        <br />
-        <textarea cols="3" rows="6" id="edtIntro" name="Intro" style="width:600px;">{$tag->Intro}</textarea>
+        <label for="edtIntro" class="block">
+            <span class='title'>{$zbp->lang['msg']['intro']}:</span>
+        </label>
+        <textarea rows="6" id="edtIntro" name="Intro">{$tag->Intro}</textarea>
     </p>
     <p>
         <label>

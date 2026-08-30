@@ -1,0 +1,85 @@
+@use "../base/variables" as *;
+
+body.admin-login {
+  min-width: 100%;
+}
+
+.login-header {
+  height: 260px;
+  padding-bottom: 13px;
+  margin-bottom: 37px;
+  background-color: $color-primary;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+
+  .brand {
+    img {
+      width: 200px;
+      height: 70px;
+      background: url("image/logo_white.svg");
+    }
+
+  }
+}
+
+/* 表单容器 */
+.login-container {
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+
+  .login-form {
+    width: 600px;
+  }
+
+  .form-row {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  /* 操作区 */
+  .form-row.actions {
+    .remember {
+      margin-right: auto;
+      display: inline-flex;
+      align-items: center;
+    }
+  }
+
+  .field {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+
+  .field label {
+    width: 64px;
+    margin-right: 12px;
+    text-align: right;
+  }
+
+
+  .field input[type="text"],
+  .field input[type="password"] {
+    flex: 1;
+    height: 32px;
+    border-radius: 2px;
+  }
+}
+
+/* 响应式：小屏改为单列 */
+@media (max-width: 720px) {
+  .login-form {
+    width: 100%;
+
+    .form-row {
+      padding: 0 30px 0 20px;
+
+      .field.placeholder {
+        display: none;
+      }
+    }
+  }
+}
