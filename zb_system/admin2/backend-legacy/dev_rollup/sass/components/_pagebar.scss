@@ -1,3 +1,5 @@
+@use "../base/variables" as *;
+
 %pageBarItem {
   padding: 2px 5px;
   margin: 1px;
@@ -15,7 +17,7 @@
   a {
     @extend %pageBarItem;
     border-radius: 0.3em;
-    border: 1px solid #efefef;
+    border: 1px solid $color-border;
 
     &:hover {
       border: 1px solid #ccc;

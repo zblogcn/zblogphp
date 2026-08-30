@@ -1,14 +1,74 @@
 /* 使用 Grid 布局：主内容 + 侧栏 */
-form#edit {
+form#post-edit {
   display: grid;
-  grid-template-columns: 1fr 270px;
-  max-width: fit-content;
+  grid-template-columns: minmax(0, 1fr) 270px;
+  padding-right: 5px;
+
+  .editmod {
+    margin: 1em 0;
+
+    label {
+      max-width: 65px;
+      text-overflow: ellipsis;
+    }
+
+    .editinputname {
+      vertical-align: middle;
+      padding: 0 2px 0 3px;
+      line-height: 1em;
+      font-size: 1.05em;
+      font-weight: bold;
+    }
+  }
+
+  #edtTitle,
+  #edtAlias,
+  #edtTag {
+    max-width: 520px;
+    width: 99% !important;
+  }
 }
 
 #divEditLeft {
   /* 主栏内元素占据第一列 (默认) */
-  label {
-    vertical-align: middle;
+
+  #ulTag {
+    margin: 0 3em;
+
+    #ajaxtags {
+      background: #f8f8f8;
+      box-shadow: 0 0 10px #aaa;
+      padding: 1em;
+
+      a {
+        margin-right: 1em;
+
+        &.selected {
+          color: black;
+          background: #f8f889;
+        }
+      }
+    }
+  }
+
+  #carea,
+  #tarea,
+  #editor_content,
+  #editor_intro {
+    width: 100%;
+  }
+
+  #carea,
+  #tarea {
+    margin: 5px 0 0;
+  }
+
+  #editor_content {
+    min-height: 320px;
+  }
+
+  #editor_intro {
+    min-height: 160px;
   }
 }
 
@@ -17,10 +77,15 @@ form#edit {
   justify-self: end;
   text-align: right;
 
-  .editmod>select,
-  .editmod>input[type="text"],
+  .editmod select,
+  .editmod input[type="text"],
   #btnPost {
     width: 180px;
     height: 38px;
   }
+
+  .editmod#istop select {
+    width: 80px;
+  }
+
 }

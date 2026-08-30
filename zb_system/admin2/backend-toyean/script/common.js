@@ -256,11 +256,11 @@ $(function(){
 	//右上角用户菜单
 	$(document).on('click', '.userlink', function(e){
 		e.stopPropagation();
-		$(".usermenu").toggleClass("on");
+		$(".userlink,.usermenu").toggleClass("on");
 	});
 	$(document).on("click",function(e){
 		if (!$(e.target).closest('.userlink, .usermenu').length) {
-			$(".usermenu").removeClass("on");
+			$(".userlink,.usermenu").removeClass("on");
 		}
 	});
 
@@ -321,13 +321,20 @@ $(function(){
 		zbp.cookie.set('side', flag ? '1' : '0');   // 你自己的封装
 	});
 
-	/* 读：DOM 就绪后恢复 */
-	const stored = zbp.cookie.get('side');
-	if (stored === '1') {
-		$('.side').addClass('on');
-		$('.fademask').addClass('on');
-		$('.main').addClass('on');
-	}
+
+	$(window).resize(function(){
+		if($(window).width() > 860){
+			/* 读：DOM 就绪后恢复 */
+			const stored = zbp.cookie.get('side');
+			//页面宽度大于860时记忆菜单状态
+			if (stored === '1') {
+				$('.side').addClass('on');
+				$('.fademask').addClass('on');
+				$('.main').addClass('on');
+			}
+		}
+	});
+
 
 	//主菜单tips
 	$('<div class="menutip" id="menutip"></div>').appendTo('body');

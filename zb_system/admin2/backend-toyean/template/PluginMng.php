@@ -1,60 +1,56 @@
-<?php die(); ?>
+<?php exit(); ?>
 
+<div class="postlist">
+  <div class="tr thead"> 
+    <div class="td-5"></div>
+    <div class="td-full">{$zbp.lang['msg']['name']}</div>
+		<div class="td-15 td-author">{$zbp.lang['msg']['author']}</div>
+		<div class="td-10">{$zbp.lang['msg']['date']}</div>
+    <div class="td-full"></div>
+  </div>
+</div>
 
-<table class="tableFull tableBorder tableBorder-thcenter table_hover table_striped plugin-list">
-  <tr>
-    <th></th>
-    <th>{$zbp.lang['msg']['name']}</th>
-    <th>{$zbp.lang['msg']['author']}</th>
-    <th>{$zbp.lang['msg']['date']}</th>
-    <th></th>
-  </tr>
-
-  {foreach $plugins as $plugin}
-  {php}<?php
-        $pluginIdEscaped = htmlspecialchars($plugin->id);
-        $pluginNoteEscaped = htmlspecialchars($plugin->note);
-        $pluginNameEscaped = htmlspecialchars($plugin->name);
-        $pluginVersionEscaped = htmlspecialchars($plugin->version);
-        $pluginAuthorUrlEscaped = htmlspecialchars($plugin->author_url);
-        $pluginAuthorNameEscaped = htmlspecialchars($plugin->author_name);
-        $pluginModifiedEscaped = htmlspecialchars($plugin->modified);
-        ?>{/php}
-  <tr>
-    <td class="td5 tdCenter{if $plugin.type == 'plugin'} plugin{/if}{if $plugin.IsUsed()} plugin-on{/if}" data-pluginid="{$pluginIdEscaped}">
-      <img {if !$plugin.IsUsed()}style="opacity:0.2" {/if} src="{$plugin.GetLogo()}" alt="" width="32" height="32" />
-    </td>
-    <td class="td25">
-      <span class="plugin-note" title="{$pluginNoteEscaped}">{$pluginNameEscaped} {$pluginVersionEscaped}</span>
-    </td>
-    <td class="td20">
-      <a href="{$pluginAuthorUrlEscaped}" target="_blank">{$pluginAuthorNameEscaped}</a>
-    </td>
-    <td class="td20">{$pluginModifiedEscaped}</td>
-    <td class="td10 tdCenter">
-      {if $plugin.type == 'plugin'}
+{foreach $plugins as $plugin}
+{php}<?php
+      $pluginIdEscaped = htmlspecialchars($plugin->id);
+      $pluginNoteEscaped = htmlspecialchars($plugin->note);
+      $pluginNameEscaped = htmlspecialchars($plugin->name);
+      $pluginVersionEscaped = htmlspecialchars($plugin->version);
+      $pluginAuthorUrlEscaped = htmlspecialchars($plugin->author_url);
+      $pluginAuthorNameEscaped = htmlspecialchars($plugin->author_name);
+      $pluginModifiedEscaped = htmlspecialchars($plugin->modified);
+?>{/php}
+<div class="tr"> 
+  <div class="td-5{if $plugin.type == 'plugin'} plugin{/if}{if $plugin.IsUsed()} plugin-on{/if}"><img {if !$plugin.IsUsed()}style="opacity:0.2" {/if} src="{$plugin.GetLogo()}" alt="" width="32" height="32"></div>
+  <div class="td-full"><span class="plugin-note" title="{$pluginNoteEscaped}">{$pluginNameEscaped} {$pluginVersionEscaped}</span></div>
+  <div class="td-15"><a href="{$pluginAuthorUrlEscaped}" target="_blank">{$pluginAuthorNameEscaped}</a></div>
+  <div class="td-10">{$pluginModifiedEscaped}</div>
+  <div class="td-full td-action">
+    {if $plugin.type == 'plugin'}
       {if $plugin.IsUsed()}
       <a href="{php}echo BuildSafeCmdURL('act=PluginDis&name='.$pluginIdEscaped);{/php}" title="{$zbp.lang['msg']['disable']}" class="btn-icon btn-disable" data-pluginid="{$pluginIdEscaped}">
-        <i class="icon-cancel on"></i>
+        关闭
       </a>
       &nbsp;&nbsp;&nbsp;&nbsp;
       {else}
       <a href="{php}echo BuildSafeCmdURL('act=PluginEnb&name='.$pluginIdEscaped);{/php}" title="{$zbp.lang['msg']['enable']}" class="btn-icon btn-enable" data-pluginid="{$pluginIdEscaped}">
-        <i class="icon-power off"></i>
+        开启
       </a>
       {/if}
-      {/if}
+    {/if}
 
       {if $plugin.IsUsed() && $plugin.CanManage()}
       <a href="{$plugin.GetManageUrl()}" title="{$zbp.lang['msg']['manage']}" class="btn-icon btn-manage" data-pluginid="{$pluginIdEscaped}">
-        <i class="icon-tools"></i>
+        配置
       </a>
       {/if}
-    </td>
-  </tr>
-  {/foreach}
 
-</table>
+  </div>
+</div>
+
+{/foreach}
+
+
 
 <script>
   $(".plugin-note").tooltip();

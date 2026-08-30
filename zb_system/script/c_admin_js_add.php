@@ -3,6 +3,7 @@
  * Z-Blog with PHP.
  *
  * @author  Z-BlogPHP Team
+ *
  * @version 2.0 2013-06-14
  */
 require '../function/c_system_base.php';
@@ -226,7 +227,7 @@ function AddHeaderFontIcon(icon_class){
 
 
 function AutoHideTips(){
-    $("p.hint:visible").each(function(i){
+    $(".hint-msg:visible").each(function(i){
         if ( !$(this).hasClass("hint_always") ){
             $(this).delay($(this).attr("data-delay")).hide(1500,function(){});
         }
@@ -234,7 +235,7 @@ function AutoHideTips(){
 }
 
 function ShowCSRFHint() {
-    $('.main').prepend('<div class="hint"><p class="hint hint_bad"><?php echo $lang['error']['94']; ?></p></div>'.replace('%s', $('meta[name=csrfExpiration]').attr('content')));
+    $('.main').prepend('<div class="hint"><p class="hint_bad"><?php echo $lang['error']['94']; ?></p></div>'.replace('%s', $('meta[name=csrfExpiration]').attr('content')));
 }
 
 
@@ -296,7 +297,7 @@ $(document).ready(function(){
     var s = $("div.divHeader,div.divHeader2").first().css("background-image");
     if ( $("div.divHeader i,div.divHeader2 i").length <= 0 && (s != undefined && s.indexOf("none.gif") != -1) ) {
         AddHeaderFontIcon("icon-window-fill");
-    } 
+    }
 
     var startTime = new Date().getTime();
     var csrfInterval = setInterval(function () {
@@ -330,13 +331,14 @@ $m = 'W/' . md5($s);
 header('Content-Type: application/x-javascript; charset=utf-8');
 header('Etag: ' . $m);
 
-if (isset($_SERVER["HTTP_IF_NONE_MATCH"]) && $_SERVER["HTTP_IF_NONE_MATCH"] == $m) {
+if (isset($_SERVER['HTTP_IF_NONE_MATCH']) && $_SERVER['HTTP_IF_NONE_MATCH'] == $m) {
     if (isset($zbp->option['ZC_JS_304_ENABLE']) && $zbp->option['ZC_JS_304_ENABLE']) {
         SetHttpStatusCode(304);
-        die;
+
+        exit;
     }
 }
 
 echo $s;
 
-die();
+exit();
