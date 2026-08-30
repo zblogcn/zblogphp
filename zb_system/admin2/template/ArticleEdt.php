@@ -420,10 +420,10 @@ echo '<script>AddHeaderFontIcon("icon-pencil-square-fill");</script>';
             var s = editor_api.editor.content.get();
             if (s.indexOf("<hr class=\"more\" />") > -1) {
                 editor_api.editor.intro.put(s.split("<hr class=\"more\" />")[0]);
-            }else{
+            } else {
                 if (s.indexOf("<hr class=\"more\"/>") > -1) {
                     editor_api.editor.intro.put(s.split("<hr class=\"more\"/>")[0]);
-                }else{
+                } else {
                     i = {$zbp->option['ZC_ARTICLE_EXCERPT_MAX']};
                     s = s.replace(/<[^>]+>/g, "");
                     editor_api.editor.intro.put(s.substring(0, i));
@@ -447,7 +447,7 @@ echo '<script>AddHeaderFontIcon("icon-pencil-square-fill");</script>';
             var s = document.body.scrollTop || document.documentElement.scrollTop;
             if (s > H) {
                 $("#divFloat").addClass("boxfloat");
-            }else{
+            } else {
                 $("#divFloat").removeClass("boxfloat");
             }
         });
@@ -532,7 +532,7 @@ echo '<script>AddHeaderFontIcon("icon-pencil-square-fill");</script>';
                 if (!content) return null;
                 try {
                     return JSON.parse(content);
-                }catch (e){
+                } catch (e) {
                     return null;
                 }
             };
