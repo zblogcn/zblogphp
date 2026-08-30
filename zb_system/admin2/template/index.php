@@ -1,7 +1,14 @@
 <?php die();?>
+{php}<?php if ($zbp->option['ZC_ADDITIONAL_SECURITY']) {
+    header('X-Frame-Options: DENY');
+    header('X-XSS-Protection: 1; mode=block');
+    header('Content-Security-Policy: ' . GetBackendCSPHeader());
+    if ($zbp->isHttps) {
+        header('Upgrade-Insecure-Requests: 1');
+    }
+}?>{/php}
 <!DOCTYPE html>
 <html lang="{$language}">
-
 <head>
   <meta charset="utf-8" />
   <meta name="generator" content="{$zblogphp}" />
@@ -13,6 +20,7 @@
   <script src="{$host}zb_system/script/zblogphp.js?v={$version}"></script>
   <script src="{$host}zb_system/script/c_admin_js_add.php?v={$version}"></script>
   {$header}
+{php}HookFilterPlugin('Filter_Plugin_Admin_Header');{/php}
 </head>
 
 <body class="admin admin-{$action}">
@@ -22,6 +30,7 @@
   {template:layout_left}
   {template:layout_main}
   {$footer}
+{php}HookFilterPlugin('Filter_Plugin_Admin_Footer');{/php}
 </body>
 
 </html>

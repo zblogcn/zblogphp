@@ -2,7 +2,7 @@
   "scripts": {
     "build": "rollup -c --environment NODE_ENV:prod",
     "dev": "rollup -c -w --environment NODE_ENV:dev",
-    "postinstall": "if [ ! -f .env ] && [ -f .env.sample ]; then cp .env.sample .env; fi",
+    "postinstall": "node -e \"const fs=require('fs'); if(!fs.existsSync('.env') && fs.existsSync('.env.sample')) fs.copyFileSync('.env.sample', '.env');\"",
     "lint": "eslint --ext .js,.mjs ."
   },
   "devDependencies": {

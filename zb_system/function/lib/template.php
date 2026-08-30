@@ -18,6 +18,8 @@ class Template
 
     protected $uncompiledCodeStore = array();
 
+    public $compileFiles_hash = array();
+
     public $theme = "";
 
     public $templates = array();
@@ -220,6 +222,7 @@ class Template
         foreach ($this->templates as $name => $content) {
             $s = RemoveBOM($this->CompileFile($content, $name));
             @file_put_contents($this->path . $name . '.php', $s);
+            $this->compileFiles_hash[$name] = md5($s);
         }
     }
 
@@ -988,6 +991,7 @@ class Template
         $this->templateTags['option'] = &$option;
         $this->templateTags['lang'] = &$zbp->lang;
         $this->templateTags['langs'] = &$zbp->langs;
+        $this->templateTags['action'] = &$zbp->action;
         $this->templateTags['version'] = &$zbp->version;
         $this->templateTags['categorys'] = &$zbp->categories;
         $this->templateTags['categories'] = &$zbp->categories;

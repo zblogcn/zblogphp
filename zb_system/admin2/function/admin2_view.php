@@ -858,3 +858,69 @@ function zbp_admin2_ModuleEdt()
 }
 
 
+
+
+function zbp_admin2_ArticleEdt()
+{
+  global $zbp, $action, $lang;
+
+  $article = new Post();
+  $article->AuthorID = $zbp->user->ID;
+
+  $ispage = false;
+  if ($action == 'PageEdt') {
+      $ispage = true;
+      $article->Type = ZC_POST_TYPE_PAGE;
+  }
+
+  if (!$zbp->CheckRights('ArticlePub')) {
+      $article->Status = ZC_POST_STATUS_AUDITING;
+  }
+
+  if (isset($_GET['id']) && (int) $_GET['id'] != 0) {
+      $article = $zbp->GetPostByID((int) GetVars('id', 'GET'));
+  } else {
+      // new Post
+      $new_action = 'ArticleNew';
+      if ($action == 'ArticleEdt') {
+          $new_action = 'ArticleNew';
+      }
+      if ($action == 'PageEdt') {
+          $new_action = 'PageNew';
+      }
+      if (!$zbp->CheckRights($new_action)) {
+          $zbp->ShowError(6, __FILE__, __LINE__);
+          die();
+      }
+  }
+
+  if ($ispage) {
+      $blogtitle = $lang['msg']['page_edit'];
+      if (!$zbp->CheckRights('PageAll') && $article->AuthorID != $zbp->user->ID) {
+          $zbp->ShowError(6, __FILE__, __LINE__);
+          die();
+      }
+  } else {
+      $blogtitle = $lang['msg']['article_edit'];
+      if (!$zbp->CheckRights('ArticleAll') && $article->AuthorID != $zbp->user->ID) {
+          $zbp->ShowError(6, __FILE__, __LINE__);
+          die();
+      }
+  }
+
+  if ($article->Intro) {
+      if (strpos($article->Content, '<!--more-->') !== false) {
+          $article->Intro = '';
+          $article->Content = str_replace('<!--more-->', '<hr class="more" />', $article->Content);
+      } elseif (strpos($article->Intro, '<!--autointro-->') !== false) {
+          $article->Intro = '';
+      }
+  }
+
+  $zbp->template_admin->SetTags('article', $article);
+  $zbp->template_admin->SetTags('ispage', $ispage);
+
+  $rlt = $zbp->template_admin->Output("ArticleEdt");
+
+  return $rlt;
+}
