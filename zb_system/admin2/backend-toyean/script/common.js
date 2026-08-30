@@ -271,9 +271,9 @@ $(function(){
 		}
 	});
 
-	//开关灯
 	!function(){
-		if ((/;\s*night=([^;]*)/.exec(';'+document.cookie)||[,])[1] !== '0') {
+		const nightValue = (/;\s*night=([^;]*)/.exec(';'+document.cookie)||[,])[1];
+		if (nightValue === '1') {
 			document.body.classList.add('night');
 		}
 	}();

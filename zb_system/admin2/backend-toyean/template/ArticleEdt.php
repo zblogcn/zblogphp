@@ -233,6 +233,133 @@ HookFilterPlugin('Filter_Plugin_Edit_Begin');
         </div>
     </div>
     <!-- divEditRight -->
+
+    <div id="divEditAIHelper">
+
+
+
+        <div id="yt-ai-helper-btn" title="AI 写作助手">🤖</div>
+        <div id="yt-ai-helper-box">
+            <div id="yt-ai-header">
+                <span>AI 写作助手</span>
+                <span style="cursor:pointer;" onclick="$('#yt-ai-helper-box').hide()">×</span>
+            </div>
+            <div id="yt-ai-messages">
+                <div class="ai-msg">你好！我是你的 AI 写作助手，有什么可以帮你的吗？</div>
+            </div>
+            <div id="yt-ai-input-area">
+                <textarea id="yt-ai-input" placeholder="输入你的要求..."></textarea>
+                <button id="yt-ai-send">发送</button>
+            </div>
+        </div>
+
+
+        <script>
+            $(document).ready(function () {
+                $('#yt-ai-helper-btn').click(function () {
+                    var $box = $('#yt-ai-helper-box');
+                    if ($box.is(':visible')) {
+                        $box.hide();
+                    } else {
+                        $box.css('display', 'flex');
+                    }
+                });
+
+                $('#yt-ai-send').click(function () {
+                    var prompt = $('#yt-ai-input').val().trim();
+                    if (!prompt) return;
+
+                    $('#yt-ai-messages').append('<div class="user-msg">' + prompt + '</div>');
+                    $('#yt-ai-input').val('');
+
+                    var $loadingMsg = $('<div class="ai-msg">正在编写...</div>');
+                    $('#yt-ai-messages').append($loadingMsg);
+                    $('#yt-ai-messages').scrollTop($('#yt-ai-messages')[0].scrollHeight);
+
+                    var btn = $(this);
+                    btn.prop('disabled', true).text('...');
+
+                    $.post("{BuildSafeCmdURL('act=AiChat')}", { prompt: prompt }, function (res) {
+                        btn.prop('disabled', false).text('发送');
+                        var data;
+                        try {
+                            data = JSON.parse(res);
+                        } catch (e) {
+                            $loadingMsg.addClass('error').text('API 解析错误');
+                            return;
+                        }
+
+                        if (data.error) {
+                            $loadingMsg.addClass('error').text('错误: ' + data.error);
+                        } else if (data.choices && data.choices.length > 0) {
+                            var rawContent = data.choices[0].message.content;
+                            var rawContent = data.choices[0].message.content;
+                            var title = '';
+                            var content = rawContent;
+                            var titleMatch = rawContent.match(/^标题[:：]\s*(.+)$/m);
+                            if (titleMatch) {
+                                title = titleMatch[1];
+                            } else {
+                                var h1Match = rawContent.match(/^#\s+(.+)$/m);
+                                if (h1Match) {
+                                    title = h1Match[1];
+                                }
+                            }
+
+                            if (title) {
+                                $('#edtTitle').val(title);
+                            }
+
+                            if (content) {
+                                yt_ai_insert_content(content);
+                            }
+
+                            $loadingMsg.text('处理完毕');
+                        } else {
+                            $loadingMsg.addClass('error').text('未知响应结构');
+                        }
+                        $('#yt-ai-messages').scrollTop($('#yt-ai-messages')[0].scrollHeight);
+                    });
+                });
+
+                $('#yt-ai-input').keypress(function (e) {
+                    if (e.which == 13 && !e.shiftKey) {
+                        e.preventDefault();
+                        $('#yt-ai-send').click();
+                    }
+                });
+            });
+
+            function yt_ai_insert_content(content) {
+                if (typeof UE !== 'undefined' && UE.getEditor('editor_content')) {
+                    UE.getEditor('editor_content').execCommand('insertHtml', content);
+                    return;
+                }
+
+                if (typeof ContentEditor !== 'undefined' && ContentEditor.insertValue) {
+                    ContentEditor.insertValue(content);
+                    return;
+                }
+
+                if (typeof window.editor_api !== 'undefined' && window.editor_api.editor && window.editor_api.editor.content && window.editor_api.editor.content.insert) {
+                    window.editor_api.editor.content.insert(content);
+                    return;
+                }
+                if (typeof editor !== 'undefined' && editor.insertValue) {
+                    editor.insertValue(content);
+                    return;
+                }
+                var textarea = document.getElementById('editor_content');
+                if (textarea) {
+                    textarea.value += content;
+                } else {
+                    alert('未找到编辑器实例，内容已复制到剪贴板，请手动粘贴。');
+                    navigator.clipboard.writeText(content);
+                }
+            }
+        </script>
+    </div>
+
 </form>
 
 <script>

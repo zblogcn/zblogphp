@@ -2334,9 +2334,8 @@ class ZBlogPHP
     public function PrepareTemplate($theme = null, $template_dirname = 'template')
     {
         //从1.8起，终于是调整和理顺了PrepareTemplate和BuildTemplate
-        //BuildTemplate的设计失误，不要挂BuildTemplate里的接口，BuildTemplate是在模板编译时期调用的
-        //不要挂Filter_Plugin_Zbp_PrepareTemplate和Filter_Plugin_Zbp_MakeTemplatetags
-        //如需要修改$template，请挂Filter_Plugin_Zbp_PrepareTemplate_Core对模板进行增加修改
+        //BuildTemplate的设计失误，把BuildTemplate里的接口转到PrepareTemplate
+        //如需要修改$zbp->template，请挂Filter_Plugin_Zbp_PrepareTemplate_Core对模板进行增加修改
         //1.8以下应该挂上Filter_Plugin_Zbp_Load，直接修改$zbp->$template
         if (is_null($theme) || empty($theme)) {
             $theme = &$this->theme;
@@ -2345,13 +2344,12 @@ class ZBlogPHP
         $template = new Template();
         $template->MakeTemplateTags();
 
-        //此接口不建议使用，只改templateTags的
+        //只改templateTags的
         foreach ($GLOBALS['hooks']['Filter_Plugin_Zbp_MakeTemplatetags'] as $fpname => &$fpsignal) {
             $fpname($template->templateTags);
         }
 
-        //此接口不建议使用，1.8以下用Filter_Plugin_Zbp_Load接口直接修改$zbp->template
-        //此处接口可以在Load时，对$theme, $template_dirname参数可以进行修改
+        //此接口可以在加载模板时，对$theme, $template_dirname参数可以进行修改
         foreach ($GLOBALS['hooks']['Filter_Plugin_Zbp_PrepareTemplate'] as $fpname => &$fpsignal) {
             $fpname($theme, $template_dirname);
         }
@@ -2362,86 +2360,63 @@ class ZBlogPHP
         $template->SetPath();
         $template->LoadTemplates();
 
-        //从1.8起，增加了Filter_Plugin_Zbp_PrepareTemplate_Core，不要再用上边的接口
+        //从1.8起，增加了Filter_Plugin_Zbp_PrepareTemplate_Core，函数内其他3个接口可以被替代！
         foreach ($GLOBALS['hooks']['Filter_Plugin_Zbp_PrepareTemplate_Core'] as $fpname => &$fpsignal) {
             $fpname($template);
+        }
+
+        //此接口不建议使用，以前设计的流程和接口有问题，把这个接口从BuildTemplate转到PrepareTemplate
+        foreach ($GLOBALS['hooks']['Filter_Plugin_Zbp_BuildTemplate'] as $fpname => &$fpsignal) {
+            $fpname($template->templates);
         }
 
         return $template;
     }
 
     /**
-     * 针对有同一主题下有多套模板的解析.
+     * 编译模板更新并缓存MD5.
      *
-     * @return bool
-     */
-    public function BuildTemplate()
-    {
-        //该接口已废弃了，以前设计的流程和接口有问题，这里的接口应该放在PrepareTemplate的
-        //不要挂Filter_Plugin_Zbp_BuildTemplate了，建议用Filter_Plugin_Zbp_PrepareTemplate_Core
-        foreach ($GLOBALS['hooks']['Filter_Plugin_Zbp_BuildTemplate'] as $fpname => &$fpsignal) {
-            $fpname($this->template->templates);
-        }
-
-        $s = implode($this->template->templates);
-        $md5 = md5($s);
-        $this->cache->templates_md5_array = serialize([$this->template->template_dirname => $md5]);
-        $this->SaveCache();
-
-        return $this->template->BuildTemplate();
-    }
-
-    /**
-     * 快捷重新编译指定主题模板目录名的模板
-     *
-     * @param null|mixed $theme
-     * @param mixed      $template_dirname
-     *
-     * @return bool
-     */
-    public function BuildTemplateMore($theme = null, $template_dirname = 'template')
-    {
-        //从1.8起清除了这个无用的函数
-    }
-
-    /**
-     * 更新模板缓存.
-     *
-     * @param bool $onlycheck  为真时，返回值为false表示需要BuildTemplate
      * @param bool $forcebuild 强制BuildTemplate
      *
      * @return bool
      */
-    public function CheckTemplate($onlycheck = false, $forcebuild = false)
+    public function BuildTemplate($forcebuild = true)
     {
-        //$forcebuild = true 强制跳过比较
-        if (true == $forcebuild) {
-            $this->BuildTemplate();
-
-            return true;
-        }
-
         $s = implode($this->template->templates);
-        $md5 = md5($s);
+        $now_md5 = md5($s);
+
         $array_md5 = @unserialize($this->cache->templates_md5_array);
         if (!is_array($array_md5)) {
             $array_md5 = [];
         }
-        $new_md5 = GetValueInArray($array_md5, $this->template->template_dirname);
+        $old_md5 = GetValueInArray($array_md5, $this->template->template_dirname);
 
-        if (true == $onlycheck) {
-            return $md5 == $new_md5;
+        if ($now_md5 != $old_md5) {
+            $this->cache->templates_md5_array = serialize([$this->template->template_dirname => $now_md5]);
+            $this->SaveCache();
+
+            return $this->template->BuildTemplate();
         }
-        if (false == $onlycheck) {
-            //$onlycheck = false时
-            if ($md5 != $new_md5) {
-                $this->BuildTemplate();
+        if (true == $forcebuild) {
+            return $this->template->BuildTemplate();
+        }
+    }
 
-                return true;
-            }
+    /**
+     * 检查模板.
+     *
+     * @param bool $forcebuild 强制BuildTemplate
+     *
+     * @return bool
+     */
+    public function CheckTemplate($forcebuild = false)
+    {
+        if (2 == func_num_args()) {
+            $arg_list = func_get_args();
+            $forcebuild = $arg_list[1];
         }
 
-        return true;
+        return $this->BuildTemplate($forcebuild);
     }
 
     /**
@@ -2466,11 +2441,6 @@ class ZBlogPHP
             $this->backendinfo = $this->backendapp->GetInfoArray();
         }
 
-        //只改templateTags的
-        foreach ($GLOBALS['hooks']['Filter_Plugin_Zbp_MakeTemplatetags_Admin'] as $fpname => &$fpsignal) {
-            $fpname($template_admin->templateTags);
-        }
-
         $template_admin->theme = $theme;
         $template_admin->template_dirname = 'template';
 
@@ -2490,41 +2460,13 @@ class ZBlogPHP
     /**
      * 编译后台模板
      *
-     * @return bool
-     */
-    public function BuildTemplateAdmin()
-    {
-        foreach ($GLOBALS['hooks']['Filter_Plugin_Zbp_BuildTemplateAdmin'] as $fpname => &$fpsignal) {
-            $fpname($this->template_admin->templates);
-        }
-
-        $b = $this->template_admin->BuildTemplate();
-        $this->cache->templates_admin_files_hash_array = serialize($this->template_admin->compileFiles_hash);
-        $s = implode($this->template_admin->templates);
-        $md5 = md5($s);
-        $this->cache->templates_admin_md5_array = serialize([$this->template_admin->template_dirname => $md5]);
-        $this->SaveCache();
-
-        return $b;
-    }
-
-    /**
-     * 更新后台模板缓存.
-     *
-     * @param bool $onlycheck  为真时，返回值为false表示需要BuildTemplateAdmin
-     * @param bool $forcebuild 强制BuildTemplateAdmin
+     * @param bool $forcebuild 强制BuildTemplate
      *
      * @return bool
      */
-    public function CheckTemplateAdmin($onlycheck = false, $forcebuild = false)
+    public function BuildTemplateAdmin($forcebuild = true)
     {
-        //$forcebuild = true 强制跳过比较直接Build
-        if (true == $forcebuild) {
-            $this->BuildTemplateAdmin();
-
-            return true;
-        }
-
+        //检查缺编译后文件
         $hash_compare = null;
         $array_files_hash_md5 = @unserialize($this->cache->templates_admin_files_hash_array);
         if (!is_array($array_files_hash_md5)) {
@@ -2533,43 +2475,50 @@ class ZBlogPHP
         foreach ($array_files_hash_md5 as $file => $md5_file) {
             if (!file_exists($this->template_admin->GetPath() . $file . '.php')) {
                 //缺编译后的文件
-                if (true == $onlycheck) {
-                    return false;
-                }
                 $hash_compare = false;
 
                 break;
             }
-            //$md5_now_file = @md5_file($this->template_admin->GetPath() . $file . '.php');
-            //if ($md5_file != $md5_now_file) {
-                //编译后的文件hash不对
-            //    if ($onlycheck == true) {
-            //        return false;
-            //    }
-            //    $hash_compare = false;
-            //    break;
-            //}
         }
 
+        //检查模板MD5
         $s = implode($this->template_admin->templates);
-        $md5 = md5($s);
+        $now_md5 = md5($s);
         $array_md5 = @unserialize($this->cache->templates_admin_md5_array);
         if (!is_array($array_md5)) {
             $array_md5 = [];
         }
-        $new_md5 = GetValueInArray($array_md5, $this->template_admin->template_dirname);
+        $old_md5 = GetValueInArray($array_md5, $this->template_admin->template_dirname);
 
-        if (true == $onlycheck) {
-            return ($md5 == $new_md5) && (false !== $hash_compare);
-        }
-        //$onlycheck = false时
-        if (($md5 != $new_md5) || (false === $hash_compare)) {
-            $this->BuildTemplateAdmin();
+        if (($now_md5 == $old_md5) && (null === $hash_compare) && (true == $forcebuild)) {
+            $this->template_admin->BuildTemplate();
+            $this->SaveCache();
 
             return true;
         }
 
-        return true;
+        if (($now_md5 != $old_md5) || (false === $hash_compare) || (true == $forcebuild)) {
+            $this->template_admin->BuildTemplate();
+            $this->cache->templates_admin_files_hash_array = serialize($this->template_admin->compileFiles_hash);
+            $s = implode($this->template_admin->templates);
+            $md5 = md5($s);
+            $this->cache->templates_admin_md5_array = serialize([$this->template_admin->template_dirname => $md5]);
+            $this->SaveCache();
+
+            return true;
+        }
+    }
+
+    /**
+     * 更新后台模板缓存.
+     *
+     * @param bool $forcebuild 强制BuildTemplateAdmin
+     *
+     * @return bool
+     */
+    public function CheckTemplateAdmin($forcebuild = false)
+    {
+        return $this->BuildTemplateAdmin($forcebuild);
     }
 
     /**
@@ -5153,7 +5102,18 @@ class ZBlogPHP
 
     /**
      * 以下部分为已废弃，但考虑到兼容性保留的代码**************************************************************.
+     *
+     * @param null|mixed $theme
+     * @param mixed      $template_dirname
      */
+
+    /**
+     * 快捷重新编译指定主题模板目录名的模板
+     */
+    public function BuildTemplateMore($theme = null, $template_dirname = 'template')
+    {
+        //从1.8起清除了这个无用的函数
+    }
 
     /**
      * 检测当前url，如果不符合设置就跳转到固定域名的链接.

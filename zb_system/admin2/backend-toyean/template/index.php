@@ -30,6 +30,7 @@
             version: '1.0'
         });
     </script>
+    {php}if(isset($main->HtmlHeader)){$header.=$main->HtmlHeader;}{/php}
     {$header}
     {php}HookFilterPlugin('Filter_Plugin_Admin_Header');{/php}
 </head>

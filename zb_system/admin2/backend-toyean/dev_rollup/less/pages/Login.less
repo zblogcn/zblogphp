@@ -1,0 +1,121 @@
+.admin-login {
+    margin: 0;
+    padding: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: #f8f9fa;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.login-container {
+    max-width: 400px;
+    width: 100%;
+    padding: 2rem;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.login-form h2 {
+    text-align: center;
+    margin-bottom: 2rem;
+    color: #2d3748;
+    font-weight: 600;
+    font-size: 1.5em;
+}
+
+.login-form label {
+    display: block;
+    margin: 0.5rem 0;
+    color: #2d3748;
+    font-weight: 500;
+}
+
+.login-form .checkbox {
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+}
+
+.login-form .checkbox input {
+    margin-right: 0.5rem;
+    flex-shrink: 0;
+}
+
+.login-form .checkbox label {
+    display: inline;
+    cursor: pointer;
+}
+
+.login-form input[type="text"],
+.login-form input[type="password"] {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #e2e8f0;
+    border-radius: 4px;
+    font-size: 1rem;
+    margin: 0.5rem 0;
+    transition: border-color 0.2s;
+    height: 40px;
+    line-height: 40px;
+}
+
+.login-form input[type="text"]:focus,
+.login-form input[type="password"]:focus {
+    outline: none;
+    border-color: #4299e1;
+}
+
+.login-form .submit {
+    text-align: center;
+}
+
+.login-form .button:hover {
+    background: #3182ce;
+}
+
+.validcode-input-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.validcode-input-wrapper input {
+    flex: 1;
+    margin-bottom: 0;
+    height: 40px;
+    padding: 0 0.75rem;
+    line-height: 40px;
+}
+
+.captcha-img {
+    vertical-align: middle;
+    cursor: pointer;
+    height: 40px;
+}
+
+@media (max-width: 480px) {
+    .login-container {
+        margin: 1rem;
+        padding: 1.5rem;
+    }
+    
+    .validcode-input-wrapper {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.5rem;
+    }
+    
+    .validcode-input-wrapper input {
+        height: auto;
+        padding: 0.75rem;
+        line-height: normal;
+    }
+    
+    .captcha-img {
+        width: 100%;
+        height: auto;
+    }
+}

@@ -149,15 +149,15 @@ class ZbpAi
 
     public function send($url, $key, $data)
     {
-        $ajax = Network::Create();
-        $ajax->open('POST', $url);
-        $ajax->setTimeOuts(120, 120, 0, 0);
-        $ajax->setRequestHeader('Content-Type', 'application/json; charset=utf-8');
-        $ajax->setRequestHeader('Authorization', 'Bearer ' . $key);
+        $network = Network::Create();
+        $network->open('POST', $url);
+        $network->setTimeOuts(120, 120, 0, 0);
+        $network->setRequestHeader('Content-Type', 'application/json; charset=utf-8');
+        $network->setRequestHeader('Authorization', 'Bearer ' . $key);
         $data = json_encode($data);
-        $ajax->send($data);
+        $network->send($data);
 
-        $json = $ajax->responseText;
+        $json = $network->responseText;
 
         $this->result = json_decode($json, true);
         if (JSON_ERROR_NONE === json_last_error()) {

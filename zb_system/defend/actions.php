@@ -1,6 +1,6 @@
 <?php
 
-return array(
+return [
     'login'  => 6,
     'logout' => 6,
     'verify' => 6,
@@ -86,5 +86,7 @@ return array(
     'RewriteMng'  => 1,
     'NoValidCode' => 5,
 
+    'AiChat'  => 1,
+
     'root' => 1,
-);
+];
