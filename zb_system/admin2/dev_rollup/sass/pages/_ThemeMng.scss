@@ -1,0 +1,60 @@
+@use "../base/variables" as *;
+
+#frmTheme {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1em;
+}
+
+.theme {
+  width: 230px;
+  padding: .6em 1em;
+
+  &>*:not(:last-child) {
+    margin-bottom: 5px;
+  }
+
+  &-img {
+    span>img {
+      width: 100%;
+    }
+  }
+
+  &-style {
+    display: flex;
+    gap: .3em;
+    align-items: center;
+    justify-content: space-between;
+
+    input {
+      margin-right: 0;
+    }
+  }
+
+  // 主题配置
+  select.edit {
+    height: 29px;
+    padding: 0 5px;
+    border-color: $color-primary;
+    max-width: 9.3em;
+    outline: 0;
+    flex-grow: 1;
+  }
+}
+
+// 当前使用的主题
+.theme-now {
+  background: #c1deff;
+  border: 1px solid #8eb5e2;
+}
+
+// 其他可用主题
+.theme-other {
+  background: #f0f0f0;
+  border: 1px solid #e2e2e2;
+
+  &:hover {
+    border-color: #c3c3c3;
+    box-shadow: 0 2px 2px 0 #ddd;
+  }
+}

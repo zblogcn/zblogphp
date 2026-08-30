@@ -380,6 +380,11 @@ class ZBlogPHP
     public $template = null;
 
     /**
+     * @var Template 后台模板
+     */
+    public $template_admin = null;
+
+    /**
      * @var null 社会化评论
      */
     public $socialcomment = null;
@@ -993,6 +998,11 @@ class ZBlogPHP
 
         //创建模板类
         $this->template = $this->PrepareTemplate();
+
+        if ($this->ismanage && $this->option['ZC_MANAGE_UI'] == 2) {
+            $this->template_admin = $this->PrepareTemplateAdmin();
+            Add_Filter_Plugin("Filter_Plugin_Admin_Header", "Include_Admin2_RedirectEdt");
+        }
 
         Add_Filter_Plugin('Filter_Plugin_Login_Header', 'Include_AddonAdminFont');
         Add_Filter_Plugin('Filter_Plugin_Other_Header', 'Include_AddonAdminFont');
@@ -2301,6 +2311,25 @@ class ZBlogPHP
 
         $template->LoadTemplates();
 
+        return $template;
+    }
+
+    /**
+     * 后台模板对象
+     *
+     * @return Template
+     */
+    public function PrepareTemplateAdmin()
+    {
+        $template = new Template();
+        $template->MakeTemplateTags();
+
+        $template->theme = 'admin_system';
+
+        $template->SetPath();
+        $template->LoadAdminTemplates();
+        $this->autofill_template_htmltags = false;
+        $template->BuildTemplate();
         return $template;
     }
 

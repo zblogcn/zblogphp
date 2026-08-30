@@ -1,0 +1,24 @@
+%pageBarItem {
+  padding: 2px 5px;
+  margin: 1px;
+}
+
+.pagebar {
+  padding: 1em 0 2em 0;
+
+  span {
+    @extend %pageBarItem;
+    color: #333;
+    font-weight: bolder;
+  }
+
+  a {
+    @extend %pageBarItem;
+    border-radius: 0.3em;
+    border: 1px solid #efefef;
+
+    &:hover {
+      border: 1px solid #ccc;
+    }
+  }
+}

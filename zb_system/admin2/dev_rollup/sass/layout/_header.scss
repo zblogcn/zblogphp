@@ -1,0 +1,105 @@
+@use "../base/variables" as *;
+
+.header {
+  grid-area: header;
+  margin-bottom: 5px;
+  // height: $header-height;
+  background: #3a6ea5;
+  // position: relative;
+  display: grid;
+  grid-template-columns: $logo-width 1fr;
+  // grid-template-rows: auto auto;
+  grid-template-areas:
+    "logo user"
+    "logo menu";
+
+  .logo {
+    grid-area: logo;
+    // height: $header-height;
+
+    a {
+      display: block;
+    }
+
+    img {
+      width: 100%;
+      height: $header-height;
+      background: url("image/logo_white.svg") center center no-repeat;
+    }
+  }
+
+  .user {
+    grid-area: user;
+    justify-self: end;
+    padding: 12px 15px 0 0;
+    color: #ffffff;
+    display: grid;
+    grid-template-areas:
+      "name avatar"
+      "btn avatar";
+
+    #avatar {
+      width: 40px;
+      height: 40px;
+    }
+
+    .usravatar {
+      grid-area: avatar;
+      padding-left: 10px;
+    }
+
+    .username {
+      font-size: 1.1em;
+    }
+
+    .userbtn {
+
+      display: flex;
+      justify-content: space-between;
+
+      a {
+        color: #ffffff;
+        display: block;
+
+        &:hover {
+          color: #b0cdee;
+        }
+      }
+    }
+  }
+
+  .menu {
+    grid-area: menu;
+    justify-self: end;
+    align-self: end;
+
+
+    ul {
+      display: flex;
+      gap: 6px;
+    }
+
+    li {
+
+      a {
+        padding: 0 20px;
+        background-color: #fff;
+        font-size: 1.1em;
+        align-items: center;
+        height: $menu-item-height;
+        display: flex;
+        gap: 5px;
+        color: $color-text;
+
+        &:hover {
+          background-color: $color-backgroud-hover;
+          color: #fff;
+        }
+      }
+
+      &.on {
+        font-weight: bold;
+      }
+    }
+  }
+}

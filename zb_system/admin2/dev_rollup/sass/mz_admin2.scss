@@ -1,0 +1,30 @@
+/*!
+作者：新鲜人
+邮箱：u2lei@yahoo.com.cn
+     xinxr@msn.com
+*/
+
+/*!
+由 沉冰浮水 重写为 sass
+*/
+
+/*! 主入口文件 */
+@use "base/reset";
+@use "base/variables";
+@use "base/other";
+
+/*! 布局组件 */
+@use "layout/all";
+@use "layout/header";
+@use "layout/sidebar";
+@use "layout/main";
+
+/*! 通用组件 */
+@use "components/tables";
+@use "components/tabs";
+@use "components/forms";
+@use "components/pagebar";
+
+/*! 独立页面 */
+@use "pages/ThemeMng";
+@use "pages/ModuleMng";

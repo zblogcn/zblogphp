@@ -1,0 +1,55 @@
+@use "../base/variables" as *;
+
+.main {
+  grid-area: main;
+  padding-left: 10px;
+  padding-right: 10px;
+
+  &.CategoryEdt .divHeader,
+  &.TagEdt .divHeader,
+  &.MemberNew .divHeader,
+  &.MemberEdt .divHeader,
+  &.ModuleEdt .divHeader {
+    border-bottom: 5px solid #e0e0e0;
+  }
+}
+
+#divMain {
+
+  .divHeader {
+    padding: 10px 0;
+    font-size: 1.5em;
+    line-height: 1.5em;
+    font-weight: bold;
+    // color: #444444;
+    display: flex;
+    align-items: center;
+    gap: 3px;
+
+    i {
+      font-size: 1.35em;
+    }
+  }
+
+  .SubMenu {
+    display: flex;
+    gap: 5px;
+
+    a {
+      background-color: $color-backgroud;
+      display: block;
+      padding: 8px 12px;
+      color: $color-text;
+
+      &:hover {
+        color: currentColor;
+        background-color: $color-backgroud-hover;
+      }
+    }
+  }
+
+  #divMain2 {
+    padding: 0;
+    margin: 0;
+  }
+}

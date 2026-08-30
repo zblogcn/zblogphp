@@ -1,0 +1,73 @@
+// 图标动画
+@keyframes refreshloading {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+i.icon-arrow-repeat.loading-status:before {
+  animation: refreshloading 1.5s linear infinite;
+  display: inline-block;
+}
+
+// hint 提示样式
+.hint {
+  width: 100%;
+  margin: 0 0 0.2em;
+
+  p {
+    padding: 0.3em 0.5em 0.3em 0.8em;
+    line-height: 1.5em;
+    border-radius: 4px;
+
+    // 图标基础样式
+    &:before {
+      font-family: "zblog" !important;
+      font-style: normal;
+      font-weight: normal;
+      font-variant: normal;
+      text-transform: none;
+      vertical-align: middle;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      margin-right: 8px;
+    }
+
+    // 成功提示
+    &.hint_good {
+      border-color: #a8de9e;
+      background: #e9fde5;
+
+      &:before {
+        content: "\ea62";
+        color: #277723;
+      }
+    }
+
+    // 错误提示
+    &.hint_bad {
+      border-color: #e1a9a9;
+      background: #fce0e0;
+
+      &:before {
+        content: "\ed79";
+        color: #ec705b;
+      }
+    }
+
+    // 提示信息
+    &.hint_tips {
+      border-color: #aab7e6;
+      background: #e4eafd;
+
+      &:before {
+        content: "\eaf9";
+        color: #4e6b9e;
+      }
+    }
+  }
+}

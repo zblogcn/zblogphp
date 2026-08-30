@@ -1,0 +1,9 @@
+@use "../base/variables" as *;
+
+body.admin {
+  display: grid;
+  grid-template-columns: $sidebar-width 1fr;
+  grid-template-areas:
+    "header header"
+    "left main";
+}
