@@ -25,35 +25,35 @@
 <!-- 用户列表 -->
 <table class="tableFull tableBorder thCenter table_hover table_striped">
     <tr>
-        <th>{$zbp.lang['msg']['id']}{$button_id_html}</th>
-        <th>{$zbp.lang['msg']['member_level']}{$button_level_html}</th>
-        <th>{$zbp.lang['msg']['name']}{$button_name_html}</th>
-        <th>{$zbp.lang['msg']['alias']}{$button_alias_html}</th>
-        <th>{$zbp.lang['msg']['all_artiles']}</th>
-        <th>{$zbp.lang['msg']['all_pages']}</th>
-        <th>{$zbp.lang['msg']['all_comments']}</th>
-        <th>{$zbp.lang['msg']['all_uploads']}</th>
-        <th></th>
+        <th data-field="id">{$zbp.lang['msg']['id']}{$button_id_html}</th>
+        <th data-field="member_level">{$zbp.lang['msg']['member_level']}{$button_level_html}</th>
+        <th data-field="name">{$zbp.lang['msg']['name']}{$button_name_html}</th>
+        <th data-field="alias">{$zbp.lang['msg']['alias']}{$button_alias_html}</th>
+        <th data-field="all_articles">{$zbp.lang['msg']['all_artiles']}</th>
+        <th data-field="all_pages">{$zbp.lang['msg']['all_pages']}</th>
+        <th data-field="all_comments">{$zbp.lang['msg']['all_comments']}</th>
+        <th data-field="all_uploads">{$zbp.lang['msg']['all_uploads']}</th>
+        <th data-field="actions"></th>
     </tr>
 
     {foreach $members as $member}
-    <tr>
-        <td class="td5">{$member.ID}</td>
-        <td class="td10">
+    <tr data-id="{$member.ID}">
+        <td class="td5" data-field="id">{$member.ID}</td>
+        <td class="td10" data-field="member_level">
             {$member.LevelName}
             {if $member.Status > 0}({$zbp.lang['user_status_name'][$member.Status]}){/if}
             {if $member.IsGod}<span title="root">#</span>{/if}
         </td>
-        <td>
+        <td data-field="name">
             <a href="{$member.Url}" target="_blank"><i class="icon-link-45deg"></i></a>
             {$member.Name}
         </td>
-        <td class="td15">{$member.Alias}</td>
-        <td class="td10">{max(0, $member->Articles)}</td>
-        <td class="td10">{max(0, $member->Pages)}</td>
-        <td class="td10">{max(0, $member->Comments)}</td>
-        <td class="td10">{max(0, $member->Uploads)}</td>
-        <td class="td10 tdCenter">
+        <td class="td15" data-field="alias">{$member.Alias}</td>
+        <td class="td10" data-field="all_articles">{max(0, $member->Articles)}</td>
+        <td class="td10" data-field="all_pages">{max(0, $member->Pages)}</td>
+        <td class="td10" data-field="all_comments">{max(0, $member->Comments)}</td>
+        <td class="td10" data-field="all_uploads">{max(0, $member->Uploads)}</td>
+        <td class="td10 tdCenter" data-field="actions">
             <a href="{$zbp.cmdurl}?act=MemberEdt&amp;id={$member.ID}">
                 <i class="icon-pencil-square"></i>
             </a>

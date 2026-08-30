@@ -2965,7 +2965,8 @@ function is_intranet_ip($check_ip)
         }
 
         return false;
-    } elseif (false !== filter_var($check_ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6)) {
+    }
+    if (false !== filter_var($check_ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6)) {
         if (false === filter_var($check_ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_RES_RANGE)) {
             return true;
         }
