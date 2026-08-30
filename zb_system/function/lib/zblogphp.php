@@ -387,6 +387,8 @@ class ZBlogPHP
 
     public $ispermanent_domain = false; //指示是否开启固定域名功能
 
+    public $islegacy_login_page = false;
+
     /**
      * @var Template 当前模板
      */
@@ -972,6 +974,8 @@ class ZBlogPHP
 
         $this->themeapp = new App();
         $this->themeinfo = $this->themeapp->GetInfoArray();
+
+        $this->islegacy_login_page = $this->option['ZC_LOGIN_USE_LEGACY_PAGE'];
 
         $this->isinitialized = true;
 

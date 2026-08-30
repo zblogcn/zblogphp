@@ -11,7 +11,7 @@ $zbp->Load();
 if ($zbp->CheckRights('admin')) {
     Redirect302('cmd.php?act=admin');
 }
-if (1 != $zbp->option['ZC_MANAGE_UI']) {
+if (2 == $zbp->option['ZC_MANAGE_UI'] && false == $zbp->islegacy_login_page) {
     Redirect("{$zbp->host}zb_system/admin2/login.php");
 }
 ?>
@@ -49,9 +49,31 @@ HookFilterPlugin('Filter_Plugin_Login_Header');
 
       <?php if ($zbp->option['ZC_LOGIN_VERIFY_ENABLE']) { ?>
       <dd class="validcode"><label for="edtValidcode"><?php echo $lang['msg']['validcode']; ?></label><input type="text" maxlength="<?php echo $zbp->option['ZC_VERIFYCODE_LENGTH']; ?>" id="edtValidcode" name="verify" size="20" tabindex="10" />
-          <img src="<?php echo $zbp->host; ?>zb_system/script/c_validcode.php?id=login&time=m" onClick="javascript:this.src='<?php echo $zbp->host; ?>zb_system/script/c_validcode.php?id=login&time=m&tm='+Math.random();" alt="validcode"/>
+          <img src="script/c_validcode.php?id=login&time=m" onClick="javascript:this.src='<?php echo $zbp->host; ?>zb_system/script/c_validcode.php?id=login&time=m&tm='+Math.random();" alt="validcode"/>
       </dd>
       <?php } ?>
+
+      <?php
+          $input_classname = $input_id = $input_label = '';
+          $input_tabindex = 9998;
+          $input_type = 'text';
+          foreach ($GLOBALS['hooks']['Filter_Plugin_Login_Input_Insert'] as $fpname => &$fpsignal) {
+              $fpreturn = call_user_func_array($fpname, $input_classname, $input_id, $input_label, $input_tabindex, $input_type);
+              if (null !== $input_label) { ?>
+      <dd class="<?php echo $input_classname; ?>">
+          <label for="<?php echo $input_id; ?>"><?php echo $input_label; ?></label>
+          <input type="<?php echo $input_type; ?>" id="<?php echo $input_id; ?>" name="<?php echo $input_id; ?>" size="20" tabindex="<?php echo $input_tabindex; ?>" />
+      </dd>
+      <?php
+      } else {
+          ?>
+          <dd class="<?php echo $input_classname; ?>">
+                    <?php echo $input_id; ?>
+                </dd>
+      <?php
+      }
+          }
+      ?>
 
     </dl>
     <dl>

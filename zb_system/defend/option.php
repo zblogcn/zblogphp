@@ -121,6 +121,7 @@ return [
     // 登录相关
     'ZC_LOGIN_CSRFCHECK_ENABLE' => true,
     'ZC_LOGIN_VERIFY_ENABLE'    => true,
+    'ZC_LOGIN_USE_LEGACY_PAGE'  => false,
 
     // '表情相关
     'ZC_EMOTICONS_FILENAME' => 'face',

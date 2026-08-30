@@ -3,7 +3,7 @@
 require '../function/c_system_base.php';
 
 // 这里不需要其他文件引入，设置 ismanage 即可
-$zbp->ismanage = true;
+$zbp->isbackend_ui = $zbp->ismanage = true;
 
 $zbp->Load();
 if ($zbp->CheckRights('admin')) {

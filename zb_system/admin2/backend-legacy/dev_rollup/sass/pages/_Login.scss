@@ -25,61 +25,136 @@ body.admin-login {
 
 /* 表单容器 */
 .login-container {
+  min-height: 100px;
   margin: 0 auto;
-  display: flex;
-  justify-content: center;
+  padding-left: 0px;
+  width: 600px;
 
   .login-form {
     width: 600px;
   }
 
-  .form-row {
-    display: flex;
-    flex-wrap: wrap;
+  dl {
+    height: 50px;
+    clear:both;
   }
-
-  /* 操作区 */
-  .form-row.actions {
-    .remember {
-      margin-right: auto;
-      display: inline-flex;
-      align-items: center;
-    }
+  dd {
+    width: 300px;
+    float: left;
+    margin-bottom:20px;
   }
-
-  .field {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    margin-bottom: 20px;
+  dd.floatright {
+    float: right;
   }
-
-  .field label {
-    width: 64px;
-    margin-right: 12px;
+  dd.checkbox {
+    margin-left: 100px;
+    width: 200px;
+    text-align: left;
+  }
+  dd.submit ,dd.password ,dd.username ,dd.validcode {
+    width: 300px;
+  }
+  label {
+    float:left;
+    width: 100px;
     text-align: right;
+    overflow :hidden;
+    text-overflow : clip;
+    white-space:nowrap;
+    line-height: 30px;
+    padding: 0 5px 0 5px;
+  }
+  input {
+    float: left;
+  }
+  input[type="checkbox"] {
+    margin: 8px 0 0 0;
+    padding: 0;
+  }
+  input[type="checkbox"]+label {
+    width:auto;
+  }
+  input[type="text"]{
+    width: 200px;
+    height: 32px;
+    padding:1px 5px;
+    line-height: 32px;
+    }
+  input[type="password"]{
+    width: 200px;
+    height: 32px;
+    padding:1px 5px;
+    line-height: 32px;
+  }
+  dd.validcode {
+    height: 40px;
+    position:relative;
+  }
+  dd.validcode > img {
+    position:absolute;
+    z-index:9999;
+    width:90px;
+    height:28px;
+    cursor:pointer;
+    right:2px;
+    top:2px;
   }
 
-
-  .field input[type="text"],
-  .field input[type="password"] {
-    flex: 1;
-    height: 32px;
-    border-radius: 2px;
+  dd .button {
+    float: right;
   }
 }
 
 /* 响应式：小屏改为单列 */
 @media (max-width: 720px) {
-  .login-form {
-    width: 100%;
-
-    .form-row {
-      padding: 0 30px 0 20px;
-
-      .field.placeholder {
-        display: none;
-      }
+  .login-container {
+    width: 310px;
+    dd {
+      clear: both;
+      padding: 0px 10px 0px 0;
+      margin-bottom:10px;
     }
+    dd.checkbox {
+      margin-left: 10px;
+      width: 300px;
+      float: left;
+      padding: 5px 0;
+    }
+    dd.submit {
+      width: 300px;
+      float: left;
+      padding: 5px 0;
+      margin-right: 10px;
+    }
+    dd.username label {
+      width: 300px;
+      text-align: left;
+    }
+    dd.password label {
+      width: 300px;text-align: left;
+    }
+    dd.validcode label {
+      width: 300px;text-align: left;
+    }
+    dd .button {
+      clear: both;
+      margin-right: 1em;
+    }
+    input[type="text"]{
+      float: right; width: 285px;
+    }
+    input[type="password"]{
+      float: right; width: 285px;
+    }
+    input[type="checkbox"] {
+      margin: 8px 0 0 5px;
+    }
+    dd.validcode {
+      height: 65px;
+    }
+    dd.validcode > img {top:32px;right:12px;
+    }
+
+
   }
 }
