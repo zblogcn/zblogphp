@@ -1434,3 +1434,96 @@ function include_get_c_admin_js_add_data($src)
         'extraScripts' => $extraScripts,
     ]);
 }
+
+/**
+ * zbp_ai_chat.
+ *
+ * @param mixed $content
+ * @param array $option
+ * @param bool  $return_full
+ */
+function zbp_ai_chat($content, $option = [], $return_full = false)
+{
+    global $zbp;
+    $zbpai = new ZbpAi();
+    if (!array_key_exists('thinking', $option)) {
+        $option['thinking'] = ['type' => 'disabled'];
+    }
+    if (!is_array($content)) {
+        $messages = [
+            [
+                'content' => $zbp->lang['msg']['you_are_a_helpful_assistant'],
+                'role' => 'system',
+            ],
+            [
+                'content' => $content,
+                'role' => 'user',
+            ],
+        ];
+
+        $content = $messages;
+    }
+
+    $r = $zbpai->chat($content, $option, $return_full);
+
+    return $r;
+}
+
+/**
+ * zbp_ai_image.
+ *
+ * @param mixed $content
+ * @param array $option
+ * @param mixed $prompt
+ * @param bool  $return_full
+ */
+function zbp_ai_image($prompt, $option = [], $return_full = false)
+{
+    global $zbp;
+    $zbpai = new ZbpAi();
+    if (!array_key_exists('size', $option)) {
+        $option['size'] = '1280x1280';
+    }
+    if (!array_key_exists('watermark_enabled', $option)) {
+        $option['watermark_enabled'] = false;
+    }
+    if (!array_key_exists('watermark', $option)) {
+        $option['watermark'] = false;
+    }
+    if (!array_key_exists('n', $option)) {
+        $option['n'] = 1;
+    }
+
+    $r = $zbpai->generateImage($prompt, $option, $return_full);
+
+    return $r;
+}
+
+/**
+ * zbp_ai_video.
+ *
+ * @param mixed $prompt
+ * @param array $option
+ * @param bool  $return_full
+ */
+function zbp_ai_video($prompt, $option = [], $return_full = false)
+{
+    global $zbp;
+    $zbpai = new ZbpAi();
+    //if (!array_key_exists('size', $option)) {
+    //    $option['size'] = '1920x1080';
+    //}
+    //if (!array_key_exists('with_audio', $option)) {
+    //    $option['with_audio'] = true;
+    //}
+    //if (!array_key_exists('quality', $option)) {
+    //    $option['quality'] = 'quality';
+    //}
+    //if (!array_key_exists('fps', $option)) {
+    //    $option['fps'] = 30;
+    //}
+
+    $r = $zbpai->generateVideo($prompt, $option, $return_full);
+
+    return $r;
+}

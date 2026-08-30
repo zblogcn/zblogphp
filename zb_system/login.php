@@ -22,7 +22,7 @@ if (2 == $zbp->option['ZC_MANAGE_UI'] && false == $zbp->islegacy_login_page) {
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="robots" content="none" />
     <meta name="viewport" content="width=device-width,viewport-fit=cover" />
-    <meta name="generator" content="<?php echo $option['ZC_BLOG_PRODUCT_FULL']; ?>" />
+    <meta name="generator" content="<?php echo $zbp->option['ZC_BLOG_PRODUCT_FULL']; ?>" />
     <meta name="renderer" content="webkit" />
     <link rel="stylesheet" href="css/admin.css?<?php echo $blogversion; ?>" type="text/css" media="screen" />
     <script src="script/jquery-latest.min.js?<?php echo $blogversion; ?>"></script>
