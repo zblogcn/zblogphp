@@ -391,6 +391,8 @@ class ZBlogPHP
 
     public $islegacy_login_page = false;
 
+    public $isignore_valid_code = false;
+
     /**
      * @var Template 当前模板
      */
@@ -420,8 +422,6 @@ class ZBlogPHP
      * @var array 激活的插件列表
      */
     public $activedapps = [];
-
-    public $activeapps;
 
     //不保存进Option的单次开关
     public $cookie_tooken_httponly = true; //已废弃
@@ -570,6 +570,8 @@ class ZBlogPHP
     //Cache相关
     private $cache_hash;
 
+    private $global_vars = [];
+
     /**
      * 构造函数，加载基本配置到$zbp.
      */
@@ -633,7 +635,6 @@ class ZBlogPHP
         $this->theme = &$blogtheme;
         $this->style = &$blogstyle;
 
-        $this->activeapps = &$this->activedapps;
         $this->t = &$this->table;
         $this->d = &$this->datainfo;
         $this->guid = &$this->option['ZC_BLOG_CLSID'];
@@ -979,8 +980,8 @@ class ZBlogPHP
 
         $this->islegacy_login_page = $this->option['ZC_LOGIN_USE_LEGACY_PAGE'];
 
-        $this->option = &$GLOBALS['zbp_option'];
-        $this->option = $GLOBALS['option'];
+        $this->global_vars['zbp_option'] = $GLOBALS['option'];
+        $this->option = &$this->global_vars['zbp_option'];
 
         $this->isinitialized = true;
 
@@ -2332,6 +2333,11 @@ class ZBlogPHP
      */
     public function PrepareTemplate($theme = null, $template_dirname = 'template')
     {
+        //从1.8起，终于是调整和理顺了PrepareTemplate和BuildTemplate
+        //BuildTemplate的设计失误，不要挂BuildTemplate里的接口，BuildTemplate是在模板编译时期调用的
+        //不要挂Filter_Plugin_Zbp_PrepareTemplate和Filter_Plugin_Zbp_MakeTemplatetags
+        //如需要修改$template，请挂Filter_Plugin_Zbp_PrepareTemplate_Core对模板进行增加修改
+        //1.8以下应该挂上Filter_Plugin_Zbp_Load，直接修改$zbp->$template
         if (is_null($theme) || empty($theme)) {
             $theme = &$this->theme;
         }
@@ -2339,9 +2345,15 @@ class ZBlogPHP
         $template = new Template();
         $template->MakeTemplateTags();
 
-        //老接口，只改templateTags的
+        //此接口不建议使用，只改templateTags的
         foreach ($GLOBALS['hooks']['Filter_Plugin_Zbp_MakeTemplatetags'] as $fpname => &$fpsignal) {
             $fpname($template->templateTags);
+        }
+
+        //此接口不建议使用，1.8以下用Filter_Plugin_Zbp_Load接口直接修改$zbp->template
+        //此处接口可以在Load时，对$theme, $template_dirname参数可以进行修改
+        foreach ($GLOBALS['hooks']['Filter_Plugin_Zbp_PrepareTemplate'] as $fpname => &$fpsignal) {
+            $fpname($theme, $template_dirname);
         }
 
         $template->theme = $theme;
@@ -2350,9 +2362,8 @@ class ZBlogPHP
         $template->SetPath();
         $template->LoadTemplates();
 
-        //从1.8起，传参变成 $template 对象
-        //1.8之前传参（$theme, $template_dirname）
-        foreach ($GLOBALS['hooks']['Filter_Plugin_Zbp_PrepareTemplate'] as $fpname => &$fpsignal) {
+        //从1.8起，增加了Filter_Plugin_Zbp_PrepareTemplate_Core，不要再用上边的接口
+        foreach ($GLOBALS['hooks']['Filter_Plugin_Zbp_PrepareTemplate_Core'] as $fpname => &$fpsignal) {
             $fpname($template);
         }
 
@@ -2360,13 +2371,14 @@ class ZBlogPHP
     }
 
     /**
-     * 针对有同一主题下有多套模板的解析
-     * 直接在接口中直接调用$zbp->BuildTemplateMore进行重新编译其它模板
+     * 针对有同一主题下有多套模板的解析.
      *
      * @return bool
      */
     public function BuildTemplate()
     {
+        //该接口已废弃了，以前设计的流程和接口有问题，这里的接口应该放在PrepareTemplate的
+        //不要挂Filter_Plugin_Zbp_BuildTemplate了，建议用Filter_Plugin_Zbp_PrepareTemplate_Core
         foreach ($GLOBALS['hooks']['Filter_Plugin_Zbp_BuildTemplate'] as $fpname => &$fpsignal) {
             $fpname($this->template->templates);
         }
@@ -2389,24 +2401,7 @@ class ZBlogPHP
      */
     public function BuildTemplateMore($theme = null, $template_dirname = 'template')
     {
-        if (is_null($theme) || empty($theme)) {
-            $theme = &$this->theme;
-        }
-        $this->template->theme = $theme;
-        $this->template->template_dirname = $template_dirname;
-        $this->template->SetPath();
-        $this->template->LoadTemplates();
-
-        foreach ($GLOBALS['hooks']['Filter_Plugin_Zbp_BuildTemplate'] as $fpname => &$fpsignal) {
-            $fpname($this->template->templates);
-        }
-
-        $s = implode($this->template->templates);
-        $md5 = md5($s);
-        $this->cache->templates_md5_array = serialize([$this->template->template_dirname => $md5]);
-        $this->SaveCache();
-
-        return $this->template->BuildTemplate();
+        //从1.8起清除了这个无用的函数
     }
 
     /**
@@ -2485,7 +2480,7 @@ class ZBlogPHP
         $this->autofill_template_htmltags = false;
         $this->backendtheme = $template_admin->theme;
 
-        foreach ($GLOBALS['hooks']['Filter_Plugin_Zbp_PrepareTemplateAdmin'] as $fpname => &$fpsignal) {
+        foreach ($GLOBALS['hooks']['Filter_Plugin_Zbp_PrepareTemplateAdmin_Core'] as $fpname => &$fpsignal) {
             $fpname($template_admin);
         }
 
@@ -2665,12 +2660,12 @@ class ZBlogPHP
      */
     public function AddBuildModule($moduleFileName, $parameters = null)
     {
-        $p = func_get_args();
         if ('archives' == $moduleFileName && isset($this->modulesbyfilename['archives'])) {
             if ([] == $this->modulesbyfilename['archives']->GetSideBarInUsed()) {
                 return;
             }
         }
+        $p = func_get_args();
         call_user_func_array(['ModuleBuilder', 'Add'], $p);
     }
 
@@ -5040,8 +5035,6 @@ class ZBlogPHP
             $links[] = $link;
         }
         $m->Links = $links;
-        $m->Build();
-        $m->Save();
     }
 
     /**
@@ -5064,8 +5057,6 @@ class ZBlogPHP
             }
         }
         $m->Links = $links;
-        $m->Build();
-        $m->Save();
     }
 
     /**

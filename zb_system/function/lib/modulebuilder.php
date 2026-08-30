@@ -45,10 +45,9 @@ class ModuleBuilder
      */
     public static function Add($modfilename, $parameters = null)
     {
-        $p = func_get_args();
         self::$Ready[$modfilename] = $modfilename;
+        $p = func_get_args();
         array_shift($p);
-        $p = is_array($p) ? $p : [];
         self::$List[$modfilename]['parameters'] = $p;
     }
 

@@ -112,12 +112,12 @@ class Template
     {
         global $zbp;
         if (null === $path) {
-            $this->app_path = $zbp->usersdir.'theme/'.$this->theme.'/';
+            $this->app_path = $zbp->usersdir . 'theme/' . $this->theme . '/';
 
             return;
         }
         $this->app_path = $path;
-        $this->app_path = rtrim($this->app_path, '/').'/';
+        $this->app_path = rtrim($this->app_path, '/') . '/';
     }
 
     public function GetAppPath()
@@ -138,19 +138,19 @@ class Template
         $template_dirname = $this->template_dirname;
 
         if (null == $path) {
-            $path = $zbp->cachedir.'compiled/'.$this->theme.'/';
+            $path = $zbp->cachedir . 'compiled/' . $this->theme . '/';
         }
 
         $path = str_replace('\\', '/', $path);
         if ('/' != substr($path, -1)) {
-            $path = $path.'/';
+            $path = $path . '/';
         }
         //针对不同的模板目录创建不同的编译目录
         if (!('' == $template_dirname || 'template' == $template_dirname)) {
-            $path = substr($path, 0, (strlen($path) - 1)).'___'.$template_dirname.'/';
+            $path = substr($path, 0, (strlen($path) - 1)) . '___' . $template_dirname . '/';
         }
         $this->path = $path;
-        $this->path = rtrim($this->path, '/').'/';
+        $this->path = rtrim($this->path, '/') . '/';
 
         return $this->path;
     }
@@ -167,7 +167,7 @@ class Template
      */
     public function HasTemplate($name)
     {
-        return file_exists($this->path.'/'.$name.'.php');
+        return file_exists($this->path . '/' . $name . '.php');
     }
 
     /**
@@ -186,7 +186,7 @@ class Template
             }
         }
 
-        return $this->path.$name.'.php';
+        return $this->path . $name . '.php';
     }
 
     /**
@@ -246,14 +246,14 @@ class Template
         }
 
         foreach ($this->dirs as $key => $value) {
-            $value = str_ireplace($this->app_path.$this->template_dirname.'/', $this->path, $value);
+            $value = str_ireplace($this->app_path . $this->template_dirname . '/', $this->path, $value);
             if (!file_exists($value)) {
                 mkdir($value, 0755, true);
             }
         }
         foreach ($this->templates as $name => $content) {
             $s = RemoveBOM($this->CompileFile($content, $name));
-            @file_put_contents($this->path.$name.'.php', $s);
+            @file_put_contents($this->path . $name . '.php', $s);
             $this->compileFiles_hash[$name] = md5($s);
         }
     }
@@ -281,7 +281,7 @@ class Template
                 }
             }
             foreach ($this->files as $key => $value) {
-                $s = $this->path.$key.'.php';
+                $s = $this->path . $key . '.php';
                 if (file_exists($s)) {
                     @unlink($s);
                 }
@@ -289,7 +289,7 @@ class Template
             $this->dirs = array_reverse($this->dirs);
 
             foreach ($this->dirs as $key => $value) {
-                $s = str_replace($this->app_path.'/'.$this->template_dirname.'/', $this->path, $value);
+                $s = str_replace($this->app_path . '/' . $this->template_dirname . '/', $this->path, $value);
                 if (file_exists($s)) {
                     foreach (GetFilesInDir($s, 'php') as $t) {
                         if (file_exists($t)) {
@@ -386,7 +386,7 @@ class Template
             $fpname($this, $entryPage);
         }
 
-        $file = $this->path.$entryPage.'.php';
+        $file = $this->path . $entryPage . '.php';
 
         if (!is_readable($file)) {
             $zbp->ShowError(86, __FILE__, __LINE__, ['lost_file' => $file]);
@@ -449,7 +449,7 @@ class Template
         $templates = [];
 
         // 读取预置模板
-        $files = GetFilesInDir($zbp->systemdir.'defend/backend/', 'php');
+        $files = GetFilesInDir($zbp->systemdir . 'defend/backend/', 'php');
         foreach ($files as $sortname => $fullname) {
             $s = file_get_contents($fullname);
             if ('{*' == substr($s, 0, 2) && false !== strstr($s, '*}')) {
@@ -466,9 +466,9 @@ class Template
         if (isset($zbp->backendapps[$this->theme]) && is_object($zbp->backendapps[$this->theme])) {
             $backendapp = &$zbp->backendapps[$this->theme];
             $backendapp_dirname = $backendapp->app_path;
-            $files2 = GetFilesInDir($backendapp_dirname."{$this->template_dirname}/", 'php');
+            $files2 = GetFilesInDir($backendapp_dirname . "{$this->template_dirname}/", 'php');
         } else {
-            $files2 = GetFilesInDir($zbp->systemdir.'admin2/'.$this->theme."/{$this->template_dirname}/", 'php');
+            $files2 = GetFilesInDir($zbp->systemdir . 'admin2/' . $this->theme . "/{$this->template_dirname}/", 'php');
         }
         foreach ($files2 as $sortname => $fullname) {
             $s = file_get_contents($fullname);
@@ -497,7 +497,7 @@ class Template
         $templates = [];
 
         // 读取预置模板
-        $files = GetFilesInDir($zbp->systemdir.'defend/default/', 'php');
+        $files = GetFilesInDir($zbp->systemdir . 'defend/default/', 'php');
         foreach ($files as $sortname => $fullname) {
             $s = file_get_contents($fullname);
             if ('{*' == substr($s, 0, 2) && false !== strstr($s, '*}')) {
@@ -511,15 +511,15 @@ class Template
         // 读取主题模板
         $this->dirs = [];
         $this->files = [];
-        $this->GetAllFileDir($zbp->usersdir.'theme/'.$theme."/{$this->template_dirname}/");
+        $this->GetAllFileDir($zbp->usersdir . 'theme/' . $theme . "/{$this->template_dirname}/");
 
         foreach ($this->files as $key => $value) {
             $templates[$key] = $value;
         }
 
         for ($i = 2; $i < 10; ++$i) {
-            if (!isset($templates['sidebar'.$i])) {
-                $templates['sidebar'.$i] = str_replace('$sidebar', '$sidebar'.$i, $templates['sidebar']);
+            if (!isset($templates['sidebar' . $i])) {
+                $templates['sidebar' . $i] = str_replace('$sidebar', '$sidebar' . $i, $templates['sidebar']);
             }
         }
 
@@ -530,29 +530,26 @@ class Template
     }
 
     /**
-     * 添加模板
+     * 添加模板含Info ($template_name名称ID, $content, $title标题, $type类型).
      *
-     * @param mixed $name
-     * @param mixed $content
+     * @param string $name
+     * @param string $content
+     * @param string $title
+     * @param string $type
+     * @param mixed  $template_name
      */
-    public function AddTemplate($name, $content)
+    public function AddTemplate($template_name, $content, $title = null, $type = null)
     {
-        $this->templates[$name] = $content;
+        $this->templates[$template_name] = $content;
 
-        return true;
-    }
-
-    /**
-     * 添加模板Info ($name名称ID, $title标题, $type类型).
-     *
-     * @param mixed $name
-     * @param mixed $title
-     * @param mixed $type
-     */
-    public function AddTemplateInfo($name, $title, $type)
-    {
-        $this->templates_Name[$name] = $title;
-        $this->templates_Type[$name] = $type;
+        if (is_null($title) && is_null($type)) {
+            $a = $this->GetTemplateNameAndType($template_name, $content);
+            $this->templates_Name[$template_name] = $a[0];
+            $this->templates_Type[$template_name] = $a[1];
+        } else {
+            $this->templates_Name[$template_name] = (string) $title;
+            $this->templates_Type[$template_name] = (string) $type;
+        }
 
         return true;
     }
@@ -654,14 +651,14 @@ class Template
                 }
             }
             //reset($ms);
-            $s = 'sidebar'.(0 == $k ? '' : $k + 1);
+            $s = 'sidebar' . (0 == $k ? '' : $k + 1);
             $this->{$s} = $ms;
             $ms = null;
         }
 
         for ($i = 1; $i < 10; ++$i) {
             $j = (1 == $i) ? '' : $i;
-            $this->templateTags['sidebar'.$j] = &$this->{'sidebar'.$j};
+            $this->templateTags['sidebar' . $j] = &$this->{'sidebar' . $j};
         }
 
         //foreach ($GLOBALS['hooks']['Filter_Plugin_Template_MakeTemplatetags'] as $fpname => &$fpsignal) {
@@ -672,12 +669,12 @@ class Template
         $o = [];
         foreach ($this->templateTags as $k => $v) {
             if (is_string($v) || is_numeric($v) || is_bool($v)) {
-                $t['{$'.$k.'}'] = $v;
+                $t['{$' . $k . '}'] = $v;
             }
         }
         foreach ($option as $k => $v) {
             if (is_string($v) || is_numeric($v) || is_bool($v)) {
-                $o['{#'.$k.'#}'] = $v;
+                $o['{#' . $k . '#}'] = $v;
             }
         }
         $this->staticTags = ($t + $o);
@@ -693,6 +690,16 @@ class Template
         return $this->entryPage;
     }
 
+    /**
+     * @param $template_name
+     *
+     * @return bool
+     */
+    public function Compiled_File_Exists($template_name)
+    {
+        return file_exists($this->path . $template_name . '.php');
+    }
+
     protected function addNonexistentTags()
     {
         global $zbp;
@@ -703,15 +710,15 @@ class Template
         }
 
         if (false === strpos($templates['comments'], 'AjaxCommentBegin')) {
-            $templates['comments'] = '<label id="AjaxCommentBegin"></label>'.$templates['comments'];
+            $templates['comments'] = '<label id="AjaxCommentBegin"></label>' . $templates['comments'];
         }
 
         if (false === strpos($templates['comments'], 'AjaxCommentEnd')) {
-            $templates['comments'] = $templates['comments'].'<label id="AjaxCommentEnd"></label>';
+            $templates['comments'] = $templates['comments'] . '<label id="AjaxCommentEnd"></label>';
         }
 
         if (false === strpos($templates['comment'], 'id="cmt{$comment.ID}"') && false === strpos($templates['comment'], 'id=\'cmt{$comment.ID}\'')) {
-            $templates['comment'] = '<label id="cmt{$comment.ID}"></label>'.$templates['comment'];
+            $templates['comment'] = '<label id="cmt{$comment.ID}"></label>' . $templates['comment'];
         }
 
         if (false === strpos($templates['commentpost'], 'commentpost-verify') && false === strpos($templates['commentpost'], 'inpVerify') && false === strpos($templates['commentpost'], '=\'verify\'') && false === strpos($templates['commentpost'], '="verify"')) {
@@ -720,7 +727,7 @@ class Template
             if (false !== strpos($templates['commentpost'], '<!--verify-->')) {
                 $templates['commentpost'] = str_replace('<!--verify-->', $verify, $templates['commentpost']);
             } elseif (strpos($templates['commentpost'], '</form>')) {
-                $templates['commentpost'] = str_replace('</form>', $verify.'</form>', $templates['commentpost']);
+                $templates['commentpost'] = str_replace('</form>', $verify . '</form>', $templates['commentpost']);
             } else {
                 $templates['commentpost'] .= $verify;
             }
@@ -728,7 +735,7 @@ class Template
 
         if (false === strpos($templates['header'], '{$header}')) {
             if (false !== strpos($templates['header'], '</head>')) {
-                $templates['header'] = str_replace('</head>', '{$header}'.'</head>', $templates['header']);
+                $templates['header'] = str_replace('</head>', '{$header}' . '</head>', $templates['header']);
             } else {
                 $templates['header'] .= '{$header}';
             }
@@ -736,11 +743,11 @@ class Template
 
         if (false === strpos($templates['footer'], '{$footer}')) {
             if (false !== strpos($templates['footer'], '</body>')) {
-                $templates['footer'] = str_replace('</body>', '{$footer}'.'</body>', $templates['footer']);
+                $templates['footer'] = str_replace('</body>', '{$footer}' . '</body>', $templates['footer']);
             } elseif (false !== strpos($templates['footer'], '</html>')) {
-                $templates['footer'] = str_replace('</html>', '{$footer}'.'</html>', $templates['footer']);
+                $templates['footer'] = str_replace('</html>', '{$footer}' . '</html>', $templates['footer']);
             } else {
-                $templates['footer'] = '{$footer}'.$templates['footer'];
+                $templates['footer'] = '{$footer}' . $templates['footer'];
             }
         }
     }
@@ -775,7 +782,7 @@ class Template
             if (isset($matches[2])) {
                 foreach ($matches[2] as $j => $p) {
                     // 用整个匹配块替换为带标签的占位符，避免仅替换内容时误替换到其他相同片段
-                    $placeholder = '{'.$matches[1][$j].'}<!-- parse_middle_code'.$j.'-->{/'.$matches[1][$j].'}';
+                    $placeholder = '{' . $matches[1][$j] . '}<!-- parse_middle_code' . $j . '-->{/' . $matches[1][$j] . '}';
                     $content = str_replace($matches[0][$j], $placeholder, $content);
                     $this->uncompiledCodeStore[$j] = [
                         'type'    => $matches[1][$j],
@@ -793,17 +800,17 @@ class Template
     {
         foreach ($this->uncompiledCodeStore as $j => $p) {
             if ('php' == $p['type']) {
-                $content = str_replace('{php}<!-- parse_middle_code'.$j.'-->{/php}', '<'.'?php '.$p['content'].' ?'.'>', $content);
+                $content = str_replace('{php}<!-- parse_middle_code' . $j . '-->{/php}', '<' . '?php ' . $p['content'] . ' ?' . '>', $content);
             } else {
                 $content = str_replace(
-                    '{'.$p['type'].'}<!-- parse_middle_code'.$j.'-->{/'.$p['type'].'}',
+                    '{' . $p['type'] . '}<!-- parse_middle_code' . $j . '-->{/' . $p['type'] . '}',
                     $p['content'],
                     $content,
                 );
             }
         }
 
-        $content = preg_replace('/\{php\}([\D\d]+?)\{\/php\}/', '<'.'?php $1 ?'.'>', $content);
+        $content = preg_replace('/\{php\}([\D\d]+?)\{\/php\}/', '<' . '?php $1 ?' . '>', $content);
         $this->uncompiledCodeStore = [];
     }
 
@@ -996,7 +1003,7 @@ class Template
      */
     protected function parse_switch_case_repalce($matches)
     {
-        return '{php}case '.rtrim(trim($matches[1]), ':').':{/php}';
+        return '{php}case ' . rtrim(trim($matches[1]), ':') . ':{/php}';
     }
 
     /**
@@ -1008,10 +1015,10 @@ class Template
     {
         $s = str_replace('=>', '', $matches[1]);
         if (false === strpos($s, '=')) {
-            return '{php} echo $'.$this->replace_dot($matches[1]).'; {/php}';
+            return '{php} echo $' . $this->replace_dot($matches[1]) . '; {/php}';
         }
 
-        return '{php} $'.$this->replace_dot($matches[1]).'; {/php}';
+        return '{php} $' . $this->replace_dot($matches[1]) . '; {/php}';
     }
 
     /**
@@ -1021,7 +1028,7 @@ class Template
      */
     protected function parse_funtion_replace_dot($matches)
     {
-        return '{php} echo '.$matches[1].'('.$this->replace_dot($matches[2]).'); {/php}';
+        return '{php} echo ' . $matches[1] . '(' . $this->replace_dot($matches[2]) . '); {/php}';
     }
 
     /**
@@ -1068,7 +1075,7 @@ class Template
             $type = trim(strtok($t, '*'));
         }
 
-        if (is_readable($f = $GLOBALS['blogpath'].'zb_users/theme/'.$this->theme.'/template.json')) {
+        if (is_readable($f = $GLOBALS['blogpath'] . 'zb_users/theme/' . $this->theme . '/template.json')) {
             if (!is_object($this->template_json_file)) {
                 $this->template_json_file = json_decode(file_get_contents($f));
             }
@@ -1088,7 +1095,7 @@ class Template
         $name = trim($name);
         $type = trim($type);
         $type = str_replace([',', '，', ';', '；', '、'], '|', $type);
-        if (null != $type) {
+        if (!empty($type)) {
             $this->isuse_nameandtype = true;
         }
         if ('index' == $filename && null == $type) {
@@ -1116,15 +1123,15 @@ class Template
         if (function_exists('scandir')) {
             foreach (scandir($dir) as $d) {
                 if ('.' != $d && '..' != $d) {
-                    if (is_dir($dir.$d)) {
+                    if (is_dir($dir . $d)) {
                         if (('.' != substr($d, 0, 1))) {
-                            $fd = str_replace('\\', '/', $dir.$d.'/');
+                            $fd = str_replace('\\', '/', $dir . $d . '/');
                             $this->dirs[] = $fd;
                             $this->GetAllFileDir($fd);
                         }
-                    } elseif (is_readable($dir.$d)) {
-                        $s = $dir.$d;
-                        $i = strlen($zbp->usersdir.'theme/'.$this->theme."/{$this->template_dirname}/");
+                    } elseif (is_readable($dir . $d)) {
+                        $s = $dir . $d;
+                        $i = strlen($zbp->usersdir . 'theme/' . $this->theme . "/{$this->template_dirname}/");
                         if ('.php' == substr($s, -4)) {
                             $s2 = substr($s, ($i - strlen($s)));
                             $s3 = substr($s2, 0, (strlen($s2) - 4));
@@ -1138,14 +1145,14 @@ class Template
             if ($handle = opendir($dir)) {
                 while (false !== ($file = readdir($handle))) {
                     if ('.' != $file && '..' != $file) {
-                        $d = str_replace("{$this->template_dirname}//", "{$this->template_dirname}/", str_replace('\\', '/', $dir.'/'.$file));
-                        if (is_dir($dir.'/'.$file)) {
+                        $d = str_replace("{$this->template_dirname}//", "{$this->template_dirname}/", str_replace('\\', '/', $dir . '/' . $file));
+                        if (is_dir($dir . '/' . $file)) {
                             $d = str_replace('\\', '/', $d);
-                            $this->dirs[] = '/' == substr($d, -1) ? $d : ($d.'/');
+                            $this->dirs[] = '/' == substr($d, -1) ? $d : ($d . '/');
                             $this->GetAllFileDir($d);
                         } elseif (is_readable($d)) {
                             $s = $d;
-                            $i = strlen($zbp->usersdir.'theme/'.$this->theme."/{$this->template_dirname}/");
+                            $i = strlen($zbp->usersdir . 'theme/' . $this->theme . "/{$this->template_dirname}/");
                             if ('.php' == substr($s, -4)) {
                                 $s2 = substr($s, ($i - strlen($s)));
                                 $s3 = substr($s2, 0, (strlen($s2) - 4));

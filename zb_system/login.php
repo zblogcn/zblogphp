@@ -54,21 +54,21 @@ HookFilterPlugin('Filter_Plugin_Login_Header');
       <?php } ?>
 
       <?php
-          $input_classname = $input_id = $input_label = '';
+          $input_classname = $input_id = $input_label = $input_html = $input_style = '';
           $input_tabindex = 9998;
           $input_type = 'text';
           foreach ($GLOBALS['hooks']['Filter_Plugin_Login_Input_Insert'] as $fpname => &$fpsignal) {
-              $fpreturn = call_user_func_array($fpname, $input_classname, $input_id, $input_label, $input_tabindex, $input_type);
+              $fpreturn = $fpname($input_classname, $input_id, $input_label, $input_tabindex, $input_type, $input_style);
               if (null !== $input_label) { ?>
       <dd class="<?php echo $input_classname; ?>">
           <label for="<?php echo $input_id; ?>"><?php echo $input_label; ?></label>
-          <input type="<?php echo $input_type; ?>" id="<?php echo $input_id; ?>" name="<?php echo $input_id; ?>" size="20" tabindex="<?php echo $input_tabindex; ?>" />
+          <input type="<?php echo $input_type; ?>" id="<?php echo $input_id; ?>" name="<?php echo $input_id; ?>" style="<?php echo $input_style; ?>" size="20" tabindex="<?php echo $input_tabindex; ?>" />
       </dd>
       <?php
       } else {
-          ?>
+          $input_html = $input_id; ?>
           <dd class="<?php echo $input_classname; ?>">
-                    <?php echo $input_id; ?>
+                    <?php echo $input_html; ?>
                 </dd>
       <?php
       }

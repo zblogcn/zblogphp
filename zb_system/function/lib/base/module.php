@@ -119,6 +119,13 @@ abstract class Base__Module extends Base
 
             return $this->private_links;
         }
+        if ('ContentWithoutId' == $name) {
+            $pattern = '/id\s*=\s*(["\'][^"\']*["\'])/i';
+            $replacement = '';
+            $s = @preg_replace($pattern, $replacement, $this->Content);
+
+            return (string) $s;
+        }
         if ('AutoContent' == $name) {
             if ('navbar' == $this->FileName) {
                 return false;
@@ -172,7 +179,7 @@ abstract class Base__Module extends Base
         if (empty($this->HtmlID)) {
             $this->HtmlID = $this->FileName;
         }
-        if (is_null($this->private_links) && !is_array($this->private_links)) {
+        if (!is_array($this->private_links)) {
             $this->private_links = [];
         }
         if (!empty($this->private_links)) {
@@ -281,6 +288,8 @@ abstract class Base__Module extends Base
 
     public function Build()
     {
+        global $zbp;
+
         if (true == $this->NoRefresh) {
             return;
         }
@@ -298,10 +307,8 @@ abstract class Base__Module extends Base
         }
         if (isset($this->Metas->system_function)) {
             $f = $this->Metas->system_function;
-            $p = $this->Metas->system_parameters;
-            $p = is_array($p) ? $p : [$p];
 
-            $this->Content = call_user_func_array(ParseFilterPlugin($f), $p);
+            $this->Content = call_user_func(ParseFilterPlugin($f));
 
             return true;
         }
@@ -345,20 +352,27 @@ abstract class Base__Module extends Base
             } else {
                 $s .= '<li>';
             }
-            if (isset($link->href)) {
-                $s .= '<' . 'a ';
-                foreach ($link as $link_key => $link_value) {
-                    if ('content' == $link_key || 'li_id' == $link_key) {
-                    } elseif ('target' == $link_key && empty($link_value)) {
-                    } else {
-                        $link_key = str_replace('data_', 'data-', $link_key);
-                        $s .= $link_key . '="' . $link_value . '" ';
-                    }
-                }
-                $s .= '>' . $link->content . '</a></li>';
+
+            if ('<dl' == substr($link->content, 0, 3) || '<ul' == substr($link->content, 0, 3) || '<ol' == substr($link->content, 0, 3)) {
+                $s .= $link->content . '';
             } else {
-                $s .= $link->content . '</li>';
+                if (isset($link->href) && !empty($link->href)) {
+                    $s .= '<' . 'a ';
+                    foreach ($link as $link_key => $link_value) {
+                        if ('content' == $link_key || 'li_id' == $link_key) {
+                        } elseif ('target' == $link_key && empty($link_value)) {
+                        } else {
+                            $link_key = str_replace('data_', 'data-', $link_key);
+                            $s .= $link_key . '="' . $link_value . '" ';
+                        }
+                    }
+                    $s .= '>' . $link->content . '</a>';
+                } else {
+                    $s .= $link->content . '';
+                }
             }
+
+            $s .= '</li>';
         }
         $this->Content = $s;
     }
@@ -378,7 +392,12 @@ abstract class Base__Module extends Base
         if ($aNodes->length > 0) {
             foreach ($aNodes as $a) {
                 $href = [];
-                $href['content'] = $a->nodeValue;
+                //$href['content'] = $a->nodeValue;
+                if (isset($a->childNodes[0])) {
+                    $href['content'] = $dom->saveHTML($a->childNodes[0]);
+                } else {
+                    $href['content'] = $a->nodeValue;
+                }
                 $attributes = $a->attributes;
                 if ($attributes->length > 0) {
                     // 遍历属性集合
@@ -395,5 +414,39 @@ abstract class Base__Module extends Base
         $this->private_links = $item;
 
         return $item;
+    }
+
+    /**
+     * 添加链接.
+     *
+     * @param $href $href可以是stdClass
+     * @param $content
+     * @param mixed $id
+     * @param mixed $target
+     *
+     * @return bool|mixed|string
+     */
+    public function AddLink($href = '', $content = '', $id = '', $target = '')
+    {
+        if (is_object($href)) {
+            $this->Links[] = $href;
+
+            return $this->Links;
+        }
+
+        if (empty($href) && empty($content)) {
+            return $this->Links;
+        }
+
+        $link = new stdClass();
+        $link->href = $href;
+        $link->content = $content;
+        $link->id = $id;
+        $link->target = $target;
+        $links = $this->Links;
+        $links[] = $link;
+        $this->Links = $links;
+
+        return $this->Links;
     }
 }

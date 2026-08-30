@@ -1,5 +1,13 @@
 @use "variables" as *;
 
+:root {
+    --color-blod:#1d4c7d;
+    --color-normal:#3a6ea5;
+    --color-light:#b0cdee;
+    --color-high:#3399cc;
+    --color-anti:#d60000;
+}
+
 * {
   padding: 0;
   margin: 0;

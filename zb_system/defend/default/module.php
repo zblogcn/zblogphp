@@ -12,18 +12,23 @@
 {if $module.FileName!='catalog'}
 {foreach $module.Links as $link}
 {php}
-  echo '<li><'.'a ';
-  foreach ($link as $link_key => $link_value) {
-    if ($link_key=='content') {
+  if ('<dl' == substr($link->content, 0, 3) || '<ul' == substr($link->content, 0, 3) || '<ol' == substr($link->content, 0, 3)) {
+    echo '<li>'.$link->content.'</li>';
+  } else {
+    echo '<li><'.'a ';
+    foreach ($link as $link_key => $link_value) {
+      if ($link_key=='content') {
 
-    }elseif($link_key=='target' && empty($link_value)) {
+      }elseif($link_key=='target' && empty($link_value)) {
 
-    }else{
-      $link_key=str_replace('data_','data-',$link_key);
-      echo $link_key.'="'.$link_value.'" ';
+      }else{
+        $link_key=str_replace('data_','data-',$link_key);
+        echo $link_key.'="'.$link_value.'" ';
+      }
     }
+    echo '>'.$link->content.'</a></li>';
   }
-  echo '>'.$link->content.'</a></li>';
+
 {/php}
 {/foreach}
 {else}

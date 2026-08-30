@@ -1,7 +1,7 @@
 <?php exit(); ?>
   <style>
   #sortable { list-style-type: none; margin: 0; padding: 0; width: auto; }
-  #sortable li { margin: 0.5em 0; padding: 0.5em 0; border-left:0.5em solid gray;padding-left: 1em; font-size: 1em; height: 3em; }
+  #sortable li { margin: 0.5em 0; padding: 0.5em 0; border-left:0.5em solid var(--color-high);padding-left: 1em; font-size: 1em; height: 3em; }
   </style>
 <form id="edit" name="edit" method="post" action="#">
     <input id="edtID" name="ID" type="hidden" value="{$mod->ID}" />
