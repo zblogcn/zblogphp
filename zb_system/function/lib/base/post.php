@@ -395,9 +395,9 @@ abstract class Base__Post extends Base
             }
         }
         if (2 == func_num_args() && !array_key_exists($type, $this->data) && array_key_exists($s, $this->data)) {
-            [$type, $s] = [$s, $type];
+            list($type, $s) = [$s, $type];
         } elseif (1 == func_num_args() && array_key_exists($s, $this->data)) {
-            [$type, $s] = [$s, 'Y-m-d H:i:s'];
+            list($type, $s) = [$s, 'Y-m-d H:i:s'];
         }
         if (array_key_exists($type, $this->data)) {
             return date($s, (int) $this->{$type});
