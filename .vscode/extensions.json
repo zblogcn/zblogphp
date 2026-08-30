@@ -1,0 +1,7 @@
+{
+    "recommendations": [
+        // "rifi2k.format-html-in-php",
+        "editorconfig.editorconfig",
+        "streetsidesoftware.code-spell-checker"
+    ]
+}
