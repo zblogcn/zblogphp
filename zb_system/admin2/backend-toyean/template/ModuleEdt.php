@@ -1,4 +1,8 @@
 <?php exit(); ?>
+  <style>
+  #sortable { list-style-type: none; margin: 0; padding: 0; width: auto; }
+  #sortable li { margin: 0.5em 0; padding: 0.5em 0; border-left:0.5em solid gray;padding-left: 1em; font-size: 1em; height: 3em; }
+  </style>
 <div class="edit module_edit">
 <form id="edit" name="edit" method="post" action="#">
     <input id="edtID" name="ID" type="hidden" value="{$mod->ID}" />
@@ -7,7 +11,7 @@
     <p {if $mod->SourceType == 'themeinclude'}class="hidden"{/if}>
         <span class="title">{$zbp->lang['msg']['title']}:</span><span class="star">(*)</span><br />
         <input id="edtName" class="edit" size="40" name="Name" maxlength="{$zbp->option['ZC_MODULE_NAME_MAX']}" type="text" value="{FormatString($mod->Name, '[html-format]')}" />
-        ({$zbp->lang['msg']['hide_title']}: <input type="text" id="IsHideTitle" name="IsHideTitle" class="checkbox" value="{$mod->IsHideTitle}" />)
+        <span style="display:none;">({$zbp->lang['msg']['hide_title']}: <input type="text" id="IsHideTitle" name="IsHideTitle" class="checkbox" value="{$mod->IsHideTitle}" />)</span>
     </p>
     <!-- filename -->
     <p>
@@ -20,25 +24,30 @@
     <input id="edtType" class="edit" size="40" name="Type" type="hidden" value="{FormatString($mod->Type, '[html-format]')}" />
     {if $mod->AutoContent == false && $mod->Type == 'ul'}
     <p>
-        <span class="title">{$zbp->lang['msg']['link']}:</span><span class="star">(*)</span><br />
+        <span class="title">{$zbp->lang['msg']['link']}:</span><span class="star">(*)</span>
     </p>
+    <ul id="sortable">
 {php}<?php
 foreach ($mod->Links as $link) {
     ?>{/php}
-    <p><input class="edit" size="50" name="href[]" type="text" placeholder="{$zbp->lang['msg']['href']}" value="{FormatString(@$link->href, '[html-format]')}" />
+    <li class="ui-state-default"><input class="edit" size="50" name="href[]" type="text" placeholder="{$zbp->lang['msg']['href']}" value="{FormatString(@$link->href, '[html-format]')}" />
     <input class="edit" size="30" name="content[]" type="text" placeholder="{$zbp->lang['msg']['text']}" value="{FormatString(@$link->content, '[html-format]')}" />
     <input class="edit" size="30" name="target[]" type="text" placeholder="Target" value="{FormatString(@$link->target, '[html-format]')}" />
     {if $mod->FileName == 'navbar'}
-    <input class="edit" size="30" name="li_id[]" type="hidden" value="{FormatString(@$link->li_id, '[html-format]')}" />
+    <input class="edit" name="li_id[]" type="hidden" value="{FormatString(@$link->li_id, '[html-format]')}" />
     {/if}
-    </p>
+    <input class="edit" name="id[]" type="hidden" value="{FormatString(@$link->id, '[html-format]')}" />
+    &nbsp;<a onclick="$(this).parent().remove();" href="javascript:return false;"><i class="icon-trash"></i></a>
+    </li>
     {php}<?php
 }
 ?>{/php}
-    <p><input class="edit" size="50" name="href[]" type="text" placeholder="{$zbp->lang['msg']['href']}" value="" />
+    <li class="ui-state-default"><input class="edit" size="50" name="href[]" type="text" placeholder="{$zbp->lang['msg']['href']}" value="" />
     <input class="edit" size="30" name="content[]" type="text" placeholder="{$zbp->lang['msg']['text']}" value="" />
     <input class="edit" size="30" name="target[]" type="text" placeholder="Target" value="" />
-    </p>
+    <input class="edit" name="id[]" type="hidden" value="" />
+    </li>
+    </ul>
     {/if}
     {if $mod->AutoContent == false && $mod->Type == 'div'}
     <p>
@@ -64,7 +73,10 @@ foreach ($mod->Links as $link) {
     </label>
     {/if}
     <!-- maxli -->
-    <input type="hidden" name="MaxLi" value="{$mod->MaxLi}" size="40" />
+    <p style="display:none;">
+        <span class="title">{$zbp->lang['msg']['max_li_in_ul']}:</span>
+        <input type="text" id="MaxLi" name="MaxLi" value="{$mod->MaxLi}" />
+    </p>
     <!-- no refresh content -->
     <p style="display:none;" {if $mod->SourceType == 'themeinclude'}class="hidden"{/if}>
         <span class="title">{$zbp->lang['msg']['no_refresh_content']}:</span>
@@ -95,5 +107,10 @@ foreach ($mod->Links as $link) {
             return false
         }
     }
+</script>
+<script>
+$( function() {
+$( "#sortable" ).sortable();
+} );
 </script>
 </div>

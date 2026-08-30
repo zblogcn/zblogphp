@@ -172,6 +172,9 @@ abstract class Base__Module extends Base
         if (empty($this->HtmlID)) {
             $this->HtmlID = $this->FileName;
         }
+        if (is_null($this->private_links) && !is_array($this->private_links)) {
+            $this->private_links = [];
+        }
         if (!empty($this->private_links)) {
             $this->Metas->system_links = json_encode($this->private_links, JSON_UNESCAPED_UNICODE);
         }
@@ -337,16 +340,25 @@ abstract class Base__Module extends Base
     {
         $s = '';
         foreach ($this->Links as $link) {
-            $s .= '<li><' . 'a ';
-            foreach ($link as $link_key => $link_value) {
-                if ('content' == $link_key) {
-                } elseif ('target' == $link_key && empty($link_value)) {
-                } else {
-                    $link_key = str_replace('data_', 'data-', $link_key);
-                    $s .= $link_key . '="' . $link_value . '" ';
-                }
+            if (isset($link->li_id)) {
+                $s .= '<li id="' . $link->li_id . '">';
+            } else {
+                $s .= '<li>';
             }
-            $s .= '>' . $link->content . '</a></li>';
+            if (isset($link->href)) {
+                $s .= '<' . 'a ';
+                foreach ($link as $link_key => $link_value) {
+                    if ('content' == $link_key || 'li_id' == $link_key) {
+                    } elseif ('target' == $link_key && empty($link_value)) {
+                    } else {
+                        $link_key = str_replace('data_', 'data-', $link_key);
+                        $s .= $link_key . '="' . $link_value . '" ';
+                    }
+                }
+                $s .= '>' . $link->content . '</a></li>';
+            } else {
+                $s .= $link->content . '</li>';
+            }
         }
         $this->Content = $s;
     }

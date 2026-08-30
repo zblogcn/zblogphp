@@ -304,6 +304,7 @@ return [
         'href'                              => 'href',
         'text'                              => 'text',
         'custom_content'                    => 'Custom content',
+        'you_are_a_helpful_assistant'       => 'You are a helpful assistant.',
         ''                                  => '',
     ],
 
