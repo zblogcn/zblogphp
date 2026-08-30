@@ -41,7 +41,7 @@ unset($post_data['addinfo']);
     ?>
 
 </head>
-<body class="error short">
+<body class="body-error error short">
 <div class="bg">
     <div id="wrapper">
         <div class="logo"><img src="<?php echo $GLOBALS['bloghost']; ?>zb_system/image/admin/none.gif" title="Z-BlogPHP"

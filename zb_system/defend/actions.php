@@ -83,6 +83,7 @@ return array(
     'TagAll'      => 2,
     'UploadAll'   => 2,
 
+    'RewriteMng'  => 1,
     'NoValidCode' => 5,
 
     'root' => 1,

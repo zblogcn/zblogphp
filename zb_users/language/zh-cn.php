@@ -6,8 +6,7 @@
 //Custom Information
 //Don't delete %s and ()
 
-return array(
-
+return [
     'lang'                  => 'zh-CN',
     'lang_bcp47'            => 'zh-Hans', // http://tools.ietf.org/html/bcp47
     'lang_name'             => '简体中文',
@@ -16,7 +15,7 @@ return array(
     'windows_character_set' => 'GBK',
 
     //Front-End & Back-End
-    'msg' => array(
+    'msg' => [
         'id'                                => 'ID',
         'name'                              => '名称',
         'title'                             => '标题',
@@ -105,6 +104,7 @@ return array(
         'theme_manage'                      => '主题管理',
         'plugin_manage'                     => '插件管理',
         'module_manage'                     => '模块管理',
+        'rewrite_manage'                    => '伪静态管理',
         'site_analyze'                      => '网站信息',
         'info_intro'                        => '网站摘要',
         'refresh_cache'                     => '清空缓存并重新编译模板',
@@ -288,10 +288,12 @@ return array(
         'external_link_no_url_error'        => '您所访问的页面由于未知原因无法打开',
         'external_link_continue'            => '继续访问',
         ''                                  => '',
-    ),
+        'closemenu'                         => '收起菜单',
+        'expandmenu'                        => '展开菜单',
+    ],
 
     //Action
-    'actions' => array(
+    'actions' => [
         'login'       => '登录',
         'logout'      => '登出',
         'verify'      => '验证',
@@ -360,35 +362,35 @@ return array(
         'UploadAll'   => '所有附件权限',
         'root'        => '超级权限',
         'NoValidCode' => '无视验证码',
-    ),
+    ],
 
     //Article Level
-    'post_status_name' => array(
+    'post_status_name' => [
         '0' => '公开',
         '1' => '草稿',
         '2' => '审核',
         '4' => '私人',
         '8' => '加锁',
-    ),
+    ],
 
     //User Level
-    'user_level_name' => array(
+    'user_level_name' => [
         '1' => '管理员',
         '2' => '网站编辑',
         '3' => '作者',
         '4' => '协作者',
         '5' => '评论者',
         '6' => '游客',
-    ),
+    ],
 
-    'user_status_name' => array(
+    'user_status_name' => [
         '0' => '正常',
         '1' => '审核',
         '2' => '禁止',
-    ),
+    ],
 
     //January, February...
-    'month' => array(
+    'month' => [
         '1'  => '一月',
         '2'  => '二月',
         '3'  => '三月',
@@ -401,10 +403,10 @@ return array(
         '10' => '十月',
         '11' => '十一月',
         '12' => '十二月',
-    ),
+    ],
 
     //Jan., Feb. ...
-    'month_abbr' => array(
+    'month_abbr' => [
         '1'  => '1月',
         '2'  => '2月',
         '3'  => '3月',
@@ -417,10 +419,10 @@ return array(
         '10' => '10月',
         '11' => '11月',
         '12' => '12月',
-    ),
+    ],
 
     //Sunday, Monday..
-    'week' => array(
+    'week' => [
         '7' => '星期日',
         '1' => '星期一',
         '2' => '星期二',
@@ -428,10 +430,10 @@ return array(
         '4' => '星期四',
         '5' => '星期五',
         '6' => '星期六',
-    ),
+    ],
 
     //Sun., Mon. ...
-    'week_abbr' => array(
+    'week_abbr' => [
         '7' => '日',
         '1' => '一',
         '2' => '二',
@@ -439,9 +441,9 @@ return array(
         '4' => '四',
         '5' => '五',
         '6' => '六',
-    ),
+    ],
 
-    'week_short' => array(
+    'week_short' => [
         '7' => '周日',
         '1' => '周一',
         '2' => '周二',
@@ -449,10 +451,10 @@ return array(
         '4' => '周四',
         '5' => '周五',
         '6' => '周六',
-    ),
+    ],
 
     //Custom Error Information
-    'error' => array(
+    'error' => [
         '0'  => '未知错误',
         '1'  => '未知命令',
         '2'  => '相关页面不存在',
@@ -557,17 +559,17 @@ return array(
         '101' => '图片载入失败',
         '102' => '原图片宽高不正常',
         '103' => 'PostTime 格式不正确，应为时间戳或可被解析的时间字符串',
-    ),
+    ],
 
-    'offical_urls' => array(
+    'offical_urls' => [
         'more_help' => 'https://www.zblogcn.com/help/?id={%id%}&message={%message%}',
         'bing_help' => 'https://cn.bing.com/search?q={%message%}',
         'office_docs' => 'https://docs.zblogcn.com/php/#/books/start-25-faq',
         'office_bbs' => 'https://bbs.zblogcn.com/',
-    ),
+    ],
 
     // Possible causes of the error
-    'error_reasons' => array(
+    'error_reasons' => [
         // -1 for default
         'default' => '',
 
@@ -591,7 +593,7 @@ return array(
             您可以<a href="https://wiki.zblogcn.com/doku.php?id=zblogphp:error:%E9%A6%96%E9%A1%B5#error-92" target="_blank">点击这里，来获得缺少组件的大致列表。</a>
         ',
 
-        'other' => array(
+        'other' => [
             // Other errors then
             'mysql' => '
                 您在zb_users/c_option.php内配置、或刚才填写的的 MySQL 连接信息是否正确？<br/>
@@ -617,8 +619,7 @@ return array(
                 2. 关闭某些使用相关函数的插件，或联系这些插件的作者。<br/>
                 <br/>
             ',
-
-        ),
+        ],
 
         'end' => '
 请复制上方错误信息到搜索引擎以获取关于该错误的说明，或点击<a href="{%morehelp%}" rel="nofollow" target="_blank">「使用必应搜索」。</a><br/><br/>
@@ -630,6 +631,5 @@ return array(
 如果仍然无法解决，也可以到 <a href="{%officebbs%}" rel="nofollow" target="_blank">Z-Blog 官方论坛</a>，附上当前错误信息与描述寻求帮助。
 注：请将"当前错误信息"复制进标题或正文中。<br/>
         ',
-    ),
-
-);
+    ],
+];

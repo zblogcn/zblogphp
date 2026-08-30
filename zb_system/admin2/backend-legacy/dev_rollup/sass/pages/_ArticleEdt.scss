@@ -1,0 +1,26 @@
+/* 使用 Grid 布局：主内容 + 侧栏 */
+form#edit {
+  display: grid;
+  grid-template-columns: 1fr 270px;
+  max-width: fit-content;
+}
+
+#divEditLeft {
+  /* 主栏内元素占据第一列 (默认) */
+  label {
+    vertical-align: middle;
+  }
+}
+
+#divEditRight {
+  /* 侧栏在第二列 */
+  justify-self: end;
+  text-align: right;
+
+  .editmod>select,
+  .editmod>input[type="text"],
+  #btnPost {
+    width: 180px;
+    height: 38px;
+  }
+}

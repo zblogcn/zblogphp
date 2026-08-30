@@ -10,8 +10,7 @@
 //'Custom Information
 //'Don't delete %s and ()
 
-return array(
-
+return [
     'lang'                  => 'zh-TW',
     'lang_bcp47'            => 'zh-Hant', // http://tools.ietf.org/html/bcp47
     'lang_name'             => '傳統中文',
@@ -20,7 +19,7 @@ return array(
     'windows_character_set' => 'BIG5',
 
     //Front-End & Back-End
-    'msg' => array(
+    'msg' => [
         'id'                                => 'ID',
         'name'                              => '名稱',
         'title'                             => '標題',
@@ -109,6 +108,7 @@ return array(
         'theme_manage'                      => '佈景主題',
         'plugin_manage'                     => '外掛管理',
         'module_manage'                     => '模組管理',
+        'rewrite_manage'                    => '僞靜態管理',
         'site_analyze'                      => '網站資訊',
         'info_intro'                        => '控制台',
         'refresh_cache'                     => '清除快取並重新編譯模板',
@@ -193,7 +193,7 @@ return array(
         'operation_succeed'                 => '處理成功',
         'operation_failed'                  => '處理失敗',
         'batch_operation_in_progress'       => '批次處理中',
-        'previous_operation_not_finished'   => "之前的批次處理任務尚未完成，點擊<a href=\'#\'>「繼續」</a>執行完所有任務。",
+        'previous_operation_not_finished'   => "之前的批次處理任務尚未完成，點擊<a href=\\'#\\'>「繼續」</a>執行完所有任務。",
         'error_tips'                        => '錯誤提示',
         'error_info'                        => '錯誤資訊',
         'file_line'                         => '檔案位置',
@@ -292,10 +292,12 @@ return array(
         'external_link_no_url_error'        => '您所訪問的頁面由於未知原因無法打開',
         'external_link_continue'            => '繼續訪問',
         ''                                  => '',
-    ),
+        'closemenu'                         => '折疊選單',
+        'expandmenu'                        => '展開選單',
+    ],
 
     //Action
-    'actions' => array(
+    'actions' => [
         'login'       => '登入',
         'logout'      => '登出',
         'verify'      => '驗證',
@@ -364,35 +366,35 @@ return array(
         'UploadAll'   => '所有附件權限',
         'root'        => '超級權限',
         'NoValidCode' => '驗證碼',
-    ),
+    ],
 
     //Article Level
-    'post_status_name' => array(
+    'post_status_name' => [
         '0' => '公開',
         '1' => '草稿',
         '2' => '待審',
         '4' => '私有',
         '8' => '加鎖',
-    ),
+    ],
 
     //User Level
-    'user_level_name' => array(
+    'user_level_name' => [
         '1' => '管理員',
         '2' => '網站編輯',
         '3' => '作者',
         '4' => '協作者',
         '5' => '迴響者',
         '6' => '訪客',
-    ),
+    ],
 
-    'user_status_name' => array(
+    'user_status_name' => [
         '0' => '正常',
         '1' => '待審',
         '2' => '禁止',
-    ),
+    ],
 
     //January, February...
-    'month' => array(
+    'month' => [
         '1'  => '一月',
         '2'  => '二月',
         '3'  => '三月',
@@ -405,10 +407,10 @@ return array(
         '10' => '十月',
         '11' => '十一月',
         '12' => '十二月',
-    ),
+    ],
 
     //Jan., Feb. ...
-    'month_abbr' => array(
+    'month_abbr' => [
         '1'  => '01月',
         '2'  => '02月',
         '3'  => '03月',
@@ -421,10 +423,10 @@ return array(
         '10' => '10月',
         '11' => '11月',
         '12' => '12月',
-    ),
+    ],
 
     //Sunday, Monday..
-    'week' => array(
+    'week' => [
         '7' => '星期日',
         '1' => '星期一',
         '2' => '星期二',
@@ -432,10 +434,10 @@ return array(
         '4' => '星期四',
         '5' => '星期五',
         '6' => '星期六',
-    ),
+    ],
 
     //Sun., Mon. ...
-    'week_abbr' => array(
+    'week_abbr' => [
         '7' => '日',
         '1' => '一',
         '2' => '二',
@@ -443,9 +445,9 @@ return array(
         '4' => '四',
         '5' => '五',
         '6' => '六',
-    ),
+    ],
 
-    'week_short' => array(
+    'week_short' => [
         '7' => '周日',
         '1' => '周一',
         '2' => '周二',
@@ -453,10 +455,10 @@ return array(
         '4' => '周四',
         '5' => '周五',
         '6' => '周六',
-    ),
+    ],
 
     //Custom Error Information
-    'error' => array(
+    'error' => [
         '0'  => '未知錯誤',
         '1'  => '未知命令',
         '2'  => '相關頁面不存在',
@@ -561,17 +563,17 @@ return array(
         '101' => '圖片載入失敗',
         '102' => '原圖片寬高不正常',
         '103' => 'PostTime 格式不正確，應為時間戳或可被解析的時間字串',
-    ),
+    ],
 
-    'offical_urls' => array(
+    'offical_urls' => [
         'more_help' => 'https://www.zblogcn.com/help/?id={%id%}&message={%message%}',
         'bing_help' => 'https://cn.bing.com/search?q={%message%}',
         'office_docs' => 'https://docs.zblogcn.com/php/#/books/start-25-faq',
         'office_bbs' => 'https://bbs.zblogcn.com/',
-    ),
+    ],
 
     // Possible causes of the error
-    'error_reasons' => array(
+    'error_reasons' => [
         // -1 for default
         'default' => '',
 
@@ -595,7 +597,7 @@ return array(
             您可以<a href="https://wiki.zblogcn.com/doku.php?id=zblogphp:error:%E9%A6%96%E9%A1%B5#error-92" target="_blank">點擊這裡，來獲得缺少組件的大致列表。 </a>
         ',
 
-        'other' => array(
+        'other' => [
             // Other errors then
             'mysql' => '
             您在 zb_users/c_option.php 內配置、或剛才填寫的的 MySQL 連接信息是否正確？ <br/>
@@ -621,13 +623,11 @@ return array(
             2.關閉某些使用相關函數的挿件，或聯系這些挿件的作者。<br/>
             <br/>
             ',
-
-        ),
+        ],
 
         'end' => '
             如果您是訪客，這說明網站程式可能出現了一些錯誤。請您稍後再試，或聯繫站長。 <br/>
             如果您是站長，您可以點擊<a href="{%morehelp%}" target="_blank">【更多幫助】</a>來查看Z-Blog官方關於這個錯誤的說明，也可以到<a href="https://bbs.zblogcn.com/" target="_blank">Z-Blog官方論壇</a>，附上錯誤詳細截圖與描述尋求幫助。
         ',
-    ),
-
-);
+    ],
+];

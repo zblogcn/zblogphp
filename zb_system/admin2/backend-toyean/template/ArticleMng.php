@@ -2,29 +2,23 @@
 <div class="sub">
 <!-- 搜索 -->
 <form class="search" id="search" method="post" action="#">
-  <p>
-    {$zbp.lang['msg']['search']}: {$zbp.lang['msg']['category']}
     <select class="edit" size="1" name="category" style="width:140px;">
       <option value="">{$zbp.lang['msg']['any']}</option>
       {foreach $zbp.categoriesbyorder as $id => $cate}
       <option value="{$cate->ID}">{$cate->SymbolName}</option>
       {/foreach}
     </select>
-    {$zbp.lang['msg']['type']}
     <select class="edit" size="1" name="status" style="width:100px;">
       <option value="">{$zbp.lang['msg']['any']}</option>
       <option value="0">{$zbp.lang['post_status_name']['0']}</option>
       <option value="1">{$zbp.lang['post_status_name']['1']}</option>
       <option value="2">{$zbp.lang['post_status_name']['2']}</option>
     </select>
-
     <label>
-      <input type="checkbox" name="istop" value="True" />{$zbp.lang['msg']['top']}
+      <input type="checkbox" name="istop" value="True">{$zbp.lang['msg']['top']}
     </label>
-
-    <input name="search" style="width:250px;" type="text" value="" />
-    <input type="submit" class="button" value="{$zbp.lang['msg']['submit']}" />
-  </p>
+    <input name="search" style="width:250px;" type="text" placeholder="请输入…" value="">
+    <input type="submit" class="button" value="{$zbp.lang['msg']['submit']}">
 </form>
 </div><!-- div class="sub" -->
 <form method="post" action="{$zbp.host}zb_system/cmd.php?act=PostBat&type={$post_type}">
@@ -61,7 +55,7 @@
 
   {/foreach}
 <!-- div class="postlist" -->
-
+</div>
 <!-- 分页 -->
 <p class="pagebar">
   {foreach $p->buttons as $k => $v}

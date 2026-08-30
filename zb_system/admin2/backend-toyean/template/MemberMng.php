@@ -1,10 +1,10 @@
 <?php die(); ?>
 
 <!-- 搜索 -->
+<div class="sub">
 <form class="search" id="search" method="post" action="#">
-  <p>
-    {$zbp.lang['msg']['search']}:
-    {$zbp.lang['msg']['member_level']}
+
+  {$zbp.lang['msg']['search']}: {$zbp.lang['msg']['member_level']}
     <select class="edit" size="1" name="level" style="width:140px;">
       <option value="">{$zbp.lang['msg']['any']}</option>
       {foreach $zbp.lang['user_level_name'] as $curId => $curName}
@@ -12,24 +12,29 @@
       {/foreach}
     </select>
 
-    <input name="search" style="width:250px;" type="text" value="" />
-    <input type="submit" class="button" value="{$zbp.lang['msg']['submit']}" />
-  </p>
+    <input name="search" style="width:250px;" type="text" placeholder="请输入…" value="">
+    <input type="submit" class="button" value="{$zbp.lang['msg']['submit']}">
 </form>
+</div>
 
+<div class="postlist">
+
+  <div class="tr thead">
+    <div class="td-id">{$zbp.lang['msg']['id']}{$button_id_html}</div>
+    <div>{$zbp.lang['msg']['id']}{$button_id_html}</div>
+    <div>{$zbp.lang['msg']['member_level']}{$button_level_html}</div>
+    <div>{$zbp.lang['msg']['name']}{$button_name_html}</div>
+    <div>{$zbp.lang['msg']['alias']}{$button_alias_html}</div>
+    <div>{$zbp.lang['msg']['all_artiles']}</div>
+    <div>{$zbp.lang['msg']['all_pages']}</div>
+    <div>{$zbp.lang['msg']['all_comments']}</div>
+    <div>{$zbp.lang['msg']['all_uploads']}</div>
+  </div>
+
+</div>
 <!-- 用户列表 -->
 <table class="tableFull tableBorder tableBorder-thcenter table_hover table_striped">
-  <tr>
-    <th>{$zbp.lang['msg']['id']}{$button_id_html}</th>
-    <th>{$zbp.lang['msg']['member_level']}{$button_level_html}</th>
-    <th>{$zbp.lang['msg']['name']}{$button_name_html}</th>
-    <th>{$zbp.lang['msg']['alias']}{$button_alias_html}</th>
-    <th>{$zbp.lang['msg']['all_artiles']}</th>
-    <th>{$zbp.lang['msg']['all_pages']}</th>
-    <th>{$zbp.lang['msg']['all_comments']}</th>
-    <th>{$zbp.lang['msg']['all_uploads']}</th>
-    <th></th>
-  </tr>
+
 
   {foreach $members as $member}
   <tr>
