@@ -1,4 +1,5 @@
 <?php die(); ?>
+<div class="sub">
 <!-- 搜索 -->
 <form class="search" id="search" method="post" action="#">
   <p>
@@ -25,55 +26,41 @@
     <input type="submit" class="button" value="{$zbp.lang['msg']['submit']}" />
   </p>
 </form>
-
+</div><!-- div class="sub" -->
 <form method="post" action="{$zbp.host}zb_system/cmd.php?act=PostBat&type={$post_type}">
 <!-- 文章列表 -->
 
-<table class="tableFull tableBorder table_hover table_striped tableBorder-thcenter">
+<div class="postlist">
 
-  <tr>
-    <th>{$zbp.lang['msg']['id']}{$button_id_html}</th>
-    <th>{$zbp.lang['msg']['category']}{$button_cateid_html}</th>
-    <th>{$zbp.lang['msg']['author']}{$button_authorid_html}</th>
-    <th>{$zbp.lang['msg']['title']}</th>
-    <th>{$zbp.lang['msg']['date']}{$button_posttime_html}</th>
-    <th>{$zbp.lang['msg']['comment']}</th>
-    <th>{$zbp.lang['msg']['status']}</th>
-    <th></th>
-    {if $zbp.CheckRights('PostBat') && $zbp.option['ZC_POST_BATCH_DELETE']}
-    <th><a href="javascript:;" onclick="BatchSelectAll();return false;">{$zbp.lang['msg']['select_all']}</a></th>
-    {/if}
-  </tr>
+        <div class="tr thead">
+          <div class="td-id">ID</div>
+          <div class="td-cate">分类</div>
+          <div class="td-author">作者</div>
+          <div class="td-title">标题</div>
+          <div class="td-date">日期</div>
+          <div class="td-view">浏览</div>
+          <div class="td-cmt">评论</div>
+          <div class="td-status">状态</div>
+          <div class="td-action">操作</div>
+        </div>
+
 
   {foreach $articles as $article}
-  <tr>
-    <td class="td5">{$article.ID}</td>
-    <td class="td10">{$article.Category.Name}</td>
-    <td class="td10">{$article.Author.Name}</td>
-    <td>
-      <a href="{$article.Url}" target="_blank"><i class="icon-link-45deg"></i></a> {$article.Title}
-    </td>
-    <td class="td20">{$article.Time()}</td>
-    <td class="td5">{$article.CommNums}</td>
-    <td class="td5">
-      {if $article.IsTop}
-      {$zbp.lang.msg.top}|
-      {/if}
-      {$article.StatusName}
-    </td>
-    <td class="td10 tdCenter">
-      <a href="../cmd.php?act=ArticleEdt&amp;id={$article.ID}"><i class="icon-pencil-square"></i></a>
-      <a onclick="return confirmDelete();" href="{BuildSafeCmdURL('act=ArticleDel&amp;id=' . $article->ID)}"><i class="icon-trash"></i></a>
-    </td>
-    {if $zbp.CheckRights('PostBat') && $zbp.option['ZC_POST_BATCH_DELETE']}
-    <td class="td5 tdCenter">
-      <input type="checkbox" id="id{$article.ID}" name="id[]" value="{$article.ID}">
-    </td>
-    {/if}
-  </tr>
-  {/foreach}
 
-</table>
+  <div class="tr">
+    <div class="td-id">{$article.ID}</div>
+    <div class="td-cate"><a href="">{$article.Category.Name}</a></div>
+    <div class="td-author"><a href="">{$article.Author.Name}</a></div>
+    <div class="td-title"><a href="{$article.Url}">欢迎使用Z-BlogPHP1.8</a></div>
+    <div class="td-date">{$article.Time()}</div>
+    <div class="td-cmt">{$article.ViewNums}</div>
+    <div class="td-cmt">{$article.CommNums}</div>
+    <div class="td-status"><span>{$article.StatusName}</span></div>
+    <div class="td-action"><a href="../../cmd.php?act=ArticleEdt&amp;id={$article.ID}" class="edit">编辑</a><a href="return confirmDelete();" href="{BuildSafeCmdURL('act=ArticleDel&amp;id=' . $article->ID)}" class="del">删除</a></div>
+  </div>
+
+  {/foreach}
+<!-- div class="postlist" -->
 
 <!-- 分页 -->
 <p class="pagebar">

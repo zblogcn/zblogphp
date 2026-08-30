@@ -29,8 +29,7 @@
   {template:layout_top}
   {template:layout_left}
   {template:layout_main}
-  {$footer}
-{php}HookFilterPlugin('Filter_Plugin_Admin_Footer');{/php}
+  {template:layout_footer}
 </body>
 
 </html>

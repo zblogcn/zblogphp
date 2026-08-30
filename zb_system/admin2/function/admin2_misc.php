@@ -88,6 +88,10 @@ function zbp_admin2_statistic_data()
   $data->current_version = $sv;
   $data->system_environment = $zbp->cache->system_environment;
 
+  $array = explode(";", $data->system_environment);
+  $data->system_environment1 = @$array[0] . '; '. @$array[1] . '; '. @$array[2];
+  $data->system_environment2 = @$array[3] . '; '. @$array[4] . '; '. @$array[5];
+
   // 统计信息
   $data->all_articles = $zbp->cache->all_article_nums;
   $data->all_categories = $zbp->cache->all_category_nums;
@@ -96,7 +100,7 @@ function zbp_admin2_statistic_data()
   $data->all_pages = $zbp->cache->all_page_nums;
   $data->all_tags = $zbp->cache->all_tag_nums;
   $data->all_views = $zbp->cache->all_view_nums;
-
+  $data->all_uploads = 123;//还没做！！！
   // 更新时间及更新链接
   $data->reload_time = date("c", (int) $zbp->cache->reload_statistic_time);
   $data->reload_url =  BuildSafeCmdURL('act=misc&type=statistic&forced=1');
@@ -105,6 +109,17 @@ function zbp_admin2_statistic_data()
   $data->reload_updateinfo = $zbp->cache->reload_updateinfo;
   $data->reload_updateinfo_time = date("c", (int) $zbp->cache->reload_updateinfo_time);
   $data->reload_reload_updateinfo_url = BuildSafeCmdURL('act=misc&type=updateinfo');
+
+
+  // thanks
+  $s = file_get_contents($zbp->path . "zb_system/defend/thanks.html");
+  $s = str_replace('Z-BlogPHP网站和程序开发', $zbp->lang['msg']['develop_intro'], $s);
+  $s = str_replace('程序', $zbp->lang['msg']['program'], $s);
+  $s = str_replace('界面', $zbp->lang['msg']['interface'], $s);
+  $s = str_replace('支持', $zbp->lang['msg']['support'], $s);
+  $s = str_replace('感谢', $zbp->lang['msg']['thanks'], $s);
+  $s = str_replace('相关链接', $zbp->lang['msg']['website'], $s);
+  $data->thanksinfo = $s;
 
   return $data;
 }

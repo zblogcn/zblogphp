@@ -116,7 +116,6 @@ return array(
     // '后台管理
     'ZC_MANAGE_COUNT' => 50,
     'ZC_MANAGE_ORDER' => 'log_PostTime',
-    'ZC_MANAGE_UI' => 1, // 1 为旧版，2 为新版
     'ZC_BACKEND_ID' => 'backend-legacy',
 
     // 登录相关
