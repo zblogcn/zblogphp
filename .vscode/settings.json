@@ -1,0 +1,17 @@
+{
+  // updated 2026-01-03 16:02
+  // https://github.com/antfu/vscode-file-nesting-config
+  "explorer.fileNesting.enabled": true,
+  "explorer.fileNesting.expand": false,
+  "explorer.fileNesting.patterns": {
+    "composer.json": ".php*.cache, composer.lock, .php-cs-*",
+    "README.md": "readme.txt",
+    ".env": ".env.*",
+    "package.json": "pnpm-lock.yaml, pnpm-workspace.yaml, rollup.config.*",
+  },
+  "files.exclude": {
+    "**/dist": true,
+    "**/node_modules": true,
+    "**/vendor": true,
+  }
+}
