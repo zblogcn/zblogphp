@@ -131,7 +131,12 @@ switch ($zbp->action) {
         Redirect_cmd_end('cmd.php?act=PageMng');
         break;
     case 'PageMng':
-        Redirect_cmd_end('admin/index.php?' . GetVars('QUERY_STRING', 'SERVER'));
+        if ($zbp->option['ZC_MANAGE_UI'] == 2) {
+            Redirect_cmd_end('admin2/index.php?' . GetVars('QUERY_STRING', 'SERVER'));
+        } else {
+            Redirect_cmd_end('admin/index.php?' . GetVars('QUERY_STRING', 'SERVER'));
+        }
+        // Redirect_cmd_end('admin/index.php?' . GetVars('QUERY_STRING', 'SERVER'));
         break;
     case 'PagePst':
         $zbp->csrfExpiration = 48;
@@ -324,7 +329,7 @@ switch ($zbp->action) {
         } else {
             Redirect_cmd_end('admin/index.php?' . GetVars('QUERY_STRING', 'SERVER'));
         }
-        Redirect_cmd_end('admin/index.php?' . GetVars('QUERY_STRING', 'SERVER'));
+        // Redirect_cmd_end('admin/index.php?' . GetVars('QUERY_STRING', 'SERVER'));
         break;
     case 'PluginDis':
         CheckIsRefererValid();
@@ -359,7 +364,7 @@ switch ($zbp->action) {
         } else {
             Redirect_cmd_end('admin/index.php?' . GetVars('QUERY_STRING', 'SERVER'));
         }
-        Redirect_cmd_end('admin/index.php?' . GetVars('QUERY_STRING', 'SERVER'));
+        // Redirect_cmd_end('admin/index.php?' . GetVars('QUERY_STRING', 'SERVER'));
         break;
     case 'ThemeSet':
         CheckIsRefererValid();

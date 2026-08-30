@@ -281,9 +281,24 @@ class ZBlogPHP
     public $subname = null;
 
     /**
-     * @var App 当前主题
+     * @var string 当前主题
      */
     public $theme = null;
+
+    /**
+     * @var string 当前后台主题
+     */
+    public $backend_theme = null;
+
+    /**
+     * @var App 当前主题类
+     */
+    public $themeapp = null;
+
+    /**
+     * @var App 所有后台主题类
+     */
+    public $backend_apps = null;
 
     /**
      * @var array() 当前主题版本信息
@@ -476,11 +491,6 @@ class ZBlogPHP
      * @var int 当前实例下VerifyCode过期时间（分钟数）
      */
     public $verifyCodeExpirationMinute = 15;
-
-    /**
-     * @var App 当前主题类
-     */
-    public $themeapp = null;
 
     /**
      * @var int 分类最大递归层数
@@ -1062,7 +1072,6 @@ class ZBlogPHP
 
         if ($this->ismanage && $this->option['ZC_MANAGE_UI'] == 2) {
             $this->template_admin = $this->PrepareTemplateAdmin();
-            //Add_Filter_Plugin("Filter_Plugin_Admin_Header", "Include_Admin2_RedirectEdt");
         }
 
         foreach ($GLOBALS['hooks']['Filter_Plugin_Zbp_LoadManage'] as $fpname => &$fpsignal) {
@@ -2308,7 +2317,6 @@ class ZBlogPHP
         $template->template_dirname = $template_dirname;
 
         $template->SetPath();
-
         $template->LoadTemplates();
 
         return $template;
@@ -2410,8 +2418,17 @@ class ZBlogPHP
         $template_admin = new Template();
         $template_admin->MakeTemplateTags();
 
-        $theme = 'system/admin2';
-        $template_admin_dirname = '';
+        $template_dirname = 'template';
+        $theme = 'backend-legacy';
+        $backend_app_dirname = $this->systemdir . 'admin2/' . $theme . '/';
+        //从ZC_BACKEND_ID取值
+        $backend_apps = &$this->backend_apps;
+        foreach ($backend_apps as $backend_app) {
+            if ($this->option['ZC_BACKEND_ID'] === $backend_app->id) {
+                $theme = $backend_app->id;
+                $backend_app_dirname = $backend_app->app_path;
+            }
+        }
 
         //只改templateTags的
         foreach ($GLOBALS['hooks']['Filter_Plugin_Zbp_MakeTemplatetags_Admin'] as $fpname => &$fpsignal) {
@@ -2420,15 +2437,17 @@ class ZBlogPHP
 
         //此处增加接口可以在Load时，对$theme, $template_dirname参数可以进行修改
         foreach ($GLOBALS['hooks']['Filter_Plugin_Zbp_PrepareTemplate_Admin'] as $fpname => &$fpsignal) {
-            $fpname($theme, $template_admin_dirname);
+            $fpname($theme, $template_dirname, $backend_app_dirname);
         }
 
         $template_admin->theme = $theme;
-        $template_admin->template_dirname = $template_admin_dirname;
+        $template_admin->template_dirname = $template_dirname;
 
-        $template_admin->SetPath($this->cachedir . 'compiled/system/admin2/');
+        $template_admin->SetPath($this->cachedir . 'compiled/system/' . $theme . '/');
+        $template_admin->SetAppPath($backend_app_dirname);
         $template_admin->LoadAdminTemplates();
         $this->autofill_template_htmltags = false;
+        $this->backend_theme = $template_admin->theme;
 
         return $template_admin;
     }

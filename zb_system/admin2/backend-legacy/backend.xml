@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<backend version="php">
+<id>backend-legacy</id>
+<name>backend-legacy传统后台主题</name>
+<url>http://www.zblogcn.com/</url>
+<note>backend-legacy传统后台主题</note>
+<description>backend-legacy传统后台主题.</description>
+<path></path>
+<include></include>
+<level>1</level>
+<author>
+  <name>zx.asd</name>
+  <email></email>
+  <url>https://www.zblogcn.com/</url>
+</author>
+<source>
+  <name>zx.asd</name>
+  <email></email>
+  <url>https://www.zblogcn.com/</url>
+</source>
+<adapted>180000</adapted>
+<version>0.9</version>
+<pubdate>2025-12-20</pubdate>
+<modified>2025-12-20</modified>
+<price>0</price>
+<phpver>5.2</phpver>
+<advanced>
+  <dependency></dependency>
+  <rewritefunctions></rewritefunctions>
+  <existsfunctions></existsfunctions>
+  <conflict></conflict>
+</advanced>
+</backend>
