@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit">
+    <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+    <title>新建文章 - 后台管理</title>
+    <link rel="stylesheet" href="../style/style.css">
+    <script src="../script/jquery-latest.min.js"></script>
+    <script src="../script/common.js"></script>
+</head>
+
+<body>
+    <div class="wrapper">
+        <div class="side">
+            <div class="mobile-close"></div>
+            <div class="logo"><a href="#"><img src="../style/images/logo-icon.svg" alt="后台管理"><img
+                        src="../style/images/logo-light.svg" alt="" class="logolight"><img
+                        src="../style/images/logo-dark.svg" alt="" class="logodark"></a></div>
+            <div class="menu">
+                <dl>
+                    <dt>概览</dt>
+                    <dd><a href="index.html" data-title="仪表盘"><i class="ico ico-home"></i>仪表盘</a></dd>
+                    <dt>内容管理</dt>
+                    <dd><a href="edit.html" class="on" data-title="创作"><i class="ico ico-newpost"></i>创作</a></dd>
+                    <dd><a href="article.html" data-title="文章"><i class="ico ico-article"></i>文章</a></dd>
+                    <dd><a href="" data-title="页面"><i class="ico ico-page"></i>页面</a></dd>
+                    <dd><a href="" data-title="分类"><i class="ico ico-category"></i>分类</a></dd>
+                    <dd><a href="" data-title="标签"><i class="ico ico-tag"></i>标签</a></dd>
+                    <dd><a href="" data-title="评论"><i class="ico ico-cmt"></i>评论</a></dd>
+                    <dd><a href="" data-title="附件"><i class="ico ico-file"></i>附件</a></dd>
+                    <dt>系统管理</dt>
+                    <dd><a href="" data-title="设置"><i class="ico ico-setting"></i>设置</a></dd>
+                    <dd><a href="" data-title="用户"><i class="ico ico-user"></i>用户</a></dd>
+                    <dd><a href="" data-title="模块"><i class="ico ico-module"></i>模块</a></dd>
+                    <dd><a href="" data-title="主题"><i class="ico ico-theme"></i>主题</a></dd>
+                    <dd><a href="" data-title="插件"><i class="ico ico-plugin"></i>插件</a></dd>
+                    <dt>其它</dt>
+                    <dd><a href="" data-title="应用中心"><i class="ico ico-appstore"></i>应用中心</a></dd>
+                </dl>
+            </div>
+            <div class="copyright hide">
+                <p>Powered by Z-BlogPHP</p>
+            </div>
+        </div>
+        <div class="main">
+            <div class="head">
+                <div class="menuico"><span></span><span></span><span></span></div>
+                <a href="" class="backhome">浏览网站</a>
+                <a href="" class="theme light"></a>
+                <div class="user">
+                    <div class="userlink"><span class="userimg"><img src="../style/images/userimg.jpg"
+                                alt=""></span><span class="username"><strong>拓源主题</strong><em>管理员</em></span></div>
+                    <div class="usermenu">
+                        <ul>
+                            <li><a href="" class="ico-set">系统设置</a></li>
+                            <li><a href="" class="ico-user">账户设置</a></li>
+                            <li><a href="" class="ico-logout">退出登录</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="content">
+                <div class="title">
+                    <h2>文章编辑</h2>
+                </div>
+
+                <div class="edit-box">
+                    <form>
+                        <div class="edit-main">
+                            <div class="form-group">
+                                <input type="text" name="alias" class="form-control" placeholder="文章标题">
+                            </div>
+                            <div class="form-group">
+                                <div class="editor-placeholder">
+
+                                    <textarea name="content" class="form-control editor-area"
+                                        placeholder="在这里输入文章正文..."></textarea>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>文章别名</label>
+                                <input type="text" name="alias" class="form-control">
+                            </div>
+                            <!-- 假设多出的"标题"是标签 -->
+                            <div class="form-group">
+                                <label>标签 (Tag)</label>
+                                <input type="text" name="tags" class="form-control" placeholder="多个标签用逗号分隔">
+                            </div>
+                        </div>
+
+                        <div class="edit-side">
+                            <div class="card">
+                                <div class="card-head">发布设置</div>
+                                <div class="card-body">
+                                    <div class="form-item">
+                                        <label>分类</label>
+                                        <select class="form-control">
+                                            <option>未分类</option>
+                                            <option>技术教程</option>
+                                            <option>生活感悟</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-item">
+                                        <label>状态</label>
+                                        <select class="form-control">
+                                            <option>公开</option>
+                                            <option>草稿</option>
+                                            <option>审核</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-item">
+                                        <label>作者</label>
+                                        <select class="form-control">
+                                            <option>admin</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-item">
+                                        <label>日期</label>
+                                        <input type="datetime-local" class="form-control" value="2025-12-28T12:00">
+                                    </div>
+                                    <div class="form-item">
+                                        <label>模板</label>
+                                        <select class="form-control">
+                                            <option>post-single</option>
+                                            <option>post-nosidebar</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="form-item">
+                                        <label>置顶</label>
+                                        <select class="form-control">
+                                            <option value="0" selected="selected">无</option>
+                                            <option value="2">首页</option>
+                                            <option value="1">全局</option>
+                                            <option value="4">分类</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="form-item row-switch">
+                                        <label>禁止评论</label>
+                                        <label class="switch">
+                                            <input type="checkbox">
+                                            <span class="slider round"></span>
+                                        </label>
+                                    </div>
+                                    <div class="form-actions">
+                                        <button type="submit" class="btn btn-primary">发布文章</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

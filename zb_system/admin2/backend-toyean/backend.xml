@@ -6,7 +6,7 @@
 <note>backend-toyean后台主题</note>
 <description>backend-toyean后台主题.</description>
 <path></path>
-<include></include>
+<include>include.php</include>
 <level>1</level>
 <author>
   <name>toyean</name>

@@ -288,7 +288,7 @@ class ZBlogPHP
     /**
      * @var string 当前后台主题
      */
-    public $backend_theme = null;
+    public $backendtheme = null;
 
     /**
      * @var App 当前主题类
@@ -298,7 +298,17 @@ class ZBlogPHP
     /**
      * @var App 所有后台主题类
      */
-    public $backend_apps = null;
+    public $backendapps = array();
+
+    /**
+     * @var App 当前后台主题类
+     */
+    public $backendapp = null;
+
+    /**
+     * @var array() 当前后台主题版本信息
+     */
+    public $backendinfo = array();
 
     /**
      * @var array() 当前主题版本信息
@@ -1055,6 +1065,13 @@ class ZBlogPHP
      */
     public function LoadManage()
     {
+        if ($this->option['ZC_MANAGE_UI'] == 2) {
+            $this->RegisterBackEndApp('backend-legacy', $this->systemdir . 'admin2/backend-legacy/backend.xml');
+            //$this->RegisterBackEndApp('backend-nexus', $this->systemdir . 'admin2/backend-nexus/backend.xml');
+            $this->RegisterBackEndApp('backend-toyean', $this->systemdir . 'admin2/backend-toyean/backend.xml');
+            $this->template_admin = $this->PrepareTemplateAdmin();
+        }
+
         Add_Filter_Plugin('Filter_Plugin_Admin_PageMng_SubMenu', 'Include_Admin_Addpagesubmenu');
         Add_Filter_Plugin('Filter_Plugin_Admin_TagMng_SubMenu', 'Include_Admin_Addtagsubmenu');
         Add_Filter_Plugin('Filter_Plugin_Admin_CategoryMng_SubMenu', 'Include_Admin_Addcatesubmenu');
@@ -1062,16 +1079,12 @@ class ZBlogPHP
         Add_Filter_Plugin('Filter_Plugin_Admin_ModuleMng_SubMenu', 'Include_Admin_Addmodsubmenu');
         Add_Filter_Plugin('Filter_Plugin_Admin_CommentMng_SubMenu', 'Include_Admin_Addcmtsubmenu');
         Add_Filter_Plugin('Filter_Plugin_Admin_SettingMng_SubMenu', 'Include_Admin_Addsettingsubmenu');
-        Add_Filter_Plugin('Filter_Plugin_Zbp_LoadManage', 'Include_Admin_UpdateDB');
+        Add_Filter_Plugin('Filter_Plugin_Admin_Hint', 'Include_Admin_UpdateDB');
         Add_Filter_Plugin('Filter_Plugin_Admin_End', 'Include_Admin_CheckHttp304OK');
         Add_Filter_Plugin('Filter_Plugin_Admin_Hint', 'Include_Admin_CheckWeakPassWord');
 
         if (isset($GLOBALS['zbpvers'])) {
             $GLOBALS['zbpvers'][$GLOBALS['blogversion']] = ZC_VERSION_DISPLAY . ' Build ' . $GLOBALS['blogversion'];
-        }
-
-        if ($this->ismanage && $this->option['ZC_MANAGE_UI'] == 2) {
-            $this->template_admin = $this->PrepareTemplateAdmin();
         }
 
         foreach ($GLOBALS['hooks']['Filter_Plugin_Zbp_LoadManage'] as $fpname => &$fpsignal) {
@@ -2160,10 +2173,19 @@ class ZBlogPHP
      */
     public function GetPreActivePlugin()
     {
-        $ap = explode("|", $this->option['ZC_USING_PLUGIN_LIST']);
-        $ap = array_unique($ap);
+        $aps = explode("|", $this->option['ZC_USING_PLUGIN_LIST']);
+        $aps = array_unique($aps);
 
-        return $ap;
+        $aps2 = array();
+        //剔除掉admin2后台禁用的插件
+        foreach ($aps as $key => $ap) {
+            if ($ap == 'AdminColor' || $ap == 'LinksManage' || $ap == 'STACentre') {
+                continue;
+            }
+            $aps2[] = $ap;
+        }
+
+        return $aps2;
     }
 
     /**
@@ -2204,6 +2226,14 @@ class ZBlogPHP
             case 'theme':
                 $languagePath .= 'zb_users/' . $type . '/' . $id . '/language/';
                 $languagePtr = &$this->lang[$id];
+                break;
+            case 'backend':
+                $backend_id = $id;
+                if (isset($this->backendapps[$backend_id]) && is_object($this->backendapps[$backend_id])) {
+                    $this->backendapp = &$this->backendapps[$backend_id];
+                    $languagePath = $this->backendapp->GetPath() . 'language/';
+                    $languagePtr = &$this->lang[$id];
+                }
                 break;
             default:
                 $languagePath .= $type . '/language/';
@@ -2418,15 +2448,22 @@ class ZBlogPHP
         $template_admin = new Template();
         $template_admin->MakeTemplateTags();
 
-        $template_dirname = 'template';
         $theme = 'backend-legacy';
-        $backend_app_dirname = $this->systemdir . 'admin2/' . $theme . '/';
+        $backendapp_dirname = $this->systemdir . 'admin2/' . $theme . '/';
+
         //从ZC_BACKEND_ID取值
-        $backend_apps = &$this->backend_apps;
-        foreach ($backend_apps as $backend_app) {
-            if ($this->option['ZC_BACKEND_ID'] === $backend_app->id) {
-                $theme = $backend_app->id;
-                $backend_app_dirname = $backend_app->app_path;
+        $backend_id = $this->option['ZC_BACKEND_ID'];
+        if (isset($this->backendapps[$backend_id]) && is_object($this->backendapps[$backend_id])) {
+            $this->backendapp = &$this->backendapps[$backend_id];
+            $theme = $this->backendapp->id;
+            $backendapp_dirname = $this->backendapp->app_path;
+
+            $this->backendinfo = $this->backendapp->GetInfoArray();
+            if (is_readable($this->backendapp->GetPath() . $this->backendapp->include)) {
+                require_once($this->backendapp->GetPath() . $this->backendapp->include);
+            }
+            if (function_exists($funcname = ('ActivePlugin_' . str_replace('-', '_', $backend_id)))) {
+                call_user_func($funcname);
             }
         }
 
@@ -2435,19 +2472,14 @@ class ZBlogPHP
             $fpname($template_admin->templateTags);
         }
 
-        //此处增加接口可以在Load时，对$theme, $template_dirname参数可以进行修改
-        foreach ($GLOBALS['hooks']['Filter_Plugin_Zbp_PrepareTemplate_Admin'] as $fpname => &$fpsignal) {
-            $fpname($theme, $template_dirname, $backend_app_dirname);
-        }
-
         $template_admin->theme = $theme;
-        $template_admin->template_dirname = $template_dirname;
+        $template_admin->template_dirname = 'template';
 
         $template_admin->SetPath($this->cachedir . 'compiled/system/' . $theme . '/');
-        $template_admin->SetAppPath($backend_app_dirname);
+        $template_admin->SetAppPath($backendapp_dirname);
         $template_admin->LoadAdminTemplates();
         $this->autofill_template_htmltags = false;
-        $this->backend_theme = $template_admin->theme;
+        $this->backendtheme = $template_admin->theme;
 
         return $template_admin;
     }
@@ -5174,6 +5206,19 @@ class ZBlogPHP
         }
 
         return $articles_top_notorder;
+    }
+
+    // admin2 注册后台主题
+    function RegisterBackEndApp($app_id, $app_file)
+    {
+        $app = new App();
+        if (is_readable($app_file)) {
+            $app->LoadInfoByXml('backend', $app_id, $app_file);
+                if ($app->isloaded == true) {
+                $this->backendapps[$app_id] = $app;
+                return true;
+            }
+        }
     }
 
     /**

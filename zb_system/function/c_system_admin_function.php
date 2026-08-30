@@ -16,15 +16,18 @@ if (!defined('ZBP_PATH')) {
 /**
  * 添加页面管理子菜单(内置插件函数).
  */
+if (!function_exists('Include_Admin_Addpagesubmenu')){
 function Include_Admin_Addpagesubmenu()
 {
     global $zbp;
     echo MakeSubMenu($GLOBALS['lang']['msg']['new_page'], $zbp->cmdurl . '?act=PageEdt', 'm-left', null, null, null, 'icon-file-plus-fill');
 }
+}
 
 /**
  * 添加标签管理子菜单(内置插件函数).
  */
+if (!function_exists('Include_Admin_Addtagsubmenu')){
 function Include_Admin_Addtagsubmenu()
 {
     global $zbp;
@@ -32,10 +35,12 @@ function Include_Admin_Addtagsubmenu()
     $typeurl = $type > 0 ? ('&type=' . $type) : '';
     echo MakeSubMenu($GLOBALS['lang']['msg']['new_tag'], $zbp->cmdurl . '?act=TagEdt' . $typeurl, 'm-left', null, null, null, 'icon-tag-fill');
 }
+}
 
 /**
  * 添加分类管理子菜单(内置插件函数).
  */
+if (!function_exists('Include_Admin_Addcatesubmenu')){
 function Include_Admin_Addcatesubmenu()
 {
     global $zbp;
@@ -43,10 +48,12 @@ function Include_Admin_Addcatesubmenu()
     $typeurl = $type > 0 ? ('&type=' . $type) : '';
     echo MakeSubMenu($GLOBALS['lang']['msg']['new_category'], $zbp->cmdurl . '?act=CategoryEdt' . $typeurl, 'm-left', null, null, null, 'icon-folder-plus');
 }
+}
 
 /**
  * 添加用户管理子菜单(内置插件函数).
  */
+if (!function_exists('Include_Admin_Addmemsubmenu')){
 function Include_Admin_Addmemsubmenu()
 {
     global $zbp;
@@ -55,10 +62,12 @@ function Include_Admin_Addmemsubmenu()
     }
     echo MakeSubMenu($GLOBALS['lang']['msg']['view_rights'], $zbp->cmdurl . '?act=misc&amp;type=vrs', 'm-left', null, null, null, 'icon-person-check-fill');
 }
+}
 
 /**
  * 添加模块管理子菜单(内置插件函数).
  */
+if (!function_exists('Include_Admin_Addmodsubmenu')){
 function Include_Admin_Addmodsubmenu()
 {
     global $zbp;
@@ -67,10 +76,12 @@ function Include_Admin_Addmodsubmenu()
     echo MakeSubMenu($GLOBALS['lang']['msg']['module_link'], $zbp->cmdurl . '?act=ModuleEdt&amp;filename=link');
     echo MakeSubMenu($GLOBALS['lang']['msg']['module_favorite'], $zbp->cmdurl . '?act=ModuleEdt&amp;filename=favorite');
 }
+}
 
 /**
  * 添加评论管理子菜单(内置插件函数).
  */
+if (!function_exists('Include_Admin_Addcmtsubmenu')){
 function Include_Admin_Addcmtsubmenu()
 {
     global $zbp;
@@ -84,18 +95,22 @@ function Include_Admin_Addcmtsubmenu()
         echo MakeSubMenu($GLOBALS['lang']['msg']['check_comment'] . $n, $zbp->cmdurl . '?act=CommentMng&amp;ischecking=1', 'm-left ' . (strval(GetVars('ischecking')) ? 'm-now' : ''), null, null, null, 'icon-shield-shaded');
     }
 }
+}
 
 /**
  * 添加网站设置子菜单(内置插件函数).
  */
+if (!function_exists('Include_Admin_Addsettingsubmenu')){
 function Include_Admin_Addsettingsubmenu()
 {
     echo MakeSubMenu($GLOBALS['lang']['msg']['clear_thumb_cache'], 'javascript:window.confirm(\'' . $GLOBALS['lang']['msg']['confirm_clear_thumb_cache'] . '\') && (window.location.href = \'' . BuildSafeCmdURL('act=misc&type=clearthumbcache') . '\');', 'm-right', null, null, null, 'icon-trash-fill');
+}
 }
 
 /**
  * 升级数据库
  */
+if (!function_exists('Include_Admin_UpdateDB')){
 function Include_Admin_UpdateDB()
 {
     global $zbp;
@@ -106,10 +121,12 @@ function Include_Admin_UpdateDB()
         }
     }
 }
+}
 
 /**
  * Check Weak PassWord
  */
+if (!function_exists('Include_Admin_CheckWeakPassWord')){
 function Include_Admin_CheckWeakPassWord()
 {
     global $zbp, $action;
@@ -124,10 +141,12 @@ function Include_Admin_CheckWeakPassWord()
 
     $zbp->ShowHint('bad', $zbp->langs->msg->change_default_password, 9999);
 }
+}
 
 /**
  * Check Http 304OK
  */
+if (!function_exists('Include_Admin_CheckHttp304OK')){
 function Include_Admin_CheckHttp304OK()
 {
     global $zbp, $action;
@@ -160,23 +179,28 @@ function Include_Admin_CheckHttp304OK()
         }
     }
 }
+}
 
 /**
  * Check Moblie and Response Style
  */
+if (!function_exists('Include_Admin_CheckMoblie')){
 function Include_Admin_CheckMoblie()
 {
     if (function_exists('CheckIsMobile') && CheckIsMobile()) {
         echo '<style>@media screen{body{font-size:16px}}@media screen and (max-width: 768px) {#divMain{padding:0 1px;overflow:scroll;}}@media screen and (max-width: 540px) {body{font-size:18px}}</style>';
     }
 }
+}
 
+if (!function_exists('Include_Admin_UpdateAppAfter')){
 function Include_Admin_UpdateAppAfter()
 {
     global $zbp;
     if ($zbp->cache->success_updated_app !== '') {
         echo '<script src="' . $zbp->cmdurl . '?act=misc&type=updatedapp"></script>';
     }
+}
 }
 
 $topmenus = array();
@@ -186,6 +210,7 @@ $leftmenus = array();
 /**
  * 后台管理左侧导航菜单.
  */
+if (!function_exists('ResponseAdmin_LeftMenu')){
 function ResponseAdmin_LeftMenu()
 {
     global $zbp;
@@ -217,10 +242,12 @@ function ResponseAdmin_LeftMenu()
         echo $m;
     }
 }
+}
 
 /**
  * 后台管理顶部菜单.
  */
+if (!function_exists('ResponseAdmin_TopMenu')){
 function ResponseAdmin_TopMenu()
 {
     global $zbp;
@@ -244,6 +271,7 @@ function ResponseAdmin_TopMenu()
         echo $m;
     }
 }
+}
 
 /**
  * 添加子菜单项.
@@ -257,6 +285,7 @@ function ResponseAdmin_TopMenu()
  *
  * @return null|string
  */
+if (!function_exists('MakeSubMenu')){
 function MakeSubMenu($strName, $strUrl, $strClass = 'm-left', $strTarget = '', $strId = '', $strTitle = '', $strIconClass = '')
 {
     $s = '<a href="' . $strUrl . '" ';
@@ -275,6 +304,7 @@ function MakeSubMenu($strName, $strUrl, $strClass = 'm-left', $strTarget = '', $
 
     return $s;
 }
+}
 
 /**
  * 添加顶部菜单项.
@@ -288,6 +318,7 @@ function MakeSubMenu($strName, $strUrl, $strClass = 'm-left', $strTarget = '', $
  *
  * @return null|string
  */
+if (!function_exists('MakeTopMenu')){
 function MakeTopMenu($requireAction, $strName, $strUrl, $strTarget, $strLiId, $strIconClass = "")
 {
     global $zbp;
@@ -310,6 +341,7 @@ function MakeTopMenu($requireAction, $strName, $strUrl, $strTarget, $strLiId, $s
 
     return $tmp;
 }
+}
 
 /**
  * 添加左侧菜单项.
@@ -323,6 +355,7 @@ function MakeTopMenu($requireAction, $strName, $strUrl, $strTarget, $strLiId, $s
  *
  * @return null|string
  */
+if (!function_exists('MakeLeftMenu')){
 function MakeLeftMenu($requireAction, $strName, $strUrl, $strLiId, $strAId, $strImgUrl, $strIconClass = "")
 {
     global $zbp;
@@ -345,6 +378,7 @@ function MakeLeftMenu($requireAction, $strName, $strUrl, $strLiId, $strAId, $str
 
     return $tmp;
 }
+}
 
 //###############################################################################################################
 
@@ -357,6 +391,7 @@ function MakeLeftMenu($requireAction, $strName, $strUrl, $strLiId, $strAId, $str
  *
  * @return null|string
  */
+if (!function_exists('OutputOptionItemsOfCommon')){
 function OutputOptionItemsOfCommon($default, $array, $name = 'Common')
 {
     global $zbp;
@@ -375,6 +410,7 @@ function OutputOptionItemsOfCommon($default, $array, $name = 'Common')
     }
     return $s;
 }
+}
 
 /**
  * 生成分类select表单.
@@ -383,6 +419,7 @@ function OutputOptionItemsOfCommon($default, $array, $name = 'Common')
  *
  * @return null|string
  */
+if (!function_exists('OutputOptionItemsOfCategories')){
 function OutputOptionItemsOfCategories($default, $type = 0)
 {
     global $zbp;
@@ -405,6 +442,7 @@ function OutputOptionItemsOfCategories($default, $type = 0)
     }
     return $s;
 }
+}
 
 /**
  * 生成模板select表单.
@@ -415,6 +453,7 @@ function OutputOptionItemsOfCategories($default, $type = 0)
  *
  * @return null|string
  */
+if (!function_exists('OutputOptionItemsOfTemplate')){
 function OutputOptionItemsOfTemplate($default, $refuse_file_filter = array(), $accept_type = array())
 {
     global $zbp;
@@ -492,6 +531,7 @@ function OutputOptionItemsOfTemplate($default, $refuse_file_filter = array(), $a
     }
     return $s;
 }
+}
 
 /**
  * 生成用户等级select表单.
@@ -500,6 +540,7 @@ function OutputOptionItemsOfTemplate($default, $refuse_file_filter = array(), $a
  *
  * @return null|string
  */
+if (!function_exists('OutputOptionItemsOfMemberLevel')){
 function OutputOptionItemsOfMemberLevel($default)
 {
     global $zbp;
@@ -527,6 +568,7 @@ function OutputOptionItemsOfMemberLevel($default)
     }
     return $s;
 }
+}
 
 /**
  * 生成用户select表单.
@@ -535,6 +577,7 @@ function OutputOptionItemsOfMemberLevel($default)
  *
  * @return null|string
  */
+if (!function_exists('OutputOptionItemsOfMember')){
 function OutputOptionItemsOfMember($default, $posttype = 0, $checkaction = 'edit')
 {
     global $zbp;
@@ -603,6 +646,7 @@ function OutputOptionItemsOfMember($default, $posttype = 0, $checkaction = 'edit
     }
     return $s;
 }
+}
 
 /**
  * 生成文章IsTop状态select表单.
@@ -611,6 +655,7 @@ function OutputOptionItemsOfMember($default, $posttype = 0, $checkaction = 'edit
  *
  * @return null|string
  */
+if (!function_exists('OutputOptionItemsOfIsTop')){
 function OutputOptionItemsOfIsTop($default)
 {
     global $zbp;
@@ -637,6 +682,7 @@ function OutputOptionItemsOfIsTop($default)
 
     return $s;
 }
+}
 
 /**
  * 生成文章发布状态select表单.
@@ -645,6 +691,7 @@ function OutputOptionItemsOfIsTop($default)
  *
  * @return null|string
  */
+if (!function_exists('OutputOptionItemsOfPostStatus')){
 function OutputOptionItemsOfPostStatus($default)
 {
     global $zbp;
@@ -677,6 +724,7 @@ function OutputOptionItemsOfPostStatus($default)
 
     return $s;
 }
+}
 
 /**
  * 创建Div模块.
@@ -684,6 +732,7 @@ function OutputOptionItemsOfPostStatus($default)
  * @param $m
  * @param bool $button
  */
+if (!function_exists('CreateModuleDiv')){
 function CreateModuleDiv($m, $button = true)
 {
     global $zbp;
@@ -704,6 +753,7 @@ function CreateModuleDiv($m, $button = true)
     echo '<div class="funid" style="display:none">' . $m->FileName . '</div>';
     echo '</div>';
 }
+}
 
 /**
  * 生成TYPEselect表单.
@@ -712,6 +762,7 @@ function CreateModuleDiv($m, $button = true)
  *
  * @return null|string
  */
+if (!function_exists('OutputOptionItemsOfPostType')){
 function OutputOptionItemsOfPostType($default)
 {
     global $zbp;
@@ -735,6 +786,7 @@ function OutputOptionItemsOfPostType($default)
     }
     return $s;
 }
+}
 
 /**
  * 生成时区select表单.
@@ -743,6 +795,7 @@ function OutputOptionItemsOfPostType($default)
  *
  * @return string
  */
+if (!function_exists('CreateOptionsOfTimeZone')){
 function CreateOptionsOfTimeZone($default)
 {
     $s = '';
@@ -789,6 +842,7 @@ function CreateOptionsOfTimeZone($default)
 
     return $s;
 }
+}
 
 /**
  * 生成语言select表单.
@@ -797,6 +851,7 @@ function CreateOptionsOfTimeZone($default)
  *
  * @return string
  */
+if (!function_exists('CreateOptionsOfLang')){
 function CreateOptionsOfLang($default)
 {
     global $zbp;
@@ -834,6 +889,7 @@ function CreateOptionsOfLang($default)
     }
     return $s;
 }
+}
 
 /**
  * 生成GuestType表单.
@@ -842,6 +898,7 @@ function CreateOptionsOfLang($default)
  *
  * @return string
  */
+if (!function_exists('CreateOptionsOfGuestIPType')){
 function CreateOptionsOfGuestIPType($default)
 {
     global $zbp;
@@ -867,10 +924,12 @@ function CreateOptionsOfGuestIPType($default)
     }
     return $s;
 }
+}
 
 /**
  * 生成排序按钮
  */
+if (!function_exists('MakeOrderButton')){
 function MakeOrderButton($id, $urlrule, $order_get, $default = 'asc')
 {
     $button_order_id_class = '';
@@ -900,4 +959,5 @@ function MakeOrderButton($id, $urlrule, $order_get, $default = 'asc')
     $button_order_id = ' <a class="order_button ' . $button_order_id_class . '" href="' . $urlrule->Make() . '"><i style="font-size:0.75em;" class="' . $button_order_id_icon . '"></i></a>';
 
     return array($button_order_id);
+}
 }

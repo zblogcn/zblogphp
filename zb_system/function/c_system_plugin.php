@@ -676,17 +676,6 @@ DefinePluginFilter('Filter_Plugin_Zbp_MakeTemplatetags');
 /*
 '**************************************************<
 '类型:Filter
-'名称:Filter_Plugin_Zbp_PrepareTemplate_Admin
-'参数:&$theme, &$template_dirname, &$backend_app_dirname
-'说明:Zbp类的PrepareTemplate_Admin接口
-'调用:
-'**************************************************>
- */
-DefinePluginFilter('Filter_Plugin_Zbp_PrepareTemplate_Admin');
-
-/*
-'**************************************************<
-'类型:Filter
 '名称:Filter_Plugin_Zbp_MakeTemplatetags_Admin
 '参数:$template
 '说明:Zbp类的生成后台模板标签接口

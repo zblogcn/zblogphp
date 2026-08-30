@@ -6,7 +6,7 @@
 <note>backend-legacy传统后台主题</note>
 <description>backend-legacy传统后台主题.</description>
 <path></path>
-<include></include>
+<include>include.php</include>
 <level>1</level>
 <author>
   <name>zx.asd</name>

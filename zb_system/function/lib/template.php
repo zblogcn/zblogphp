@@ -149,6 +149,7 @@ class Template
         }
         $this->path = $path;
         $this->path = rtrim($this->path, '/') . '/';
+        return $this->path;
     }
 
     /**
@@ -614,7 +615,7 @@ class Template
 
         return "{php} for($exp) {{/php} $code{php} }  {/php}";
     }
-    
+
     /**
      * @param $content
      */
@@ -628,7 +629,7 @@ class Template
             );
         }
     }
-    
+
     /**
      * @param $matches
      *
@@ -637,13 +638,13 @@ class Template
     protected function parse_switch_sub($matches)
     {
         $exp = $this->replace_dot($matches[1]);
-        
+
         $code = $this->parse_switch_case($matches[2]);
         $code = preg_replace('/^(\s+?){php}/', '${1}', $code);
-        
+
         return "{php} switch($exp) { $code{php} }  {/php}";
     }
-    
+
     /**
      * @param $code
      *
@@ -653,7 +654,7 @@ class Template
     {
         $code = preg_replace('/{break;?}/', '{php}break;{/php}', $code);
         $code = preg_replace('/{default:?}/', '{php}default:{/php}', $code);
-        
+
         $code = preg_replace_callback('/{case(.+?)}/', array($this, 'parse_switch_case_repalce'), $code);
         return $code;
     }
@@ -820,10 +821,21 @@ class Template
         // 读取Backend模板
         $this->dirs = array();
         $this->files = array();
-        $this->GetAllFileDir($zbp->systemdir . 'admin2/' . $this->theme . "/{$this->template_dirname}");
-
-        foreach ($this->files as $key => $value) {
-            $templates[$key] = $value;
+        if (isset($zbp->backendapps[$this->theme]) && is_object($zbp->backendapps[$this->theme])) {
+            $backendapp = &$zbp->backendapps[$this->theme];
+            $backendapp_dirname = $backendapp->app_path;
+            $files2 = GetFilesInDir($backendapp_dirname . "{$this->template_dirname}/", 'php');
+        } else {
+            $files2 = GetFilesInDir($zbp->systemdir . 'admin2/' . $this->theme . "/{$this->template_dirname}/", 'php');
+        }
+        foreach ($files2 as $sortname => $fullname) {
+            $s = file_get_contents($fullname);
+            if (substr($s, 0, 2) == '{*' && strstr($s, '*}') !== false) {
+                $s = strstr($s, '*}');
+                $s = substr($s, 2);
+            }
+            $templates[$sortname] = $s;
+            $s = null;
         }
 
         $this->templates = $templates;
@@ -1054,9 +1066,11 @@ class Template
         $this->templateTags['name'] = htmlspecialchars($zbp->name);
         $this->templateTags['subname'] = htmlspecialchars($zbp->subname);
         $this->templateTags['theme'] = &$zbp->theme;
-        $this->templateTags['backend_theme'] = &$zbp->backend_theme;
         $this->templateTags['themeapp'] = &$zbp->themeapp;
         $this->templateTags['themeinfo'] = &$zbp->themeinfo;
+        $this->templateTags['backendapp'] = &$zbp->backendapp;
+        $this->templateTags['backendinfo'] = &$zbp->backendinfo;
+        $this->templateTags['backendtheme'] = &$zbp->backendtheme;
         $this->templateTags['style'] = &$zbp->style;
         $this->templateTags['language'] = $zbp->option['ZC_BLOG_LANGUAGE'];
         $this->templateTags['copyright'] = $zbp->option['ZC_BLOG_COPYRIGHT'];
