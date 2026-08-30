@@ -8,11 +8,10 @@ if (!defined('ZBP_PATH')) {
  */
 class ModuleBuilder
 {
+    public static $List = []; //array('filename'=>,'function' => '', 'paramters' => '');
 
     //需要重建的module list
-    private static $Ready = array(); //'filename';
-
-    public static $List = array(); //array('filename'=>,'function' => '', 'paramters' => '');
+    private static $Ready = []; //'filename';
 
     public static function Build()
     {
@@ -35,7 +34,7 @@ class ModuleBuilder
     {
         self::$List[$modfilename]['filename'] = $modfilename;
         self::$List[$modfilename]['function'] = $userfunc;
-        self::$List[$modfilename]['parameters'] = array();
+        self::$List[$modfilename]['parameters'] = [];
     }
 
     /**
@@ -49,7 +48,7 @@ class ModuleBuilder
         $p = func_get_args();
         self::$Ready[$modfilename] = $modfilename;
         array_shift($p);
-        $p = is_array($p) ? $p : array();
+        $p = is_array($p) ? $p : [];
         self::$List[$modfilename]['parameters'] = $p;
     }
 
@@ -66,18 +65,18 @@ class ModuleBuilder
     /**
      * 导出网站分类模块数据.
      *
+     * @param mixed $type
+     *
      * @throws Exception
      *
      * @return string 模块内容
-     *
-     *
      */
     public static function Catalog($type = 0)
     {
         global $zbp;
 
-        $template = $zbp->template;
-        $tags = array();
+        $template = $zbp->GetTemplate();
+        $tags = [];
 
         $tags['style'] = $zbp->option['ZC_MODULE_CATALOG_STYLE'];
         $tags['maxLi'] = $zbp->modulesbyfilename['catalog']->MaxLi;
@@ -85,6 +84,17 @@ class ModuleBuilder
 
         $template->SetTagsAll($tags);
         $ret = $template->Output('module-catalog');
+
+        $links = [];
+        $catalogs = $zbp->categoriesbyorder_type[$type];
+        foreach ($catalogs as $catalog) {
+            $link = new StdClass();
+            $link->href = $catalog->Url;
+            $link->title = $catalog->Name;
+            $link->content = $catalog->Name;
+            $links[] = $link;
+        }
+        $zbp->modulesbyfilename['catalog']->Links = $links;
 
         return $ret;
     }
@@ -101,10 +111,10 @@ class ModuleBuilder
     public static function Calendar($date = '')
     {
         global $zbp;
-        $template = $zbp->template;
-        $tags = array();
+        $template = $zbp->GetTemplate();
+        $tags = [];
 
-        if ($date == '') {
+        if ('' == $date) {
             $date = date('Y-m', time());
         }
         $tags['date'] = $date;
@@ -151,18 +161,18 @@ class ModuleBuilder
         $ldate = (strtotime(date('Y-m-t', strtotime($date))) + 60 * 60 * 24);
         $sql = $zbp->db->sql->Select(
             $zbp->table['Post'],
-            array('log_ID', 'log_PostTime'),
-            array(
-                array('=', 'log_Type', '0'),
-                array('=', 'log_Status', '0'),
-                array('BETWEEN', 'log_PostTime', $fdate, $ldate),
-            ),
-            array('log_PostTime' => 'ASC'),
+            ['log_ID', 'log_PostTime'],
+            [
+                ['=', 'log_Type', '0'],
+                ['=', 'log_Status', '0'],
+                ['BETWEEN', 'log_PostTime', $fdate, $ldate],
+            ],
+            ['log_PostTime' => 'ASC'],
             null,
-            null
+            null,
         );
         $array = $zbp->db->Query($sql);
-        $arraydate = array();
+        $arraydate = [];
         foreach ($array as $value) {
             $key = date('j', $value[$zbp->datainfo['Post']['PostTime'][0]]);
             if (!isset($arraydate[$key])) {
@@ -173,13 +183,13 @@ class ModuleBuilder
                 $url->Rules['{%month%}'] = $tags['nowMonth'];
                 $url->Rules['{%day%}'] = $key;
                 $url->RulesObject = $vdate;
-                $arraydate[$key] = array(
+                $arraydate[$key] = [
                     'Date'  => $fullDate,
                     'Url'   => $url->Make(),
                     'Count' => 0,
-                );
+                ];
             }
-            $arraydate[$key]['Count']++;
+            ++$arraydate[$key]['Count'];
         }
         $tags['arraydate'] = $arraydate;
         $template->SetTagsAll($tags);
@@ -198,19 +208,29 @@ class ModuleBuilder
     public static function Comments()
     {
         global $zbp;
-        $template = $zbp->template;
-        $tags = array();
+        $template = $zbp->GetTemplate();
+        $tags = [];
 
         $i = $zbp->modulesbyfilename['comments']->MaxLi;
-        if ($i == 0) {
+        if (0 == $i) {
             $i = 10;
         }
         $tags['maxLi'] = $i;
-        $comments = $zbp->GetCommentList('*', array(array('=', 'comm_IsChecking', 0)), array('comm_ID' => 'DESC'), $i, null);
+        $comments = $zbp->GetCommentList('*', [['=', 'comm_IsChecking', 0]], ['comm_ID' => 'DESC'], $i, null);
         $tags['comments'] = $comments;
 
         $template->SetTagsAll($tags);
         $ret = $template->Output('module-comments');
+
+        $links = [];
+        foreach ($comments as $comment) {
+            $link = new StdClass();
+            $link->href = $comment->Post->Url;
+            $link->title = htmlspecialchars($comment->Author->StaticName . ' @ ' . $comment->Time());
+            $link->content = FormatString($comment->Content, '[noenter]');
+            $links[] = $link;
+        }
+        $zbp->modulesbyfilename['comments']->Links = $links;
 
         return $ret;
     }
@@ -225,19 +245,29 @@ class ModuleBuilder
     public static function LatestArticles()
     {
         global $zbp;
-        $template = $zbp->template;
-        $tags = array();
+        $template = $zbp->GetTemplate();
+        $tags = [];
 
         $i = $zbp->modulesbyfilename['previous']->MaxLi;
-        if ($i == 0) {
+        if (0 == $i) {
             $i = 10;
         }
         $tags['maxLi'] = $i;
-        $articles = $zbp->GetArticleList('*', array(array('=', 'log_Status', 0)), array('log_PostTime' => 'DESC'), $i, null, false);
+        $articles = $zbp->GetArticleList('*', [['=', 'log_Status', 0]], ['log_PostTime' => 'DESC'], $i, null, false);
         $tags['articles'] = $articles;
 
         $template->SetTagsAll($tags);
         $ret = $template->Output('module-previous');
+
+        $links = [];
+        foreach ($articles as $article) {
+            $link = new StdClass();
+            $link->href = $article->Url;
+            $link->title = $article->Title;
+            $link->content = $article->Title;
+            $links[] = $link;
+        }
+        $zbp->modulesbyfilename['previous']->Links = $links;
 
         return $ret;
     }
@@ -252,39 +282,39 @@ class ModuleBuilder
     public static function Archives()
     {
         global $zbp;
-        $template = $zbp->template;
-        $tags = array();
-        $urls = array(); //array(url,name,count);
+        $template = $zbp->GetTemplate();
+        $tags = [];
+        $urls = []; //array(url,name,count);
 
         $maxli = $zbp->modulesbyfilename['archives']->MaxLi;
         if ($maxli < 0) {
             return '';
         }
 
-        $sql = $zbp->db->sql->Select($zbp->table['Post'], array('log_PostTime'), null, array('log_PostTime' => 'DESC'), array(1), null);
+        $sql = $zbp->db->sql->Select($zbp->table['Post'], ['log_PostTime'], null, ['log_PostTime' => 'DESC'], [1], null);
 
         $array = $zbp->db->Query($sql);
 
-        if (count($array) == 0) {
+        if (0 == count($array)) {
             return '';
         }
 
-        $ldate = array(date('Y', $array[0][$zbp->datainfo['Post']['PostTime'][0]]), date('m', $array[0][$zbp->datainfo['Post']['PostTime'][0]]));
+        $ldate = [date('Y', $array[0][$zbp->datainfo['Post']['PostTime'][0]]), date('m', $array[0][$zbp->datainfo['Post']['PostTime'][0]])];
 
-        $sql = $zbp->db->sql->Select($zbp->table['Post'], array('log_PostTime'), null, array('log_PostTime' => 'ASC'), array(1), null);
+        $sql = $zbp->db->sql->Select($zbp->table['Post'], ['log_PostTime'], null, ['log_PostTime' => 'ASC'], [1], null);
 
         $array = $zbp->db->Query($sql);
 
-        if (count($array) == 0) {
+        if (0 == count($array)) {
             return '';
         }
 
-        $fdate = array(date('Y', $array[0][$zbp->datainfo['Post']['PostTime'][0]]), date('m', $array[0][$zbp->datainfo['Post']['PostTime'][0]]));
+        $fdate = [date('Y', $array[0][$zbp->datainfo['Post']['PostTime'][0]]), date('m', $array[0][$zbp->datainfo['Post']['PostTime'][0]])];
 
-        $arraydate = array();
+        $arraydate = [];
 
-        for ($i = $fdate[0]; $i < ($ldate[0] + 1); $i++) {
-            for ($j = 1; $j < 13; $j++) {
+        for ($i = $fdate[0]; $i < ($ldate[0] + 1); ++$i) {
+            for ($j = 1; $j < 13; ++$j) {
                 $arraydate[] = strtotime($i . '-' . $j);
             }
         }
@@ -322,16 +352,16 @@ class ModuleBuilder
 
             $fdate = $value;
             $ldate = (strtotime(date('Y-m-t', $value)) + 60 * 60 * 24);
-            $sql = $zbp->db->sql->Count($zbp->table['Post'], array(array('COUNT', '*', 'num')), array(array('=', 'log_Type', '0'), array('=', 'log_Status', '0'), array('BETWEEN', 'log_PostTime', $fdate, $ldate)));
+            $sql = $zbp->db->sql->Count($zbp->table['Post'], [['COUNT', '*', 'num']], [['=', 'log_Type', '0'], ['=', 'log_Status', '0'], ['BETWEEN', 'log_PostTime', $fdate, $ldate]]);
             $n = GetValueInArrayByCurrent($zbp->db->Query($sql), 'num');
             if ($n > 0) {
                 //$urls[]=array($url->Make(),str_replace(array('%y%', '%m%'), array(date('Y', $fdate), date('n', $fdate)), $zbp->lang['msg']['year_month']),$n);
                 $meta = new Metas();
                 $meta->Url = $url->Make();
-                $meta->Name = str_replace(array('%y%', '%m%'), array(date('Y', $fdate), date('n', $fdate)), $zbp->lang['msg']['year_month']);
+                $meta->Name = str_replace(['%y%', '%m%'], [date('Y', $fdate), date('n', $fdate)], $zbp->lang['msg']['year_month']);
                 $meta->Count = $n;
                 $urls[] = $meta;
-                $i++;
+                ++$i;
             }
         }
 
@@ -339,6 +369,17 @@ class ModuleBuilder
         $tags['style'] = $zbp->option['ZC_MODULE_ARCHIVES_STYLE'];
         $template->SetTagsAll($tags);
         $ret = $template->Output('module-archives');
+
+        $links = [];
+        foreach ($urls as $url) {
+            $link = new StdClass();
+            $link->href = $url['Url'];
+            $link->title = $url['Name'];
+            $link->content = $url['Name'];
+            $link->data_count = $url['Count'];
+            $links[] = $link;
+        }
+        $zbp->modulesbyfilename['archives']->Links = $links;
 
         return $ret;
     }
@@ -353,50 +394,13 @@ class ModuleBuilder
     public static function Navbar()
     {
         global $zbp;
-        $template = $zbp->template;
-        $tags = array();
+        $template = $zbp->GetTemplate();
+        $tags = [];
 
         $s = $zbp->modulesbyfilename['navbar']->Content;
 
-        $a = array();
-        preg_match_all('/<li id="navbar-(page|category|tag)-(\d+)">/', $s, $a);
-
-        $b = $a[1];
-        $c = $a[2];
-        foreach ($b as $key => $value) {
-            if ($b[$key] == 'page') {
-                $type = 'page';
-                $id = $c[$key];
-                $o = $zbp->GetPostByID($id);
-                $url = $o->Url;
-                $name = $o->Title;
-
-                $a = '<li id="navbar-' . $type . '-' . $id . '"><a href="' . $url . '">' . $name . '</a></li>';
-                $s = preg_replace('/<li id="navbar-' . $type . '-' . $id . '">.*?<\/a><\/li>/', $a, $s);
-            }
-            if ($b[$key] == 'category') {
-                $type = 'category';
-                $id = $c[$key];
-                $o = $zbp->GetCategoryByID($id);
-                $url = $o->Url;
-                $name = $o->Name;
-
-                $a = '<li id="navbar-' . $type . '-' . $id . '"><a href="' . $url . '">' . $name . '</a></li>';
-                $s = preg_replace('/<li id="navbar-' . $type . '-' . $id . '">.*?<\/a><\/li>/', $a, $s);
-            }
-            if ($b[$key] == 'tag') {
-                $type = 'tag';
-                $id = $c[$key];
-                $o = $zbp->GetTagByID($id);
-                $url = $o->Url;
-                $name = $o->Name;
-
-                $a = '<li id="navbar-' . $type . '-' . $id . '"><a href="' . $url . '">' . $name . '</a></li>';
-                $s = preg_replace('/<li id="navbar-' . $type . '-' . $id . '">.*?<\/a><\/li>/', $a, $s);
-            }
-        }
-
         $tags['content'] = $s;
+        $tags['links'] = $zbp->modulesbyfilename['navbar']->Links;
 
         $template->SetTagsAll($tags);
         $ret = $template->Output('module-navbar');
@@ -407,6 +411,8 @@ class ModuleBuilder
     /**
      * 导出tags模块数据.
      *
+     * @param mixed $type
+     *
      * @throws Exception
      *
      * @return string 模块内容
@@ -414,17 +420,17 @@ class ModuleBuilder
     public static function TagList($type = 0)
     {
         global $zbp;
-        $template = $zbp->template;
-        $tags = array();
-        $urls = array(); //array(real tag);
+        $template = $zbp->GetTemplate();
+        $tags = [];
+        $urls = []; //array(real tag);
 
         $i = $zbp->modulesbyfilename['tags']->MaxLi;
-        if ($i == 0) {
+        if (0 == $i) {
             $i = 25;
         }
 
-        $array = $zbp->GetTagList('*', array(array('=', 'tag_Type', $type)), array('tag_Count' => 'DESC'), $i, null);
-        $array2 = array();
+        $array = $zbp->GetTagList('*', [['=', 'tag_Type', $type]], ['tag_Count' => 'DESC'], $i, null);
+        $array2 = [];
         foreach ($array as $tag) {
             $array2[$tag->ID] = $tag;
         }
@@ -438,6 +444,17 @@ class ModuleBuilder
 
         $template->SetTagsAll($tags);
         $ret = $template->Output('module-tags');
+
+        $links = [];
+        foreach ($urls as $tag) {
+            $link = new StdClass();
+            $link->href = $tag->Url;
+            $link->title = $tag->Name;
+            $link->content = $tag->Name;
+            $link->data_count = $tag->Count;
+            $links[] = $link;
+        }
+        $zbp->modulesbyfilename['tags']->Links = $links;
 
         return $ret;
     }
@@ -454,20 +471,20 @@ class ModuleBuilder
     public static function Authors($level = 4)
     {
         global $zbp;
-        $template = $zbp->template;
-        $tags = array();
-        $authors = array();
+        $template = $zbp->GetTemplate();
+        $tags = [];
+        $authors = [];
         $level = $level || $zbp->actions['ArticleEdt'];
 
-        $w = array();
-        $w[] = array('<=', 'mem_Level', $level);
+        $w = [];
+        $w[] = ['<=', 'mem_Level', $level];
 
         $i = $zbp->modulesbyfilename['authors']->MaxLi;
-        if ($i == 0) {
+        if (0 == $i) {
             $i = 10;
         }
 
-        $array = $zbp->GetMemberList('*', $w, array('mem_ID' => 'ASC'), $i, null);
+        $array = $zbp->GetMemberList('*', $w, ['mem_ID' => 'ASC'], $i, null);
 
         foreach ($array as $member) {
             $m = $member->Cloned();
@@ -479,6 +496,18 @@ class ModuleBuilder
         $tags['authors'] = $authors;
         $template->SetTagsAll($tags);
         $ret = $template->Output('module-authors');
+
+        $links = [];
+        foreach ($authors as $author) {
+            $link = new StdClass();
+            $link->href = $author->Url;
+            $link->title = $author->StaticName;
+            $link->content = $author->StaticName;
+            $link->data_count = $author->Articles;
+            $link->data_count_articles = $author->Articles;
+            $links[] = $link;
+        }
+        $zbp->modulesbyfilename['authors']->Links = $links;
 
         return $ret;
     }
@@ -492,12 +521,12 @@ class ModuleBuilder
      *
      * @return string 模块内容
      */
-    public static function Statistics($array = array())
+    public static function Statistics($array = [])
     {
         global $zbp;
-        $template = $zbp->template;
-        $tags = array();
-        $allinfo = array();
+        $template = $zbp->GetTemplate();
+        $tags = [];
+        $allinfo = [];
 
         $all_artiles = 0;
         $all_pages = 0;
@@ -506,7 +535,7 @@ class ModuleBuilder
         $all_views = 0;
         $all_comments = 0;
 
-        if (count($array) == 0) {
+        if (0 == count($array)) {
             return $zbp->modulesbyfilename['statistics']->Content;
         }
 
@@ -534,22 +563,30 @@ class ModuleBuilder
             $all_comments = $array[5];
         }
 
-        $allinfo['all_artiles'] = array('name' => $zbp->lang['msg']['all_artiles'], 'count' => $all_artiles);
-        $allinfo['all_pages'] = array('name' => $zbp->lang['msg']['all_pages'], 'count' => $all_pages);
-        $allinfo['all_categorys'] = array('name' => $zbp->lang['msg']['all_categorys'], 'count' => $all_categorys);
-        $allinfo['all_tags'] = array('name' => $zbp->lang['msg']['all_tags'], 'count' => $all_tags);
-        $allinfo['all_comments'] = array('name' => $zbp->lang['msg']['all_comments'], 'count' => $all_comments);
+        $allinfo['all_artiles'] = ['name' => $zbp->lang['msg']['all_artiles'], 'count' => $all_artiles];
+        $allinfo['all_pages'] = ['name' => $zbp->lang['msg']['all_pages'], 'count' => $all_pages];
+        $allinfo['all_categorys'] = ['name' => $zbp->lang['msg']['all_categorys'], 'count' => $all_categorys];
+        $allinfo['all_tags'] = ['name' => $zbp->lang['msg']['all_tags'], 'count' => $all_tags];
+        $allinfo['all_comments'] = ['name' => $zbp->lang['msg']['all_comments'], 'count' => $all_comments];
         if (!$zbp->option['ZC_VIEWNUMS_TURNOFF'] || $zbp->option['ZC_LARGE_DATA']) {
-            $allinfo['all_views'] = array('name' => $zbp->lang['msg']['all_views'], 'count' => $all_views);
+            $allinfo['all_views'] = ['name' => $zbp->lang['msg']['all_views'], 'count' => $all_views];
         }
-
-        $zbp->modulesbyfilename['statistics']->Type = "ul";
 
         $tags['allinfo'] = $allinfo;
         $template->SetTagsAll($tags);
         $ret = $template->Output('module-statistics');
 
+        $links = [];
+        foreach ($allinfo as $info) {
+            $link = new StdClass();
+            $link->href = '';
+            $link->title = $info['name'];
+            $link->content = $info['name'] . ':' . $info['count'];
+            $link->data_count = $info['count'];
+            $links[] = $link;
+        }
+        $zbp->modulesbyfilename['statistics']->Links = $links;
+
         return $ret;
     }
-
 }

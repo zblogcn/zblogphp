@@ -304,6 +304,10 @@ return [
         'video_ai_url'                      => '视频AI Url',
         'video_ai_key'                      => '视频AI Key',
         'video_ai_model'                    => '视频AI模型名',
+        'link'                              => '連結',
+        'href'                              => '地址',
+        'text'                              => '文本',
+        ''                                  => '',
     ],
 
     //Action

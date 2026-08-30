@@ -2575,6 +2575,9 @@ class ZBlogPHP
      */
     public function &GetTemplate()
     {
+        if (is_null($this->template)) {
+            $this->template = $this->PrepareTemplate();
+        }
         if (IS_CLI && (IS_WORKERMAN || IS_SWOOLE)) {
             $template = clone $this->template;
         } else {
@@ -2589,6 +2592,9 @@ class ZBlogPHP
      */
     public function &GetTemplateAdmin()
     {
+        if (is_null($this->template_admin)) {
+            $this->template_admin = $this->PrepareTemplateAdmin();
+        }
         if (IS_CLI && (IS_WORKERMAN || IS_SWOOLE)) {
             $template = clone $this->template_admin;
         } else {
@@ -5016,17 +5022,17 @@ class ZBlogPHP
         }
 
         $m = $this->modulesbyfilename['navbar'];
-        $s = $m->Content;
 
-        $a = '<li id="navbar-' . $type . '-' . $id . '"><a href="' . $url . '">' . $name . '</a></li>';
-
-        if ($this->CheckItemToNavbar($type, $id)) {
-            $s = preg_replace('/<li id="navbar-' . $type . '-' . $id . '">.*?<\/li>/', $a, $s);
-        } else {
-            $s .= '<li id="navbar-' . $type . '-' . $id . '"><a href="' . $url . '">' . $name . '</a></li>';
+        $links = $m->Links;
+        $li_id = 'navbar-' . $type . '-' . $id;
+        $link = new stdClass();
+        $link->href = $url;
+        $link->content = $name;
+        $link->li_id = $li_id;
+        if (!$this->CheckItemToNavbar($type, $id)) {
+            $links[] = $link;
         }
-
-        $m->Content = $s;
+        $m->Build();
         $m->Save();
     }
 
@@ -5041,13 +5047,16 @@ class ZBlogPHP
         if (!$type) {
             $type = 'item';
         }
-
+        $li_id = 'navbar-' . $type . '-' . $id;
         $m = $this->modulesbyfilename['navbar'];
-        $s = $m->Content;
-
-        $s = preg_replace('/<li id="navbar-' . $type . '-' . $id . '">.*?<\/li>/', '', $s);
-
-        $m->Content = $s;
+        $links = $m->Links;
+        foreach ($links as $key => $link) {
+            if (isset($link->li_id) && $link->li_id == $li_id) {
+                unset($links[$key]);
+            }
+        }
+        $m->Links = $links;
+        $m->Build();
         $m->Save();
     }
 
@@ -5064,11 +5073,16 @@ class ZBlogPHP
         if (!$type) {
             $type = 'item';
         }
-
+        $li_id = 'navbar-' . $type . '-' . $id;
         $m = $this->modulesbyfilename['navbar'];
-        $s = $m->Content;
+        $links = $m->Links;
+        foreach ($links as $key => $link) {
+            if (isset($link->li_id) && $link->li_id == $li_id) {
+                return true;
+            }
+        }
 
-        return (bool) strpos($s, 'id="navbar-' . $type . '-' . $id . '"');
+        return false;
     }
 
     /**

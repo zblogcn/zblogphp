@@ -1,3 +1,3 @@
 {foreach $allinfo as $info}
-<li>{$info['name']}:{$info['count']}</li>
+<li><a href="">{$info['name']}:{$info['count']}</a></li>
 {/foreach}
