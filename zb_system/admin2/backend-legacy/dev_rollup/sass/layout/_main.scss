@@ -45,6 +45,15 @@
         background-color: $color-background-hover;
       }
     }
+
+    span.m-now {
+      color: $color-fff;
+    }
+
+    a:has(span.m-now) {
+      background: $color-light;
+    }
+
   }
 
   #divMain2 {

@@ -373,10 +373,10 @@ class ModuleBuilder
         $links = [];
         foreach ($urls as $url) {
             $link = new StdClass();
-            $link->href = $url['Url'];
-            $link->title = $url['Name'];
-            $link->content = $url['Name'];
-            $link->data_count = $url['Count'];
+            $link->href = $url->Url;
+            $link->title = $url->Name;
+            $link->content = $url->Name;
+            $link->data_count = $url->Count;
             $links[] = $link;
         }
         $zbp->modulesbyfilename['archives']->Links = $links;

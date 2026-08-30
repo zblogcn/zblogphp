@@ -301,6 +301,7 @@ return [
         'video_ai_key'                      => '视频AI Key',
         'video_ai_model'                    => '视频AI模型名',
         'link'                              => '链接',
+        'custom_content'                    => '自定义内容',
         'href'                              => '地址',
         'text'                              => '文本',
     ],

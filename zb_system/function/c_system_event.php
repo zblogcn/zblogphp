@@ -1856,11 +1856,12 @@ function PostModule()
         $zbp->ShowError(6, __FILE__, __LINE__);
     }
 
-    if (isset($_POST['catalog_style'])) {
-        $zbp->option['ZC_MODULE_CATALOG_STYLE'] = $_POST['catalog_style'];
-        $zbp->SaveOption();
+    if ('catalog' == $_POST['FileName']) {
+        if (isset($_POST['catalog_style'])) {
+            $zbp->option['ZC_MODULE_CATALOG_STYLE'] = $_POST['catalog_style'];
+            $zbp->SaveOption();
+        }
     }
-
     if ('archives' == $_POST['FileName']) {
         if (isset($_POST['archives_style'])) {
             $zbp->option['ZC_MODULE_ARCHIVES_STYLE'] = 1;
@@ -1891,11 +1892,6 @@ function PostModule()
     if (!isset($_POST['Type'])) {
         $_POST['Type'] = 'ul';
     }
-    // if (isset($_POST['Content'])) {
-    //     if ($_POST['Type'] != 'div') {
-    //         // div不再过滤\r和\n//$_POST['Content'] = str_replace(array("\r", "\n"), array('', ''), $_POST['Content']);
-    //     }
-    // }
 
     /* @var Module $mod */
     $mod = $zbp->GetModuleByID(GetVars('ID', 'POST'));
@@ -1917,23 +1913,39 @@ function PostModule()
         $mod->HtmlID = $mod->FileName;
     }
 
+    if (isset($_POST['custom_content'])) {
+        if ('ul' == $mod->Type && '1' === $_POST['custom_content']) {
+            $mod->ConvertLink();
+            $mod->Type = 'div';
+        }
+        if ('div' == $mod->Type && '0' === $_POST['custom_content']) {
+            $mod->ParseLink();
+            $mod->Type = 'ul';
+        }
+    }
+
     if ('ul' == $mod->Type && false == $mod->AutoContent) {
-        $array = [];
-        $j = count($_POST['href']);
-        for ($i = 0; $i <= $j - 1; ++$i) {
-            $link = new stdClass();
-            $link->href = $_POST['href'][$i];
-            $link->content = $_POST['content'][$i];
-            foreach ($_POST as $key => $post) {
-                if (is_array($post) && 'href' != $key && 'content' != $key) {
-                    @$link->{$key} = $post[$i];
+        if (isset($_POST['href'], $_POST['content']) && is_array($_POST['href']) && is_array($_POST['content'])) {
+            $array = [];
+            $j = count($_POST['href']);
+            for ($i = 0; $i <= $j - 1; ++$i) {
+                $link = new stdClass();
+                $link->href = $_POST['href'][$i];
+                $link->content = $_POST['content'][$i];
+                if (isset($_POST['li_id'], $_POST['li_id'][$i])) {
+                    $link->li_id = $_POST['li_id'][$i];
+                }
+                foreach ($_POST as $key => $post) {
+                    if (is_array($post) && 'href' != $key && 'content' != $key) {
+                        @$link->{$key} = $post[$i];
+                    }
+                }
+                if (!empty($link->href) && !empty($link->content)) {
+                    $array[] = $link;
                 }
             }
-            if (!empty($link->href) && !empty($link->content)) {
-                $array[] = $link;
-            }
+            $mod->Links = $array;
         }
-        $mod->Links = $array;
     }
 
     FilterMeta($mod);

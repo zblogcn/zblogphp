@@ -18,6 +18,7 @@ table {
 
     &.td-center,
     &.th-center,
+    &.tdCenter,
     &.center {
       text-align: center;
     }
@@ -42,6 +43,7 @@ table {
 
   &.table_hover {
     tr:hover {
+
       >td,
       >th {
         background-color: #ffffdd;

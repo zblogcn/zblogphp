@@ -350,7 +350,7 @@
    */
   function AddHeaderIcon(s) {
     const element = $('div.divHeader,div.divHeader2').first();
-    element.css({ 'background-image': "url('" + s + "')" });
+    element.css({ 'background': "url('" + s + "') 4px 12px no-repeat ",'background-size':'1.4em','padding-left':'1.8em' });
     element.html('<span>' + element.text() + '</span>');
   }
 

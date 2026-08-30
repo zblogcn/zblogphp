@@ -237,6 +237,12 @@ body.admin {
   color: currentColor;
   background-color: #b0cdee;
 }
+#divMain .SubMenu span.m-now {
+  color: #ffffff;
+}
+#divMain .SubMenu a:has(span.m-now) {
+  background: #3399cc;
+}
 #divMain #divMain2 {
   padding: 0;
   margin: 0;
@@ -480,9 +486,10 @@ table td:last-child,
 table th:last-child {
   border-right: none;
 }
-table td.td-center, table td.th-center, table td.center,
+table td.td-center, table td.th-center, table td.tdCenter, table td.center,
 table th.td-center,
 table th.th-center,
+table th.tdCenter,
 table th.center {
   text-align: center;
 }
