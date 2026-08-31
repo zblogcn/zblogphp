@@ -303,6 +303,7 @@ return [
         'link'                              => 'Link',
         'href'                              => 'href',
         'text'                              => 'text',
+        'custom_content'                    => 'Custom content',
         ''                                  => '',
     ],
 

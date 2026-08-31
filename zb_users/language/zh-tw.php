@@ -307,6 +307,7 @@ return [
         'link'                              => '連結',
         'href'                              => '地址',
         'text'                              => '文本',
+        'custom_content'                    => '自定义内容',
         ''                                  => '',
     ],
 

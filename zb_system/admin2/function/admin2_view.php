@@ -658,6 +658,12 @@ function zbp_admin2_PluginMng()
 
     $allplugins = $zbp->LoadPlugins();
 
+    foreach ($allplugins as $key => $plugin) {
+        if (in_array($plugin->id, ZBlogPHP::DISABLE_PLUGINS)) {
+            unset($allplugins[$key]);
+        }
+    }
+
     $plugins = [];
 
     $app = new App();

@@ -28,6 +28,9 @@ foreach ($mod->Links as $link) {
     <p><input class="edit" size="50" name="href[]" type="text" placeholder="{$zbp->lang['msg']['href']}" value="{FormatString(@$link->href, '[html-format]')}" />
     <input class="edit" size="30" name="content[]" type="text" placeholder="{$zbp->lang['msg']['text']}" value="{FormatString(@$link->content, '[html-format]')}" />
     <input class="edit" size="30" name="target[]" type="text" placeholder="Target" value="{FormatString(@$link->target, '[html-format]')}" />
+    {if $mod->FileName == 'navbar'}
+    <input class="edit" size="30" name="li_id[]" type="hidden" value="{FormatString(@$link->li_id, '[html-format]')}" />
+    {/if}
     </p>
     {php}<?php
 }
@@ -63,9 +66,13 @@ foreach ($mod->Links as $link) {
     <!-- maxli -->
     <input type="hidden" name="MaxLi" value="{$mod->MaxLi}" size="40" />
     <!-- no refresh content -->
-    <p {if $mod->SourceType == 'themeinclude'}class="hidden"{/if}>
+    <p style="display:none;" {if $mod->SourceType == 'themeinclude'}class="hidden"{/if}>
         <span class="title">{$zbp->lang['msg']['no_refresh_content']}:</span>
         <input type="text" id="NoRefresh" name="NoRefresh" class="checkbox" value="{$mod->NoRefresh}" />
+    </p>
+    <p {if $mod->SourceType != 'user' && $mod->SourceType != 'plugin' && $mod->SourceType != 'theme'}class="hidden"{/if}>
+        <span class="title">{$zbp->lang['msg']['custom_content']}:</span>
+        <input type="text" id="custom_content" name="custom_content" class="checkbox" value="{if $mod->Type == 'div'}1{else}0{/if}" />
     </p>
     <div id='response' class='editmod2'>
         {php}

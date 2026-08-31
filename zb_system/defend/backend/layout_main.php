@@ -1,6 +1,6 @@
 <?php exit(); ?>
 <!-- update: 2026-01-04 -->
-<section class="main {$action}">
+<section class="main main-{$action}">
     {php}$zbp->GetHint();{/php}
     {php}HookFilterPlugin('Filter_Plugin_Admin_Hint');{/php}
     <div id="divMain">

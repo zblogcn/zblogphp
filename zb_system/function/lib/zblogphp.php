@@ -10,6 +10,8 @@ class ZBlogPHP
 {
     public const OPTION_RESERVE_KEYS = 'ZC_DATABASE_TYPE|ZC_SQLITE_NAME|ZC_SQLITE_PRE|ZC_MYSQL_SERVER|ZC_MYSQL_USERNAME|ZC_MYSQL_PASSWORD|ZC_MYSQL_NAME|ZC_MYSQL_CHARSET|ZC_MYSQL_COLLATE|ZC_MYSQL_PRE|ZC_MYSQL_ENGINE|ZC_MYSQL_PORT|ZC_MYSQL_PERSISTENT|ZC_MYSQL_PORT|ZC_PGSQL_SERVER|ZC_PGSQL_USERNAME|ZC_PGSQL_PASSWORD|ZC_PGSQL_NAME|ZC_PGSQL_CHARSET|ZC_PGSQL_PRE|ZC_PGSQL_PORT|ZC_PGSQL_PERSISTENT|ZC_CLOSE_WHOLE_SITE|ZC_PERMANENT_DOMAIN_FORCED_URL|ZC_INSTALL_AFTER_CONFIG';
 
+    public const DISABLE_PLUGINS = ['AdminColor', 'LinksManage', 'STACentre'];
+
     /**
      * @var string 版本号
      */
@@ -1119,7 +1121,9 @@ class ZBlogPHP
         Add_Filter_Plugin('Filter_Plugin_Admin_Hint', 'Include_Admin_CheckWeakPassWord');
 
         if (isset($GLOBALS['zbpvers'])) {
-            $GLOBALS['zbpvers'][$GLOBALS['blogversion']] = ZC_VERSION_DISPLAY . ' Build ' . $GLOBALS['blogversion'];
+            if (!isset($GLOBALS['zbpvers'][$GLOBALS['blogversion']])) {
+                $GLOBALS['zbpvers'][$GLOBALS['blogversion']] = ZC_VERSION_DISPLAY . ' Build ' . $GLOBALS['blogversion'];
+            }
         }
 
         if ($this->option['ZC_DEBUG_MODE'] || $this->ismanage) {
@@ -2162,7 +2166,7 @@ class ZBlogPHP
         $aps2 = [];
         //剔除掉admin2后台禁用的插件
         foreach ($aps as $key => $ap) {
-            if ('AdminColor' == $ap || 'LinksManage' == $ap || 'STACentre' == $ap) {
+            if (in_array($ap, ZBlogPHP::DISABLE_PLUGINS)) {
                 continue;
             }
             $aps2[] = $ap;
@@ -5032,6 +5036,7 @@ class ZBlogPHP
         if (!$this->CheckItemToNavbar($type, $id)) {
             $links[] = $link;
         }
+        $m->Links = $links;
         $m->Build();
         $m->Save();
     }

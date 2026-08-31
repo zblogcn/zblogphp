@@ -16,7 +16,7 @@ if (!defined('ZBP_PATH')) {
  */
 abstract class Base__Module extends Base
 {
-    public $private_links = [];
+    public $private_links;
 
     /**
      * 构造函数.
@@ -106,21 +106,32 @@ abstract class Base__Module extends Base
             return (bool) $this->Metas->norefresh;
         }
         if ('Links' == $name) {
-            if (isset($this->Metas->system_links)) {
-                $this->private_links = json_decode($this->Metas->system_links, false);
-            } else {
-                $this->ParseLink();
+            if (is_null($this->private_links)) {
+                if (isset($this->Metas->system_links)) {
+                    $this->private_links = json_decode($this->Metas->system_links, false);
+                } else {
+                    $this->ParseLink();
+                }
+            }
+            if (!is_array($this->private_links)) {
+                $this->private_links = [];
             }
 
             return $this->private_links;
         }
-        if ('ContentWithoutId' == $name) {
-            $s = preg_replace("/(id=\"[^\\s]*\"|id='[^\\s]*')/i", '', $this->Content);
-
-            return $s;
-        }
         if ('AutoContent' == $name) {
+            if ('navbar' == $this->FileName) {
+                return false;
+            }
             if (in_array($this->FileName, ['catalog', 'calendar', 'comments', 'previous', 'archives', 'tags', 'statistics', 'authors'])) {
+                return true;
+            }
+            if (isset(ModuleBuilder::$List[$this->FileName])) {
+                if (isset(ModuleBuilder::$List[$this->FileName]['function'])) {
+                    return true;
+                }
+            }
+            if (isset($this->Metas->system_function)) {
                 return true;
             }
 
@@ -275,7 +286,7 @@ abstract class Base__Module extends Base
             if (isset(ModuleBuilder::$List[$this->FileName]['function'])) {
                 $f = ModuleBuilder::$List[$this->FileName]['function'];
                 $p = ModuleBuilder::$List[$this->FileName]['parameters'];
-                $p = is_array($p) ? $p : [];
+                $p = is_array($p) ? $p : [$p];
 
                 $this->Content = call_user_func_array(ParseFilterPlugin($f), $p);
 
@@ -285,9 +296,15 @@ abstract class Base__Module extends Base
         if (isset($this->Metas->system_function)) {
             $f = $this->Metas->system_function;
             $p = $this->Metas->system_parameters;
-            $p = is_array($p) ? $p : [];
+            $p = is_array($p) ? $p : [$p];
 
             $this->Content = call_user_func_array(ParseFilterPlugin($f), $p);
+
+            return true;
+        }
+
+        if ('ul' == $this->Type) {
+            $this->ConvertLink();
 
             return true;
         }
@@ -314,6 +331,24 @@ abstract class Base__Module extends Base
         }
 
         return $inused;
+    }
+
+    public function ConvertLink()
+    {
+        $s = '';
+        foreach ($this->Links as $link) {
+            $s .= '<li><' . 'a ';
+            foreach ($link as $link_key => $link_value) {
+                if ('content' == $link_key) {
+                } elseif ('target' == $link_key && empty($link_value)) {
+                } else {
+                    $link_key = str_replace('data_', 'data-', $link_key);
+                    $s .= $link_key . '="' . $link_value . '" ';
+                }
+            }
+            $s .= '>' . $link->content . '</a></li>';
+        }
+        $this->Content = $s;
     }
 
     public function ParseLink()
