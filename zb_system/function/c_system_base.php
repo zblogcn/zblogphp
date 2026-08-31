@@ -192,8 +192,6 @@ $GLOBALS['datadir'] = $GLOBALS['usersdir'] . 'data/';
  * 已激活插件列表
  */
 $GLOBALS['activedapps'] = [];
-//保留activeapps，兼容以前版本
-$GLOBALS['activeapps'] = &$GLOBALS['activedapps'];
 
 /*
  * 加载设置
@@ -203,7 +201,7 @@ $file_base = GetVarsFromEnv('ZBP_PRESET_ENV', 'constant|environment|server');
 if (!empty($file_base) && is_readable($file_base) && class_exists('ZbpEnv')) {
     ZbpEnv::LoadByPath($file_base);
 }
-$GLOBALS['zbp_option'] = $GLOBALS['option'] = include ZBP_PATH . 'zb_system/defend/option.php';
+$GLOBALS['option'] = include ZBP_PATH . 'zb_system/defend/option.php';
 $GLOBALS['option_user_file'] = [];
 if (!ZBP_HOOKERROR && is_readable($file_base = GetVarsFromEnv('ZBP_USER_OPTION'))) {
     $GLOBALS['option_user_file'] = include $file_base;
@@ -312,7 +310,7 @@ if (ZBP_SAFEMODE === false) {
 //从ZC_BACKEND_ID取值
 $backend_id = $GLOBALS['zbp']->option['ZC_BACKEND_ID'];
 //系统自带的后台主题
-if ('backend-legacy' == $backend_id or 'backend-nexus' == $backend_id or 'backend-toyean' == $backend_id) {
+if ('backend-legacy' == $backend_id or 'backend-toyean' == $backend_id) {
     if (is_readable($GLOBALS['systemdir'] . 'admin2/' . $backend_id . '/include.php')) {
         require_once $GLOBALS['systemdir'] . 'admin2/' . $backend_id . '/include.php';
     }

@@ -754,9 +754,9 @@ DefinePluginFilter('Filter_Plugin_Zbp_Load_Pre');
 '**************************************************<
 '类型:Filter
 '名称:Filter_Plugin_Zbp_PrepareTemplate
-'参数:&$template
+'参数:&$theme, &$template_dirname
 '说明:Zbp类的PrepareTemplate接口
-'调用:
+'调用:已废弃
 '**************************************************>
  */
 DefinePluginFilter('Filter_Plugin_Zbp_PrepareTemplate');
@@ -764,13 +764,24 @@ DefinePluginFilter('Filter_Plugin_Zbp_PrepareTemplate');
 /*
 '**************************************************<
 '类型:Filter
-'名称:Filter_Plugin_Zbp_PrepareTemplateAdmin
+'名称:Filter_Plugin_Zbp_PrepareTemplate_Core
+'参数:&$template
+'说明:Zbp类的PrepareTemplate接口
+'调用:1.8新增，Filter_Plugin_Zbp_PrepareTemplate不要再用
+'**************************************************>
+ */
+DefinePluginFilter('Filter_Plugin_Zbp_PrepareTemplate_Core');
+
+/*
+'**************************************************<
+'类型:Filter
+'名称:Filter_Plugin_Zbp_PrepareTemplateAdmin_Core
 '参数:&$template_admin
 '说明:Zbp类的PrepareTemplateAdmin接口
 '调用:
 '**************************************************>
  */
-DefinePluginFilter('Filter_Plugin_Zbp_PrepareTemplateAdmin');
+DefinePluginFilter('Filter_Plugin_Zbp_PrepareTemplateAdmin_Core');
 
 /*
 '**************************************************<
@@ -968,7 +979,7 @@ DefinePluginFilter('Filter_Plugin_Login_Header');
 '**************************************************<
 '类型:Filter
 '名称:Filter_Plugin_Login_Input_Insert
-'参数:$input_classname, $input_id, $input_label, $input_tabindex, $input_type
+'参数:&$input_classname, &$input_id, &$input_label, &$input_tabindex, &$input_type, &$input_style
 '说明:定义Login.php首页Input_Insert接口
 '调用:第三个参数为null，就直接echo 第二个参数$input_id(html源码)以支持高级验证码;
 '**************************************************>

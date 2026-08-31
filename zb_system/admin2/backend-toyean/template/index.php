@@ -12,7 +12,7 @@
     <title>{$name} - {$title}</title>
     <link rel="stylesheet" href="{$host}zb_system/admin2/{$backendtheme}/style/{$backendtheme}.css?v={$version}">
     <!--<link rel="stylesheet" href="{$host}zb_system/image/icon/icon.css?v={$version}">-->
-    <script src="{$host}zb_system/script/jquery-2.2.4.min.js?v={$version}"></script>
+    <script src="{$host}zb_system/script/jquery-latest.min.js?v={$version}"></script>
     <script src="{$host}zb_system/script/jquery-ui.custom.min.js?v={$version}"></script>
     <script src="{$host}zb_system/script/zblogphp.js?v={$version}"></script>
     <script>

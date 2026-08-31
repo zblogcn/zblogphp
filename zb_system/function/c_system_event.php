@@ -33,7 +33,7 @@ function VerifyLogin($throwException = true, $ignoreValidCode = true, $ignoreCsr
 
     if ($zbp->option['ZC_LOGIN_VERIFY_ENABLE'] && false == $ignoreValidCode) {
         $zbp->verifyCodeExpirationMinute = 5;
-        if (false == $zbp->CheckValidCode(GetVars('verify', 'POST'), 'login', 'minute')) {
+        if (true == $zbp->isignore_valid_code && false == $zbp->CheckValidCode(GetVars('verify', 'POST'), 'login', 'minute')) {
             $zbp->ShowError(38, __FILE__, __LINE__);
         }
     }
@@ -311,10 +311,12 @@ function PostPost()
 
     if ('0' === GetVars('AddNavbar', 'POST')) {
         $zbp->DelItemToNavbar('page', $post->ID);
+        $zbp->AddBuildModule('navbar');
     }
 
     if ('1' === GetVars('AddNavbar', 'POST')) {
         $zbp->AddItemToNavbar('page', $post->ID, $post->Title, $post->Url);
+        $zbp->AddBuildModule('navbar');
     }
 
     foreach ($GLOBALS['hooks']['Filter_Plugin_PostPost_Succeed'] as $fpname => &$fpsignal) {
@@ -360,6 +362,7 @@ function DelPost()
         DelArticle_Comments($post->ID);
 
         $zbp->DelItemToNavbar($zbp->GetPostType($post->Type, 'name'), $post->ID);
+        $zbp->AddBuildModule('navbar');
 
         foreach ($GLOBALS['hooks']['Filter_Plugin_DelPost_Succeed'] as $fpname => &$fpsignal) {
             $fpname($post);
@@ -851,10 +854,12 @@ function PostPage()
 
     if ('0' === GetVars('AddNavbar', 'POST')) {
         $zbp->DelItemToNavbar('page', $article->ID);
+        $zbp->AddBuildModule('navbar');
     }
 
     if ('1' === GetVars('AddNavbar', 'POST')) {
         $zbp->AddItemToNavbar('page', $article->ID, $article->Title, $article->Url);
+        $zbp->AddBuildModule('navbar');
     }
 
     foreach ($GLOBALS['hooks']['Filter_Plugin_PostPage_Succeed'] as $fpname => &$fpsignal) {
@@ -898,6 +903,7 @@ function DelPage()
         $zbp->AddBuildModule('comments');
 
         $zbp->DelItemToNavbar('page', $article->ID);
+        $zbp->AddBuildModule('navbar');
 
         foreach ($GLOBALS['hooks']['Filter_Plugin_DelPage_Succeed'] as $fpname => &$fpsignal) {
             $fpname($article);
@@ -1435,10 +1441,12 @@ function PostCategory()
 
     if ('0' === GetVars('AddNavbar', 'POST')) {
         $zbp->DelItemToNavbar('category', $cate->ID);
+        $zbp->AddBuildModule('navbar');
     }
 
     if ('1' === GetVars('AddNavbar', 'POST')) {
         $zbp->AddItemToNavbar('category', $cate->ID, $cate->Name, $cate->Url);
+        $zbp->AddBuildModule('navbar');
     }
 
     foreach ($GLOBALS['hooks']['Filter_Plugin_PostCategory_Succeed'] as $fpname => &$fpsignal) {
@@ -1477,6 +1485,7 @@ function DelCategory()
         $zbp->LoadCategories();
         $zbp->AddBuildModule('catalog');
         $zbp->DelItemToNavbar('category', $cate->ID);
+        $zbp->AddBuildModule('navbar');
 
         foreach ($GLOBALS['hooks']['Filter_Plugin_DelCategory_Succeed'] as $fpname => &$fpsignal) {
             $fpname($cate);
@@ -1576,10 +1585,12 @@ function PostTag()
 
     if ('0' === GetVars('AddNavbar', 'POST')) {
         $zbp->DelItemToNavbar('tag', $tag->ID);
+        $zbp->AddBuildModule('navbar');
     }
 
     if ('1' === GetVars('AddNavbar', 'POST')) {
         $zbp->AddItemToNavbar('tag', $tag->ID, $tag->Name, $tag->Url);
+        $zbp->AddBuildModule('navbar');
     }
 
     $zbp->AddBuildModule('tags');
@@ -1609,6 +1620,8 @@ function DelTag()
         $tag->Del();
         $zbp->DelItemToNavbar('tag', $tag->ID);
         $zbp->AddBuildModule('tags');
+        $zbp->AddBuildModule('navbar');
+
         foreach ($GLOBALS['hooks']['Filter_Plugin_DelTag_Succeed'] as $fpname => &$fpsignal) {
             $fpname($tag);
         }
@@ -1893,6 +1906,11 @@ function PostModule()
         $_POST['Type'] = 'ul';
     }
 
+    if (isset($_POST['Content'])) {
+        $Content_class = new XssHtml($_POST['Content']);
+        $_POST['Content'] = trim($Content_class->getHtml());
+    }
+
     /* @var Module $mod */
     $mod = $zbp->GetModuleByID(GetVars('ID', 'POST'));
 
@@ -1930,23 +1948,33 @@ function PostModule()
             $j = count($_POST['href']);
             for ($i = 0; $i <= $j - 1; ++$i) {
                 $link = new stdClass();
-                $link->href = $_POST['href'][$i];
-                $link->content = $_POST['content'][$i];
+                $link->href = strip_tags($_POST['href'][$i]);
+
+                $class = new XssHtml($_POST['content'][$i]);
+                $source = trim($class->getHtml());
+
+                $link->content = $source;
                 if (isset($_POST['li_id'], $_POST['li_id'][$i])) {
-                    $link->li_id = $_POST['li_id'][$i];
+                    $link->li_id = strip_tags($_POST['li_id'][$i]);
                     if (empty($link->li_id)) {
                         unset($link->li_id);
                     }
                 }
                 if (isset($_POST['id'], $_POST['id'][$i])) {
-                    $link->id = $_POST['id'][$i];
+                    $link->id = strip_tags($_POST['id'][$i]);
                     if (empty($link->id)) {
                         unset($link->id);
                     }
                 }
+                if (isset($_POST['target'], $_POST['target'][$i])) {
+                    $link->target = strip_tags($_POST['target'][$i]);
+                    if (empty($link->target)) {
+                        unset($link->target);
+                    }
+                }
                 foreach ($_POST as $key => $post) {
-                    if (is_array($post) && 'href' != $key && 'content' != $key && 'id' != $key && 'li_id' != $key) {
-                        @$link->{$key} = $post[$i];
+                    if (is_array($post) && 'href' != $key && 'content' != $key && 'id' != $key && 'li_id' != $key && 'target' != $key) {
+                        @$link->{$key} = strip_tags($post[$i]);
                     }
                 }
                 if (!empty($link->href) && !empty($link->content)) {

@@ -4,7 +4,7 @@
  *
  * @version 1.0.0
  *
- * @link http://phith0n.github.io/XssHtml
+ * @see http://phith0n.github.io/XssHtml
  * @since 20140621
  *
  * @copyright (c) Phithon All Rights Reserved
@@ -31,16 +31,15 @@
 
 class XssHtml
 {
-
     private $m_dom;
 
     private $m_xss;
 
     private $m_ok;
 
-    private $m_AllowAttr = array('title', 'src', 'href', 'id', 'class', 'style', 'width', 'height', 'alt', 'target', 'align');
+    private $m_AllowAttr = ['title', 'src', 'href', 'id', 'class', 'style', 'width', 'height', 'alt', 'target', 'align'];
 
-    private $m_AllowTag = array('a', 'img', 'br', 'strong', 'b', 'code', 'pre', 'p', 'div', 'em', 'span', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'table', 'ul', 'ol', 'tr', 'th', 'td', 'hr', 'li', 'u');
+    private $m_AllowTag = ['a', 'img', 'br', 'strong', 'b', 'code', 'pre', 'p', 'div', 'em', 'span', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'table', 'ul', 'ol', 'tr', 'th', 'td', 'hr', 'li', 'u', 'dl', 'dd', 'dt'];
 
     /**
      * 构造函数.
@@ -49,7 +48,7 @@ class XssHtml
      * @param string $charset  文本编码，默认utf-8
      * @param array  $AllowTag 允许的标签，如果不清楚请保持默认，默认已涵盖大部分功能，不要增加危险标签
      */
-    public function __construct($html, $charset = 'utf-8', $AllowTag = array())
+    public function __construct($html, $charset = 'utf-8', $AllowTag = [])
     {
         $this->m_AllowTag = empty($AllowTag) ? $this->m_AllowTag : $AllowTag;
         $this->m_xss = strip_tags($html, '<' . implode('><', $this->m_AllowTag) . '>');
@@ -70,38 +69,13 @@ class XssHtml
         libxml_use_internal_errors(false);
     }
 
-    /**
-     * 获得过滤后的内容.
-     */
-    public function getHtml()
-    {
-        if (!$this->m_ok) {
-            return '';
-        }
-        $nodeList = $this->m_dom->getElementsByTagName('*');
-        for ($i = 0; $i < $nodeList->length; $i++) {
-            $node = $nodeList->item($i);
-            if (in_array($node->nodeName, $this->m_AllowTag)) {
-                if (method_exists($this, "__node_{$node->nodeName}")) {
-                    call_user_func(array($this, "__node_{$node->nodeName}"), $node);
-                } else {
-                    call_user_func(array($this, '__node_default'), $node);
-                }
-            }
-        }
-        $html = strip_tags($this->m_dom->saveHTML(), '<' . implode('><', $this->m_AllowTag) . '>');
-        $html = preg_replace('/^\n(.*)\n$/s', '$1', $html);
-
-        return $html;
-    }
-
     private function __true_url($url)
     {
         if (preg_match('#^https?://.+#is', $url)) {
             return $url;
-        } else {
-            return 'http://' . $url;
         }
+
+        return 'http://' . $url;
     }
 
     private function __get_style($node)
@@ -109,13 +83,12 @@ class XssHtml
         if ($node->attributes->getNamedItem('style')) {
             $style = $node->attributes->getNamedItem('style')->nodeValue;
             $style = str_replace('\\', ' ', $style);
-            $style = str_replace(array('&#', '/*', '*/'), ' ', $style);
-            $style = preg_replace('#e.*x.*p.*r.*e.*s.*s.*i.*o.*n#Uis', ' ', $style);
+            $style = str_replace(['&#', '/*', '*/'], ' ', $style);
 
-            return $style;
-        } else {
-            return '';
+            return preg_replace('#e.*x.*p.*r.*e.*s.*s.*i.*o.*n#Uis', ' ', $style);
         }
+
+        return '';
     }
 
     private function __get_link($node, $att)
@@ -123,9 +96,9 @@ class XssHtml
         $link = $node->attributes->getNamedItem($att);
         if ($link) {
             return $this->__true_url($link->nodeValue);
-        } else {
-            return '';
         }
+
+        return '';
     }
 
     private function __setAttr($dom, $attr, $val)
@@ -147,11 +120,11 @@ class XssHtml
 
     private function __common_attr($node)
     {
-        $list = array();
+        $list = [];
         foreach ($node->attributes as $attr) {
             if (!in_array(
                 $attr->nodeName,
-                $this->m_AllowAttr
+                $this->m_AllowAttr,
             )
             ) {
                 $list[] = $attr->nodeName;
@@ -203,6 +176,29 @@ class XssHtml
         $this->__common_attr($node);
     }
 
+    /**
+     * 获得过滤后的内容.
+     */
+    public function getHtml()
+    {
+        if (!$this->m_ok) {
+            return '';
+        }
+        $nodeList = $this->m_dom->getElementsByTagName('*');
+        for ($i = 0; $i < $nodeList->length; ++$i) {
+            $node = $nodeList->item($i);
+            if (in_array($node->nodeName, $this->m_AllowTag)) {
+                if (method_exists($this, "__node_{$node->nodeName}")) {
+                    call_user_func([$this, "__node_{$node->nodeName}"], $node);
+                } else {
+                    call_user_func([$this, '__node_default'], $node);
+                }
+            }
+        }
+        $html = strip_tags($this->m_dom->saveHTML(), '<' . implode('><', $this->m_AllowTag) . '>');
+
+        return preg_replace('/^\n(.*)\n$/s', '$1', $html);
+    }
 }
 
 // if(php_sapi_name() == "cli"){
