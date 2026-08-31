@@ -2311,13 +2311,13 @@ class ZBlogPHP
      */
     public function BuildTemplate()
     {
-        $this->BuildTemplate_Once();
+        $this->template->LoadTemplates();
 
-        foreach ($GLOBALS['hooks']['Filter_Plugin_Zbp_BuildTemplate_End'] as $fpname => &$fpsignal) {
-            $fpname($this->template);
+        foreach ($GLOBALS['hooks']['Filter_Plugin_Zbp_BuildTemplate'] as $fpname => &$fpsignal) {
+            $fpname($this->template->templates);
         }
 
-        return true;
+        return $this->template->BuildTemplate();
     }
 
     /**
@@ -2333,16 +2333,6 @@ class ZBlogPHP
         $this->template->theme = $theme;
         $this->template->template_dirname = $template_dirname;
         $this->template->SetPath();
-        return $this->BuildTemplate_Once();
-    }
-
-    /**
-     * 模板解析.
-     *
-     * @return bool
-     */
-    private function BuildTemplate_Once()
-    {
         $this->template->LoadTemplates();
 
         foreach ($GLOBALS['hooks']['Filter_Plugin_Zbp_BuildTemplate'] as $fpname => &$fpsignal) {
@@ -2362,7 +2352,6 @@ class ZBlogPHP
      */
     public function CheckTemplate($onlycheck = false, $forcebuild = false)
     {
-        $this->template->LoadTemplates();
         $s = implode($this->template->templates);
         $md5 = md5($s);
 
