@@ -2234,6 +2234,9 @@ class ZBlogPHP
                     $this->backendapp = &$this->backendapps[$backend_id];
                     $languagePath = $this->backendapp->GetPath() . 'language/';
                     $languagePtr = &$this->lang[$id];
+                } else {
+                    $languagePath .= 'zb_system/admin2/' . $id . '/language/';
+                    $languagePtr = &$this->lang[$id];
                 }
                 break;
             default:
@@ -2531,15 +2534,15 @@ class ZBlogPHP
                 $hash_compare = false;
                 break;
             }
-            $md5_now_file = @md5_file($this->template_admin->GetPath() . $file . '.php');
-            if ($md5_file != $md5_now_file) {
+            //$md5_now_file = @md5_file($this->template_admin->GetPath() . $file . '.php');
+            //if ($md5_file != $md5_now_file) {
                 //编译后的文件hash不对
-                if ($onlycheck == true) {
-                    return false;
-                }
-                $hash_compare = false;
-                break;
-            }
+            //    if ($onlycheck == true) {
+            //        return false;
+            //    }
+            //    $hash_compare = false;
+            //    break;
+            //}
         }
 
         $s = implode($this->template_admin->templates);

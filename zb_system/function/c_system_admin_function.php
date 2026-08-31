@@ -107,7 +107,11 @@ function Include_Admin_Addcmtsubmenu()
 if (!function_exists('Include_Admin_Addsettingsubmenu')){
 function Include_Admin_Addsettingsubmenu()
 {
+    global $zbp;
     echo MakeSubMenu($GLOBALS['lang']['msg']['clear_thumb_cache'], 'javascript:window.confirm(\'' . $GLOBALS['lang']['msg']['confirm_clear_thumb_cache'] . '\') && (window.location.href = \'' . BuildSafeCmdURL('act=misc&type=clearthumbcache') . '\');', 'm-right', null, null, null, 'icon-trash-fill');
+
+    echo MakeSubMenu($GLOBALS['lang']['msg']['rewrite_manage'], $zbp->cmdurl . '?act=RewriteMng', 'm-right', null, null, null, 'icon-diagram-3-fill');
+
 }
 }
 

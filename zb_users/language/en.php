@@ -10,8 +10,7 @@
 //'Custom Information
 //'Don't delete %s and ()
 
-return array(
-
+return [
     'lang'                  => 'en',
     'lang_bcp47'            => 'en', // http://tools.ietf.org/html/bcp47
     'lang_name'             => 'English',
@@ -20,7 +19,7 @@ return array(
     'windows_character_set' => 'ISO-8859-1',
 
     //Front-End & Back-End
-    'msg' => array(
+    'msg' => [
         'id'                                => 'ID',
         'name'                              => 'Name',
         'title'                             => 'Title',
@@ -106,6 +105,7 @@ return array(
         'theme_manage'                      => 'Themes',
         'plugin_manage'                     => 'Plugins',
         'module_manage'                     => 'Modules',
+        'rewrite_manage'                    => 'Rewrite',
         'site_analyze'                      => 'Site Information',
         'info_intro'                        => 'Dashboard',
         'refresh_cache'                     => 'Refresh Cache &amp; Compile Template',
@@ -288,11 +288,13 @@ return array(
         'external_link_info'                => 'About to redirect to an external link, please pay attention to the security of your account and property. We are not responsible for the security and content of this website.',
         'external_link_no_url_error'        => 'The page you are visiting cannot be opened due to unknown reasons.',
         'external_link_continue'            => 'Continue',
+        'closemenu'                         => 'Collapse',
+        'expandmenu'                        => 'Expand',
         ''                                  => '',
-    ),
+    ],
 
     //Action
-    'actions' => array(
+    'actions' => [
         'login'       => 'Log in',
         'logout'      => 'Log Out',
         'verify'      => 'Verify',
@@ -361,35 +363,35 @@ return array(
         'UploadAll'   => 'All Attachments Privilege Management',
         'root'        => 'Superuser Privilege Management',
         'NoValidCode' => 'Ignore Captcha',
-    ),
+    ],
 
     //Article Level
-    'post_status_name' => array(
+    'post_status_name' => [
         '0' => 'Published',
         '1' => 'Draft',
         '2' => 'Pending',
         '4' => 'Private',
         '8' => 'Locked',
-    ),
+    ],
 
     //User Level
-    'user_level_name' => array(
+    'user_level_name' => [
         '1' => 'Administrator',
         '2' => 'Redactor',
         '3' => 'Author',
         '4' => 'Teamworker',
         '5' => 'Commentator',
         '6' => 'Visitor',
-    ),
+    ],
 
-    'user_status_name' => array(
+    'user_status_name' => [
         '0' => 'Normality',
         '1' => 'Pending',
         '2' => 'Disabled',
-    ),
+    ],
 
     //January, February...
-    'month' => array(
+    'month' => [
         '1'  => 'January',
         '2'  => 'February',
         '3'  => 'March',
@@ -402,10 +404,10 @@ return array(
         '10' => 'October',
         '11' => 'November',
         '12' => 'December',
-    ),
+    ],
 
     //Jan., Feb. ...
-    'month_abbr' => array(
+    'month_abbr' => [
         '1'  => 'Jan',
         '2'  => 'Feb',
         '3'  => 'Mar',
@@ -418,10 +420,10 @@ return array(
         '10' => 'Oct',
         '11' => 'Nov',
         '12' => 'Dec',
-    ),
+    ],
 
     //Sunday, Monday..
-    'week' => array(
+    'week' => [
         '7' => 'Sunday',
         '1' => 'Monday',
         '2' => 'Tuesday',
@@ -429,10 +431,10 @@ return array(
         '4' => 'Thursday',
         '5' => 'Friday',
         '6' => 'Saturday',
-    ),
+    ],
 
     //Sun., Mon. ...
-    'week_abbr' => array(
+    'week_abbr' => [
         '7' => 'Sun',
         '1' => 'Mon',
         '2' => 'Tue',
@@ -440,9 +442,9 @@ return array(
         '4' => 'Thu',
         '5' => 'Fri',
         '6' => 'Sat',
-    ),
+    ],
 
-    'week_short' => array(
+    'week_short' => [
         '7' => 'S',
         '1' => 'M',
         '2' => 'T',
@@ -450,10 +452,10 @@ return array(
         '4' => 'T',
         '5' => 'F',
         '6' => 'S',
-    ),
+    ],
 
     //Custom Error Information
-    'error' => array(
+    'error' => [
         '0'  => 'Unknown Error',
         '1'  => 'Unknown Command',
         '2'  => 'Sorry, This page does not exist.',
@@ -508,7 +510,7 @@ return array(
         '51' => 'Subcategory cannot include any category.',
         '52' => 'Exceeded maximum number of replies.',
         '53' => 'Your comment has entered the approval process, please do not resubmit.',
-        '54' => "Passwords should be between 8 and 20 characters.",
+        '54' => 'Passwords should be between 8 and 20 characters.',
         '55' => 'A length of encrypted string is not equal to 32 digits.',
         '56' => 'Exceeds the set number of replies.',
         '57' => 'The parent and the child comments are not in the same post.',
@@ -558,17 +560,17 @@ return array(
         '101' => 'Image failed to load',
         '102' => 'Image aspect ratio error',
         '103' => 'Invalid PostTime format. Expected a timestamp or a parseable datetime string.',
-    ),
+    ],
 
-    'offical_urls' => array(
+    'offical_urls' => [
         'more_help' => 'https://www.zblogcn.com/help/?id={%id%}&message={%message%}',
         'bing_help' => 'https://cn.bing.com/search?q={%message%}',
         'office_docs' => 'https://docs.zblogcn.com/php/#/books/start-25-faq',
         'office_bbs' => 'https://bbs.zblogcn.com/',
-    ),
+    ],
 
     // Possible causes of the error
-    'error_reasons' => array(
+    'error_reasons' => [
         // -1 for default
         'default' => '',
 
@@ -592,7 +594,7 @@ return array(
              You can <a href="https://wiki.zblogcn.com/doku.php?id=zblogphp:error:%E9%A6%96%E9%A1%B5#error-92" target="_blank"> click here to get a rough list of missing extensions. </a>
          ',
 
-        'other' => array(
+        'other' => [
             // Other errors then
             'mysql' => '
                     Please check your MySQL configuration in zb_users/c_option.php, or check the MySQL connection information that you just fill. <br/>
@@ -611,12 +613,11 @@ return array(
                 Otherwise you can disable the plugin which caused this error and contact the author of which.
                 <br/>
             ',
-
-        ),
+        ],
 
         'end' => '
             If you are a visitor, this may be something happened. Please try again later, or contact the webmaster. <br/>
             If you are the webmaster, You can click on <a href="{%morehelp%}" target="_blank"> [more] </a> to get more help from Z-Blog Wiki(Chinese only). Therefore, to publish a thread in English in <a href="https://bbs.zblogcn.com/" target="_blank">Z-Blog official forum </a> with detailed error description and screenshots for help is a choice.
         ',
-    ),
-);
+    ],
+];

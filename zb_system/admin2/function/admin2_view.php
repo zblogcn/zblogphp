@@ -913,3 +913,12 @@ function zbp_admin2_ArticleEdt()
 
   return $rlt;
 }
+
+
+function zbp_admin2_RewriteMng() {
+  global $zbp, $action, $lang;
+
+  $rlt = $zbp->template_admin->Output("RewriteMng");
+
+  return $rlt;
+}

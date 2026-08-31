@@ -372,8 +372,9 @@ span.button:hover { box-shadow: 0 0 1px #000; border-radius: 2px; padding: 2px 3
 
 /*侧栏管理*/
 .widget-left { float: left; clear: left; width: 100%; margin-right: -290px; overflow: hidden; }
+.widget-right{ float: left; }
 .widget-list { min-width: 270px; margin-right: 290px; border: 2px solid #EEE; }
-.siderbar-list { float: right; width: 290px; margin-left: 0; }
+.siderbar-list { width: 290px; margin-left: 0; }
 .widget-list-header,
 .siderbar-header,
 .siderbar-note { clear: both; background: #EDEDED; padding: 5px; font-size: 1.1em; font-weight: bold; text-align: center; margin-bottom: 3px; }

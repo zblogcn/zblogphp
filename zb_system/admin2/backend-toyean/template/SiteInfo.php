@@ -1,4 +1,4 @@
-<?php die(); ?>
+<?php exit(); ?>
 
 
 <div class="listcard four">
@@ -57,16 +57,16 @@
             <ul class="configinfo">
               <li><em>当前版本</em><span>{$current_version}</span></li>
               <li><em>当前主题</em><span>{$current_theme} {$current_theme_version}/{$current_style}</span></li>
-              <li><em>系统环境</em><span>{$system_environment1}</span></li>
-              <li><em></em><span>{$system_environment2}</span></li>
+              <li><em>系统环境</em><span>{$system_environment1};{$system_environment2}</span></li>
               <li><em>API协议地址</em><span>http://localhost/zb_system/api.php</span></li>
-    {if $zbp.isdebug}
-    <!--debug_mode_note-->
-    <li><em>调试模式</em><span class="on">已启用</span></li>
-    {else}
-    <li><em>调试模式</em><span class="off">关闭</span></li>
-    {/if}
-            </ul>            
+              <li><em>服务器IP</em><span>{gethostbyname(gethostname())}</span></li>
+              {if $zbp.isdebug}
+              <!--debug_mode_note-->
+              <li><em>调试模式</em><span class="on">已启用</span></li>
+              {else}
+              <li><em>调试模式</em><span class="off">关闭</span></li>
+              {/if}
+            </ul>
           </dd>
   </dl>
 </div>
@@ -91,22 +91,26 @@
 {if (time() - (int) $zbp->cache->reload_statistic_time) > (3600 * 23)}
 <script>
   const $btnStatistic = document.getElementById('statistic');
-  $btnStatistic.style.color = 'red';
-  // 自动点击刷新
-  setTimeout(() => {
-    statistic('{$reload_url}');
-  }, 1000);
+  if ($btnStatistic) {
+    $btnStatistic.style.color = 'red';
+    // 自动点击刷新
+    setTimeout(() => {
+        statistic('{$reload_url}');
+    }, 1000);
+  }
 </script>
 {/if}
 <!-- 公告信息更新 -->
 {if (time() - (int) $zbp->cache->reload_updateinfo_time) > (3600 * 47)}
 <script>
   const $btnUpdateInfo = document.getElementById('updateinfo');
-  $btnUpdateInfo.style.color = 'red';
-  // 自动点击刷新
-  setTimeout(() => {
-    updateinfo('{$reload_reload_updateinfo_url}');
-  }, 1000);
+  if ($btnUpdateInfo) {
+    $btnUpdateInfo.style.color = 'red';
+    // 自动点击刷新
+    setTimeout(() => {
+        updateinfo('{$reload_reload_updateinfo_url}');
+    }, 1000);
+  }
 </script>
 {/if}
 

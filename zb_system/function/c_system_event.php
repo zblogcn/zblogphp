@@ -2333,3 +2333,37 @@ function SaveSetting()
 
     return true;
 }
+
+
+
+/**
+ * 保存Rewrite选项.
+ *
+ * @throws Exception
+ */
+function SaveRewrite()
+{
+    global $zbp;
+
+    $zbp->option['ZC_STATIC_MODE'] = trim(GetVars('ZC_STATIC_MODE', 'POST'));
+    $zbp->option['ZC_ARTICLE_REGEX'] = trim(GetVars('ZC_ARTICLE_REGEX', 'POST'));
+    $zbp->option['ZC_PAGE_REGEX'] = trim(GetVars('ZC_PAGE_REGEX', 'POST'));
+    $zbp->option['ZC_INDEX_REGEX'] = trim(GetVars('ZC_INDEX_REGEX', 'POST'));
+    $zbp->option['ZC_CATEGORY_REGEX'] = trim(GetVars('ZC_CATEGORY_REGEX', 'POST'));
+    $zbp->option['ZC_TAGS_REGEX'] = trim(GetVars('ZC_TAGS_REGEX', 'POST'));
+    $zbp->option['ZC_DATE_REGEX'] = trim(GetVars('ZC_DATE_REGEX', 'POST'));
+    $zbp->option['ZC_AUTHOR_REGEX'] = trim(GetVars('ZC_AUTHOR_REGEX', 'POST'));
+    $zbp->SaveOption();
+
+    $zbp->AddBuildModule('archives');
+    $zbp->AddBuildModule('tags');
+    $zbp->AddBuildModule('authors');
+    $zbp->AddBuildModule('previous');
+    $zbp->AddBuildModule('catalog');
+    $zbp->AddBuildModule('navbar');
+
+    $zbp->BuildModule();
+    $zbp->SetHint('good');
+
+    return true;
+}

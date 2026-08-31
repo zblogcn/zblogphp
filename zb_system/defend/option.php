@@ -116,6 +116,7 @@ return array(
     // '后台管理
     'ZC_MANAGE_COUNT' => 50,
     'ZC_MANAGE_ORDER' => 'log_PostTime',
+    'ZC_MANAGE_UI' => 2, // 1 为旧版，走/admin，2 为新版，走/admin2
     'ZC_BACKEND_ID' => 'backend-legacy',
 
     // 登录相关
@@ -224,7 +225,7 @@ return array(
     'ZC_POST_ALIAS_USE_ID_NOT_TITLE' => false,
     'ZC_COMPATIBLE_ASP_URL'          => true,
     'ZC_LARGE_DATA'                  => false,
-    'ZC_VERSION_IN_HEADER'           => true,
+    'ZC_VERSION_IN_HEADER'           => false,
     'ZC_ADDITIONAL_SECURITY'         => true,
     'ZC_XMLRPC_ENABLE'               => false,
     'ZC_XMLRPC_USE_WEBTOKEN'         => false,

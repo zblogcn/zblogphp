@@ -10,7 +10,9 @@
 <!DOCTYPE html>
 <html lang="{$language}">
 <head>
-  <meta charset="utf-8" />
+  <meta charset="utf-8">
+	<meta name="renderer" content="webkit">
+	<meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
   <meta name="generator" content="{$zblogphp}" />
   <title>{$name} - {$title}</title>
   <link rel="stylesheet" href="{$host}zb_system/admin2/{$backendtheme}/style/style.css?v={$version}">
