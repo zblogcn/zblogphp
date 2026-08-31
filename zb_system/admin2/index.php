@@ -1,9 +1,10 @@
 <?php
 require '../function/c_system_base.php';
-$zbp->ismanage = true;
-$zbp->Load();
 require 'function/admin2_function.php';
 require '../function/c_system_admin_function.php';
+$zbp->ismanage = true;
+$zbp->Load();
+
 
 $zbp->action = GetVars('act', 'GET');
 $zbp->action = ($zbp->action == '') ? 'admin' : $zbp->action;

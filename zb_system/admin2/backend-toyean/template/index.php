@@ -20,6 +20,7 @@
   <script src="{$host}zb_system/admin2/{$backendtheme}/script/common.js"></script>
   <script src="{$host}zb_system/script/zblogphp.js?v={$version}"></script>
   <script src="{$host}zb_system/script/c_admin_js_add.php?v={$version}"></script>
+<script>window.toyean = Object.assign(window.toyean || {}, { night: true, setnightstart: '22', setnightover: '6', backtotop: true, backtotopvalue: 500, version: '1.0' });</script>
   {$header}
 {php}HookFilterPlugin('Filter_Plugin_Admin_Header');{/php}
 </head>
@@ -32,8 +33,7 @@
   {template:layout_top}
   {template:layout_main}
   </div>
-  {$footer}
-{php}HookFilterPlugin('Filter_Plugin_Admin_Footer');{/php}
+  {template:layout_footer}
   </div>
 </body>
 

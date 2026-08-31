@@ -75,6 +75,9 @@
     {$reload_updateinfo}
   </tbody>
 </table>
+
+{$thanksinfo}
+
 {if $zbp->CheckRights('root')}
 
 <!-- 站点统计更新 -->

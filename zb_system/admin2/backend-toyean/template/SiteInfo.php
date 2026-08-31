@@ -1,80 +1,90 @@
 <?php die(); ?>
-<table class="tableFull tableBorder table_striped table_hover" id="tbStatistic">
-  <tbody>
-    <tr>
-      <th colspan="4" scope="col">
-        <i class="icon-info-circle-fill"></i>
-        {$zbp.lang['msg']['site_analyze']}
 
-        {if $zbp->CheckRights('root')}
-        <a href="javascript:statistic('{$reload_url}');" id="statistic" title="{$zbp.lang['msg']['refresh_cache']}" data-time="{$reload_time}"><i class="icon-arrow-repeat" style="font-size:small; margin-right: 0.2em;" alt="{$zbp.lang['msg']['refresh_cache']}"></i><small>{$zbp.lang['msg']['refresh_cache']}</small></a>
-        {/if}
 
-      </th>
-    </tr>
+<div class="listcard four">
+  <ul>
+    <li>
+      <p>文章数</p>
+      <p class="num">{$all_articles}</p>
+      <span class="icon ico-newpost"></span>
+    </li>
+    <li>
+      <p>页面数</p>
+      <p class="num">{$all_pages}</p>
+      <span class="icon ico-page"></span>
+    </li>
+    <li>
+      <p>浏览总数</p>
+      <p class="num">{$all_views}</p>
+      <span class="icon ico-view"></span>
+    </li>
+    <li>
+      <p>评论总数</p>
+      <p class="num">{$all_comments}</p>
+      <span class="icon ico-cmt"></span>
+    </li>
+    <li>
+      <p>用户总数</p>
+      <p class="num">{$all_members}</p>
+      <span class="icon ico-user"></span>
+    </li>
+    <li>
+      <p>分类总数</p>
+      <p class="num">{$all_categories}</p>
+      <span class="icon ico-category"></span>
+    </li>
+    <li>
+      <p>标签总数</p>
+      <p class="num">{$all_tags}</p>
+      <span class="icon ico-tag"></span>
+    </li>
+    <li>
+      <p>附件总数</p>
+      <p class="num">{$all_uploads}</p>
+      <span class="icon ico-file"></span>
+    </li>
+  </ul>
+</div>
+
+<div class="listcard two">
+  <dl>
+          <dt>最新动态<a href="javascript:updateinfo('{$reload_reload_updateinfo_url}');" id="updateinfo" title="{$zbp.lang['msg']['refresh']}" class="refresh" data-time="{$reload_updateinfo_time}">刷新</a></dt>
+          <dd>{$reload_updateinfo}</dd>
+  </dl>
+  <dl>
+          <dt>系统信息</dt>
+          <dd>
+            <ul class="configinfo">
+              <li><em>当前版本</em><span>{$current_version}</span></li>
+              <li><em>当前主题</em><span>{$current_theme} {$current_theme_version}/{$current_style}</span></li>
+              <li><em>系统环境</em><span>{$system_environment1}</span></li>
+              <li><em></em><span>{$system_environment2}</span></li>
+              <li><em>API协议地址</em><span>http://localhost/zb_system/api.php</span></li>
     {if $zbp.isdebug}
     <!--debug_mode_note-->
-    <tr>
-      <td colspan='4' style='text-align: center'>{$zbp.lang['msg']['debugging_warning']}</td>
-    </tr>
+    <li><em>调试模式</em><span class="on">已启用</span></li>
+    {else}
+    <li><em>调试模式</em><span class="off">关闭</span></li>
     {/if}
-    <tr>
-      <td class='td20'>{$zbp.lang['msg']['current_member']}</td>
-      <td class='td30'>{$current_isroot}<a href='../cmd.php?act=misc&type=vrs' target='_blank' title="{$current_member}">{$current_member}</a></td>
-      <td class='td20'>{$zbp.lang['msg']['current_version']}</td>
-      <td class='td30'>{$current_version};</td>
-    </tr>
-    <tr>
-      <td class='td20'>{$zbp.lang['msg']['all_artiles']}</td>
-      <td>{$all_articles}</td>
-      <td>{$zbp.lang['msg']['all_categorys']}</td>
-      <td>{$all_categories}</td>
-    </tr>
-    <tr>
-      <td class='td20'>{$zbp.lang['msg']['all_pages']}</td>
-      <td>{$all_pages}</td>
-      <td>{$zbp.lang['msg']['all_tags']}</td>
-      <td>{$all_tags}</td>
-    </tr>
-    <tr>
-      <td class='td20'>{$zbp.lang['msg']['all_comments']}</td>
-      <td>{$all_comments}</td>
-      <td>{$zbp.lang['msg']['all_views']}</td>
-      <td>{$all_views}</td>
-    </tr>
-    <tr>
-      <td class='td20'>{$zbp.lang['msg']['current_theme']}</td>
-      <td>{$current_theme}/{$current_style} {$current_theme_version}</td>
-      <td>{$zbp.lang['msg']['all_members']}</td>
-      <td>{$all_members}</td>
-    </tr>
-    {if $zbp->CheckRights('root')}
-    <!--debug_mode_moreinfo-->
-    <tr>
-      <td class='td20'>{$zbp.lang['msg']['protocol_address']}</td>
-      <td>{$api_address}, {$xmlrpc_address}</td>
-      <td>{$zbp.lang['msg']['system_environment']}</td>
-      <td><a href='../cmd.php?act=misc&type=phpinfo' target='_blank'>{$system_environment}</a></td>
-    </tr>
-    {/if}
-  </tbody>
-</table>
+            </ul>            
+          </dd>
+  </dl>
+</div>
 
-<table class="tableFull tableBorder table_striped table_hover" id="tbUpdateInfo">
-  <tbody>
-    <tr>
-      <th>
-        <i class="icon-flower2"></i>
-        {$zbp.lang['msg']['latest_news']}
-
-        {if $zbp->CheckRights('root')}
-        <a href="javascript:updateinfo('{$reload_reload_updateinfo_url}');" id="updateinfo" title="{$zbp.lang['msg']['refresh']}" data-time="{$reload_updateinfo_time}"><i class="icon-arrow-repeat" style="font-size:small; margin-right: 0.2em;" alt="{$zbp.lang['msg']['refresh']}"></i><small>{$zbp.lang['msg']['refresh']}</small></a>
-        {/if}
-      </th>
-    </tr>
-    {$reload_updateinfo}
-  </tbody>
-</table>
+<div class="listcard one">
+        <dl>
+          <dt>Z-BLOG网站和程序开发</dt>
+          <dd>
+{php}<?php
+  // thanks
+  $pattern = '/<thead>(.*?)<\/thead>/s';
+  $replacement = '';
+  $result = preg_replace($pattern, $replacement, $thanksinfo);
+  echo $thanksinfo = $result;
+?>{/php}
+</dd>
+</dl>
+</div>
 {if $zbp->CheckRights('root')}
 
 <!-- 站点统计更新 -->

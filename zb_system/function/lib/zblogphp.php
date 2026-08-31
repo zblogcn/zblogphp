@@ -379,6 +379,8 @@ class ZBlogPHP
 
     public $ismanage = false; //是否加载管理模式
 
+    public $isbackend_ui = false; //是否加载后台UI模板化
+
     public $isapi = false; //是否加载API模式
 
     public $iscmd = false; //是否加载CMD模式
@@ -1065,12 +1067,11 @@ class ZBlogPHP
      */
     public function LoadManage()
     {
-        if ($this->option['ZC_MANAGE_UI'] == 2) {
-            $this->RegisterBackEndApp('backend-legacy', $this->systemdir . 'admin2/backend-legacy/backend.xml');
-            //$this->RegisterBackEndApp('backend-nexus', $this->systemdir . 'admin2/backend-nexus/backend.xml');
-            $this->RegisterBackEndApp('backend-toyean', $this->systemdir . 'admin2/backend-toyean/backend.xml');
-            $this->template_admin = $this->PrepareTemplateAdmin();
-        }
+        $this->RegisterBackEndApp('backend-legacy', $this->systemdir . 'admin2/backend-legacy/backend.xml');
+        //$this->RegisterBackEndApp('backend-nexus', $this->systemdir . 'admin2/backend-nexus/backend.xml');
+        $this->RegisterBackEndApp('backend-toyean', $this->systemdir . 'admin2/backend-toyean/backend.xml');
+
+        $this->template_admin = $this->PrepareTemplateAdmin();
 
         Add_Filter_Plugin('Filter_Plugin_Admin_PageMng_SubMenu', 'Include_Admin_Addpagesubmenu');
         Add_Filter_Plugin('Filter_Plugin_Admin_TagMng_SubMenu', 'Include_Admin_Addtagsubmenu');
@@ -2457,14 +2458,7 @@ class ZBlogPHP
             $this->backendapp = &$this->backendapps[$backend_id];
             $theme = $this->backendapp->id;
             $backendapp_dirname = $this->backendapp->app_path;
-
             $this->backendinfo = $this->backendapp->GetInfoArray();
-            if (is_readable($this->backendapp->GetPath() . $this->backendapp->include)) {
-                require_once($this->backendapp->GetPath() . $this->backendapp->include);
-            }
-            if (function_exists($funcname = ('ActivePlugin_' . str_replace('-', '_', $backend_id)))) {
-                call_user_func($funcname);
-            }
         }
 
         //只改templateTags的

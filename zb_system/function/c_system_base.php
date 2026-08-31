@@ -301,8 +301,20 @@ if (ZBP_SAFEMODE === false) {
     }
 }
 
+//从ZC_BACKEND_ID取值
+$backend_id = $GLOBALS['zbp']->option['ZC_BACKEND_ID'];
+//系统自带的后台主题
+if ($backend_id == 'backend-legacy' or $backend_id == 'backend-nexus' or $backend_id == 'backend-toyean') {
+    if (is_readable($GLOBALS['systemdir'] . 'admin2/' . $backend_id . '/include.php')) {
+        require_once($GLOBALS['systemdir'] . 'admin2/' . $backend_id . '/include.php');
+    }
+    if (function_exists($funcname = ('ActivePlugin_' . str_replace('-', '_', $backend_id)))) {
+        call_user_func($funcname);
+    }
+}
+
 unset($file_base, $aps, $aps_preset, $fn, $ap, $opk, $opv, $preset_bloghost, $preset_cookiespath);
-unset($theme_name, $theme_include, $theme_preset, $style_preset);
+unset($backend_id, $theme_name, $theme_include, $theme_preset, $style_preset);
 
 //1.7新加入的
 $GLOBALS['zbp']->PreLoad();

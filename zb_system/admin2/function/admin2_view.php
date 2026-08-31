@@ -10,17 +10,6 @@ function zbp_admin2_SiteInfo()
 
   $rlt = $zbp->template_admin->Output("SiteInfo");
 
-  // thanks
-  $s = file_get_contents($zbp->path . "zb_system/defend/thanks.html");
-  $s = str_replace('Z-BlogPHP网站和程序开发', $zbp->lang['msg']['develop_intro'], $s);
-  $s = str_replace('程序', $zbp->lang['msg']['program'], $s);
-  $s = str_replace('界面', $zbp->lang['msg']['interface'], $s);
-  $s = str_replace('支持', $zbp->lang['msg']['support'], $s);
-  $s = str_replace('感谢', $zbp->lang['msg']['thanks'], $s);
-  $s = str_replace('相关链接', $zbp->lang['msg']['website'], $s);
-
-  $rlt .= $s;
-
   return $rlt;
 }
 

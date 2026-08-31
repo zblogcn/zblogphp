@@ -6,6 +6,7 @@ require __DIR__ . "/admin2_view.php";
 require __DIR__ . "/admin2_misc.php";
 
 $zbp->ismanage = true;
+$zbp->isbackend_ui = true;
 
 // admin2 后台主要函数 管理页面
 function zbp_admin2_GetActionInfo($action)
@@ -18,6 +19,7 @@ function zbp_admin2_GetActionInfo($action)
     "SubMenu" => "",
     "ActiveTopMenu" => "",
     "ActiveLeftMenu" => "",
+    "Action" => $action,
   );
   switch ($action) {
     case 'admin':
@@ -26,6 +28,8 @@ function zbp_admin2_GetActionInfo($action)
       $main->Content = zbp_admin2_SiteInfo();
       $main->Header = $lang['msg']['info_intro'];
       $main->HeaderIcon = 'icon-house-door-fill';
+      $main->ActiveLeftMenu = 'aDashboard';
+      $main->ActiveTopMenu = 'topmenu_dashboard';
       $main->Title = $blogtitle;
       break;
     case 'ArticleMng':
@@ -129,7 +133,11 @@ function zbp_admin2_GetActionInfo($action)
       break;
     case 'ArticleEdt':
       $blogtitle = $lang['msg']['article_edit'];
-      $main->ActiveLeftMenu = 'aArticleMng';
+      if (empty(GetVars('id'))) {
+        $main->ActiveLeftMenu = 'aArticleEdt';
+      } else {
+        $main->ActiveLeftMenu = 'aArticleMng';
+      }
       $main->Content = zbp_admin2_ArticleEdt();
       $main->Header = $blogtitle;
       $main->HeaderIcon = 'icon-pencil-square-fill';
@@ -176,7 +184,8 @@ function zbp_admin2_GetActionInfo($action)
       break;
   }
 
-  //$main->SubMenu = zbp_admin2_GenSubMenu($action);
+  //返回原SubMenu接口设置的菜单
+  $main->SubMenu = zbp_admin2_GenSubMenu($action);
   return $main;
 }
 

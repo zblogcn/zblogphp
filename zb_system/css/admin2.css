@@ -112,6 +112,8 @@ label { cursor: pointer; }
 .left #leftmenu li.split { height: 0px !important; background: #fff; }
 .left #leftmenu li.split hr { display: none; }
 
+.left #leftmenu li.menutitle  { font-size:0px; height: 0px !important; background: #fff; }
+
 /*主要内容区*/
 .main { padding-left: 150px; padding-right: 10px; }
 
