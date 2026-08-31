@@ -5,5 +5,6 @@
     {if !empty($main.ActiveTopMenu)}ActiveTopMenu("{$main.ActiveTopMenu}");{/if}
     {if !empty($main.ActiveLeftMenu)}ActiveLeftMenu("{$main.ActiveLeftMenu}");{/if}
 </script>
+{php}if(isset($main->HtmlFooter)){$header.=$main->HtmlFooter;}{/php}
 {$footer}
 {php}HookFilterPlugin('Filter_Plugin_Admin_Footer');{/php}

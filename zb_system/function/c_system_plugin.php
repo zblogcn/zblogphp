@@ -665,17 +665,6 @@ DefinePluginFilter('Filter_Plugin_Zbp_BuildTemplate');
 /*
 '**************************************************<
 '类型:Filter
-'名称:Filter_Plugin_Zbp_BuildTemplateAdmin
-'参数:$template
-'说明:Zbp类的重新编译后台模板接口
-'调用:
-'**************************************************>
- */
-DefinePluginFilter('Filter_Plugin_Zbp_BuildTemplateAdmin');
-
-/*
-'**************************************************<
-'类型:Filter
 '名称:Filter_Plugin_Zbp_MakeTemplatetags
 '参数:$template
 '说明:Zbp类的生成模板标签接口
@@ -683,17 +672,6 @@ DefinePluginFilter('Filter_Plugin_Zbp_BuildTemplateAdmin');
 '**************************************************>
  */
 DefinePluginFilter('Filter_Plugin_Zbp_MakeTemplatetags');
-
-/*
-'**************************************************<
-'类型:Filter
-'名称:Filter_Plugin_Zbp_MakeTemplatetags_Admin
-'参数:$template
-'说明:Zbp类的生成后台模板标签接口
-'调用:
-'**************************************************>
- */
-DefinePluginFilter('Filter_Plugin_Zbp_MakeTemplatetags_Admin');
 
 /*
 '**************************************************<

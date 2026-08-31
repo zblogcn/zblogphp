@@ -3,13 +3,12 @@
 /**
  * 错误调试.
  */
-
 if (!defined('ZBP_PATH')) {
     exit('Access denied');
 }
 
 /**
- * 显示全局变量.(下版转到debug页,虽然还没有做，但加了todo检查会报错)
+ * 显示全局变量.(下版转到debug页,虽然还没有做，但加了todo检查会报错).
  *
  * @return mixed
  *
@@ -17,7 +16,7 @@ if (!defined('ZBP_PATH')) {
  */
 function Debug_PrintGlobals()
 {
-    $a = array();
+    $a = [];
     foreach ($GLOBALS as $n => $v) {
         $a[] = $n;
     }
@@ -26,7 +25,7 @@ function Debug_PrintGlobals()
 }
 
 /**
- *  打印全局Include文件.(下版转到debug页,虽然还没有做，但加了todo检查会报错)
+ *  打印全局Include文件.(下版转到debug页,虽然还没有做，但加了todo检查会报错).
  *
  * @return string
  *
@@ -34,7 +33,7 @@ function Debug_PrintGlobals()
  */
 function Debug_PrintIncludefiles()
 {
-    $a = array();
+    $a = [];
     foreach (get_included_files() as $n => $v) {
         $a[] = $v;
     }
@@ -43,7 +42,7 @@ function Debug_PrintIncludefiles()
 }
 
 /**
- *  打印全局自定义常量.(下版转到debug页,虽然还没有做，但加了todo检查会报错)
+ *  打印全局自定义常量.(下版转到debug页,虽然还没有做，但加了todo检查会报错).
  *
  * @return string
  *
@@ -68,43 +67,43 @@ function Debug_PrintConstants()
  */
 function Debug_IgnoreError($errno)
 {
-    if (ZbpErrorControl::$iswarning == false) {
-        if ($errno == E_WARNING) {
+    if (false == ZbpErrorControl::$iswarning) {
+        if (E_WARNING == $errno) {
             return true;
         }
 
-        if ($errno == E_USER_WARNING) {
+        if (E_USER_WARNING == $errno) {
             return true;
         }
     }
-    if (ZbpErrorControl::$isstrict == false) {
-        if (PHP_VERSION_ID < 80400 && defined('E_STRICT') && $errno == constant("E_STRICT")) {
+    if (false == ZbpErrorControl::$isstrict) {
+        if (PHP_VERSION_ID < 80400 && defined('E_STRICT') && $errno == constant('E_STRICT')) {
             return true;
         }
 
-        if ($errno == E_NOTICE) {
+        if (E_NOTICE == $errno) {
             return true;
         }
 
-        if ($errno == E_USER_NOTICE) {
+        if (E_USER_NOTICE == $errno) {
             return true;
         }
     }
 
     // 屏蔽系统的错误，防ZBP报系统的错误，不过也有可能导致ZBP内的DEPRECATED错误也被屏蔽了
-    if ($errno == E_CORE_WARNING) {
+    if (E_CORE_WARNING == $errno) {
         return true;
     }
 
-    if ($errno == E_COMPILE_WARNING) {
+    if (E_COMPILE_WARNING == $errno) {
         return true;
     }
 
-    if (defined('E_DEPRECATED') && $errno == E_DEPRECATED) {
+    if (defined('E_DEPRECATED') && E_DEPRECATED == $errno) {
         return true;
     }
 
-    if (defined('E_USER_DEPRECATED') && $errno == E_USER_DEPRECATED) {
+    if (defined('E_USER_DEPRECATED') && E_USER_DEPRECATED == $errno) {
         return true;
     }
 
@@ -131,22 +130,25 @@ function Debug_IgnoreError($errno)
 function Debug_Error_Handler($errno, $errstr, $errfile, $errline)
 {
     ZbpErrorControl::AddErrorList($errno, $errstr, $errfile, $errline, 'Error');
-    if (ZbpErrorControl::$disabled == true) {
+    if (true == ZbpErrorControl::$disabled) {
         return true;
     }
 
     //已废弃接口
     foreach ($GLOBALS['hooks']['Filter_Plugin_Debug_Handler'] as $fpname => &$fpsignal) {
-        $fpreturn = $fpname('Error', array($errno, $errstr, $errfile, $errline));
+        $fpreturn = $fpname('Error', [$errno, $errstr, $errfile, $errline]);
     }
 
-    if (ZbpErrorControl::$islogerror == true) {
+    if (true == ZbpErrorControl::$islogerror) {
         $err = ZbpErrorControl::$errarray[$errno];
-        Logs(var_export(array($err, $errno, $errstr, $errfile, $errline), true), 'ERROR');
+        if (0 == error_reporting() || !(error_reporting() & $errno)) {
+        } else {
+            Logs(var_export([$err, $errno, $errstr, $errfile, $errline], true), 'ERROR');
+        }
     }
 
     //@符号的错误抑制功能的实现 php7 || php8
-    if (error_reporting() == 0 || !(error_reporting() & $errno)) {
+    if (0 == error_reporting() || !(error_reporting() & $errno)) {
         //if (function_exists('error_clear_last ')) {
         //    error_clear_last();
         //}
@@ -163,7 +165,7 @@ function Debug_Error_Handler($errno, $errstr, $errfile, $errline)
     foreach ($GLOBALS['hooks']['Filter_Plugin_Debug_Handler_ZEE'] as $fpname => &$fpsignal) {
         $fpsignal = PLUGIN_EXITSIGNAL_NONE;
         $fpreturn = $fpname($zee, 'Error');
-        if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
+        if (PLUGIN_EXITSIGNAL_RETURN == $fpsignal) {
             return $fpreturn;
         }
     }
@@ -172,7 +174,7 @@ function Debug_Error_Handler($errno, $errstr, $errfile, $errline)
     foreach ($GLOBALS['hooks']['Filter_Plugin_Debug_Handler_Common'] as $fpname => &$fpsignal) {
         $fpsignal = PLUGIN_EXITSIGNAL_NONE;
         $fpreturn = $fpname($zee->getCode(), $zee->getMessage(), $zee->getFile(), $zee->getLine(), $zee->getMoreInfo(), $zee->getHttpCode());
-        if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
+        if (PLUGIN_EXITSIGNAL_RETURN == $fpsignal) {
             return $fpreturn;
         }
     }
@@ -181,7 +183,7 @@ function Debug_Error_Handler($errno, $errstr, $errfile, $errline)
     foreach ($GLOBALS['hooks']['Filter_Plugin_Debug_Display'] as $fpname => &$fpsignal) {
         $fpsignal = PLUGIN_EXITSIGNAL_NONE;
         $fpreturn = $fpname($zec);
-        if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
+        if (PLUGIN_EXITSIGNAL_RETURN == $fpsignal) {
             return $fpreturn;
         }
     }
@@ -201,7 +203,7 @@ function Debug_Error_Handler($errno, $errstr, $errfile, $errline)
 function Debug_Exception_Handler($exception)
 {
     ZbpErrorControl::AddErrorList($exception);
-    if (ZbpErrorControl::$disabled == true) {
+    if (true == ZbpErrorControl::$disabled) {
         return true;
     }
 
@@ -213,13 +215,13 @@ function Debug_Exception_Handler($exception)
     if (ZbpErrorControl::$islogerror) {
         Logs(
             var_export(
-                array(
+                [
                     'Exception',
                     $exception->getMessage(), $exception->getCode(), $exception->getFile(), $exception->getLine(),
-                ),
-                true
+                ],
+                true,
             ),
-            'EXCEPTION'
+            'EXCEPTION',
         );
     }
 
@@ -229,7 +231,7 @@ function Debug_Exception_Handler($exception)
     foreach ($GLOBALS['hooks']['Filter_Plugin_Debug_Handler_ZEE'] as $fpname => &$fpsignal) {
         $fpsignal = PLUGIN_EXITSIGNAL_NONE;
         $fpreturn = $fpname($zee, 'Exception');
-        if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
+        if (PLUGIN_EXITSIGNAL_RETURN == $fpsignal) {
             return $fpreturn;
         }
     }
@@ -237,7 +239,7 @@ function Debug_Exception_Handler($exception)
     foreach ($GLOBALS['hooks']['Filter_Plugin_Debug_Handler_Common'] as $fpname => &$fpsignal) {
         $fpsignal = PLUGIN_EXITSIGNAL_NONE;
         $fpreturn = $fpname($zee->getCode(), $zee->getMessage(), $zee->getFile(), $zee->getLine(), $zee->getMoreInfo(), $zee->getHttpCode());
-        if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
+        if (PLUGIN_EXITSIGNAL_RETURN == $fpsignal) {
             return $fpreturn;
         }
     }
@@ -246,7 +248,7 @@ function Debug_Exception_Handler($exception)
     foreach ($GLOBALS['hooks']['Filter_Plugin_Debug_Display'] as $fpname => &$fpsignal) {
         $fpsignal = PLUGIN_EXITSIGNAL_NONE;
         $fpreturn = $fpname($zec);
-        if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
+        if (PLUGIN_EXITSIGNAL_RETURN == $fpsignal) {
             return $fpreturn;
         }
     }
@@ -257,7 +259,7 @@ function Debug_Exception_Handler($exception)
 }
 
 /**
- * 当机错误处理.(不再使用)
+ * 当机错误处理.(不再使用).
  *
  * @return bool
  */
@@ -265,7 +267,7 @@ function Debug_Shutdown_Handler()
 {
     if ($error = error_get_last()) {
         ZbpErrorControl::AddErrorList($error['type'], $error['message'], $error['file'], $error['line'], 'Fatal');
-        if (ZbpErrorControl::$disabled == true) {
+        if (true == ZbpErrorControl::$disabled) {
             return true;
         }
 
@@ -275,7 +277,7 @@ function Debug_Shutdown_Handler()
         }
 
         if (ZbpErrorControl::$islogerror) {
-            Logs(var_export(array('Fatal', $error['type'], $error['message'], $error['file'], $error['line']), true), 'FATAL');
+            Logs(var_export(['Fatal', $error['type'], $error['message'], $error['file'], $error['line']], true), 'FATAL');
         }
 
         if (Debug_IgnoreError($error['type'])) {
@@ -288,7 +290,7 @@ function Debug_Shutdown_Handler()
         foreach ($GLOBALS['hooks']['Filter_Plugin_Debug_Handler_ZEE'] as $fpname => &$fpsignal) {
             $fpsignal = PLUGIN_EXITSIGNAL_NONE;
             $fpreturn = $fpname($zee, 'Fatal');
-            if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
+            if (PLUGIN_EXITSIGNAL_RETURN == $fpsignal) {
                 return $fpreturn;
             }
         }
@@ -296,7 +298,7 @@ function Debug_Shutdown_Handler()
         foreach ($GLOBALS['hooks']['Filter_Plugin_Debug_Handler_Common'] as $fpname => &$fpsignal) {
             $fpsignal = PLUGIN_EXITSIGNAL_NONE;
             $fpreturn = $fpname($zee->getCode(), $zee->getMessage(), $zee->getFile(), $zee->getLine(), $zee->getMoreInfo(), $zee->getHttpCode());
-            if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
+            if (PLUGIN_EXITSIGNAL_RETURN == $fpsignal) {
                 return $fpreturn;
             }
         }
@@ -305,7 +307,7 @@ function Debug_Shutdown_Handler()
         foreach ($GLOBALS['hooks']['Filter_Plugin_Debug_Display'] as $fpname => &$fpsignal) {
             $fpsignal = PLUGIN_EXITSIGNAL_NONE;
             $fpreturn = $fpname($zec);
-            if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
+            if (PLUGIN_EXITSIGNAL_RETURN == $fpsignal) {
                 return $fpreturn;
             }
         }
@@ -316,15 +318,13 @@ function Debug_Shutdown_Handler()
     return true;
 }
 
-
 /**
- * Debug DoNothing
+ * Debug DoNothing.
  */
 function Debug_DoNothing()
 {
     return true;
 }
-
 
 /**
  * Class ZbpErrorException.
@@ -332,14 +332,14 @@ function Debug_DoNothing()
 class ZbpErrorException extends Exception
 {
     /**
-     * 类型(Error, Exception, Fatal, ZbpErrorException)
+     * 类型(Error, Exception, Fatal, ZbpErrorException).
      */
     public $type = __CLASS__;
-    public $moreinfo = array();
+    public $moreinfo = [];
     public $httpcode = 500;
-    public $messagefull = null;
+    public $messagefull;
 
-    public function __construct($message = "", $code = 0, $previous = null, $file = '', $line = 0, $type = null, $moreinfo = array(), $httpcode = null, $messagefull = null)
+    public function __construct($message = '', $code = 0, $previous = null, $file = '', $line = 0, $type = null, $moreinfo = [], $httpcode = null, $messagefull = null)
     {
         if (is_array($message)) {
             $array = $message;
@@ -410,50 +410,39 @@ class ZbpErrorException extends Exception
 }
 
 /**
- * Class ZbpErrorControl (原名ZBlogException)
+ * Class ZbpErrorControl (原名ZBlogException).
  */
 class ZbpErrorControl
 {
-
     /**
-     * 错误显示输出
+     * 错误显示输出.
      */
     public static $display_error = true;
 
     /**
-     * 静态disabled
+     * 静态disabled.
      */
     public static $disabled = false;
 
     /**
-     * 静态isstrict
+     * 静态isstrict.
      */
     public static $isstrict = false;
 
     /**
-     * 静态iswarning
+     * 静态iswarning.
      */
     public static $iswarning = true;
 
     /**
-     * 静态islogerror
+     * 静态islogerror.
      */
     public static $islogerror = false;
 
     /**
-     * 静态error_msg_list
+     * 错误数组.
      */
-    private static $error_msg_list = array();
-
-    /**
-     * 内部_zee
-     */
-    private  $private_zee = null;
-
-    /**
-     * 错误数组
-     */
-    public static $errarray = array(
+    public static $errarray = [
         0     => 'UNKNOWN',
         1     => 'E_ERROR',
         2     => 'E_WARNING',
@@ -471,7 +460,19 @@ class ZbpErrorControl
         8192  => 'E_DEPRECATED',
         16384 => 'E_USER_DEPRECATED',
         30719 => 'E_ALL',
-    );
+    ];
+
+    /**
+     * 静态error_msg_list.
+     */
+    private static $error_msg_list = [];
+
+    /**
+     * 内部_zee.
+     */
+    private $private_zee;
+
+    private static $disabled_old_state;
 
     /**
      * 构造函数，定义常见错误代码
@@ -483,37 +484,50 @@ class ZbpErrorControl
 
     public function __get($name)
     {
-        if ($name == 'file') {
+        if ('file' == $name) {
             return $this->private_zee->getFile();
-        }elseif ($name == 'line') {
+        }
+        if ('line' == $name) {
             return $this->private_zee->getLine();
-        }elseif ($name == 'code') {
+        }
+        if ('code' == $name) {
             return $this->private_zee->getCode();
-        }elseif ($name == 'message') {
+        }
+        if ('message' == $name) {
             return $this->private_zee->getMessage();
-        }elseif ($name == 'type') {
+        }
+        if ('type' == $name) {
             return $this->private_zee->getType();
-        }elseif ($name == 'messagefull') {
+        }
+        if ('messagefull' == $name) {
             return $this->private_zee->getMessageFull();
-        }elseif ($name == 'httpcode') {
+        }
+        if ('httpcode' == $name) {
             return $this->private_zee->getHttpCode();
-        }elseif ($name == 'moreinfo') {
+        }
+        if ('moreinfo' == $name) {
             return $this->private_zee->getMoreInfo();
         }
     }
 
     /**
-     * AddErrorList
+     * AddErrorList.
+     *
+     * @param mixed      $code
+     * @param null|mixed $message
+     * @param null|mixed $file
+     * @param null|mixed $line
+     * @param null|mixed $type
      *
      * @return true
      */
     public static function AddErrorList($code, $message = null, $file = null, $line = null, $type = null)
     {
         if (is_a($code, 'Exception') || is_a($code, 'Error')) {
-            $array = array();
-            $array = array('code' => $code->getCode(), 'message' => $code->getMessage(), 'file' => $code->getFile(), 'line' => $code->getLine(), 'type' => get_class($code));
+            $array = [];
+            $array = ['code' => $code->getCode(), 'message' => $code->getMessage(), 'file' => $code->getFile(), 'line' => $code->getLine(), 'type' => get_class($code)];
             if (property_exists($code, 'moreinfo')) {
-                if (is_array($code->moreinfo) &&!empty($code->moreinfo)) {
+                if (is_array($code->moreinfo) && !empty($code->moreinfo)) {
                     $array['moreinfo'] = $code->moreinfo;
                 }
             }
@@ -528,20 +542,20 @@ class ZbpErrorControl
             }
             self::$error_msg_list[] = $array;
         } else {
-            self::$error_msg_list[] = array('code' => $code, 'message' => $message, 'file' => $file, 'line' => $line, 'type' => $type);
+            self::$error_msg_list[] = ['code' => $code, 'message' => $message, 'file' => $file, 'line' => $line, 'type' => $type];
         }
         if (isset($_SERVER['_error_count'])) {
             $_SERVER['_error_count'] = ($_SERVER['_error_count'] + 1);
         }
+
         return true;
     }
 
     /**
-     * GetErrorList
+     * GetErrorList.
      *
      * @return array
      */
-    
     public static function GetErrorList()
     {
         return self::$error_msg_list;
@@ -588,8 +602,6 @@ class ZbpErrorControl
     {
         self::$disabled = true;
     }
-
-    private static $disabled_old_state = null;
 
     /**
      * 暂停错误调度.
@@ -657,7 +669,7 @@ class ZbpErrorControl
     }
 
     /**
-     * 直接扔出内部zee
+     * 直接扔出内部zee.
      */
     public function ThrowError()
     {
@@ -677,6 +689,7 @@ class ZbpErrorControl
         $this->private_zee = new ZbpErrorException($message, $type, null, $file, $line);
         $this->private_zee->messagefull = $message . ' (set_error_handler) ';
         $this->private_zee->type = 'Error';
+
         return $this->private_zee;
     }
 
@@ -690,6 +703,7 @@ class ZbpErrorControl
         $this->private_zee = new ZbpErrorException($error['message'], $error['type'], null, $error['file'], $error['line']);
         $this->private_zee->messagefull = $error['message'] . ' (register_shutdown_function) ';
         $this->private_zee->type = 'Fatal';
+
         return $this->private_zee;
     }
 
@@ -706,11 +720,12 @@ class ZbpErrorControl
         if (is_a($exception, 'Error')) {
             $this->private_zee->messagefull = $exception->getMessage() . ' (set_exception_error_handler) ';
         }
-        if (get_class($exception) == 'ZbpErrorException') {
+        if ('ZbpErrorException' == get_class($exception)) {
             $this->private_zee->moreinfo = $exception->moreinfo;
             $this->private_zee->messagefull = $exception->messagefull;
             $this->private_zee->httpcode = $exception->httpcode;
         }
+
         return $this->private_zee;
     }
 
@@ -719,7 +734,7 @@ class ZbpErrorControl
      */
     public function Display()
     {
-        if (self::$display_error == false) {
+        if (false == self::$display_error) {
             return true;
         }
         if (!headers_sent()) {
@@ -753,12 +768,12 @@ class ZbpErrorControl
      */
     public function get_code($file, $line)
     {
-        if (strcasecmp($file, 'Unknown') == 0) {
-            return array();
+        if (0 == strcasecmp($file, 'Unknown')) {
+            return [];
         }
 
         if (!is_readable($file)) {
-            return array();
+            return [];
         }
 
         $aFile = array_slice(file($file), max(0, ($line - 5)), 10, true);
@@ -787,7 +802,7 @@ class ZbpErrorControl
             $error_id = $lastzee->GetCode();
         }
 
-        if ($error_id != 0) {
+        if (0 != $error_id) {
             // 代表Z-BlogPHP自身抛出的错误
             if (isset($lang['error_reasons'][$error_id])) {
                 $result = $lang['error_reasons'][$error_id];
@@ -798,7 +813,7 @@ class ZbpErrorControl
 
         // 根据关键词查找错误
         $lowerErrorReason = strtolower($this->message);
-        if (isset($lang['error_reasons']) && isset($lang['error_reasons']['other']) && is_array($lang['error_reasons']['other'])) {
+        if (isset($lang['error_reasons'], $lang['error_reasons']['other']) && is_array($lang['error_reasons']['other'])) {
             foreach ($lang['error_reasons']['other'] as $key => $value) {
                 if (strpos($lowerErrorReason, $key) > -1) {
                     $result .= $value;
@@ -819,6 +834,7 @@ class ZbpErrorControl
         $result = str_replace('{%morehelp%}', $moreHelp, $result);
         $result = str_replace('{%officedocs%}', $office_docs, $result);
         $result = str_replace('{%officebbs%}', $office_bbs, $result);
+
         return $result;
     }
 
@@ -864,16 +880,15 @@ class ZbpErrorControl
 
     public function getTrace()
     {
-        $t = debug_backtrace();
-        return $t;
+        return debug_backtrace();
     }
 
     public function getTraceAsString()
     {
         $t = $this->getTrace();
+
         return call_user_func('print_r', $t, true);
     }
-
 }
 
 //给ZBlogException改名为ZbpErrorControl，然后保持延续就起了别名

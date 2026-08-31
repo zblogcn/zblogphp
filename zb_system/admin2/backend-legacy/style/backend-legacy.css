@@ -12,8 +12,10 @@
   --color-blod:#1d4c7d;
   --color-normal:#3a6ea5;
   --color-light:#b0cdee;
-  --color-high:#3399cc;
+  --color-high:#4b90d9;
   --color-anti:#d60000;
+  --color-bg-normal:#ededed;
+  --color-bg-light:#f4f4f4;
 }
 
 * {
@@ -249,7 +251,7 @@ body.admin {
   color: #ffffff;
 }
 #divMain .SubMenu a:has(span.m-now) {
-  background: #3399cc;
+  background: #4b90d9;
 }
 #divMain #divMain2 {
   padding: 0;
@@ -286,7 +288,7 @@ body.admin {
   color: currentColor;
 }
 #leftmenu li.on {
-  background: #3399cc;
+  background: #4b90d9;
 }
 #leftmenu li.on a {
   color: #ffffff;
@@ -360,11 +362,11 @@ input.button, input[type=submit], input[type=button] {
   height: 29px;
   padding: 2px 18px 3px;
   background: #3a6ea5;
-  border: 1px solid #3399cc;
+  border: 1px solid #4b90d9;
   cursor: pointer;
 }
 input.button:hover, input[type=submit]:hover, input[type=button]:hover {
-  background: #3399cc;
+  background: #4b90d9;
 }
 input.button[disabled], input.button[disabled]:hover, input[type=submit][disabled], input[type=submit][disabled]:hover, input[type=button][disabled], input[type=button][disabled]:hover {
   background: #eee;

@@ -9,7 +9,7 @@ function zbp_admin2_statistic()
     global $zbp;
 
     // 当模板文件有修改，或者传入强制刷新参数时，重建模板编译
-    $zbp->CheckTemplate(false, (bool) GetVars('forced', 'GET'));
+    $zbp->CheckTemplate((bool) GetVars('forced', 'GET'));
 
     // 获取上次刷新时间
     $reload_statistic_time = $zbp->cache->reload_statistic_time;

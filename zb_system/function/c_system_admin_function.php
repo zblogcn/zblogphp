@@ -507,8 +507,14 @@ if (!function_exists('OutputOptionItemsOfTemplate')) {
                 continue;
             }
 
-            $name = @$zbp->template->templates_Name[$key];
-            $type = @$zbp->template->templates_Type[$key];
+            $name = '';
+            $type = '';
+            if (isset($zbp->template->templates_Name[$key])) {
+                $name = $zbp->template->templates_Name[$key];
+            }
+            if (isset($zbp->template->templates_Type[$key])) {
+                $type = $zbp->template->templates_Type[$key];
+            }
             $typeArray = explode('|', $type);
 
             if ('none' == strtolower($type)) {

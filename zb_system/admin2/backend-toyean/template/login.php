@@ -23,13 +23,9 @@
 </head>
 
 <body class="admin-login body-login">
-    <header class="login-header">
-        <h1 class="brand"><img src="{$host}zb_system/image/admin/none.gif" title="{htmlspecialchars($blogname)}" alt="{htmlspecialchars($blogname)}" /></h1>
-    </header>
-
-
     <main class="login-container login">
         <form class="login-form" method="post" action="#">
+            <h2>{$lang['msg']['login']}</h2>
             <input type="hidden" name="csrfToken" value="{$zbp.GetCSRFToken('login','minute')}">
             <dl>
                 <dd class="username">
@@ -45,8 +41,10 @@
                 {if $zbp->option['ZC_LOGIN_VERIFY_ENABLE']}
                 <dd class="validcode">
                     <label for="edtValidcode">{$lang['msg']['validcode']}</label>
-                    <input type="text" maxlength="{$zbp.option['ZC_VERIFYCODE_LENGTH']}" id="edtValidcode" name="verify" size="20" tabindex="10" />
-                    <img class="captcha-img" src="{$host}zb_system/script/c_validcode.php?id=login&time=m" onClick="javascript:this.src='{$host}zb_system/script/c_validcode.php?id=login&time=m&tm='+Math.random();" alt="validcode" />
+                    <div class="validcode-input-wrapper">
+                        <input type="text" maxlength="{$zbp.option['ZC_VERIFYCODE_LENGTH']}" id="edtValidcode" name="verify" size="20" tabindex="10" />
+                        <img class="captcha-img" src="{$host}zb_system/script/c_validcode.php?id=login&time=m" onClick="javascript:this.src='{$host}zb_system/script/c_validcode.php?id=login&time=m&tm='+Math.random();" alt="validcode" />
+                    </div>
                 </dd>
                 {/if}
 
