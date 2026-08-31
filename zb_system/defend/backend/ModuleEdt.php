@@ -5,32 +5,45 @@
     <input id="edtSource" name="Source" type="hidden" value="{$mod->Source}" />
     <!-- name -->
     <p {if $mod->SourceType == 'themeinclude'}class="hidden"{/if}>
-        <span class="title">{$zbp->lang['msg']['name']}:</span><span class="star">(*)</span><br />
+        <span class="title">{$zbp->lang['msg']['title']}:</span><span class="star">(*)</span><br />
         <input id="edtName" class="edit" size="40" name="Name" maxlength="{$zbp->option['ZC_MODULE_NAME_MAX']}" type="text" value="{FormatString($mod->Name, '[html-format]')}" />
         ({$zbp->lang['msg']['hide_title']}: <input type="text" id="IsHideTitle" name="IsHideTitle" class="checkbox" value="{$mod->IsHideTitle}" />)
     </p>
     <!-- filename -->
     <p>
-        <span class="title">{$zbp->lang['msg']['filename']}:</span><span class="star">(*)</span><br />
+        <span class="title">{$zbp->lang['msg']['id']}:</span><span class="star">(*)</span><br />
         <input id="edtFileName" class="edit" size="40" name="FileName" type="text" value="{FormatString($mod->FileName, '[html-format]')}" {if $mod->Source != 'user'}readonly="readonly"{/if} />
     </p>
     <!-- htmlid -->
-    <p {if $mod->SourceType == 'themeinclude'}class="hidden"{/if}>
-        <span class="title">{$zbp->lang['msg']['htmlid']}:</span><span class="star">(*)</span><br />
-        <input id="edtHtmlID" class="edit" size="40" name="HtmlID" type="text" value="{FormatString($mod->HtmlID, '[html-format]')}" />
+    <input id="edtHtmlID" class="edit" size="40" name="HtmlID" type="hidden" value="{FormatString($mod->HtmlID, '[html-format]')}" />
+    <!-- type -->
+    <input id="edtType" class="edit" size="40" name="Type" type="hidden" value="{FormatString($mod->Type, '[html-format]')}" />
+    {if $mod->AutoContent == false && $mod->Type == 'ul'}
+    <p>
+        <span class="title">{$zbp->lang['msg']['link']}:</span><span class="star">(*)</span><br />
     </p>
-    <!-- type & maxli -->
-    <p {if $mod->SourceType == 'themeinclude'}class="hidden"{/if}>
-        <span class="title">{$zbp->lang['msg']['type']}:</span><br />
-        <input id="Type_DIV" name="Type" type="radio" class="radio" value="div" {if $mod->Type == 'div'}checked="checked"{/if} onclick="$('#pMaxLi').addClass('hidden');" />
-        <label for="Type_DIV">DIV</label>&nbsp;&nbsp;&nbsp;&nbsp;
-        <input id="Type_UL" type="radio" class="radio" name="Type" value="ul" {if $mod->Type != 'div'}checked="checked"{/if} onclick="$('#pMaxLi').removeClass('hidden');" />
-        <label for="Type_UL">UL</label>
+{php}<?php
+foreach ($mod->Links as $link) {
+    ?>{/php}
+    <p><input class="edit" size="50" name="href[]" type="text" placeholder="{$zbp->lang['msg']['href']}" value="{FormatString(@$link->href, '[html-format]')}" />
+    <input class="edit" size="30" name="content[]" type="text" placeholder="{$zbp->lang['msg']['text']}" value="{FormatString(@$link->content, '[html-format]')}" />
+    <input class="edit" size="30" name="target[]" type="text" placeholder="Target" value="{FormatString(@$link->target, '[html-format]')}" />
     </p>
-    <p id="pMaxLi" {if $mod->Type == 'div'}class="hidden"{/if}>
-        <span class="title">{$zbp->lang['msg']['max_li_in_ul']}:</span><br />
-        <input type="text" name="MaxLi" value="{$mod->MaxLi}" size="40" />
+    {php}<?php
+}
+?>{/php}
+    <p><input class="edit" size="50" name="href[]" type="text" placeholder="{$zbp->lang['msg']['href']}" value="" />
+    <input class="edit" size="30" name="content[]" type="text" placeholder="{$zbp->lang['msg']['text']}" value="" />
+    <input class="edit" size="30" name="target[]" type="text" placeholder="Target" value="" />
     </p>
+    {/if}
+    {if $mod->AutoContent == false && $mod->Type == 'div'}
+    <p>
+        <span class="title">{$zbp->lang['msg']['content']}:</span><br />
+        <textarea name="Content" id="Content" cols="80" rows="12">{htmlspecialchars($mod->Content)}</textarea>
+    </p>  
+    {/if}
+
     {if $mod->FileName == 'catalog'}
     <p>
         <span class="title">{$zbp->lang['msg']['style']}:</span>&nbsp;&nbsp;
@@ -47,10 +60,8 @@
         <input name="archives_style" type="checkbox" value="{$zbp->option['ZC_MODULE_ARCHIVES_STYLE']}" {if $zbp->option['ZC_MODULE_ARCHIVES_STYLE'] == '1'}checked="checked"{/if}/>{$zbp->lang['msg']['archives_style_select']}
     </label>
     {/if}
-    <p>
-        <span class="title">{$zbp->lang['msg']['content']}:</span><br />
-        <textarea name="Content" id="Content" cols="80" rows="12">{htmlspecialchars($mod->Content)}</textarea>
-    </p>
+    <!-- maxli -->
+    <input type="hidden" name="MaxLi" value="{$mod->MaxLi}" size="40" />
     <!-- no refresh content -->
     <p {if $mod->SourceType == 'themeinclude'}class="hidden"{/if}>
         <span class="title">{$zbp->lang['msg']['no_refresh_content']}:</span>
@@ -74,10 +85,6 @@
         }
         if (!$("#edtFileName").val()) {
             alert("{$zbp->lang['error']['75']}");
-            return false
-        }
-        if (!$("#edtHtmlID").val()) {
-            alert("{$zbp->lang['error']['76']}");
             return false
         }
     }
