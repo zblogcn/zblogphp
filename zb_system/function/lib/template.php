@@ -530,6 +530,34 @@ class Template
     }
 
     /**
+     * 添加模板
+     *
+     * @param mixed $name
+     * @param mixed $content
+     */
+    public function AddTemplate($name, $content)
+    {
+        $this->templates[$name] = $content;
+
+        return true;
+    }
+
+    /**
+     * 添加模板Info ($name名称ID, $title标题, $type类型).
+     *
+     * @param mixed $name
+     * @param mixed $title
+     * @param mixed $type
+     */
+    public function AddTemplateInfo($name, $title, $type)
+    {
+        $this->templates_Name[$name] = $title;
+        $this->templates_Type[$name] = $type;
+
+        return true;
+    }
+
+    /**
      * 读取模板 Name 及 Type.
      */
     public function LoadTemplateInfos()

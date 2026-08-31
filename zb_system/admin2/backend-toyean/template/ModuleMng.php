@@ -1,4 +1,4 @@
-<?php die(); ?>
+<?php exit(); ?>
 <div class="module-layout">
   <div class="widget-left">
     <script>
@@ -53,7 +53,7 @@
     <form id="edit" method="post" action="{php}echo BuildSafeCmdURL('act=SidebarSet');{/php}">
       {foreach $sideids as $curKey => $curValue}
         {php}$curOption = 'ZC_SIDEBAR' . $curValue . '_ORDER';{/php}
-        <input type="hidden" id="strsidebar{$curValue}" name="edtSidebar{$curValue}" value="{$zbp.option[$curOption]}" />
+        <input type="hidden" id="strsidebar{$curValue}" name="edtSidebar{$curValue}" value="{$zbp.option[$curOption]}">
       {/foreach}
     </form>
 
@@ -63,7 +63,7 @@
         <div class="siderbar-drop" id="siderbar{$curValue}">
           <div class="siderbar-header">
             {$zbp.lang['msg'][$id]}&nbsp;
-            <img class="roll" src="../image/admin/loading.gif" width="16" alt="" />
+            <img class="roll" src="{$zbp.host}zb_system/image/admin/loading.gif" width="16" alt="">
             <span class="ui-icon ui-icon-triangle-1-s"></span>
           </div>
           <div class="siderbar-sort-list">

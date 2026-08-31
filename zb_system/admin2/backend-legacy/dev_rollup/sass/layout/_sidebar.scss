@@ -22,11 +22,12 @@
   }
 
   li {
-    background-color: $color-backgroud;
+    background-color: $color-background;
     margin-bottom: 8px;
 
     &:hover {
-      background-color: $color-backgroud-hover;
+      background-color: $color-background-hover;
+
       a {
         color: currentColor;
       }
@@ -36,7 +37,7 @@
       background: $color-light;
 
       a {
-        color: #ffffff;
+        color: $color-fff;
       }
     }
   }

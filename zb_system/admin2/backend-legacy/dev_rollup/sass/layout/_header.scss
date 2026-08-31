@@ -3,8 +3,9 @@
 .header {
   grid-area: header;
   margin-bottom: 5px;
+  padding-right: $gap-right;
   // height: $header-height;
-  background: #3a6ea5;
+  background: $color-primary;
   // position: relative;
   display: grid;
   grid-template-columns: $logo-width 1fr;
@@ -31,8 +32,8 @@
   .user {
     grid-area: user;
     justify-self: end;
-    padding: 12px 15px 0 0;
-    color: #ffffff;
+    padding: 12px 0 0 0;
+    color: $color-fff;
     display: grid;
     grid-template-areas:
       "name avatar"
@@ -43,26 +44,26 @@
       height: 40px;
     }
 
-    .usravatar {
+    .user-avatar {
       grid-area: avatar;
       padding-left: 10px;
     }
 
-    .username {
+    .user-name {
       font-size: 1.1em;
     }
 
-    .userbtn {
+    .user-btn {
 
       display: flex;
       justify-content: space-between;
 
       a {
-        color: #ffffff;
+        color: $color-fff;
         display: block;
 
         &:hover {
-          color: #b0cdee;
+          color: $color-hover-muted;
         }
       }
     }
@@ -83,7 +84,7 @@
 
       a {
         padding: 0 20px;
-        background-color: #fff;
+        background-color: $color-fff;
         font-size: 1.1em;
         align-items: center;
         height: $menu-item-height;
@@ -92,8 +93,8 @@
         color: $color-text;
 
         &:hover {
-          background-color: $color-backgroud-hover;
-          color: #fff;
+          background-color: $color-background-hover;
+          color: $color-fff;
         }
       }
 

@@ -1,11 +1,11 @@
-<?php die(); ?>
+<?php exit(); ?>
 
 {php}<?php
 $csrfToken = $zbp->GetCSRFToken();
 ?>{/php}
 <form id="frmTheme" method="post" action="{BuildSafeCmdURL('act=ThemeSet')}">
-  <input type="hidden" name="theme" id="theme" value="" />
-  <input type="hidden" name="style" id="style" value="" />
+  <input type="hidden" name="theme" id="theme" value="">
+  <input type="hidden" name="style" id="style" value="">
 
   {foreach $allthemes as $curTheme}
   {php}<?php
@@ -20,7 +20,7 @@ $csrfToken = $zbp->GetCSRFToken();
     <div class="theme-name">
       {php}<?php
       if (isset($zbp->lang[$curTheme->id]['theme_name'])) {
-        $curTheme->name = $zbp->lang[$curTheme->id]['theme_name'];
+          $curTheme->name = $zbp->lang[$curTheme->id]['theme_name'];
       }
       ?>{/php}
 
@@ -35,7 +35,7 @@ $csrfToken = $zbp->GetCSRFToken();
       </a>
     </div>
     <div class="theme-img">
-      <span><img src="{$curTheme.GetScreenshot()}" title="{$themeNameEscaped}" alt="{$themeNameEscaped}" /></span>
+      <span><img src="{$curTheme.GetScreenshot()}" title="{$themeNameEscaped}" alt="{$themeNameEscaped}"></span>
     </div>
     <div class="theme-author">
       {$zbp.lang['msg']['author']}: <a target="_blank" href="{$themeAuthorUrlEscaped}">{$themeAuthorNameEscaped}</a>

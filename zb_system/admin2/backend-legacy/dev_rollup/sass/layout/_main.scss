@@ -21,7 +21,6 @@
     font-size: 1.5em;
     line-height: 1.5em;
     font-weight: bold;
-    // color: #444444;
     display: flex;
     align-items: center;
     gap: 3px;
@@ -36,14 +35,14 @@
     gap: 5px;
 
     a {
-      background-color: $color-backgroud;
+      background-color: $color-background;
       display: block;
       padding: 8px 12px;
       color: $color-text;
 
       &:hover {
         color: currentColor;
-        background-color: $color-backgroud-hover;
+        background-color: $color-background-hover;
       }
     }
   }

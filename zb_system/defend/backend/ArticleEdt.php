@@ -11,13 +11,13 @@ if (isset($_COOKIE['timezone'])) {
 ?>
 {/php}
 
-<script src="../script/jquery.tagto.js"></script>
-<script src="../script/jquery-ui-timepicker-addon.js"></script>
+<script src="{$host}zb_system/script/jquery.tagto.js"></script>
+<script src="{$host}zb_system/script/jquery-ui-timepicker-addon.js"></script>
 {php}
 HookFilterPlugin('Filter_Plugin_Edit_Begin');
 {/php}
 
-<form id="edit" name="edit" method="post" action="#">
+<form id="post-edit" class="edit" name="edit" method="post" action="#">
     <div id="divEditLeft">
         <!-- 4号输出接口 -->
         <div id="response4" class="editmod2">
@@ -31,11 +31,35 @@ HookFilterPlugin('Filter_Plugin_Edit_Begin');
             <!-- title( -->
             <div id="titleheader" class="editmod">
                 <label for="edtTitle" class="editinputname">{$lang['msg']['title']}</label>
-                <div>
-                    <input type="text" name="Title" id="edtTitle" maxlength="{$option['ZC_ARTICLE_TITLE_MAX']}" value="{$article->Title}" />
-                </div>
+                <input type="text" name="Title" id="edtTitle" maxlength="{$option['ZC_ARTICLE_TITLE_MAX']}" value="{$article->Title}" />
             </div>
             <!-- )title -->
+
+            <!-- alias( -->
+            <div id="alias" class="editmod">
+                <label for="edtAlias" class="editinputname">
+                    {$lang['msg']['alias']}
+                </label>
+                <input type="text" name="Alias" id="edtAlias" maxlength="250" value="{$article->Alias}" />
+            </div>
+            <!-- )alias -->
+
+            {if !$ispage}
+            <!-- tags( -->
+            <div id="tags" class="editmod">
+                <label for="edtTag" class='editinputname'>
+                    {$lang['msg']['tags']}
+                </label>
+                <input type="text" name="Tag" id="edtTag" value="{$article->TagsToNameString()}" />
+                ({$lang['msg']['use_commas_to_separate']})
+                <a href="javascript:;" id="showtags" data-url="{BuildSafeCmdURL('act=misc&type=showtags')}">{$lang['msg']['show_common_tags']}</a>
+            </div>
+            <!-- Tags -->
+            <div id="ulTag" class="editmod2 jq-hidden hidden">
+                <div id="ajaxtags">Waiting...</div>
+            </div>
+            <!-- )tags -->
+            {/if}
 
         </div>
 
@@ -61,7 +85,7 @@ HookFilterPlugin('Filter_Plugin_Edit_Begin');
                 <textarea id="editor_content" name="Content">{FormatString($article->Content, '[html-format]')}</textarea>
             </div>
             <div id="contentready" class="hidden">
-                <img alt="loading" id="statloading1" src="../image/admin/loading.gif" />Waiting...
+                <img alt="loading" id="statloading1" src="{$host}zb_system/image/admin/loading.gif" />Waiting...
             </div>
         </div>
 
@@ -73,38 +97,15 @@ HookFilterPlugin('Filter_Plugin_Edit_Begin');
         </div>
 
         <br />
-        <!-- alias( -->
-        <div id="alias" class="editmod2">
-            <label for="edtAlias" class="editinputname">
-                {$lang['msg']['alias']}
-            </label>
-            <input type="text" name="Alias" id="edtAlias" maxlength="250" value="{$article->Alias}" />
-        </div>
-        <!-- )alias -->
 
         {if !$ispage}
-        <!-- tags( -->
-        <div id="tags" class="editmod2">
-            <label for="edtTag" class='editinputname'>
-                {$lang['msg']['tags']}
-            </label>
-            <input type="text" name="Tag" id="edtTag" value="{$article->TagsToNameString()}" />
-            ({$lang['msg']['use_commas_to_separate']})
-            <a href="#" id="showtags">{$lang['msg']['show_common_tags']}</a>
-        </div>
-        <!-- Tags -->
-        <div id="ulTag" class="editmod2 hidden">
-            <div id="ajaxtags">Waiting...</div>
-        </div>
-        <!-- )tags -->
-
         <div id="insertintro" class="editmod2">
             <span>* {$lang['msg']['help_generate_summary']}
                 <a href="javascript:;" onClick="AutoIntro()">[{$lang['msg']['generate_summary']}]</a></span>
         </div>
         {/if}
 
-        <div id="divIntro" class="editmod2 {if !$article.Intro}hidden{/if}">
+        <div id="divIntro" class="editmod2 {if !$article.Intro}jq-hidden hidden{/if}">
             <div id="theader" class="editmod editmod3">
                 <label for="editor_intro" class="editinputname">
                     {$lang['msg']['intro']}
@@ -114,7 +115,7 @@ HookFilterPlugin('Filter_Plugin_Edit_Begin');
                 <textarea id="editor_intro" name="Intro">{FormatString($article->Intro, '[html-format]')}</textarea>
             </div>
             <div id="introready" class="hidden">
-                <img alt="loading" id="statloading2" src="../image/admin/loading.gif" />Waiting...
+                <img alt="loading" id="statloading2" src="{$host}zb_system/image/admin/loading.gif" />Waiting...
             </div>
 
         </div>
@@ -233,10 +234,10 @@ HookFilterPlugin('Filter_Plugin_Edit_Begin');
     </div>
     <!-- divEditRight -->
 </form>
+
 <script>
     let sContent = "",
         sIntro = ""; // 原内容与摘要
-    let tag_loaded = false; // 是否已经ajax读取过TAGS
     let isSubmit = false; // 是否提交保存
 
     const contentBarBtn = [],
@@ -248,51 +249,35 @@ HookFilterPlugin('Filter_Plugin_Edit_Begin');
         editor: {
             content: {
                 obj: {},
-                get: function() {
-                    return ""
-                },
-                insert: function() {
-                    return ""
-                },
-                put: function() {
-                    return ""
-                },
-                focus: function() {
-                    return ""
-                },
-                barBtn: function(name, icon, callback) {
+                get: () => "",
+                insert: () => "",
+                put: () => "",
+                focus: () => "",
+                barBtn: (name, icon, callback) => {
                     contentBarBtn.push({
                         name: name,
                         icon: icon,
                         callback: callback
                     });
                 },
-                ready: function(f) {
+                ready: (f) => {
                     contentReady.push(f);
                 }
             },
             intro: {
                 obj: {},
-                get: function() {
-                    return ""
-                },
-                insert: function() {
-                    return ""
-                },
-                put: function() {
-                    return ""
-                },
-                focus: function() {
-                    return ""
-                },
-                barBtn: function(name, icon, callback) {
+                get: () => "",
+                insert: () => "",
+                put: () => "",
+                focus: () => "",
+                barBtn: (name, icon, callback) => {
                     introBarBtn.push({
                         name: name,
                         icon: icon,
                         callback: callback
                     });
                 },
-                ready: function(f) {
+                ready: (f) => {
                     introReady.push(f);
                 }
             }
@@ -353,56 +338,9 @@ HookFilterPlugin('Filter_Plugin_Edit_Begin');
         // changeYear: true
     });
 
-
-    // 显示tags
-    $(document).click(function(event) {
-        $('#ulTag').slideUp("fast");
-    });
-
-    $('#showtags').click(function(event) {
-        event.stopPropagation();
-        const offset = $(event.target).offset();
-        $('#ulTag').css({
-            top: offset.top + $(event.target).height() + 20 + "px",
-            left: offset.left
-        });
-        $('#ulTag').slideDown("fast");
-        if (tag_loaded === false) {
-            const tag = ',' + $('#edtTag').val() + ',';
-            $.getScript("{BuildSafeCmdURL('act=misc&type=showtags')}", function() {
-                $('#ajaxtags a').each(function() {
-                    if (tag.indexOf($(this).text()) != -1) {
-                        $(this).addClass('selected');
-                    }
-                });
-            });
-            tag_loaded = true;
-        }
-        return false;
-    });
-
-    function AddKey(i) {
-        const strKey = $('#edtTag').val();
-        const strNow = "," + i
-        if (strKey == "") {
-            strNow = i
-        }
-        if (strKey.indexOf(strNow) == -1) {
-            strKey = strKey + strNow;
-        }
-        $('#edtTag').val(strKey);
-    }
-
-    function DelKey(i) {
-        const strKey = $('#edtTag').val().replace(/[;，、\s]/, ',');
-        strKey = ',' + strKey + ',';
-        strKey = strKey.replace(',' + i + ',', ',').replace(/^,(.*?),$/, '$1');
-        $('#edtTag').val(strKey);
-    }
-
     // 提取摘要
     function AutoIntro() {
-        const s = editor_api.editor.content.get();
+        let s = editor_api.editor.content.get();
         if (s.indexOf("<hr class=\"more\" />") > -1) {
             editor_api.editor.intro.put(s.split("<hr class=\"more\" />")[0]);
         } else {
@@ -414,12 +352,13 @@ HookFilterPlugin('Filter_Plugin_Edit_Begin');
                 editor_api.editor.intro.put(s.substring(0, i));
             }
         }
-        $("#divIntro").show();
-        $('html,body').animate({
+        $("#divIntro").slideDown('slow');
+        $('html,body').delay(500).animate({
             scrollTop: $('#divIntro').offset().top
         }, 'fast');
     }
 
+    // 编辑器初始化，插件需要覆盖此函数
     function editor_init() {
         editor_api.editor.content.obj = $('#editor_content');
         editor_api.editor.intro.obj = $('#editor_intro');
