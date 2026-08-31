@@ -8,7 +8,7 @@ foreach ($zbp->modules as $module) {
 ?>
 {/php}
 <script>
-    // const functions = {php}echo json_encode($modSourceMaps);{/php};
+    // const functions = {json_encode($modSourceMaps)};
 </script>
 <div class="module-layout">
     <div class="widget-left">
@@ -53,7 +53,7 @@ foreach ($zbp->modules as $module) {
     </div>
 
     <div class="widget-right">
-        <form id="edit" class="hidden" method="post" action="{php}echo BuildSafeCmdURL('act=SidebarSet');{/php}">
+        <form id="edit" class="hidden" method="post" action="{BuildSafeCmdURL('act=SidebarSet')}">
             {foreach $sideids as $curKey => $curValue}
             {php}$curOption = 'ZC_SIDEBAR' . $curValue . '_ORDER';{/php}
             <input type="hidden" id="strsidebar{$curValue}" name="edtSidebar{$curValue}" value="{$zbp.option[$curOption]}" />

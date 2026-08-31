@@ -54,6 +54,7 @@
     function confirmDelete() {
         return window.confirm("{$zbp.lang['msg']['confirm_operating']}");
     }
+
     $("a.order_button").parent().bind("mouseenter mouseleave", function() {
         $(this).find("a.order_button").toggleClass("element-visibility-hidden");
     });

@@ -17,7 +17,7 @@ if (isset($_COOKIE['timezone'])) {
 HookFilterPlugin('Filter_Plugin_Edit_Begin');
 {/php}
 
-<form id="post-edit" class="edit" name="edit" method="post" action="#">
+<form id="edit" class="edit post-edit" name="edit" method="post" action="#">
     <div id="divEditLeft">
         <!-- 4号输出接口 -->
         <div id="response4" class="editmod2">
@@ -209,7 +209,7 @@ HookFilterPlugin('Filter_Plugin_Edit_Begin');
 
                     <div id='islock' class="editmod">
                         <label for="edtIslock" class='editinputname'>{$lang['msg']['disable_comment']}</label>
-                        <input id="edtIslock" name="IsLock" type="text" value="{intval($article->IsLock)" class="checkbox" />
+                        <input id="edtIslock" name="IsLock" type="text" value="{intval($article->IsLock)}" class="checkbox" />
                     </div>
                     <!-- )IsLock -->
 
@@ -236,53 +236,119 @@ HookFilterPlugin('Filter_Plugin_Edit_Begin');
 </form>
 
 <script>
-    let sContent = "",
-        sIntro = ""; // 原内容与摘要
-    let isSubmit = false; // 是否提交保存
+    // 标题输入框的聚焦/失焦逻辑（保持与内联事件一致）
+    (() => {
+        const $title = $('#edtTitle');
+        if (!$title.length) return;
+        const unnamed = "{$lang['msg']['unnamed']}";
+        $title.on('focus', function() {
+            if (this.value === unnamed) this.value = '';
+        });
+        $title.on('blur', function() {
+            if (this.value === '') this.value = unnamed;
+        });
+    })();
+
+    // 显示 tags
+    (() => {
+        let tag_loaded = false; // 是否已经 ajax 读取过 TAGS
+        $(document).click(function(event) {
+            $('#ulTag').slideUp("fast");
+        });
+
+        $('#showtags').click(function(event) {
+            event.stopPropagation();
+            const offset = $(event.target).offset();
+            $('#ulTag').css({
+                top: offset.top + $(event.target).height() + 20 + "px",
+                left: offset.left
+            });
+            $('#ulTag').slideToggle("fast");
+            if (tag_loaded === false) {
+                const tag = ',' + $('#edtTag').val() + ',';
+                const url = $(this).data('url');
+                $.getScript(url, function() {
+                    $('#ajaxtags a').each(function() {
+                        if (tag.indexOf($(this).text()) != -1) {
+                            $(this).addClass('selected');
+                        }
+                    });
+                });
+                tag_loaded = true;
+            }
+            return false;
+        });
+    })();
+
+    /* ----- */
+
+    // 编辑器接口构造函数
+    const makeEditorSlot = (barList, readyList) => ({
+        obj: {},
+        get: () => "",
+        insert: () => "",
+        put: () => "",
+        focus: () => "",
+        barBtn: (name, icon, callback) => {
+            barList.push({
+                name: name,
+                icon: icon,
+                callback: callback
+            });
+        },
+        ready: (fn) => {
+            readyList.push(fn);
+        }
+    });
 
     const contentBarBtn = [],
         introBarBtn = [],
         contentReady = [],
         introReady = [];
 
+    // 编辑器接口
     const editor_api = {
         editor: {
-            content: {
-                obj: {},
-                get: () => "",
-                insert: () => "",
-                put: () => "",
-                focus: () => "",
-                barBtn: (name, icon, callback) => {
-                    contentBarBtn.push({
-                        name: name,
-                        icon: icon,
-                        callback: callback
-                    });
-                },
-                ready: (f) => {
-                    contentReady.push(f);
-                }
-            },
-            intro: {
-                obj: {},
-                get: () => "",
-                insert: () => "",
-                put: () => "",
-                focus: () => "",
-                barBtn: (name, icon, callback) => {
-                    introBarBtn.push({
-                        name: name,
-                        icon: icon,
-                        callback: callback
-                    });
-                },
-                ready: (f) => {
-                    introReady.push(f);
-                }
-            }
+            content: makeEditorSlot(contentBarBtn, contentReady),
+            intro: makeEditorSlot(introBarBtn, introReady)
         }
     };
+
+    // 编辑器内容缓存
+    let sContent = "",
+        sIntro = "";
+
+    // 编辑器初始化，插件需要覆盖此函数
+    function editor_init() {
+        // 内容编辑器接口实现
+        editor_api.editor.content.obj = $('#editor_content');
+        editor_api.editor.content.get = function() {
+            return this.obj.val()
+        };
+        editor_api.editor.content.put = function(str) {
+            return this.obj.val(str)
+        };
+        editor_api.editor.content.focus = function() {
+            return this.obj.focus()
+        };
+
+        // 摘要编辑器接口实现
+        editor_api.editor.intro.obj = $('#editor_intro');
+        editor_api.editor.intro.get = function() {
+            return this.obj.val()
+        };
+        editor_api.editor.intro.put = function(str) {
+            return this.obj.val(str)
+        };
+        editor_api.editor.intro.focus = function() {
+            return this.obj.focus()
+        };
+        sContent = editor_api.editor.content.get();
+    }
+
+    /* ----- */
+
+    let isSubmit = false; // 是否提交保存
 
     // 文章内容或摘要变动提示保存
     window.onbeforeunload = function() {
@@ -291,14 +357,15 @@ HookFilterPlugin('Filter_Plugin_Edit_Begin');
 
     function checkArticleInfo() {
         if (isSubmit) return false;
-        document.getElementById("edit").action = "{BuildSafeCmdURL($ispage ? 'act=PagePst' : 'act=ArticlePst')}";
-
+        $("#edit").attr("action", "{BuildSafeCmdURL($ispage ? 'act=PagePst' : 'act=ArticlePst')}");
         if (!editor_api.editor.content.get()) {
             alert("{$zbp->lang['error'][70]}");
             return false;
         }
         isSubmit = true;
     }
+
+    /* ----- */
 
     // 日期时间控件
     $.datepicker.regional["{$lang['lang']}"] = {
@@ -357,32 +424,6 @@ HookFilterPlugin('Filter_Plugin_Edit_Begin');
             scrollTop: $('#divIntro').offset().top
         }, 'fast');
     }
-
-    // 编辑器初始化，插件需要覆盖此函数
-    function editor_init() {
-        editor_api.editor.content.obj = $('#editor_content');
-        editor_api.editor.intro.obj = $('#editor_intro');
-        editor_api.editor.content.get = function() {
-            return this.obj.val()
-        };
-        editor_api.editor.content.put = function(str) {
-            return this.obj.val(str)
-        };
-        editor_api.editor.content.focus = function() {
-            return this.obj.focus()
-        };
-        editor_api.editor.intro.get = function() {
-            return this.obj.val()
-        };
-        editor_api.editor.intro.put = function(str) {
-            return this.obj.val(str)
-        };
-        editor_api.editor.intro.focus = function() {
-            return this.obj.focus()
-        };
-        sContent = editor_api.editor.content.get();
-    }
-
 
     // Auto-save module
     (function() {
@@ -468,18 +509,6 @@ HookFilterPlugin('Filter_Plugin_Edit_End');
 {/php}
 
 <script>
+    // 调用编辑器初始化
     editor_init();
-
-    // 标题输入框的聚焦/失焦逻辑（保持与内联事件一致）
-    (function() {
-        const $title = $('#edtTitle');
-        if (!$title.length) return;
-        const unnamed = "{$lang['msg']['unnamed']}";
-        $title.on('focus', function() {
-            if (this.value === unnamed) this.value = '';
-        });
-        $title.on('blur', function() {
-            if (this.value === '') this.value = unnamed;
-        });
-    })();
 </script>

@@ -116,6 +116,7 @@ return [
         'page_setting'                      => '页面设置',
         'comment_setting'                   => '评论设置',
         'api_setting'                       => 'API设置',
+        'ai_setting'                        => 'AI设置',
         'other_setting'                     => '其它设置',
         'blog_host'                         => '网站地址',
         'blog_host_add'                     => '默认自动读取当前网址，如需固定网站域名请点击按钮并输入域名。',
@@ -290,6 +291,9 @@ return [
         ''                                  => '',
         'closemenu'                         => '收起菜单',
         'expandmenu'                        => '展开菜单',
+        'ai_url'                            => 'AI Url',
+        'ai_key'                            => 'AI Key',
+        'ai_model'                          => 'AI模型名',
     ],
 
     //Action

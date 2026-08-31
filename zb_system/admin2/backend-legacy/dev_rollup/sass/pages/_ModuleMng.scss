@@ -3,21 +3,32 @@
 .module-layout {
   display: flex;
   margin: 1.3em 0;
+  gap: 20px;
+  padding-right: 20px;
+
+  // 左侧模块列表
+  .widget-left {
+    flex: 1;
+  }
+
+  // 右侧侧栏列表
+  .widget-right {
+    flex: 0 0 270px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
 }
 
-// 左侧模块列表
-.widget-left {
-  flex: 1;
+%header-style {
+  padding: 8px 0;
+  font-weight: bold;
+  border-bottom: 1px solid $color-border;
+  text-align: center;
+  background: $color-background;
+  user-select: none;
 }
 
-// 右侧侧栏列表
-.widget-right {
-  flex: 0 0 290px;
-  padding: 0 10px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
 
 // 模块列表容器
 .widget-list {
@@ -28,11 +39,7 @@
   }
 
   &-header {
-    padding: 5px 0;
-    font-weight: bold;
-    border-bottom: 1px solid $color-border;
-    text-align: center;
-    background: $color-background;
+    @extend %header-style;
   }
 
   &-note {
@@ -48,23 +55,26 @@
     flex-wrap: wrap;
     gap: 10px;
     justify-content: flex-start;
+
+    .widget {
+      width: calc(100% / 5 - 8px);
+    }
   }
 
   &-header+&-content {
     margin-top: 5px;
   }
+
 }
 
 // 模块项
 .widget {
-  width: 252px;
-  background: #f8f8f8;
   border: 1px solid $color-border;
   cursor: move;
-  flex: 0 0 252px;
 
-  &:hover {
-    background: $color-hover;
+  &.ui-draggable-dragging {
+    max-width: 240px;
+    opacity: 0.7;
   }
 
   img {
@@ -75,7 +85,7 @@
   // 模块标题
   &-title {
     margin: 0;
-    padding: 6px;
+    padding: 8px 6px;
     color: $color-text;
     cursor: move;
 
@@ -123,7 +133,14 @@
     &_other .widget-title {
       background: #ded9c0;
     }
+
   }
+
+  .widget-title:hover {
+    background: $color-background-hover !important;
+  }
+
+
 
   &_ishidden_true img.more-action {
     opacity: 0.4;
@@ -143,12 +160,8 @@
   }
 
   &-header {
-    padding: 8px 10px;
+    @extend %header-style;
     cursor: pointer;
-    user-select: none;
-    font-weight: bold;
-    background: $color-background;
-    text-align: center;
 
     &:hover {
       background: $color-background-hover;
@@ -164,11 +177,11 @@
   }
 
   &-sort-list {
-    padding: 10px 4px;
+    padding: 8px 4px 10px;
     min-height: 30px;
 
-    &>*:not(:last-child) {
-      margin-bottom: 6px;
+    .widget {
+      margin-top: 10px;
     }
   }
 
@@ -176,9 +189,5 @@
     color: $color-text-light;
     font-style: italic;
     text-align: center;
-  }
-
-  .roll {
-    display: none;
   }
 }

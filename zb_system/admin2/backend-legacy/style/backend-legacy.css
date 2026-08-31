@@ -280,8 +280,8 @@ table td:last-child,
 table th:last-child {
   border-right: none;
 }
-table td .tdCenter,
-table th .tdCenter {
+table td.center,
+table th.center {
   text-align: center;
 }
 
@@ -292,10 +292,7 @@ table.tableBorder {
   line-height: 1.8em;
   margin: 0.4em 0 0.8em;
 }
-table.tableBorder th {
-  text-align: left;
-}
-table.tableBorder-thcenter th {
+table.thCenter th {
   text-align: center;
 }
 table.table_hover > tbody > tr:hover > td,
@@ -304,6 +301,10 @@ table.table_hover > tbody > tr:hover > th {
 }
 table.table_striped > tbody > tr:nth-of-type(odd) {
   background-color: #f4f4f4;
+}
+table th > [class^=icon-],
+table td > [class^=icon-] {
+  padding-right: 0.3em;
 }
 
 tr.color1 {
@@ -595,18 +596,26 @@ textarea {
 .module-layout {
   display: flex;
   margin: 1.3em 0;
+  gap: 20px;
+  padding-right: 20px;
 }
-
-.widget-left {
+.module-layout .widget-left {
   flex: 1;
 }
-
-.widget-right {
-  flex: 0 0 290px;
-  padding: 0 10px;
+.module-layout .widget-right {
+  flex: 0 0 270px;
   display: flex;
   flex-direction: column;
   gap: 10px;
+}
+
+.siderbar-header, .widget-list-header {
+  padding: 8px 0;
+  font-weight: bold;
+  border-bottom: 1px solid #efefef;
+  text-align: center;
+  background: #ededed;
+  user-select: none;
 }
 
 .widget-list {
@@ -614,13 +623,6 @@ textarea {
 }
 .widget-list-group {
   margin-bottom: 20px;
-}
-.widget-list-header {
-  padding: 5px 0;
-  font-weight: bold;
-  border-bottom: 1px solid #efefef;
-  text-align: center;
-  background: #ededed;
 }
 .widget-list-note {
   padding: 5px 0;
@@ -635,19 +637,20 @@ textarea {
   gap: 10px;
   justify-content: flex-start;
 }
+.widget-list-content .widget {
+  width: calc(20% - 8px);
+}
 .widget-list-header + .widget-list-content {
   margin-top: 5px;
 }
 
 .widget {
-  width: 252px;
-  background: #f8f8f8;
   border: 1px solid #efefef;
   cursor: move;
-  flex: 0 0 252px;
 }
-.widget:hover {
-  background: #d60000;
+.widget.ui-draggable-dragging {
+  max-width: 240px;
+  opacity: 0.7;
 }
 .widget img {
   margin: 3px;
@@ -655,7 +658,7 @@ textarea {
 }
 .widget-title {
   margin: 0;
-  padding: 6px;
+  padding: 8px 6px;
   color: #333333;
   cursor: move;
 }
@@ -690,6 +693,9 @@ textarea {
 .widget_source_other .widget-title {
   background: #ded9c0;
 }
+.widget .widget-title:hover {
+  background: #b0cdee !important;
+}
 .widget_ishidden_true img.more-action {
   opacity: 0.4;
 }
@@ -703,12 +709,7 @@ textarea {
   background: #fefefe;
 }
 .siderbar-header {
-  padding: 8px 10px;
   cursor: pointer;
-  user-select: none;
-  font-weight: bold;
-  background: #ededed;
-  text-align: center;
 }
 .siderbar-header:hover {
   background: #b0cdee;
@@ -720,44 +721,41 @@ textarea {
   margin-left: auto;
 }
 .siderbar-sort-list {
-  padding: 10px 4px;
+  padding: 8px 4px 10px;
   min-height: 30px;
 }
-.siderbar-sort-list > *:not(:last-child) {
-  margin-bottom: 6px;
+.siderbar-sort-list .widget {
+  margin-top: 10px;
 }
 .siderbar-note {
   color: #666666;
   font-style: italic;
   text-align: center;
 }
-.siderbar .roll {
-  display: none;
-}
 
 /* 使用 Grid 布局：主内容 + 侧栏 */
-form#post-edit {
+form.post-edit {
   display: grid;
   grid-template-columns: minmax(0, 1fr) 270px;
   padding-right: 5px;
 }
-form#post-edit .editmod {
+form.post-edit .editmod {
   margin: 1em 0;
 }
-form#post-edit .editmod label {
+form.post-edit .editmod label {
   max-width: 65px;
   text-overflow: ellipsis;
 }
-form#post-edit .editmod .editinputname {
+form.post-edit .editmod .editinputname {
   vertical-align: middle;
   padding: 0 2px 0 3px;
   line-height: 1em;
   font-size: 1.05em;
   font-weight: bold;
 }
-form#post-edit #edtTitle,
-form#post-edit #edtAlias,
-form#post-edit #edtTag {
+form.post-edit #edtTitle,
+form.post-edit #edtAlias,
+form.post-edit #edtTag {
   max-width: 520px;
   width: 99% !important;
 }

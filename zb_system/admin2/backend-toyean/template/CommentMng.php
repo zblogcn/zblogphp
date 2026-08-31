@@ -14,12 +14,12 @@
   <div class="postlist">
     <div class="tr thead">
       <div class="td-5 td-id">{$zbp.lang['msg']['id']}{$button_id_html}</div>
-      <div class="td-10">{$zbp.lang['msg']['parend_id']}</div>
+      <div class="td-5">{$zbp.lang['msg']['parend_id']}</div>
       <div class="td-15">{$zbp.lang['msg']['name']}{$button_authorid_html}</div>
       <div class="td-15">{$zbp.lang['msg']['content']}</div>
       <div class="td-10">{$zbp.lang['msg']['article']}{$button_logid_html}</div>
       <div class="td-10">{$zbp.lang['msg']['date']}{$button_posttime_html}</div>
-      <div class="td-10 td-action">操作</div>
+      <div class="td-10">操作</div>
       <div class="td-5 tdCenter">
         <a href="javascript:;" onclick="BatchSelectAll();return false;">{$zbp.lang['msg']['select_all']}</a>
       </div>
@@ -30,22 +30,14 @@
 
     {foreach $comments as $comment}
     <tr>
-      <td class="td5">
-        <a href="?act=CommentMng&id={$comment.ID}"
-          title="{$zbp.lang['msg']['jump_comment']}{$comment.ID}">{$comment.ID}</a>
-      </td>
+      <td class="td5"><a href="?act=CommentMng&id={$comment.ID}" title="{$zbp.lang['msg']['jump_comment']}{$comment.ID}">{$comment.ID}</a></td>
       <td class="td5">
         {if $comment.ParentID}
-        <a href="?act=CommentMng&id={$comment.ParentID}"
-          title="{$zbp.lang['msg']['jump_comment']}{$comment.ParentID}">{$comment.ParentID}</a>
+        <a href="?act=CommentMng&id={$comment.ParentID}" title="{$zbp.lang['msg']['jump_comment']}{$comment.ParentID}">{$comment.ParentID}</a>
         {/if}
       </td>
-      <td class="td10">
-        <span class="cmt-note" title="{$zbp.lang['msg']['email']}:{$comment.Email}">
-          <a href="mailto:{$comment.Email}">{$comment.Author.StaticName}</a>
-        </span>
-      </td>
-      <td>
+      <td class="td15"><span class="cmt-note" title="{$zbp.lang['msg']['email']}:{$comment.Email}"><a href="mailto:{$comment.Email}">{$comment.Author.StaticName}</a></span></td>
+      <td class="td15">
         <div style="overflow:hidden;max-width:500px;">
           {if $comment.Post}
           <a href="{$comment.Post.Url}" target="_blank"><i class="icon-link-45deg"></i></a>
@@ -55,8 +47,8 @@
           {$comment.Content}
         </div>
       </td>
-      <td class="td5">{$comment.LogID}</td>
-      <td class="td15">{$comment.Time()}</td>
+      <td class="td10">{$comment.LogID}</td>
+      <td class="td10">{$comment.Time()}</td>
       <td class="td10 tdCenter">
         <a onclick="return confirmDelete();" href="{BuildSafeCmdURL('act=CommentDel&amp;id=' . $comment->ID)}">
           <i class="icon-trash" title="{$zbp.lang['msg']['del']}"></i>

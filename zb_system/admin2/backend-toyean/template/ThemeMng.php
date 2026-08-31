@@ -1,8 +1,19 @@
 <?php exit(); ?>
-
 {php}<?php
 $csrfToken = $zbp->GetCSRFToken();
 ?>{/php}
+
+<style>
+    #frmTheme{
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 0.5rem;
+    }
+    #frmTheme .theme{
+        width: 100%;
+        height: 100%;
+    }
+</style>
 <form id="frmTheme" method="post" action="{BuildSafeCmdURL('act=ThemeSet')}">
   <input type="hidden" name="theme" id="theme" value="">
   <input type="hidden" name="style" id="style" value="">

@@ -97,9 +97,7 @@
 
 <script>
     function confirmDelete() {
-        const message = "{$zbp.lang['msg']['confirm_operating']}";
-        const confirmed = window.confirm(message);
-        return confirmed;
+        return window.confirm("{$zbp.lang['msg']['confirm_operating']}");
     }
 
     $("a.order_button").parent().bind("mouseenter mouseleave", function() {

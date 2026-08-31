@@ -16,7 +16,7 @@ $zbp->isbackend_ui = true;
 Add_Filter_Plugin('Filter_Plugin_Admin_Begin', 'zbp_admin2_security');
 
 // admin2 后台主要函数 管理页面
-function zbp_admin2_GetActionInfo($action)
+function zbp_admin2_GetActionInfo($action, $extra = null)
 {
     global $lang;
     $main = (object) [
@@ -34,209 +34,222 @@ function zbp_admin2_GetActionInfo($action)
     }
 
     switch ($action) {
-    case 'admin':
-      // $admin_function = 'Admin_SiteInfo';
-      $blogtitle = $lang['msg']['dashboard'];
-      $main->Content = zbp_admin2_SiteInfo();
-      $main->Header = $lang['msg']['info_intro'];
-      $main->HeaderIcon = 'icon-house-door-fill';
-      $main->ActiveLeftMenu = 'aDashboard';
-      $main->ActiveTopMenu = 'topmenu_dashboard';
-      $main->Title = $blogtitle;
+        case 'admin':
+            // $admin_function = 'Admin_SiteInfo';
+            $blogtitle = $lang['msg']['dashboard'];
+            $main->Content = zbp_admin2_SiteInfo();
+            $main->Header = $lang['msg']['info_intro'];
+            $main->HeaderIcon = 'icon-house-door-fill';
+            $main->ActiveLeftMenu = 'aDashboard';
+            $main->ActiveTopMenu = 'topmenu_dashboard';
+            $main->Title = $blogtitle;
 
-      break;
+            break;
 
-    case 'ArticleMng':
-      // $admin_function = 'Admin_ArticleMng';
-      $blogtitle = $lang['msg']['article_manage'];
-      $main->ActiveLeftMenu = 'aArticleMng';
-      $main->Content = zbp_admin2_ArticleMng();
-      $main->Header = $blogtitle;
-      $main->HeaderIcon = 'icon-stickies';
-      $main->Title = $blogtitle;
+        case 'ArticleMng':
+            // $admin_function = 'Admin_ArticleMng';
+            $blogtitle = $lang['msg']['article_manage'];
+            $main->ActiveLeftMenu = 'aArticleMng';
+            $main->Content = zbp_admin2_ArticleMng();
+            $main->Header = $blogtitle;
+            $main->HeaderIcon = 'icon-stickies';
+            $main->Title = $blogtitle;
 
-      break;
+            break;
 
-    case 'PageMng':
-      // $admin_function = 'Admin_PageMng';
-      $blogtitle = $lang['msg']['page_manage'];
-      $main->ActiveLeftMenu = 'aPageMng';
-      $main->Content = zbp_admin2_PageMng();
-      $main->Header = $blogtitle;
-      $main->HeaderIcon = 'icon-stickies-fill';
-      $main->Title = $blogtitle;
+        case 'PageMng':
+            // $admin_function = 'Admin_PageMng';
+            $blogtitle = $lang['msg']['page_manage'];
+            $main->ActiveLeftMenu = 'aPageMng';
+            $main->Content = zbp_admin2_PageMng();
+            $main->Header = $blogtitle;
+            $main->HeaderIcon = 'icon-stickies-fill';
+            $main->Title = $blogtitle;
 
-      break;
+            break;
 
-    case 'CategoryMng':
-      // $admin_function = 'Admin_CategoryMng';
-      $blogtitle = $lang['msg']['category_manage'];
-      $main->ActiveLeftMenu = 'aCategoryMng';
-      $main->Content = zbp_admin2_CategoryMng();
-      $main->Header = $blogtitle;
-      $main->HeaderIcon = 'icon-folder-fill';
-      $main->Title = $blogtitle;
+        case 'CategoryMng':
+            // $admin_function = 'Admin_CategoryMng';
+            $blogtitle = $lang['msg']['category_manage'];
+            $main->ActiveLeftMenu = 'aCategoryMng';
+            $main->Content = zbp_admin2_CategoryMng();
+            $main->Header = $blogtitle;
+            $main->HeaderIcon = 'icon-folder-fill';
+            $main->Title = $blogtitle;
 
-      break;
+            break;
 
-    case 'TagMng':
-      // $admin_function = 'Admin_TagMng';
-      $blogtitle = $lang['msg']['tag_manage'];
-      $main->ActiveLeftMenu = 'aTagMng';
-      $main->Content = zbp_admin2_TagMng();
-      $main->Header = $blogtitle;
-      $main->HeaderIcon = 'icon-tags-fill';
-      $main->Title = $blogtitle;
+        case 'TagMng':
+            // $admin_function = 'Admin_TagMng';
+            $blogtitle = $lang['msg']['tag_manage'];
+            $main->ActiveLeftMenu = 'aTagMng';
+            $main->Content = zbp_admin2_TagMng();
+            $main->Header = $blogtitle;
+            $main->HeaderIcon = 'icon-tags-fill';
+            $main->Title = $blogtitle;
 
-      break;
+            break;
 
-    case 'CommentMng':
-      // $admin_function = 'Admin_CommentMng';
-      $blogtitle = $lang['msg']['comment_manage'];
-      $main->ActiveLeftMenu = 'aCommentMng';
-      $main->Content = zbp_admin2_CommentMng();
-      $main->Header = $blogtitle;
-      $main->HeaderIcon = 'icon-chat-text-fill';
-      $main->Title = $blogtitle;
+        case 'CommentMng':
+            // $admin_function = 'Admin_CommentMng';
+            $blogtitle = $lang['msg']['comment_manage'];
+            $main->ActiveLeftMenu = 'aCommentMng';
+            $main->Content = zbp_admin2_CommentMng();
+            $main->Header = $blogtitle;
+            $main->HeaderIcon = 'icon-chat-text-fill';
+            $main->Title = $blogtitle;
 
-      break;
+            break;
 
-    case 'UploadMng':
-      // $admin_function = 'Admin_UploadMng';
-      $blogtitle = $lang['msg']['upload_manage'];
-      $main->ActiveLeftMenu = 'aUploadMng';
-      $main->Content = zbp_admin2_UploadMng();
-      $main->Header = $blogtitle;
-      $main->HeaderIcon = 'icon-inboxes-fill';
-      $main->Title = $blogtitle;
+        case 'UploadMng':
+            // $admin_function = 'Admin_UploadMng';
+            $blogtitle = $lang['msg']['upload_manage'];
+            $main->ActiveLeftMenu = 'aUploadMng';
+            $main->Content = zbp_admin2_UploadMng();
+            $main->Header = $blogtitle;
+            $main->HeaderIcon = 'icon-inboxes-fill';
+            $main->Title = $blogtitle;
 
-      break;
+            break;
 
-    case 'MemberMng':
-      // $admin_function = 'Admin_MemberMng';
-      $blogtitle = $lang['msg']['member_manage'];
-      $main->ActiveLeftMenu = 'aMemberMng';
-      $main->Content = zbp_admin2_MemberMng();
-      $main->Header = $blogtitle;
-      $main->HeaderIcon = 'icon-people-fill';
-      $main->Title = $blogtitle;
+        case 'MemberMng':
+            // $admin_function = 'Admin_MemberMng';
+            $blogtitle = $lang['msg']['member_manage'];
+            $main->ActiveLeftMenu = 'aMemberMng';
+            $main->Content = zbp_admin2_MemberMng();
+            $main->Header = $blogtitle;
+            $main->HeaderIcon = 'icon-people-fill';
+            $main->Title = $blogtitle;
 
-      break;
+            break;
 
-    case 'ModuleMng':
-      // $admin_function = 'Admin_ModuleMng';
-      $blogtitle = $lang['msg']['module_manage'];
-      $main->ActiveLeftMenu = 'aModuleMng';
-      $main->Content = zbp_admin2_ModuleMng();
-      $main->Header = $blogtitle;
-      $main->HeaderIcon = 'icon-grid-3x3-gap-fill';
-      $main->Title = $blogtitle;
+        case 'ModuleMng':
+            // $admin_function = 'Admin_ModuleMng';
+            $blogtitle = $lang['msg']['module_manage'];
+            $main->ActiveLeftMenu = 'aModuleMng';
+            $main->Content = zbp_admin2_ModuleMng();
+            $main->Header = $blogtitle;
+            $main->HeaderIcon = 'icon-grid-3x3-gap-fill';
+            $main->Title = $blogtitle;
 
-      break;
+            break;
 
-    case 'ThemeMng':
-      // $admin_function = 'Admin_ThemeMng';
-      $blogtitle = $lang['msg']['theme_manage'];
-      $main->ActiveLeftMenu = 'aThemeMng';
-      $main->Content = zbp_admin2_ThemeMng();
-      $main->Header = $blogtitle;
-      $main->HeaderIcon = 'icon-grid-1x2-fill';
-      $main->Title = $blogtitle;
+        case 'ThemeMng':
+            // $admin_function = 'Admin_ThemeMng';
+            $blogtitle = $lang['msg']['theme_manage'];
+            $main->ActiveLeftMenu = 'aThemeMng';
+            $main->Content = zbp_admin2_ThemeMng();
+            $main->Header = $blogtitle;
+            $main->HeaderIcon = 'icon-grid-1x2-fill';
+            $main->Title = $blogtitle;
 
-      break;
+            break;
 
-    case 'PluginMng':
-      // $admin_function = 'Admin_PluginMng';
-      $blogtitle = $lang['msg']['plugin_manage'];
-      $main->ActiveLeftMenu = 'aPluginMng';
-      $main->Content = zbp_admin2_PluginMng();
-      $main->Header = $blogtitle;
-      $main->HeaderIcon = 'icon-puzzle-fill';
-      $main->Title = $blogtitle;
+        case 'PluginMng':
+            // $admin_function = 'Admin_PluginMng';
+            $blogtitle = $lang['msg']['plugin_manage'];
+            $main->ActiveLeftMenu = 'aPluginMng';
+            $main->Content = zbp_admin2_PluginMng();
+            $main->Header = $blogtitle;
+            $main->HeaderIcon = 'icon-puzzle-fill';
+            $main->Title = $blogtitle;
 
-      break;
+            break;
 
-    case 'SettingMng':
-      // $admin_function = 'Admin_SettingMng';
-      $blogtitle = $lang['msg']['settings'];
-      $main->ActiveLeftMenu = 'aSettingMng';
-      $main->Content = zbp_admin2_SettingMng();
-      $main->Header = $blogtitle;
-      $main->HeaderIcon = 'icon-gear-fill';
-      $main->Title = $blogtitle;
+        case 'SettingMng':
+            // $admin_function = 'Admin_SettingMng';
+            $blogtitle = $lang['msg']['settings'];
+            $main->ActiveLeftMenu = 'aSettingMng';
+            $main->ActiveTopMenu = 'topmenu_setting';
+            $main->Content = zbp_admin2_SettingMng();
+            $main->Header = $blogtitle;
+            $main->HeaderIcon = 'icon-gear-fill';
+            $main->Title = $blogtitle;
 
-      break;
+            break;
 
-    case 'ArticleEdt':
-    case 'PageEdt':
-      $isPage = ('PageEdt' === $action);
-      $blogtitle = $lang['msg'][$isPage ? 'page_edit' : 'article_edit'];
-      $main->ActiveLeftMenu = empty(GetVars('id')) ? ($isPage ? 'aPageMng' : 'aArticleEdt') : ($isPage ? 'aPageMng' : 'aArticleMng');
-      $main->Content = zbp_admin2_ArticleEdt($isPage);
-      $main->Header = $blogtitle;
-      $main->HeaderIcon = 'icon-pencil-square-fill';
-      $main->Title = $blogtitle;
+        case 'ArticleEdt':
+        case 'PageEdt':
+            $isPage = ('PageEdt' === $action);
+            $blogtitle = $lang['msg'][$isPage ? 'page_edit' : 'article_edit'];
+            $main->ActiveLeftMenu = empty(GetVars('id')) ? ($isPage ? 'aPageMng' : 'aArticleEdt') : ($isPage ? 'aPageMng' : 'aArticleMng');
+            $main->Content = zbp_admin2_ArticleEdt($isPage);
+            $main->Header = $blogtitle;
+            $main->HeaderIcon = 'icon-pencil-square-fill';
+            $main->Title = $blogtitle;
 
-      break;
+            break;
 
-    case 'CategoryEdt':
-      $blogtitle = $lang['msg']['category_edit'];
-      $main->ActiveLeftMenu = 'aCategoryMng';
-      $main->Content = zbp_admin2_CategoryEdt();
-      $main->Header = $blogtitle;
-      $main->HeaderIcon = 'icon-folder-fill';
-      $main->Title = $blogtitle;
+        case 'CategoryEdt':
+            $blogtitle = $lang['msg']['category_edit'];
+            $main->ActiveLeftMenu = 'aCategoryMng';
+            $main->Content = zbp_admin2_CategoryEdt();
+            $main->Header = $blogtitle;
+            $main->HeaderIcon = 'icon-folder-fill';
+            $main->Title = $blogtitle;
 
-      break;
+            break;
 
-    case 'TagEdt':
-      $blogtitle = $lang['msg']['tag_edit'];
-      $main->ActiveLeftMenu = 'aTagMng';
-      $main->Content = zbp_admin2_TagEdt();
-      $main->Header = $blogtitle;
-      $main->HeaderIcon = 'icon-tags-fill';
-      $main->Title = $blogtitle;
+        case 'TagEdt':
+            $blogtitle = $lang['msg']['tag_edit'];
+            $main->ActiveLeftMenu = 'aTagMng';
+            $main->Content = zbp_admin2_TagEdt();
+            $main->Header = $blogtitle;
+            $main->HeaderIcon = 'icon-tags-fill';
+            $main->Title = $blogtitle;
 
-      break;
+            break;
 
-    case 'MemberNew':
-    case 'MemberEdt':
-      $blogtitle = $lang['msg']['member_edit'];
-      $main->ActiveLeftMenu = 'aMemberMng';
-      $main->Content = zbp_admin2_MemberEdt();
-      $main->Header = $blogtitle;
-      $main->HeaderIcon = 'icon-person-fill';
-      $main->Title = $blogtitle;
+        case 'MemberNew':
+        case 'MemberEdt':
+            $blogtitle = $lang['msg']['member_edit'];
+            $main->ActiveLeftMenu = 'aMemberMng';
+            $main->Content = zbp_admin2_MemberEdt();
+            $main->Header = $blogtitle;
+            $main->HeaderIcon = 'icon-person-fill';
+            $main->Title = $blogtitle;
 
-      break;
+            break;
 
-    case 'ModuleEdt':
-      $blogtitle = $lang['msg']['module_edit'];
-      $main->ActiveLeftMenu = 'aModuleMng';
-      $main->Content = zbp_admin2_ModuleEdt();
-      $main->Header = $blogtitle;
-      $main->HeaderIcon = 'icon-grid-fill';
-      $main->Title = $blogtitle;
+        case 'ModuleEdt':
+            $blogtitle = $lang['msg']['module_edit'];
+            $main->ActiveLeftMenu = 'aModuleMng';
+            $main->Content = zbp_admin2_ModuleEdt();
+            $main->Header = $blogtitle;
+            $main->HeaderIcon = 'icon-grid-fill';
+            $main->Title = $blogtitle;
 
-      break;
+            break;
 
-    case 'RewriteMng':
-      // $admin_function = 'Admin_PluginMng';
-      $blogtitle = $lang['msg']['rewrite_manage'];
-      $main->ActiveLeftMenu = '';
-      $main->Content = zbp_admin2_RewriteMng();
-      $main->Header = $blogtitle;
-      $main->HeaderIcon = 'icon-diagram-3-fill';
-      $main->Title = $blogtitle;
+        case 'RewriteMng':
+            // $admin_function = 'Admin_PluginMng';
+            $blogtitle = $lang['msg']['rewrite_manage'];
+            $main->ActiveLeftMenu = '';
+            $main->Content = zbp_admin2_RewriteMng();
+            $main->Header = $blogtitle;
+            $main->HeaderIcon = 'icon-diagram-3-fill';
+            $main->Title = $blogtitle;
 
-      break;
+            break;
 
-    default:
-      break;
-  }
+        default:
+            break;
+    }
 
     // 返回原 SubMenu 接口设置的菜单
     $main->SubMenu = zbp_admin2_GenSubMenu($action);
+
+    return zbp_admin2_MergeActionInfo($main, $extra);
+}
+
+// 将额外对象合并到 action info
+function zbp_admin2_MergeActionInfo($main, $extra)
+{
+    if (is_object($extra)) {
+        foreach (get_object_vars($extra) as $key => $val) {
+            $main->{$key} = $val;
+        }
+    }
 
     return $main;
 }

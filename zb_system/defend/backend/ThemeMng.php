@@ -48,6 +48,7 @@
                 <option value="{$keyEscaped}" {if $curTheme->IsUsed() && $curKey === $zbp->style}selected="selected"{/if}>{basename($curValue)}</option>
                 {/foreach}
             </select>
+            <!-- Todo: 点击事件封装为函数 -->
             <input type="button" onclick="$('#style').val($(this).prev().val());$('#theme').val('{$curTheme.id}');$('#frmTheme').submit();" class="theme-activate button" value="{$zbp.lang['msg']['enable']}">
         </div>
     </div>

@@ -1,0 +1,40 @@
+// 虽然年不懂这部分作用，姑且保留
+@scrollbar-thumb-img-light: 'images/scrollbar-01.png';
+@scrollbar-thumb-img-dark: 'images/scrollbar-02.png';
+
+.scrollbar(@track, @thumb, @hover, @active, @img, @width: 8px) {
+  &::-webkit-scrollbar {
+    width: @width;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: @track;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: @thumb url(@img) no-repeat center center;
+    border-radius: 4px;
+  }
+
+  &::-webkit-scrollbar-thumb:vertical:hover {
+    background-color: @hover;
+  }
+
+  &::-webkit-scrollbar-thumb:vertical:active {
+    background-color: @active;
+  }
+}
+
+.scrollbar-hidden(@width: 0) {
+  &::-webkit-scrollbar {
+    width: @width;
+  }
+}
+
+.scrollbar-light() {
+  .scrollbar(#f1f1f1, #c1c1c1, #a8a8a8, #787878, @scrollbar-thumb-img-light);
+}
+
+.scrollbar-dark(@track: #222, @thumb: #555, @hover: rgba(255, 255, 255, .3), @active: rgba(255, 255, 255, .4), @img: @scrollbar-thumb-img-dark) {
+  .scrollbar(@track, @thumb, @hover, @active, @img);
+}

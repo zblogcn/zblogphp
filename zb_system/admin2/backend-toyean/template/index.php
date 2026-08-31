@@ -10,14 +10,14 @@
     <meta name="csrfToken" content="{$zbp.GetCSRFToken()}" />
     <meta name="csrfExpiration" content="{$zbp.csrfExpiration}" />
     <title>{$name} - {$title}</title>
-    <link rel="stylesheet" href="{$host}zb_system/admin2/{$backendtheme}/style/style.css?v={$version}">
+    <link rel="stylesheet" href="{$host}zb_system/admin2/{$backendtheme}/style/{$backendtheme}.css?v={$version}">
     <!--<link rel="stylesheet" href="{$host}zb_system/image/icon/icon.css?v={$version}">-->
     <script src="{$host}zb_system/script/jquery-2.2.4.min.js?v={$version}"></script>
-    <!--<script src="{$host}zb_system/script/jquery-ui.custom.min.js?v={$version}"></script>-->
+    <script src="{$host}zb_system/script/jquery-ui.custom.min.js?v={$version}"></script>
     <script src="{$host}zb_system/admin2/{$backendtheme}/script/common.js"></script>
     <script src="{$host}zb_system/script/zblogphp.js?v={$version}"></script>
     <script src="{$host}zb_system/script/c_admin_js_add.php?v={$version}"></script>
-    <script>
+   <script>
         window.toyean = Object.assign(window.toyean || {}, {
             night: true,
             setnightstart: '22',
@@ -31,12 +31,12 @@
     {php}HookFilterPlugin('Filter_Plugin_Admin_Header');{/php}
 </head>
 
-<body class="admin admin-{$action}{if GetVars('night','COOKIE')} night{/if}">
+<body class="admin admin-{$action}{if GetVars('night','COOKIE')==1} night{/if}">
     <div class="wrapper">
         <!-- <p>title: {$title}</p> -->
         <!-- <p>action: {$action}</p> -->
         {template:layout_left}
-        <div class="main{if GetVars('side','COOKIE')} on{/if}">
+        <div class="main{if GetVars('side','COOKIE')==1} on{/if}">
             {template:layout_top}
             {template:layout_main}
         </div>

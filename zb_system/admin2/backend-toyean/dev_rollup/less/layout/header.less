@@ -1,0 +1,265 @@
+.head {
+  height: @head-height;
+  padding-right: 40px;
+  border-bottom: 1px solid @color-border;
+  box-sizing: border-box;
+  background: #fff;
+  position: relative;
+  z-index: 99;
+  display: flex;
+  align-items: center;
+  justify-content: end;
+}
+
+.backhome {
+  height: 28px;
+  padding: 0 12px;
+  font-size: 14px;
+  color: #333;
+  line-height: 28px;
+  border: 1px solid #eee;
+  border-radius: 4px;
+  display: inline-block;
+
+  &::before {
+    content: "\ee21";
+    margin-right: 6px;
+    font-size: 16px;
+    color: #333;
+    font-family: zblog;
+    .zoom;
+  }
+
+  &:hover {
+    color: #000;
+    border-color: #ddd;
+    .shadow;
+
+    &::before {
+      color: #000;
+    }
+  }
+}
+
+.theme {
+  width: 28px;
+  height: 28px;
+  margin: 0 10px;
+  text-align: center;
+  line-height: 28px;
+  border: 1px solid #eee;
+  border-radius: 4px;
+  display: inline-block;
+
+  &.light::before {
+    content: "\ef6f";
+    font-size: 18px;
+    color: #333;
+    font-family: zblog;
+    .zoom;
+  }
+
+  &.dark::before {
+    content: "\f1bf";
+    font-size: 18px;
+    color: #333;
+    font-family: zblog;
+    .zoom;
+  }
+
+  &:hover {
+    color: #000;
+    border-color: #ddd;
+    .shadow;
+  }
+}
+
+.user {
+  margin-left: 20px;
+  position: relative;
+
+  &link {
+    cursor: pointer;
+    display: flex;
+
+    &::after {
+      content: "\ea4e";
+      margin-left: 10px;
+      font-size: 18px;
+      color: #333;
+      font-family: zblog;
+      display: flex;
+      align-items: center;
+    }
+
+    &.on::after {
+      content: "\ea78";
+    }
+  }
+
+  &img {
+    width: 32px;
+    height: 32px;
+    margin-right: 10px;
+    border-radius: 50%;
+
+    img {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+  }
+
+  &name {
+    line-height: 1;
+
+    strong {
+      margin-top: 2px;
+      font-size: 14px;
+      color: #333;
+      display: block;
+    }
+
+    em {
+      font-size: 12px;
+      color: #999;
+      font-style: normal;
+    }
+  }
+
+  &menu {
+    width: 100%;
+    padding: 8px 0;
+    border: 1px solid @color-border;
+    border-radius: 10px;
+    background: #fff;
+    position: absolute;
+    top: 40px;
+    left: 0;
+    z-index: 1;
+    display: none;
+
+    &.on {
+      display: block;
+    }
+
+    li {
+      line-height: 36px;
+
+      a {
+        padding: 0 0 0 14px;
+        font-size: 14px;
+        color: #333;
+        display: flex;
+        align-items: center;
+
+        &::before {
+          content: "";
+          width: 16px;
+          height: 16px;
+          margin-right: 4px;
+          font-size: 16px;
+          color: #333;
+          font-family: zblog;
+          line-height: 16px;
+        }
+
+        &:hover {
+          background: @color-border;
+        }
+
+        &.ico- {
+          &set::before {
+            content: "\f0e4";
+          }
+
+          &user::before {
+            content: "\ea09";
+          }
+
+          &logout::before {
+            content: "\f126";
+          }
+        }
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 860px) {
+  .head {
+    padding-right: 14px;
+  }
+
+  .backhome {
+    width: 28px;
+    padding: 0;
+    font-size: 0;
+    text-align: center;
+
+    &::before {
+      margin: 0;
+      font-size: 18px;
+    }
+  }
+
+  .user {
+    margin-left: 10px;
+
+    &link {
+      cursor: default;
+    }
+  }
+}
+
+.night {
+  .head {
+    border-color: #2a2a2a;
+    background-color: #161616;
+  }
+
+  .backhome,
+  .theme {
+    color: #ccc;
+    border-color: #434343;
+    background: #242424;
+
+    &::before {
+      color: #ccc;
+    }
+  }
+
+  .user {
+    &name {
+      strong {
+        color: #fff;
+      }
+    }
+
+    &link {
+      &::after {
+        color: #fff;
+      }
+    }
+
+    &menu {
+      border-color: #434343;
+      background: #242424;
+
+      li {
+        a {
+          color: #fff;
+
+          &::before {
+            color: #fff;
+          }
+
+          &:hover {
+            background-color: #333;
+          }
+        }
+      }
+    }
+  }
+}

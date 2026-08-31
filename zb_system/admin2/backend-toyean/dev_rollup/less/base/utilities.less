@@ -1,0 +1,49 @@
+.hide,
+.hidden {
+  display: none !important;
+}
+
+.flex(@j: center; @a: center) {
+  display: flex;
+  justify-content: @j;
+  align-items: @a;
+}
+
+.inline-flex(@j: center; @a: center) {
+  display: inline-flex;
+  justify-content: @j;
+  align-items: @a;
+}
+
+.clear() {
+  &::after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+}
+
+.fl(@l: left) {
+  float: @l;
+  display: inline;
+}
+
+.fr(@r: right) {
+  float: @r;
+  display: inline;
+}
+
+.zoom,
+.inline-block {
+  display: inline-block;
+}
+
+.nowrap {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.shadow {
+  box-shadow: 0 1px 2px rgba(0, 0, 0, .08);
+}

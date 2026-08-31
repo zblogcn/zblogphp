@@ -9,6 +9,7 @@
                 <li><a href="#tab4"><span>{$zbp->lang['msg']['comment_setting']}</span></a></li>
                 <li><a href="#tab5"><span>{$zbp->langs->msg->backend_setting}</span></a></li>
                 <li><a href="#tab6"><span>{$zbp->lang['msg']['api_setting']}</span></a></li>
+                <li><a href="#tab7"><span>{$zbp->lang['msg']['ai_setting']}</span></a></li>
             </ul>
             <div class="clear"></div>
         </div>
@@ -186,12 +187,25 @@
                         <td><input id="ZC_API_DISPLAY_COUNT" name="ZC_API_DISPLAY_COUNT" type="text" value="{$zbp->option['ZC_API_DISPLAY_COUNT']}" class="input-90" /></td>
                     </tr>
                 </table>
+            <!-- Tab 7 -->
+            <div class="tab-content" id="tab7">
+                <table class="table_hover table_striped tableFull">
+                    <tr>
+                        <td class="td25"><b>{$zbp->lang['msg']['ai_url']}</b></td>
+                        <td><input id="ZC_AI_API_URL" name="ZC_AI_API_URL" type="text" value="{$zbp->option['ZC_AI_API_URL']}" class="checkbox" /></td>
+                    </tr>
+                    <tr>
+                        <td><b>{$zbp->lang['msg']['ai_key']}</b></td>
+                        <td><input id="ZC_AI_API_KEY" name="ZC_AI_API_KEY" type="text" value="{$zbp->option['ZC_AI_API_KEY']}" class="checkbox" /></td>
+                    </tr>
+                    <tr>
+                        <td><b>{$zbp->lang['msg']['ai_model']}</b></td>
+                        <td><input id="ZC_AI_API_MODEL" name="ZC_AI_API_MODEL" type="text" value="{$zbp->option['ZC_AI_API_MODEL']}" class="input-90" /></td>
+                    </tr>
+                </table>
             </div>
         </div>
     </div>
     <p><input type="submit" class="button" value="{$zbp->lang['msg']['submit']}" id="btnPost" /></p>
 
 </form>
-<script>
-    ActiveTopMenu("topmenu2");
-</script>

@@ -1,12 +1,10 @@
 <?php
 
 /**
- * 后台管理相关
- * @package Z-BlogPHP
- * @subpackage System/Administrator 后台管理
+ * 后台管理相关.
+ *
  * @author Z-BlogPHP Team
  */
-
 if (!defined('ZBP_PATH')) {
     exit('Access denied');
 }
@@ -56,7 +54,7 @@ function Admin_SiteInfo()
         $r = str_replace('{$system_environment}', GetEnvironment(), $r);
         $app = $zbp->LoadApp('plugin', 'AppCentre');
         $sv = ZC_VERSION_FULL;
-        if ($app->isloaded == true && $app->IsUsed()) {
+        if (true == $app->isloaded && $app->IsUsed()) {
             $sv .= '; AppCentre' . $app->version;
         }
         if ($zbp->option['ZC_LAST_VERSION'] < ZC_LAST_VERSION) {
@@ -78,7 +76,7 @@ function Admin_SiteInfo()
     }
     echo ' </th></tr>';
 
-    if ((time() - (int) $zbp->cache->reload_updateinfo_time) > (47 * 60 * 60) && $zbp->CheckRights('root') && $echoStatistic == true) {
+    if ((time() - (int) $zbp->cache->reload_updateinfo_time) > (47 * 60 * 60) && $zbp->CheckRights('root') && true == $echoStatistic) {
         echo '<script>$(document).ready(function(){ updateinfo(\'' . BuildSafeCmdURL('act=misc&type=updateinfo') . '\'); });</script>';
     } else {
         echo $zbp->cache->reload_updateinfo;
@@ -88,7 +86,7 @@ function Admin_SiteInfo()
 
     echo '</div>';
 
-    $s = file_get_contents($zbp->path . "zb_system/defend/thanks.html");
+    $s = file_get_contents($zbp->path . 'zb_system/defend/thanks.html');
     $s = str_replace('Z-BlogPHP网站和程序开发', $zbp->lang['msg']['develop_intro'], $s);
     $s = str_replace('程序', $zbp->lang['msg']['program'], $s);
     $s = str_replace('界面', $zbp->lang['msg']['interface'], $s);
@@ -132,7 +130,7 @@ function Admin_ArticleMng()
 
     $p = new Pagebar('{%host%}zb_system/cmd.php?act=ArticleMng{&status=%status%}{&istop=%istop%}{&category=%category%}{&search=%search%}{&order=%order%}{&page=%page%}', false);
     $p->PageCount = $zbp->managecount;
-    $p->PageNow = (int) GetVars('page', 'GET') == 0 ? 1 : (int) GetVars('page', 'GET');
+    $p->PageNow = 0 == (int) GetVars('page', 'GET') ? 1 : (int) GetVars('page', 'GET');
     if (GetVars('search') !== GetVars('search', 'GET')) {
         $p->PageNow = 1;
     }
@@ -144,52 +142,52 @@ function Admin_ArticleMng()
     $p->UrlRule->Rules['{%istop%}'] = (bool) GetVars('istop');
     $p->UrlRule->Rules['{%order%}'] = $order_get;
 
-    $w = array();
-    $w[] = array('=', 'log_Type', 0);
+    $w = [];
+    $w[] = ['=', 'log_Type', 0];
 
     if (!$zbp->CheckRights('ArticleAll')) {
-        $w[] = array('=', 'log_AuthorID', $zbp->user->ID);
+        $w[] = ['=', 'log_AuthorID', $zbp->user->ID];
     }
     if (GetVars('search')) {
-        $w[] = array('search', 'log_Content', 'log_Intro', 'log_Title', $search);
+        $w[] = ['search', 'log_Content', 'log_Intro', 'log_Title', $search];
     }
     if (GetVars('istop')) {
-        $w[] = array('<>', 'log_Istop', '0');
+        $w[] = ['<>', 'log_Istop', '0'];
     }
-    if (GetVars('status') !== null && GetVars('status') !== '') {
-        $w[] = array('=', 'log_Status', (int) GetVars('status'));
+    if (null !== GetVars('status') && '' !== GetVars('status')) {
+        $w[] = ['=', 'log_Status', (int) GetVars('status')];
     }
     if (GetVars('category')) {
-        $w[] = array('=', 'log_CateID', GetVars('category'));
+        $w[] = ['=', 'log_CateID', GetVars('category')];
     }
 
     $s = '';
 
-    if ($order_get == 'id_desc') {
-        $or = array('log_ID' => 'DESC');
-    } elseif ($order_get == 'id_asc') {
-        $or = array('log_ID' => 'ASC');
-    } elseif ($order_get == 'cateid_desc') {
-        $or = array('log_CateID' => 'DESC');
-    } elseif ($order_get == 'cateid_asc') {
-        $or = array('log_CateID' => 'ASC');
-    } elseif ($order_get == 'authorid_desc') {
-        $or = array('log_AuthorID' => 'DESC');
-    } elseif ($order_get == 'authorid_asc') {
-        $or = array('log_AuthorID' => 'ASC');
-    } elseif ($order_get == 'posttime_desc') {
-        $or = array('log_PostTime' => 'DESC');
-    } elseif ($order_get == 'posttime_asc') {
-        $or = array('log_PostTime' => 'ASC');
-    } elseif ($order_get == 'updatetime_desc') {
-        $or = array('log_UpdateTime' => 'DESC');
-    } elseif ($order_get == 'updatetime_asc') {
-        $or = array('log_UpdateTime' => 'ASC');
+    if ('id_desc' == $order_get) {
+        $or = ['log_ID' => 'DESC'];
+    } elseif ('id_asc' == $order_get) {
+        $or = ['log_ID' => 'ASC'];
+    } elseif ('cateid_desc' == $order_get) {
+        $or = ['log_CateID' => 'DESC'];
+    } elseif ('cateid_asc' == $order_get) {
+        $or = ['log_CateID' => 'ASC'];
+    } elseif ('authorid_desc' == $order_get) {
+        $or = ['log_AuthorID' => 'DESC'];
+    } elseif ('authorid_asc' == $order_get) {
+        $or = ['log_AuthorID' => 'ASC'];
+    } elseif ('posttime_desc' == $order_get) {
+        $or = ['log_PostTime' => 'DESC'];
+    } elseif ('posttime_asc' == $order_get) {
+        $or = ['log_PostTime' => 'ASC'];
+    } elseif ('updatetime_desc' == $order_get) {
+        $or = ['log_UpdateTime' => 'DESC'];
+    } elseif ('updatetime_asc' == $order_get) {
+        $or = ['log_UpdateTime' => 'ASC'];
     } else {
-        $or = array($zbp->manageorder => 'DESC');
+        $or = [$zbp->manageorder => 'DESC'];
     }
-    $l = array(($p->PageNow - 1) * $p->PageCount, $p->PageCount);
-    $op = array('pagebar' => $p);
+    $l = [($p->PageNow - 1) * $p->PageCount, $p->PageCount];
+    $op = ['pagebar' => $p];
 
     $type = null;
 
@@ -207,19 +205,19 @@ function Admin_ArticleMng()
         $w,
         $or,
         $l,
-        $op
+        $op,
     );
 
     echo '<form method="post" action="' . $zbp->host . 'zb_system/cmd.php?act=PostBat&type=' . ZC_POST_TYPE_ARTICLE . '">';
     echo '<table border="1" class="tableFull tableBorder table_hover table_striped tableBorder-thcenter">';
 
-    list($button_id_html) = MakeOrderButton('id', $p->UrlRule, $order_get);
-    list($button_posttime_html) = MakeOrderButton('posttime', $p->UrlRule, $order_get);
-    list($button_cateid_html) = MakeOrderButton('cateid', $p->UrlRule, $order_get);
-    list($button_authorid_html) = MakeOrderButton('authorid', $p->UrlRule, $order_get);
+    [$button_id_html] = MakeOrderButton('id', $p->UrlRule, $order_get);
+    [$button_posttime_html] = MakeOrderButton('posttime', $p->UrlRule, $order_get);
+    [$button_cateid_html] = MakeOrderButton('cateid', $p->UrlRule, $order_get);
+    [$button_authorid_html] = MakeOrderButton('authorid', $p->UrlRule, $order_get);
 
     $tables = '';
-    $tableths = array();
+    $tableths = [];
     $tableths[] = '<tr>';
     $tableths[] = '<th>' . $zbp->lang['msg']['id'] . $button_id_html . '</th>';
     $tableths[] = '<th>' . $zbp->lang['msg']['category'] . $button_cateid_html . '</th>';
@@ -235,7 +233,7 @@ function Admin_ArticleMng()
     $tableths[] = '</tr>';
 
     foreach ($array as $article) {
-        $tabletds = array(); //table string
+        $tabletds = []; //table string
         $tabletds[] = '<tr>';
         $tabletds[] = '<td class="td5">' . $article->ID . '</td>';
         $tabletds[] = '<td class="td10">' . $article->Category->Name . '</td>';
@@ -247,7 +245,7 @@ function Admin_ArticleMng()
         $tabletds[] = '<td class="td10 tdCenter">' .
             '<a href="../cmd.php?act=ArticleEdt&amp;id=' . $article->ID . '"><i class="icon-pencil-square"></i></a>' .
             '&nbsp;&nbsp;&nbsp;&nbsp;' .
-            '<a onclick="return window.confirm(\'' . str_replace(array('"', '\''), '', $zbp->lang['msg']['confirm_operating']) . '\');" href="' . BuildSafeCmdURL('act=ArticleDel&amp;id=' . $article->ID) . '"><i class="icon-trash"></i></a>' .
+            '<a onclick="return window.confirm(\'' . str_replace(['"', '\''], '', $zbp->lang['msg']['confirm_operating']) . '\');" href="' . BuildSafeCmdURL('act=ArticleDel&amp;id=' . $article->ID) . '"><i class="icon-trash"></i></a>' .
             '</td>';
         if ($zbp->CheckRights('PostBat') && $zbp->option['ZC_POST_BATCH_DELETE']) {
             $tabletds[] = '<td class="td5 tdCenter"><input type="checkbox" id="id' . $article->ID . '" name="id[]" value="' . $article->ID . '"></td>';
@@ -276,7 +274,7 @@ function Admin_ArticleMng()
         }
     }
     if ($zbp->CheckRights('PostBat') && $zbp->option['ZC_POST_BATCH_DELETE']) {
-        echo '<input  style="float:right;" type="submit" name="all_del" onclick="return window.confirm(\'' . str_replace(array('"', '\''), '', $zbp->lang['msg']['confirm_operating']) . '\');" value="' . $zbp->lang['msg']['all_del'] . '">';
+        echo '<input  style="float:right;" type="submit" name="all_del" onclick="return window.confirm(\'' . str_replace(['"', '\''], '', $zbp->lang['msg']['confirm_operating']) . '\');" value="' . $zbp->lang['msg']['all_del'] . '">';
     }
     echo '</p></form></div>';
     echo '<script>ActiveLeftMenu("aArticleMng");</script>';
@@ -306,39 +304,39 @@ function Admin_PageMng()
 
     $p = new Pagebar('{%host%}zb_system/cmd.php?act=PageMng{&order=%order%}{&page=%page%}', false);
     $p->PageCount = $zbp->managecount;
-    $p->PageNow = (int) GetVars('page', 'GET') == 0 ? 1 : (int) GetVars('page', 'GET');
+    $p->PageNow = 0 == (int) GetVars('page', 'GET') ? 1 : (int) GetVars('page', 'GET');
     $p->PageBarCount = $zbp->pagebarcount;
     $p->UrlRule->Rules['{%order%}'] = $order_get;
 
-    $w = array();
-    $w[] = array('=', 'log_Type', 1);
+    $w = [];
+    $w[] = ['=', 'log_Type', 1];
 
     if (!$zbp->CheckRights('PageAll')) {
-        $w[] = array('=', 'log_AuthorID', $zbp->user->ID);
+        $w[] = ['=', 'log_AuthorID', $zbp->user->ID];
     }
 
     $s = '';
-    if ($order_get == 'id_desc') {
-        $or = array('log_ID' => 'DESC');
-    } elseif ($order_get == 'id_asc') {
-        $or = array('log_ID' => 'ASC');
-    } elseif ($order_get == 'cateid_desc') {
-        $or = array('log_CateID' => 'DESC');
-    } elseif ($order_get == 'cateid_asc') {
-        $or = array('log_CateID' => 'ASC');
-    } elseif ($order_get == 'authorid_desc') {
-        $or = array('log_AuthorID' => 'DESC');
-    } elseif ($order_get == 'authorid_asc') {
-        $or = array('log_AuthorID' => 'ASC');
-    } elseif ($order_get == 'posttime_desc') {
-        $or = array('log_PostTime' => 'DESC');
-    } elseif ($order_get == 'posttime_asc') {
-        $or = array('log_PostTime' => 'ASC');
+    if ('id_desc' == $order_get) {
+        $or = ['log_ID' => 'DESC'];
+    } elseif ('id_asc' == $order_get) {
+        $or = ['log_ID' => 'ASC'];
+    } elseif ('cateid_desc' == $order_get) {
+        $or = ['log_CateID' => 'DESC'];
+    } elseif ('cateid_asc' == $order_get) {
+        $or = ['log_CateID' => 'ASC'];
+    } elseif ('authorid_desc' == $order_get) {
+        $or = ['log_AuthorID' => 'DESC'];
+    } elseif ('authorid_asc' == $order_get) {
+        $or = ['log_AuthorID' => 'ASC'];
+    } elseif ('posttime_desc' == $order_get) {
+        $or = ['log_PostTime' => 'DESC'];
+    } elseif ('posttime_asc' == $order_get) {
+        $or = ['log_PostTime' => 'ASC'];
     } else {
-        $or = array('log_PostTime' => 'DESC');
+        $or = ['log_PostTime' => 'DESC'];
     }
-    $l = array(($p->PageNow - 1) * $p->PageCount, $p->PageCount);
-    $op = array('pagebar' => $p);
+    $l = [($p->PageNow - 1) * $p->PageCount, $p->PageCount];
+    $op = ['pagebar' => $p];
 
     //1.7新加入的接口
     foreach ($GLOBALS['hooks']['Filter_Plugin_Admin_PageMng_Core'] as $fpname => &$fpsignal) {
@@ -354,19 +352,19 @@ function Admin_PageMng()
         $w,
         $or,
         $l,
-        $op
+        $op,
     );
 
     echo '<form method="post" action="' . $zbp->host . 'zb_system/cmd.php?act=PostBat&type=' . ZC_POST_TYPE_PAGE . '">';
     echo '<table border="1" class="tableFull tableBorder tableBorder-thcenter table_hover table_striped">';
 
-    list($button_id_html) = MakeOrderButton('id', $p->UrlRule, $order_get);
-    list($button_posttime_html) = MakeOrderButton('posttime', $p->UrlRule, $order_get);
-    list($button_cateid_html) = MakeOrderButton('cateid', $p->UrlRule, $order_get);
-    list($button_authorid_html) = MakeOrderButton('authorid', $p->UrlRule, $order_get);
+    [$button_id_html] = MakeOrderButton('id', $p->UrlRule, $order_get);
+    [$button_posttime_html] = MakeOrderButton('posttime', $p->UrlRule, $order_get);
+    [$button_cateid_html] = MakeOrderButton('cateid', $p->UrlRule, $order_get);
+    [$button_authorid_html] = MakeOrderButton('authorid', $p->UrlRule, $order_get);
 
     $tables = '';
-    $tableths = array();
+    $tableths = [];
     $tableths[] = '<tr>';
     $tableths[] = '<th>' . $zbp->lang['msg']['id'] . $button_id_html . '</th>';
     $tableths[] = '<th>' . $zbp->lang['msg']['author'] . $button_authorid_html . '</th>';
@@ -381,7 +379,7 @@ function Admin_PageMng()
     $tableths[] = '</tr>';
 
     foreach ($array as $article) {
-        $tabletds = array(); //table string
+        $tabletds = []; //table string
         $tabletds[] = '<tr>';
         $tabletds[] = '<td class="td5">' . $article->ID . '</td>';
         $tabletds[] = '<td class="td10">' . $article->Author->Name . '</td>';
@@ -392,7 +390,7 @@ function Admin_PageMng()
         $tabletds[] = '<td class="td10 tdCenter">' .
             '<a href="../cmd.php?act=PageEdt&amp;id=' . $article->ID . '"><i class="icon-pencil-square"></i></a>' .
             '&nbsp;&nbsp;&nbsp;&nbsp;' .
-            '<a onclick="return window.confirm(\'' . str_replace(array('"', '\''), '', $zbp->lang['msg']['confirm_operating']) . '\');" href="' . BuildSafeCmdURL('act=PageDel&amp;id=' . $article->ID) . '"><i class="icon-trash"></i></a>' .
+            '<a onclick="return window.confirm(\'' . str_replace(['"', '\''], '', $zbp->lang['msg']['confirm_operating']) . '\');" href="' . BuildSafeCmdURL('act=PageDel&amp;id=' . $article->ID) . '"><i class="icon-trash"></i></a>' .
             '</td>';
         if ($zbp->CheckRights('PostBat') && $zbp->option['ZC_POST_BATCH_DELETE']) {
             $tabletds[] = '<td class="td5 tdCenter"><input type="checkbox" id="id' . $article->ID . '" name="id[]" value="' . $article->ID . '"></td>';
@@ -419,7 +417,7 @@ function Admin_PageMng()
         }
     }
     if ($zbp->CheckRights('PostBat') && $zbp->option['ZC_POST_BATCH_DELETE']) {
-        echo '<input  style="float:right;" type="submit" name="all_del" onclick="return window.confirm(\'' . str_replace(array('"', '\''), '', $zbp->lang['msg']['confirm_operating']) . '\');" value="' . $zbp->lang['msg']['all_del'] . '">';
+        echo '<input  style="float:right;" type="submit" name="all_del" onclick="return window.confirm(\'' . str_replace(['"', '\''], '', $zbp->lang['msg']['confirm_operating']) . '\');" value="' . $zbp->lang['msg']['all_del'] . '">';
     }
     echo '</p><form></div>';
     echo '<script>ActiveLeftMenu("aPageMng");</script>';
@@ -459,41 +457,41 @@ function Admin_CategoryMng()
 
     $p = new Pagebar('{%host%}zb_system/cmd.php?act=CategoryMng{&type=%type%}{&search=%search%}{&order=%order%}{&page=%page%}', false);
     $p->PageCount = $zbp->managecount;
-    $p->PageNow = (int) GetVars('page', 'GET') == 0 ? 1 : (int) GetVars('page', 'GET');
+    $p->PageNow = 0 == (int) GetVars('page', 'GET') ? 1 : (int) GetVars('page', 'GET');
     $p->PageBarCount = $zbp->pagebarcount;
     //$p->UrlRule->Rules['{%type%}'] = GetVars('type', 'GET');
     $p->UrlRule->Rules['{%search%}'] = rawurlencode($search);
 
-    $w = array();
-    $w[] = array('=', 'cate_Type', $posttype);
+    $w = [];
+    $w[] = ['=', 'cate_Type', $posttype];
 
     if ($search) {
-        $w[] = array('search', 'cate_Name', 'cate_Alias', 'cate_Intro', $search);
+        $w[] = ['search', 'cate_Name', 'cate_Alias', 'cate_Intro', $search];
     }
 
     $s = '';
-    if ($order_get == 'id_desc') {
-        $or = array('cate_ID' => 'DESC');
-    } elseif ($order_get == 'id_asc') {
-        $or = array('cate_ID' => 'ASC');
-    } elseif ($order_get == 'order_desc') {
-        $or = array('cate_Order' => 'DESC');
-    } elseif ($order_get == 'order_asc') {
-        $or = array('cate_Order' => 'ASC');
-    } elseif ($order_get == 'name_desc') {
-        $or = array('cate_Name' => 'DESC');
-    } elseif ($order_get == 'name_asc') {
-        $or = array('cate_Name' => 'ASC');
-    } elseif ($order_get == 'alias_desc') {
-        $or = array('cate_Alias' => 'DESC');
-    } elseif ($order_get == 'alias_asc') {
-        $or = array('cate_Alias' => 'ASC');
+    if ('id_desc' == $order_get) {
+        $or = ['cate_ID' => 'DESC'];
+    } elseif ('id_asc' == $order_get) {
+        $or = ['cate_ID' => 'ASC'];
+    } elseif ('order_desc' == $order_get) {
+        $or = ['cate_Order' => 'DESC'];
+    } elseif ('order_asc' == $order_get) {
+        $or = ['cate_Order' => 'ASC'];
+    } elseif ('name_desc' == $order_get) {
+        $or = ['cate_Name' => 'DESC'];
+    } elseif ('name_asc' == $order_get) {
+        $or = ['cate_Name' => 'ASC'];
+    } elseif ('alias_desc' == $order_get) {
+        $or = ['cate_Alias' => 'DESC'];
+    } elseif ('alias_asc' == $order_get) {
+        $or = ['cate_Alias' => 'ASC'];
     } else {
-        $or = array('cate_ID' => 'ASC');
+        $or = ['cate_ID' => 'ASC'];
     }
 
-    $l = array(($p->PageNow - 1) * $p->PageCount, $p->PageCount);
-    $op = array('pagebar' => $p);
+    $l = [($p->PageNow - 1) * $p->PageCount, $p->PageCount];
+    $op = ['pagebar' => $p];
 
     //1.7新加入的接口
     foreach ($GLOBALS['hooks']['Filter_Plugin_Admin_CategoryMng_Core'] as $fpname => &$fpsignal) {
@@ -506,7 +504,7 @@ function Admin_CategoryMng()
             $w,
             $or,
             $l,
-            $op
+            $op,
         );
     } else {
         $array = $zbp->categoriesbyorder_type[$posttype];
@@ -514,13 +512,13 @@ function Admin_CategoryMng()
 
     //Array_Isset($zbp->categoriesbyorder_type, $posttype, array());
     //$array = $zbp->categoriesbyorder_type[$posttype];
-    list($button_id_html) = MakeOrderButton('id', $p->UrlRule, $order_get, 'desc');
-    list($button_order_html) = MakeOrderButton('order', $p->UrlRule, $order_get);
-    list($button_name_html) = MakeOrderButton('name', $p->UrlRule, $order_get);
-    list($button_alias_html) = MakeOrderButton('alias', $p->UrlRule, $order_get);
+    [$button_id_html] = MakeOrderButton('id', $p->UrlRule, $order_get, 'desc');
+    [$button_order_html] = MakeOrderButton('order', $p->UrlRule, $order_get);
+    [$button_name_html] = MakeOrderButton('name', $p->UrlRule, $order_get);
+    [$button_alias_html] = MakeOrderButton('alias', $p->UrlRule, $order_get);
 
     $tables = '';
-    $tableths = array();
+    $tableths = [];
     $tableths[] = '<tr>';
     $tableths[] = '<th>' . $zbp->lang['msg']['id'] . $button_id_html . '</th>';
     $tableths[] = '<th>' . $zbp->lang['msg']['order'] . $button_order_html . '</th>';
@@ -531,7 +529,7 @@ function Admin_CategoryMng()
     $tableths[] = '</tr>';
 
     foreach ($array as $category) {
-        $tabletds = array(); //table string
+        $tabletds = []; //table string
         $tabletds[] = '<tr>';
         $tabletds[] = '<td class="td5">' . $category->ID . '</td>';
         $tabletds[] = '<td class="td5">' . $category->Order . '</td>';
@@ -540,7 +538,7 @@ function Admin_CategoryMng()
         $tabletds[] = '<td class="td10">' . $category->Count . '</td>';
         $tabletds[] = '<td class="td10 tdCenter">' .
             '<a href="../cmd.php?act=CategoryEdt&amp;id=' . $category->ID . '"><i class="icon-pencil-square"></i></a>' .
-            ((count($category->SubCategories) == 0) ? '&nbsp;&nbsp;&nbsp;&nbsp;<a onclick="return window.confirm(\'' . str_replace(array('"', '\''), '', $zbp->lang['msg']['confirm_operating']) . '\');" href="' . BuildSafeCmdURL('act=CategoryDel&amp;id=' . $category->ID) . '"><i class="icon-trash"></i></a>' : '') .
+            ((0 == count($category->SubCategories)) ? '&nbsp;&nbsp;&nbsp;&nbsp;<a onclick="return window.confirm(\'' . str_replace(['"', '\''], '', $zbp->lang['msg']['confirm_operating']) . '\');" href="' . BuildSafeCmdURL('act=CategoryDel&amp;id=' . $category->ID) . '"><i class="icon-trash"></i></a>' : '') .
             '</td>';
 
         $tabletds[] = '</tr>';
@@ -599,7 +597,7 @@ function Admin_CommentMng()
 
     $p = new Pagebar('{%host%}zb_system/cmd.php?act=CommentMng{&ischecking=%ischecking%}{&search=%search%}{&order=%order%}{&page=%page%}', false);
     $p->PageCount = $zbp->managecount;
-    $p->PageNow = (int) GetVars('page', 'GET') == 0 ? 1 : (int) GetVars('page', 'GET');
+    $p->PageNow = 0 == (int) GetVars('page', 'GET') ? 1 : (int) GetVars('page', 'GET');
     if (GetVars('search') !== GetVars('search', 'GET')) {
         $p->PageNow = 1;
     }
@@ -611,45 +609,45 @@ function Admin_CommentMng()
     $p->UrlRule->Rules['{%ischecking%}'] = (bool) GetVars('ischecking');
     $p->UrlRule->Rules['{%order%}'] = $order_get;
 
-    $w = array();
+    $w = [];
     if (!$zbp->CheckRights('CommentAll')) {
-        $w[] = array('=', 'comm_AuthorID', $zbp->user->ID);
+        $w[] = ['=', 'comm_AuthorID', $zbp->user->ID];
     }
     if (GetVars('search')) {
-        $w[] = array('search', 'comm_Content', 'comm_Name', GetVars('search'));
+        $w[] = ['search', 'comm_Content', 'comm_Name', GetVars('search')];
     }
     if (GetVars('id')) {
-        $w[] = array('=', 'comm_ID', GetVars('id'));
+        $w[] = ['=', 'comm_ID', GetVars('id')];
     }
 
-    $w[] = array('=', 'comm_Ischecking', (int) GetVars('ischecking'));
+    $w[] = ['=', 'comm_Ischecking', (int) GetVars('ischecking')];
 
     $s = '';
-    if ($order_get == 'id_desc') {
-        $or = array('comm_ID' => 'DESC');
-    } elseif ($order_get == 'id_asc') {
-        $or = array('comm_ID' => 'ASC');
-    } elseif ($order_get == 'posttime_desc') {
-        $or = array('comm_PostTime' => 'DESC');
-    } elseif ($order_get == 'posttime_asc') {
-        $or = array('comm_PostTime' => 'ASC');
-    } elseif ($order_get == 'logid_desc') {
-        $or = array('comm_LogID' => 'DESC');
-    } elseif ($order_get == 'logid_asc') {
-        $or = array('comm_LogID' => 'ASC');
-    } elseif ($order_get == 'authorid_desc') {
-        $or = array('comm_AuthorID' => 'DESC');
-    } elseif ($order_get == 'authorid_asc') {
-        $or = array('comm_AuthorID' => 'ASC');
-    } elseif ($order_get == 'parentid_desc') {
-        $or = array('comm_ParentID' => 'DESC');
-    } elseif ($order_get == 'parentid_asc') {
-        $or = array('comm_ParentID' => 'ASC');
+    if ('id_desc' == $order_get) {
+        $or = ['comm_ID' => 'DESC'];
+    } elseif ('id_asc' == $order_get) {
+        $or = ['comm_ID' => 'ASC'];
+    } elseif ('posttime_desc' == $order_get) {
+        $or = ['comm_PostTime' => 'DESC'];
+    } elseif ('posttime_asc' == $order_get) {
+        $or = ['comm_PostTime' => 'ASC'];
+    } elseif ('logid_desc' == $order_get) {
+        $or = ['comm_LogID' => 'DESC'];
+    } elseif ('logid_asc' == $order_get) {
+        $or = ['comm_LogID' => 'ASC'];
+    } elseif ('authorid_desc' == $order_get) {
+        $or = ['comm_AuthorID' => 'DESC'];
+    } elseif ('authorid_asc' == $order_get) {
+        $or = ['comm_AuthorID' => 'ASC'];
+    } elseif ('parentid_desc' == $order_get) {
+        $or = ['comm_ParentID' => 'DESC'];
+    } elseif ('parentid_asc' == $order_get) {
+        $or = ['comm_ParentID' => 'ASC'];
     } else {
-        $or = array(($zbp->option['ZC_COMMENT_ORDERBY_TIME'] ? 'comm_PostTime' : 'comm_ID') => 'DESC');
+        $or = [($zbp->option['ZC_COMMENT_ORDERBY_TIME'] ? 'comm_PostTime' : 'comm_ID') => 'DESC'];
     }
-    $l = array(($p->PageNow - 1) * $p->PageCount, $p->PageCount);
-    $op = array('pagebar' => $p);
+    $l = [($p->PageNow - 1) * $p->PageCount, $p->PageCount];
+    $op = ['pagebar' => $p];
 
     //1.7新加入的接口
     foreach ($GLOBALS['hooks']['Filter_Plugin_Admin_CommentMng_Core'] as $fpname => &$fpsignal) {
@@ -665,18 +663,18 @@ function Admin_CommentMng()
         $w,
         $or,
         $l,
-        $op
+        $op,
     );
 
-    list($button_id_html) = MakeOrderButton('id', $p->UrlRule, $order_get, 'desc');
-    list($button_posttime_html) = MakeOrderButton('posttime', $p->UrlRule, $order_get);
-    list($button_logid_html) = MakeOrderButton('logid', $p->UrlRule, $order_get);
-    list($button_authorid_html) = MakeOrderButton('authorid', $p->UrlRule, $order_get);
-    list($button_parentid_html) = MakeOrderButton('parentid', $p->UrlRule, $order_get);
+    [$button_id_html] = MakeOrderButton('id', $p->UrlRule, $order_get, 'desc');
+    [$button_posttime_html] = MakeOrderButton('posttime', $p->UrlRule, $order_get);
+    [$button_logid_html] = MakeOrderButton('logid', $p->UrlRule, $order_get);
+    [$button_authorid_html] = MakeOrderButton('authorid', $p->UrlRule, $order_get);
+    [$button_parentid_html] = MakeOrderButton('parentid', $p->UrlRule, $order_get);
 
     echo '<table border="1" class="tableFull tableBorder tableBorder-thcenter table_hover table_striped">';
     $tables = '';
-    $tableths = array();
+    $tableths = [];
     $tableths[] = '<tr>';
     $tableths[] = '<th>' . $zbp->lang['msg']['id'] . $button_id_html . '</th>';
     $tableths[] = '<th>' . $zbp->lang['msg']['parend_id'] . '</th>';
@@ -690,11 +688,11 @@ function Admin_CommentMng()
 
     foreach ($array as $cmt) {
         $article = $zbp->GetPostByID($cmt->LogID);
-        if ($article->ID == 0) {
+        if (0 == $article->ID) {
             $article = null;
         }
 
-        $tabletds = array(); //table string
+        $tabletds = []; //table string
         $tabletds[] = '<tr>';
         $tabletds[] = '<td class="td5"><a href="?act=CommentMng&id=' . $cmt->ID . '" title="' . $zbp->lang['msg']['jump_comment'] . $cmt->ID . '">' . $cmt->ID . '</a></td>';
         if ($cmt->ParentID > 0) {
@@ -706,12 +704,13 @@ function Admin_CommentMng()
         $tabletds[] = '<td class="td10"><span class="cmt-note" title="' . $zbp->lang['msg']['email'] . ':' . htmlspecialchars($cmt->Email) . '"><a href="mailto:' . htmlspecialchars($cmt->Email) . '">' . $cmt->Author->StaticName . '</a></span></td>';
         $tabletds[] = '<td><div style="overflow:hidden;max-width:500px;">' .
             (
-                ($article) ? '<a href="' . $article->Url . '" target="_blank"><i class="icon-link-45deg"></i></a> ' : '<a href="javascript:;"><i class="icon-trash"></i></a>') .
+                ($article) ? '<a href="' . $article->Url . '" target="_blank"><i class="icon-link-45deg"></i></a> ' : '<a href="javascript:;"><i class="icon-trash"></i></a>'
+            ) .
             $cmt->Content . '<div></td>';
         $tabletds[] = '<td class="td5">' . $cmt->LogID . '</td>';
         $tabletds[] = '<td class="td15">' . $cmt->Time() . '</td>';
         $tabletds[] = '<td class="td10 tdCenter">' .
-            '<a onclick="return window.confirm(\'' . str_replace(array('"', '\''), '', $zbp->lang['msg']['confirm_operating']) . '\');" href="' . BuildSafeCmdURL('act=CommentDel&amp;id=' . $cmt->ID) . '"><i class="icon-trash" title="' . $zbp->lang['msg']['del'] . '"></i></a>' .
+            '<a onclick="return window.confirm(\'' . str_replace(['"', '\''], '', $zbp->lang['msg']['confirm_operating']) . '\');" href="' . BuildSafeCmdURL('act=CommentDel&amp;id=' . $cmt->ID) . '"><i class="icon-trash" title="' . $zbp->lang['msg']['del'] . '"></i></a>' .
             '&nbsp;&nbsp;&nbsp;&nbsp;' .
             (!GetVars('ischecking', 'GET') ? '<a href="' . BuildSafeCmdURL('act=CommentChk&amp;id=' . $cmt->ID . '&amp;ischecking=' . (int) !GetVars('ischecking', 'GET')) . '"><i class="icon-shield-fill-x" title="' . $zbp->lang['msg']['audit'] . '"></i></a>' : '<a href="' . BuildSafeCmdURL('act=CommentChk&amp;id=' . $cmt->ID . '&amp;ischecking=' . (int) !GetVars('ischecking', 'GET')) . '"><i class="icon-shield-fill-check" title="' . $zbp->lang['msg']['pass'] . '"></i></a>') .
             '</td>';
@@ -733,10 +732,10 @@ function Admin_CommentMng()
     echo '<p style="float:right;">';
 
     if ((bool) GetVars('ischecking')) {
-        echo '<input type="submit" name="all_del" onclick="return window.confirm(\'' . str_replace(array('"', '\''), '', $zbp->lang['msg']['confirm_operating']) . '\');"  value="' . $zbp->lang['msg']['all_del'] . '"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+        echo '<input type="submit" name="all_del" onclick="return window.confirm(\'' . str_replace(['"', '\''], '', $zbp->lang['msg']['confirm_operating']) . '\');"  value="' . $zbp->lang['msg']['all_del'] . '"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
         echo '<input type="submit" name="all_pass"  value="' . $zbp->lang['msg']['all_pass'] . '"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
     } else {
-        echo '<input type="submit" name="all_del" onclick="return window.confirm(\'' . str_replace(array('"', '\''), '', $zbp->lang['msg']['confirm_operating']) . '\');"  value="' . $zbp->lang['msg']['all_del'] . '"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+        echo '<input type="submit" name="all_del" onclick="return window.confirm(\'' . str_replace(['"', '\''], '', $zbp->lang['msg']['confirm_operating']) . '\');"  value="' . $zbp->lang['msg']['all_del'] . '"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
         echo '<input type="submit" name="all_audit"  value="' . $zbp->lang['msg']['all_audit'] . '"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
     }
 
@@ -792,46 +791,46 @@ function Admin_MemberMng()
 
     $p = new Pagebar('{%host%}zb_system/cmd.php?act=MemberMng{&order=%order%}{&page=%page%}', false);
     $p->PageCount = $zbp->managecount;
-    $p->PageNow = (int) GetVars('page', 'GET') == 0 ? 1 : (int) GetVars('page', 'GET');
+    $p->PageNow = 0 == (int) GetVars('page', 'GET') ? 1 : (int) GetVars('page', 'GET');
     if (GetVars('search') !== GetVars('search', 'GET')) {
         $p->PageNow = 1;
     }
     $p->PageBarCount = $zbp->pagebarcount;
     $p->UrlRule->Rules['{%order%}'] = $order_get;
 
-    $w = array();
+    $w = [];
     if (!$zbp->CheckRights('MemberAll')) {
-        $w[] = array('=', 'mem_ID', $zbp->user->ID);
+        $w[] = ['=', 'mem_ID', $zbp->user->ID];
     }
     if (GetVars('level')) {
-        $w[] = array('=', 'mem_Level', GetVars('level'));
+        $w[] = ['=', 'mem_Level', GetVars('level')];
     }
     if (GetVars('search')) {
-        $w[] = array('search', 'mem_Name', 'mem_Alias', 'mem_Email', GetVars('search'));
+        $w[] = ['search', 'mem_Name', 'mem_Alias', 'mem_Email', GetVars('search')];
     }
 
     $s = '';
-    if ($order_get == 'id_desc') {
-        $or = array('mem_ID' => 'DESC');
-    } elseif ($order_get == 'id_asc') {
-        $or = array('mem_ID' => 'ASC');
-    } elseif ($order_get == 'level_desc') {
-        $or = array('mem_Level' => 'DESC');
-    } elseif ($order_get == 'level_asc') {
-        $or = array('mem_Level' => 'ASC');
-    } elseif ($order_get == 'name_desc') {
-        $or = array('mem_Name' => 'DESC');
-    } elseif ($order_get == 'name_asc') {
-        $or = array('mem_Name' => 'ASC');
-    } elseif ($order_get == 'alias_desc') {
-        $or = array('mem_Alias' => 'DESC');
-    } elseif ($order_get == 'alias_asc') {
-        $or = array('mem_Alias' => 'ASC');
+    if ('id_desc' == $order_get) {
+        $or = ['mem_ID' => 'DESC'];
+    } elseif ('id_asc' == $order_get) {
+        $or = ['mem_ID' => 'ASC'];
+    } elseif ('level_desc' == $order_get) {
+        $or = ['mem_Level' => 'DESC'];
+    } elseif ('level_asc' == $order_get) {
+        $or = ['mem_Level' => 'ASC'];
+    } elseif ('name_desc' == $order_get) {
+        $or = ['mem_Name' => 'DESC'];
+    } elseif ('name_asc' == $order_get) {
+        $or = ['mem_Name' => 'ASC'];
+    } elseif ('alias_desc' == $order_get) {
+        $or = ['mem_Alias' => 'DESC'];
+    } elseif ('alias_asc' == $order_get) {
+        $or = ['mem_Alias' => 'ASC'];
     } else {
-        $or = array('mem_ID' => 'ASC');
+        $or = ['mem_ID' => 'ASC'];
     }
-    $l = array(($p->PageNow - 1) * $p->PageCount, $p->PageCount);
-    $op = array('pagebar' => $p);
+    $l = [($p->PageNow - 1) * $p->PageCount, $p->PageCount];
+    $op = ['pagebar' => $p];
 
     //1.7新加入的接口
     foreach ($GLOBALS['hooks']['Filter_Plugin_Admin_MemberMng_Core'] as $fpname => &$fpsignal) {
@@ -843,17 +842,17 @@ function Admin_MemberMng()
         $w,
         $or,
         $l,
-        $op
+        $op,
     );
 
-    list($button_id_html) = MakeOrderButton('id', $p->UrlRule, $order_get, 'desc');
-    list($button_level_html) = MakeOrderButton('level', $p->UrlRule, $order_get);
-    list($button_name_html) = MakeOrderButton('name', $p->UrlRule, $order_get);
-    list($button_alias_html) = MakeOrderButton('alias', $p->UrlRule, $order_get);
+    [$button_id_html] = MakeOrderButton('id', $p->UrlRule, $order_get, 'desc');
+    [$button_level_html] = MakeOrderButton('level', $p->UrlRule, $order_get);
+    [$button_name_html] = MakeOrderButton('name', $p->UrlRule, $order_get);
+    [$button_alias_html] = MakeOrderButton('alias', $p->UrlRule, $order_get);
 
     echo '<table border="1" class="tableFull tableBorder tableBorder-thcenter table_hover table_striped">';
     $tables = '';
-    $tableths = array();
+    $tableths = [];
     $tableths[] = '<tr>';
     $tableths[] = '<th>' . $zbp->lang['msg']['id'] . $button_id_html . '</th>';
     $tableths[] = '<th>' . $zbp->lang['msg']['member_level'] . $button_level_html . '</th>';
@@ -867,7 +866,7 @@ function Admin_MemberMng()
     $tableths[] = '</tr>';
 
     foreach ($array as $member) {
-        $tabletds = array(); //table string
+        $tabletds = []; //table string
         $tabletds[] = '<tr>';
         $tabletds[] = '<td class="td5">' . $member->ID . '</td>';
         $tabletds[] = '<td class="td10">' . $member->LevelName . ($member->Status > 0 ? '(' . $zbp->lang['user_status_name'][$member->Status] . ')' : '') . ($member->IsGod ? ' <span title="root">#</span>' : '') . '</td>';
@@ -879,8 +878,8 @@ function Admin_MemberMng()
         $tabletds[] = '<td class="td10">' . max(0, $member->Uploads) . '</td>';
         $tabletds[] = '<td class="td10 tdCenter">' .
             '<a href="../cmd.php?act=MemberEdt&amp;id=' . $member->ID . '"><i class="icon-pencil-square"></i></a>' .
-            (($zbp->CheckRights('MemberDel') && ($member->IsGod !== true)) ? '&nbsp;&nbsp;&nbsp;&nbsp;' .
-                '<a onclick="return window.confirm(\'' . str_replace(array('"', '\''), '', $zbp->lang['msg']['confirm_operating']) . '\');" href="' . BuildSafeCmdURL('act=MemberDel&amp;id=' . $member->ID) . '"><i class="icon-trash"></i></a>' : '') .
+            (($zbp->CheckRights('MemberDel') && (true !== $member->IsGod)) ? '&nbsp;&nbsp;&nbsp;&nbsp;' .
+                '<a onclick="return window.confirm(\'' . str_replace(['"', '\''], '', $zbp->lang['msg']['confirm_operating']) . '\');" href="' . BuildSafeCmdURL('act=MemberDel&amp;id=' . $member->ID) . '"><i class="icon-trash"></i></a>' : '') .
             '</td>';
 
         $tabletds[] = '</tr>';
@@ -935,44 +934,44 @@ function Admin_UploadMng()
     echo '<input class="button" type="reset" value="' . $zbp->lang['msg']['reset'] . '" /></p>';
     echo '</form>';
 
-    $w = array();
+    $w = [];
     if (!$zbp->CheckRights('UploadAll')) {
-        $w[] = array('=', 'ul_AuthorID', $zbp->user->ID);
+        $w[] = ['=', 'ul_AuthorID', $zbp->user->ID];
     }
 
     $order_get = GetVars('order', 'GET');
 
     $p = new Pagebar('{%host%}zb_system/cmd.php?act=UploadMng{&order=%order%}{&page=%page%}', false);
     $p->PageCount = $zbp->managecount;
-    $p->PageNow = (int) GetVars('page', 'GET') == 0 ? 1 : (int) GetVars('page', 'GET');
+    $p->PageNow = 0 == (int) GetVars('page', 'GET') ? 1 : (int) GetVars('page', 'GET');
     $p->PageBarCount = $zbp->pagebarcount;
 
     $s = '';
-    if ($order_get == 'id_desc') {
-        $or = array('ul_ID' => 'DESC');
-    } elseif ($order_get == 'id_asc') {
-        $or = array('ul_ID' => 'ASC');
-    } elseif ($order_get == 'size_desc') {
-        $or = array('ul_Size' => 'DESC');
-    } elseif ($order_get == 'size_asc') {
-        $or = array('ul_Size' => 'ASC');
-    } elseif ($order_get == 'authorid_desc') {
-        $or = array('ul_AuthorID' => 'DESC');
-    } elseif ($order_get == 'authorid_asc') {
-        $or = array('ul_AuthorID' => 'ASC');
-    } elseif ($order_get == 'logid_desc') {
-        $or = array('ul_LogID' => 'DESC');
-    } elseif ($order_get == 'logid_asc') {
-        $or = array('ul_LogID' => 'ASC');
-    } elseif ($order_get == 'posttime_desc') {
-        $or = array('ul_PostTime' => 'DESC');
-    } elseif ($order_get == 'posttime_asc') {
-        $or = array('ul_PostTime' => 'ASC');
+    if ('id_desc' == $order_get) {
+        $or = ['ul_ID' => 'DESC'];
+    } elseif ('id_asc' == $order_get) {
+        $or = ['ul_ID' => 'ASC'];
+    } elseif ('size_desc' == $order_get) {
+        $or = ['ul_Size' => 'DESC'];
+    } elseif ('size_asc' == $order_get) {
+        $or = ['ul_Size' => 'ASC'];
+    } elseif ('authorid_desc' == $order_get) {
+        $or = ['ul_AuthorID' => 'DESC'];
+    } elseif ('authorid_asc' == $order_get) {
+        $or = ['ul_AuthorID' => 'ASC'];
+    } elseif ('logid_desc' == $order_get) {
+        $or = ['ul_LogID' => 'DESC'];
+    } elseif ('logid_asc' == $order_get) {
+        $or = ['ul_LogID' => 'ASC'];
+    } elseif ('posttime_desc' == $order_get) {
+        $or = ['ul_PostTime' => 'DESC'];
+    } elseif ('posttime_asc' == $order_get) {
+        $or = ['ul_PostTime' => 'ASC'];
     } else {
-        $or = array('ul_PostTime' => 'DESC');
+        $or = ['ul_PostTime' => 'DESC'];
     }
-    $l = array(($p->PageNow - 1) * $p->PageCount, $p->PageCount);
-    $op = array('pagebar' => $p);
+    $l = [($p->PageNow - 1) * $p->PageCount, $p->PageCount];
+    $op = ['pagebar' => $p];
 
     //1.7新加入的接口
     foreach ($GLOBALS['hooks']['Filter_Plugin_Admin_UploadMng_Core'] as $fpname => &$fpsignal) {
@@ -981,15 +980,15 @@ function Admin_UploadMng()
 
     $array = $zbp->GetUploadList($s, $w, $or, $l, $op);
 
-    list($button_id_html) = MakeOrderButton('id', $p->UrlRule, $order_get);
-    list($button_size_html) = MakeOrderButton('size', $p->UrlRule, $order_get);
-    list($button_authorid_html) = MakeOrderButton('authorid', $p->UrlRule, $order_get);
-    list($button_logid_html) = MakeOrderButton('logid', $p->UrlRule, $order_get);
-    list($button_posttime_html) = MakeOrderButton('posttime', $p->UrlRule, $order_get);
+    [$button_id_html] = MakeOrderButton('id', $p->UrlRule, $order_get);
+    [$button_size_html] = MakeOrderButton('size', $p->UrlRule, $order_get);
+    [$button_authorid_html] = MakeOrderButton('authorid', $p->UrlRule, $order_get);
+    [$button_logid_html] = MakeOrderButton('logid', $p->UrlRule, $order_get);
+    [$button_posttime_html] = MakeOrderButton('posttime', $p->UrlRule, $order_get);
 
     echo '<table border="1" class="tableFull tableBorder tableBorder-thcenter table_hover table_striped">';
     $tables = '';
-    $tableHeaders = array();
+    $tableHeaders = [];
     $tableHeaders[] = '<tr>';
     $tableHeaders[] = '<th>' . $zbp->lang['msg']['id'] . $button_id_html . '</th>';
     $tableHeaders[] = '<th>' . $zbp->lang['msg']['author'] . $button_authorid_html . '</th>';
@@ -1001,7 +1000,7 @@ function Admin_UploadMng()
     $tableHeaders[] = '</tr>';
 
     foreach ($array as $upload) {
-        $ret = array(); //table string
+        $ret = []; //table string
         $ret[] = '<tr>';
         $ret[] = '<td class="td5">' . $upload->ID . '</td>';
         $ret[] = '<td class="td10">' . htmlspecialchars($upload->Author->Name) . '</td>';
@@ -1010,7 +1009,7 @@ function Admin_UploadMng()
         $ret[] = '<td class="td10">' . $upload->Size . '</td>';
         $ret[] = '<td class="td20">' . htmlspecialchars($upload->MimeType) . '</td>';
         $ret[] = '<td class="td10 tdCenter">' .
-            '<a onclick="return window.confirm(\'' . str_replace(array('"', '\''), '', $zbp->lang['msg']['confirm_operating']) . '\');" href="' . BuildSafeCmdURL('act=UploadDel&amp;id=' . $upload->ID) . '"><i class="icon-trash"></i></a>' .
+            '<a onclick="return window.confirm(\'' . str_replace(['"', '\''], '', $zbp->lang['msg']['confirm_operating']) . '\');" href="' . BuildSafeCmdURL('act=UploadDel&amp;id=' . $upload->ID) . '"><i class="icon-trash"></i></a>' .
             '</td>';
 
         $ret[] = '</tr>';
@@ -1065,7 +1064,7 @@ function Admin_TagMng()
 
     $p = new Pagebar('{%host%}zb_system/cmd.php?act=TagMng{&type=%type%}{&search=%search%}{&order=%order%}{&page=%page%}', false);
     $p->PageCount = $zbp->managecount;
-    $p->PageNow = (int) GetVars('page', 'GET') == 0 ? 1 : (int) GetVars('page', 'GET');
+    $p->PageNow = 0 == (int) GetVars('page', 'GET') ? 1 : (int) GetVars('page', 'GET');
     $p->PageBarCount = $zbp->pagebarcount;
     if (GetVars('search') !== GetVars('search', 'GET')) {
         $p->PageNow = 1;
@@ -1077,32 +1076,31 @@ function Admin_TagMng()
     $p->UrlRule->Rules['{%search%}'] = rawurlencode($search);
     $p->UrlRule->Rules['{%type%}'] = GetVars('type', 'GET');
 
-    $w = array();
+    $w = [];
     if ($search) {
-        $w[] = array('search', 'tag_Name', 'tag_Alias', 'tag_Intro', $search);
+        $w[] = ['search', 'tag_Name', 'tag_Alias', 'tag_Intro', $search];
     }
-    $w[] = array('=', 'tag_Type', $posttype);
-
+    $w[] = ['=', 'tag_Type', $posttype];
 
     $s = '';
-    if ($order_get == 'id_desc') {
-        $or = array('tag_ID' => 'DESC');
-    } elseif ($order_get == 'id_asc') {
-        $or = array('tag_ID' => 'ASC');
-    } elseif ($order_get == 'name_desc') {
-        $or = array('tag_Name' => 'DESC');
-    } elseif ($order_get == 'name_asc') {
-        $or = array('tag_Name' => 'ASC');
-    } elseif ($order_get == 'alias_desc') {
-        $or = array('tag_Alias' => 'DESC');
-    } elseif ($order_get == 'alias_asc') {
-        $or = array('tag_Alias' => 'ASC');
+    if ('id_desc' == $order_get) {
+        $or = ['tag_ID' => 'DESC'];
+    } elseif ('id_asc' == $order_get) {
+        $or = ['tag_ID' => 'ASC'];
+    } elseif ('name_desc' == $order_get) {
+        $or = ['tag_Name' => 'DESC'];
+    } elseif ('name_asc' == $order_get) {
+        $or = ['tag_Name' => 'ASC'];
+    } elseif ('alias_desc' == $order_get) {
+        $or = ['tag_Alias' => 'DESC'];
+    } elseif ('alias_asc' == $order_get) {
+        $or = ['tag_Alias' => 'ASC'];
     } else {
-        $or = array('tag_ID' => 'ASC');
+        $or = ['tag_ID' => 'ASC'];
     }
 
-    $l = array(($p->PageNow - 1) * $p->PageCount, $p->PageCount);
-    $op = array('pagebar' => $p);
+    $l = [($p->PageNow - 1) * $p->PageCount, $p->PageCount];
+    $op = ['pagebar' => $p];
 
     //1.7新加入的接口
     foreach ($GLOBALS['hooks']['Filter_Plugin_Admin_TagMng_Core'] as $fpname => &$fpsignal) {
@@ -1111,13 +1109,13 @@ function Admin_TagMng()
 
     $array = $zbp->GetTagList($s, $w, $or, $l, $op);
 
-    list($button_id_html) = MakeOrderButton('id', $p->UrlRule, $order_get, 'desc');
-    list($button_name_html) = MakeOrderButton('name', $p->UrlRule, $order_get);
-    list($button_alias_html) = MakeOrderButton('alias', $p->UrlRule, $order_get);
+    [$button_id_html] = MakeOrderButton('id', $p->UrlRule, $order_get, 'desc');
+    [$button_name_html] = MakeOrderButton('name', $p->UrlRule, $order_get);
+    [$button_alias_html] = MakeOrderButton('alias', $p->UrlRule, $order_get);
 
     echo '<table border="1" class="tableFull tableBorder tableBorder-thcenter table_hover table_striped">';
     $tables = '';
-    $tableths = array();
+    $tableths = [];
     $tableths[] = '<tr>';
     $tableths[] = '<th>' . $zbp->lang['msg']['id'] . $button_id_html . '</th>';
     $tableths[] = '<th>' . $zbp->lang['msg']['name'] . $button_name_html . '</th>';
@@ -1127,7 +1125,7 @@ function Admin_TagMng()
     $tableths[] = '</tr>';
 
     foreach ($array as $tag) {
-        $tabletds = array(); //table string
+        $tabletds = []; //table string
         $tabletds[] = '<tr>';
         $tabletds[] = '<td class="td5">' . $tag->ID . '</td>';
         $tabletds[] = '<td class="td25"><a href="' . $tag->Url . '" target="_blank"><i class="icon-link-45deg"></i></a> ' . $tag->Name . '</td>';
@@ -1136,7 +1134,7 @@ function Admin_TagMng()
         $tabletds[] = '<td class="td10 tdCenter">' .
             '<a href="../cmd.php?act=TagEdt&amp;id=' . $tag->ID . '"><i class="icon-pencil-square"></i></a>' .
             '&nbsp;&nbsp;&nbsp;&nbsp;' .
-            '<a onclick="return window.confirm(\'' . str_replace(array('"', '\''), '', $zbp->lang['msg']['confirm_operating']) . '\');" href="' . BuildSafeCmdURL('act=TagDel&amp;id=' . $tag->ID) . '"><i class="icon-trash"></i></a>' .
+            '<a onclick="return window.confirm(\'' . str_replace(['"', '\''], '', $zbp->lang['msg']['confirm_operating']) . '\');" href="' . BuildSafeCmdURL('act=TagDel&amp;id=' . $tag->ID) . '"><i class="icon-trash"></i></a>' .
             '</td>';
 
         $tabletds[] = '</tr>';
@@ -1243,19 +1241,19 @@ function Admin_ModuleMng()
     echo '</div>';
     echo '<div id="divMain2" style="min-width:550px;">';
 
-    $sm = array();
-    $um = array();
-    $tm = array();
-    $pm = array();
+    $sm = [];
+    $um = [];
+    $tm = [];
+    $pm = [];
 
     foreach ($zbp->modules as $m) {
-        if ($m->SourceType == 'system') {
+        if ('system' == $m->SourceType) {
             $sm[] = $m;
-        } elseif ($m->SourceType == 'user') {
+        } elseif ('user' == $m->SourceType) {
             $um[] = $m;
-        } elseif ($m->SourceType == 'theme' || $m->SourceType == 'themeinclude') {
+        } elseif ('theme' == $m->SourceType || 'themeinclude' == $m->SourceType) {
             //判断模块归属当前主题
-            if ($m->Source == 'theme' || (substr($m->Source, (-1 - strlen($zbp->theme)))) == ('_' . $zbp->theme)) {
+            if ('theme' == $m->Source || (substr($m->Source, (-1 - strlen($zbp->theme)))) == ('_' . $zbp->theme)) {
                 $tm[] = $m;
             }
         } else {
@@ -1300,7 +1298,7 @@ function Admin_ModuleMng()
         CreateModuleDiv($m);
     }
 
-    $sideids = array(1 => '', 2 => '2', 3 => '3', 4 => '4', 5 => '5', 6 => '6', 7 => '7', 8 => '8', 9 => '9');
+    $sideids = [1 => '', 2 => '2', 3 => '3', 4 => '4', 5 => '5', 6 => '6', 7 => '7', 8 => '8', 9 => '9'];
 
     echo '<hr/>';
     echo "\r\n";
@@ -1320,8 +1318,8 @@ function Admin_ModuleMng()
         $id = 'sidebar' . $value;
         echo '<div class="siderbar-list">';
         echo '<div class="siderbar-drop" id="siderbar' . $value . '"><div class="siderbar-header">' . $zbp->lang['msg'][$id] . '&nbsp;<img class="roll" src="../image/admin/loading.gif" width="16" alt="" /><span class="ui-icon ui-icon-triangle-1-s"></span></div><div  class="siderbar-sort-list" >';
-        echo '<div class="siderbar-note" >' . str_replace('%s', count($zbp->template->$id), $zbp->lang['msg']['sidebar_module_count']) . '</div>';
-        foreach ($zbp->template->$id as $m) {
+        echo '<div class="siderbar-note" >' . str_replace('%s', count($zbp->template->{$id}), $zbp->lang['msg']['sidebar_module_count']) . '</div>';
+        foreach ($zbp->template->{$id} as $m) {
             CreateModuleDiv($m, false);
         }
         echo '</div></div>';
@@ -1349,15 +1347,13 @@ function Admin_ModuleMng()
         });
         ';
                     echo '$("#strsidebar' . $value . '").val(s' . $key . ');';
-                }
-                ?>
+                } ?>
 
                 $.post($("#edit").attr("action"), {
                     <?php
                     foreach ($sideids as $key => $value) {
                         echo '"sidebar' . $value . '": s' . $key . ',';
-                    }
-                    ?>
+                    } ?>
                     },
                     function(data) {
                         //alert("Data Loaded: " + data);
@@ -1467,10 +1463,10 @@ function Admin_PluginMng()
     <th></th>
     </tr>';
 
-    $plugins = array();
+    $plugins = [];
 
     $app = new App();
-    if ($app->LoadInfoByXml('theme', $zbp->theme) == true) {
+    if (true == $app->LoadInfoByXml('theme', $zbp->theme)) {
         if ($app->HasPlugin()) {
             array_unshift($plugins, $app);
         }
@@ -1494,13 +1490,13 @@ function Admin_PluginMng()
 
     foreach ($plugins as $plugin) {
         echo '<tr>';
-        echo '<td class="td5 tdCenter' . ($plugin->type == 'plugin' ? ' plugin' : '') . ($plugin->IsUsed() ? ' plugin-on' : '') . '" data-pluginid="' . htmlspecialchars($plugin->id) . '"><img ' . ($plugin->IsUsed() ? '' : 'style="opacity:0.2"') . ' src="' . $plugin->GetLogo() . '" alt="" width="32" height="32" /></td>';
+        echo '<td class="td5 tdCenter' . ('plugin' == $plugin->type ? ' plugin' : '') . ($plugin->IsUsed() ? ' plugin-on' : '') . '" data-pluginid="' . htmlspecialchars($plugin->id) . '"><img ' . ($plugin->IsUsed() ? '' : 'style="opacity:0.2"') . ' src="' . $plugin->GetLogo() . '" alt="" width="32" height="32" /></td>';
         echo '<td class="td25"><span class="plugin-note" title="' . htmlspecialchars($plugin->note) . '">' . htmlspecialchars($plugin->name) . ' ' . htmlspecialchars($plugin->version) . '</span></td>';
         echo '<td class="td20"><a href="' . htmlspecialchars($plugin->author_url) . '" target="_blank">' . htmlspecialchars($plugin->author_name) . '</a></td>';
         echo '<td class="td20">' . htmlspecialchars($plugin->modified) . '</td>';
         echo '<td class="td10 tdCenter">';
 
-        if ($plugin->type == 'plugin') {
+        if ('plugin' == $plugin->type) {
             if ($plugin->IsUsed()) {
                 echo '<a href="' . BuildSafeCmdURL('act=PluginDis&amp;name=' . htmlspecialchars($plugin->id)) . '" title="' . $zbp->lang['msg']['disable'] . '" class="btn-icon btn-disable" data-pluginid="' . htmlspecialchars($plugin->id) . '"><i class="icon-cancel on"></i></a>';
                 echo '&nbsp;&nbsp;&nbsp;&nbsp;';
@@ -1537,8 +1533,7 @@ function Admin_SettingMng()
     foreach ($GLOBALS['hooks']['Filter_Plugin_Admin_SettingMng_SubMenu'] as $fpname => &$fpsignal) {
         $fpname();
     }
-    echo '</div>';
-    ?>
+    echo '</div>'; ?>
     <form method="post" action="<?php echo BuildSafeCmdURL('act=SettingSav'); ?>" onsubmit="return checkDomain();">
         <div id="divMain2">
             <div class="content-box">
@@ -1552,6 +1547,7 @@ function Admin_SettingMng()
                         <li><a href="#tab4"><span><?php echo $zbp->lang['msg']['comment_setting']; ?></span></a></li>
                         <li><a href="#tab5"><span><?php echo @$zbp->langs->msg->backend_setting; ?></span></a></li>
                         <li><a href="#tab6"><span><?php echo $zbp->lang['msg']['api_setting']; ?></span></a></li>
+                        <li><a href="#tab6"><span><?php echo $zbp->lang['msg']['ai_setting']; ?></span></a></li>
                     </ul>
                     <div class="clear"></div>
                 </div>
@@ -1560,25 +1556,25 @@ function Admin_SettingMng()
                 <div class="content-box-content">
                     <?php
                     $decodedBlogHost = $zbp->option['ZC_BLOG_HOST'];
-                    if (stripos($zbp->option['ZC_BLOG_HOST'], '/xn--') !== false && function_exists('mb_strtolower')) {
-                        $Punycode = new Punycode();
-                        $decodedBlogHost = $Punycode->decode($zbp->option['ZC_BLOG_HOST']);
-                    }
+    if (false !== stripos($zbp->option['ZC_BLOG_HOST'], '/xn--') && function_exists('mb_strtolower')) {
+        $Punycode = new Punycode();
+        $decodedBlogHost = $Punycode->decode($zbp->option['ZC_BLOG_HOST']);
+    }
 
-                    echo '<div class="tab-content default-tab" style="border:none;padding:0px;margin:0;" id="tab1">';
-                    echo '<table style="padding:0px;margin:0px;width:100%;" class="table_hover table_striped">';
-                    echo '<tr><td class="td25"><p><b>' . $zbp->lang['msg']['blog_host'] . '</b><br/>';
-                    if ($zbp->ispermanent_domain) {
-                        echo '<span class="note">' . $zbp->lang['msg']['permanent_domain_is_enable'] . '</span><br/>';
-                    }
-                    if ($zbp->ispermanent_domain && (Null2Empty(GetValueInArray($zbp->option, 'ZC_PERMANENT_DOMAIN_FORCED_URL')) == '') && $zbp->option['ZC_PERMANENT_DOMAIN_ENABLE']) {
-                        echo '<span class="note">' . $zbp->lang['msg']['blog_host_add'] . '</span>';
-                    }
-                    echo '</p></td><td><p><input id="ZC_BLOG_HOST" name="ZC_BLOG_HOST" style="max-width:600px;width:90%;" type="text" value="' . $decodedBlogHost . '" ' . (($zbp->option['ZC_PERMANENT_DOMAIN_ENABLE'] && (Null2Empty(GetValueInArray($zbp->option, 'ZC_PERMANENT_DOMAIN_FORCED_URL'))) == '') ? '' : 'readonly="readonly" ') . 'oninput="disableSubmit($(this).val())" />&nbsp;&nbsp;';
-                    if ($zbp->ispermanent_domain && (Null2Empty(GetValueInArray($zbp->option, 'ZC_PERMANENT_DOMAIN_FORCED_URL')) == '') && $zbp->option['ZC_PERMANENT_DOMAIN_ENABLE']) {
-                        echo '<span class="js-tip"></span>';
-                        echo '<p><label onclick="$(\'#ZC_BLOG_HOST\').prop(\'readonly\', $(\'#ZC_PERMANENT_DOMAIN_ENABLE\').val()==0?true:false);   if($(\'#ZC_PERMANENT_DOMAIN_ENABLE\').val()==0){enableSubmit();$(\'.js-tip\').html(\'\');}else {disableSubmit();}"><input type="text" id="ZC_PERMANENT_DOMAIN_ENABLE" name="ZC_PERMANENT_DOMAIN_ENABLE" class="checkbox" value="' . $zbp->option['ZC_PERMANENT_DOMAIN_ENABLE'] . '"/></label>' . $zbp->lang['msg']['permanent_domain'] . '<span style="display:none;"></span></p>';
-                        echo '<script>
+    echo '<div class="tab-content default-tab" style="border:none;padding:0px;margin:0;" id="tab1">';
+    echo '<table style="padding:0px;margin:0px;width:100%;" class="table_hover table_striped">';
+    echo '<tr><td class="td25"><p><b>' . $zbp->lang['msg']['blog_host'] . '</b><br/>';
+    if ($zbp->ispermanent_domain) {
+        echo '<span class="note">' . $zbp->lang['msg']['permanent_domain_is_enable'] . '</span><br/>';
+    }
+    if ($zbp->ispermanent_domain && ('' == Null2Empty(GetValueInArray($zbp->option, 'ZC_PERMANENT_DOMAIN_FORCED_URL'))) && $zbp->option['ZC_PERMANENT_DOMAIN_ENABLE']) {
+        echo '<span class="note">' . $zbp->lang['msg']['blog_host_add'] . '</span>';
+    }
+    echo '</p></td><td><p><input id="ZC_BLOG_HOST" name="ZC_BLOG_HOST" style="max-width:600px;width:90%;" type="text" value="' . $decodedBlogHost . '" ' . (($zbp->option['ZC_PERMANENT_DOMAIN_ENABLE'] && (Null2Empty(GetValueInArray($zbp->option, 'ZC_PERMANENT_DOMAIN_FORCED_URL'))) == '') ? '' : 'readonly="readonly" ') . 'oninput="disableSubmit($(this).val())" />&nbsp;&nbsp;';
+    if ($zbp->ispermanent_domain && ('' == Null2Empty(GetValueInArray($zbp->option, 'ZC_PERMANENT_DOMAIN_FORCED_URL'))) && $zbp->option['ZC_PERMANENT_DOMAIN_ENABLE']) {
+        echo '<span class="js-tip"></span>';
+        echo '<p><label onclick="$(\'#ZC_BLOG_HOST\').prop(\'readonly\', $(\'#ZC_PERMANENT_DOMAIN_ENABLE\').val()==0?true:false);   if($(\'#ZC_PERMANENT_DOMAIN_ENABLE\').val()==0){enableSubmit();$(\'.js-tip\').html(\'\');}else {disableSubmit();}"><input type="text" id="ZC_PERMANENT_DOMAIN_ENABLE" name="ZC_PERMANENT_DOMAIN_ENABLE" class="checkbox" value="' . $zbp->option['ZC_PERMANENT_DOMAIN_ENABLE'] . '"/></label>' . $zbp->lang['msg']['permanent_domain'] . '<span style="display:none;"></span></p>';
+        echo '<script>
 var bCheck = false;
 function disableSubmit(newurl){
     bCheck = true;
@@ -1597,7 +1593,7 @@ function checkDomain(){
     }
 }
 function changeDomain(newurl){
-    var token = "' . CreateWebToken("", (time() + 3600)) . '";
+    var token = "' . CreateWebToken('', (time() + 3600)) . '";
     newurl = newurl.replace(" ","");
     if(newurl.substr(newurl.length-1,1) != "/" ){
         newurl = newurl + "/";
@@ -1623,85 +1619,84 @@ function changeDomain(newurl){
       });
 }
     </script>';
-                    } else {
-                        echo '<script>
+    } else {
+        echo '<script>
 function checkDomain(){
     return true;
 }
     </script>';
-                    };
-                    echo '</td></tr>';
-                    echo '<tr><td><p><b>' . $zbp->lang['msg']['blog_name'] . '</b></p></td><td><p><input id="ZC_BLOG_NAME" name="ZC_BLOG_NAME" style="max-width:600px;width:90%;" type="text" value="' . htmlspecialchars($zbp->option['ZC_BLOG_NAME']) . '" /></p></td></tr>';
-                    echo '<tr><td><p><b>' . $zbp->lang['msg']['blog_subname'] . '</b></p></td><td><p><input id="ZC_BLOG_SUBNAME" name="ZC_BLOG_SUBNAME" style="max-width:600px;width:90%;"  type="text" value="' . htmlspecialchars($zbp->option['ZC_BLOG_SUBNAME']) . '" /></p></td></tr>';
-                    echo '<tr><td><p><b>' . $zbp->lang['msg']['copyright'] . '</b><br/><span class="note">' . $zbp->lang['msg']['copyright_add'] . '</span></p></td><td><p><textarea cols="3" rows="6" id="ZC_BLOG_COPYRIGHT" name="ZC_BLOG_COPYRIGHT" style="max-width:600px;width:90%;">' . htmlspecialchars($zbp->option['ZC_BLOG_COPYRIGHT']) . '</textarea></p></td></tr>';
+    }
+    echo '</td></tr>';
+    echo '<tr><td><p><b>' . $zbp->lang['msg']['blog_name'] . '</b></p></td><td><p><input id="ZC_BLOG_NAME" name="ZC_BLOG_NAME" style="max-width:600px;width:90%;" type="text" value="' . htmlspecialchars($zbp->option['ZC_BLOG_NAME']) . '" /></p></td></tr>';
+    echo '<tr><td><p><b>' . $zbp->lang['msg']['blog_subname'] . '</b></p></td><td><p><input id="ZC_BLOG_SUBNAME" name="ZC_BLOG_SUBNAME" style="max-width:600px;width:90%;"  type="text" value="' . htmlspecialchars($zbp->option['ZC_BLOG_SUBNAME']) . '" /></p></td></tr>';
+    echo '<tr><td><p><b>' . $zbp->lang['msg']['copyright'] . '</b><br/><span class="note">' . $zbp->lang['msg']['copyright_add'] . '</span></p></td><td><p><textarea cols="3" rows="6" id="ZC_BLOG_COPYRIGHT" name="ZC_BLOG_COPYRIGHT" style="max-width:600px;width:90%;">' . htmlspecialchars($zbp->option['ZC_BLOG_COPYRIGHT']) . '</textarea></p></td></tr>';
 
-                    echo '</table>';
-                    echo '</div>';
+    echo '</table>';
+    echo '</div>';
 
-                    echo '<div class="tab-content" style="border:none;padding:0px;margin:0;" id="tab2">';
-                    echo '<table style="padding:0px;margin:0px;width:100%;" class="table_hover table_striped">';
+    echo '<div class="tab-content" style="border:none;padding:0px;margin:0;" id="tab2">';
+    echo '<table style="padding:0px;margin:0px;width:100%;" class="table_hover table_striped">';
 
-                    echo '<tr><td class="td25"><p><b>' . $zbp->lang['msg']['blog_timezone'] . '</b></p></td><td><p><select id="ZC_TIME_ZONE_NAME" name="ZC_TIME_ZONE_NAME" style="max-width:600px;width:90%;" >';
-                    echo CreateOptionsOfTimeZone($zbp->option['ZC_TIME_ZONE_NAME']);
-                    echo '</select></p></td></tr>';
-                    echo '<tr><td><p><b>' . $zbp->lang['msg']['blog_language'] . '</b></p></td><td><p><select id="ZC_BLOG_LANGUAGEPACK" name="ZC_BLOG_LANGUAGEPACK" style="max-width:600px;width:90%;" >';
-                    echo CreateOptionsOfLang($zbp->option['ZC_BLOG_LANGUAGEPACK']);
-                    echo '</select></p></td></tr>';
-                    echo '<tr><td><p><b>' . $zbp->lang['msg']['debug_mode'] . '</b></p></td><td><p><input id="ZC_DEBUG_MODE" name="ZC_DEBUG_MODE" type="text" value="' . $zbp->option['ZC_DEBUG_MODE'] . '" class="checkbox"/></p></td></tr>';
-                    echo '<tr><td><p><b>' . @$zbp->langs->msg->show_warning_error . '</b></p></td><td><p><input id="ZC_DEBUG_MODE_WARNING" name="ZC_DEBUG_MODE_WARNING" type="text" value="' . $zbp->option['ZC_DEBUG_MODE_WARNING'] . '" class="checkbox"/></p></td></tr>';
-                    echo '<tr><td><p><b>' . $zbp->lang['msg']['additional_security'] . '</b></p></td><td><p><input id="ZC_ADDITIONAL_SECURITY" name="ZC_ADDITIONAL_SECURITY" type="text" value="' . $zbp->option['ZC_ADDITIONAL_SECURITY'] . '" class="checkbox"/></p></td></tr>';
-                    echo '<tr><td><p><b>' . $zbp->lang['msg']['using_cdn_guest_type'] . '</b></p></td><td><p><select id="ZC_USING_CDN_GUESTIP_TYPE" name="ZC_USING_CDN_GUESTIP_TYPE" style="max-width:600px;width:90%;" >';
-                    echo CreateOptionsOfGuestIPType($zbp->option['ZC_USING_CDN_GUESTIP_TYPE']);
-                    echo '</select></p></td></tr>';
-                    echo '<tr><td><p><b>' . $zbp->lang['msg']['enable_xmlrpc'] . '</b></p></td><td><p><input id="ZC_XMLRPC_ENABLE" name="ZC_XMLRPC_ENABLE" type="text" value="' . $zbp->option['ZC_XMLRPC_ENABLE'] . '" class="checkbox"/></p></td></tr>';
-                    echo '<tr><td><p><b>' . $zbp->lang['msg']['close_site'] . '</b></p></td><td><p><input id="ZC_CLOSE_SITE" name="ZC_CLOSE_SITE" type="text" value="' . $zbp->option['ZC_CLOSE_SITE'] . '" class="checkbox"/></p></td></tr>';
+    echo '<tr><td class="td25"><p><b>' . $zbp->lang['msg']['blog_timezone'] . '</b></p></td><td><p><select id="ZC_TIME_ZONE_NAME" name="ZC_TIME_ZONE_NAME" style="max-width:600px;width:90%;" >';
+    echo CreateOptionsOfTimeZone($zbp->option['ZC_TIME_ZONE_NAME']);
+    echo '</select></p></td></tr>';
+    echo '<tr><td><p><b>' . $zbp->lang['msg']['blog_language'] . '</b></p></td><td><p><select id="ZC_BLOG_LANGUAGEPACK" name="ZC_BLOG_LANGUAGEPACK" style="max-width:600px;width:90%;" >';
+    echo CreateOptionsOfLang($zbp->option['ZC_BLOG_LANGUAGEPACK']);
+    echo '</select></p></td></tr>';
+    echo '<tr><td><p><b>' . $zbp->lang['msg']['debug_mode'] . '</b></p></td><td><p><input id="ZC_DEBUG_MODE" name="ZC_DEBUG_MODE" type="text" value="' . $zbp->option['ZC_DEBUG_MODE'] . '" class="checkbox"/></p></td></tr>';
+    echo '<tr><td><p><b>' . @$zbp->langs->msg->show_warning_error . '</b></p></td><td><p><input id="ZC_DEBUG_MODE_WARNING" name="ZC_DEBUG_MODE_WARNING" type="text" value="' . $zbp->option['ZC_DEBUG_MODE_WARNING'] . '" class="checkbox"/></p></td></tr>';
+    echo '<tr><td><p><b>' . $zbp->lang['msg']['additional_security'] . '</b></p></td><td><p><input id="ZC_ADDITIONAL_SECURITY" name="ZC_ADDITIONAL_SECURITY" type="text" value="' . $zbp->option['ZC_ADDITIONAL_SECURITY'] . '" class="checkbox"/></p></td></tr>';
+    echo '<tr><td><p><b>' . $zbp->lang['msg']['using_cdn_guest_type'] . '</b></p></td><td><p><select id="ZC_USING_CDN_GUESTIP_TYPE" name="ZC_USING_CDN_GUESTIP_TYPE" style="max-width:600px;width:90%;" >';
+    echo CreateOptionsOfGuestIPType($zbp->option['ZC_USING_CDN_GUESTIP_TYPE']);
+    echo '</select></p></td></tr>';
+    echo '<tr><td><p><b>' . $zbp->lang['msg']['enable_xmlrpc'] . '</b></p></td><td><p><input id="ZC_XMLRPC_ENABLE" name="ZC_XMLRPC_ENABLE" type="text" value="' . $zbp->option['ZC_XMLRPC_ENABLE'] . '" class="checkbox"/></p></td></tr>';
+    echo '<tr><td><p><b>' . $zbp->lang['msg']['close_site'] . '</b></p></td><td><p><input id="ZC_CLOSE_SITE" name="ZC_CLOSE_SITE" type="text" value="' . $zbp->option['ZC_CLOSE_SITE'] . '" class="checkbox"/></p></td></tr>';
 
-                    echo '</table>';
-                    echo '</div>';
-                    echo '<div class="tab-content" style="border:none;padding:0px;margin:0;" id="tab3">';
-                    echo '<table style="padding:0px;margin:0px;width:100%;" class="table_hover table_striped">';
+    echo '</table>';
+    echo '</div>';
+    echo '<div class="tab-content" style="border:none;padding:0px;margin:0;" id="tab3">';
+    echo '<table style="padding:0px;margin:0px;width:100%;" class="table_hover table_striped">';
 
-                    echo '<tr><td class="td25"><p><b>' . $zbp->lang['msg']['display_count'] . '</b></p></td><td><p><input id="ZC_DISPLAY_COUNT" name="ZC_DISPLAY_COUNT" style="max-width:600px;width:90%;" type="text" value="' . $zbp->option['ZC_DISPLAY_COUNT'] . '" /></p></td></tr>';
-                    echo '<tr><td><p><b>' . $zbp->lang['msg']['display_subcategorys'] . '</b></p></td><td><p><input id="ZC_DISPLAY_SUBCATEGORYS" name="ZC_DISPLAY_SUBCATEGORYS" type="text" value="' . $zbp->option['ZC_DISPLAY_SUBCATEGORYS'] . '" class="checkbox"/></p></td></tr>';
-                    echo '<tr><td><p><b>' . $zbp->lang['msg']['pagebar_count'] . '</b></p></td><td><p><input id="ZC_PAGEBAR_COUNT" name="ZC_PAGEBAR_COUNT" style="max-width:600px;width:90%;" type="text" value="' . $zbp->option['ZC_PAGEBAR_COUNT'] . '" /></p></td></tr>';
-                    echo '<tr><td><p><b>' . $zbp->lang['msg']['search_count'] . '</b></p></td><td><p><input id="ZC_SEARCH_COUNT" name="ZC_SEARCH_COUNT" style="max-width:600px;width:90%;" type="text" value="' . $zbp->option['ZC_SEARCH_COUNT'] . '" /></p></td></tr>';
-                    echo '<tr><td><p><b>' . $zbp->lang['msg']['syntax_high_lighter'] . '</b></p></td><td><p><input id="ZC_SYNTAXHIGHLIGHTER_ENABLE" name="ZC_SYNTAXHIGHLIGHTER_ENABLE" type="text" value="' . $zbp->option['ZC_SYNTAXHIGHLIGHTER_ENABLE'] . '" class="checkbox"/></p></td></tr>';
-                    echo '</table>';
-                    echo '</div>';
-                    echo '<div class="tab-content" style="border:none;padding:0px;margin:0;" id="tab4">';
-                    echo '<table style="padding:0px;margin:0px;width:100%;" class="table_hover table_striped">';
+    echo '<tr><td class="td25"><p><b>' . $zbp->lang['msg']['display_count'] . '</b></p></td><td><p><input id="ZC_DISPLAY_COUNT" name="ZC_DISPLAY_COUNT" style="max-width:600px;width:90%;" type="text" value="' . $zbp->option['ZC_DISPLAY_COUNT'] . '" /></p></td></tr>';
+    echo '<tr><td><p><b>' . $zbp->lang['msg']['display_subcategorys'] . '</b></p></td><td><p><input id="ZC_DISPLAY_SUBCATEGORYS" name="ZC_DISPLAY_SUBCATEGORYS" type="text" value="' . $zbp->option['ZC_DISPLAY_SUBCATEGORYS'] . '" class="checkbox"/></p></td></tr>';
+    echo '<tr><td><p><b>' . $zbp->lang['msg']['pagebar_count'] . '</b></p></td><td><p><input id="ZC_PAGEBAR_COUNT" name="ZC_PAGEBAR_COUNT" style="max-width:600px;width:90%;" type="text" value="' . $zbp->option['ZC_PAGEBAR_COUNT'] . '" /></p></td></tr>';
+    echo '<tr><td><p><b>' . $zbp->lang['msg']['search_count'] . '</b></p></td><td><p><input id="ZC_SEARCH_COUNT" name="ZC_SEARCH_COUNT" style="max-width:600px;width:90%;" type="text" value="' . $zbp->option['ZC_SEARCH_COUNT'] . '" /></p></td></tr>';
+    echo '<tr><td><p><b>' . $zbp->lang['msg']['syntax_high_lighter'] . '</b></p></td><td><p><input id="ZC_SYNTAXHIGHLIGHTER_ENABLE" name="ZC_SYNTAXHIGHLIGHTER_ENABLE" type="text" value="' . $zbp->option['ZC_SYNTAXHIGHLIGHTER_ENABLE'] . '" class="checkbox"/></p></td></tr>';
+    echo '</table>';
+    echo '</div>';
+    echo '<div class="tab-content" style="border:none;padding:0px;margin:0;" id="tab4">';
+    echo '<table style="padding:0px;margin:0px;width:100%;" class="table_hover table_striped">';
 
-                    echo '<tr><td class="td25"><p><b>' . $zbp->lang['msg']['comment_turnoff'] . '</b></p></td><td><p><input id="ZC_COMMENT_TURNOFF" name="ZC_COMMENT_TURNOFF" type="text" value="' . $zbp->option['ZC_COMMENT_TURNOFF'] . '" class="checkbox"/></p></td></tr>';
-                    echo '<tr><td class="td25"><p><b>' . $zbp->lang['msg']['comment_audit'] . '</b><br/><span class="note">' . $zbp->lang['msg']['comment_audit_comment'] . '</span></p></td><td><p><input id="ZC_COMMENT_AUDIT" name="ZC_COMMENT_AUDIT" type="text" value="' . $zbp->option['ZC_COMMENT_AUDIT'] . '" class="checkbox"/></p></td></tr>';
-                    echo '<tr><td><p><b>' . $zbp->lang['msg']['comment_reverse_order'] . '</b></p></td><td><p><input id="ZC_COMMENT_REVERSE_ORDER" name="ZC_COMMENT_REVERSE_ORDER" type="text" value="' . $zbp->option['ZC_COMMENT_REVERSE_ORDER'] . '" class="checkbox"/></p></td></tr>';
-                    echo '<tr><td><p><b>' . $zbp->lang['msg']['comments_display_count'] . '</b></p></td><td><p><input id="ZC_COMMENTS_DISPLAY_COUNT" name="ZC_COMMENTS_DISPLAY_COUNT" type="text" value="' . $zbp->option['ZC_COMMENTS_DISPLAY_COUNT'] . '"  style="max-width:600px;width:90%;" /></p></td></tr>';
-                    echo '<tr><td><p><b>' . $zbp->lang['msg']['comment_verify_enable'] . '</b></p></td><td><p><input id="ZC_COMMENT_VERIFY_ENABLE" name="ZC_COMMENT_VERIFY_ENABLE" type="text" value="' . $zbp->option['ZC_COMMENT_VERIFY_ENABLE'] . '" class="checkbox"/></p></td></tr>';
+    echo '<tr><td class="td25"><p><b>' . $zbp->lang['msg']['comment_turnoff'] . '</b></p></td><td><p><input id="ZC_COMMENT_TURNOFF" name="ZC_COMMENT_TURNOFF" type="text" value="' . $zbp->option['ZC_COMMENT_TURNOFF'] . '" class="checkbox"/></p></td></tr>';
+    echo '<tr><td class="td25"><p><b>' . $zbp->lang['msg']['comment_audit'] . '</b><br/><span class="note">' . $zbp->lang['msg']['comment_audit_comment'] . '</span></p></td><td><p><input id="ZC_COMMENT_AUDIT" name="ZC_COMMENT_AUDIT" type="text" value="' . $zbp->option['ZC_COMMENT_AUDIT'] . '" class="checkbox"/></p></td></tr>';
+    echo '<tr><td><p><b>' . $zbp->lang['msg']['comment_reverse_order'] . '</b></p></td><td><p><input id="ZC_COMMENT_REVERSE_ORDER" name="ZC_COMMENT_REVERSE_ORDER" type="text" value="' . $zbp->option['ZC_COMMENT_REVERSE_ORDER'] . '" class="checkbox"/></p></td></tr>';
+    echo '<tr><td><p><b>' . $zbp->lang['msg']['comments_display_count'] . '</b></p></td><td><p><input id="ZC_COMMENTS_DISPLAY_COUNT" name="ZC_COMMENTS_DISPLAY_COUNT" type="text" value="' . $zbp->option['ZC_COMMENTS_DISPLAY_COUNT'] . '"  style="max-width:600px;width:90%;" /></p></td></tr>';
+    echo '<tr><td><p><b>' . $zbp->lang['msg']['comment_verify_enable'] . '</b></p></td><td><p><input id="ZC_COMMENT_VERIFY_ENABLE" name="ZC_COMMENT_VERIFY_ENABLE" type="text" value="' . $zbp->option['ZC_COMMENT_VERIFY_ENABLE'] . '" class="checkbox"/></p></td></tr>';
 
-                    echo '</table>';
-                    echo '</div>';
-                    echo '<div class="tab-content" style="border:none;padding:0px;margin:0;" id="tab5">';
-                    echo '<table style="padding:0px;margin:0px;width:100%;" class="table_hover table_striped">';
-                    echo '<tr><td class="td25"><p><b>' . $zbp->lang['msg']['allow_upload_type'] . '</b></p></td><td><p><input id="ZC_UPLOAD_FILETYPE" name="ZC_UPLOAD_FILETYPE" style="max-width:600px;width:90%;" type="text" value="' . htmlspecialchars($zbp->option['ZC_UPLOAD_FILETYPE']) . '" /></p></td></tr>';
-                    echo '<tr><td><p><b>' . $zbp->lang['msg']['allow_upload_size'] . '</b><br/><span class="note">upload_max_filesize=' . ini_get('upload_max_filesize') . '<br/>post_max_size=' . ini_get('post_max_size') . '</span></p></td><td><p><input id="ZC_UPLOAD_FILESIZE" name="ZC_UPLOAD_FILESIZE" style="max-width:600px;width:90%;" type="text" value="' . $zbp->option['ZC_UPLOAD_FILESIZE'] . '" /></p></td></tr>';
-                    echo '<tr><td><p><b>' . @$zbp->langs->msg->get_text_intro . '</b></p></td><td><p><input id="ZC_ARTICLE_INTRO_WITH_TEXT" name="ZC_ARTICLE_INTRO_WITH_TEXT" type="text" value="' . $zbp->option['ZC_ARTICLE_INTRO_WITH_TEXT'] . '" class="checkbox"/></p></td></tr>';
-                    echo '<tr><td><p><b>' . $zbp->lang['msg']['manage_count'] . '</b></p></td><td><p><input id="ZC_MANAGE_COUNT" name="ZC_MANAGE_COUNT" style="max-width:600px;width:90%;" type="text" value="' . $zbp->option['ZC_MANAGE_COUNT'] . '" /></p></td></tr>';
-                    echo '<tr><td><p><b>' . @$zbp->langs->msg->enable_post_batch_delete . '</b></p></td><td><p><input id="ZC_POST_BATCH_DELETE" name="ZC_POST_BATCH_DELETE" type="text" value="' . $zbp->option['ZC_POST_BATCH_DELETE'] . '" class="checkbox"/></p></td></tr>';
-                    echo '<tr><td><p><b>' . @$zbp->langs->msg->delete_member_with_alldata . '</b></p></td><td><p><input id="ZC_DELMEMBER_WITH_ALLDATA" name="ZC_DELMEMBER_WITH_ALLDATA" type="text" value="' . $zbp->option['ZC_DELMEMBER_WITH_ALLDATA'] . '" class="checkbox"/></p></td></tr>';
-                    echo '<tr><td><p><b>' . @$zbp->langs->msg->category_legacy_display . '</b></p></td><td><p><input id="ZC_CATEGORY_MANAGE_LEGACY_DISPLAY" name="ZC_CATEGORY_MANAGE_LEGACY_DISPLAY" type="text" value="' . $zbp->option['ZC_CATEGORY_MANAGE_LEGACY_DISPLAY'] . '" class="checkbox"/></p></td></tr>';
-                    //echo '<tr><td><p><b>' . @$zbp->langs->msg->enable_login_csrfcheck . '</b></p></td><td><p><input id="ZC_LOGIN_CSRFCHECK_ENABLE" name="ZC_LOGIN_CSRFCHECK_ENABLE" type="text" value="' . $zbp->option['ZC_LOGIN_CSRFCHECK_ENABLE'] . '" class="checkbox"/></p></td></tr>';
-                    echo '<tr><td><p><b>' . @$zbp->langs->msg->enable_login_verify . '</b></p></td><td><p><input id="ZC_LOGIN_VERIFY_ENABLE" name="ZC_LOGIN_VERIFY_ENABLE" type="text" value="' . $zbp->option['ZC_LOGIN_VERIFY_ENABLE'] . '" class="checkbox"/></p></td></tr>';
-                    echo '</table>';
-                    echo '</div>';
+    echo '</table>';
+    echo '</div>';
+    echo '<div class="tab-content" style="border:none;padding:0px;margin:0;" id="tab5">';
+    echo '<table style="padding:0px;margin:0px;width:100%;" class="table_hover table_striped">';
+    echo '<tr><td class="td25"><p><b>' . $zbp->lang['msg']['allow_upload_type'] . '</b></p></td><td><p><input id="ZC_UPLOAD_FILETYPE" name="ZC_UPLOAD_FILETYPE" style="max-width:600px;width:90%;" type="text" value="' . htmlspecialchars($zbp->option['ZC_UPLOAD_FILETYPE']) . '" /></p></td></tr>';
+    echo '<tr><td><p><b>' . $zbp->lang['msg']['allow_upload_size'] . '</b><br/><span class="note">upload_max_filesize=' . ini_get('upload_max_filesize') . '<br/>post_max_size=' . ini_get('post_max_size') . '</span></p></td><td><p><input id="ZC_UPLOAD_FILESIZE" name="ZC_UPLOAD_FILESIZE" style="max-width:600px;width:90%;" type="text" value="' . $zbp->option['ZC_UPLOAD_FILESIZE'] . '" /></p></td></tr>';
+    echo '<tr><td><p><b>' . @$zbp->langs->msg->get_text_intro . '</b></p></td><td><p><input id="ZC_ARTICLE_INTRO_WITH_TEXT" name="ZC_ARTICLE_INTRO_WITH_TEXT" type="text" value="' . $zbp->option['ZC_ARTICLE_INTRO_WITH_TEXT'] . '" class="checkbox"/></p></td></tr>';
+    echo '<tr><td><p><b>' . $zbp->lang['msg']['manage_count'] . '</b></p></td><td><p><input id="ZC_MANAGE_COUNT" name="ZC_MANAGE_COUNT" style="max-width:600px;width:90%;" type="text" value="' . $zbp->option['ZC_MANAGE_COUNT'] . '" /></p></td></tr>';
+    echo '<tr><td><p><b>' . @$zbp->langs->msg->enable_post_batch_delete . '</b></p></td><td><p><input id="ZC_POST_BATCH_DELETE" name="ZC_POST_BATCH_DELETE" type="text" value="' . $zbp->option['ZC_POST_BATCH_DELETE'] . '" class="checkbox"/></p></td></tr>';
+    echo '<tr><td><p><b>' . @$zbp->langs->msg->delete_member_with_alldata . '</b></p></td><td><p><input id="ZC_DELMEMBER_WITH_ALLDATA" name="ZC_DELMEMBER_WITH_ALLDATA" type="text" value="' . $zbp->option['ZC_DELMEMBER_WITH_ALLDATA'] . '" class="checkbox"/></p></td></tr>';
+    echo '<tr><td><p><b>' . @$zbp->langs->msg->category_legacy_display . '</b></p></td><td><p><input id="ZC_CATEGORY_MANAGE_LEGACY_DISPLAY" name="ZC_CATEGORY_MANAGE_LEGACY_DISPLAY" type="text" value="' . $zbp->option['ZC_CATEGORY_MANAGE_LEGACY_DISPLAY'] . '" class="checkbox"/></p></td></tr>';
+    //echo '<tr><td><p><b>' . @$zbp->langs->msg->enable_login_csrfcheck . '</b></p></td><td><p><input id="ZC_LOGIN_CSRFCHECK_ENABLE" name="ZC_LOGIN_CSRFCHECK_ENABLE" type="text" value="' . $zbp->option['ZC_LOGIN_CSRFCHECK_ENABLE'] . '" class="checkbox"/></p></td></tr>';
+    echo '<tr><td><p><b>' . @$zbp->langs->msg->enable_login_verify . '</b></p></td><td><p><input id="ZC_LOGIN_VERIFY_ENABLE" name="ZC_LOGIN_VERIFY_ENABLE" type="text" value="' . $zbp->option['ZC_LOGIN_VERIFY_ENABLE'] . '" class="checkbox"/></p></td></tr>';
+    echo '</table>';
+    echo '</div>';
 
-                    echo '<div class="tab-content" style="border:none;padding:0px;margin:0;" id="tab6">';
-                    echo '<table style="padding:0px;margin:0px;width:100%;" class="table_hover table_striped">';
-                    echo '<tr><td class="td25"><p><b>' . $zbp->lang['msg']['enable_api'] . '</b></p></td><td><p><input id="ZC_API_ENABLE" name="ZC_API_ENABLE" type="text" value="' . $zbp->option['ZC_API_ENABLE'] . '" class="checkbox"/></p></td></tr>';
-                    echo '<tr><td><p><b>' . $zbp->lang['msg']['enable_api_throttle'] . '</b><br/><span class="note">' . $zbp->lang['msg']['enable_api_throttle_note'] . '</span></p></td><td><p><input id="ZC_API_THROTTLE_ENABLE" name="ZC_API_THROTTLE_ENABLE" type="text" value="' . $zbp->option['ZC_API_THROTTLE_ENABLE'] . '" class="checkbox"/></p></td></tr>';
-                    echo '<tr><td><p><b>' . $zbp->lang['msg']['api_throttle_max_reqs_per_min'] . '</b><br/><span class="note">' . $zbp->lang['msg']['api_throttle_max_reqs_note'] . '</span></p></td><td><p><input id="ZC_API_THROTTLE_MAX_REQS_PER_MIN" name="ZC_API_THROTTLE_MAX_REQS_PER_MIN" style="max-width:600px;width:90%;" type="text" value="' . $zbp->option['ZC_API_THROTTLE_MAX_REQS_PER_MIN'] . '" /></p></td></tr>';
-                    echo '<tr><td><p><b>' . $zbp->lang['msg']['api_display_count'] . '</b><br/><span class="note">' . $zbp->lang['msg']['api_throttle_max_reqs_note'] . '</span></p></td><td><p><input id="ZC_API_DISPLAY_COUNT" name="ZC_API_DISPLAY_COUNT" style="max-width:600px;width:90%;" type="text" value="' . $zbp->option['ZC_API_DISPLAY_COUNT'] . '" /></p></td></tr>';
-                    echo '</table>';
-                    echo '</div>';
-                    ?>
+    echo '<div class="tab-content" style="border:none;padding:0px;margin:0;" id="tab6">';
+    echo '<table style="padding:0px;margin:0px;width:100%;" class="table_hover table_striped">';
+    echo '<tr><td class="td25"><p><b>' . $zbp->lang['msg']['enable_api'] . '</b></p></td><td><p><input id="ZC_API_ENABLE" name="ZC_API_ENABLE" type="text" value="' . $zbp->option['ZC_API_ENABLE'] . '" class="checkbox"/></p></td></tr>';
+    echo '<tr><td><p><b>' . $zbp->lang['msg']['enable_api_throttle'] . '</b><br/><span class="note">' . $zbp->lang['msg']['enable_api_throttle_note'] . '</span></p></td><td><p><input id="ZC_API_THROTTLE_ENABLE" name="ZC_API_THROTTLE_ENABLE" type="text" value="' . $zbp->option['ZC_API_THROTTLE_ENABLE'] . '" class="checkbox"/></p></td></tr>';
+    echo '<tr><td><p><b>' . $zbp->lang['msg']['api_throttle_max_reqs_per_min'] . '</b><br/><span class="note">' . $zbp->lang['msg']['api_throttle_max_reqs_note'] . '</span></p></td><td><p><input id="ZC_API_THROTTLE_MAX_REQS_PER_MIN" name="ZC_API_THROTTLE_MAX_REQS_PER_MIN" style="max-width:600px;width:90%;" type="text" value="' . $zbp->option['ZC_API_THROTTLE_MAX_REQS_PER_MIN'] . '" /></p></td></tr>';
+    echo '<tr><td><p><b>' . $zbp->lang['msg']['api_display_count'] . '</b><br/><span class="note">' . $zbp->lang['msg']['api_throttle_max_reqs_note'] . '</span></p></td><td><p><input id="ZC_API_DISPLAY_COUNT" name="ZC_API_DISPLAY_COUNT" style="max-width:600px;width:90%;" type="text" value="' . $zbp->option['ZC_API_DISPLAY_COUNT'] . '" /></p></td></tr>';
+    echo '</table>';
+    echo '</div>'; ?>
                 </div>
                 <!-- End .content-box-content -->
 
