@@ -156,6 +156,22 @@
             <td><b>{$zbp->langs->msg->enable_login_verify}</b></td>
             <td><input id="ZC_LOGIN_VERIFY_ENABLE" name="ZC_LOGIN_VERIFY_ENABLE" type="text" value="{$zbp->option['ZC_LOGIN_VERIFY_ENABLE']}" class="checkbox" /></td>
           </tr>
+          <tr>
+            <td><b>后台主题</b></td>
+            <td><select id="ZC_BACKEND_ID" name="ZC_BACKEND_ID" class="select-90">
+{php}<?php
+  $backend_apps = &$zbp->backend_apps;
+  foreach ($backend_apps as $backend_app) {
+  $s = '<option value="' . $backend_app->id . '" ' . ($zbp->option['ZC_BACKEND_ID'] == $backend_app->id ? 'selected="selected"' : '') . ' >' . ' ' . $backend_app->name . '</option>';
+  echo $s;
+  }
+  unset($backend_apps, $backend_app, $s);
+?>{/php}
+
+
+          </select></td></tr>
+
+
         </table>
       </div>
       <!-- Tab 6 -->

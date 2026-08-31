@@ -13,7 +13,7 @@
   <meta charset="utf-8" />
   <meta name="generator" content="{$zblogphp}" />
   <title>{$name} - {$title}</title>
-  <link rel="stylesheet" href="{$host}zb_system/admin2/style/admin2.css?v={$version}">
+  <link rel="stylesheet" href="{$host}zb_system/admin2/{$backend_theme}/style/admin2.css?v={$version}">
   <link rel="stylesheet" href="{$host}zb_system/image/icon/icon.css?v={$version}">
   <script src="{$host}zb_system/script/jquery-2.2.4.min.js?v={$version}"></script>
   <script src="{$host}zb_system/script/jquery-ui.custom.min.js?v={$version}"></script>

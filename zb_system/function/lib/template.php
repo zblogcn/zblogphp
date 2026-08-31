@@ -90,12 +90,37 @@ class Template
     public $template_dirname = 'template';
 
     /**
+     * @var string 主题应用的根目录
+     */
+    protected $app_path = '';
+
+    /**
      * @var bool 是否已显示过了
      */
     public $isdisplayed = false;
 
     public function __construct()
     {
+    }
+
+    public function SetAppPath($path = null)
+    {
+        global $zbp;
+        if ($path === null) {
+            $this->app_path = $zbp->usersdir . 'theme/' . $this->theme . '/';
+            return;
+        }
+        $this->app_path = $path;
+        $this->app_path = rtrim($this->app_path, '/') . '/';
+    }
+
+
+    /**
+     * @return null
+     */
+    public function GetAppPath()
+    {
+        return $this->app_path;
     }
 
     /**
@@ -107,6 +132,7 @@ class Template
     public function SetPath($path = null)
     {
         global $zbp;
+
         $template_dirname = $this->template_dirname;
 
         if ($path == null) {
@@ -122,6 +148,7 @@ class Template
             $path = substr($path, 0, (strlen($path) - 1)) . '___' . $template_dirname . '/';
         }
         $this->path = $path;
+        $this->path = rtrim($this->path, '/') . '/';
     }
 
     /**
@@ -213,8 +240,12 @@ class Template
     {
         global $zbp;
 
+        if ($this->app_path === '') {
+            $this->SetAppPath();
+        }
+
         foreach ($this->dirs as $key => $value) {
-            $value = str_ireplace($zbp->usersdir . 'theme/' . $this->theme . '/' . $this->template_dirname . '/', $this->path, $value);
+            $value = str_ireplace($this->app_path . $this->template_dirname . '/', $this->path, $value);
             if (!file_exists($value)) {
                 mkdir($value, 0755, true);
             }
@@ -235,6 +266,10 @@ class Template
     {
         global $zbp;
 
+        if ($this->app_path === '') {
+            $this->SetAppPath();
+        }
+
         // 初始化模板
         if (!file_exists($this->path)) {
             @mkdir($this->path, 0755, true);
@@ -251,8 +286,9 @@ class Template
                 }
             }
             $this->dirs = array_reverse($this->dirs);
+
             foreach ($this->dirs as $key => $value) {
-                $s = str_replace($zbp->usersdir . 'theme/' . $this->theme . '/' . $this->template_dirname . '/', $this->path, $value);
+                $s = str_replace($this->app_path . '/' . $this->template_dirname . '/', $this->path, $value);
                 if (file_exists($s)) {
                     foreach (GetFilesInDir($s, 'php') as $t) {
                         if (file_exists($t)) {
@@ -770,7 +806,7 @@ class Template
         $templates = array();
 
         // 读取预置模板
-        $files = GetFilesInDir($zbp->systemdir . 'admin2/template/', 'php');
+        $files = GetFilesInDir($zbp->systemdir . 'defend/backend/', 'php');
         foreach ($files as $sortname => $fullname) {
             $s = file_get_contents($fullname);
             if (substr($s, 0, 2) == '{*' && strstr($s, '*}') !== false) {
@@ -779,6 +815,15 @@ class Template
             }
             $templates[$sortname] = $s;
             $s = null;
+        }
+
+        // 读取Backend模板
+        $this->dirs = array();
+        $this->files = array();
+        $this->GetAllFileDir($zbp->systemdir . 'admin2/' . $this->theme . "/{$this->template_dirname}");
+
+        foreach ($this->files as $key => $value) {
+            $templates[$key] = $value;
         }
 
         $this->templates = $templates;
@@ -1009,6 +1054,7 @@ class Template
         $this->templateTags['name'] = htmlspecialchars($zbp->name);
         $this->templateTags['subname'] = htmlspecialchars($zbp->subname);
         $this->templateTags['theme'] = &$zbp->theme;
+        $this->templateTags['backend_theme'] = &$zbp->backend_theme;
         $this->templateTags['themeapp'] = &$zbp->themeapp;
         $this->templateTags['themeinfo'] = &$zbp->themeinfo;
         $this->templateTags['style'] = &$zbp->style;

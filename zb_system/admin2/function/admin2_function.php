@@ -7,6 +7,27 @@ require __DIR__ . "/admin2_misc.php";
 
 $zbp->ismanage = true;
 
+
+if (is_readable($xmlPath = $zbp->systemdir . 'admin2/backend-legacy/backend.xml')) {
+  zbp_admin2_RegisterBackEndApp('backend-legacy', $xmlPath);
+}
+if (is_readable($xmlPath = $zbp->systemdir . 'admin2/backend-nexus/backend.xml')) {
+  zbp_admin2_RegisterBackEndApp('backend-nexus', $xmlPath);
+}
+if (is_readable($xmlPath = $zbp->systemdir . 'admin2/backend-toyean/backend.xml')) {
+  zbp_admin2_RegisterBackEndApp('backend-toyean', $xmlPath);
+}
+unset($xmlPath);
+
+// admin2 注册后台主题
+function zbp_admin2_RegisterBackEndApp($app_id, $app_file)
+{
+  global $zbp;
+  $app = new App();
+  $app->LoadInfoByXml('backend', $app_id, $app_file);
+  $zbp->backend_apps[] = $app;
+}
+
 // admin2 后台主要函数 管理页面
 function zbp_admin2_GetActionInfo($action)
 {

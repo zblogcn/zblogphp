@@ -204,13 +204,18 @@ class App
      */
     public static $unpack_app = null;
 
+    protected $app_directory = null;
+
     public function __get($key)
     {
         global $zbp;
         if ($key === 'app_path') {
+            if ($this->app_directory !== null) {
+                return $this->app_directory;
+            }
             $appDirectory = $zbp->usersdir . FormatString($this->type, '[filename]');
             $appDirectory .= '/' . FormatString($this->id, '[filename]') . '/';
-
+            $this->app_directory = $appDirectory;
             return $appDirectory;
         } elseif ($key === 'app_url') {
             return $zbp->host . 'zb_users/' . $this->type . '/' . $this->id . '/';
@@ -373,12 +378,18 @@ class App
      *
      * @return bool
      */
-    public function LoadInfoByXml($type, $id)
+    public function LoadInfoByXml($type, $id, $xmlfilepath = null)
     {
         global $zbp;
 
         $this->id = $id;
         $this->type = $type;
+
+        if ($type == 'backend') {
+            $this->app_directory = pathinfo($xmlfilepath, PATHINFO_DIRNAME);
+            $this->app_directory = rtrim($this->app_directory, '/') . '/';
+        }
+
         $xmlPath = $this->app_path . FormatString($type, '[filename]') . '.xml';
         $this->isloaded = false;
 
