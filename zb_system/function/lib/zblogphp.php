@@ -979,6 +979,9 @@ class ZBlogPHP
 
         $this->islegacy_login_page = $this->option['ZC_LOGIN_USE_LEGACY_PAGE'];
 
+        $this->option = &$GLOBALS['zbp_option'];
+        $this->option = $GLOBALS['option'];
+
         $this->isinitialized = true;
 
         return true;
