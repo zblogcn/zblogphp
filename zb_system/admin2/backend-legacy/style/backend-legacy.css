@@ -680,53 +680,138 @@ body.admin-login {
 
 /* 表单容器 */
 .login-container {
+  min-height: 100px;
   margin: 0 auto;
-  display: flex;
-  justify-content: center;
+  padding-left: 0px;
+  width: 600px;
 }
 .login-container .login-form {
   width: 600px;
 }
-.login-container .form-row {
-  display: flex;
-  flex-wrap: wrap;
+.login-container dl {
+  height: 50px;
+  clear: both;
 }
-.login-container {
-  /* 操作区 */
-}
-.login-container .form-row.actions .remember {
-  margin-right: auto;
-  display: inline-flex;
-  align-items: center;
-}
-.login-container .field {
-  flex: 1;
-  display: flex;
-  align-items: center;
+.login-container dd {
+  width: 300px;
+  float: left;
   margin-bottom: 20px;
 }
-.login-container .field label {
-  width: 64px;
-  margin-right: 12px;
-  text-align: right;
+.login-container dd.floatright {
+  float: right;
 }
-.login-container .field input[type=text],
-.login-container .field input[type=password] {
-  flex: 1;
+.login-container dd.checkbox {
+  margin-left: 100px;
+  width: 200px;
+  text-align: left;
+}
+.login-container dd.submit, .login-container dd.password, .login-container dd.username, .login-container dd.validcode {
+  width: 300px;
+}
+.login-container label {
+  float: left;
+  width: 100px;
+  text-align: right;
+  overflow: hidden;
+  text-overflow: clip;
+  white-space: nowrap;
+  line-height: 30px;
+  padding: 0 5px 0 5px;
+}
+.login-container input {
+  float: left;
+}
+.login-container input[type=checkbox] {
+  margin: 8px 0 0 0;
+  padding: 0;
+}
+.login-container input[type=checkbox] + label {
+  width: auto;
+}
+.login-container input[type=text] {
+  width: 200px;
   height: 32px;
-  border-radius: 2px;
+  padding: 1px 5px;
+  line-height: 32px;
+}
+.login-container input[type=password] {
+  width: 200px;
+  height: 32px;
+  padding: 1px 5px;
+  line-height: 32px;
+}
+.login-container dd.validcode {
+  height: 40px;
+  position: relative;
+}
+.login-container dd.validcode > img {
+  position: absolute;
+  z-index: 9999;
+  width: 90px;
+  height: 28px;
+  cursor: pointer;
+  right: 2px;
+  top: 2px;
+}
+.login-container dd .button {
+  float: right;
 }
 
 /* 响应式：小屏改为单列 */
 @media (max-width: 720px) {
-  .login-form {
-    width: 100%;
+  .login-container {
+    width: 310px;
   }
-  .login-form .form-row {
-    padding: 0 30px 0 20px;
+  .login-container dd {
+    clear: both;
+    padding: 0px 10px 0px 0;
+    margin-bottom: 10px;
   }
-  .login-form .form-row .field.placeholder {
-    display: none;
+  .login-container dd.checkbox {
+    margin-left: 10px;
+    width: 300px;
+    float: left;
+    padding: 5px 0;
+  }
+  .login-container dd.submit {
+    width: 300px;
+    float: left;
+    padding: 5px 0;
+    margin-right: 10px;
+  }
+  .login-container dd.username label {
+    width: 300px;
+    text-align: left;
+  }
+  .login-container dd.password label {
+    width: 300px;
+    text-align: left;
+  }
+  .login-container dd.validcode label {
+    width: 300px;
+    text-align: left;
+  }
+  .login-container dd .button {
+    clear: both;
+    margin-right: 1em;
+  }
+  .login-container input[type=text] {
+    float: right;
+    width: 285px;
+  }
+  .login-container input[type=password] {
+    float: right;
+    width: 285px;
+  }
+  .login-container input[type=checkbox] {
+    margin: 8px 0 0 5px;
+  }
+  .login-container dd.validcode {
+    height: 65px;
+  }
+  .login-container dd.validcode > img {
+    top: 32px;
+    right: 12px;
   }
 }
 .module-layout {

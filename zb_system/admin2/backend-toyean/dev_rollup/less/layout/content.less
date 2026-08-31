@@ -9,6 +9,60 @@
   animation: fadeIn 0.3s ease;
   .scrollbar-light();
 
+  .title {
+    margin-bottom: 14px;
+
+    h2 {
+      margin-bottom: 8px;
+      font-size: 32px;
+      font-weight: bold;
+      .flex(space-between);
+      color: var(--color-text);
+
+      ul#topmenu {
+        .flex();
+        gap: 12px;
+
+        a {
+          padding: 0 12px;
+
+          &:last-child {
+            margin-left: 0;
+          }
+        }
+      }
+
+      a {
+        height: 32px;
+        margin-top: 4px;
+        padding: 0 12px 0 8px;
+        font-size: 14px;
+        color: #fff;
+        font-weight: normal;
+        line-height: 32px;
+        border: 1px solid @color-primary;
+        border-radius: 4px;
+        box-shadow: 0 4px 10px 0 rgba(1, 136, 251, 0.3);
+        background: @color-primary;
+        .inline-block;
+
+        &.rebuild::before {
+          content: "\ec28";
+          margin-right: 4px;
+          font-family: zblog;
+        }
+
+        &:hover {
+          .shadow;
+        }
+      }
+    }
+
+    p {
+      font-size: 16px;
+      color: var(--color-text);
+    }
+  }
 
   .sub {
     margin-bottom: 16px;
@@ -71,94 +125,19 @@
   }
 }
 
-.title {
-  margin-bottom: 14px;
-  // .clear();
 
-  h2 {
-    margin-bottom: 8px;
-    font-size: 32px;
-    color: #333;
-    font-weight: bold;
-    .flex(space-between);
-    // .clear();
-
-    // span {
-    //   background: linear-gradient(0deg, #cce7ff 10%, transparent 20%);
-    // }
-
-    ul#topmenu {
-      // .fr();
-      .flex();
-      gap: 12px;
-
-      a {
-        // margin-left: 18px;
-        padding: 0 12px;
-
-        &:last-child {
-          margin-left: 0;
-        }
-      }
-
-      // span {
-      //   background: none;
-      // }
-    }
-
-    a {
-      height: 32px;
-      // .fr();
-      margin-top: 4px;
-      padding: 0 12px 0 8px;
-      font-size: 14px;
-      color: #fff;
-      font-weight: normal;
-      line-height: 32px;
-      border: 1px solid @color-primary;
-      border-radius: 4px;
-      box-shadow: 0 4px 10px 0 rgba(1, 136, 251, 0.3);
-      background: @color-primary;
-      .zoom;
-
-      &.rebuild::before {
-        content: "\ec28";
-        margin-right: 4px;
-        font-size: 14px;
-        color: #fff;
-        font-family: zblog;
-        font-weight: normal;
-        .zoom;
-      }
-
-      &:hover {
-        .shadow;
-      }
-    }
-  }
-
-  p {
-    font-size: 16px;
-    color: #333;
-  }
-}
 
 @media screen and (max-width: 860px) {
   .content {
     height: calc(~"100vh - 89px");
     padding: 14px;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-    .scrollbar-hidden();
+    // scrollbar-width: none;
+    // .scrollbar-hidden();
   }
 
   .title {
     h2 {
       font-size: 26px;
-
-      a {
-        margin-top: 4px;
-      }
     }
 
     p {
@@ -170,33 +149,5 @@
 .night {
   .content {
     .scrollbar-dark();
-  }
-
-  .title {
-    h2 {
-      color: #fff;
-
-      span {
-        background: linear-gradient(0deg, #036 0%, transparent 20%);
-      }
-
-      ul span {
-        background: none;
-      }
-
-      a {
-        color: #fff;
-        border-color: @color-primary;
-        background-color: @color-primary;
-
-        &::before {
-          color: #fff;
-        }
-      }
-    }
-
-    p {
-      color: #ccc;
-    }
   }
 }

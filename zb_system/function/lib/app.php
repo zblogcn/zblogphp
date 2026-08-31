@@ -8,7 +8,6 @@ if (!defined('ZBP_PATH')) {
  */
 class App
 {
-
     /**
      * @var string 应用类型，'plugin'表示插件，'theme'表示主题
      */
@@ -182,7 +181,7 @@ class App
     /**
      * @var array 禁止打包文件glob
      */
-    public $ignore_files = array('.gitignore', '.DS_Store', 'Thumbs.db', 'composer.lock', 'zbignore.txt', '*.code-workspace');
+    public $ignore_files = ['.gitignore', '.DS_Store', 'Thumbs.db', 'composer.lock', 'zbignore.txt', '*.code-workspace'];
 
     /**
      * @var bool 加载xml成功否
@@ -202,17 +201,31 @@ class App
     /**
      * @var string 静态访法返回unpack成功后的app
      */
-    public static $unpack_app = null;
+    public static $unpack_app;
 
     /**
      * @var string app_path 之前是魔术方法，现在转入GetDir()
      */
-    public $app_path = null;
+    public $app_path;
 
     /**
      * @var string app_url 之前是魔术方法，现在转入GetUrl()
      */
-    public $app_url = null;
+    public $app_url;
+
+    /**
+     * @var array 所有目录列表
+     * @private
+     */
+    private $dirs = [];
+
+    /**
+     * @var array 所有文件列表
+     * @private
+     */
+    private $files = [];
+
+    private $ignored_dirs = [];
 
     /**
      * 得到详细信息数组.
@@ -308,12 +321,13 @@ class App
     public function GetDir()
     {
         global $zbp;
-        if ($this->app_path !== null) {
+        if (null !== $this->app_path) {
             return $this->app_path;
         }
         $appDirectory = $zbp->usersdir . FormatString($this->type, '[filename]');
         $appDirectory .= '/' . FormatString($this->id, '[filename]') . '/';
         $this->app_path = $appDirectory;
+
         return $this->app_path;
     }
 
@@ -330,27 +344,29 @@ class App
     public function GetUrl()
     {
         global $zbp;
-        if ($this->app_url !== null) {
+        if (null !== $this->app_url) {
             return $this->app_url;
         }
         $this->app_url = $zbp->host . 'zb_users/' . $this->type . '/' . $this->id . '/';
+
         return $this->app_url;
     }
 
     /**
-     * 获取应用Logo图片地址(优先Logo)
+     * 获取应用Logo图片地址(优先Logo).
      *
      * @return string
      */
     public function GetLogo()
     {
-        if ($this->type == 'plugin') {
+        if ('plugin' == $this->type) {
             return $this->GetUrl() . 'logo.png';
-        } elseif (is_readable($this->GetDir() . 'logo.png')) {
-            return $this->GetUrl() . 'logo.png';
-        } else {
-            return $this->GetUrl() . 'screenshot.png';
         }
+        if (is_readable($this->GetDir() . 'logo.png')) {
+            return $this->GetUrl() . 'logo.png';
+        }
+
+        return $this->GetUrl() . 'screenshot.png';
     }
 
     /**
@@ -374,12 +390,12 @@ class App
 
         $array = GetFilesInDir($dir, 'css');
         if (isset($array['default'])) {
-            $a = array('default' => $array['default']);
+            $a = ['default' => $array['default']];
             unset($array['default']);
             $array = array_merge($a, $array);
         }
         if (isset($array['style'])) {
-            $a = array('style' => $array['style']);
+            $a = ['style' => $array['style']];
             unset($array['style']);
             $array = array_merge($a, $array);
         }
@@ -390,8 +406,9 @@ class App
     /**
      * 载入应用xml中的信息.
      *
-     * @param string $type 应用类型
-     * @param string $id   应用ID
+     * @param string     $type        应用类型
+     * @param string     $id          应用ID
+     * @param null|mixed $xmlfilepath
      *
      * @return bool
      */
@@ -402,7 +419,7 @@ class App
         $this->id = $id;
         $this->type = $type;
 
-        if ($type == 'backend') {
+        if ('backend' == $type) {
             $this->app_path = pathinfo($xmlfilepath, PATHINFO_DIRNAME);
             $this->app_path = rtrim($this->app_path, '/') . '/';
         }
@@ -422,7 +439,7 @@ class App
         }
 
         $appver = $xml->attributes();
-        if ((string) $appver->version !== 'php') {
+        if ('php' !== (string) $appver->version) {
             return false;
         }
 
@@ -473,7 +490,7 @@ class App
         $this->sidebars_sidebar9 = (string) $xml->sidebars->sidebar9;
 
         $appIgnorePath = $this->GetDir() . 'zbignore.txt';
-        $appIgnores = array();
+        $appIgnores = [];
         if (is_readable($appIgnorePath)) {
             $appIgnores = explode("\n", str_replace("\r", "\n", trim(file_get_contents($appIgnorePath))));
         }
@@ -483,7 +500,6 @@ class App
             }
         }
         $this->ignore_files = array_unique($this->ignore_files);
-
 
         $stylecss_file = $this->GetDir() . 'style/' . $zbp->style . '.css';
         if (is_readable($stylecss_file)) {
@@ -564,38 +580,6 @@ class App
     }
 
     /**
-     * @var array 所有目录列表
-     * @private
-     */
-    private $dirs = array();
-
-    /**
-     * @var array 所有文件列表
-     * @private
-     */
-    private $files = array();
-
-    /**
-     * @param string $dir 获取所有目录及文件列表
-     * @private
-     */
-    private function GetAllFileDir($dir)
-    {
-        foreach (scandir($dir) as $d) {
-            if (is_dir($dir . $d)) {
-                if ((substr($d, 0, 1) != '.')
-                    && !($d == 'compile' && $this->type == 'theme')
-                ) {
-                    $this->GetAllFileDir($dir . $d . '/');
-                    $this->dirs[] = $dir . $d . '/';
-                }
-            } else {
-                $this->files[] = $dir . $d;
-            }
-        }
-    }
-
-    /**
      * 应用打包.
      *
      * @return string
@@ -603,8 +587,8 @@ class App
     public function Pack()
     {
         global $zbp;
-        $this->dirs = array();
-        $this->files = array();
+        $this->dirs = [];
+        $this->files = [];
 
         $dir = $this->GetDir();
         $this->GetAllFileDir($dir);
@@ -692,7 +676,7 @@ class App
             }
             $d = $this->id . '/' . str_replace($dir, '', $value);
             $ext = pathinfo($value, PATHINFO_EXTENSION);
-            if ($ext == 'php' || $ext == 'inc') {
+            if ('php' == $ext || 'inc' == $ext) {
                 $c = base64_encode(RemoveBOM(file_get_contents($value)));
             } else {
                 $c = base64_encode(file_get_contents($value));
@@ -717,35 +701,6 @@ class App
         return gzencode($this->Pack(), 9, FORCE_GZIP);
     }
 
-    private $ignored_dirs = array();
-
-    private function IsPathIgnored($path)
-    {
-        $path = str_ireplace('\\', '/', $path);
-        $appPath = str_ireplace('\\', '/', $this->GetDir());
-        $fileName = str_ireplace($appPath, '', $path);
-        foreach ($this->ignore_files as $glob) {
-            if (fnmatch($glob, $fileName)) {
-                return true;
-            }
-            if (is_file($path)) {
-                foreach ($this->ignored_dirs as $key => $value) {
-                    if (stripos($path, $value) !== false) {
-                        return true;
-                    }
-                }
-            }
-            if (is_dir($path) && is_dir($d = $appPath . $glob)) {
-                $d = rtrim($d, '/') . '/';
-                if (stripos($path, $d) !== false) {
-                    return true;
-                }
-            }
-        }
-
-        return false;
-    }
-
     /**
      * 解开应用包.
      *
@@ -756,10 +711,10 @@ class App
     public static function UnPack($s)
     {
         global $zbp;
-        $charset = array();
+        $charset = [];
         $charset[1] = substr($s, 0, 1);
         $charset[2] = substr($s, 1, 1);
-        if (ord($charset[1]) == 31 && ord($charset[2]) == 139) {
+        if (31 == ord($charset[1]) && 139 == ord($charset[2])) {
             $s = gzdecode($s);
         }
 
@@ -768,13 +723,13 @@ class App
             return false;
         }
 
-        if ($xml['version'] != 'php') {
+        if ('php' != $xml['version']) {
             return false;
         }
 
         $type = $xml['type'];
         $id = $xml->id;
-        $dir = $zbp->userdir . $type . '/';
+        $dir = $zbp->usersdir . $type . '/';
 
         ZbpErrorControl::SuspendErrorHook();
 
@@ -813,7 +768,7 @@ class App
     }
 
     /**
-     * @return true | Exception
+     * @return Exception|true
      */
     public function CheckCompatibility()
     {
@@ -824,11 +779,12 @@ class App
             return new Exception(str_replace('%s', $this->adapted, $zbp->lang['error'][78]));
         }
 
-        if (trim($this->phpver) == '') {
+        if ('' == trim($this->phpver)) {
             $this->phpver = '5.2';
         }
         if (version_compare($this->phpver, GetPHPVersion()) > 0) {
             $zbp->ShowError(str_replace('%s', $this->phpver, $zbp->lang['error'][91]), __FILE__, __LINE__);
+
             return new Exception(str_replace('%s', $this->phpver, $zbp->lang['error'][91]));
         }
 
@@ -874,14 +830,16 @@ class App
     }
 
     /**
-     * 从全局检查 依赖(关闭时) or 拒绝(开启时)
+     * 从全局检查 依赖(关闭时) or 拒绝(开启时).
+     *
      * @param $action string (Enable|Disable)
-     * @return true | Exception
+     *
+     * @return Exception|true
      */
     public function CheckCompatibility_Global($action)
     {
         global $zbp;
-        if ($action == 'Enable') {
+        if ('Enable' == $action) {
             $apps = $zbp->LoadPlugins();
             $apps[] = $zbp->LoadApp('theme', $zbp->theme);
             foreach ($apps as $app) {
@@ -897,7 +855,7 @@ class App
                 }
             }
         }
-        if ($action == 'Disable') {
+        if ('Disable' == $action) {
             $apps = $zbp->LoadPlugins();
             $apps[] = $zbp->LoadApp('theme', $zbp->theme);
             foreach ($apps as $app) {
@@ -956,11 +914,11 @@ class App
         }
 
         $s = '';
-        for ($i = 1; $i < 10; $i++) {
+        for ($i = 1; $i < 10; ++$i) {
             $s .= $this->{'sidebars_sidebar' . $i};
         }
         if (!empty($s)) {
-            for ($i = 1; $i < 10; $i++) {
+            for ($i = 1; $i < 10; ++$i) {
                 $zbp->option['ZC_SIDEBAR' . (($i > 1) ? $i : '') . '_ORDER'] = $this->{'sidebars_sidebar' . $i};
             }
         }
@@ -975,11 +933,57 @@ class App
     {
         global $zbp;
 
-        for ($i = 1; $i < 10; $i++) {
+        for ($i = 1; $i < 10; ++$i) {
             $a[$i] = $zbp->option['ZC_SIDEBAR' . (($i > 1) ? $i : '') . '_ORDER'];
         }
         $zbp->cache->{'sidebars_' . $this->id} = json_encode($a);
         $zbp->SaveCache();
     }
 
+    /**
+     * @param string $dir 获取所有目录及文件列表
+     * @private
+     */
+    private function GetAllFileDir($dir)
+    {
+        foreach (scandir($dir) as $d) {
+            if (is_dir($dir . $d)) {
+                if (('.' != substr($d, 0, 1))
+                    && !('compile' == $d && 'theme' == $this->type)
+                ) {
+                    $this->GetAllFileDir($dir . $d . '/');
+                    $this->dirs[] = $dir . $d . '/';
+                }
+            } else {
+                $this->files[] = $dir . $d;
+            }
+        }
+    }
+
+    private function IsPathIgnored($path)
+    {
+        $path = str_ireplace('\\', '/', $path);
+        $appPath = str_ireplace('\\', '/', $this->GetDir());
+        $fileName = str_ireplace($appPath, '', $path);
+        foreach ($this->ignore_files as $glob) {
+            if (fnmatch($glob, $fileName)) {
+                return true;
+            }
+            if (is_file($path)) {
+                foreach ($this->ignored_dirs as $key => $value) {
+                    if (false !== stripos($path, $value)) {
+                        return true;
+                    }
+                }
+            }
+            if (is_dir($path) && is_dir($d = $appPath . $glob)) {
+                $d = rtrim($d, '/') . '/';
+                if (false !== stripos($path, $d)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
 }
