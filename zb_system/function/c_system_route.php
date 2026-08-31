@@ -1595,7 +1595,11 @@ function ViewPost($id = null, $alias = null, $isrewrite = false, $object = [])
         return false;
     }
 
-    if (0 != $article->Status && !$zbp->CheckRights($article->TypeActions['all']) && ($article->AuthorID != $zbp->user->ID)) {
+    if ($article->Status != 0
+        && !($zbp->user->ID > 0 && $article->AuthorID == $zbp->user->ID)
+        && !$zbp->CheckRights($article->TypeActions['all'])
+    ) {
+        // 作者被删除后 AuthorID 置为 0，匿名用户 ID 同为 0，不能据此绕过鉴权
         $zbp->ShowError(2, __FILE__, __LINE__);
     }
 
