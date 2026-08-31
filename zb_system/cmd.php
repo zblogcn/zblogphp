@@ -81,7 +81,12 @@ switch ($zbp->action) {
         ViewComments((int) GetVars('postid', 'GET'), (int) GetVars('page', 'GET'));
         break;
     case 'ArticleEdt':
-        Redirect_cmd_end('admin/edit.php?' . GetVars('QUERY_STRING', 'SERVER'));
+        if ($zbp->option['ZC_MANAGE_UI'] == 2) {
+            Redirect_cmd_end('admin2/index.php?' . GetVars('QUERY_STRING', 'SERVER'));
+        } else {
+            Redirect_cmd_end('admin/edit.php?' . GetVars('QUERY_STRING', 'SERVER'));
+        }
+        //Redirect_cmd_end('admin/edit.php?' . GetVars('QUERY_STRING', 'SERVER'));
         break;
     case 'ArticleDel':
         CheckIsRefererValid();
@@ -92,7 +97,12 @@ switch ($zbp->action) {
         Redirect_cmd_end('cmd.php?act=ArticleMng');
         break;
     case 'ArticleMng':
-        Redirect_cmd_end('admin/index.php?' . GetVars('QUERY_STRING', 'SERVER'));
+        if ($zbp->option['ZC_MANAGE_UI'] == 2) {
+            Redirect_cmd_end('admin2/index.php?' . GetVars('QUERY_STRING', 'SERVER'));
+        } else {
+            Redirect_cmd_end('admin/index.php?' . GetVars('QUERY_STRING', 'SERVER'));
+        }
+        //Redirect_cmd_end('admin/index.php?' . GetVars('QUERY_STRING', 'SERVER'));
         break;
     case 'ArticlePst':
         $zbp->csrfExpiration = 48;
@@ -105,7 +115,12 @@ switch ($zbp->action) {
         Redirect_cmd_end_by_script('cmd.php?act=ArticleMng');
         break;
     case 'PageEdt':
-        Redirect_cmd_end('admin/edit.php?' . GetVars('QUERY_STRING', 'SERVER'));
+        if ($zbp->option['ZC_MANAGE_UI'] == 2) {
+            Redirect_cmd_end('admin2/index.php?' . GetVars('QUERY_STRING', 'SERVER'));
+        } else {
+            Redirect_cmd_end('admin/edit.php?' . GetVars('QUERY_STRING', 'SERVER'));
+        }
+        //Redirect_cmd_end('admin/edit.php?' . GetVars('QUERY_STRING', 'SERVER'));
         break;
     case 'PageDel':
         CheckIsRefererValid();
@@ -129,10 +144,20 @@ switch ($zbp->action) {
         Redirect_cmd_end_by_script('cmd.php?act=PageMng');
         break;
     case 'CategoryMng':
-        Redirect_cmd_end('admin/index.php?' . GetVars('QUERY_STRING', 'SERVER'));
+        if ($zbp->option['ZC_MANAGE_UI'] == 2) {
+            Redirect_cmd_end('admin2/index.php?' . GetVars('QUERY_STRING', 'SERVER'));
+        } else {
+            Redirect_cmd_end('admin/index.php?' . GetVars('QUERY_STRING', 'SERVER'));
+        }
+        //Redirect_cmd_end('admin/index.php?' . GetVars('QUERY_STRING', 'SERVER'));
         break;
     case 'CategoryEdt':
-        Redirect_cmd_end('admin/category_edit.php?' . GetVars('QUERY_STRING', 'SERVER'));
+        if ($zbp->option['ZC_MANAGE_UI'] == 2) {
+            Redirect_cmd_end('admin2/index.php?' . GetVars('QUERY_STRING', 'SERVER'));
+        } else {
+            Redirect_cmd_end('admin/category_edit.php?' . GetVars('QUERY_STRING', 'SERVER'));
+        }
+        //Redirect_cmd_end('admin/category_edit.php?' . GetVars('QUERY_STRING', 'SERVER'));
         break;
     case 'CategoryPst':
         CheckIsRefererValid();
@@ -175,16 +200,36 @@ switch ($zbp->action) {
         Redirect_cmd_end($_SERVER["HTTP_REFERER"]);
         break;
     case 'CommentMng':
-        Redirect_cmd_end('admin/index.php?' . GetVars('QUERY_STRING', 'SERVER'));
+        if ($zbp->option['ZC_MANAGE_UI'] == 2) {
+            Redirect_cmd_end('admin2/index.php?' . GetVars('QUERY_STRING', 'SERVER'));
+        } else {
+            Redirect_cmd_end('admin/index.php?' . GetVars('QUERY_STRING', 'SERVER'));
+        }
+        //Redirect_cmd_end('admin/index.php?' . GetVars('QUERY_STRING', 'SERVER'));
         break;
     case 'MemberMng':
-        Redirect_cmd_end('admin/index.php?' . GetVars('QUERY_STRING', 'SERVER'));
+        if ($zbp->option['ZC_MANAGE_UI'] == 2) {
+            Redirect_cmd_end('admin2/index.php?' . GetVars('QUERY_STRING', 'SERVER'));
+        } else {
+            Redirect_cmd_end('admin/index.php?' . GetVars('QUERY_STRING', 'SERVER'));
+        }
+        //Redirect_cmd_end('admin/index.php?' . GetVars('QUERY_STRING', 'SERVER'));
         break;
     case 'MemberEdt':
-        Redirect_cmd_end('admin/member_edit.php?' . GetVars('QUERY_STRING', 'SERVER'));
+        if ($zbp->option['ZC_MANAGE_UI'] == 2) {
+            Redirect_cmd_end('admin2/index.php?' . GetVars('QUERY_STRING', 'SERVER'));
+        } else {
+            Redirect_cmd_end('admin/member_edit.php?' . GetVars('QUERY_STRING', 'SERVER'));
+        }
+        //Redirect_cmd_end('admin/member_edit.php?' . GetVars('QUERY_STRING', 'SERVER'));
         break;
     case 'MemberNew':
-        Redirect_cmd_end('admin/member_edit.php?' . GetVars('QUERY_STRING', 'SERVER'));
+        if ($zbp->option['ZC_MANAGE_UI'] == 2) {
+            Redirect_cmd_end('admin2/index.php?' . GetVars('QUERY_STRING', 'SERVER'));
+        } else {
+            Redirect_cmd_end('admin/member_edit.php?' . GetVars('QUERY_STRING', 'SERVER'));
+        }
+        //Redirect_cmd_end('admin/member_edit.php?' . GetVars('QUERY_STRING', 'SERVER'));
         break;
     case 'MemberPst':
         CheckIsRefererValid();
@@ -214,7 +259,12 @@ switch ($zbp->action) {
         Redirect_cmd_end('cmd.php?act=MemberMng');
         break;
     case 'UploadMng':
-        Redirect_cmd_end('admin/index.php?' . GetVars('QUERY_STRING', 'SERVER'));
+        if ($zbp->option['ZC_MANAGE_UI'] == 2) {
+            Redirect_cmd_end('admin2/index.php?' . GetVars('QUERY_STRING', 'SERVER'));
+        } else {
+            Redirect_cmd_end('admin/index.php?' . GetVars('QUERY_STRING', 'SERVER'));
+        }
+        //Redirect_cmd_end('admin/index.php?' . GetVars('QUERY_STRING', 'SERVER'));
         break;
     case 'UploadPst':
         CheckIsRefererValid();
@@ -232,10 +282,20 @@ switch ($zbp->action) {
         Redirect_cmd_end('cmd.php?act=UploadMng');
         break;
     case 'TagMng':
-        Redirect_cmd_end('admin/index.php?' . GetVars('QUERY_STRING', 'SERVER'));
+        if ($zbp->option['ZC_MANAGE_UI'] == 2) {
+            Redirect_cmd_end('admin2/index.php?' . GetVars('QUERY_STRING', 'SERVER'));
+        } else {
+            Redirect_cmd_end('admin/index.php?' . GetVars('QUERY_STRING', 'SERVER'));
+        }
+        //Redirect_cmd_end('admin/index.php?' . GetVars('QUERY_STRING', 'SERVER'));
         break;
     case 'TagEdt':
-        Redirect_cmd_end('admin/tag_edit.php?' . GetVars('QUERY_STRING', 'SERVER'));
+        if ($zbp->option['ZC_MANAGE_UI'] == 2) {
+            Redirect_cmd_end('admin2/index.php?' . GetVars('QUERY_STRING', 'SERVER'));
+        } else {
+            Redirect_cmd_end('admin/tag_edit.php?' . GetVars('QUERY_STRING', 'SERVER'));
+        }
+        //Redirect_cmd_end('admin/tag_edit.php?' . GetVars('QUERY_STRING', 'SERVER'));
         break;
     case 'TagPst':
         CheckIsRefererValid();
@@ -258,6 +318,11 @@ switch ($zbp->action) {
             InstallPlugin(GetVars('install', 'GET'));
             $zbp->BuildModule();
             $zbp->SaveCache();
+        }
+        if ($zbp->option['ZC_MANAGE_UI'] == 2) {
+            Redirect_cmd_end('admin2/index.php?' . GetVars('QUERY_STRING', 'SERVER'));
+        } else {
+            Redirect_cmd_end('admin/index.php?' . GetVars('QUERY_STRING', 'SERVER'));
         }
         Redirect_cmd_end('admin/index.php?' . GetVars('QUERY_STRING', 'SERVER'));
         break;
@@ -289,6 +354,11 @@ switch ($zbp->action) {
         if (GetVars('install', 'GET') !== null) {
             $zbp->BuildTemplate();
         }
+        if ($zbp->option['ZC_MANAGE_UI'] == 2) {
+            Redirect_cmd_end('admin2/index.php?' . GetVars('QUERY_STRING', 'SERVER'));
+        } else {
+            Redirect_cmd_end('admin/index.php?' . GetVars('QUERY_STRING', 'SERVER'));
+        }
         Redirect_cmd_end('admin/index.php?' . GetVars('QUERY_STRING', 'SERVER'));
         break;
     case 'ThemeSet':
@@ -307,7 +377,12 @@ switch ($zbp->action) {
         $zbp->SaveCache();
         break;
     case 'ModuleEdt':
-        Redirect_cmd_end('admin/module_edit.php?' . GetVars('QUERY_STRING', 'SERVER'));
+        if ($zbp->option['ZC_MANAGE_UI'] == 2) {
+            Redirect_cmd_end('admin2/index.php?' . GetVars('QUERY_STRING', 'SERVER'));
+        } else {
+            Redirect_cmd_end('admin/module_edit.php?' . GetVars('QUERY_STRING', 'SERVER'));
+        }
+        //Redirect_cmd_end('admin/module_edit.php?' . GetVars('QUERY_STRING', 'SERVER'));
         break;
     case 'ModulePst':
         CheckIsRefererValid();
@@ -326,10 +401,20 @@ switch ($zbp->action) {
         Redirect_cmd_end('cmd.php?act=ModuleMng');
         break;
     case 'ModuleMng':
-        Redirect_cmd_end('admin/index.php?' . GetVars('QUERY_STRING', 'SERVER'));
+        if ($zbp->option['ZC_MANAGE_UI'] == 2) {
+            Redirect_cmd_end('admin2/index.php?' . GetVars('QUERY_STRING', 'SERVER'));
+        } else {
+            Redirect_cmd_end('admin/index.php?' . GetVars('QUERY_STRING', 'SERVER'));
+        }
+        //Redirect_cmd_end('admin/index.php?' . GetVars('QUERY_STRING', 'SERVER'));
         break;
     case 'SettingMng':
-        Redirect_cmd_end('admin/index.php?' . GetVars('QUERY_STRING', 'SERVER'));
+        if ($zbp->option['ZC_MANAGE_UI'] == 2) {
+            Redirect_cmd_end('admin2/index.php?' . GetVars('QUERY_STRING', 'SERVER'));
+        } else {
+            Redirect_cmd_end('admin/index.php?' . GetVars('QUERY_STRING', 'SERVER'));
+        }
+        //Redirect_cmd_end('admin/index.php?' . GetVars('QUERY_STRING', 'SERVER'));
         break;
     case 'SettingSav':
         CheckIsRefererValid();

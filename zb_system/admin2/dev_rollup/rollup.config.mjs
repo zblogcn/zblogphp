@@ -5,14 +5,17 @@ import copy from 'rollup-plugin-copy'
 import postcss from "rollup-plugin-postcss";
 // import { purgeCSSPlugin } from '@fullhuman/postcss-purgecss';
 
+import path from 'path';
 // 获取当前及应用目录
 const curPath = process.cwd();
-const appPath = curPath.replace(/\/[^/]+$/, "");
+const appPath = path.dirname(curPath);
 // 应用文件夹名
-const appName = appPath.replace(/.*\//, "");
+const appName = path.basename(appPath);
+// Normalize path for globs (replace backslashes with forward slashes)
+const toPosix = (p) => p.replace(/\\/g, '/');
 // 产物复制到的目录
-// const distJS = `${appPath}/script/`;
-const distCSS = `${appPath}/style/`;
+// const distJS = path.join(appPath, 'script');
+const distCSS = path.join(appPath, 'style');
 
 // 加载环境变量
 const envConfig = config({ path: `${curPath}/.env` }).parsed;
@@ -35,7 +38,7 @@ const defConfig = {
       },
       // plugins: [
       //   purgeCSSPlugin({
-      //     content: [`${appPath}/template/*.php`],
+      //     content: [toPosix(path.join(appPath, 'template', '*.php'))],
       //   }),
       // ],
     }),
@@ -61,9 +64,9 @@ if (process.env.NODE_ENV === "dev") {
     browsersync({
       proxy: envConfig.PROXY || 'http://localhost',
       files: [
-        `${appPath}/**/*.php`,
-        `${appPath}/style/**/*.css`,
-        // `${appPath}/script/**/*.js`,
+        toPosix(path.join(appPath, '**', '*.php')),
+        toPosix(path.join(appPath, 'style', '**', '*.css')),
+        // toPosix(path.join(appPath, 'script', '**', '*.js')),
       ],
     }),
   );
