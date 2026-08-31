@@ -8,15 +8,15 @@
     <meta name="csrfToken" content="{$zbp.GetCSRFToken()}" />
     <meta name="csrfExpiration" content="{$zbp.csrfExpiration}" />
     <title>{$name} - {$title}</title>
-  <link rel="stylesheet" href="{$host}zb_system/admin2/{$backend_theme}/style/admin2.css?v={$version}">
+    <link rel="stylesheet" href="{$host}zb_system/admin2/{$backendtheme}/style/{$backendtheme}.css?v={$version}">
     <link rel="stylesheet" href="{$host}zb_system/image/icon/icon.css?v={$version}">
     <link rel="stylesheet" href="{$host}zb_system/css/jquery-ui.custom.css?v={$version}" />
     <script src="{$host}zb_system/script/jquery-2.2.4.min.js?v={$version}"></script>
     <script src="{$host}zb_system/script/jquery-ui.custom.min.js?v={$version}"></script>
     <script src="{$host}zb_system/script/zblogphp.js?v={$version}"></script>
-     <script>
+    <script>
         window.__ADMIN_JS_CONFIG_URL__ = '{$zbp.ajaxurl}admin2';
-     </script>
+    </script>
     <script src="{$host}zb_system/admin2/script/c_admin_js_add.js?v={$version}"></script>
     <script src="{$host}zb_system/admin2/{$backendtheme}/script/{$backendtheme}.js?v={$version}"></script>
     {$header}

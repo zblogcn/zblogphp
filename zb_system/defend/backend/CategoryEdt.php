@@ -5,35 +5,40 @@
     <input id="edtType" name="Type" type="hidden" value="{$cate->Type}" />
     <!-- 名称 -->
     <p>
-        <span class="title">{$zbp->lang['msg']['name']}:</span>
-        <span class="star">(*)</span>
-        <br />
-        <input id="edtName" class="edit" size="40" name="Name" maxlength="{$option['ZC_CATEGORY_NAME_MAX']}" type="text" value="{$cate->Name}" />
+        <label for="edtName" class="block">
+            <span class="title">{$zbp->lang['msg']['name']}:</span>
+            <span class="star">(*)</span>
+        </label>
+        <input id="edtName" class="edit" size="40" name="Name" maxlength="{$option['ZC_CATEGORY_NAME_MAX']}" type="text" value="{$cate->Name}" autocomplete="off" />
     </p>
     <!-- 别名 -->
     <p>
-        <span class="title">{$zbp->lang['msg']['alias']}:</span>
-        <br />
+        <label for="edtAlias" class="block">
+            <span class="title">{$zbp->lang['msg']['alias']}:</span>
+        </label>
         <input id="edtAlias" class="edit" size="40" name="Alias" type="text" value="{$cate->Alias}" />
     </p>
     <!-- 排序 -->
     <p>
-        <span class="title">{$zbp->lang['msg']['order']}:</span>
-        <br />
+        <label for="edtOrder" class="block">
+            <span class="title">{$zbp->lang['msg']['order']}:</span>
+        </label>
         <input id="edtOrder" class="edit" size="40" name="Order" type="text" value="{$cate->Order}" />
     </p>
     <!-- 父分类 -->
     <p>
-        <span class="title">{$zbp->lang['msg']['parent_category']}:</span>
-        <br />
+        <label for="edtParentID" class="block">
+            <span class="title">{$zbp->lang['msg']['parent_category']}:</span>
+        </label>
         <select id="edtParentID" name="ParentID" class="edit" size="1">
             {$p}
         </select>
     </p>
     <!-- 模板 -->
     <p>
-        <span class="title">{$zbp->lang['msg']['template']}:</span>
-        <br />
+        <label for="cmbTemplate" class="block">
+            <span class="title">{$zbp->lang['msg']['template']}:</span>
+        </label>
         <select class="edit" size="1" name="Template" id="cmbTemplate">
             {OutputOptionItemsOfTemplate($cate->Template, array('single', '404', 'search', 'module', 'lm-'), array('list', 'category'))}
         </select>
@@ -41,17 +46,19 @@
     </p>
     <!-- 分类内文章模板 -->
     <p>
-        <span class="title">{$zbp->lang['msg']['category_aritles_default_template']}:</span>
-        <br />
+        <label for="cmbLogTemplate" class="block">
+            <span class="title">{$zbp->lang['msg']['category_aritles_default_template']}:</span>
+        </label>
         <select class="edit" size="1" name="LogTemplate" id="cmbLogTemplate">
             {OutputOptionItemsOfTemplate($cate->LogTemplate, array('index', '404', 'search', 'module', 'lm-'), array('single', $zbp->GetPostType($cate->Type, 'name')))}
         </select>
     </p>
     <!-- 描述 -->
     <p>
-        <span class='title'>{$zbp->lang['msg']['intro']}:</span>
-        <br />
-        <textarea cols="3" rows="6" id="edtIntro" name="Intro" style="width:600px;">{$cate->Intro}</textarea>
+        <label for="edtIntro" class="block">
+            <span class='title'>{$zbp->lang['msg']['intro']}:</span>
+        </label>
+        <textarea rows="6" id="edtIntro" name="Intro">{$cate->Intro}</textarea>
     </p>
     <!-- 添加到导航栏 -->
     <p>

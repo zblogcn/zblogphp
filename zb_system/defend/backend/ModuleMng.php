@@ -163,8 +163,11 @@ foreach ($zbp->modules as $module) {
             connectToSortable: ".siderbar-sort-list",
             revert: "invalid",
             containment: "document",
-            helper: "clone",
-            cursor: "move"
+            // helper: "clone",
+            cursor: "move",
+            helper: function() {
+                return $(this).clone().css("width", "100%");
+            },
         }).disableSelection();
 
         $(".widget-list").droppable({

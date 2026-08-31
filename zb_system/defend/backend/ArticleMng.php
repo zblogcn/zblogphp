@@ -2,33 +2,40 @@
 <!-- 搜索 -->
 <form class="search" id="search" method="post" action="#">
     <p>
-        {$zbp.lang['msg']['search']}: {$zbp.lang['msg']['category']}
-        <select class="edit" size="1" name="category" style="width:140px;">
-            <option value="">{$zbp.lang['msg']['any']}</option>
-            {foreach $zbp.categoriesbyorder as $id => $cate}
-            <option value="{$cate->ID}">{$cate->SymbolName}</option>
-            {/foreach}
-        </select>
-        {$zbp.lang['msg']['type']}
-        <select class="edit" size="1" name="status" style="width:100px;">
-            <option value="">{$zbp.lang['msg']['any']}</option>
-            <option value="0">{$zbp.lang['post_status_name']['0']}</option>
-            <option value="1">{$zbp.lang['post_status_name']['1']}</option>
-            <option value="2">{$zbp.lang['post_status_name']['2']}</option>
-        </select>
-
+        {$zbp.lang['msg']['search']}:
+        <!-- 分类 -->
         <label>
+            {$zbp.lang['msg']['category']}
+            <select class="edit" size="1" name="category">
+                <option value="">{$zbp.lang['msg']['any']}</option>
+                {foreach $zbp.categoriesbyorder as $id => $cate}
+                <option value="{$cate->ID}">{$cate->SymbolName}</option>
+                {/foreach}
+            </select>
+        </label>
+        <!-- 状态 -->
+        <label>
+            {$zbp.lang['msg']['type']}
+            <select class="edit" size="1" name="status">
+                <option value="">{$zbp.lang['msg']['any']}</option>
+                <option value="0">{$zbp.lang['post_status_name']['0']}</option>
+                <option value="1">{$zbp.lang['post_status_name']['1']}</option>
+                <option value="2">{$zbp.lang['post_status_name']['2']}</option>
+            </select>
+        </label>
+        <!-- 置顶 -->
+        <label class="label-flex">
             <input type="checkbox" name="istop" value="True" />{$zbp.lang['msg']['top']}
         </label>
 
-        <input name="search" style="width:250px;" type="text" value="" />
+        <input aria-label="search" name="search" type="text" value="" />
         <input type="submit" class="button" value="{$zbp.lang['msg']['submit']}" />
     </p>
 </form>
 
 <form method="post" action="{$zbp.cmdurl}?act=PostBat&type={$post_type}">
     <!-- 文章列表 -->
-    <table class="tableFull tableBorder table_hover table_striped tableBorder-thcenter">
+    <table class="tableFull tableBorder table_hover table_striped thCenter">
         <!-- 表头 -->
         <tr>
             <th>{$zbp.lang['msg']['id']}{$button_id_html}</th>

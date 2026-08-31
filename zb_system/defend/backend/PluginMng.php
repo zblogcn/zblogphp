@@ -1,6 +1,6 @@
 <?php exit(); ?>
 <!-- update: 2026-01-04 -->
-<table class="tableFull tableBorder tableBorder-thcenter table_hover table_striped plugin-list">
+<table class="tableFull tableBorder thCenter table_hover table_striped plugin-list">
     <tr>
         <th></th>
         <th>{$zbp.lang['msg']['name']}</th>

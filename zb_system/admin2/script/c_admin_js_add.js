@@ -376,7 +376,7 @@
 
   // CSRF 过期提示
   function ShowCSRFHint() {
-    let hintHtml = '<div class="hint"><p class="hint_bad">' + getLang(['error', '94'], 'Login status expired, please refresh and retry. (%s)') + '</p></div>';
+    let hintHtml = '<div class="hint"><p class="hint-msg hint_always hint_bad">' + getLang(['error', '94'], 'Login status expired, please refresh and retry. (%s)') + '</p></div>';
     hintHtml = hintHtml.replace('%s', $('meta[name=csrfExpiration]').attr('content'));
     const $hint = $(hintHtml);
     if ($('.hint-place').length > 0) {

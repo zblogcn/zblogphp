@@ -4,7 +4,7 @@
 <form class="search" id="search" method="post" action="#">
     <p>
         {$zbp.lang['msg']['search']}:
-        <input name="search" style="width:450px;" type="text" value="" />
+        <input aria-label="search" name="search" type="text" value="" />
         <input type="submit" class="button" value="{$zbp.lang['msg']['submit']}" />
     </p>
 </form>
@@ -13,7 +13,7 @@
 <form method="post" action="{$zbp.cmdurl}?act=CommentBat">
     <input type="hidden" name="csrfToken" value="{$zbp.GetCSRFToken()}">
 
-    <table class="tableFull tableBorder tableBorder-thcenter table_hover table_striped">
+    <table class="tableFull tableBorder thCenter table_hover table_striped">
         <tr>
             <th>{$zbp.lang['msg']['id']}{$button_id_html}</th>
             <th>{$zbp.lang['msg']['parend_id']}</th>
@@ -41,7 +41,7 @@
                 </span>
             </td>
             <td>
-                <div style="overflow:hidden;max-width:500px;">
+                <div class="overflow-hidden">
                     {if $comment.Post}
                     <a href="{$comment.Post.Url}" target="_blank"><i class="icon-link-45deg"></i></a>
                     {else}
@@ -85,11 +85,11 @@
         {/foreach}
 
         {if $ischecking}
-        <input type="submit" name="all_del" onclick="return confirmDelete();" value="{$zbp.lang['msg']['all_del']}" class="button" style="float:right;" />
-        <input type="submit" name="all_pass" value="{$zbp.lang['msg']['all_pass']}" class="button" style="float:right;margin-right:10px;" />
+        <input type="submit" name="all_del" onclick="return confirmDelete();" value="{$zbp.lang['msg']['all_del']}" class="button pull-right" />
+        <input type="submit" name="all_pass" value="{$zbp.lang['msg']['all_pass']}" class="button pull-right mr-10" />
         {else}
-        <input type="submit" name="all_del" onclick="return confirmDelete();" value="{$zbp.lang['msg']['all_del']}" class="button" style="float:right;" />
-        <input type="submit" name="all_audit" value="{$zbp.lang['msg']['all_audit']}" class="button" style="float:right;margin-right:10px;" />
+        <input type="submit" name="all_del" onclick="return confirmDelete();" value="{$zbp.lang['msg']['all_del']}" class="button pull-right" />
+        <input type="submit" name="all_audit" value="{$zbp.lang['msg']['all_audit']}" class="button pull-right mr-10" />
         {/if}
     </p>
 

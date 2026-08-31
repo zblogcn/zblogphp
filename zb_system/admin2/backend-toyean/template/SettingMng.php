@@ -193,16 +193,40 @@
             <div class="tab-content" id="tab7">
                 <table class="table_hover table_striped tableFull">
                     <tr>
-                        <td class="td20"><b>{$zbp->lang['msg']['ai_url']}</b></td>
-                        <td><input id="ZC_AI_API_URL" name="ZC_AI_API_URL" type="text" value="{$zbp->option['ZC_AI_API_URL']}" class="input-90"></td>
+                        <td class="td25"><b>{$zbp->lang['msg']['text_ai_url']}</b></td>
+                        <td><input id="ZC_TEXT_AI_API_URL" name="ZC_TEXT_AI_API_URL" type="text" value="{$zbp->option['ZC_TEXT_AI_API_URL']}" class="input-90" /></td>
                     </tr>
                     <tr>
-                        <td><b>{$zbp->lang['msg']['ai_key']}</b></td>
-                        <td><input id="ZC_AI_API_KEY" name="ZC_AI_API_KEY" type="text" value="{$zbp->option['ZC_AI_API_KEY']}" class="input-90"></td>
+                        <td><b>{$zbp->lang['msg']['text_ai_key']}</b></td>
+                        <td><input id="ZC_TEXT_AI_API_KEY" name="ZC_TEXT_AI_API_KEY" type="text" value="{$zbp->option['ZC_TEXT_AI_API_KEY']}" class="input-90" /></td>
                     </tr>
                     <tr>
-                        <td><b>{$zbp->lang['msg']['ai_model']}</b></td>
-                        <td><input id="ZC_AI_API_MODEL" name="ZC_AI_API_MODEL" type="text" value="{$zbp->option['ZC_AI_API_MODEL']}" class="input-90"></td>
+                        <td><b>{$zbp->lang['msg']['text_ai_model']}</b></td>
+                        <td><input id="ZC_TEXT_AI_API_MODEL" name="ZC_TEXT_AI_API_MODEL" type="text" value="{$zbp->option['ZC_TEXT_AI_API_MODEL']}" class="input-90" /></td>
+                    </tr>
+                    <tr>
+                        <td class="td25"><b>{$zbp->lang['msg']['image_ai_url']}</b></td>
+                        <td><input id="ZC_IMAGE_AI_API_URL" name="ZC_IMAGE_AI_API_URL" type="text" value="{$zbp->option['ZC_IMAGE_AI_API_URL']}" class="input-90" /></td>
+                    </tr>
+                    <tr>
+                        <td><b>{$zbp->lang['msg']['image_ai_key']}</b></td>
+                        <td><input id="ZC_IMAGE_AI_API_KEY" name="ZC_IMAGE_AI_API_KEY" type="text" value="{$zbp->option['ZC_IMAGE_AI_API_KEY']}" class="input-90" /></td>
+                    </tr>
+                    <tr>
+                        <td><b>{$zbp->lang['msg']['image_ai_model']}</b></td>
+                        <td><input id="ZC_IMAGE_AI_API_MODEL" name="ZC_IMAGE_AI_API_MODEL" type="text" value="{$zbp->option['ZC_IMAGE_AI_API_MODEL']}" class="input-90" /></td>
+                    </tr>
+                    <tr>
+                        <td class="td25"><b>{$zbp->lang['msg']['video_ai_url']}</b></td>
+                        <td><input id="ZC_VIDEO_AI_API_URL" name="ZC_VIDEO_AI_API_URL" type="text" value="{$zbp->option['ZC_VIDEO_AI_API_URL']}" class="input-90" /></td>
+                    </tr>
+                    <tr>
+                        <td><b>{$zbp->lang['msg']['video_ai_key']}</b></td>
+                        <td><input id="ZC_VIDEO_AI_API_KEY" name="ZC_VIDEO_AI_API_KEY" type="text" value="{$zbp->option['ZC_VIDEO_AI_API_KEY']}" class="input-90" /></td>
+                    </tr>
+                    <tr>
+                        <td><b>{$zbp->lang['msg']['video_ai_model']}</b></td>
+                        <td><input id="ZC_VIDEO_AI_API_MODEL" name="ZC_VIDEO_AI_API_MODEL" type="text" value="{$zbp->option['ZC_VIDEO_AI_API_MODEL']}" class="input-90" /></td>
                     </tr>
                 </table>
             </div>

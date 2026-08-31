@@ -28,6 +28,18 @@ form {
     select {
       height: 33px;
     }
+
+    select {
+      min-width: 150px;
+    }
+
+    input[type=text] {
+      width: 200px;
+    }
+
+    p>*:not(:last-child) {
+      margin-right: .7em;
+    }
   }
 }
 
@@ -108,6 +120,16 @@ select {
 textarea {
   @extend %input-base;
   height: auto;
+}
+
+#edit textarea[name="Intro"] {
+  width: 600px;
+}
+
+.label-flex {
+  display: inline-flex;
+  align-items: center;
+  gap: .3em;
 }
 
 /* checkbox */

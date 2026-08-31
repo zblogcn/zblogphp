@@ -443,6 +443,13 @@ switch ($zbp->action) {
         $zbp->SetHint('good');
         Redirect_cmd_end($_SERVER["HTTP_REFERER"]);
         break;
+    case 'RewriteMng':
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            SaveRewrite();
+            Redirect_cmd_end('admin2/index.php?' . GetVars('QUERY_STRING', 'SERVER'));
+        }
+        Redirect_cmd_end('admin2/index.php?' . GetVars('QUERY_STRING', 'SERVER'));
+        break;
     case 'misc':
         include './function/c_system_misc.php';
         ob_clean();
