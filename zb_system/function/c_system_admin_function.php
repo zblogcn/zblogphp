@@ -166,7 +166,7 @@ if (!function_exists('Include_Admin_CheckHttp304OK')) {
             echo '<script>
          var exp = new Date();
          exp.setTime(exp.getTime() + 365*24*3600*1000);
-         $(function () {  $.ajax({type: "GET",url: "' . $zbp->cmdurl . '?act=checkhttp304ok",success: function(msg){ 
+         $(function () {  $.ajax({type: "GET",url: "' . $zbp->cmdurl . '?act=checkhttp304ok",success: function(msg){
             document.cookie="http304ok=0; path=' . $zbp->cookiespath . '" + "; expires=" + exp.toGMTString();
          },statusCode: {500: function() {
             document.cookie="http304ok=1; path=' . $zbp->cookiespath . '" + "; expires=" + exp.toGMTString();
