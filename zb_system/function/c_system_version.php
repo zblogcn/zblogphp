@@ -25,7 +25,7 @@ define('ZC_VERSION_BUILD', '5');
 define('ZC_VERSION_COMMIT', '3500');
 define('ZC_VERSION_CODENAME', 'Optimus');
 define('ZC_VERSION', ZC_VERSION_MAJOR . '.' . ZC_VERSION_MINOR . '.' . ZC_VERSION_BUILD . '.' . ZC_VERSION_COMMIT);
-if (strcasecmp(ZC_VERSION_CODENAME, 'Beta') == 0 || strcasecmp(ZC_VERSION_CODENAME, 'Alpha') == 0) {
+if (0 == strcasecmp(ZC_VERSION_CODENAME, 'Beta') || 0 == strcasecmp(ZC_VERSION_CODENAME, 'Alpha')) {
     define('ZC_VERSION_DISPLAY', ZC_VERSION_MAJOR . '.' . ZC_VERSION_MINOR . '.' . ZC_VERSION_BUILD . '.' . ZC_VERSION_COMMIT . ' ' . ZC_VERSION_CODENAME);
 } else {
     define('ZC_VERSION_DISPLAY', ZC_VERSION_MAJOR . '.' . ZC_VERSION_MINOR . '.' . ZC_VERSION_BUILD);
