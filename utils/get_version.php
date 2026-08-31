@@ -5,6 +5,7 @@
 
 if (PHP_SAPI !== 'cli') {
     fwrite(STDERR, "This script is intended to be run from the command line.\n");
+
     exit(1);
 }
 
@@ -14,7 +15,7 @@ $opts = getopt('hvs', ['help', 'version', 'short', 'full', 'display', 'commit', 
 
 function usage()
 {
-    $u = <<<USAGE
+    $u = <<<'USAGE'
 Usage: php get_version.php [options]
 
 Options:
@@ -33,6 +34,7 @@ USAGE;
 
 if (isset($opts['h']) || isset($opts['help'])) {
     usage();
+
     exit(0);
 }
 
@@ -49,29 +51,35 @@ if (isset($opts['json'])) {
         'ZC_BLOG_VERSION' => defined('ZC_BLOG_VERSION') ? ZC_BLOG_VERSION : null,
     ];
     echo json_encode($out, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT) . "\n";
+
     exit(0);
 }
 
 if (isset($opts['short'])) {
-    echo (defined('ZC_VERSION') ? ZC_VERSION : '') . "\n";
+    echo(defined('ZC_VERSION') ? ZC_VERSION : '') . "\n";
+
     exit(0);
 }
 
 if (isset($opts['full'])) {
-    echo (defined('ZC_VERSION_FULL') ? ZC_VERSION_FULL : '') . "\n";
+    echo(defined('ZC_VERSION_FULL') ? ZC_VERSION_FULL : '') . "\n";
+
     exit(0);
 }
 
 if (isset($opts['display']) || isset($opts['version']) || isset($opts['v'])) {
-    echo (defined('ZC_BLOG_VERSION') ? ZC_BLOG_VERSION : (defined('ZC_VERSION_DISPLAY') ? ZC_VERSION_DISPLAY : '')) . "\n";
+    echo(defined('ZC_BLOG_VERSION') ? ZC_BLOG_VERSION : (defined('ZC_VERSION_DISPLAY') ? ZC_VERSION_DISPLAY : '')) . "\n";
+
     exit(0);
 }
 
 if (isset($opts['commit'])) {
-    echo (defined('ZC_VERSION_COMMIT') ? ZC_VERSION_COMMIT : '') . "\n";
+    echo(defined('ZC_VERSION_COMMIT') ? ZC_VERSION_COMMIT : '') . "\n";
+
     exit(0);
 }
 
 // default
-echo (defined('ZC_BLOG_VERSION') ? ZC_BLOG_VERSION : (defined('ZC_VERSION_DISPLAY') ? ZC_VERSION_DISPLAY : '')) . "\n";
+echo(defined('ZC_BLOG_VERSION') ? ZC_BLOG_VERSION : (defined('ZC_VERSION_DISPLAY') ? ZC_VERSION_DISPLAY : '')) . "\n";
+
 exit(0);
