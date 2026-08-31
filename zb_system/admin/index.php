@@ -22,6 +22,10 @@ if (!$zbp->CheckRights($zbp->action)) {
     die();
 }
 
+if ($zbp->option['ZC_MANAGE_UI'] != 1) {
+  Redirect("../admin2/index.php?act={$zbp->action}");
+}
+
 HookFilterPlugin('Filter_Plugin_Admin_Begin');
 
 switch ($zbp->action) {

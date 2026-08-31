@@ -756,6 +756,33 @@ class Template
     }
 
     /**
+     * 后台模板载入
+     */
+    public function LoadAdminTemplates()
+    {
+        global $zbp;
+
+        $templates = array();
+
+        // 读取预置模板
+        $files = GetFilesInDir($zbp->systemdir . 'admin2/template/', 'php');
+        foreach ($files as $sortname => $fullname) {
+            $s = file_get_contents($fullname);
+            if (substr($s, 0, 2) == '{*' && strstr($s, '*}') !== false) {
+                $s = strstr($s, '*}');
+                $s = substr($s, 2);
+            }
+            $templates[$sortname] = $s;
+            $s = null;
+        }
+
+        $this->templates = $templates;
+        $this->LoadTemplateInfos();
+
+        return true;
+    }
+
+    /**
      * 载入未编译模板s.
      */
     public function LoadTemplates()

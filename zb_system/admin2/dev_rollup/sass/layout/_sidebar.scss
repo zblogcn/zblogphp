@@ -1,0 +1,49 @@
+@use "../base/variables" as *;
+
+.left {
+  grid-area: left;
+}
+
+#leftmenu {
+  padding: 0;
+  margin: 0;
+
+  a {
+    display: block;
+    color: $color-text;
+
+    span {
+      display: flex;
+      height: $menu-item-height + 5px;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+  }
+
+  li {
+    background-color: $color-backgroud;
+    margin-bottom: 8px;
+
+    &:hover {
+      background-color: $color-backgroud-hover;
+      a {
+        color: currentColor;
+      }
+    }
+
+    &.on {
+      background: $color-light;
+
+      a {
+        color: #ffffff;
+      }
+    }
+  }
+
+  li.split {
+    display: none;
+  }
+
+
+}

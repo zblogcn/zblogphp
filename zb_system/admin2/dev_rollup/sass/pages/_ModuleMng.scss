@@ -1,0 +1,184 @@
+@use "../base/variables" as *;
+
+.module-layout {
+  display: flex;
+  margin: 1.3em 0;
+}
+
+// 左侧模块列表
+.widget-left {
+  flex: 1;
+}
+
+// 右侧侧栏列表
+.widget-right {
+  flex: 0 0 290px;
+  padding: 0 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+// 模块列表容器
+.widget-list {
+  border: 1px solid $color-border;
+
+  &-group {
+    margin-bottom: 20px;
+  }
+
+  &-header {
+    padding: 5px 0;
+    font-weight: bold;
+    border-bottom: 1px solid $color-border;
+    text-align: center;
+    background: $color-backgroud;
+  }
+
+  &-note {
+    padding: 5px 0;
+    color: $color-text-light;
+    font-style: italic;
+    text-align: center;
+  }
+
+  &-content {
+    padding: 5px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: flex-start;
+  }
+  &-header + &-content {
+    margin-top: 5px;
+  }
+}
+
+// 模块项
+.widget {
+  width: 252px;
+  background: #f8f8f8;
+  border: 1px solid $color-border;
+  cursor: move;
+  flex: 0 0 252px;
+
+  &:hover {
+    background: $color-hover;
+  }
+
+  img {
+    margin: 3px;
+    margin-bottom: -3px;
+  }
+
+  // 模块标题
+  &-title {
+    margin: 0;
+    padding: 6px;
+    color: $color-text;
+    cursor: move;
+
+    span {
+      display: inline-block;
+    }
+
+    i {
+      margin: 0 5px;
+      color: #64a7da;
+    }
+
+    a:hover i {
+      color: #067dd8;
+    }
+  }
+
+  // 模块操作
+  &-action {
+    float: right;
+  }
+
+  // 不同来源模块的标题背景色
+  &_source {
+    &_system .widget-title {
+      background: #e3e4e4;
+    }
+
+    &_user .widget-title {
+      background: #c6d4e5;
+    }
+
+    &_theme .widget-title {
+      background: #d7e3bc;
+    }
+
+    &_themeinclude .widget-title {
+      background: #e3bebc;
+    }
+
+    &_plugin .widget-title {
+      background: #d4cddd;
+    }
+
+    &_other .widget-title {
+      background: #ded9c0;
+    }
+  }
+
+  &_ishidden_true img.more-action {
+    opacity: 0.4;
+  }
+}
+
+// 侧栏列表
+.siderbar {
+  &-list {
+    width: 100%;
+    background: #ffffff;
+    border: 1px solid $color-border;
+  }
+
+  &-drop {
+    background: #fefefe;
+  }
+
+  &-header {
+    padding: 8px 10px;
+    cursor: pointer;
+    user-select: none;
+    font-weight: bold;
+    background: $color-backgroud;
+    text-align: center;
+
+    &:hover {
+      background: $color-backgroud-hover;
+      // color: #000000;
+    }
+
+    .roll {
+      display: none;
+    }
+
+    .ui-icon {
+      margin-left: auto;
+    }
+  }
+
+  &-sort-list {
+    padding: 10px 4px;
+    min-height: 30px;
+
+    &>*:not(:last-child) {
+      margin-bottom: 6px;
+    }
+  }
+
+  &-note {
+    color: $color-text-light;
+    font-style: italic;
+    text-align: center;
+  }
+
+  .roll {
+    display: none;
+  }
+}

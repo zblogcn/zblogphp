@@ -1,0 +1,86 @@
+@use "../base/variables" as *;
+
+// 基础表格样式
+table {
+  border-collapse: collapse;
+  box-shadow: 0 0 0.1em rgba(0, 0, 0, 0.3);
+
+  // 基础单元格样式
+  td,
+  th {
+    padding: 0.5em;
+    border-right: 1px solid $color-border;
+
+    &:last-child {
+      border-right: none;
+    }
+
+    .tdCenter {
+      text-align: center;
+    }
+  }
+}
+
+table {
+  &.tableFull {
+    width: 100%;
+  }
+
+  &.tableBorder {
+    line-height: 1.8em;
+    margin: 0.4em 0 0.8em;
+
+    th {
+      text-align: left;
+    }
+  }
+
+  &.tableBorder-thcenter {
+    th {
+      text-align: center;
+    }
+  }
+
+  &.table_hover {
+    >tbody>tr {
+      &:hover {
+
+        >td,
+        >th {
+          background-color: #ffffdd;
+        }
+      }
+    }
+  }
+
+  &.table_striped {
+    >tbody>tr:nth-of-type(odd) {
+      background-color: #f4f4f4;
+    }
+  }
+}
+
+// 表格背景色
+tr {
+  &.color1 {
+    background: #ededed;
+  }
+
+  &.color2 {
+    background: #f4f4f4;
+  }
+
+  &.color3 {
+    background: #ffffff;
+  }
+
+  &.color4 {
+    background: #ffffdd;
+  }
+}
+
+@for $i from 1 through 7 {
+  .td#{$i * 5} {
+    width: #{$i * 5}#{'%'};
+  }
+}

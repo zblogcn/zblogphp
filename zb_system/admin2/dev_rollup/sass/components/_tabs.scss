@@ -1,0 +1,52 @@
+@use "../base/variables" as *;
+
+.content-box {
+
+  // 标签列表
+  ul {
+    padding: 10px 0 0;
+    display: flex;
+    gap: 9px;
+  }
+
+  li {
+    min-height: 2em;
+  }
+
+  // 标签链接
+  .content-box-tabs {
+    a {
+      display: inline-flex;
+      padding: 4px 10px;
+
+      // 当前激活的标签
+      &.current {
+        background: $color-backgroud;
+        color: $color-text;
+        font-weight: bold;
+      }
+    }
+  }
+
+  // 标签内容区域
+  .content-box-content {
+    margin-top: -1px;
+
+    .tab-content {
+      display: none;
+
+      td {
+
+        input[type=text],
+        select {
+          height: 33px;
+        }
+
+      }
+
+      &.default-tab {
+        display: block;
+      }
+    }
+  }
+}

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * 功能型的函数.
  */
@@ -655,6 +656,18 @@ function Include_ViewListPost_CheckRights_View($route)
             SetPluginSignal('Filter_Plugin_ViewPost_Begin_V2', __FUNCTION__, PLUGIN_EXITSIGNAL_RETURN);
             return false;
         }
+    }
+}
+
+/**
+ * admin2 编辑页拦截跳转
+ */
+function Include_Admin2_RedirectEdt()
+{
+    global $action;
+    if (HasNameInString("CategoryPst|TagPst|MemberNew|MemberEdt|ModuleEdt", $action)) {
+        $args = GetVars('QUERY_STRING', 'SERVER');
+        Redirect("../admin2/index.php?{$args}");
     }
 }
 
