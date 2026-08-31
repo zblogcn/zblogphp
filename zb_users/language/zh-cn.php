@@ -304,6 +304,8 @@ return [
         'custom_content'                    => '自定义内容',
         'href'                              => '地址',
         'text'                              => '文本',
+        'you_are_a_helpful_assistant'       => '你是一个有用的助手',
+        ''                                  => '',
     ],
 
     //Action

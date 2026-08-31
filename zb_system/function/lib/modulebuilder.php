@@ -582,7 +582,7 @@ class ModuleBuilder
             $link->href = '';
             $link->title = $info['name'];
             $link->content = $info['name'] . ':' . $info['count'];
-            $link->data_count = $info['count'];
+            //$link->data_count = $info['count'];
             $links[] = $link;
         }
         $zbp->modulesbyfilename['statistics']->Links = $links;

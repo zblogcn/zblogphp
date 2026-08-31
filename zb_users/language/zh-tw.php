@@ -308,6 +308,7 @@ return [
         'href'                              => '地址',
         'text'                              => '文本',
         'custom_content'                    => '自定义内容',
+        'you_are_a_helpful_assistant'       => '你是一個有用的助手',
         ''                                  => '',
     ],
 

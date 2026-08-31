@@ -35,12 +35,11 @@ if (!defined('ZBP_PATH')) {
  */
 abstract class Base__Post extends Base
 {
+    protected $allImages;
 
     private $private_prev = '';
 
     private $private_next = '';
-
-    protected $allImages;
 
     public function __construct()
     {
@@ -63,83 +62,12 @@ abstract class Base__Post extends Base
     {
         foreach ($GLOBALS['hooks']['Filter_Plugin_Post_Call'] as $fpname => &$fpsignal) {
             $fpreturn = $fpname($this, $method, $args);
-            if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
+            if (PLUGIN_EXITSIGNAL_RETURN == $fpsignal) {
                 $fpsignal = PLUGIN_EXITSIGNAL_NONE;
 
                 return $fpreturn;
             }
         }
-    }
-
-    /**
-     * @param string $s
-     * @param type|string 1.7.2后可以与$s前后调换
-     *
-     * @return null|string
-     */
-    public function Time($s = 'Y-m-d H:i:s', $type = 'PostTime')
-    {
-        //1.7.2改回了1.6的顺序, $type放在第2参数
-        if ($s === 'Post') {
-            $s = 'PostTime';
-        } elseif ($s === 'Create') {
-            $s = 'CreateTime';
-        } elseif ($s === 'Update') {
-            $s = 'UpdateTime';
-        }
-        if (func_num_args() == 2) {
-            if ($type === 'Post') {
-                $type = 'PostTime';
-            } elseif ($type === 'Create') {
-                $type = 'CreateTime';
-            } elseif ($type === 'Update') {
-                $type = 'UpdateTime';
-            }
-        }
-        if (func_num_args() == 2 && !array_key_exists($type, $this->data) && array_key_exists($s, $this->data)) {
-            list($type, $s) = array($s, $type);
-        } elseif (func_num_args() == 1 && array_key_exists($s, $this->data)) {
-            list($type, $s) = array($s, 'Y-m-d H:i:s');
-        }
-        if (array_key_exists($type, $this->data)) {
-            return date($s, (int) $this->$type);
-        } else {
-            return date($s, (int) $this->PostTime);
-        }
-    }
-
-    /**
-     * @return array|int|mixed|null|string
-     */
-    public function TagsToNameString()
-    {
-        global $zbp;
-        $s = $this->Tag;
-        if ($s == '') {
-            return '';
-        }
-
-        $s = str_replace('}{', '|', $s);
-        $s = str_replace('{', '', $s);
-        $s = str_replace('}', '', $s);
-        $b = explode('|', $s);
-        $b = array_unique($b);
-
-        $a = $zbp->LoadTagsByIDString($this->Tag);
-        $s = '';
-        $c = array();
-        foreach ($b as $key) {
-            if (isset($zbp->tags[$key])) {
-                $c[] = $zbp->tags[$key]->Name;
-            }
-        }
-        if (!$c) {
-            return '';
-        }
-
-        $s = implode(',', $c);
-
-        return $s;
     }
 
     /**
@@ -149,6 +77,7 @@ abstract class Base__Post extends Base
     public function __set($name, $value)
     {
         global $zbp;
+
         switch ($name) {
             case 'Category':
             case 'Author':
@@ -171,6 +100,7 @@ abstract class Base__Post extends Base
             case 'UpdateDate':
             case 'AliasFirst':
                 return;
+
             case 'Template':
                 if ($value == $zbp->GetPostType($this->Type, 'template')) {
                     $value = '';
@@ -178,25 +108,28 @@ abstract class Base__Post extends Base
                 $this->data[$name] = $value;
 
                 return;
+
             case 'TopType':
-                if ($value == 'global') {
+                if ('global' == $value) {
                     $this->IsTop = 1;
-                } elseif ($value == 'index') {
+                } elseif ('index' == $value) {
                     $this->IsTop = 2;
-                } elseif ($value == 'categorys') {
+                } elseif ('categorys' == $value) {
                     $this->IsTop = 4;
-                } elseif ($value == 'category') {
+                } elseif ('category' == $value) {
                     $this->IsTop = 8;
-                } elseif ($value == '' || $value == null) {
+                } elseif ('' == $value || null == $value) {
                     $this->IsTop = 0;
                 }
 
                 return;
+
             default:
                 foreach ($GLOBALS['hooks']['Filter_Plugin_Post_Set'] as $fpname => &$fpsignal) {
                     $fpreturn = $fpname($this, $name, $value);
                 }
                 parent::__set($name, $value);
+
                 break;
         }
     }
@@ -204,22 +137,26 @@ abstract class Base__Post extends Base
     /**
      * @param $name
      *
-     * @return array|int|mixed|null|string
+     * @return null|array|int|mixed|string
      */
     public function __get($name)
     {
         global $zbp;
+
         switch ($name) {
             case 'Category':
                 return $zbp->GetCategoryByID($this->CateID);
+
             case 'Author':
                 return $zbp->GetMemberByID($this->AuthorID);
+
             case 'StatusName':
                 return $zbp->lang['post_status_name'][$this->Status];
+
             case 'Url':
                 foreach ($GLOBALS['hooks']['Filter_Plugin_Post_Url'] as $fpname => &$fpsignal) {
                     $fpreturn = $fpname($this);
-                    if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
+                    if (PLUGIN_EXITSIGNAL_RETURN == $fpsignal) {
                         $fpsignal = PLUGIN_EXITSIGNAL_NONE;
 
                         return $fpreturn;
@@ -237,8 +174,8 @@ abstract class Base__Post extends Base
                 if ($this->Alias) {
                     $u->Rules['{%alias%}'] = $this->Alias;
                 } else {
-                    if ($zbp->option['ZC_POST_ALIAS_USE_ID_NOT_TITLE'] == false) {
-                        $u->Rules['{%alias%}'] = rawurlencode($this->Title);
+                    if (false == $zbp->option['ZC_POST_ALIAS_USE_ID_NOT_TITLE']) {
+                        $u->Rules['{%alias%}'] = rawurlencode(strip_tags($this->Title));
                     } else {
                         $u->Rules['{%alias%}'] = $this->ID;
                     }
@@ -258,34 +195,42 @@ abstract class Base__Post extends Base
                 }
 
                 return $u->Make();
+
             case 'Tags':
                 return $zbp->LoadTagsByIDString($this->Tag);
+
             case 'TagsCount':
                 return substr_count($this->Tag, '{');
+
             case 'TagsName':
                 return $this->TagsToNameString();
+
             case 'FirstTag':
                 $array = $zbp->LoadTagsByIDString($this->Tag);
-                if (count($array) == 0) {
-                    return new Tag;
-                } else {
-                    return current($array);
+                if (0 == count($array)) {
+                    return new Tag();
                 }
+
+                    return current($array);
+
             case 'Template':
                 $value = $this->data[$name];
-                if ($value == '') {
+                if ('' == $value) {
                     $value = GetValueInArray($this->Category->GetData(), 'LogTemplate');
-                    if ($value == '') {
+                    if ('' == $value) {
                         $value = $zbp->GetPostType($this->Type, 'template');
                     }
                 }
+
                 return $value;
+
             case 'CommentPostKey':
                 return $zbp->GetCmtKey($this->ID);
+
             case 'CommentPostUrl':
                 foreach ($GLOBALS['hooks']['Filter_Plugin_Post_CommentPostUrl'] as $fpname => &$fpsignal) {
                     $fpreturn = $fpname($this);
-                    if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
+                    if (PLUGIN_EXITSIGNAL_RETURN == $fpsignal) {
                         $fpsignal = PLUGIN_EXITSIGNAL_NONE;
 
                         return $fpreturn;
@@ -294,110 +239,125 @@ abstract class Base__Post extends Base
                 $key = '&amp;key=' . $this->CommentPostKey;
 
                 return $zbp->host . 'zb_system/cmd.php?act=cmt&amp;postid=' . $this->ID . $key;
+
             case 'ValidCodeUrl':
                 return $zbp->validcodeurl . '?id=cmt';
+
             case 'Prev':
-                if ($this->private_prev !== '') {
+                if ('' !== $this->private_prev) {
                     return $this->private_prev;
                 }
 
                 foreach ($GLOBALS['hooks']['Filter_Plugin_Post_Prev'] as $fpname => &$fpsignal) {
                     $this->private_prev = $fpname($this);
-                    if ($this->private_prev !== '') {
+                    if ('' !== $this->private_prev) {
                         return $this->private_prev;
                     }
                 }
 
                 $articles = $zbp->GetPostList(
-                    array('*'),
-                    array(array('=', 'log_Type', 0), array('=', 'log_Status', 0), array('<', 'log_PostTime', $this->PostTime)),
-                    array('log_PostTime' => 'DESC'),
-                    array(1),
-                    null
+                    ['*'],
+                    [['=', 'log_Type', 0], ['=', 'log_Status', 0], ['<', 'log_PostTime', $this->PostTime]],
+                    ['log_PostTime' => 'DESC'],
+                    [1],
+                    null,
                 );
-                if (count($articles) == 1) {
+                if (1 == count($articles)) {
                     $this->private_prev = $articles[0];
                 } else {
                     $this->private_prev = null;
                 }
 
                 return $this->private_prev;
+
             case 'Next':
-                if ($this->private_next !== '') {
+                if ('' !== $this->private_next) {
                     return $this->private_next;
                 }
 
                 foreach ($GLOBALS['hooks']['Filter_Plugin_Post_Next'] as $fpname => &$fpsignal) {
                     $this->private_next = $fpname($this);
-                    if ($this->private_next !== '') {
+                    if ('' !== $this->private_next) {
                         return $this->private_next;
                     }
                 }
 
                 $articles = $zbp->GetPostList(
-                    array('*'),
-                    array(array('=', 'log_Type', 0), array('=', 'log_Status', 0), array('>', 'log_PostTime', $this->PostTime)),
-                    array('log_PostTime' => 'ASC'),
-                    array(1),
-                    null
+                    ['*'],
+                    [['=', 'log_Type', 0], ['=', 'log_Status', 0], ['>', 'log_PostTime', $this->PostTime]],
+                    ['log_PostTime' => 'ASC'],
+                    [1],
+                    null,
                 );
-                if (count($articles) == 1) {
+                if (1 == count($articles)) {
                     $this->private_next = $articles[0];
                 } else {
                     $this->private_next = null;
                 }
 
                 return $this->private_next;
+
             case 'RelatedList':
                 foreach ($GLOBALS['hooks']['Filter_Plugin_Post_RelatedList'] as $fpname => &$fpsignal) {
                     $fpreturn = $fpname($this);
-                    if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
+                    if (PLUGIN_EXITSIGNAL_RETURN == $fpsignal) {
                         $fpsignal = PLUGIN_EXITSIGNAL_NONE;
 
                         return $fpreturn;
                     }
                 }
 
-                return GetList($zbp->option['ZC_RELATEDLIST_COUNT'], null, null, null, null, null, array('is_related' => $this->ID));
+                return GetList($zbp->option['ZC_RELATEDLIST_COUNT'], null, null, null, null, null, ['is_related' => $this->ID]);
+
             case 'TopType':
                 $toptype = '';
-                if ($this->IsTop == 1) {
+                if (1 == $this->IsTop) {
                     $toptype = 'global';
                 }
-                if ($this->IsTop == 2) {
+                if (2 == $this->IsTop) {
                     $toptype = 'index';
                 }
-                if ($this->IsTop == 4) {
+                if (4 == $this->IsTop) {
                     $toptype = 'categorys';
                 }
-                if ($this->IsTop == 8) {
+                if (8 == $this->IsTop) {
                     $toptype = 'category';
                 }
+
                 return $toptype;
+
             case 'TypeName':
                 return $zbp->GetPostType($this->Type, 'name');
+
             case 'TypeActions':
                 return $zbp->GetPostType($this->Type, 'actions');
+
             case 'PostDate':
                 return new ZbpDate($this->PostTime);
+
             case 'CreateDate':
                 return new ZbpDate($this->CreateTime);
+
             case 'UpdateDate':
                 return new ZbpDate($this->UpdateTime);
+
             case 'AliasFirst':
                 if ($this->Alias) {
                     return $this->Alias;
-                } else {
-                    return $this->Title;
                 }
+
+                    return $this->Title;
+
             case 'AllImages':
                 return is_array($this->allImages) ? $this->allImages : ($this->allImages = GetImagesFromHtml($this->Content));
+
             case 'ImageCount':
                 return count($this->AllImages);
+
             default:
                 foreach ($GLOBALS['hooks']['Filter_Plugin_Post_Get'] as $fpname => &$fpsignal) {
                     $fpreturn = $fpname($this, $name);
-                    if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
+                    if (PLUGIN_EXITSIGNAL_RETURN == $fpsignal) {
                         $fpsignal = PLUGIN_EXITSIGNAL_NONE;
 
                         return $fpreturn;
@@ -409,12 +369,85 @@ abstract class Base__Post extends Base
     }
 
     /**
+     * @param string $s
+     * @param string|type 1.7.2后可以与$s前后调换
+     * @param mixed $type
+     *
+     * @return null|string
+     */
+    public function Time($s = 'Y-m-d H:i:s', $type = 'PostTime')
+    {
+        //1.7.2改回了1.6的顺序, $type放在第2参数
+        if ('Post' === $s) {
+            $s = 'PostTime';
+        } elseif ('Create' === $s) {
+            $s = 'CreateTime';
+        } elseif ('Update' === $s) {
+            $s = 'UpdateTime';
+        }
+        if (2 == func_num_args()) {
+            if ('Post' === $type) {
+                $type = 'PostTime';
+            } elseif ('Create' === $type) {
+                $type = 'CreateTime';
+            } elseif ('Update' === $type) {
+                $type = 'UpdateTime';
+            }
+        }
+        if (2 == func_num_args() && !array_key_exists($type, $this->data) && array_key_exists($s, $this->data)) {
+            [$type, $s] = [$s, $type];
+        } elseif (1 == func_num_args() && array_key_exists($s, $this->data)) {
+            [$type, $s] = [$s, 'Y-m-d H:i:s'];
+        }
+        if (array_key_exists($type, $this->data)) {
+            return date($s, (int) $this->{$type});
+        }
+
+        return date($s, (int) $this->PostTime);
+    }
+
+    /**
+     * @return null|array|int|mixed|string
+     */
+    public function TagsToNameString()
+    {
+        global $zbp;
+        $s = $this->Tag;
+        if ('' == $s) {
+            return '';
+        }
+
+        $s = str_replace('}{', '|', $s);
+        $s = str_replace('{', '', $s);
+        $s = str_replace('}', '', $s);
+        $b = explode('|', $s);
+        $b = array_unique($b);
+
+        $a = $zbp->LoadTagsByIDString($this->Tag);
+        $s = '';
+        $c = [];
+        foreach ($b as $key) {
+            if (isset($zbp->tags[$key])) {
+                $c[] = $zbp->tags[$key]->Name;
+            }
+        }
+        if (!$c) {
+            return '';
+        }
+
+        $s = implode(',', $c);
+
+        return $s;
+    }
+
+    /**
      * 获取缩略图.
      *
-     * @param integer $width
-     * @param integer $height
-     * @param integer $count
-     * @param boolean $clip
+     * @param int  $width
+     * @param int  $height
+     * @param int  $count
+     * @param bool $clip
+     *
      * @return array
      */
     public function Thumbs($width = 200, $height = 150, $count = 1, $clip = true)
@@ -423,8 +456,9 @@ abstract class Base__Post extends Base
 
         foreach ($GLOBALS['hooks']['Filter_Plugin_Post_Thumbs'] as $fpname => &$fpsignal) {
             $fpreturn = $fpname($this, $all_images, $width, $height, $count, $clip);
-            if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
+            if (PLUGIN_EXITSIGNAL_RETURN == $fpsignal) {
                 $fpsignal = PLUGIN_EXITSIGNAL_NONE;
+
                 return $fpreturn;
             }
         }
@@ -437,7 +471,7 @@ abstract class Base__Post extends Base
      */
     public function Save()
     {
-        if ($this->Type == ZC_POST_TYPE_ARTICLE) {
+        if (ZC_POST_TYPE_ARTICLE == $this->Type) {
             if ($this->Template == GetValueInArray($this->Category->GetData(), 'LogTemplate')) {
                 $this->data['Template'] = '';
             }
@@ -448,7 +482,7 @@ abstract class Base__Post extends Base
 
         foreach ($GLOBALS['hooks']['Filter_Plugin_Post_Save'] as $fpname => &$fpsignal) {
             $fpreturn = $fpname($this);
-            if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
+            if (PLUGIN_EXITSIGNAL_RETURN == $fpsignal) {
                 $fpsignal = PLUGIN_EXITSIGNAL_NONE;
 
                 return $fpreturn;
@@ -465,7 +499,7 @@ abstract class Base__Post extends Base
     {
         foreach ($GLOBALS['hooks']['Filter_Plugin_Post_Del'] as $fpname => &$fpsignal) {
             $fpreturn = $fpname($this);
-            if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN) {
+            if (PLUGIN_EXITSIGNAL_RETURN == $fpsignal) {
                 $fpsignal = PLUGIN_EXITSIGNAL_NONE;
 
                 return $fpreturn;
@@ -476,12 +510,14 @@ abstract class Base__Post extends Base
     }
 
     /**
+     * @param mixed $key
+     *
      * @return array|string
      */
     public function GetType($key)
     {
         global $zbp;
+
         return $zbp->GetPostType($this->Type, $key);
     }
-
 }

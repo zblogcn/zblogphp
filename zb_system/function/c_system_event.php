@@ -1934,9 +1934,18 @@ function PostModule()
                 $link->content = $_POST['content'][$i];
                 if (isset($_POST['li_id'], $_POST['li_id'][$i])) {
                     $link->li_id = $_POST['li_id'][$i];
+                    if (empty($link->li_id)) {
+                        unset($link->li_id);
+                    }
+                }
+                if (isset($_POST['id'], $_POST['id'][$i])) {
+                    $link->id = $_POST['id'][$i];
+                    if (empty($link->id)) {
+                        unset($link->id);
+                    }
                 }
                 foreach ($_POST as $key => $post) {
-                    if (is_array($post) && 'href' != $key && 'content' != $key) {
+                    if (is_array($post) && 'href' != $key && 'content' != $key && 'id' != $key && 'li_id' != $key) {
                         @$link->{$key} = $post[$i];
                     }
                 }
@@ -2371,6 +2380,7 @@ function SaveSetting()
     $lang = include $zbp->usersdir . 'language/' . $zbp->option['ZC_BLOG_LANGUAGEPACK'] . '.php';
     $zbp->option['ZC_BLOG_LANGUAGE'] = $lang['lang'];
     $zbp->option['ZC_BLOG_PRODUCT'] = 'Z-BlogPHP';
+    $zbp->cache->reload_statistic_time = 0;
     $zbp->SaveOption();
 
     return true;
