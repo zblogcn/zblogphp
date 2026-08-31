@@ -2,11 +2,8 @@
 
 /**
  * 插件接口相关
- * 接口模式复制自Z-Blog ASP版
- * @package Z-BlogPHP
- * @subpackage System/Plugin 操作API
+ * 接口模式复制自Z-Blog ASP版.
  */
-
 if (!defined('ZBP_PATH')) {
     exit('Access denied');
 }
@@ -28,21 +25,18 @@ define('PLUGIN_EXITSIGNAL_BREAK', 'break');
  */
 define('PLUGIN_EXITSIGNAL_GOTO', 'goto');
 
-
 //定义总插件激活列表
-$GLOBALS['plugins'] = array();
+$GLOBALS['plugins'] = [];
 
 //定义总接口列表，1.5版启用，逐渐过度到hooks
-$GLOBALS['hooks'] = array();
-$GLOBALS['hooks_addition'] = array();
+$GLOBALS['hooks'] = [];
+$GLOBALS['hooks_addition'] = [];
 
 /**
  * 注册插件函数，由每个插件主动调用.
  *
  * @param string $strPluginName           插件ID
  * @param string $strPluginActiveFunction 插件激活时执行的函数名
- *
- * @return void
  */
 function RegisterPlugin($strPluginName, $strPluginActiveFunction)
 {
@@ -53,8 +47,6 @@ function RegisterPlugin($strPluginName, $strPluginActiveFunction)
  * 插件安装函数，只在插件安装时运行一次
  *
  * @param string $strPluginName 插件ID
- *
- * @return void
  */
 function InstallPlugin($strPluginName)
 {
@@ -68,28 +60,26 @@ function InstallPlugin($strPluginName)
  * 插件删除函数，只在插件删除时运行一次
  *
  * @param string $strPluginName 插件ID
- *
- * @return void
  */
 function UninstallPlugin($strPluginName)
 {
     $f = 'UninstallPlugin_' . $strPluginName;
-    if (function_exists($f) == true) {
+    if (true == function_exists($f)) {
         $f();
     }
 }
 
 /**
- * 定义插件接口Hook
+ * 定义插件接口Hook.
  *
  * @param string $strPluginFilter 插件接口Hook
  *
- * @return boolean
+ * @return bool
  */
 function DefinePluginFilter($strPluginFilter)
 {
     if (!isset($GLOBALS['hooks'][$strPluginFilter])) {
-        $GLOBALS['hooks'][$strPluginFilter] = array();
+        $GLOBALS['hooks'][$strPluginFilter] = [];
         $GLOBALS[$strPluginFilter] = &$GLOBALS['hooks'][$strPluginFilter];
 
         return true;
@@ -99,11 +89,11 @@ function DefinePluginFilter($strPluginFilter)
 }
 
 /**
- * 检查插件接口Hook
+ * 检查插件接口Hook.
  *
  * @param string $strPluginFilter 插件接口Hook
  *
- * @return boolean
+ * @return bool
  */
 function ExistsPluginFilter($strPluginFilter)
 {
@@ -111,7 +101,7 @@ function ExistsPluginFilter($strPluginFilter)
 }
 
 /**
- * 调用插件接口(php >= 5.5可以在接口调用处使用)
+ * 调用插件接口(php >= 5.5可以在接口调用处使用).
  *
  * @param string $strPluginFilter 插件接口Hook
  *
@@ -122,23 +112,22 @@ function &UsingPluginFilter($strPluginFilter)
     if (isset($GLOBALS['hooks'][$strPluginFilter])) {
         return $GLOBALS['hooks'][$strPluginFilter];
     }
-    $result = array();
+    $result = [];
 
     return $result;
 }
 
 /**
- * 移除插件Hook接口
+ * 移除插件Hook接口.
  *
  * @param string $strPluginFilter 插件接口Hook
  *
- * @return boolean
+ * @return bool
  */
 function RemovePluginFilter($strPluginFilter)
 {
     if (isset($GLOBALS['hooks'][$strPluginFilter])) {
-        unset($GLOBALS[$strPluginFilter]);
-        unset($GLOBALS['hooks'][$strPluginFilter]);
+        unset($GLOBALS[$strPluginFilter], $GLOBALS['hooks'][$strPluginFilter]);
 
         return true;
     }
@@ -147,13 +136,13 @@ function RemovePluginFilter($strPluginFilter)
 }
 
 /**
- * 设置插件自身信号
+ * 设置插件自身信号.
  *
  * @param $plugname
  * @param $functionname
  * @param $signal
  *
- * @return boolean
+ * @return bool
  */
 function SetPluginSignal($plugname, $functionname, $signal = PLUGIN_EXITSIGNAL_NONE)
 {
@@ -169,7 +158,7 @@ function SetPluginSignal($plugname, $functionname, $signal = PLUGIN_EXITSIGNAL_N
 }
 
 /**
- * 获取插件自身信号
+ * 获取插件自身信号.
  *
  * @param $plugname
  * @param $functionname
@@ -190,13 +179,13 @@ function GetPluginSignal($plugname, $functionname)
 }
 
 /**
- * 挂上Filter接口
+ * 挂上Filter接口.
  *
- * @param string $plugname 接口名称
+ * @param string $plugname     接口名称
  * @param string $functionname 要挂接的函数名
- * @param string $exitsignal :return,break,continue
+ * @param string $exitsignal   :return,break,continue
  *
- * @return boolean
+ * @return bool
  */
 function Add_Filter_Plugin($plugname, $functionname, $exitsignal = PLUGIN_EXITSIGNAL_NONE)
 {
@@ -212,12 +201,12 @@ function Add_Filter_Plugin($plugname, $functionname, $exitsignal = PLUGIN_EXITSI
 }
 
 /**
- * 卸载Filter接口的某项挂载函数
+ * 卸载Filter接口的某项挂载函数.
  *
- * @param string $plugname 接口名称
+ * @param string $plugname     接口名称
  * @param string $functionname 要挂接的函数名
  *
- * @return boolean
+ * @return bool
  */
 function Remove_Filter_Plugin($plugname, $functionname)
 {
@@ -233,7 +222,7 @@ function Remove_Filter_Plugin($plugname, $functionname)
 }
 
 /**
- * 获取Filter接口的全部挂载函数列表数组
+ * 获取Filter接口的全部挂载函数列表数组.
  *
  * @param string $plugname 接口名称
  *
@@ -245,20 +234,21 @@ function List_Filter_Plugin($plugname)
         return $GLOBALS['hooks'][$plugname];
     }
 
-    return array();
+    return [];
 }
 
 /**
- * 清除Filter接口的所有挂载函数
+ * 清除Filter接口的所有挂载函数.
  *
  * @param string $plugname 接口名称
  *
- * @return boolean
+ * @return bool
  */
 function ClearFilterPlugin($plugname)
 {
     if (isset($GLOBALS['hooks'][$plugname])) {
-        $GLOBALS['hooks'][$plugname] = array();
+        $GLOBALS['hooks'][$plugname] = [];
+
         return true;
     }
 
@@ -266,29 +256,31 @@ function ClearFilterPlugin($plugname)
 }
 
 /**
- * 暂停Filter接口
+ * 暂停Filter接口.
  *
  * @param string $plugname 接口名称
  *
- * @return boolean
+ * @return bool
  */
 function SuspendFilterPlugin($plugname)
 {
     if (isset($GLOBALS['hooks'][$plugname])) {
         $array = $GLOBALS['hooks'][$plugname];
-        $GLOBALS['hooks'][$plugname] = array();
+        $GLOBALS['hooks'][$plugname] = [];
         SetFilterPluginAddition($plugname, 'func_data', $array);
+
         return true;
     }
+
     return false;
 }
 
 /**
- * 恢复Filter接口
+ * 恢复Filter接口.
  *
  * @param string $plugname 接口名称
  *
- * @return boolean
+ * @return bool
  */
 function ResumeFilterPlugin($plugname)
 {
@@ -297,16 +289,20 @@ function ResumeFilterPlugin($plugname)
         if (!is_null($array) && is_array($array)) {
             $GLOBALS['hooks'][$plugname] = $array;
             SetFilterPluginAddition($plugname, 'func_data', null);
+
             return true;
         }
     }
+
     return false;
 }
 
 /**
- * 解析Callback Filter接口的某项挂载函数名 (支持多种型式的function调用，已经玩出花了^_^)
+ * 解析Callback Filter接口的某项挂载函数名 (支持多种型式的function调用，已经玩出花了^_^).
  *
  * 要挂接的函数名 (可以是1函数名 2类名::静态方法名 3类名@动态方法名 4全局变量名@动态方法名 5全局匿名函数)
+ *
+ * @param mixed $fpname
  *
  * @return mixed 解析后的function值
  */
@@ -316,27 +312,29 @@ function ParseFilterPlugin($fpname)
 
     if (function_exists($function)) {
         return $function;
-    } elseif (strpos($function, '::') !== false) {
+    }
+    if (false !== strpos($function, '::')) {
         $func = explode('::', $function);
-        $function = array($func[0], $func[1]);
-    } elseif (strpos($function, '@') !== false) {
+        $function = [$func[0], $func[1]];
+    } elseif (false !== strpos($function, '@')) {
         $func = explode('@', $function);
         if (class_exists($func[0])) {
-            $newobject = new $func[0];
-            $function = array($newobject, $func[1]);
+            $newobject = new $func[0]();
+            $function = [$newobject, $func[1]];
         } elseif (array_key_exists($func[0], $GLOBALS) && is_object($GLOBALS[$func[0]])) {
-            $function = array($GLOBALS[$func[0]], $func[1]);
+            $function = [$GLOBALS[$func[0]], $func[1]];
         }
     } else {
-        if (array_key_exists($function, $GLOBALS) && is_object($GLOBALS[$function]) && get_class($GLOBALS[$function]) == 'Closure') {
+        if (array_key_exists($function, $GLOBALS) && is_object($GLOBALS[$function]) && 'Closure' == get_class($GLOBALS[$function])) {
             $function = $GLOBALS[$function];
         }
     }
+
     return $function;
 }
 
 /**
- * 插入钩子 Filter接口
+ * 插入钩子 Filter接口.
  *
  * @param string $plugname 接口名称
  */
@@ -350,7 +348,7 @@ function HookFilterPlugin($plugname)
 }
 
 /**
- * 插入钩子 Filter接口引用版 (php>=5.6)
+ * 插入钩子 Filter接口引用版 (php>=5.6).
  *
  * @param string $plugname 接口名称
  */
@@ -366,7 +364,7 @@ function HookFilterPlugin_Ref($plugname, &...$args)
 /**
  * 插入钩子 Filter接口 的带返回值版
  * 获取 Filter接口信号 请用GetFilterPluginSignal
- * 与HookFilterPlugin的区别是HookFilterPluginBack可以被插件退出返回，中断，GOTO
+ * 与HookFilterPlugin的区别是HookFilterPluginBack可以被插件退出返回，中断，GOTO.
  *
  * @param string $plugname 接口名称
  */
@@ -377,8 +375,9 @@ function HookFilterPluginBack($plugname)
     foreach ($GLOBALS['hooks'][$plugname] as $fpname => &$fpsignal) {
         $fpreturn = call_user_func_array(ParseFilterPlugin($fpname), $array);
         SetFilterPluginSignal($plugname, $fpsignal);
-        if ($fpsignal === PLUGIN_EXITSIGNAL_RETURN || $fpsignal === PLUGIN_EXITSIGNAL_BREAK || $fpsignal === PLUGIN_EXITSIGNAL_GOTO) {
+        if (PLUGIN_EXITSIGNAL_RETURN === $fpsignal || PLUGIN_EXITSIGNAL_BREAK === $fpsignal || PLUGIN_EXITSIGNAL_GOTO === $fpsignal) {
             $fpsignal = PLUGIN_EXITSIGNAL_NONE;
+
             return $fpreturn;
         }
     }
@@ -386,7 +385,7 @@ function HookFilterPluginBack($plugname)
 
 /**
  * 插入钩子 Filter接口带返回值的引用版 (php>=5.6)
- * 获取 Filter接口信号 请用GetFilterPluginSignal
+ * 获取 Filter接口信号 请用GetFilterPluginSignal.
  *
  * @param string $plugname 接口名称
  */
@@ -406,7 +405,7 @@ function HookFilterPluginBack_Ref($plugname, &...$args)
 
 /**
  * 获取 Filter 接口信号
- * 由宿主调用而非插件，插件获取信号用GetPluginSignal
+ * 由宿主调用而非插件，插件获取信号用GetPluginSignal.
  *
  * @param string $plugname 接口名称
  */
@@ -414,15 +413,16 @@ function GetFilterPluginSignal($plugname)
 {
     $signal = GetFilterPluginAddition($plugname, 'signal');
     SetFilterPluginAddition($plugname, 'signal', PLUGIN_EXITSIGNAL_NONE);
+
     return $signal;
 }
 
 /**
  * 设置 Filter 接口信号
- * 由宿主调用而非插件，插件设置信号用SetPluginSignal
+ * 由宿主调用而非插件，插件设置信号用SetPluginSignal.
  *
  * @param string $plugname 接口名称
- * @param string $signal 信号
+ * @param string $signal   信号
  */
 function SetFilterPluginSignal($plugname, $signal = PLUGIN_EXITSIGNAL_NONE)
 {
@@ -430,39 +430,50 @@ function SetFilterPluginSignal($plugname, $signal = PLUGIN_EXITSIGNAL_NONE)
 }
 
 /**
- * 获取 Filter 接口附加信息
+ * 获取 Filter 接口附加信息.
+ *
+ * @param mixed $plugname
+ * @param mixed $key
  */
 function GetFilterPluginAddition($plugname, $key)
 {
     $ha = &$GLOBALS['hooks_addition'];
     if (isset($GLOBALS['hooks'][$plugname])) {
         if (!isset($ha[$plugname])) {
-            $ha[$plugname] = array();
+            $ha[$plugname] = [];
         }
         if (!array_key_exists($key, $ha[$plugname])) {
             $ha[$plugname][$key] = null;
         }
+
         return $ha[$plugname][$key];
     }
+
     return null;
 }
 
 /**
- * 设置 Filter 接口附加信息
+ * 设置 Filter 接口附加信息.
+ *
+ * @param mixed $plugname
+ * @param mixed $key
+ * @param mixed $value
  */
 function SetFilterPluginAddition($plugname, $key, $value)
 {
     $ha = &$GLOBALS['hooks_addition'];
     if (isset($GLOBALS['hooks'][$plugname])) {
         if (!isset($ha[$plugname])) {
-            $ha[$plugname] = array();
+            $ha[$plugname] = [];
         }
         if (!array_key_exists($key, $ha[$plugname])) {
             $ha[$plugname][$key] = null;
         }
         $ha[$plugname][$key] = $value;
+
         return true;
     }
+
     return false;
 }
 
@@ -727,7 +738,6 @@ DefinePluginFilter('Filter_Plugin_Zbp_Load_Pre');
 '**************************************************>
  */
 DefinePluginFilter('Filter_Plugin_Zbp_PrepareTemplate');
-
 
 /*
 '**************************************************<
@@ -2843,7 +2853,6 @@ DefinePluginFilter('Filter_Plugin_LargeData_CountTagArray');
 '**************************************************>
  */
 DefinePluginFilter('Filter_Plugin_LargeData_GetList');
-
 
 //<其它杂项接口>
 
