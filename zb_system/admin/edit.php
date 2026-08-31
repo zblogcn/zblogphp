@@ -4,9 +4,11 @@
  * Z-Blog with PHP.
  *
  * @author  Z-BlogPHP Team
+ *
  * @version 2.0 2013-07-05
  */
 require '../function/c_system_base.php';
+
 require '../function/c_system_admin.php';
 
 $zbp->Load();
@@ -14,17 +16,18 @@ $zbp->Load();
 $zbp->csrfExpiration = 48;
 
 $action = '';
-if (GetVars('act', 'GET') == 'PageEdt') {
+if ('PageEdt' == GetVars('act', 'GET')) {
     $action = 'PageEdt';
 }
 
-if (GetVars('act', 'GET') == 'ArticleEdt') {
+if ('ArticleEdt' == GetVars('act', 'GET')) {
     $action = 'ArticleEdt';
 }
 
 if (!$zbp->CheckRights($action)) {
     $zbp->ShowError(6, __FILE__, __LINE__);
-    die();
+
+    exit();
 }
 
 if (isset($_COOKIE['timezone'])) {
@@ -39,7 +42,7 @@ $article = new Post();
 $article->AuthorID = $zbp->user->ID;
 
 $ispage = false;
-if ($action == 'PageEdt') {
+if ('PageEdt' == $action) {
     $ispage = true;
     $article->Type = ZC_POST_TYPE_PAGE;
 }
@@ -48,20 +51,21 @@ if (!$zbp->CheckRights('ArticlePub')) {
     $article->Status = ZC_POST_STATUS_AUDITING;
 }
 
-if (isset($_GET['id']) && (int) $_GET['id'] != 0) {
+if (isset($_GET['id']) && 0 != (int) $_GET['id']) {
     $article = $zbp->GetPostByID((int) GetVars('id', 'GET'));
 } else {
     // new Post
     $new_action = 'ArticleNew';
-    if ($action == 'ArticleEdt') {
+    if ('ArticleEdt' == $action) {
         $new_action = 'ArticleNew';
     }
-    if ($action == 'PageEdt') {
+    if ('PageEdt' == $action) {
         $new_action = 'PageNew';
     }
     if (!$zbp->CheckRights($new_action)) {
         $zbp->ShowError(6, __FILE__, __LINE__);
-        die();
+
+        exit();
     }
 }
 
@@ -69,21 +73,23 @@ if ($ispage) {
     $blogtitle = $lang['msg']['page_edit'];
     if (!$zbp->CheckRights('PageAll') && $article->AuthorID != $zbp->user->ID) {
         $zbp->ShowError(6, __FILE__, __LINE__);
-        die();
+
+        exit();
     }
 } else {
     $blogtitle = $lang['msg']['article_edit'];
     if (!$zbp->CheckRights('ArticleAll') && $article->AuthorID != $zbp->user->ID) {
         $zbp->ShowError(6, __FILE__, __LINE__);
-        die();
+
+        exit();
     }
 }
 
 if ($article->Intro) {
-    if (strpos($article->Content, '<!--more-->') !== false) {
+    if (false !== strpos($article->Content, '<!--more-->')) {
         $article->Intro = '';
         $article->Content = str_replace('<!--more-->', '<hr class="more" />', $article->Content);
-    } elseif (strpos($article->Intro, '<!--autointro-->') !== false) {
+    } elseif (false !== strpos($article->Intro, '<!--autointro-->')) {
         $article->Intro = '';
     }
 }
@@ -272,7 +278,7 @@ require ZBP_PATH . 'zb_system/admin/admin_top.php';
                                     <?php echo $lang['msg']['template']; ?>
                                 </label>
                                 <select style="" class="edit" size="1" name="Template" id="cmbTemplate" onChange="cmbTemplate.value=this.options[this.selectedIndex].value">
-                                    <?php echo OutputOptionItemsOfTemplate($article->Template, array('index', '404', 'module', 'search', 'lm-'), array('single', $zbp->GetPostType($article->Type, 'name'))); ?>
+                                    <?php echo OutputOptionItemsOfTemplate($article->Template, ['index', '404', 'module', 'search', 'lm-'], ['single', $zbp->GetPostType($article->Type, 'name')]); ?>
                                 </select>
                             </div>
                             <!-- )template -->
@@ -353,7 +359,7 @@ require ZBP_PATH . 'zb_system/admin/admin_top.php';
     <?php
     if ($ispage) {
         echo '<script>ActiveLeftMenu("aPageMng");</script>';
-    } elseif ($article->ID == 0) {
+    } elseif (0 == $article->ID) {
         echo '<script>ActiveLeftMenu("aArticleEdt");</script>';
     } else {
         echo '<script>ActiveLeftMenu("aArticleMng");</script>';
