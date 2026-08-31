@@ -403,10 +403,12 @@ class Template
     {
         $this->uncompiledCodeStore = array();
         $matches = array();
-        if ($i = preg_match_all('/\{(php|pre)\}([\D\d]+?)\{\/(php|pre)\}/si', $content, $matches) > 0) {
+        if (($i = preg_match_all('/\{(php|pre)\}([\D\d]+?)\{\/(php|pre)\}/si', $content, $matches)) > 0) {
             if (isset($matches[2])) {
                 foreach ($matches[2] as $j => $p) {
-                    $content = str_replace($p, '<!-- parse_middle_code' . $j . '-->', $content);
+                    // 用整个匹配块替换为带标签的占位符，避免仅替换内容时误替换到其他相同片段
+                    $placeholder = '{' . $matches[1][$j] . '}<!-- parse_middle_code' . $j . '-->{/' . $matches[1][$j] . '}';
+                    $content = str_replace($matches[0][$j], $placeholder, $content);
                     $this->uncompiledCodeStore[$j] = array(
                         'type'    => $matches[1][$j],
                         'content' => $p,
