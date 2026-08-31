@@ -33,7 +33,7 @@ function _GetHttpContent($url)
 }
 
 $zba = _GetHttpContent('https://app.zblogcn.com/?zba=231');
-if (! $zba) {
+if (!$zba) {
     throw new Exception('Downloaded zba failed.');
 }
 

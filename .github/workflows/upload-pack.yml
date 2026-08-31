@@ -34,10 +34,10 @@ jobs:
       - name: Pack as zip
         run: git archive -o zblogphp-${{ steps.get_version.outputs.short }}.zip HEAD
 
-      # - name: Put AppCentre Plugin
-      #   run: |
-      #     php ./utils/put_appcentre.php
-      #     zip -g zblogphp-${{ steps.get_version.outputs.short }}.zip zb_users/plugin/AppCentre/* zb_users/plugin/AppCentre/**/*
+      - name: Put AppCentre Plugin
+        run: |
+          php ./utils/put_appcentre.php
+          zip -g zblogphp-${{ steps.get_version.outputs.short }}.zip zb_users/plugin/AppCentre/* zb_users/plugin/AppCentre/**/*
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
