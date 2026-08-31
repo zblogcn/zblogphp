@@ -8,6 +8,7 @@ if (!defined('ZBP_PATH')) {
  * Z-Blog with PHP.
  *
  * @author  Z-BlogPHP Team
+ *
  * @version 1.0 2020-07-04
  */
 
@@ -22,18 +23,18 @@ function api_post_get()
 
     $postId = (int) GetVars('id');
 
-    $relation_info = array(
-        'Author' => array(
-            'other_props' => array('Url', 'Template', 'Avatar', 'StaticName'),
-            'remove_props' => array('Guid', 'Password', 'IP')
-        ),
-    );
-    $relation_info['Category'] = array(
-        'other_props' => array('Url', 'Symbol', 'Level', 'SymbolName', 'AllCount'),
-    );
-    $relation_info['Tags'] = array(
-        'other_props' => array('Url', 'Template'),
-    );
+    $relation_info = [
+        'Author' => [
+            'other_props' => ['Url', 'Template', 'Avatar', 'StaticName'],
+            'remove_props' => ['Guid', 'Password', 'IP'],
+        ],
+    ];
+    $relation_info['Category'] = [
+        'other_props' => ['Url', 'Symbol', 'Level', 'SymbolName', 'AllCount'],
+    ];
+    $relation_info['Tags'] = [
+        'other_props' => ['Url', 'Template'],
+    ];
 
     if ($postId > 0) {
         $post = new Post();
@@ -41,24 +42,24 @@ function api_post_get()
         if ($post->LoadInfoByID($postId)) {
             //if ($post->Type != ZC_POST_TYPE_PAGE) {
             //}
-            if ($post->Status != ZC_POST_STATUS_PUBLIC && $post->AuthorID != $zbp->user->ID) {
+            if (ZC_POST_STATUS_PUBLIC != $post->Status && $post->AuthorID != $zbp->user->ID) {
                 // 不是本人的非公开页面（草稿或审核状态）
                 ApiCheckAuth(true, $post->TypeActions['all']);
             }
-            if ($post->Status == ZC_POST_STATUS_PUBLIC) {
+            if (ZC_POST_STATUS_PUBLIC == $post->Status) {
                 // 默认为公开状态的文章/页面
                 ApiCheckAuth(false, $post->TypeActions['view']);
             }
 
-            if (GetVars('viewnums') == true) {
-                if (isset($zbp->option['ZC_VIEWNUMS_TURNOFF']) && $zbp->option['ZC_VIEWNUMS_TURNOFF'] == false) {
+            if (true == GetVars('viewnums')) {
+                if (isset($zbp->option['ZC_VIEWNUMS_TURNOFF']) && false == $zbp->option['ZC_VIEWNUMS_TURNOFF']) {
                     if (count($GLOBALS['hooks']['Filter_Plugin_ViewPost_ViewNums']) > 0) {
                         foreach ($GLOBALS['hooks']['Filter_Plugin_ViewPost_ViewNums'] as $fpname => &$fpsignal) {
                             $post->ViewNums = $fpname($post);
                         }
                     } else {
-                        $post->ViewNums += 1;
-                        $sql = $zbp->db->sql->Update($zbp->table['Post'], array('log_ViewNums' => $post->ViewNums), array(array('=', 'log_ID', $post->ID)));
+                        ++$post->ViewNums;
+                        $sql = $zbp->db->sql->Update($zbp->table['Post'], ['log_ViewNums' => $post->ViewNums], [['=', 'log_ID', $post->ID]]);
                         $zbp->db->Update($sql);
                     }
                 }
@@ -66,23 +67,23 @@ function api_post_get()
 
             $array = ApiGetObjectArray(
                 $post,
-                array('Url','TagsCount','TagsName','CommentPostKey','ValidCodeUrl'),
-                array(),
-                ApiGetAndFilterRelationQuery($relation_info)
+                ['Url', 'TagsCount', 'TagsName', 'CommentPostKey', 'ValidCodeUrl'],
+                [],
+                ApiGetAndFilterRelationQuery($relation_info),
             );
 
-            return array(
-                'data' => array(
+            return [
+                'data' => [
                     'post' => $array,
-                ),
-            );
+                ],
+            ];
         }
     }
 
-    return array(
+    return [
         'code' => 404,
         'message' => $GLOBALS['lang']['error']['97'],
-    );
+    ];
 }
 
 /**
@@ -118,21 +119,21 @@ function api_post_post()
             }
         } else {
             $ts = strtotime((string) $pt);
-            if ($ts === false || $ts === -1) {
-                return array(
+            if (false === $ts || -1 === $ts) {
+                return [
                     'code' => 500,
                     'message' => $GLOBALS['lang']['error']['103'],
-                );
+                ];
             }
         }
         $_POST['PostTime'] = date('Y-m-d H:i:s', $ts);
     }
 
     try {
-        if ($postType == ZC_POST_TYPE_ARTICLE) {
+        if (ZC_POST_TYPE_ARTICLE == $postType) {
             // 默认为新增/修改文章
             $post = PostArticle();
-        } elseif ($postType == ZC_POST_TYPE_PAGE) {
+        } elseif (ZC_POST_TYPE_PAGE == $postType) {
             // 新增/修改页面
             $post = PostPage();
         } else {
@@ -142,44 +143,44 @@ function api_post_post()
         $zbp->BuildModule();
         $zbp->SaveCache();
 
-        if ($post === false) {
-            return array(
+        if (false === $post) {
+            return [
                 'code' => 500,
                 'message' => $GLOBALS['lang']['error']['11'],
-            );
+            ];
         }
 
         $array = ApiGetObjectArray(
             $post,
-            array('Url','TagsCount','TagsName','CommentPostKey','ValidCodeUrl'),
-            array(),
+            ['Url', 'TagsCount', 'TagsName', 'CommentPostKey', 'ValidCodeUrl'],
+            [],
             ApiGetAndFilterRelationQuery(
-                array(
-                    'Category' => array(
-                        'other_props' => array('Url', 'Symbol', 'Level', 'SymbolName', 'AllCount'),
-                    ),
-                    'Author' => array(
-                        'other_props' => array('Url', 'Template', 'Avatar', 'StaticName'),
-                        'remove_props' => array('Guid', 'Password', 'IP')
-                    ),
-                    'Tags' => array(
-                        'other_props' => array('Url', 'Template'),
-                    ),
-                )
-            )
-        );
-
-        return array(
-            'message' => $GLOBALS['lang']['msg']['operation_succeed'],
-            'data' => array(
-                'post' => $array,
+                [
+                    'Category' => [
+                        'other_props' => ['Url', 'Symbol', 'Level', 'SymbolName', 'AllCount'],
+                    ],
+                    'Author' => [
+                        'other_props' => ['Url', 'Template', 'Avatar', 'StaticName'],
+                        'remove_props' => ['Guid', 'Password', 'IP'],
+                    ],
+                    'Tags' => [
+                        'other_props' => ['Url', 'Template'],
+                    ],
+                ],
             ),
         );
+
+        return [
+            'message' => $GLOBALS['lang']['msg']['operation_succeed'],
+            'data' => [
+                'post' => $array,
+            ],
+        ];
     } catch (Exception $e) {
-        return array(
+        return [
             'code' => 500,
             'message' => $GLOBALS['lang']['msg']['operation_failed'] . ' ' . $e->getMessage(),
-        );
+        ];
     }
 }
 
@@ -196,20 +197,21 @@ function api_post_delete()
 
     $post = $zbp->GetPostByID((int) GetVars('id'));
     if (empty($post->ID)) {
-        return array(
+        return [
             'code' => 404,
             'message' => $GLOBALS['lang']['error']['97'],
-        );
+        ];
     }
     $type = $post->Type;
 
     // 默认为删除文章
     ApiCheckAuth(true, $post->TypeActions['del']);
+
     try {
-        if ($type == ZC_POST_TYPE_ARTICLE) {
+        if (ZC_POST_TYPE_ARTICLE == $type) {
             // 默认为删除文章
             DelArticle();
-        } elseif ($type == ZC_POST_TYPE_PAGE) {
+        } elseif (ZC_POST_TYPE_PAGE == $type) {
             // 删除页面
             DelPage();
         } else {
@@ -219,15 +221,15 @@ function api_post_delete()
         $zbp->BuildModule();
         $zbp->SaveCache();
     } catch (Exception $e) {
-        return array(
+        return [
             'code' => 500,
             'message' => $GLOBALS['lang']['msg']['operation_failed'] . ' ' . $e->getMessage(),
-        );
+        ];
     }
 
-    return array(
+    return [
         'message' => $GLOBALS['lang']['msg']['operation_succeed'],
-    );
+    ];
 }
 
 /**
@@ -248,79 +250,79 @@ function api_post_list()
     $actions = $zbp->GetPostType($type, 'actions');
     $search = (string) GetVars('search');
 
-    if (GetVars('cate_alias') !== null) {
+    if (null !== GetVars('cate_alias')) {
         $category = $zbp->GetCategoryByAlias(GetVars('cate_alias'));
         $cateId = $category->ID;
     }
-    if (GetVars('auth_name') !== null) {
+    if (null !== GetVars('auth_name')) {
         $member = $zbp->GetMemberByName(GetVars('auth_name'));
         $authId = $member->ID;
     }
 
     // 组织查询条件
-    $where = array();
+    $where = [];
     if ($cateId > 0) {
-        if (GetVars('with_subcate') == false) {
-            $where[] = array('=', 'log_CateID', $cateId);
+        if (false == GetVars('with_subcate')) {
+            $where[] = ['=', 'log_CateID', $cateId];
         } else {
-            $arysubcate = array();
-            $arysubcate[] = array('log_CateID', $cateId);
+            $arysubcate = [];
+            $arysubcate[] = ['log_CateID', $cateId];
             if (isset($zbp->categories[$cateId])) {
                 foreach ($zbp->categories[$cateId]->ChildrenCategories as $subcate) {
-                    $arysubcate[] = array('log_CateID', $subcate->ID);
+                    $arysubcate[] = ['log_CateID', $subcate->ID];
                 }
             }
-            $where[] = array('array', $arysubcate);
+            $where[] = ['array', $arysubcate];
         }
     }
     if ($tagId > 0) {
-        $where[] = array('LIKE', 'log_Tag', '%{' . $tagId . '}%');
+        $where[] = ['LIKE', 'log_Tag', '%{' . $tagId . '}%'];
     }
     if (!empty($authId)) {
-        $where[] = array('=', 'log_AuthorID', $authId);
+        $where[] = ['=', 'log_AuthorID', $authId];
     }
     if (!empty($date)) {
         $time = strtotime(GetVars('date', 'GET', ''));
         if (strrpos($date, '-') !== strpos($date, '-')) {
-            $where[] = array('BETWEEN', 'log_PostTime', $time, strtotime('+1 day', $time));
+            $where[] = ['BETWEEN', 'log_PostTime', $time, strtotime('+1 day', $time)];
         } else {
-            $where[] = array('BETWEEN', 'log_PostTime', $time, strtotime('+1 month', $time));
+            $where[] = ['BETWEEN', 'log_PostTime', $time, strtotime('+1 month', $time)];
         }
     }
     if (!empty($search)) {
         ApiCheckAuth(false, 'search');
         $type = 0;
         $search = trim(htmlspecialchars($search));
-        $where[] = array('search', 'log_Content', 'log_Intro', 'log_Title', $search);
+        $where[] = ['search', 'log_Content', 'log_Intro', 'log_Title', $search];
     }
 
-    $where[] = array('=', 'log_Type', $type);
+    $where[] = ['=', 'log_Type', $type];
     // 权限验证
-    if ($mng != 0) {
+    if (0 != $mng) {
         //检查管理模式权限
         ApiCheckAuth(true, $actions['manage']);
         // 如果没有管理all权限
         if (!$zbp->CheckRights($actions['all'])) {
-            $where[] = array('=', 'log_AuthorID', $zbp->user->ID);
+            $where[] = ['=', 'log_AuthorID', $zbp->user->ID];
         }
         $limitCount = $zbp->option['ZC_MANAGE_COUNT'];
     } else {
         // 默认非管理模式
         ApiCheckAuth(false, $actions['view']);
         $limitCount = $zbp->option['ZC_API_DISPLAY_COUNT'];
-        $where[] = array('=', 'log_Status', 0);
+        $where[] = ['=', 'log_Status', 0];
     }
 
     $filter = ApiGetRequestFilter(
         $limitCount,
-        array(
+        [
             'ID' => 'log_ID',
             'CreateTime' => 'log_CreateTime',
             'PostTime' => 'log_PostTime',
             'UpdateTime' => 'log_UpdateTime',
             'CommNums' => 'log_CommNums',
-            'ViewNums' => 'log_ViewNums'
-        )
+            'ViewNums' => 'log_ViewNums',
+        ],
     );
     $select = '';
     $order = $filter['order'];
@@ -333,29 +335,29 @@ function api_post_list()
 
     $listArr = ApiGetObjectArrayList(
         $zbp->GetPostList($select, $where, $order, $limit, $option),
-        array('Url', 'TagsCount', 'TagsName', 'CommentPostKey', 'ValidCodeUrl'),
-        (GetVars('without_content') != 0) ? array('Content') : array(),
+        ['Url', 'TagsCount', 'TagsName', 'CommentPostKey', 'ValidCodeUrl'],
+        (0 != GetVars('without_content')) ? ['Content'] : [],
         ApiGetAndFilterRelationQuery(
-            array(
-                'Category' => array(
-                    'other_props' => array('Url', 'Symbol', 'Level', 'SymbolName', 'AllCount'),
-                ),
-                'Author' => array(
-                    'other_props' => array('Url', 'Template', 'Avatar', 'StaticName'),
-                    'remove_props' => array('Guid', 'Password', 'IP')
-                ),
-                'Tags' => array(
-                    'other_props' => array('Url', 'Template'),
-                ),
-            )
-        )
+            [
+                'Category' => [
+                    'other_props' => ['Url', 'Symbol', 'Level', 'SymbolName', 'AllCount'],
+                ],
+                'Author' => [
+                    'other_props' => ['Url', 'Template', 'Avatar', 'StaticName'],
+                    'remove_props' => ['Guid', 'Password', 'IP'],
+                ],
+                'Tags' => [
+                    'other_props' => ['Url', 'Template'],
+                ],
+            ],
+        ),
     );
     $paginationArr = ApiGetPagebarInfo($option);
 
-    return array(
-        'data' => array(
+    return [
+        'data' => [
             'list' => $listArr,
             'pagebar' => $paginationArr,
-        ),
-    );
+        ],
+    ];
 }
