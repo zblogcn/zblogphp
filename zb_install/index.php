@@ -1550,8 +1550,16 @@ function SaveConfig()
     $zbp->option['ZC_BLOG_NAME'] = GetVars('blogtitle', 'POST', '');
     $zbp->option['ZC_USING_PLUGIN_LIST'] = 'AppCentre|UEditor|Totoro|LinksManage';
 
-    $zbp->option['ZC_BLOG_THEME'] = SplitAndGet(GetVars('blogtheme', 'POST', ''), '|', 0);
-    $zbp->option['ZC_BLOG_CSS'] = SplitAndGet(GetVars('blogtheme', 'POST', ''), '|', 1);
+    $blogtheme = GetVars('blogtheme', 'POST', '');
+    if ($blogtheme == '') {
+        $blogtheme = 'default|default';
+    }
+    $zbp->option['ZC_BLOG_THEME'] = SplitAndGet($blogtheme, '|', 0);
+    $zbp->option['ZC_BLOG_CSS'] = SplitAndGet($blogtheme, '|', 1);
+
+    if ($zbp->option['ZC_BLOG_THEME'] === 'os2020') {
+        $zbp->option['ZC_API_ENABLE'] = true;
+    }
     $zbp->option['ZC_DEBUG_MODE'] = false;
     $zbp->option['ZC_LAST_VERSION'] = ZC_LAST_VERSION;
     $zbp->option['ZC_NOW_VERSION'] = $zbp->version;

@@ -192,6 +192,8 @@ $GLOBALS['datadir'] = $GLOBALS['usersdir'] . 'data/';
  * 已激活插件列表
  */
 $GLOBALS['activedapps'] = [];
+//保留activeapps，兼容以前版本
+$GLOBALS['activeapps'] = &$GLOBALS['activedapps'];
 
 /*
  * 加载设置
@@ -209,7 +211,7 @@ if (!ZBP_HOOKERROR && is_readable($file_base = GetVarsFromEnv('ZBP_USER_OPTION')
 } elseif (is_readable($file_base = $GLOBALS['usersdir'] . 'c_option.php')) {
     $GLOBALS['option_user_file'] = include $file_base;
 }
-$GLOBALS['option'] = array_merge($GLOBALS['option'], $GLOBALS['option_user_file']);
+$GLOBALS['zbp_option'] = $GLOBALS['option'] = array_merge($GLOBALS['option'], $GLOBALS['option_user_file']);
 
 $GLOBALS['blogtitle'] = $GLOBALS['option']['ZC_BLOG_SUBNAME']; // 不是漏写！
 $GLOBALS['blogname'] = &$GLOBALS['option']['ZC_BLOG_NAME'];
