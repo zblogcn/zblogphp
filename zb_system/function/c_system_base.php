@@ -5,7 +5,7 @@
  */
 
 /**
- * ZBLOGPHP
+ * ZBLOGPHP.
  *
  * @var ZBlogPHP;
  */
@@ -29,27 +29,36 @@ if (ZBP_OBSTART) {
  * 加载系统基础函数.
  */
 require ZBP_PATH . 'zb_system/function/c_system_version.php';
+
 require ZBP_PATH . 'zb_system/function/c_system_common.php';
+
 require ZBP_PATH . 'zb_system/function/c_system_compat.php';
+
 require ZBP_PATH . 'zb_system/function/c_system_defined.php';
+
 require ZBP_PATH . 'zb_system/function/c_system_plugin.php';
+
 require ZBP_PATH . 'zb_system/function/c_system_debug.php';
+
 require ZBP_PATH . 'zb_system/function/c_system_function.php';
+
 require ZBP_PATH . 'zb_system/function/c_system_route.php';
+
 require ZBP_PATH . 'zb_system/function/c_system_event.php';
+
 require ZBP_PATH . 'zb_system/function/c_system_api.php';
 
 if (ZBP_HOOKERROR) {
     ZbpErrorControl::SetErrorHook();
 }
 
-/**
+/*
  * 指定加载类的目录并注册加载函数到系统
  */
 if (function_exists('RunTime_Begin')) {
     RunTime_Begin();
 }
-$GLOBALS['autoload_class_dirs'] = array();
+$GLOBALS['autoload_class_dirs'] = [];
 if (function_exists('AddAutoloadClassDir')) {
     AddAutoloadClassDir(ZBP_PATH . 'zb_system/function/lib');
 }
@@ -87,7 +96,6 @@ $GLOBALS['datainfo'] = include ZBP_PATH . 'zb_system/defend/datainfo.php';
  * https://github.com/php/php-src/commit/b2ea507beab862a0167af6b99f44fe9c695ca4f0
  */
 if (function_exists('get_magic_quotes_gpc') && PHP_VERSION_ID < 70400 && call_user_func('get_magic_quotes_gpc')) {
-
     function _stripslashes(&$var)
     {
         if (is_array($var)) {
@@ -110,16 +118,16 @@ if (function_exists('get_magic_quotes_gpc') && PHP_VERSION_ID < 70400 && call_us
  */
 if (IS_CLI && !IS_WORKERMAN && !IS_SWOOLE) {
     if (isset($GLOBALS['argv'])) {
-        $_SERVER["QUERY_STRING"] = implode('&', array_slice($GLOBALS['argv'], 1));
+        $_SERVER['QUERY_STRING'] = implode('&', array_slice($GLOBALS['argv'], 1));
     } else {
-        $_SERVER["QUERY_STRING"] = '';
+        $_SERVER['QUERY_STRING'] = '';
     }
 
-    $_SERVER["HTTP_HOST"] = "localhost";
-    $_SERVER['SERVER_SOFTWARE'] = "CLI";
-    $_GET = array();
-    parse_str($_SERVER["QUERY_STRING"], $_GET);
-    parse_str($_SERVER["QUERY_STRING"], $_REQUEST);
+    $_SERVER['HTTP_HOST'] = 'localhost';
+    $_SERVER['SERVER_SOFTWARE'] = 'CLI';
+    $_GET = [];
+    parse_str($_SERVER['QUERY_STRING'], $_GET);
+    parse_str($_SERVER['QUERY_STRING'], $_REQUEST);
     // $_POST = json_decode(file_get_contents('php://stdin'), true);
 }
 
@@ -130,7 +138,7 @@ if (IS_CLI && !IS_WORKERMAN && !IS_SWOOLE) {
 /*
  * 默认路由url数组
  */
-$GLOBALS['routes'] = array();
+$GLOBALS['routes'] = [];
 /*
  * 当前动作命令
  */
@@ -145,7 +153,7 @@ $GLOBALS['fullcurrentscript'] = ZBP_PATH . $GLOBALS['currentscript'];
 /*
  * 语言包
  */
-$GLOBALS['lang'] = array(); // array
+$GLOBALS['lang'] = []; // array
 $GLOBALS['langs'] = null; // object
 /*
  * 系统根路径
@@ -183,7 +191,7 @@ $GLOBALS['datadir'] = $GLOBALS['usersdir'] . 'data/';
 /*
  * 已激活插件列表
  */
-$GLOBALS['activedapps'] = array();
+$GLOBALS['activedapps'] = [];
 //保留activeapps，兼容以前版本
 $GLOBALS['activeapps'] = &$GLOBALS['activedapps'];
 
@@ -196,7 +204,7 @@ if (!empty($file_base) && is_readable($file_base) && class_exists('ZbpEnv')) {
     ZbpEnv::LoadByPath($file_base);
 }
 $GLOBALS['option'] = include ZBP_PATH . 'zb_system/defend/option.php';
-$GLOBALS['option_user_file'] = array();
+$GLOBALS['option_user_file'] = [];
 if (!ZBP_HOOKERROR && is_readable($file_base = GetVarsFromEnv('ZBP_USER_OPTION'))) {
     $GLOBALS['option_user_file'] = include $file_base;
     define('ZBP_PRESET_OPTION_USED', true);
@@ -213,7 +221,7 @@ $GLOBALS['blogstyle'] = &$GLOBALS['option']['ZC_BLOG_CSS'];
 $GLOBALS['cookiespath'] = null;
 
 $preset_bloghost = GetVarsFromEnv('ZBP_PRESET_HOST');
-if ($preset_bloghost != '') {
+if ('' != $preset_bloghost) {
     $preset_cookiespath = GetVarsFromEnv('ZBP_PRESET_COOKIESPATH');
     define('ZBP_PRESET_HOST_USED', true);
     $preset_bloghost = rtrim($preset_bloghost, '/');
@@ -221,7 +229,7 @@ if ($preset_bloghost != '') {
     $GLOBALS['bloghost'] = $preset_bloghost . $preset_cookiespath;
     $GLOBALS['cookiespath'] = $preset_cookiespath;
 } else {
-   $GLOBALS['bloghost'] = GetCurrentHost($GLOBALS['blogpath'], $GLOBALS['cookiespath']); 
+    $GLOBALS['bloghost'] = GetCurrentHost($GLOBALS['blogpath'], $GLOBALS['cookiespath']);
 }
 
 $GLOBALS['usersurl'] = $GLOBALS['bloghost'] . 'zb_users/';
@@ -231,10 +239,10 @@ $GLOBALS['adminurl'] = $GLOBALS['bloghost'] . 'zb_system/admin/';
 /*
  * Api Mods
  */
-$GLOBALS['api_public_mods'] = array();
-$GLOBALS['api_private_mods'] = array();
-$GLOBALS['api_allow_mods_rule'] = array();
-$GLOBALS['api_disallow_mods_rule'] = array();
+$GLOBALS['api_public_mods'] = [];
+$GLOBALS['api_private_mods'] = [];
+$GLOBALS['api_allow_mods_rule'] = [];
+$GLOBALS['api_disallow_mods_rule'] = [];
 
 /*
  * 系统实例化
@@ -251,10 +259,10 @@ $GLOBALS['zbp']->Initialize();
  */
 if (ZBP_SAFEMODE === false) {
     $theme_preset = GetVarsFromEnv('ZBP_PRESET_THEME');
-    if ($theme_preset != '') {
+    if ('' != $theme_preset) {
         $GLOBALS['blogtheme'] = $theme_preset;
         $style_preset = GetVarsFromEnv('ZBP_PRESET_THEME_STYLE');
-        if ($style_preset != '') {
+        if ('' != $style_preset) {
             $GLOBALS['blogstyle'] = $style_preset;
         }
     }
@@ -276,8 +284,8 @@ if (ZBP_SAFEMODE === false) {
 
     $aps = $GLOBALS['zbp']->GetPreActivePlugin();
     $aps_preset = GetVarsFromEnv('ZBP_PRESET_PLUGINS');
-    if ($aps_preset != '') {
-        $aps = array();
+    if ('' != $aps_preset) {
+        $aps = [];
         $aps_preset = explode('|', $aps_preset);
         foreach ($aps as $ap) {
             $aps[] = trim($ap);
@@ -301,8 +309,7 @@ if (ZBP_SAFEMODE === false) {
     }
 }
 
-unset($file_base, $aps, $aps_preset, $fn, $ap, $opk, $opv, $preset_bloghost, $preset_cookiespath);
-unset($theme_name, $theme_include, $theme_preset, $style_preset);
+unset($file_base, $aps, $aps_preset, $fn, $ap, $opk, $opv, $preset_bloghost, $preset_cookiespath, $theme_name, $theme_include, $theme_preset, $style_preset);
 
 //1.7新加入的
 $GLOBALS['zbp']->PreLoad();

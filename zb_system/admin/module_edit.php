@@ -4,9 +4,11 @@
  * Z-Blog with PHP.
  *
  * @author  Z-BlogPHP Team
+ *
  * @version 2.0 2013-07-05
  */
 require '../function/c_system_base.php';
+
 require '../function/c_system_admin.php';
 
 $zbp->Load();
@@ -14,12 +16,14 @@ $zbp->Load();
 $action = 'ModuleEdt';
 if (!$zbp->CheckRights($action)) {
     $zbp->ShowError(6, __FILE__, __LINE__);
-    die();
+
+    exit();
 }
 
 $blogtitle = $lang['msg']['module_edit'];
 
 require ZBP_PATH . 'zb_system/admin/admin_header.php';
+
 require ZBP_PATH . 'zb_system/admin/admin_top.php';
 
 ?>
@@ -27,10 +31,10 @@ require ZBP_PATH . 'zb_system/admin/admin_top.php';
 $modid = null;
 $mod = null;
 
-if (isset($_GET['source']) && isset($_GET['filename'])) {
+if (isset($_GET['source'], $_GET['filename'])) {
     if (GetVars('source', 'GET') == 'themeinclude_' . $zbp->theme) {
         $mod = $zbp->GetModuleByFileName(GetVars('filename', 'GET'));
-        if ($mod->ID == 0 || $mod->SourceType != 'themeinclude') {
+        if (0 == $mod->ID || 'themeinclude' != $mod->SourceType) {
             $zbp->ShowError(61);
         }
     } else {
@@ -38,7 +42,7 @@ if (isset($_GET['source']) && isset($_GET['filename'])) {
     }
 } elseif (isset($_GET['filename'])) {
     $mod = $zbp->GetModuleByFileName(GetVars('filename', 'GET'));
-    if ($mod->ID == 0 || $mod->SourceType == 'themeinclude') {
+    if (0 == $mod->ID || 'themeinclude' == $mod->SourceType) {
         $zbp->ShowError(69);
     }
 } else {
@@ -50,21 +54,21 @@ if (isset($_GET['source']) && isset($_GET['filename'])) {
 
     $mod = $zbp->GetModuleByID($modid);
 }
-if ($mod->Type == 'ul') {
-    $mod->Content = str_replace("</li>", "</li>\r\n", $mod->Content);
+if ('ul' == $mod->Type) {
+    $mod->Content = str_replace('</li>', "</li>\r\n", $mod->Content);
 }
 
 $islock = '';
-if ($mod->Source != 'user') {
+if ('user' != $mod->Source) {
     $islock = 'readonly="readonly"';
 }
-if ($mod->FileName == '') {
+if ('' == $mod->FileName) {
     $islock = '';
     $mod->Name = 'newmodule';
     $mod->HtmlID = 'newmodule';
 }
 $ishide = '';
-if ($mod->SourceType == 'themeinclude') {
+if ('themeinclude' == $mod->SourceType) {
     $ishide = 'style="display:none;"';
 }
 ?>
@@ -106,38 +110,38 @@ if ($mod->SourceType == 'themeinclude') {
                 <span class='title'>
                     <?php echo $lang['msg']['type']; ?>:</span>
                 <br />
-                <input id="Type_DIV" name="Type" type="radio" class="radio" value="div" <?php echo $mod->Type == 'div' ? 'checked="checked"' : ''; ?> onclick="$('#pMaxLi').css('display','none');" />
+                <input id="Type_DIV" name="Type" type="radio" class="radio" value="div" <?php echo 'div' == $mod->Type ? 'checked="checked"' : ''; ?> onclick="$('#pMaxLi').css('display','none');" />
                 <label for="Type_DIV">DIV</label>
                 &nbsp;&nbsp;&nbsp;&nbsp;
-                <input id="Type_UL" type="radio" class="radio" name="Type" value="ul" <?php echo $mod->Type == 'div' ? '' : 'checked="checked"'; ?> onclick="$('#pMaxLi').css('display','block');" />
+                <input id="Type_UL" type="radio" class="radio" name="Type" value="ul" <?php echo 'div' == $mod->Type ? '' : 'checked="checked"'; ?> onclick="$('#pMaxLi').css('display','block');" />
                 <label for="Type_UL">UL</label>
             </p>
-            <p id="pMaxLi" style="<?php echo $mod->Type == 'div' ? 'display:none;' : ''; ?>">
+            <p id="pMaxLi" style="<?php echo 'div' == $mod->Type ? 'display:none;' : ''; ?>">
                 <span class='title'>
                     <?php echo $lang['msg']['max_li_in_ul']; ?>:</span>
                 <br />
                 <input type="text" name="MaxLi" value="<?php echo $mod->MaxLi; ?>" size="40" /></p>
             <?php
-            if ($mod->FileName == 'catalog') {
+            if ('catalog' == $mod->FileName) {
                 ?>
                 <p>
                     <span class='title'>
                         <?php echo $lang['msg']['style']; ?>:</span>
                     &nbsp;&nbsp;
-                        <input id="catalog_style_normal" name="catalog_style" type="radio" class="radio" value="0" <?php echo $zbp->option['ZC_MODULE_CATALOG_STYLE'] == '0' ? 'checked="checked"' : ''; ?> />&nbsp;
+                        <input id="catalog_style_normal" name="catalog_style" type="radio" class="radio" value="0" <?php echo '0' == $zbp->option['ZC_MODULE_CATALOG_STYLE'] ? 'checked="checked"' : ''; ?> />&nbsp;
                         <label for="catalog_style_normal"><?php echo $lang['msg']['catalog_style_normal']; ?></label>
                     &nbsp;&nbsp;
-                        <input id="catalog_style_tree" name="catalog_style" type="radio" class="radio" value="1" <?php echo $zbp->option['ZC_MODULE_CATALOG_STYLE'] == '1' ? 'checked="checked"' : ''; ?> />&nbsp;
+                        <input id="catalog_style_tree" name="catalog_style" type="radio" class="radio" value="1" <?php echo '1' == $zbp->option['ZC_MODULE_CATALOG_STYLE'] ? 'checked="checked"' : ''; ?> />&nbsp;
                         <label for="catalog_style_tree"><?php echo $lang['msg']['catalog_style_tree']; ?></label>
                     &nbsp;&nbsp;
-                        <input id="catalog_style_ul" name="catalog_style" type="radio" class="radio" value="2" <?php echo $zbp->option['ZC_MODULE_CATALOG_STYLE'] == '2' ? 'checked="checked"' : ''; ?> />&nbsp;
+                        <input id="catalog_style_ul" name="catalog_style" type="radio" class="radio" value="2" <?php echo '2' == $zbp->option['ZC_MODULE_CATALOG_STYLE'] ? 'checked="checked"' : ''; ?> />&nbsp;
                         <label for="catalog_style_ul"><?php echo $lang['msg']['catalog_style_ul']; ?></label>
                     &nbsp;&nbsp;
                 </p>
                 <?php
             }
-            if ($mod->FileName == 'archives') {
-                if ($zbp->option['ZC_MODULE_ARCHIVES_STYLE'] == '1') {
+            if ('archives' == $mod->FileName) {
+                if ('1' == $zbp->option['ZC_MODULE_ARCHIVES_STYLE']) {
                     ?>
                     <label><input name="archives_style" type="checkbox" value="<?php echo $zbp->option['ZC_MODULE_ARCHIVES_STYLE']; ?>" checked="checked" /><?php echo $lang['msg']['archives_style_select']; ?></label></label>
                     <?php

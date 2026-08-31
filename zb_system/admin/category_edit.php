@@ -4,9 +4,11 @@
  * Z-Blog with PHP.
  *
  * @author  Z-BlogPHP Team
+ *
  * @version 2.0 2013-07-05
  */
 require '../function/c_system_base.php';
+
 require '../function/c_system_admin.php';
 
 $zbp->Load();
@@ -14,7 +16,8 @@ $zbp->Load();
 $action = 'CategoryPst';
 if (!$zbp->CheckRights($action)) {
     $zbp->ShowError(6, __FILE__, __LINE__);
-    die();
+
+    exit();
 }
 
 $type = (int) GetVars('type');
@@ -23,6 +26,7 @@ $typetitle = $type > 0 ? (ucfirst($zbp->GetPostType($type, 'name')) . '-') : '';
 $blogtitle = $typetitle . $lang['msg']['category_edit'];
 
 require ZBP_PATH . 'zb_system/admin/admin_header.php';
+
 require ZBP_PATH . 'zb_system/admin/admin_top.php';
 
 ?>
@@ -33,19 +37,21 @@ if (isset($_GET['id'])) {
     $action = 'CategoryEdt';
     if (!$zbp->CheckRights($action)) {
         $zbp->ShowError(6, __FILE__, __LINE__);
-        die();
+
+        exit();
     }
 } else {
     $cateid = 0;
     $action = 'CategoryNew';
     if (!$zbp->CheckRights($action)) {
         $zbp->ShowError(6, __FILE__, __LINE__);
-        die();
+
+        exit();
     }
 }
 
 $cate = $zbp->GetCategoryByID($cateid);
-if ($cate->ID == 0) {
+if (0 == $cate->ID) {
     $cate->Type = (int) GetVars('type', 'GET');
 }
 
@@ -112,14 +118,14 @@ foreach ($zbp->categoriesbyorder_type[$cate->Type] as $k => $v) {
                     <?php echo $lang['msg']['template']; ?>:</span>
                 <br />
                 <select class="edit" size="1" name="Template" id="cmbTemplate">
-                    <?php echo OutputOptionItemsOfTemplate($cate->Template, array('single', '404', 'search', 'module', 'lm-'), array('list', 'category')); ?></select>
+                    <?php echo OutputOptionItemsOfTemplate($cate->Template, ['single', '404', 'search', 'module', 'lm-'], ['list', 'category']); ?></select>
                 <input type="hidden" name="edtTemplate" id="edtTemplate" value="<?php echo $cate->Template; ?>" /></p>
             <p>
                 <span class="title">
                     <?php echo $lang['msg']['category_aritles_default_template']; ?>:</span>
                 <br />
                 <select class="edit" size="1" name="LogTemplate" id="cmbLogTemplate">
-                    <?php echo OutputOptionItemsOfTemplate($cate->LogTemplate, array('index', '404', 'search', 'module', 'lm-'), array('single', $zbp->GetPostType($cate->Type, 'name'))); ?></select>
+                    <?php echo OutputOptionItemsOfTemplate($cate->LogTemplate, ['index', '404', 'search', 'module', 'lm-'], ['single', $zbp->GetPostType($cate->Type, 'name')]); ?></select>
             </p>
             <p>
                 <span class='title'>
