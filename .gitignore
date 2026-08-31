@@ -1,7 +1,11 @@
 .history/
+.htaccess
 .php-cs-fixer.cache
 nologin*
 vendor/
+web.config
 zb_users/c_option.php
 zb_users/cache/
+zb_users/data/
 zb_users/logs/
+zb_users/upload/
