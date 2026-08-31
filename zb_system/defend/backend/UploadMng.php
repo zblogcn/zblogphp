@@ -15,27 +15,27 @@
 <!-- 文件列表 -->
 <table class="tableFull tableBorder thCenter table_hover table_striped">
     <tr>
-        <th>{$zbp.lang['msg']['id']}{$button_id_html}</th>
-        <th>{$zbp.lang['msg']['author']}{$button_authorid_html}</th>
-        <th>{$zbp.lang['msg']['name']}</th>
-        <th>{$zbp.lang['msg']['date']}{$button_posttime_html}</th>
-        <th>{$zbp.lang['msg']['size']}{$button_size_html}</th>
-        <th>{$zbp.lang['msg']['type']}</th>
-        <th></th>
+        <th data-field="id">{$zbp.lang['msg']['id']}{$button_id_html}</th>
+        <th data-field="author">{$zbp.lang['msg']['author']}{$button_authorid_html}</th>
+        <th data-field="name">{$zbp.lang['msg']['name']}</th>
+        <th data-field="date">{$zbp.lang['msg']['date']}{$button_posttime_html}</th>
+        <th data-field="size">{$zbp.lang['msg']['size']}{$button_size_html}</th>
+        <th data-field="type">{$zbp.lang['msg']['type']}</th>
+        <th data-field="actions"></th>
     </tr>
 
     {foreach $uploads as $upload}
-    <tr>
-        <td class="td5">{$upload.ID}</td>
-        <td class="td10">{$upload.Author.Name}</td>
-        <td>
+    <tr data-id="{$upload.ID}">
+        <td class="td5" data-field="id">{$upload.ID}</td>
+        <td class="td10" data-field="author">{$upload.Author.Name}</td>
+        <td data-field="name">
             <a href="{$upload.Url}" target="_blank"><i class="icon-link-45deg"></i></a>
             {$upload.Name}
         </td>
-        <td class="td15">{$upload.Time()}</td>
-        <td class="td10">{$upload.Size}</td>
-        <td class="td20">{$upload.MimeType}</td>
-        <td class="td10 tdCenter">
+        <td class="td15" data-field="date">{$upload.Time()}</td>
+        <td class="td10" data-field="size">{$upload.Size}</td>
+        <td class="td20" data-field="type">{$upload.MimeType}</td>
+        <td class="td10 tdCenter" data-field="actions">
             <a onclick="return confirmDelete();" href="{BuildSafeCmdURL('act=UploadDel&amp;id=' . $upload->ID)}">
                 <i class="icon-trash"></i>
             </a>

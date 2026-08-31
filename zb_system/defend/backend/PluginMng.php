@@ -2,11 +2,11 @@
 <!-- update: 2026-01-04 -->
 <table class="tableFull tableBorder thCenter table_hover table_striped plugin-list">
     <tr>
-        <th></th>
-        <th>{$zbp.lang['msg']['name']}</th>
-        <th>{$zbp.lang['msg']['author']}</th>
-        <th>{$zbp.lang['msg']['date']}</th>
-        <th></th>
+        <th data-field="icon"></th>
+        <th data-field="name">{$zbp.lang['msg']['name']}</th>
+        <th data-field="author">{$zbp.lang['msg']['author']}</th>
+        <th data-field="date">{$zbp.lang['msg']['date']}</th>
+        <th data-field="actions"></th>
     </tr>
 
     {foreach $plugins as $plugin}
@@ -21,18 +21,18 @@
     $pluginModifiedEscaped = htmlspecialchars($plugin->modified);
     ?>
     {/php}
-    <tr>
-        <td class="td5 tdCenter{if $plugin.type == 'plugin'} plugin{/if}{if $plugin.IsUsed()} plugin-on{/if}" data-pluginid="{$pluginIdEscaped}">
+    <tr data-id="{$pluginIdEscaped}">
+        <td class="td5 tdCenter{if $plugin.type == 'plugin'} plugin{/if}{if $plugin.IsUsed()} plugin-on{/if}" data-pluginid="{$pluginIdEscaped}" data-field="icon">
             <img class="{if !$plugin.IsUsed()}plugin-off{/if}" src="{$plugin.GetLogo()}" alt="" width="32" height="32" />
         </td>
-        <td class="td25">
+        <td class="td25" data-field="name">
             <span class="plugin-note" title="{$pluginNoteEscaped}">{$pluginNameEscaped} {$pluginVersionEscaped}</span>
         </td>
-        <td class="td20">
+        <td class="td20" data-field="author">
             <a href="{$pluginAuthorUrlEscaped}" target="_blank">{$pluginAuthorNameEscaped}</a>
         </td>
-        <td class="td20">{$pluginModifiedEscaped}</td>
-        <td class="td10 tdCenter">
+        <td class="td20" data-field="date">{$pluginModifiedEscaped}</td>
+        <td class="td10 tdCenter" data-field="actions">
             {if $plugin.type == 'plugin'}
             {if $plugin.IsUsed()}
             <a href="{BuildSafeCmdURL('act=PluginDis')}&name={$pluginIdEscaped}" title="{$zbp.lang['msg']['disable']}" class="btn-icon btn-disable" data-pluginid="{$pluginIdEscaped}">

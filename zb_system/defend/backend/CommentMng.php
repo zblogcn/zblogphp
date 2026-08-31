@@ -15,32 +15,32 @@
 
     <table class="tableFull tableBorder thCenter table_hover table_striped">
         <tr>
-            <th>{$zbp.lang['msg']['id']}{$button_id_html}</th>
-            <th>{$zbp.lang['msg']['parend_id']}</th>
-            <th>{$zbp.lang['msg']['name']}{$button_authorid_html}</th>
-            <th>{$zbp.lang['msg']['content']}</th>
-            <th>{$zbp.lang['msg']['article']}{$button_logid_html}</th>
-            <th>{$zbp.lang['msg']['date']}{$button_posttime_html}</th>
-            <th></th>
-            <th><a href="javascript:;" onclick="BatchSelectAll();return false;">{$zbp.lang['msg']['select_all']}</a></th>
+            <th data-field="id">{$zbp.lang['msg']['id']}{$button_id_html}</th>
+            <th data-field="parent_id">{$zbp.lang['msg']['parend_id']}</th>
+            <th data-field="name">{$zbp.lang['msg']['name']}{$button_authorid_html}</th>
+            <th data-field="content">{$zbp.lang['msg']['content']}</th>
+            <th data-field="article">{$zbp.lang['msg']['article']}{$button_logid_html}</th>
+            <th data-field="date">{$zbp.lang['msg']['date']}{$button_posttime_html}</th>
+            <th data-field="actions"></th>
+            <th data-field="select"><a href="javascript:;" onclick="BatchSelectAll();return false;">{$zbp.lang['msg']['select_all']}</a></th>
         </tr>
 
         {foreach $comments as $comment}
-        <tr>
-            <td class="td5">
+        <tr data-id="{$comment.ID}">
+            <td class="td5" data-field="id">
                 <a href="?act=CommentMng&id={$comment.ID}" title="{$zbp.lang['msg']['jump_comment']}{$comment.ID}">{$comment.ID}</a>
             </td>
-            <td class="td5">
+            <td class="td5" data-field="parent_id">
                 {if $comment.ParentID}
                 <a href="?act=CommentMng&id={$comment.ParentID}" title="{$zbp.lang['msg']['jump_comment']}{$comment.ParentID}">{$comment.ParentID}</a>
                 {/if}
             </td>
-            <td class="td10">
+            <td class="td10" data-field="name">
                 <span class="cmt-note" title="{$zbp.lang['msg']['email']}:{$comment.Email}">
                     <a href="mailto:{$comment.Email}">{$comment.Author.StaticName}</a>
                 </span>
             </td>
-            <td>
+            <td data-field="content">
                 <div class="overflow-hidden">
                     {if $comment.Post}
                     <a href="{$comment.Post.Url}" target="_blank"><i class="icon-link-45deg"></i></a>
@@ -50,9 +50,9 @@
                     {$comment.Content}
                 </div>
             </td>
-            <td class="td5">{$comment.LogID}</td>
-            <td class="td15">{$comment.Time()}</td>
-            <td class="td10 tdCenter">
+            <td class="td5" data-field="article">{$comment.LogID}</td>
+            <td class="td15" data-field="date">{$comment.Time()}</td>
+            <td class="td10 tdCenter" data-field="actions">
                 <a onclick="return confirmDelete();" href="{BuildSafeCmdURL('act=CommentDel&amp;id=' . $comment->ID)}">
                     <i class="icon-trash" title="{$zbp.lang['msg']['del']}"></i>
                 </a>
@@ -66,7 +66,7 @@
                 </a>
                 {/if}
             </td>
-            <td class="td5 tdCenter">
+            <td class="td5 tdCenter" data-field="select">
                 <input type="checkbox" id="id{$comment.ID}" name="id[]" value="{$comment.ID}" />
             </td>
         </tr>

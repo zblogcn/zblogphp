@@ -3,34 +3,34 @@
 <form method="post" action="{$zbp.cmdurl}?act=PostBat&type={$post_type}">
     <table class="tableFull tableBorder thCenter table_hover table_striped">
         <tr>
-            <th>{$zbp.lang['msg']['id']}{$button_id_html}</th>
-            <th>{$zbp.lang['msg']['author']}{$button_authorid_html}</th>
-            <th>{$zbp.lang['msg']['title']}</th>
-            <th>{$zbp.lang['msg']['date']}{$button_posttime_html}</th>
-            <th>{$zbp.lang['msg']['comment']}</th>
-            <th>{$zbp.lang['msg']['status']}</th>
-            <th></th>
+            <th data-field="id">{$zbp.lang['msg']['id']}{$button_id_html}</th>
+            <th data-field="author">{$zbp.lang['msg']['author']}{$button_authorid_html}</th>
+            <th data-field="title">{$zbp.lang['msg']['title']}</th>
+            <th data-field="date">{$zbp.lang['msg']['date']}{$button_posttime_html}</th>
+            <th data-field="comment">{$zbp.lang['msg']['comment']}</th>
+            <th data-field="status">{$zbp.lang['msg']['status']}</th>
+            <th data-field="actions"></th>
             {if $zbp.CheckRights('PostBat') && $zbp.option['ZC_POST_BATCH_DELETE']}
-            <th><a href="javascript:;" onclick="BatchSelectAll();return false;">{$zbp.lang['msg']['select_all']}</a></th>
+            <th data-field="select"><a href="javascript:;" onclick="BatchSelectAll();return false;">{$zbp.lang['msg']['select_all']}</a></th>
             {/if}
         </tr>
 
         {foreach $pages as $page}
-        <tr>
-            <td class="td5">{$page.ID}</td>
-            <td class="td10">{$page.Author.Name}</td>
-            <td>
+        <tr data-id="{$page.ID}">
+            <td class="td5" data-field="id">{$page.ID}</td>
+            <td class="td10" data-field="author">{$page.Author.Name}</td>
+            <td data-field="title">
                 <a href="{$page.Url}" target="_blank"><i class="icon-link-45deg"></i></a> {$page.Title}
             </td>
-            <td class="td20">{$page.Time()}</td>
-            <td class="td5">{$page.CommNums}</td>
-            <td class="td5">{$page.StatusName}</td>
-            <td class="td10 tdCenter">
+            <td class="td20" data-field="date">{$page.Time()}</td>
+            <td class="td5" data-field="comment">{$page.CommNums}</td>
+            <td class="td5" data-field="status">{$page.StatusName}</td>
+            <td class="td10 tdCenter" data-field="actions">
                 <a href="{$zbp.cmdurl}?act=PageEdt&amp;id={$page.ID}"><i class="icon-pencil-square"></i></a>
                 <a onclick="return confirmDelete();" href="{BuildSafeCmdURL('act=PageDel&amp;id=' . $page->ID)}"><i class="icon-trash"></i></a>
             </td>
             {if $zbp.CheckRights('PostBat') && $zbp.option['ZC_POST_BATCH_DELETE']}
-            <td class="td5 tdCenter">
+            <td class="td5 tdCenter" data-field="select">
                 <input type="checkbox" id="id{$page.ID}" name="id[]" value="{$page.ID}">
             </td>
             {/if}

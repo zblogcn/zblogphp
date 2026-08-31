@@ -38,41 +38,41 @@
     <table class="tableFull tableBorder table_hover table_striped thCenter">
         <!-- 表头 -->
         <tr>
-            <th>{$zbp.lang['msg']['id']}{$button_id_html}</th>
-            <th>{$zbp.lang['msg']['category']}{$button_cateid_html}</th>
-            <th>{$zbp.lang['msg']['author']}{$button_authorid_html}</th>
-            <th>{$zbp.lang['msg']['title']}</th>
-            <th>{$zbp.lang['msg']['date']}{$button_posttime_html}</th>
-            <th>{$zbp.lang['msg']['comment']}</th>
-            <th>{$zbp.lang['msg']['status']}</th>
-            <th></th>
+            <th data-field="id">{$zbp.lang['msg']['id']}{$button_id_html}</th>
+            <th data-field="category">{$zbp.lang['msg']['category']}{$button_cateid_html}</th>
+            <th data-field="author">{$zbp.lang['msg']['author']}{$button_authorid_html}</th>
+            <th data-field="title">{$zbp.lang['msg']['title']}</th>
+            <th data-field="date">{$zbp.lang['msg']['date']}{$button_posttime_html}</th>
+            <th data-field="comment">{$zbp.lang['msg']['comment']}</th>
+            <th data-field="status">{$zbp.lang['msg']['status']}</th>
+            <th data-field="actions"></th>
             {if $zbp.CheckRights('PostBat') && $zbp.option['ZC_POST_BATCH_DELETE']}
-            <th><a href="javascript:;" onclick="BatchSelectAll();return false;">{$zbp.lang['msg']['select_all']}</a></th>
+            <th data-field="select"><a href="javascript:;" onclick="BatchSelectAll();return false;">{$zbp.lang['msg']['select_all']}</a></th>
             {/if}
         </tr>
         <!-- 列表内容 -->
         {foreach $articles as $article}
-        <tr>
-            <td class="td5">{$article.ID}</td>
-            <td class="td10">{$article.Category.Name}</td>
-            <td class="td10">{$article.Author.Name}</td>
-            <td>
+        <tr data-id="{$article.ID}">
+            <td class="td5" data-field="id">{$article.ID}</td>
+            <td class="td10" data-field="category">{$article.Category.Name}</td>
+            <td class="td10" data-field="author">{$article.Author.Name}</td>
+            <td data-field="title">
                 <a href="{$article.Url}" target="_blank"><i class="icon-link-45deg"></i></a> {$article.Title}
             </td>
-            <td class="td20">{$article.Time()}</td>
-            <td class="td5">{$article.CommNums}</td>
-            <td class="td5">
+            <td class="td20" data-field="date">{$article.Time()}</td>
+            <td class="td5" data-field="comment">{$article.CommNums}</td>
+            <td class="td5" data-field="status">
                 {if $article.IsTop}
                 {$zbp.lang.msg.top}|
                 {/if}
                 {$article.StatusName}
             </td>
-            <td class="td10 tdCenter">
+            <td class="td10 tdCenter" data-field="actions">
                 <a href="{$zbp.cmdurl}?act=ArticleEdt&amp;id={$article.ID}"><i class="icon-pencil-square"></i></a>
                 <a onclick="return confirmDelete();" href="{BuildSafeCmdURL('act=ArticleDel&amp;id=' . $article->ID)}"><i class="icon-trash"></i></a>
             </td>
             {if $zbp.CheckRights('PostBat') && $zbp.option['ZC_POST_BATCH_DELETE']}
-            <td class="td5 tdCenter">
+            <td class="td5 tdCenter" data-field="select">
                 <input type="checkbox" id="id{$article.ID}" name="id[]" value="{$article.ID}">
             </td>
             {/if}
