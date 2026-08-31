@@ -7,32 +7,12 @@ require __DIR__ . "/admin2_misc.php";
 
 $zbp->ismanage = true;
 
-
-if (is_readable($xmlPath = $zbp->systemdir . 'admin2/backend-legacy/backend.xml')) {
-  zbp_admin2_RegisterBackEndApp('backend-legacy', $xmlPath);
-}
-if (is_readable($xmlPath = $zbp->systemdir . 'admin2/backend-nexus/backend.xml')) {
-  zbp_admin2_RegisterBackEndApp('backend-nexus', $xmlPath);
-}
-if (is_readable($xmlPath = $zbp->systemdir . 'admin2/backend-toyean/backend.xml')) {
-  zbp_admin2_RegisterBackEndApp('backend-toyean', $xmlPath);
-}
-unset($xmlPath);
-
-// admin2 注册后台主题
-function zbp_admin2_RegisterBackEndApp($app_id, $app_file)
-{
-  global $zbp;
-  $app = new App();
-  $app->LoadInfoByXml('backend', $app_id, $app_file);
-  $zbp->backend_apps[] = $app;
-}
-
 // admin2 后台主要函数 管理页面
 function zbp_admin2_GetActionInfo($action)
 {
   global $lang;
   $main = (object) array(
+    "Title" => "",
     "Header" => "",
     "HeaderIcon" => "",
     "SubMenu" => "",
@@ -46,6 +26,7 @@ function zbp_admin2_GetActionInfo($action)
       $main->Content = zbp_admin2_SiteInfo();
       $main->Header = $lang['msg']['info_intro'];
       $main->HeaderIcon = 'icon-house-door-fill';
+      $main->Title = $blogtitle;
       break;
     case 'ArticleMng':
       // $admin_function = 'Admin_ArticleMng';
@@ -54,6 +35,7 @@ function zbp_admin2_GetActionInfo($action)
       $main->Content = zbp_admin2_ArticleMng();
       $main->Header = $blogtitle;
       $main->HeaderIcon = 'icon-stickies';
+      $main->Title = $blogtitle;
       break;
     case 'PageMng':
       // $admin_function = 'Admin_PageMng';
@@ -62,6 +44,7 @@ function zbp_admin2_GetActionInfo($action)
       $main->Content = zbp_admin2_PageMng();
       $main->Header = $blogtitle;
       $main->HeaderIcon = 'icon-stickies-fill';
+      $main->Title = $blogtitle;
       break;
     case 'CategoryMng':
       // $admin_function = 'Admin_CategoryMng';
@@ -70,6 +53,7 @@ function zbp_admin2_GetActionInfo($action)
       $main->Content = zbp_admin2_CategoryMng();
       $main->Header = $blogtitle;
       $main->HeaderIcon = 'icon-folder-fill';
+      $main->Title = $blogtitle;
       break;
     case 'TagMng':
       // $admin_function = 'Admin_TagMng';
@@ -78,6 +62,7 @@ function zbp_admin2_GetActionInfo($action)
       $main->Content = zbp_admin2_TagMng();
       $main->Header = $blogtitle;
       $main->HeaderIcon = 'icon-tags-fill';
+      $main->Title = $blogtitle;
       break;
     case 'CommentMng':
       // $admin_function = 'Admin_CommentMng';
@@ -86,6 +71,7 @@ function zbp_admin2_GetActionInfo($action)
       $main->Content = zbp_admin2_CommentMng();
       $main->Header = $blogtitle;
       $main->HeaderIcon = 'icon-chat-text-fill';
+      $main->Title = $blogtitle;
       break;
     case 'UploadMng':
       // $admin_function = 'Admin_UploadMng';
@@ -94,6 +80,7 @@ function zbp_admin2_GetActionInfo($action)
       $main->Content = zbp_admin2_UploadMng();
       $main->Header = $blogtitle;
       $main->HeaderIcon = 'icon-inboxes-fill';
+      $main->Title = $blogtitle;
       break;
     case 'MemberMng':
       // $admin_function = 'Admin_MemberMng';
@@ -102,6 +89,7 @@ function zbp_admin2_GetActionInfo($action)
       $main->Content = zbp_admin2_MemberMng();
       $main->Header = $blogtitle;
       $main->HeaderIcon = 'icon-people-fill';
+      $main->Title = $blogtitle;
       break;
     case 'ModuleMng':
       // $admin_function = 'Admin_ModuleMng';
@@ -110,6 +98,7 @@ function zbp_admin2_GetActionInfo($action)
       $main->Content = zbp_admin2_ModuleMng();
       $main->Header = $blogtitle;
       $main->HeaderIcon = 'icon-grid-3x3-gap-fill';
+      $main->Title = $blogtitle;
       break;
     case 'ThemeMng':
       // $admin_function = 'Admin_ThemeMng';
@@ -118,6 +107,7 @@ function zbp_admin2_GetActionInfo($action)
       $main->Content = zbp_admin2_ThemeMng();
       $main->Header = $blogtitle;
       $main->HeaderIcon = 'icon-grid-1x2-fill';
+      $main->Title = $blogtitle;
       break;
     case 'PluginMng':
       // $admin_function = 'Admin_PluginMng';
@@ -126,6 +116,7 @@ function zbp_admin2_GetActionInfo($action)
       $main->Content = zbp_admin2_PluginMng();
       $main->Header = $blogtitle;
       $main->HeaderIcon = 'icon-puzzle-fill';
+      $main->Title = $blogtitle;
       break;
     case 'SettingMng':
       // $admin_function = 'Admin_SettingMng';
@@ -134,6 +125,7 @@ function zbp_admin2_GetActionInfo($action)
       $main->Content = zbp_admin2_SettingMng();
       $main->Header = $blogtitle;
       $main->HeaderIcon = 'icon-gear-fill';
+      $main->Title = $blogtitle;
       break;
     case 'ArticleEdt':
       $blogtitle = $lang['msg']['article_edit'];
@@ -141,6 +133,7 @@ function zbp_admin2_GetActionInfo($action)
       $main->Content = zbp_admin2_ArticleEdt();
       $main->Header = $blogtitle;
       $main->HeaderIcon = 'icon-pencil-square-fill';
+      $main->Title = $blogtitle;
       break;
     case 'CategoryEdt':
       $blogtitle = $lang['msg']['category_edit'];
@@ -148,6 +141,7 @@ function zbp_admin2_GetActionInfo($action)
       $main->Content = zbp_admin2_CategoryEdt();
       $main->Header = $blogtitle;
       $main->HeaderIcon = 'icon-folder-fill';
+      $main->Title = $blogtitle;
       break;
 
     case 'TagEdt':
@@ -156,6 +150,7 @@ function zbp_admin2_GetActionInfo($action)
       $main->Content = zbp_admin2_TagEdt();
       $main->Header = $blogtitle;
       $main->HeaderIcon = 'icon-tags-fill';
+      $main->Title = $blogtitle;
       break;
 
     case 'MemberNew':
@@ -165,6 +160,7 @@ function zbp_admin2_GetActionInfo($action)
       $main->Content = zbp_admin2_MemberEdt();
       $main->Header = $blogtitle;
       $main->HeaderIcon = 'icon-person-fill';
+      $main->Title = $blogtitle;
       break;
 
     case 'ModuleEdt':
@@ -173,13 +169,14 @@ function zbp_admin2_GetActionInfo($action)
       $main->Content = zbp_admin2_ModuleEdt();
       $main->Header = $blogtitle;
       $main->HeaderIcon = 'icon-grid-fill';
+      $main->Title = $blogtitle;
       break;
 
     default:
       break;
   }
 
-  $main->SubMenu = zbp_admin2_GenSubMenu($action);
-  return array($blogtitle, $main);
+  //$main->SubMenu = zbp_admin2_GenSubMenu($action);
+  return $main;
 }
 

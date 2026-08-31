@@ -204,25 +204,15 @@ class App
      */
     public static $unpack_app = null;
 
-    protected $app_directory = null;
+    /**
+     * @var string app_path 之前是魔术方法，现在转入GetDir()
+     */
+    public $app_path = null;
 
-    public function __get($key)
-    {
-        global $zbp;
-        if ($key === 'app_path') {
-            if ($this->app_directory !== null) {
-                return $this->app_directory;
-            }
-            $appDirectory = $zbp->usersdir . FormatString($this->type, '[filename]');
-            $appDirectory .= '/' . FormatString($this->id, '[filename]') . '/';
-            $this->app_directory = $appDirectory;
-            return $appDirectory;
-        } elseif ($key === 'app_url') {
-            return $zbp->host . 'zb_users/' . $this->type . '/' . $this->id . '/';
-        }
-
-        return '';
-    }
+    /**
+     * @var string app_url 之前是魔术方法，现在转入GetUrl()
+     */
+    public $app_url = null;
 
     /**
      * 得到详细信息数组.
@@ -317,7 +307,34 @@ class App
      */
     public function GetDir()
     {
+        global $zbp;
+        if ($this->app_path !== null) {
+            return $this->app_path;
+        }
+        $appDirectory = $zbp->usersdir . FormatString($this->type, '[filename]');
+        $appDirectory .= '/' . FormatString($this->id, '[filename]') . '/';
+        $this->app_path = $appDirectory;
         return $this->app_path;
+    }
+
+    public function GetPath()
+    {
+        return $this->GetDir();
+    }
+
+    /**
+     * 获取应用目Url地址
+     *
+     * @return string
+     */
+    public function GetUrl()
+    {
+        global $zbp;
+        if ($this->app_url !== null) {
+            return $this->app_url;
+        }
+        $this->app_url = $zbp->host . 'zb_users/' . $this->type . '/' . $this->id . '/';
+        return $this->app_url;
     }
 
     /**
@@ -328,11 +345,11 @@ class App
     public function GetLogo()
     {
         if ($this->type == 'plugin') {
-            return $this->app_url . 'logo.png';
-        } elseif (is_readable($this->app_path . 'logo.png')) {
-            return $this->app_url . 'logo.png';
+            return $this->GetUrl() . 'logo.png';
+        } elseif (is_readable($this->GetDir() . 'logo.png')) {
+            return $this->GetUrl() . 'logo.png';
         } else {
-            return $this->app_url . 'screenshot.png';
+            return $this->GetUrl() . 'screenshot.png';
         }
     }
 
@@ -343,7 +360,7 @@ class App
      */
     public function GetScreenshot()
     {
-        return $this->app_url . 'screenshot.png';
+        return $this->GetUrl() . 'screenshot.png';
     }
 
     /**
@@ -353,7 +370,7 @@ class App
      */
     public function GetCssFiles()
     {
-        $dir = $this->app_path . 'style/';
+        $dir = $this->GetDir() . 'style/';
 
         $array = GetFilesInDir($dir, 'css');
         if (isset($array['default'])) {
@@ -386,11 +403,12 @@ class App
         $this->type = $type;
 
         if ($type == 'backend') {
-            $this->app_directory = pathinfo($xmlfilepath, PATHINFO_DIRNAME);
-            $this->app_directory = rtrim($this->app_directory, '/') . '/';
+            $this->app_path = pathinfo($xmlfilepath, PATHINFO_DIRNAME);
+            $this->app_path = rtrim($this->app_path, '/') . '/';
         }
+        $this->app_url = $zbp->host . 'zb_users/' . $this->type . '/' . $this->id . '/';
 
-        $xmlPath = $this->app_path . FormatString($type, '[filename]') . '.xml';
+        $xmlPath = $this->GetDir() . FormatString($type, '[filename]') . '.xml';
         $this->isloaded = false;
 
         if (!is_readable($xmlPath)) {
@@ -454,7 +472,7 @@ class App
         $this->sidebars_sidebar8 = (string) $xml->sidebars->sidebar8;
         $this->sidebars_sidebar9 = (string) $xml->sidebars->sidebar9;
 
-        $appIgnorePath = $this->app_path . 'zbignore.txt';
+        $appIgnorePath = $this->GetDir() . 'zbignore.txt';
         $appIgnores = array();
         if (is_readable($appIgnorePath)) {
             $appIgnores = explode("\n", str_replace("\r", "\n", trim(file_get_contents($appIgnorePath))));
@@ -467,7 +485,7 @@ class App
         $this->ignore_files = array_unique($this->ignore_files);
 
 
-        $stylecss_file = $this->app_path . 'style/' . $zbp->style . '.css';
+        $stylecss_file = $this->GetDir() . 'style/' . $zbp->style . '.css';
         if (is_readable($stylecss_file)) {
             $this->css_crc32 = crc32(file_get_contents($stylecss_file));
         }
@@ -538,7 +556,7 @@ class App
 
         $s .= '</' . $this->type . '>';
 
-        $path = $this->app_path . $this->type . '.xml';
+        $path = $this->GetDir() . $this->type . '.xml';
 
         @file_put_contents($path, $s);
 
@@ -588,7 +606,7 @@ class App
         $this->dirs = array();
         $this->files = array();
 
-        $dir = $this->app_path;
+        $dir = $this->GetDir();
         $this->GetAllFileDir($dir);
         foreach ($this->dirs as $key => $value) {
             $this->dirs[$key] = str_ireplace('\\', '/', $this->dirs[$key]);
@@ -654,7 +672,7 @@ class App
         $s .= "\n";
 
         foreach ($this->ignore_files as $glob) {
-            if (is_dir($d = $this->app_path . $glob)) {
+            if (is_dir($d = $this->GetDir() . $glob)) {
                 $this->ignored_dirs[crc32($d)] = rtrim($d, '/') . '/';
             }
         }
@@ -704,7 +722,7 @@ class App
     private function IsPathIgnored($path)
     {
         $path = str_ireplace('\\', '/', $path);
-        $appPath = str_ireplace('\\', '/', $this->app_path);
+        $appPath = str_ireplace('\\', '/', $this->GetDir());
         $fileName = str_ireplace($appPath, '', $path);
         foreach ($this->ignore_files as $glob) {
             if (fnmatch($glob, $fileName)) {
@@ -756,7 +774,7 @@ class App
 
         $type = $xml['type'];
         $id = $xml->id;
-        $dir = $zbp->path . 'zb_users/' . $type . '/';
+        $dir = $zbp->userdir . $type . '/';
 
         ZbpErrorControl::SuspendErrorHook();
 
@@ -904,7 +922,7 @@ class App
      */
     public function Del()
     {
-        rrmdir($this->app_path);
+        rrmdir($this->GetDir());
         $this->DelCompiled();
     }
 

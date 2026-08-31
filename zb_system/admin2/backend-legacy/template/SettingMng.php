@@ -1,3 +1,9 @@
+<style>
+table input[type="text"] {max-width:600px;width:90%;}
+table select {max-width:600px;width:90%;}
+table textarea {max-width:600px;width:90%;}
+table {margin:0;}
+</style>
 <form method="post" action="{BuildSafeCmdURL('act=SettingSav')}">
 
   <div class="content-box">
@@ -30,7 +36,7 @@
           </tr>
           <tr>
             <td><b>{$zbp->lang['msg']['copyright']}</b></td>
-            <td><textarea id="ZC_BLOG_COPYRIGHT" name="ZC_BLOG_COPYRIGHT" class="textarea-90">{$zbp->option['ZC_BLOG_COPYRIGHT']}</textarea></td>
+            <td><textarea id="ZC_BLOG_COPYRIGHT" name="ZC_BLOG_COPYRIGHT" cols="3" rows="6" class="textarea-90">{$zbp->option['ZC_BLOG_COPYRIGHT']}</textarea></td>
           </tr>
         </table>
       </div>
