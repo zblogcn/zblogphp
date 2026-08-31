@@ -4,9 +4,11 @@
  * Z-Blog with PHP.
  *
  * @author  Z-BlogPHP Team
+ *
  * @version 2.0 2013-07-05
  */
 require '../function/c_system_base.php';
+
 require '../function/c_system_admin.php';
 
 $zbp->Load();
@@ -14,7 +16,8 @@ $zbp->Load();
 $action = 'TagPst';
 if (!$zbp->CheckRights($action)) {
     $zbp->ShowError(6, __FILE__, __LINE__);
-    die();
+
+    exit();
 }
 
 $type = (int) GetVars('type');
@@ -23,6 +26,7 @@ $typetitle = $type > 0 ? (ucfirst($zbp->GetPostType($type, 'name')) . '-') : '';
 $blogtitle = $typetitle . $lang['msg']['tag_edit'];
 
 require ZBP_PATH . 'zb_system/admin/admin_header.php';
+
 require ZBP_PATH . 'zb_system/admin/admin_top.php';
 
 ?>
@@ -33,19 +37,21 @@ if (isset($_GET['id'])) {
     $action = 'TagEdt';
     if (!$zbp->CheckRights($action)) {
         $zbp->ShowError(6, __FILE__, __LINE__);
-        die();
+
+        exit();
     }
 } else {
     $tagid = 0;
     $action = 'TagNew';
     if (!$zbp->CheckRights($action)) {
         $zbp->ShowError(6, __FILE__, __LINE__);
-        die();
+
+        exit();
     }
 }
 
 $tag = $zbp->GetTagByID($tagid);
-if ($tag->ID == 0) {
+if (0 == $tag->ID) {
     $tag->Type = (int) GetVars('type', 'GET');
 }
 ?>
@@ -59,7 +65,7 @@ if ($tag->ID == 0) {
     </div>
     <div id="divMain2" class="edit tag_edit">
         <form id="edit" name="edit" method="post" action="#">
-            <input id="edtID" name="ID" type="hidden" value="<?php echo $tag->ID;?>" />
+            <input id="edtID" name="ID" type="hidden" value="<?php echo $tag->ID; ?>" />
             <input id="edtType" name="Type" type="hidden" value="<?php echo $tag->Type; ?>" />
             <p>
                 <span class="title">
@@ -77,7 +83,7 @@ if ($tag->ID == 0) {
                     <?php echo $lang['msg']['template']; ?>:</span>
                 <br />
                 <select class="edit" size="1" name="Template" id="cmbTemplate">
-                    <?php echo OutputOptionItemsOfTemplate($tag->Template, array('single', '404', 'module', 'search', 'lm-'), array('list', 'tag')); ?></select>
+                    <?php echo OutputOptionItemsOfTemplate($tag->Template, ['single', '404', 'module', 'search', 'lm-'], ['list', 'tag']); ?></select>
             </p>
             <p>
                 <span class='title'>
