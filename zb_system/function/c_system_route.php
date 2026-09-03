@@ -1595,7 +1595,7 @@ function ViewPost($id = null, $alias = null, $isrewrite = false, $object = [])
         return false;
     }
 
-    if ($article->Status != 0
+    if (0 != $article->Status
         && !($zbp->user->ID > 0 && $article->AuthorID == $zbp->user->ID)
         && !$zbp->CheckRights($article->TypeActions['all'])
     ) {

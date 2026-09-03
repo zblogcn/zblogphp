@@ -1551,13 +1551,13 @@ function SaveConfig()
     $zbp->option['ZC_USING_PLUGIN_LIST'] = 'AppCentre|UEditor|Totoro|LinksManage';
 
     $blogtheme = GetVars('blogtheme', 'POST', '');
-    if ($blogtheme == '') {
+    if ('' == $blogtheme) {
         $blogtheme = 'default|default';
     }
     $zbp->option['ZC_BLOG_THEME'] = SplitAndGet($blogtheme, '|', 0);
     $zbp->option['ZC_BLOG_CSS'] = SplitAndGet($blogtheme, '|', 1);
 
-    if ($zbp->option['ZC_BLOG_THEME'] === 'os2020') {
+    if ('os2020' === $zbp->option['ZC_BLOG_THEME']) {
         $zbp->option['ZC_API_ENABLE'] = true;
     }
     $zbp->option['ZC_DEBUG_MODE'] = false;

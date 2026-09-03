@@ -952,16 +952,16 @@ if (!function_exists('CreateOptionsOfGuestIPType')) {
         global $zbp;
         $s = '';
         $orig = $zbp->option['ZC_USING_CDN_GUESTIP_TYPE'];
-        $headers = array(
+        $headers = [
             'REMOTE_ADDR'                    => 'REMOTE_ADDR (' . $zbp->lang['msg']['default'] . ')',
             'HTTP_X_FORWARDED_FOR'           => 'HTTP_X_FORWARDED_FOR (腾讯云,阿里云,七牛)',
             'HTTP_X_REAL_IP'                 => 'HTTP_X_REAL_IP (又拍云,百度CDN)',
             'HTTP_CF_CONNECTING_IP'          => 'HTTP_CF_CONNECTING_IP (CloudFlare)',
             'HTTP_CLIENT_IP'                 => 'HTTP_CLIENT_IP',
-        );
-        $tz = array();
+        ];
+        $tz = [];
         foreach ($headers as $key => $label) {
-            if (GetVars($key, 'SERVER') === null || GetVars($key, 'SERVER') === '') {
+            if (null === GetVars($key, 'SERVER') || '' === GetVars($key, 'SERVER')) {
                 $tz[$key] = $label;
             } else {
                 $zbp->option['ZC_USING_CDN_GUESTIP_TYPE'] = $key;

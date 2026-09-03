@@ -42,7 +42,7 @@ function api_post_get()
         if ($post->LoadInfoByID($postId)) {
             //if ($post->Type != ZC_POST_TYPE_PAGE) {
             //}
-            if ($post->Status != ZC_POST_STATUS_PUBLIC
+            if (ZC_POST_STATUS_PUBLIC != $post->Status
                 && !($zbp->user->ID > 0 && $post->AuthorID == $zbp->user->ID)
             ) {
                 // 非公开内容（草稿或审核状态）仅作者本人（已登录）或拥有 all 权限者可读取；
