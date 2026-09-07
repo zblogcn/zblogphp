@@ -17,6 +17,9 @@ standards/                            export-ignore
 tests/                                export-ignore
 utils/                                export-ignore
 
+# 前端资源和构建文件
+**/dev_rollup                         export-ignore
+
 # 根目录文件
 search.php
 feed.php
