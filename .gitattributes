@@ -1,24 +1,36 @@
-.github                               export-ignore
-.gitattributes                        export-ignore
-.gitignore                            export-ignore
+# 开发相关文件
 .editorconfig                         export-ignore
-LICENSE                               export-ignore
+.gitattributes                        export-ignore
+.github                               export-ignore
+.gitignore                            export-ignore
+.php-cs-fixer.dist.php                export-ignore
+.vscode                               export-ignore
+composer.json                         export-ignore
+composer.lock                         export-ignore
 contributing.md                       export-ignore
-SECURITY.md                           export-ignore
+LICENSE                               export-ignore
 phpcs.xml                             export-ignore
-search.php
+readme.md                             export-ignore
+readme.txt
+SECURITY.md                           export-ignore
+standards/                            export-ignore
+tests/                                export-ignore
 utils/                                export-ignore
+
+# 根目录文件
+search.php
+feed.php
+index.php
+
+zb_install/
+
+# 系统目录
+zb_system/
+zb_system/script/zblogphp.orig.js     export-ignore
+
+# 用户目录
 zb_users/
-# 预置主题
-zb_users/theme/Zit/
-zb_users/theme/default/
-zb_users/theme/tpure/
-zb_users/theme/os2020/
-zb_users/theme/HTML5CSS3/             export-ignore
-zb_users/theme/WhitePage/
-zb_users/theme/garland/               export-ignore
-zb_users/theme/metro/                 export-ignore
-zb_users/theme/x2013/                 export-ignore
+
 # 预置插件
 zb_users/plugin/AdminColor
 zb_users/plugin/alipay                export-ignore
@@ -45,14 +57,13 @@ zb_users/plugin/wp2zbp                export-ignore
 zb_users/plugin/ZBPDK                 export-ignore
 zb_users/plugin/ZBPJFExample          export-ignore
 
-composer.json                         export-ignore
-feed.php
-readme.md                             export-ignore
-standards/                            export-ignore
-zb_install/
-composer.lock                         export-ignore
-index.php
-readme.txt
-tests/                                export-ignore
-zb_system/
-zb_system/script/zblogphp.orig.js     export-ignore
+# 预置主题
+zb_users/theme/default/
+zb_users/theme/garland/               export-ignore
+zb_users/theme/HTML5CSS3/             export-ignore
+zb_users/theme/metro/                 export-ignore
+zb_users/theme/os2020/
+zb_users/theme/tpure/
+zb_users/theme/WhitePage/
+zb_users/theme/x2013/                 export-ignore
+zb_users/theme/Zit/
