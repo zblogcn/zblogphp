@@ -2,6 +2,9 @@ name: Upload pack as Release Asset
 
 on:
   push:
+    branches:
+      - master
+      - dev/zbp18
     paths:
       - "zb_system/function/c_system_version.php"
 
