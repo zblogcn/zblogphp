@@ -45,6 +45,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: v${{ steps.get_version.outputs.short }}
+          target_commitish: ${{ github.sha }}
           name: ${{ steps.get_version.outputs.full }}
           # draft: true
           prerelease: false
