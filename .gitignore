@@ -1,6 +1,7 @@
 .history/
 .htaccess
 .php-cs-fixer.cache
+*.zip
 nologin*
 vendor/
 web.config
