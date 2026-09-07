@@ -7,8 +7,8 @@ if (!defined('ZBP_PATH')) {
 /*
  * 定义版本号
 
-这是1.5取消的数组，被安排到应用中心客户端的include.php文件里。
-#定义版本号列
+这是 1.5 取消的数组，被安排到应用中心客户端的 include.php 文件里。
+// 定义版本号列
 $zbpvers=array();
 $zbpvers['130707']='1.0 Beta Build 130707';
 $zbpvers['131111']='1.0 Beta2 Build 131111';
@@ -35,4 +35,4 @@ define('ZC_BLOG_COMMIT', ZC_VERSION_COMMIT); // 为写入系统配置统一风�
 $GLOBALS['blogversion'] = ZC_VERSION_MAJOR . ZC_VERSION_MINOR . ZC_VERSION_COMMIT;
 define('ZC_NOW_VERSION', $GLOBALS['blogversion']);
 define('ZC_BLOG_VERSION', ZC_VERSION_DISPLAY . ' Build ' . $GLOBALS['blogversion']);
-define('ZC_LAST_VERSION', '173000'); //数据库里写入的最新的数据库版本号（非系统版本号，只有更改数据库结构才会变动）
+define('ZC_LAST_VERSION', '173000'); // 数据库里写入的最新的数据库版本号（非系统版本号，只有更改数据库结构才会变动）
