@@ -207,26 +207,77 @@ class ZbpInstaller
         $category->Count = 1;
         $category->Save();
 
-        $module = new Module();
-        $module->Name = $zbp->lang['msg']['module_navbar'];
-        $module->FileName = 'navbar';
-        $module->Source = 'system';
-        $module->SidebarID = 0;
-        $module->Content = '<li id="navbar-item-index"><a href="{#ZC_BLOG_HOST#}">' . $zbp->lang['zb_install']['index'] . '</a></li><li id="navbar-page-2"><a href="{#ZC_BLOG_HOST#}?id=2">' . $zbp->lang['zb_install']['guestbook'] . '</a></li>';
-        $module->HtmlID = 'divNavBar';
-        $module->Type = 'ul';
-        $module->Save();
-
-        foreach (['calendar', 'catalog', 'comments', 'archives', 'statistics', 'favorite', 'link', 'authors', 'previous', 'tags'] as $fileName) {
-            $module = new Module();
-            $module->Name = $fileName;
-            $module->FileName = $fileName;
-            $module->Source = 'system';
-            $module->SidebarID = in_array($fileName, ['statistics', 'authors', 'previous', 'tags'], true) ? 0 : 1;
-            $module->Content = '';
-            $module->HtmlID = 'div' . ucfirst($fileName);
-            $module->Type = 'ul';
-            $module->Save();
+        $moduleDefinitions = [
+            [
+                'name' => $zbp->lang['msg']['module_navbar'],
+                'file_name' => 'navbar',
+                'sidebar_id' => 0,
+                'html_id' => 'divNavBar',
+                'links' => [
+                    self::CreateModuleLink('{#ZC_BLOG_HOST#}', $zbp->lang['zb_install']['index'], ['li_id' => 'navbar-item-index']),
+                    self::CreateModuleLink('{#ZC_BLOG_HOST#}?id=2', $zbp->lang['zb_install']['guestbook']),
+                ],
+            ],
+            [
+                'name' => $zbp->lang['msg']['calendar'],
+                'file_name' => 'calendar',
+                'sidebar_id' => 1,
+                'html_id' => 'divCalendar',
+                'type' => 'div',
+                'hide_title' => true,
+                'build' => true,
+            ],
+            [
+                'name' => $zbp->lang['msg']['control_panel'],
+                'file_name' => 'controlpanel',
+                'sidebar_id' => 1,
+                'content' => '<span class="cp-hello">' . $zbp->lang['zb_install']['wellcome'] . '</span><br/><span class="cp-login"><a href="{#ZC_BLOG_HOST#}zb_system/cmd.php?act=login">' . $zbp->lang['msg']['admin_login'] . '</a></span>&nbsp;&nbsp;<span class="cp-vrs"><a href="{#ZC_BLOG_HOST#}zb_system/cmd.php?act=misc&amp;type=vrs">' . $zbp->lang['msg']['view_rights'] . '</a></span>',
+                'html_id' => 'divContorPanel',
+                'type' => 'div',
+            ],
+            [
+                'name' => $zbp->lang['msg']['module_catalog'],
+                'file_name' => 'catalog',
+                'sidebar_id' => 1,
+                'html_id' => 'divCatalog',
+            ],
+            [
+                'name' => $zbp->lang['msg']['search'],
+                'file_name' => 'searchpanel',
+                'sidebar_id' => 1,
+                'content' => '<form name="search" method="post" action="{#ZC_BLOG_HOST#}zb_system/cmd.php?act=search"><label><span style="position:absolute;color:transparent;z-index:-9999;">Search</span><input type="text" name="q" size="11" /></label> <input type="submit" value="' . $zbp->lang['msg']['search'] . '" /></form>',
+                'html_id' => 'divSearchPanel',
+                'type' => 'div',
+            ],
+            ['name' => $zbp->lang['msg']['module_comments'], 'file_name' => 'comments', 'sidebar_id' => 1, 'html_id' => 'divComments'],
+            ['name' => $zbp->lang['msg']['module_archives'], 'file_name' => 'archives', 'sidebar_id' => 1, 'html_id' => 'divArchives'],
+            ['name' => $zbp->lang['msg']['module_statistics'], 'file_name' => 'statistics', 'sidebar_id' => 0, 'html_id' => 'divStatistics'],
+            [
+                'name' => $zbp->lang['msg']['module_favorite'],
+                'file_name' => 'favorite',
+                'sidebar_id' => 1,
+                'html_id' => 'divFavorites',
+                'links' => [
+                    self::CreateModuleLink('https://app.zblogcn.com/', 'Z-Blog应用中心', ['target' => '_blank']),
+                    self::CreateModuleLink('https://bbs.zblogcn.com/', 'ZBlogger社区', ['target' => '_blank']),
+                    self::CreateModuleLink('https://z5encrypt.com/', 'Z5 PHP加密', ['target' => '_blank', 'title' => '全新的PHP加密方案，致力于PHP源码的保护']),
+                ],
+            ],
+            [
+                'name' => $zbp->lang['msg']['module_link'],
+                'file_name' => 'link',
+                'sidebar_id' => 1,
+                'html_id' => 'divLinkage',
+                'links' => [
+                    self::CreateModuleLink('https://github.com/zblogcn', 'Z-Blog on Github', ['target' => '_blank', 'title' => 'Z-Blog on Github']),
+                ],
+            ],
+            ['name' => $zbp->lang['msg']['module_authors'], 'file_name' => 'authors', 'sidebar_id' => 0, 'html_id' => 'divAuthors'],
+            ['name' => $zbp->lang['msg']['module_previous'], 'file_name' => 'previous', 'sidebar_id' => 0, 'html_id' => 'divPrevious'],
+            ['name' => $zbp->lang['msg']['module_tags'], 'file_name' => 'tags', 'sidebar_id' => 0, 'html_id' => 'divTags'],
+        ];
+        foreach ($moduleDefinitions as $moduleDefinition) {
+            self::CreateModule($moduleDefinition);
         }
 
         self::InsertPost($zbp->lang['zb_install']['hello_zblog'], $zbp->lang['zb_install']['hello_zblog_content'], ZC_POST_TYPE_ARTICLE, 1);
@@ -236,6 +287,66 @@ class ZbpInstaller
             throw new RuntimeException('插入初始数据失败。');
         }
         $messages[] = '管理员和初始数据创建成功。';
+    }
+
+    private static function CreateModule(array $definition)
+    {
+        $module = new Module();
+        $module->Name = $definition['name'];
+        $module->FileName = $definition['file_name'];
+        $module->Source = 'system';
+        $module->SidebarID = $definition['sidebar_id'];
+        $module->Content = $definition['content'] ?? '';
+        $module->HtmlID = $definition['html_id'];
+        $module->Type = $definition['type'] ?? 'ul';
+        if (!empty($definition['hide_title'])) {
+            $module->IsHideTitle = true;
+        }
+        if (isset($definition['links'])) {
+            self::SetModuleLinks($module, $definition['links']);
+        }
+        if (!empty($definition['build'])) {
+            $module->Build();
+        }
+        $module->Save();
+
+        return $module;
+    }
+
+    private static function CreateModuleLink($href, $content, array $attributes = [])
+    {
+        $link = new stdClass();
+        $link->href = $href;
+        $link->content = $content;
+        foreach ($attributes as $name => $value) {
+            $link->$name = $value;
+        }
+
+        return $link;
+    }
+
+    private static function SetModuleLinks(Module $module, array $links)
+    {
+        if (version_compare(ZC_VERSION, '1.8.0', '>=')) {
+            $module->Links = $links;
+            call_user_func([$module, 'ConvertLink']);
+
+            return;
+        }
+
+        $content = '';
+        foreach ($links as $link) {
+            $content .= isset($link->li_id) ? '<li id="' . $link->li_id . '">' : '<li>';
+            $content .= '<a href="' . $link->href . '"';
+            if (!empty($link->target)) {
+                $content .= ' target="' . $link->target . '"';
+            }
+            if (!empty($link->title)) {
+                $content .= ' title="' . $link->title . '"';
+            }
+            $content .= '>' . $link->content . '</a></li>';
+        }
+        $module->Content = $content;
     }
 
     private static function InsertPost($title, $content, $type, $categoryId)
