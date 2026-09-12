@@ -2,13 +2,16 @@
 
 if (PHP_SAPI !== 'cli') {
     http_response_code(404);
+
     exit;
 }
 
 date_default_timezone_set('UTC');
 
 require dirname(__DIR__) . '/zb_system/function/c_system_base.php';
+
 require dirname(__DIR__) . '/zb_system/function/c_system_admin.php';
+
 require __DIR__ . '/install.php';
 
 $zbp->LoadLanguage('system', '', 'zh-cn');
@@ -32,6 +35,7 @@ $options = getopt('', [
 
 if (isset($options['help'])) {
     ZbpInstallerCli::PrintHelp();
+
     exit(0);
 }
 
@@ -62,13 +66,16 @@ try {
     }
     if (!$result['success']) {
         fwrite(STDERR, '安装失败: ' . $result['error'] . PHP_EOL);
+
         exit(1);
     }
     fwrite(STDOUT, '安装成功。' . PHP_EOL);
+
     exit(0);
 } catch (Throwable $exception) {
     fwrite(STDERR, '参数错误: ' . $exception->getMessage() . PHP_EOL);
     ZbpInstallerCli::PrintHelp(STDERR);
+
     exit(2);
 }
 
@@ -76,11 +83,11 @@ class ZbpInstallerCli
 {
     public static function PrintHelp($stream = STDOUT)
     {
-        fwrite($stream, <<<HELP
+        fwrite($stream, <<<'HELP'
 Z-BlogPHP CLI 安装器
 
 用法:
-  php zb_install/cli.php --db-type=sqlite3 --db-name=zb_users/data/database.db \\
+  php zb_install/cli.php --db-type=sqlite3 --db-name=zb_users/data/database.db \
     --site-name="我的站点" --admin-user=admin
 
 参数:

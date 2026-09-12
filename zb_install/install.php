@@ -3,7 +3,6 @@
 /**
  * Shared installer service for the web installer and CLI installer.
  */
-
 if (!defined('ZBP_PATH')) {
     exit('Access denied');
 }
@@ -12,8 +11,6 @@ class ZbpInstaller
 {
     /**
      * Install Z-BlogPHP from normalized options.
-     *
-     * @param array $options
      *
      * @return array{success: bool, messages: array, error: string}
      */
@@ -79,7 +76,7 @@ class ZbpInstaller
         $options['db_prefix'] = trim($options['db_prefix']) ?: 'zbp_';
         $options['db_engine'] = $options['db_engine'] ?: 'MyISAM';
         $options['theme'] = $options['theme'] ?: 'default|default';
-        if (!$options['db_port'] && in_array($options['db_type'], ['mysql', 'mysqli', 'pdo_mysql', 'postgresql', 'pdo_postgresql'], true) && substr_count($options['db_server'], ':') === 1) {
+        if (!$options['db_port'] && in_array($options['db_type'], ['mysql', 'mysqli', 'pdo_mysql', 'postgresql', 'pdo_postgresql'], true) && 1 === substr_count($options['db_server'], ':')) {
             [$options['db_server'], $options['db_port']] = explode(':', $options['db_server'], 2);
             $options['db_port'] = (int) $options['db_port'];
         }
@@ -164,7 +161,7 @@ class ZbpInstaller
             $options['db_port'],
             $options['db_user'],
             $options['db_password'],
-            $options['db_name']
+            $options['db_name'],
         );
         $database->Close();
         if (!$created) {

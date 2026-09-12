@@ -1,7 +1,5 @@
 <?php
-
 /**
- * Z-Blog with PHP.
  *
  * @author  Z-BlogPHP Team
  *
@@ -40,6 +38,7 @@ date_default_timezone_set('UTC');
 require '../zb_system/function/c_system_base.php';
 
 require '../zb_system/function/c_system_admin.php';
+
 require __DIR__ . '/install.php';
 
 header('Content-type: text/html; charset=utf-8');
@@ -866,44 +865,45 @@ function Setup3()
             $all_themes = [];
     $all_themes_name = GetDirsInDir(ZBP_PATH . 'zb_users/theme');
 
-    foreach ($all_themes_name as $key => $value) {
-        $css_file = '';
-        if (is_readable($css_file = ZBP_PATH . 'zb_users/theme/' . $value . '/style/style.css')) {
-            $css_file = 'style';
-        } elseif (is_readable($css_file = ZBP_PATH . 'zb_users/theme/' . $value . '/style/style.php')) {
-            $css_file = 'style';
-        } elseif (is_readable($css_file = ZBP_PATH . 'zb_users/theme/' . $value . '/style/style.css.php')) {
-            $css_file = 'style';
-        } elseif (is_readable($css_file = ZBP_PATH . 'zb_users/theme/' . $value . '/style/' . $value . '.css')) {
-            $css_file = $value;
-        } elseif (is_readable($css_file = ZBP_PATH . 'zb_users/theme/' . $value . '/style/' . strtolower($value) . '.css')) {
-            $css_file = strtolower($value);
-        } elseif (is_readable($css_file = ZBP_PATH . 'zb_users/theme/' . $value . '/style/' . strtolower($value) . '.css')) {
-            $css_file = 'style';
-        } elseif (is_readable($css_file = ZBP_PATH . 'zb_users/theme/' . $value . '/style.css')) {
-            $css_file = 'style';
-        } elseif (is_readable($css_file = ZBP_PATH . 'zb_users/theme/' . $value . '/style.php')) {
-            $css_file = 'style';
-        } elseif (is_readable($css_file = ZBP_PATH . 'zb_users/theme/' . $value . '/style.css.php')) {
-            $css_file = 'style';
-        } elseif (is_readable($css_file = ZBP_PATH . 'zb_users/theme/' . $value . '/' . $value . '.css')) {
-            $css_file = $value;
-        } elseif (is_readable($css_file = ZBP_PATH . 'zb_users/theme/' . $value . '/' . strtolower($value) . '.css')) {
-            $css_file = strtolower($value);
-        } else {
-            $css_file = 'default';
-        }
-        $all_themes[$value] = $css_file;
-    }
-    //add four themes
-    //$themes2 = array(
-    //    'tpure'     => 'style',
-    //    'Zit'       => 'style',
-    //    'default'   => 'default',
-    //);
-    if (0 == count($all_themes)) {
-        $all_themes = ['default' => 'default'];
-    }
+            foreach ($all_themes_name as $key => $value) {
+                $css_file = '';
+                if (is_readable($css_file = ZBP_PATH . 'zb_users/theme/' . $value . '/style/style.css')) {
+                    $css_file = 'style';
+                } elseif (is_readable($css_file = ZBP_PATH . 'zb_users/theme/' . $value . '/style/style.php')) {
+                    $css_file = 'style';
+                } elseif (is_readable($css_file = ZBP_PATH . 'zb_users/theme/' . $value . '/style/style.css.php')) {
+                    $css_file = 'style';
+                } elseif (is_readable($css_file = ZBP_PATH . 'zb_users/theme/' . $value . '/style/' . $value . '.css')) {
+                    $css_file = $value;
+                } elseif (is_readable($css_file = ZBP_PATH . 'zb_users/theme/' . $value . '/style/' . strtolower($value) . '.css')) {
+                    $css_file = strtolower($value);
+                } elseif (is_readable($css_file = ZBP_PATH . 'zb_users/theme/' . $value . '/style/' . strtolower($value) . '.css')) {
+                    $css_file = 'style';
+                } elseif (is_readable($css_file = ZBP_PATH . 'zb_users/theme/' . $value . '/style.css')) {
+                    $css_file = 'style';
+                } elseif (is_readable($css_file = ZBP_PATH . 'zb_users/theme/' . $value . '/style.php')) {
+                    $css_file = 'style';
+                } elseif (is_readable($css_file = ZBP_PATH . 'zb_users/theme/' . $value . '/style.css.php')) {
+                    $css_file = 'style';
+                } elseif (is_readable($css_file = ZBP_PATH . 'zb_users/theme/' . $value . '/' . $value . '.css')) {
+                    $css_file = $value;
+                } elseif (is_readable($css_file = ZBP_PATH . 'zb_users/theme/' . $value . '/' . strtolower($value) . '.css')) {
+                    $css_file = strtolower($value);
+                } else {
+                    $css_file = 'default';
+                }
+                $all_themes[$value] = $css_file;
+            }
+            //add four themes
+            //$themes2 = array(
+            //    'tpure'     => 'style',
+            //    'Zit'       => 'style',
+            //    'default'   => 'default',
+            //    'WhitePage' => 'default',
+            //);
+            if (count($all_themes) == 0) {
+                $all_themes = array('default' => 'default');
+            }
 
     $themes = [];
     foreach ($all_themes as $key => $value) {
@@ -973,8 +973,7 @@ function Setup4()
         'admin_password' => GetVars('password', 'POST', ''),
         'theme' => GetVars('blogtheme', 'POST', 'default|default'),
     ]);
-    $result = ZbpInstaller::Install($options);
-    ?>
+    $result = ZbpInstaller::Install($options); ?>
   <dl>
     <dt></dt>
     <dd id="ddleft">
@@ -999,167 +998,6 @@ function Setup4()
         <?php } else { ?>
           <input type="button" name="next" onClick="javascript:history.go(-1)" id="netx" value="<?php echo $zbp->lang['zb_install']['clicktoback']; ?>" />
         <?php } ?>
-      </div>
-    </dd>
-  </dl>
-    <?php
-    return;
-    ?>
-  <dl>
-    <dt></dt>
-    <dd id="ddleft">
-      <div id="headerimg"><img src="../zb_system/image/admin/logo.svg" alt="Z-BlogPHP" />
-        <strong><?php echo $zbp->lang['zb_install']['install_program']; ?></strong></div>
-      <div class="left"><?php echo $zbp->lang['zb_install']['install_progress']; ?>&nbsp;</div>
-      <div id="setup4" class="left"></div>
-      <p><b><?php echo $zbp->lang['zb_install']['install_license']; ?></b> » <b><?php echo $zbp->lang['zb_install']['environment_check']; ?></b> » <b><?php echo $zbp->lang['zb_install']['db_build_set']; ?></b> » <b><?php echo $zbp->lang['zb_install']['install_result']; ?></b></p>
-    </dd>
-    <dd id="ddright">
-      <div id="title"><?php echo $zbp->lang['zb_install']['install_result']; ?></div>
-      <div id="content">
-        <?php
-        $isInstallFlag = true;
-    $zbp->option['ZC_DATABASE_TYPE'] = GetVars('dbtype', 'POST', '');
-
-    $cts = '';
-
-    switch ($zbp->option['ZC_DATABASE_TYPE']) {
-            case 'mysql':
-            case 'mysqli':
-            case 'pdo_mysql':
-                $cts = file_get_contents($GLOBALS['blogpath'] . 'zb_system/defend/createtable/mysql.sql');
-                $zbp->option['ZC_MYSQL_SERVER'] = GetVars('dbmysql_server', 'POST', '');
-                if (false !== strpos($zbp->option['ZC_MYSQL_SERVER'], ':')) {
-                    $servers = explode(':', $zbp->option['ZC_MYSQL_SERVER']);
-                    $zbp->option['ZC_MYSQL_SERVER'] = trim($servers[0]);
-                    $zbp->option['ZC_MYSQL_PORT'] = (int) $servers[1];
-                    if (0 == $zbp->option['ZC_MYSQL_PORT']) {
-                        $zbp->option['ZC_MYSQL_PORT'] = 3306;
-                    }
-
-                    unset($servers);
-                }
-                //$zbp->option['ZC_MYSQL_CHARSET'] = GetVars('dbcharset', 'POST', '');
-                $zbp->option['ZC_MYSQL_USERNAME'] = trim(GetVars('dbmysql_username', 'POST', ''));
-                $zbp->option['ZC_MYSQL_PASSWORD'] = trim(GetVars('dbmysql_password', 'POST', ''));
-                $zbp->option['ZC_MYSQL_NAME'] = trim(str_replace(['\'', '"'], ['', ''], GetVars('dbmysql_name', 'POST', '')));
-                $zbp->option['ZC_MYSQL_PRE'] = trim(str_replace(['\'', '"'], ['', ''], GetVars('dbmysql_pre', 'POST', '')));
-                if ('' == $zbp->option['ZC_MYSQL_PRE']) {
-                    $zbp->option['ZC_MYSQL_PRE'] = 'zbp_';
-                }
-
-                $zbp->option['ZC_MYSQL_ENGINE'] = GetVars('dbengine', 'POST', '');
-                $cts = str_replace('MyISAM', $zbp->option['ZC_MYSQL_ENGINE'], $cts);
-
-                if (!(isset($zbp->option['ZC_INSTALL_AFTER_CONFIG']) && true == $zbp->option['ZC_INSTALL_AFTER_CONFIG'])) {
-                    $newdb = ZBlogPHP::InitializeDB($zbp->option['ZC_DATABASE_TYPE']);
-                    if (true == $newdb->CreateDB($zbp->option['ZC_MYSQL_SERVER'], $zbp->option['ZC_MYSQL_PORT'], $zbp->option['ZC_MYSQL_USERNAME'], $zbp->option['ZC_MYSQL_PASSWORD'], $zbp->option['ZC_MYSQL_NAME'])) {
-                        echo $zbp->lang['zb_install']['create_db'] . $zbp->option['ZC_MYSQL_NAME'] . '<br/>';
-                    }
-                    $newdb->dbpre = $zbp->option['ZC_MYSQL_PRE'];
-                    $newdb->Close();
-                    $newdb = null;
-                }
-
-                break;
-
-            case 'sqlite':
-                $cts = file_get_contents($GLOBALS['blogpath'] . 'zb_system/defend/createtable/sqlite.sql');
-                $cts = str_replace(' autoincrement', '', $cts);
-                $zbp->option['ZC_SQLITE_NAME'] = trim(GetVars('dbsqlite_name', 'POST', ''));
-                $zbp->option['ZC_SQLITE_PRE'] = trim(GetVars('dbsqlite_pre', 'POST', ''));
-                if ('' == $zbp->option['ZC_SQLITE_PRE']) {
-                    $zbp->option['ZC_SQLITE_PRE'] = 'zbp_';
-                }
-
-                break;
-
-            case 'sqlite3':
-            case 'pdo_sqlite':
-                $cts = file_get_contents($GLOBALS['blogpath'] . 'zb_system/defend/createtable/sqlite.sql');
-                $zbp->option['ZC_SQLITE_NAME'] = trim(GetVars('dbsqlite_name', 'POST', ''));
-                $zbp->option['ZC_SQLITE_PRE'] = trim(GetVars('dbsqlite_pre', 'POST', ''));
-                if ('' == $zbp->option['ZC_SQLITE_PRE']) {
-                    $zbp->option['ZC_SQLITE_PRE'] = 'zbp_';
-                }
-
-                break;
-
-            case 'postgresql':
-            case 'pdo_postgresql':
-                $cts = file_get_contents($GLOBALS['blogpath'] . 'zb_system/defend/createtable/pgsql.sql');
-                $zbp->option['ZC_PGSQL_SERVER'] = GetVars('dbpgsql_server', 'POST', '');
-                if (false !== strpos($zbp->option['ZC_PGSQL_SERVER'], ':')) {
-                    $servers = explode(':', $zbp->option['ZC_PGSQL_SERVER']);
-                    $zbp->option['ZC_PGSQL_SERVER'] = trim($servers[0]);
-                    $zbp->option['ZC_PGSQL_PORT'] = (int) $servers[1];
-                    if (0 == $zbp->option['ZC_PGSQL_PORT']) {
-                        $zbp->option['ZC_PGSQL_PORT'] = 5432;
-                    }
-
-                    unset($servers);
-                }
-                $zbp->option['ZC_PGSQL_CHARSET'] = 'utf8';
-                $zbp->option['ZC_PGSQL_USERNAME'] = trim(GetVars('dbpgsql_username', 'POST', ''));
-                $zbp->option['ZC_PGSQL_PASSWORD'] = trim(GetVars('dbpgsql_password', 'POST', ''));
-                $zbp->option['ZC_PGSQL_NAME'] = strtolower(trim(str_replace(['\'', '"'], ['', ''], GetVars('dbpgsql_name', 'POST', ''))));
-                $zbp->option['ZC_PGSQL_PRE'] = trim(str_replace(['\'', '"'], ['', ''], GetVars('dbpgsql_pre', 'POST', '')));
-                if ('' == $zbp->option['ZC_PGSQL_PRE']) {
-                    'zbp_' == $zbp->option['ZC_PGSQL_PRE'];
-                }
-
-                if (!(isset($zbp->option['ZC_INSTALL_AFTER_CONFIG']) && true == $zbp->option['ZC_INSTALL_AFTER_CONFIG'])) {
-                    $newdb = ZBlogPHP::InitializeDB($zbp->option['ZC_DATABASE_TYPE']);
-                    if (true == $newdb->CreateDB($zbp->option['ZC_PGSQL_SERVER'], $zbp->option['ZC_PGSQL_PORT'], $zbp->option['ZC_PGSQL_USERNAME'], $zbp->option['ZC_PGSQL_PASSWORD'], $zbp->option['ZC_PGSQL_NAME'])) {
-                        echo $zbp->lang['zb_install']['create_db'] . $zbp->option['ZC_PGSQL_NAME'] . '<br/>';
-                    }
-                    $newdb->dbpre = $zbp->option['ZC_PGSQL_PRE'];
-                    $newdb->Close();
-                    $newdb = null;
-                }
-
-                break;
-
-            default:
-                $isInstallFlag = false;
-
-                break;
-        }
-    $hasError = false;
-    if ($isInstallFlag) {
-        $zbp->OpenConnect();
-        $zbp->ConvertTableAndDatainfo();
-        if (CreateTable($cts)) {
-            if (InsertInfo()) {
-                if (SaveConfig()) {
-                    //ok
-                    $i = 0;
-                } else {
-                    //$hasError = true;
-                    $i = 0;
-                }
-            } else {
-                $hasError = true;
-            }
-        } else {
-            $hasError = true;
-        }
-
-        $zbp->CloseConnect();
-    } else {
-        $hasError = true;
-    } ?>
-
-      </div>
-      <div id="bottom">
-        <?php
-        if (true == $hasError) {
-            echo '<p><input type="button" name="next" onClick="javascript:history.go(-1)" id="netx" value="' . $zbp->lang['zb_install']['clicktoback'] . '"/></p>';
-        } else {
-            ?>
-          <input type="button" name="next" onClick="window.location.href='../'" id="netx" value="<?php echo $zbp->lang['zb_install']['ok']; ?>" />
-            <?php
-        } ?>
       </div>
     </dd>
   </dl>
@@ -1394,39 +1232,30 @@ function InsertInfo()
 
     $t = new Module();
     $t->Name = $zbp->lang['msg']['module_navbar'];
-    $t->FileName = 'navbar';
-    $t->Source = 'system';
-    $t->Content = '';
-    $t->HtmlID = 'divNavBar';
-    $t->Type = 'ul';
-    $links = [];
-    $link = new stdClass();
-    $link->href = '{#ZC_BLOG_HOST#}';
-    $link->content = $zbp->lang['zb_install']['index'];
-    $link->li_id = 'navbar-item-index';
-    $links[] = $link;
-    $link = new stdClass();
-    $link->href = '{#ZC_BLOG_HOST#}?id=2';
-    $link->content = $zbp->lang['zb_install']['guestbook'];
-    $links[] = $link;
-    $t->Links = $links;
-    $t->ConvertLink();
+    $t->FileName = "navbar";
+    $t->Source = "system";
+    $t->SidebarID = 0;
+    $t->Content = '<li id="navbar-item-index"><a href="{#ZC_BLOG_HOST#}">' . $zbp->lang['zb_install']['index'] . '</a></li><li id="navbar-page-2"><a href="{#ZC_BLOG_HOST#}?id=2">' . $zbp->lang['zb_install']['guestbook'] . '</a></li>';
+    $t->HtmlID = "divNavBar";
+    $t->Type = "ul";
     $t->Save();
 
     $t = new Module();
     $t->Name = $zbp->lang['msg']['calendar'];
-    $t->FileName = 'calendar';
-    $t->Source = 'system';
-    $t->Content = '';
-    $t->HtmlID = 'divCalendar';
-    $t->Type = 'div';
+    $t->FileName = "calendar";
+    $t->Source = "system";
+    $t->SidebarID = 1;
+    $t->Content = "";
+    $t->HtmlID = "divCalendar";
+    $t->Type = "div";
     $t->IsHideTitle = true;
     $t->Save();
 
     $t = new Module();
     $t->Name = $zbp->lang['msg']['control_panel'];
-    $t->FileName = 'controlpanel';
-    $t->Source = 'system';
+    $t->FileName = "controlpanel";
+    $t->Source = "system";
+    $t->SidebarID = 1;
     $t->Content = '<span class="cp-hello">' . $zbp->lang['zb_install']['wellcome'] . '</span><br/><span class="cp-login"><a href="{#ZC_BLOG_HOST#}zb_system/cmd.php?act=login">' . $zbp->lang['msg']['admin_login'] . '</a></span>&nbsp;&nbsp;<span class="cp-vrs"><a href="{#ZC_BLOG_HOST#}zb_system/cmd.php?act=misc&amp;type=vrs">' . $zbp->lang['msg']['view_rights'] . '</a></span>';
     $t->HtmlID = 'divContorPanel';
     $t->Type = 'div';
@@ -1434,17 +1263,19 @@ function InsertInfo()
 
     $t = new Module();
     $t->Name = $zbp->lang['msg']['module_catalog'];
-    $t->FileName = 'catalog';
-    $t->Source = 'system';
-    $t->Content = '';
-    $t->HtmlID = 'divCatalog';
-    $t->Type = 'ul';
+    $t->FileName = "catalog";
+    $t->Source = "system";
+    $t->SidebarID = 1;
+    $t->Content = "";
+    $t->HtmlID = "divCatalog";
+    $t->Type = "ul";
     $t->Save();
 
     $t = new Module();
     $t->Name = $zbp->lang['msg']['search'];
-    $t->FileName = 'searchpanel';
-    $t->Source = 'system';
+    $t->FileName = "searchpanel";
+    $t->Source = "system";
+    $t->SidebarID = 1;
     $t->Content = '<form name="search" method="post" action="{#ZC_BLOG_HOST#}zb_system/cmd.php?act=search"><label><span style="position:absolute;color:transparent;z-index:-9999;">Search</span><input type="text" name="q" size="11" /></label> <input type="submit" value="' . $zbp->lang['msg']['search'] . '" /></form>';
     $t->HtmlID = 'divSearchPanel';
     $t->Type = 'div';
@@ -1452,90 +1283,82 @@ function InsertInfo()
 
     $t = new Module();
     $t->Name = $zbp->lang['msg']['module_comments'];
-    $t->FileName = 'comments';
-    $t->Source = 'system';
-    $t->Content = '';
-    $t->HtmlID = 'divComments';
-    $t->Type = 'ul';
+    $t->FileName = "comments";
+    $t->Source = "system";
+    $t->SidebarID = 1;
+    $t->Content = "";
+    $t->HtmlID = "divComments";
+    $t->Type = "ul";
     $t->Save();
 
     $t = new Module();
     $t->Name = $zbp->lang['msg']['module_archives'];
-    $t->FileName = 'archives';
-    $t->Source = 'system';
-    $t->Content = '';
-    $t->HtmlID = 'divArchives';
-    $t->Type = 'ul';
+    $t->FileName = "archives";
+    $t->Source = "system";
+    $t->SidebarID = 1;
+    $t->Content = "";
+    $t->HtmlID = "divArchives";
+    $t->Type = "ul";
     $t->Save();
 
     $t = new Module();
     $t->Name = $zbp->lang['msg']['module_statistics'];
-    $t->FileName = 'statistics';
-    $t->Source = 'system';
-    $t->Content = '';
-    $t->HtmlID = 'divStatistics';
-    $t->Type = 'ul';
+    $t->FileName = "statistics";
+    $t->Source = "system";
+    $t->SidebarID = 0;
+    $t->Content = "";
+    $t->HtmlID = "divStatistics";
+    $t->Type = "ul";
     $t->Save();
 
     $t = new Module();
     $t->Name = $zbp->lang['msg']['module_favorite'];
-    $t->FileName = 'favorite';
-    $t->Source = 'system';
-    $t->Content = '';
-    $t->HtmlID = 'divFavorites';
-    $t->Type = 'ul';
-    $links = [];
-    $link = new stdClass();
-    $link->href = 'https://www.zblogcn.com/';
-    $link->content = 'Z-Blog主页';
-    $link->target = '_blank';
-    $links[] = $link;
-    $t->Links = $links;
-    $t->ConvertLink();
+    $t->FileName = "favorite";
+    $t->Source = "system";
+    $t->SidebarID = 1;
+    $t->Content = '<li><a href="https://app.zblogcn.com/" target="_blank">Z-Blog应用中心</a></li><li><a href="https://bbs.zblogcn.com/" target="_blank">ZBlogger社区</a></li><li><a href="https://z5encrypt.com/" target="_blank" title="全新的PHP加密方案，致力于PHP源码的保护">Z5 PHP加密</a></li>';
+    $t->HtmlID = "divFavorites";
+    $t->Type = "ul";
     $t->Save();
 
     $t = new Module();
     $t->Name = $zbp->lang['msg']['module_link'];
-    $t->FileName = 'link';
-    $t->Source = 'system';
-    $t->Content = '';
-    $t->HtmlID = 'divLinkage';
-    $t->Type = 'ul';
-    $links = [];
-    $link = new stdClass();
-    $link->href = 'https://github.com/zblogcn';
-    $link->content = 'Z-Blog on Github';
-    $link->target = '_blank';
-    $links[] = $link;
-    $t->Links = $links;
-    $t->ConvertLink();
+    $t->FileName = "link";
+    $t->Source = "system";
+    $t->SidebarID = 1;
+    $t->Content = '<li><a href="https://github.com/zblogcn" target="_blank" title="Z-Blog on Github">Z-Blog on Github</a></li>';
+    $t->HtmlID = "divLinkage";
+    $t->Type = "ul";
     $t->Save();
 
     $t = new Module();
     $t->Name = $zbp->lang['msg']['module_authors'];
-    $t->FileName = 'authors';
-    $t->Source = 'system';
-    $t->Content = '';
-    $t->HtmlID = 'divAuthors';
-    $t->Type = 'ul';
+    $t->FileName = "authors";
+    $t->Source = "system";
+    $t->SidebarID = 0;
+    $t->Content = "";
+    $t->HtmlID = "divAuthors";
+    $t->Type = "ul";
     $t->Save();
 
     $t = new Module();
     $t->Name = $zbp->lang['msg']['module_previous'];
-    $t->FileName = 'previous';
-    $t->Source = 'system';
-    $t->Content = '';
-    $t->HtmlID = 'divPrevious';
-    $t->Type = 'ul';
+    $t->FileName = "previous";
+    $t->Source = "system";
+    $t->SidebarID = 0;
+    $t->Content = "";
+    $t->HtmlID = "divPrevious";
+    $t->Type = "ul";
     $t->Save();
 
     $t = new Module();
     $t->Name = $zbp->lang['msg']['module_tags'];
-    $t->FileName = 'tags';
-    $t->Source = 'system';
-    $t->Content = '';
-    $t->HtmlID = 'divTags';
-    $t->Type = 'ul';
+    $t->FileName = "tags";
+    $t->Source = "system";
+    $t->SidebarID = 0;
+    $t->Content = "";
+    $t->HtmlID = "divTags";
+    $t->Type = "ul";
     $t->Save();
 
     $a = new Post();
@@ -1624,7 +1447,13 @@ function SaveConfig()
     }
 
     $app = $zbp->LoadApp('theme', 'tpure');
-    if (true == $app->isloaded) {
+    if ($app->isloaded == true) {
+        $app->LoadSideBars();
+        $app->SaveSideBars();
+    }
+
+    $app = $zbp->LoadApp('theme', 'WhitePage');
+    if ($app->isloaded == true) {
         $app->LoadSideBars();
         $app->SaveSideBars();
     }
