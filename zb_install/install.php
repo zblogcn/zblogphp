@@ -319,7 +319,7 @@ class ZbpInstaller
         $link->href = $href;
         $link->content = $content;
         foreach ($attributes as $name => $value) {
-            $link->$name = $value;
+            $link->{$name} = $value;
         }
 
         return $link;
