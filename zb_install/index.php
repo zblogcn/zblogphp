@@ -40,6 +40,7 @@ date_default_timezone_set('UTC');
 require '../zb_system/function/c_system_base.php';
 
 require '../zb_system/function/c_system_admin.php';
+require __DIR__ . '/install.php';
 
 header('Content-type: text/html; charset=utf-8');
 
@@ -91,7 +92,7 @@ if ($a) {
   <script src="../zb_system/script/jquery-ui.custom.min.js?<?php echo $blogversion; ?>"></script>
   <link rel="stylesheet" href="../zb_system/css/jquery-ui.custom.css?<?php echo $blogversion; ?>" type="text/css" media="screen" />
   <link rel="stylesheet" href="../zb_system/css/install.css?<?php echo $blogversion; ?>" type="text/css" media="screen" />
-  <link rel="stylesheet" href="../zb_system/image/icon/icon.css?<?php echo $blogversion; ?>" type="text/css" media="screen" />  
+  <link rel="stylesheet" href="../zb_system/image/icon/icon.css?<?php echo $blogversion; ?>" type="text/css" media="screen" />
   <title>Z-BlogPHP <?php echo ZC_BLOG_VERSION . ' ' . $zbp->lang['zb_install']['install_program']; ?> </title>
   <?php Include_AddonAdminFont(); ?>
 </head>
@@ -957,7 +958,53 @@ function Setup3()
 //4
 function Setup4()
 {
-    global $zbp; ?>
+    global $zbp;
+    $options = ZbpInstaller::Normalize([
+        'db_type' => GetVars('dbtype', 'POST', ''),
+        'db_server' => GetVars('dbmysql_server', 'POST', '') ?: GetVars('dbpgsql_server', 'POST', ''),
+        'db_port' => 0,
+        'db_name' => GetVars('dbmysql_name', 'POST', '') ?: GetVars('dbpgsql_name', 'POST', '') ?: GetVars('dbsqlite_name', 'POST', ''),
+        'db_user' => GetVars('dbmysql_username', 'POST', '') ?: GetVars('dbpgsql_username', 'POST', ''),
+        'db_password' => GetVars('dbmysql_password', 'POST', '') ?: GetVars('dbpgsql_password', 'POST', ''),
+        'db_prefix' => GetVars('dbmysql_pre', 'POST', '') ?: GetVars('dbpgsql_pre', 'POST', '') ?: GetVars('dbsqlite_pre', 'POST', ''),
+        'db_engine' => GetVars('dbengine', 'POST', 'MyISAM'),
+        'site_name' => GetVars('blogtitle', 'POST', ''),
+        'admin_user' => GetVars('username', 'POST', ''),
+        'admin_password' => GetVars('password', 'POST', ''),
+        'theme' => GetVars('blogtheme', 'POST', 'default|default'),
+    ]);
+    $result = ZbpInstaller::Install($options);
+    ?>
+  <dl>
+    <dt></dt>
+    <dd id="ddleft">
+      <div id="headerimg"><img src="../zb_system/image/admin/logo.svg" alt="Z-BlogPHP" />
+        <strong><?php echo $zbp->lang['zb_install']['install_program']; ?></strong></div>
+      <div class="left"><?php echo $zbp->lang['zb_install']['install_progress']; ?>&nbsp;</div>
+      <div id="setup4" class="left"></div>
+    </dd>
+    <dd id="ddright">
+      <div id="title"><?php echo $zbp->lang['zb_install']['install_result']; ?></div>
+      <div id="content">
+        <?php foreach ($result['messages'] as $message) { ?>
+          <p><?php echo htmlspecialchars($message, ENT_QUOTES, 'UTF-8'); ?></p>
+        <?php } ?>
+        <?php if (!$result['success']) { ?>
+          <p><?php echo htmlspecialchars($result['error'], ENT_QUOTES, 'UTF-8'); ?></p>
+        <?php } ?>
+      </div>
+      <div id="bottom">
+        <?php if ($result['success']) { ?>
+          <input type="button" name="next" onClick="window.location.href='../'" id="netx" value="<?php echo $zbp->lang['zb_install']['ok']; ?>" />
+        <?php } else { ?>
+          <input type="button" name="next" onClick="javascript:history.go(-1)" id="netx" value="<?php echo $zbp->lang['zb_install']['clicktoback']; ?>" />
+        <?php } ?>
+      </div>
+    </dd>
+  </dl>
+    <?php
+    return;
+    ?>
   <dl>
     <dt></dt>
     <dd id="ddleft">
