@@ -99,7 +99,7 @@ if ($a) {
 <body clas="install">
   <div class="setup">
     <?php
-    $s = $_SERVER['QUERY_STRING'];
+    $s = $_SERVER['QUERY_STRING'] ?? '';
     $array = [];
     parse_str($s, $array);
     unset($array['step']);
