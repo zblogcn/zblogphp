@@ -1,6 +1,6 @@
 <?php
 /**
- * Z-BlogPHP ZBA 打包工具 (CLI 单文件版)
+ * Z-BlogPHP ZBA 打包工具 (CLI 单文件版).
  *
  * 用法:
  *   php pack_zba.php <应用目录路径> [选项]
@@ -11,9 +11,8 @@
  *   -v, --verbose        显示详细打包文件列表
  *   -h, --help           显示使用说明
  */
-
-if (php_sapi_name() !== 'cli' && empty($_SERVER['argv'])) {
-    die("此脚本仅能在 CLI 命令行环境下运行。\n");
+if ('cli' !== php_sapi_name() && empty($_SERVER['argv'])) {
+    exit("此脚本仅能在 CLI 命令行环境下运行。\n");
 }
 
 class ZbaPacker
@@ -48,9 +47,53 @@ class ZbaPacker
         $this->parseArgs($argv);
     }
 
+    public function run()
+    {
+        $this->loadAppXml();
+        $this->loadIgnoreRules();
+        $this->scanDirectory($this->targetDir);
+        $xmlContent = $this->buildXml();
+
+        if ($this->gzip && function_exists('gzencode')) {
+            $packData = gzencode($xmlContent, 9, FORCE_GZIP);
+        } else {
+            $packData = $xmlContent;
+        }
+
+        if (empty($this->outputPath)) {
+            $version = (string) ($this->appXml->version ?? '1.0');
+            $modified = (string) ($this->appXml->modified ?? date('Ymd'));
+            $filename = "{$this->appId}_{$version}_{$modified}.zba";
+            $this->outputPath = getcwd() . DIRECTORY_SEPARATOR . $filename;
+        }
+
+        $outDir = dirname($this->outputPath);
+        if (!is_dir($outDir)) {
+            @mkdir($outDir, 0755, true);
+        }
+
+        if (false === file_put_contents($this->outputPath, $packData)) {
+            $this->error("错误: 无法写入目标文件 {$this->outputPath}");
+        }
+
+        $size = filesize($this->outputPath);
+        $sizeStr = $size > 1048576 ? round($size / 1048576, 2) . ' MB' : ($size > 1024 ? round($size / 1024, 2) . ' KB' : $size . ' B');
+
+        echo "========================================\n";
+        echo "打包成功!\n";
+        echo "应用 ID   : {$this->appId}\n";
+        echo "应用类型 : {$this->appType}\n";
+        echo '应用名称 : ' . ($this->appData['name'] ?? '') . "\n";
+        echo '包含目录 : ' . count($this->dirs) . " 个\n";
+        echo '包含文件 : ' . count($this->files) . " 个\n";
+        echo '压缩模式 : ' . ($this->gzip ? 'Gzip 压缩' : '未压缩 (XML)') . "\n";
+        echo "输出文件 : {$this->outputPath} ({$sizeStr})\n";
+        echo "========================================\n";
+    }
+
     private function showHelp()
     {
-        echo <<<HELP
+        echo <<<'HELP'
 Z-BlogPHP ZBA 打包工具 (CLI)
 
 使用方法:
@@ -76,28 +119,31 @@ HELP;
 
         if (empty($argv)) {
             $this->showHelp();
+
             exit(0);
         }
 
         $positional = [];
         $count = count($argv);
-        for ($i = 0; $i < $count; $i++) {
+        for ($i = 0; $i < $count; ++$i) {
             $arg = $argv[$i];
 
-            if ($arg === '-h' || $arg === '--help') {
+            if ('-h' === $arg || '--help' === $arg) {
                 $this->showHelp();
+
                 exit(0);
-            } elseif ($arg === '--no-gzip') {
+            }
+            if ('--no-gzip' === $arg) {
                 $this->gzip = false;
-            } elseif ($arg === '-v' || $arg === '--verbose') {
+            } elseif ('-v' === $arg || '--verbose' === $arg) {
                 $this->verbose = true;
-            } elseif ($arg === '-o' || $arg === '--output') {
+            } elseif ('-o' === $arg || '--output' === $arg) {
                 if (!isset($argv[$i + 1])) {
                     $this->error("错误: 参数 {$arg} 必须指定输出路径。");
                 }
                 $this->outputPath = $argv[++$i];
             } else {
-                if (strpos($arg, '-') === 0) {
+                if (0 === strpos($arg, '-')) {
                     $this->error("未知参数: {$arg}");
                 }
                 $positional[] = $arg;
@@ -105,57 +151,13 @@ HELP;
         }
 
         if (empty($positional)) {
-            $this->error("错误: 请指定需要打包的应用文件夹路径。");
+            $this->error('错误: 请指定需要打包的应用文件夹路径。');
         }
 
         $this->targetDir = rtrim(realpath($positional[0]), '/\\');
         if (!$this->targetDir || !is_dir($this->targetDir)) {
             $this->error("错误: 目标路径不存在或非有效的文件夹: {$positional[0]}");
         }
-    }
-
-    public function run()
-    {
-        $this->loadAppXml();
-        $this->loadIgnoreRules();
-        $this->scanDirectory($this->targetDir);
-        $xmlContent = $this->buildXml();
-
-        if ($this->gzip && function_exists('gzencode')) {
-            $packData = gzencode($xmlContent, 9, FORCE_GZIP);
-        } else {
-            $packData = $xmlContent;
-        }
-
-        if (empty($this->outputPath)) {
-            $version = (string)($this->appXml->version ?? '1.0');
-            $modified = (string)($this->appXml->modified ?? date('Ymd'));
-            $filename = "{$this->appId}_{$version}_{$modified}.zba";
-            $this->outputPath = getcwd() . DIRECTORY_SEPARATOR . $filename;
-        }
-
-        $outDir = dirname($this->outputPath);
-        if (!is_dir($outDir)) {
-            @mkdir($outDir, 0755, true);
-        }
-
-        if (file_put_contents($this->outputPath, $packData) === false) {
-            $this->error("错误: 无法写入目标文件 {$this->outputPath}");
-        }
-
-        $size = filesize($this->outputPath);
-        $sizeStr = $size > 1048576 ? round($size / 1048576, 2) . ' MB' : ($size > 1024 ? round($size / 1024, 2) . ' KB' : $size . ' B');
-
-        echo "========================================\n";
-        echo "打包成功!\n";
-        echo "应用 ID   : {$this->appId}\n";
-        echo "应用类型 : {$this->appType}\n";
-        echo "应用名称 : " . ($this->appData['name'] ?? '') . "\n";
-        echo "包含目录 : " . count($this->dirs) . " 个\n";
-        echo "包含文件 : " . count($this->files) . " 个\n";
-        echo "压缩模式 : " . ($this->gzip ? 'Gzip 压缩' : '未压缩 (XML)') . "\n";
-        echo "输出文件 : {$this->outputPath} ({$sizeStr})\n";
-        echo "========================================\n";
     }
 
     private function loadAppXml()
@@ -178,7 +180,7 @@ HELP;
         $this->appId = trim($this->appData['id'] ?? '');
 
         if (empty($this->appId)) {
-            $this->error("错误: XML 文件中未找到有效的 <id> 节点。");
+            $this->error('错误: XML 文件中未找到有效的 <id> 节点。');
         }
     }
 
@@ -195,7 +197,7 @@ HELP;
         $tags = [
             'id', 'name', 'url', 'note', 'description',
             'path', 'include', 'level', 'adapted', 'version',
-            'pubdate', 'modified', 'price', 'phpver'
+            'pubdate', 'modified', 'price', 'phpver',
         ];
 
         foreach ($tags as $tag) {
@@ -206,7 +208,7 @@ HELP;
             }
         }
 
-        if (preg_match("#<author>(.*?)</author>#is", $content, $mAuthor)) {
+        if (preg_match('#<author>(.*?)</author>#is', $content, $mAuthor)) {
             foreach (['name', 'email', 'url'] as $sub) {
                 if (preg_match("#<{$sub}>(.*?)</{$sub}>#is", $mAuthor[1], $mSub)) {
                     $data['author'][$sub] = htmlspecialchars_decode(trim($mSub[1]));
@@ -214,7 +216,7 @@ HELP;
             }
         }
 
-        if (preg_match("#<source>(.*?)</source>#is", $content, $mSource)) {
+        if (preg_match('#<source>(.*?)</source>#is', $content, $mSource)) {
             foreach (['name', 'email', 'url'] as $sub) {
                 if (preg_match("#<{$sub}>(.*?)</{$sub}>#is", $mSource[1], $mSub)) {
                     $data['source'][$sub] = htmlspecialchars_decode(trim($mSub[1]));
@@ -222,7 +224,7 @@ HELP;
             }
         }
 
-        if (preg_match("#<advanced>(.*?)</advanced>#is", $content, $mAdv)) {
+        if (preg_match('#<advanced>(.*?)</advanced>#is', $content, $mAdv)) {
             foreach (['dependency', 'rewritefunctions', 'existsfunctions', 'conflict'] as $sub) {
                 if (preg_match("#<{$sub}>(.*?)</{$sub}>#is", $mAdv[1], $mSub)) {
                     $data['advanced'][$sub] = htmlspecialchars_decode(trim($mSub[1]));
@@ -230,8 +232,8 @@ HELP;
             }
         }
 
-        if (preg_match("#<sidebars>(.*?)</sidebars>#is", $content, $mSide)) {
-            for ($i = 1; $i <= 9; $i++) {
+        if (preg_match('#<sidebars>(.*?)</sidebars>#is', $content, $mSide)) {
+            for ($i = 1; $i <= 9; ++$i) {
                 $sub = "sidebar{$i}";
                 if (preg_match("#<{$sub}>(.*?)</{$sub}>#is", $mSide[1], $mSub)) {
                     $data['sidebars'][$sub] = htmlspecialchars_decode(trim($mSub[1]));
@@ -249,7 +251,7 @@ HELP;
             $lines = explode("\n", str_replace("\r", "\n", file_get_contents($ignoreFile)));
             foreach ($lines as $line) {
                 $line = trim($line);
-                if ($line !== '' && strpos($line, '#') !== 0) {
+                if ('' !== $line && 0 !== strpos($line, '#')) {
                     $this->ignoreFiles[] = $line;
                 }
             }
@@ -260,12 +262,12 @@ HELP;
     private function scanDirectory($dir)
     {
         $items = @scandir($dir);
-        if ($items === false) {
+        if (false === $items) {
             return;
         }
 
         foreach ($items as $item) {
-            if ($item === '.' || $item === '..') {
+            if ('.' === $item || '..' === $item) {
                 continue;
             }
 
@@ -291,21 +293,23 @@ HELP;
             if (empty($pattern)) {
                 continue;
             }
-            if (fnmatch($pattern, $fileName) || fnmatch($pattern, $relativePath) || fnmatch("*/$pattern", $relativePath)) {
+            if (fnmatch($pattern, $fileName) || fnmatch($pattern, $relativePath) || fnmatch("*/{$pattern}", $relativePath)) {
                 return true;
             }
-            if (strpos($relativePath, trim($pattern, '/')) === 0) {
+            if (0 === strpos($relativePath, trim($pattern, '/'))) {
                 return true;
             }
         }
+
         return false;
     }
 
     private function removeBom($str)
     {
-        if (substr($str, 0, 3) === "\xEF\xBB\xBF") {
+        if ("\xEF\xBB\xBF" === substr($str, 0, 3)) {
             return substr($str, 3);
         }
+
         return $str;
     }
 
@@ -315,7 +319,8 @@ HELP;
         if (is_array($val)) {
             return '';
         }
-        return (string)$val;
+
+        return (string) $val;
     }
 
     private function getNestedValue(array $arr, $key, $default = '')
@@ -324,7 +329,8 @@ HELP;
         if (is_array($val)) {
             return '';
         }
-        return (string)$val;
+
+        return (string) $val;
     }
 
     private function buildXml()
@@ -334,7 +340,7 @@ HELP;
 
         $fields = [
             'id', 'name', 'url', 'note', 'description',
-            'path', 'include', 'level'
+            'path', 'include', 'level',
         ];
         foreach ($fields as $field) {
             $val = $this->getValue($field);
@@ -364,7 +370,7 @@ HELP;
         }
 
         $phpver = $this->getValue('phpver', '5.2');
-        $xml .= '<phpver>' . htmlspecialchars($phpver !== '' ? $phpver : '5.2') . '</phpver>';
+        $xml .= '<phpver>' . htmlspecialchars('' !== $phpver ? $phpver : '5.2') . '</phpver>';
 
         // advanced
         $advanced = is_array($this->appData['advanced'] ?? null) ? $this->appData['advanced'] : [];
@@ -378,7 +384,7 @@ HELP;
         // sidebars
         $sidebars = is_array($this->appData['sidebars'] ?? null) ? $this->appData['sidebars'] : [];
         $xml .= '<sidebars>';
-        for ($i = 1; $i <= 9; $i++) {
+        for ($i = 1; $i <= 9; ++$i) {
             $key = "sidebar{$i}";
             $val = $this->getNestedValue($sidebars, $key);
             $xml .= "<{$key}>" . htmlspecialchars($val) . "</{$key}>";
@@ -400,7 +406,7 @@ HELP;
             $ext = strtolower(pathinfo($fullPath, PATHINFO_EXTENSION));
 
             $content = file_get_contents($fullPath);
-            if ($ext === 'php' || $ext === 'inc') {
+            if ('php' === $ext || 'inc' === $ext) {
                 $content = $this->removeBom($content);
             }
 
@@ -422,6 +428,7 @@ HELP;
     private function error($msg)
     {
         fwrite(STDERR, $msg . "\n");
+
         exit(1);
     }
 }
