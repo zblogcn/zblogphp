@@ -23,7 +23,6 @@ function ActivePlugin_Zit()
     Add_Filter_Plugin('Filter_Plugin_Zbp_MakeTemplatetags', $name . '_MakeTemplatetags');
     Add_Filter_Plugin('Filter_Plugin_Category_Edit_Response', $name . '_CategoryEdit');
     Add_Filter_Plugin('Filter_Plugin_ViewList_Template', $name . '_ViewList');
-
 }
 
 function InstallPlugin_Zit()
@@ -33,7 +32,7 @@ function InstallPlugin_Zit()
     $cfg = $zbp->Config($name);
     $def = Zit_Defaults(!$cfg->Custom);
     foreach ($def as $k=>$v) {
-        $cfg->$k = $v;
+        $cfg->{$k} = $v;
     }
     $cfg->Save();
 }
@@ -63,7 +62,7 @@ function Zit_Defaults($init = false)
         $cfg->MottoUrl = '';
         $cfg->MottoSize = '';
 
-        #TODO add in 1.2, fit main.php and languages
+        //TODO add in 1.2, fit main.php and languages
         //$cfg->CmtLink = 1;
         $cfg->CmtIds = '';
         $cfg->GbookID = 2;
@@ -89,24 +88,27 @@ function Zit_TopMenu(&$m)
 {
     global $bloghost,$lang;
 
-    array_unshift($m, MakeTopMenu("root", $lang['Zit']['setting'], $bloghost . 'zb_users/theme/Zit/main.php', '', 'topmenu_Zit', 'icon-gear-fill'));
+    array_unshift($m, MakeTopMenu('root', $lang['Zit']['setting'], $bloghost . 'zb_users/theme/Zit/main.php', '', 'topmenu_Zit', 'icon-gear-fill'));
 }
 
 function Zit_PostGet(&$post, $name)
 {
-  global $zbp;
+    global $zbp;
 
-  switch ($name) {
+    switch ($name) {
     case 'Cover':
-      $post->$name=$post->ImageCount>0?$post->Thumbs(400,300)[0]:'';
+      $post->{$name} = $post->ImageCount > 0 ? $post->Thumbs(400, 300)[0] : '';
+
     break;
+
     case 'TimeUrl':
       $url = new UrlRule($zbp->option['ZC_DATE_REGEX']);
       $url->Rules['{%date%}'] = $post->Time('Y-m-d');
       $url->Rules['{%year%}'] = $post->Time('Y');
       $url->Rules['{%month%}'] = $post->Time('m');
       $url->Rules['{%day%}'] = $post->Time('d');
-      $post->$name = $url->Make();
+      $post->{$name} = $url->Make();
+
     break;
   }
 }
@@ -130,12 +132,12 @@ function Zit_BuildModule()
         $mod->Source = 'themeinclude_Zit';
     }
 
-    $where = array(
-        array('=', 'comm_IsChecking', 0),
-        array('custom','length(`comm_Content`)>20'),
-    );
-    $ids = array();
-    $cmts = $zbp->GetCommentList('', $where, array('comm_PostTime' => 'DESC'));
+    $where = [
+        ['=', 'comm_IsChecking', 0],
+        ['custom', 'length(`comm_Content`)>20'],
+    ];
+    $ids = [];
+    $cmts = $zbp->GetCommentList('', $where, ['comm_PostTime' => 'DESC']);
     foreach ($cmts as $cmt) {
         $ids[] = $cmt->ID;
     }
@@ -153,55 +155,66 @@ function Zit_MakeTemplatetags(&$templateTags)
 
     $templateTags['cfg'] = $cfg;
 
-    $templateTags['sideMods'] = $cfg->MobileSide ? array() : explode(' ', trim($cfg->SideMods));
+    $templateTags['sideMods'] = $cfg->MobileSide ? [] : explode(' ', trim($cfg->SideMods));
 }
 
 function Zit_ViewList(&$tpl)
 {
     global $zbp;
 
-    $cfg=$zbp->Config('Zit');
+    $cfg = $zbp->Config('Zit');
 
-    foreach($tpl->GetTags('articles') as $v){
-      if($cfg->ListAlbum&&count($v->AllImages)>3){
-        $v->Intro='';
-      }else{
-        $v->Intro=preg_replace('/<img[^>]*?\s+src="([^\s"]{5,})"(\/?>|\s[^<]*?>)/i','',$v->Intro);
-        $v->Intro=preg_replace('/<p>(<br\/?>)?<\/p>/i','',$v->Intro);
-        if($cfg->HideIntro) $v->Intro='<div class="hidem">'.$v->Intro.'</div>';
-      }
+    foreach ($tpl->GetTags('articles') as $v) {
+        if ($cfg->ListAlbum && count($v->AllImages) > 3) {
+            $v->Intro = '';
+        } else {
+            $v->Intro = preg_replace('/<img[^>]*?\s+src="([^\s"]{5,})"(\/?>|\s[^<]*?>)/i', '', $v->Intro);
+            $v->Intro = preg_replace('/<p>(<br\/?>)?<\/p>/i', '', $v->Intro);
+            if ($cfg->HideIntro) {
+                $v->Intro = '<div class="hidem">' . $v->Intro . '</div>';
+            }
+        }
     }
-
 }
 
-function Zit_Motto($category,$cfg)
+function Zit_Motto($category, $cfg)
 {
-  global $zbp;
+    global $zbp;
 
-  $motto=$cfg->Motto?$cfg->Motto:$zbp->subname;
+    $motto = $cfg->Motto ? $cfg->Motto : $zbp->subname;
 
-  $mottoSize=$cfg->MottoSize;
-  $mottoUrl=$cfg->MottoUrl;
+    $mottoSize = $cfg->MottoSize;
+    $mottoUrl = $cfg->MottoUrl;
 
-  if($category){
-    if($category->Metas->Motto) $motto=$category->Metas->Motto;
-    if($category->Metas->MottoSize) $mottoSize=$category->Metas->MottoSize;
-    if($category->Metas->MottoUrl) $mottoUrl=$category->Metas->MottoUrl;
-  }
+    if ($category) {
+        if ($category->Metas->Motto) {
+            $motto = $category->Metas->Motto;
+        }
+        if ($category->Metas->MottoSize) {
+            $mottoSize = $category->Metas->MottoSize;
+        }
+        if ($category->Metas->MottoUrl) {
+            $mottoUrl = $category->Metas->MottoUrl;
+        }
+    }
 
-  if($mottoSize) $motto='<span style="display:block;font-size:'.$mottoSize.'">'.$motto.'</span>';
-  if($mottoUrl) $motto='<a href="'.trim(str_replace('~',$zbp->host,$mottoUrl)).'" targe="_blank">'.$motto.'</a>';
+    if ($mottoSize) {
+        $motto = '<span style="display:block;font-size:' . $mottoSize . '">' . $motto . '</span>';
+    }
+    if ($mottoUrl) {
+        $motto = '<a href="' . trim(str_replace('~', $zbp->host, $mottoUrl)) . '" targe="_blank">' . $motto . '</a>';
+    }
 
-  echo $motto;
+    echo $motto;
 }
 
 function Zit_CategoryEdit()
 {
-  global $bloghost,$lang,$cate;
+    global $bloghost,$lang,$cate;
 
-  $msg = (object) $lang['Zit'];
+    $msg = (object) $lang['Zit'];
 
-  echo <<<STR
+    echo <<<STR
   <h3 class="zit">{$msg->otherset}</h3>
   <p><dfn>{$msg->backdrop}</dfn> <input size="60" type="text" name="meta_Backdrop" placeholder="{$msg->backdrop_place}" value="{$cate->Metas->Backdrop}" class="pic"> <small>{$msg->backdrop_tip}</small></p>
   <p><dfn>{$msg->mottotxt}</dfn> <input size="60" type="text" name="meta_Motto" value="{$cate->Metas->Motto}"> <small>{$msg->mottotxt_tip}</small></p>
@@ -275,7 +288,7 @@ function Zit_AdminHeader()
     $logo = $cfg->Logo ? $cfg->Logo : $zbp->name;
     $username = $zbp->user->Name;
 
-    $animate=$cfg->MenuAnimate?'':'.left{animation:none}';
+    $animate = $cfg->MenuAnimate ? '' : '.left{animation:none}';
 
     echo <<<CSS
   <style>

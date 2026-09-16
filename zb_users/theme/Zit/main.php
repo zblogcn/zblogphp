@@ -8,6 +8,7 @@
  */
 
 require '../../../zb_system/function/c_system_base.php';
+
 require '../../../zb_system/function/c_system_admin.php';
 
 $zbp->Load();
@@ -29,7 +30,7 @@ if ($_POST) {
     if (isset($_POST['update'])) {
         foreach ($def as $k=>$v) {
             if (!$cfg->HasKey($k)) {
-                $cfg->$k = $v;
+                $cfg->{$k} = $v;
             }
         }
         foreach ($cfg->GetData() as $k=>$v) {
@@ -40,7 +41,7 @@ if ($_POST) {
     } else {
         foreach ($_POST as $k=>$v) {
             if ($cfg->HasKey($k)) {
-                $cfg->$k = $v;
+                $cfg->{$k} = $v;
             }
         }
         $cfg->Custom = time();
@@ -65,6 +66,7 @@ if (!empty($diffKeys1) || !empty($diffKeys2)) {
 }
 
 require $blogpath . 'zb_system/admin/admin_header.php';
+
 require $blogpath . 'zb_system/admin/admin_top.php';
 
 ?>
