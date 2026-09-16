@@ -188,25 +188,32 @@ function tpure_LoginHeader()
     echo <<<CSSJS
     <style>
         input:-webkit-autofill { -webkit-text-fill-color:#000 !important; background-color:transparent; background-image:none; transition:background-color 50000s ease-in-out 0s; }
-        .bg { height:100%; background:url({$zbp->host}zb_users/theme/tpure/style/images/banner.jpg) no-repeat center top; background-size:cover; }
+        .bg{ height:100%; background:url({$zbp->host}zb_users/theme/tpure/style/images/banner.jpg) no-repeat center top; background-size:cover; }
+        .login-header{  background:url({$zbp->host}zb_users/theme/tpure/style/images/banner.jpg) no-repeat center top; background-size:cover; }
         .logo { width:100%; height:auto; margin:0; padding:20px 0 10px; text-align:center; border-bottom:1px solid #eee; }
         .logo img { width:auto; height:50px; margin:auto; background:none; display:block; }
         #wrapper { width:440px; min-height:400px; height:auto; border-radius:8px; background:#fff; position:absolute; top:50%; left:50%; transform:translate(-50%, -50%); }
-        .login { width:auto; height:auto; padding:30px 40px 20px; }
+        .login { width:auto; height:auto; padding:30px 40px 20px;display: flex;align-items: center;justify-content: center;}
         .login input[type="text"], .login input[type="password"] { width:100%; height:42px; float:none; padding:0 14px; font-size:16px; line-height:42px; border:1px solid #e4e8eb; outline:0; border-radius:3px; box-sizing:border-box; }
         .login input[type="password"] { font-size:24px; }
         .login input[type="text"]:focus, .login input[type="password"]:focus { color:#0188fb; background-color:#fff; border-color:#aab7c1; outline:0; box-shadow:0 0 0 0.2rem rgba(31,73,119,0.1); }
         .login dl { height:auto; }
         .login dd { margin-bottom:14px; }
         .login dd.submit, .login dd.password, .login dd.username { width:auto; float:none; overflow:visible; }
-        .login dd.checkbox { width:170px; float:none; margin:0 0 10px; }
+        .login dd.checkbox {width:auto; margin:0 0 10px; border-radius:3px; }
         .login dd.checkbox input[type="checkbox"] { width:16px; height:16px; margin-right:6px;; }
+        .login dd.checkbox:focus-within { outline:2px solid #a4a9adff; outline-offset:2px; } 
+         .login dd.submit .button:focus { outline:2px solid #b8b8b8ff; outline-offset:2px; }
         .login label { width:auto; margin-bottom:5px; padding:0; font-size:16px; text-align:left; }
         .logintitle { padding:0 70px; font-size:24px; color:#0188fb; line-height:40px; white-space:nowrap; text-overflow:ellipsis; overflow:hidden; position:relative; display:block; }
         .logintitle:before,.logintitle:after { content:""; width:40px; height:0; border-top:1px solid #ddd; position:absolute; top:20px; right:30px; }
         .logintitle:before { right:auto; left:30px; }
         .button { width:100%; height:42px; float:none; font-size:16px; line-height:42px; border-radius:3px; outline:0; box-shadow:1px 3px 5px 0 rgba(72,108,255,0.3); background:#0188fb; }
         .button:hover { background:#0188fb; }
+        .login-container dd.validcode { width:auto;height:auto; float:none; overflow:visible; }
+        .login-container dd.validcode input { width:50%;display: block;clear: both; }
+        .login-container dd.validcode > img {  width:50%;height:42px;top:auto;bottom:0;right:0; border:1px solid #e4e8eb; }
+        .login-container dd .button{height:42px;margin-right:0;}
         @media only screen and (max-width: 768px){
             .login { padding:30px 30px 10px; }
             .login dd { float:left; margin-bottom:14px; padding:0; }
@@ -619,11 +626,24 @@ function tpure_color()
     return $skin;
 }
 
+function tpure_GetEditPost()
+{
+    global $zbp;
+    $article = null;
+    if (isset($zbp->template_admin) && is_object($zbp->template_admin)) {
+        $article = $zbp->template_admin->GetTags('article');
+    }
+    if (!is_object($article)) {
+        $article = new Post();
+    }
+    return $article;
+}
+
 //文章或页面自动展示全文开关(开启)
 //挂接口：Add_Filter_Plugin('Filter_Plugin_Edit_Response3', 'tpure_ArticleViewall');
 function tpure_ArticleViewall()
 {
-    global $zbp,$article;
+    $article = tpure_GetEditPost();
     echo '<div class="editmod">
             <label class="editinputname">自动展开全文</label>
             <input type="text" name="meta_viewall" value="'.$article->Metas->viewall.'" class="checkbox" />
@@ -634,7 +654,7 @@ function tpure_ArticleViewall()
 //挂接口：Add_Filter_Plugin('Filter_Plugin_Edit_Response5', 'tpure_Edit_Response');
 function tpure_Edit_Response()
 {
-    global $zbp,$article;
+    $article = tpure_GetEditPost();
     tpure_CustomMeta_Response($article);
 }
 
@@ -689,7 +709,7 @@ function tpure_CustomMeta_Response(&$object)
 //挂接口：Add_Filter_Plugin('Filter_Plugin_Edit_Response5', 'tpure_SingleSEO');
 function tpure_SingleSEO()
 {
-    global $zbp,$article;
+    $article = tpure_GetEditPost();
     $array = array('singletitle', 'singlekeywords', 'singledescription');
     $singletitle_intro = 'SEO标题';
     $singlekeywords_intro = 'SEO关键词';
