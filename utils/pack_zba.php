@@ -1,6 +1,6 @@
 <?php
 /**
- * Z-BlogPHP ZBA 打包工具 (CLI 单文件版).
+ * Z-BlogPHP ZBA 打包工具 (CLI & GitHub Action 版).
  *
  * 用法:
  *   php pack_zba.php <应用目录路径> [选项]
@@ -28,6 +28,10 @@ class ZbaPacker
 
     private $ignoreFiles = [
         '.git',
+        '.github',
+        '.history',
+        '.idea',
+        '.vscode',
         '.svn',
         '.hg',
         '.DS_Store',
@@ -61,8 +65,8 @@ class ZbaPacker
         }
 
         if (empty($this->outputPath)) {
-            $version = (string) ($this->appXml->version ?? '1.0');
-            $modified = (string) ($this->appXml->modified ?? date('Ymd'));
+            $version = (string) ($this->appData['version'] ?? '1.0');
+            $modified = (string) ($this->appData['modified'] ?? date('Ymd'));
             $filename = "{$this->appId}_{$version}_{$modified}.zba";
             $this->outputPath = getcwd() . DIRECTORY_SEPARATOR . $filename;
         }
@@ -79,16 +83,36 @@ class ZbaPacker
         $size = filesize($this->outputPath);
         $sizeStr = $size > 1048576 ? round($size / 1048576, 2) . ' MB' : ($size > 1024 ? round($size / 1024, 2) . ' KB' : $size . ' B');
 
+        $this->exportGithubOutputs();
+
         echo "========================================\n";
         echo "打包成功!\n";
         echo "应用 ID   : {$this->appId}\n";
         echo "应用类型 : {$this->appType}\n";
         echo '应用名称 : ' . ($this->appData['name'] ?? '') . "\n";
+        echo '版本号   : ' . ($this->appData['version'] ?? '') . "\n";
         echo '包含目录 : ' . count($this->dirs) . " 个\n";
         echo '包含文件 : ' . count($this->files) . " 个\n";
         echo '压缩模式 : ' . ($this->gzip ? 'Gzip 压缩' : '未压缩 (XML)') . "\n";
         echo "输出文件 : {$this->outputPath} ({$sizeStr})\n";
         echo "========================================\n";
+    }
+
+    private function exportGithubOutputs()
+    {
+        $githubOutput = getenv('GITHUB_OUTPUT');
+        if ($githubOutput && is_file($githubOutput)) {
+            $outputs = [
+                'zba-path=' . $this->outputPath,
+                'zba-name=' . basename($this->outputPath),
+                'app-id=' . $this->appId,
+                'app-name=' . ($this->appData['name'] ?? ''),
+                'app-version=' . ($this->appData['version'] ?? ''),
+                'app-type=' . $this->appType,
+                'app-modified=' . ($this->appData['modified'] ?? ''),
+            ];
+            file_put_contents($githubOutput, implode("\n", $outputs) . "\n", FILE_APPEND);
+        }
     }
 
     private function showHelp()
