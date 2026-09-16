@@ -248,6 +248,7 @@ function Zit_LoginHeader()
     .zit::after{content:"Z";position:absolute;left:.5em;bottom:-.5em;transform:rotate(30deg);display:inline-block;margin:0 .2em 0 0;z-index:-1;color:#18a;font-weight:bold;}
     #wrapper{filter:hue-rotate({$hue}deg);position:relative;max-width:600px;padding-top:300px;}
     .logo{position:absolute;left:0;height:auto;width:auto;margin:-6em 0 0;word-break:break-all;}
+
     @media only screen and (max-width:768px) {
       #wrapper{padding-top:200px;}
       .logo{left:2em}
