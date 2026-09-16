@@ -650,6 +650,9 @@ form.post-edit #edtTag {
 #divEditLeft #editor_intro {
   width: 100%;
 }
+.edui-default .edui-editor {
+  width: 100% !important;
+}
 #divEditLeft #carea,
 #divEditLeft #tarea {
   margin: 5px 0 0;

@@ -91,6 +91,8 @@ select.disabled{background:#eee;}
 .btn.update{filter:none;}
 .pic{transition:text-indent .2s;}
 .picable{background-size:3em 100%;background-repeat:no-repeat;text-indent:3em;}
+.submit{position: fixed;z-index: 100; width: 100%; text-align: left; bottom: 0;left: 10em; padding: 1em 2em; background: linear-gradient(to bottom, transparent, #fafbfc, #fafbfc);}
+.submit .btn{margin: 0;}
 <?php
   if ($cfg->DefaultAdmin) {
       echo <<<CSS
@@ -148,7 +150,10 @@ echo <<<FORM
     <p><dfn>{$msg->relatedtitle}</dfn> <input type="text" name="RelatedTitle" value="{$cfg->RelatedTitle}" required></p>
     <p><dfn>{$msg->commenttitle}</dfn> <input type="text" name="CommentTitle" value="{$cfg->CommentTitle}" required></p>
   </div>
-  {$submit}
+  <div style="height: 2em;"></div>
+  <div class="submit">
+    {$submit}
+  </div>
 </form>
 FORM;
 ?>

@@ -279,6 +279,9 @@ function Zit_AdminHeader()
 
     echo <<<CSS
   <style>
+  .pane,
+.theme,
+form.search{box-shadow:0 0 2em rgba(0,0,0,0.05);padding:2em;position:relative;background:#fff;margin:2em 0;border-radius:0.1em;}
     input.button,
     input[type="submit"],
     input[type="button"],
