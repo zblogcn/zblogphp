@@ -43,7 +43,7 @@ jobs:
           zip -g zblogphp-${{ steps.get_version.outputs.short }}.zip zb_users/plugin/AppCentre/* zb_users/plugin/AppCentre/**/*
 
       - name: Create GitHub Release
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
