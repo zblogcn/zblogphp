@@ -9,4 +9,5 @@ zb_users/c_option.php
 zb_users/cache/
 zb_users/data/
 zb_users/logs/
-zb_users/upload/
+zb_users/upload/ 
+.vscode/

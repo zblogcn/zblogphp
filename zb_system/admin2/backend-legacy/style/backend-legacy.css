@@ -400,7 +400,7 @@ textarea {
   background: none !important;
   display: inline-block !important;
   position: relative;
-  width: 40px;
+  width: 140px;
   height: 16px;
   max-height: 1em;
   cursor: pointer;
@@ -653,6 +653,9 @@ form.post-edit #edtTag {
 .edui-default .edui-editor {
   width: 100% !important;
 }
+.edui-editor-iframeholder.edui-default {
+  width: 100% !important;
+}
 #divEditLeft #carea,
 #divEditLeft #tarea {
   margin: 5px 0 0;
@@ -676,7 +679,7 @@ form.post-edit #edtTag {
   height: 38px;
 }
 #divEditRight .editmod#istop select {
-  width: 80px;
+  /* width: 80px; */
 }
 
 body.admin-login {

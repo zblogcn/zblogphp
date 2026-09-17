@@ -24,7 +24,7 @@ input, textarea {
 .edit .uploadimg { height:30px; margin:0 0 0 -90px; padding:0 15px; border:0; background:#004c98; position:relative; z-index:1; display:inline-block; vertical-align:top; }
 .edit .metaintro { width:99%; padding:0.25em; }
 .edit .imgcheck { margin-top:6px; }
-.introbox { width:99%; height:72px; margin-bottom:10px; padding:15px 15px 5px; border:1px solid #ddd; overflow:hidden; }
+.introbox { width:99%; margin-bottom:10px; padding:15px 15px 5px; border:1px solid #ddd; overflow:hidden; }
 .introbox.on { height:auto; }
 .togglelabel { line-height:40px; margin-bottom:10px; font-weight:bold; text-align:center; cursor:pointer; background:#ddd; }
 .media { margin-top:15px; }
