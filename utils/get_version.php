@@ -10,6 +10,7 @@ if (PHP_SAPI !== 'cli') {
 }
 
 defined('ZBP_PATH') || define('ZBP_PATH', dirname(__DIR__) . DIRECTORY_SEPARATOR);
+
 require_once __DIR__ . '../../zb_system/function/c_system_version.php';
 
 $opts = getopt('hvs', ['help', 'version', 'short', 'full', 'display', 'commit', 'json']);
@@ -51,7 +52,7 @@ if (isset($opts['json'])) {
         'ZC_VERSION_FULL' => defined('ZC_VERSION_FULL') ? ZC_VERSION_FULL : null,
         'ZC_BLOG_VERSION' => defined('ZC_BLOG_VERSION') ? ZC_BLOG_VERSION : null,
     ];
-    echo json_encode($out, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT) . "\n";
+    echo json_encode($out, (JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT)) . "\n";
 
     exit(0);
 }
