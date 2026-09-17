@@ -26,7 +26,7 @@ textarea{font-family:"Microsoft YaHei";}
 .pane,
 .theme,
 form.search{box-shadow:0 0 2em rgba(0,0,0,0.05);padding:2em;position:relative;background:#fff;margin:2em 0;border-radius:0.1em;}
-div.theme{height:340px;margin:0 2em 2em 0;}
+div.theme{height:340px;margin:0 1em 1em 0;padding: 1em;}
 div.theme-other{background:#fff;}
 form.search p{padding:0;}
 
@@ -91,7 +91,7 @@ html[lang='en'] .left #leftmenu{font-size:15px;}
 html[lang='en'] .left #leftmenu a:hover{letter-spacing:-.02em;text-indent:0;}
 html[lang='en'] #leftmenu li.on{font-weight:bold;letter-spacing:-.02em;}
 
-.main{margin-left:10em;padding:0;}
+.main{margin-left:1em;padding:0;}
 
 div.hint{margin:0;padding:0 !important;}
 div.hint p{line-height:2;padding:0.5em 2em 0.5em 0;background-position:99% 50% !important;text-align:right;font-weight:bold;color:#123;border-radius:0;}
@@ -99,7 +99,7 @@ div.hint p{line-height:2;padding:0.5em 2em 0.5em 0;background-position:99% 50% !
 .divHeader2{border:none;}
 
 .SubMenu{height:40px;line-height:37px;margin:2em 0 -2em !important;padding:0 10px;border-bottom:2px solid #39c;overflow:auto;}
-.SubMenu a{background:#fefefe;box-shadow:0 0 0.5em rgba(0,0,0,0.05);border:solid #f4f5f6;border-width:1px 1px 0;border-radius:0.3em 0.3em 0 0;overflow:hidden;margin-bottom:0;}
+#divMain .SubMenu a{background:#fefefe;box-shadow:0 0 0.5em rgba(0,0,0,0.05);border:solid #f4f5f6;border-width:1px 1px 0;border-radius:0.3em 0.3em 0 0;overflow:hidden;margin-bottom:0; padding: 0 1em;}
 .SubMenu a:hover{background:#def;}
 .SubMenu span{color:#17a;}
 .SubMenu span:hover{color:#234;}
@@ -145,7 +145,9 @@ div.hint p{line-height:2;padding:0.5em 2em 0.5em 0;background-position:99% 50% !
 
 input.btn,.button,button.btn{background:#39c;color:#fff;border:none;cursor:pointer;border:none!important;transition:all .3s}
 input.button,input[type="submit"],button{background:#39c;}
-input.btn,.button,button.btn{padding:.6em 1em;border-radius:.5em;font-size:1.2em;font-weight:bold;}
+/* 按钮样式 覆盖面太广 */
+/* input.btn,.button,button.btn{padding:.6em 1em;border-radius:.5em;font-size:1.2em;font-weight:bold;} */
+.theme .button{background:rgb(243, 243, 243);color:#39c;font-size:.9em;border-radius:.5em;padding: 3px;} 
 input.btn:hover,button:hover{box-shadow:0 0 2em rgba(0,0,0,.2) inset!important}
 form.search .button, form.search .reset,.theme-activate{padding:0 1em!important;border-radius:3px;font-weight:normal;}
 .theme-activate{font-size:.9em;}

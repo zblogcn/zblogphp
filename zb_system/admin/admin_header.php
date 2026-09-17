@@ -21,6 +21,7 @@ if ($zbp->option['ZC_ADDITIONAL_SECURITY']) {
 <meta name="csrfToken" content="<?php echo $zbp->GetCSRFToken(); ?>" />
 <meta name="csrfExpiration" content="<?php echo $zbp->csrfExpiration; ?>" />
 <title><?php echo $blogname . ' - ' . $blogtitle; ?></title>
+ 
 <link href="<?php echo $bloghost; ?>zb_system/css/admin2.css?<?php echo $blogversion; ?>" rel="stylesheet" type="text/css" />
 <link rel="stylesheet" type="text/css" href="<?php echo $bloghost; ?>zb_system/css/jquery-ui.custom.css?v=<?php echo $blogversion; ?>"/>
 <link rel="stylesheet" type="text/css" href="<?php echo $bloghost; ?>zb_system/image/icon/icon.css?v=<?php echo $blogversion; ?>"/>

@@ -52,6 +52,22 @@ label { cursor: pointer; }
 .header { margin-bottom: 5px; height: 85px; padding: 0; background: #3a6ea5; position: relative; }
 .header .top { }
 
+body.admin {
+    display: grid;
+    grid-template-columns: 140px 1fr;
+    grid-template-areas:         "header header"        "left main";
+}
+.header {
+    grid-area: header;
+    margin-bottom: 5px;
+    padding-right: 13px;
+    background: #3a6ea5;
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    grid-template-areas:         "logo user"        "logo menu";
+}
+ 
+
 .element-display-block {display:block;}
 .element-display-none {display:none;}
 .element-display-block-always {display:block;}
@@ -87,7 +103,9 @@ label { cursor: pointer; }
 .menu ul li span {  }
 
 /*左边导航*/
-.left { float: left; width: 140px; padding: 0px; overflow: hidden; margin: 0 0 0 0; position: absolute; }
+.left {
+    grid-area: left;
+}
 .left #leftmenu { }
 .left #leftmenu li { float: left; width: 140px; height: 32px; margin-bottom: 5px; background: #ededed; cursor: pointer; }
 .left #leftmenu a { float: left; width: 140px; height: 32px; line-height: 35px; cursor: pointer; padding-right:1em; }
@@ -115,7 +133,7 @@ label { cursor: pointer; }
 .left #leftmenu li.menutitle  { font-size:0px; height: 0px !important; background: #fff; }
 
 /*主要内容区*/
-.main { padding-left: 150px; padding-right: 10px; }
+.main { grid-area: main;padding-left: 10px; padding-right: 10px; }
 
 /*后台首页*/
 #divMain { float: left; width: 100%; padding: 0px; margin: 0px; }
