@@ -40,11 +40,16 @@ if (isset($options['help'])) {
 }
 
 try {
+    $dbType = strtolower(trim($options['db-type'] ?? ''));
+    $dbName = $options['db-name'] ?? '';
+    if (!$dbName && in_array($dbType, ['sqlite', 'sqlite3', 'pdo_sqlite'], true)) {
+        $dbName = GetDbName();
+    }
     $options = ZbpInstaller::Normalize([
         'db_type' => $options['db-type'] ?? '',
         'db_server' => $options['db-server'] ?? '',
         'db_port' => (int) ($options['db-port'] ?? 0),
-        'db_name' => $options['db-name'] ?? '',
+        'db_name' => $dbName,
         'db_user' => $options['db-user'] ?? '',
         'db_password' => $options['db-password'] ?? '',
         'db_prefix' => $options['db-prefix'] ?? 'zbp_',
@@ -87,12 +92,12 @@ class ZbpInstallerCli
 Z-BlogPHP CLI 安装器
 
 用法:
-  php zb_install/cli.php --db-type=sqlite3 --db-name=zb_users/data/database.db \
+    php zb_install/cli.php --db-type=sqlite3 \
     --site-name="我的站点" --admin-user=admin
 
 参数:
   --db-type        sqlite3、pdo_sqlite、mysqli、pdo_mysql、pgsql 或 pdo_postgresql
-  --db-name        SQLite 文件路径或 MySQL/PostgreSQL 数据库名
+  --db-name        SQLite 文件名或 MySQL/PostgreSQL 数据库名；对于 SQLite 请留空以自动生成
   --db-server      数据库地址（SQLite 不需要）
   --db-port        数据库端口
   --db-user        数据库用户名
