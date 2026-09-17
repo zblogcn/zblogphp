@@ -8,7 +8,8 @@ if (PHP_SAPI !== 'cli') {
     exit(1);
 }
 
-require_once __DIR__ . '/../zb_system/function/c_system_base.php';
+defined('ZBP_PATH') || define('ZBP_PATH', dirname(__DIR__) . DIRECTORY_SEPARATOR);
+require_once __DIR__ . '../../zb_system/function/c_system_version.php';
 
 $opts = getopt('hvs', ['help', 'version', 'short', 'full', 'display', 'commit', 'json']);
 
