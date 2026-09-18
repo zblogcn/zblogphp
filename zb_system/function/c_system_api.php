@@ -439,7 +439,7 @@ function ApiResponseRaw($raw, $raw_type = 'application/json')
     }
 
     if (!defined('ZBP_API_IN_TEST')) {
-        ob_end_clean();
+        @ob_clean();
         if (!headers_sent()) {
             header('Content-Type: ' . $raw_type . '; charset=utf-8');
         }
