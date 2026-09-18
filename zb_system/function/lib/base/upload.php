@@ -116,10 +116,11 @@ abstract class Base__Upload extends Base
         } else {
             $fn = $this->Name;
         }
-        if ($this->CheckExtName()) {
-            @move_uploaded_file($tmp, $zbp->usersdir . $this->Dir . $fn);
-            return true;
+
+        if (!$this->CheckExtName()) {
+            return false;
         }
+        @move_uploaded_file($tmp, $zbp->usersdir . $this->Dir . $fn);
 
         return true;
     }
@@ -152,10 +153,13 @@ abstract class Base__Upload extends Base
         } else {
             $fn = $this->Name;
         }
-        if ($this->CheckExtName()) {
-            file_put_contents($zbp->usersdir . $this->Dir . $fn, $s);
-            return true;
+
+        if (!$this->CheckExtName()) {
+            return false;
         }
+
+        file_put_contents($zbp->usersdir . $this->Dir . $fn, $s);
+        return true;
     }
 
     /**
