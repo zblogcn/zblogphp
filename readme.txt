@@ -11,9 +11,9 @@ https://www.zblogcn.com/disclaimer/
 =============================
           社区说明
 =============================
-1. 使用交流及开发建议，请转向：Z-Blog 论坛 https://bbs.zblogcn.com/；
+1. 使用交流及开发建议，请转向：Z-Blog 开发者社区 https://bbs.zblogcn.com/；
 2. 开发文档，参看 https://docs.zblogcn.com/；
-3. 提交功能 BUG，请在论坛内，或直接在 GitHub Issue 内提交；
+3. 提交功能 BUG，请在开发者社区内，或直接在 GitHub Issue 内提交；
 4. 欢迎 Pull Request，如果你喜欢，请为我们点一个 Star :)
 
 =============================
