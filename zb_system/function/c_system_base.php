@@ -270,7 +270,7 @@ if (ZBP_SAFEMODE === false) {
         $GLOBALS['zbp']->themeinfo = $GLOBALS['zbp']->themeapp->GetInfoArray();
 
         if ($GLOBALS['zbp']->themeapp->isloaded && is_readable($theme_include)) {
-            include $theme_include;
+            include_once $theme_include;
         }
     }
 
@@ -290,7 +290,7 @@ if (ZBP_SAFEMODE === false) {
             $GLOBALS['activedapps'][] = $ap;
         }
         if (is_readable($file_base = $GLOBALS['usersdir'] . 'plugin/' . $ap . '/include.php')) {
-            include $file_base;
+            include_once $file_base;
         }
     }
 
