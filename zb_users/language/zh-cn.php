@@ -644,7 +644,7 @@ return [
 
 如果您是站长，可以<a href="{%officedocs%}" rel="nofollow" target="_blank">「点击这里」</a>查看 Z-Blog 官方对于【部分常见错误 】的说明,，以及<a href="{%officedocs%}" rel="nofollow" target="_blank">「通用排查指南」</a>。<br/>
 
-如果仍然无法解决，也可以到 <a href="{%officebbs%}" rel="nofollow" target="_blank">Z-Blog 官方论坛</a>，附上当前错误信息与描述寻求帮助。
+如果仍然无法解决，也可以到 <a href="{%officebbs%}" rel="nofollow" target="_blank">Z-Blog 开发者社区</a>，附上当前错误信息与描述寻求帮助。
 注：请将"当前错误信息"复制进标题或正文中。<br/>
         ',
     ],

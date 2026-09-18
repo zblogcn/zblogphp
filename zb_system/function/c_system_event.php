@@ -2134,7 +2134,7 @@ function DelUpload()
         $zbp->ShowError(6, __FILE__, __LINE__);
     }
 
-    $id = (int) GetVars('id', 'GET');
+    $id = (int) GetVars('id');
     $u = $zbp->GetUploadByID($id);
     if ($zbp->CheckRights('UploadAll') || (!$zbp->CheckRights('UploadAll') && $u->AuthorID == $zbp->user->ID)) {
         $u->Del();
