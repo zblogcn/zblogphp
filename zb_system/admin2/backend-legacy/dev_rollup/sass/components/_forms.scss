@@ -134,67 +134,67 @@ textarea {
 
 /* checkbox */
 .imgcheck {
+  $track-width: 40px;
+  $track-height: 22px;
+  $thumb-size: 20px;
+  $thumb-offset: 1px;
+  $thumb-travel: $track-width - $thumb-size - $thumb-offset;
+
   background: none !important;
   display: inline-block !important;
   position: relative;
-  width: 40px;
-  height: 16px;
-  max-height: 1em;
+  width: $track-width;
+  height: $track-height;
+  // line-height: $track-height;
   cursor: pointer;
+  user-select: none;
   -webkit-touch-callout: none;
-  margin-right: 0;
-  margin-bottom: 0;
-  padding-left: 40px;
-  line-height: 16px;
   margin-right: 10px;
-  padding-left: 30px;
-}
 
-.imgcheck:before {
-  position: absolute;
-  display: inline-block;
-  left: 0;
-  content: "";
-  border-style: solid;
-  width: 40px;
-  height: 22px;
-  border-width: 0;
-  border-color: transparent;
-  background: #d8d8d8;
-  border-radius: 20px;
-  transition: all 0.3s;
-  margin-top: -2px;
-}
+  &:before,
+  &:after {
+    position: absolute;
+    content: "";
+    top: 50%;
+    transform: translateY(-50%);
+  }
 
-.imgcheck:after {
-  color: $color-fff;
-  position: absolute;
-  content: "";
-  width: 20px;
-  height: 20px;
-  line-height: 20px;
-  top: 1px;
-  left: 1px;
-  text-align: center;
-  background: $color-fff;
-  box-shadow: 0 2px 5px 0 rgba(51, 51, 51, 0.25);
-  border-radius: 10px;
-  transition: left 0.3s, right 0.3s;
-  margin-top: -2px;
-}
+  &:before {
+    left: 0;
+    width: $track-width;
+    height: $track-height;
+    background: #d8d8d8;
+    border-radius: calc($track-height / 2);
+    transition: background-color 0.3s;
+  }
 
-.imgcheck-on:before {
-  background: $color-primary;
-  transition: all 0.3s;
-}
+  &:after {
+    left: $thumb-offset;
+    width: $thumb-size;
+    height: $thumb-size;
+    background: $color-fff;
+    border-radius: 50%;
+    box-shadow: 0 2px 5px 0 rgba(51, 51, 51, 0.25);
+    transition: left 0.3s;
+  }
 
-.imgcheck-on:after {
-  left: 19px;
-  transition: left 0.3s, right 0.3s;
-  background: $color-fff;
-}
+  &:focus-visible {
+    outline: 2px solid $color-primary;
+    outline-offset: 2px;
+  }
 
-.imgcheck-disabled {
-  opacity: 0.3;
-  cursor: not-allowed;
+  &-on {
+    &:before {
+      background: $color-primary;
+    }
+
+    &:after {
+      left: $thumb-travel;
+    }
+  }
+
+  &-disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+  }
 }

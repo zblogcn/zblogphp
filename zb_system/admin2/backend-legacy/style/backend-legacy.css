@@ -227,7 +227,7 @@ body.admin {
   padding-left: 10px;
   padding-right: 10px;
 }
-.main.main-CategoryEdt .divHeader, .main.main-ArticleEdt .divHeader, .main.main-TagEdt .divHeader, .main.main-MemberNew .divHeader, .main.main-MemberEdt .divHeader, .main.main-ModuleEdt .divHeader, .main.main-PageEdt .divHeader {
+.main.main-ArticleEdt .divHeader, .main.main-CategoryEdt .divHeader, .main.main-MemberEdt .divHeader, .main.main-MemberNew .divHeader, .main.main-ModuleEdt .divHeader, .main.main-PageEdt .divHeader, .main.main-TagEdt .divHeader {
   border-bottom: 5px solid #e0e0e0;
 }
 
@@ -411,62 +411,45 @@ textarea {
   display: inline-block !important;
   position: relative;
   width: 40px;
-  height: 16px;
-  max-height: 1em;
+  height: 22px;
   cursor: pointer;
+  user-select: none;
   -webkit-touch-callout: none;
-  margin-right: 0;
-  margin-bottom: 0;
-  padding-left: 40px;
-  line-height: 16px;
   margin-right: 10px;
-  padding-left: 30px;
 }
-
-.imgcheck:before {
+.imgcheck:before, .imgcheck:after {
   position: absolute;
-  display: inline-block;
-  left: 0;
   content: "";
-  border-style: solid;
+  top: 50%;
+  transform: translateY(-50%);
+}
+.imgcheck:before {
+  left: 0;
   width: 40px;
   height: 22px;
-  border-width: 0;
-  border-color: transparent;
   background: #d8d8d8;
-  border-radius: 20px;
-  transition: all 0.3s;
-  margin-top: -2px;
+  border-radius: 11px;
+  transition: background-color 0.3s;
 }
-
 .imgcheck:after {
-  color: #ffffff;
-  position: absolute;
-  content: "";
+  left: 1px;
   width: 20px;
   height: 20px;
-  line-height: 20px;
-  top: 1px;
-  left: 1px;
-  text-align: center;
   background: #ffffff;
+  border-radius: 50%;
   box-shadow: 0 2px 5px 0 rgba(51, 51, 51, 0.25);
-  border-radius: 10px;
-  transition: left 0.3s, right 0.3s;
-  margin-top: -2px;
+  transition: left 0.3s;
 }
-
+.imgcheck:focus-visible {
+  outline: 2px solid #3a6ea5;
+  outline-offset: 2px;
+}
 .imgcheck-on:before {
   background: #3a6ea5;
-  transition: all 0.3s;
 }
-
 .imgcheck-on:after {
   left: 19px;
-  transition: left 0.3s, right 0.3s;
-  background: #ffffff;
 }
-
 .imgcheck-disabled {
   opacity: 0.3;
   cursor: not-allowed;
@@ -602,7 +585,11 @@ tr.color4 {
 }
 .content-box .content-box-content .tab-content td input[type=text],
 .content-box .content-box-content .tab-content td select {
-  height: 33px;
+  height: 30px;
+}
+.content-box .content-box-content .tab-content td:has(.imgcheck) {
+  display: flex;
+  align-items: center;
 }
 .content-box .content-box-content .tab-content.default-tab {
   display: block;
