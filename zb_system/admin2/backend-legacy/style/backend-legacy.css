@@ -227,7 +227,7 @@ body.admin {
   padding-left: 10px;
   padding-right: 10px;
 }
-.main.CategoryEdt .divHeader, .main.TagEdt .divHeader, .main.MemberNew .divHeader, .main.MemberEdt .divHeader, .main.ModuleEdt .divHeader {
+.main.main-CategoryEdt .divHeader, .main.main-ArticleEdt .divHeader, .main.main-TagEdt .divHeader, .main.main-MemberNew .divHeader, .main.main-MemberEdt .divHeader, .main.main-ModuleEdt .divHeader, .main.main-PageEdt .divHeader {
   border-bottom: 5px solid #e0e0e0;
 }
 

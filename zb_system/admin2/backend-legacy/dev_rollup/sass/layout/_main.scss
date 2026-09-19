@@ -5,11 +5,13 @@
   padding-left: 10px;
   padding-right: 10px;
 
-  &.CategoryEdt .divHeader,
-  &.TagEdt .divHeader,
-  &.MemberNew .divHeader,
-  &.MemberEdt .divHeader,
-  &.ModuleEdt .divHeader {
+  &.main-ArticleEdt .divHeader,
+  &.main-CategoryEdt .divHeader,
+  &.main-MemberEdt .divHeader,
+  &.main-MemberNew .divHeader,
+  &.main-ModuleEdt .divHeader,
+  &.main-PageEdt .divHeader,
+  &.main-TagEdt .divHeader {
     border-bottom: 5px solid #e0e0e0;
   }
 }
