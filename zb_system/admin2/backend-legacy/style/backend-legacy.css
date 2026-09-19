@@ -142,6 +142,7 @@ body.admin {
   background: #3a6ea5;
   display: grid;
   grid-template-columns: 200px 1fr;
+  grid-template-rows: 1fr auto;
   grid-template-areas: "logo user" "logo menu";
 }
 .header .logo {
@@ -153,12 +154,14 @@ body.admin {
 .header .logo img {
   width: 100%;
   height: 85px;
+  display: block;
   background: url("image/logo_white.svg") center center no-repeat;
 }
 .header .user {
   grid-area: user;
   justify-self: end;
-  padding: 12px 0 0 0;
+  align-items: center;
+  align-self: center;
   color: #ffffff;
   display: grid;
   grid-template-areas: "name avatar" "btn avatar";
@@ -166,6 +169,7 @@ body.admin {
 .header .user #avatar {
   width: 40px;
   height: 40px;
+  display: block;
 }
 .header .user .user-avatar {
   grid-area: avatar;
@@ -173,6 +177,12 @@ body.admin {
 }
 .header .user .user-name {
   font-size: 1.1em;
+}
+.header .user .user-name span {
+  display: block;
+}
+.header .user .user-name {
+  align-items: end;
 }
 .header .user .user-btn {
   display: flex;
