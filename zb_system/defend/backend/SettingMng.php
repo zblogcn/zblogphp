@@ -157,6 +157,7 @@
                         <td><b>{$zbp->langs->msg->enable_login_verify}</b></td>
                         <td><input id="ZC_LOGIN_VERIFY_ENABLE" name="ZC_LOGIN_VERIFY_ENABLE" type="text" value="{$zbp->option['ZC_LOGIN_VERIFY_ENABLE']}" class="checkbox" /></td>
                     </tr>
+                    {if $zbp.option['ZC_DEBUG_MODE']}
                     <tr>
                         <td><b>后台主题</b></td>
                         <td><select id="ZC_BACKEND_ID" name="ZC_BACKEND_ID" class="select-90">
@@ -165,6 +166,7 @@
                                 {/foreach}
                             </select></td>
                     </tr>
+                    {/if}
                 </table>
             </div>
             <!-- Tab 6 -->
