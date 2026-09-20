@@ -259,7 +259,9 @@ HELP;
                     throw new Exception("无法获取应用文件: {$zbaPath}");
                 }
                 $appInfo = $this->inspectZba($zbaPath);
-                $this->unpackZba($zbaPath, $workDir);
+                // 对于 bundle 操作，将应用解压到正确的目录结构中
+                $appDestDir = $workDir . '/zb_users/' . $appInfo['type'] . '/';
+                $this->unpackZba($zbaPath, $appDestDir);
                 if ($this->verbose) {
                     echo "已准备应用: {$appInfo['name']} ({$appInfo['id']})\n";
                 }
