@@ -7,3 +7,4 @@
 - [Z-BlogPHP 密码重置工具](nologin.php)
 - [Z-BlogPHP 插件接口定义输出工具](pluginlist.php)
 - [Z-BlogPHP ZBA 打包工具](pack_zba.php)
+- [Z-BlogPHP ZBA 工具包（解压）](zba_toolkit.php)
