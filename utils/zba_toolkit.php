@@ -23,7 +23,6 @@
  *   -v, --verbose                显示详细过程
  *   -h, --help                   显示帮助
  */
-
 if ('cli' !== php_sapi_name() && empty($_SERVER['argv'])) {
     exit("此脚本仅能在 CLI 命令行环境下运行。\n");
 }
@@ -48,16 +47,23 @@ class ZbaToolkit
         switch ($this->command) {
             case 'unpack':
                 $this->runUnpack();
+
                 break;
+
             case 'sync':
                 $this->runSync();
+
                 break;
+
             case 'bundle':
                 $this->runBundle();
+
                 break;
+
             case 'help':
             default:
                 $this->showHelp();
+
                 break;
         }
     }
@@ -68,12 +74,14 @@ class ZbaToolkit
 
         if (empty($argv)) {
             $this->showHelp();
+
             exit(0);
         }
 
         $this->command = strtolower($argv[0]);
         if (in_array($this->command, ['-h', '--help', 'help'], true)) {
             $this->showHelp();
+
             exit(0);
         }
 
@@ -83,6 +91,7 @@ class ZbaToolkit
 
             if (in_array($arg, ['-h', '--help'], true)) {
                 $this->showHelp();
+
                 exit(0);
             }
             if (in_array($arg, ['-f', '--force'], true)) {
@@ -99,7 +108,7 @@ class ZbaToolkit
                     $this->error("参数 {$arg} 必须指定输出路径。");
                 }
                 $this->outputPath = $argv[++$i];
-            } elseif ($arg === '--into') {
+            } elseif ('--into' === $arg) {
                 if (!isset($argv[$i + 1])) {
                     $this->error("参数 {$arg} 必须指定目标 zip 路径。");
                 }
@@ -242,6 +251,7 @@ HELP;
                     if ($this->verbose) {
                         echo "已跳过: {$app['name']}\n";
                     }
+
                     continue;
                 }
                 $zbaPath = $this->resolveAppSource($app);
@@ -270,7 +280,7 @@ HELP;
 
         $content = file_get_contents($realPath);
         $config = json_decode($content, true);
-        if (json_last_error() !== JSON_ERROR_NONE) {
+        if (JSON_ERROR_NONE !== json_last_error()) {
             $this->error('配置文件 JSON 解析失败: ' . json_last_error_msg());
         }
 
@@ -281,11 +291,12 @@ HELP;
     {
         $source = $app['source'] ?? 'local';
 
-        if ($source === 'download' || $source === 'url') {
+        if ('download' === $source || 'url' === $source) {
             $url = $app['url'] ?? '';
             if (empty($url)) {
                 $this->error('下载来源必须提供 url 字段。');
             }
+
             return $this->downloadFile($url);
         }
 
@@ -312,13 +323,13 @@ HELP;
             $data = curl_exec($ch);
             $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
             curl_close($ch);
-            if ($code < 200 || $code >= 300 || $data === false) {
+            if ($code < 200 || $code >= 300 || false === $data) {
                 $this->error("下载失败 HTTP {$code}: {$url}");
             }
             file_put_contents($tmpFile, $data);
         } elseif (ini_get('allow_url_fopen')) {
             $data = @file_get_contents($url);
-            if ($data === false) {
+            if (false === $data) {
                 $this->error("下载失败: {$url}");
             }
             file_put_contents($tmpFile, $data);
@@ -351,7 +362,7 @@ HELP;
             $this->error("无法解析 .zba 文件: {$zbaPath}");
         }
 
-        if ((string) $xml['version'] !== 'php') {
+        if ('php' !== (string) $xml['version']) {
             $this->error("不支持的 .zba 版本: {$xml['version']}");
         }
 
@@ -371,7 +382,7 @@ HELP;
             $path = (string) $folder->path;
             $path = $this->normalizePath($path);
             $relativePath = $this->getRelativePath($path, $id);
-            if ($relativePath === false) {
+            if (false === $relativePath) {
                 continue;
             }
             $dir = $baseDir . $relativePath;
@@ -385,7 +396,7 @@ HELP;
             $stream = (string) $file->stream;
             $path = $this->normalizePath($path);
             $relativePath = $this->getRelativePath($path, $id);
-            if ($relativePath === false) {
+            if (false === $relativePath) {
                 continue;
             }
             $filePath = $baseDir . $relativePath;
@@ -406,15 +417,15 @@ HELP;
     private function loadZbaXml($zbaPath)
     {
         $data = file_get_contents($zbaPath);
-        if ($data === false) {
+        if (false === $data) {
             return false;
         }
 
         $c1 = substr($data, 0, 1);
         $c2 = substr($data, 1, 1);
-        if (ord($c1) === 31 && ord($c2) === 139) {
+        if (31 === ord($c1) && 139 === ord($c2)) {
             $data = @gzdecode($data);
-            if ($data === false) {
+            if (false === $data) {
                 return false;
             }
         }
@@ -428,13 +439,14 @@ HELP;
     {
         $path = str_replace('\\', '/', $path);
         $path = str_replace('./', '', $path);
+
         return ltrim($path, '/');
     }
 
     private function getRelativePath($path, $appId)
     {
         $prefix = $appId . '/';
-        if (strpos($path, $prefix) === 0) {
+        if (0 === strpos($path, $prefix)) {
             return substr($path, strlen($prefix));
         }
 
@@ -466,13 +478,13 @@ HELP;
         }
 
         $zip = new ZipArchive();
-        if ($zip->open($zipPath, $mode) !== true) {
+        if (true !== $zip->open($zipPath, $mode)) {
             $this->error("无法打开 zip 文件: {$zipPath}");
         }
 
         $iterator = new RecursiveIteratorIterator(
             new RecursiveDirectoryIterator($sourceDir, RecursiveDirectoryIterator::SKIP_DOTS),
-            RecursiveIteratorIterator::SELF_FIRST
+            RecursiveIteratorIterator::SELF_FIRST,
         );
 
         foreach ($iterator as $file) {
@@ -501,7 +513,7 @@ HELP;
 
         $items = new RecursiveIteratorIterator(
             new RecursiveDirectoryIterator($dir, RecursiveDirectoryIterator::SKIP_DOTS),
-            RecursiveIteratorIterator::CHILD_FIRST
+            RecursiveIteratorIterator::CHILD_FIRST,
         );
 
         foreach ($items as $item) {
@@ -522,7 +534,7 @@ HELP;
         }
 
         $realPath = realpath($path);
-        if ($realPath !== false) {
+        if (false !== $realPath) {
             return $realPath;
         }
 
@@ -535,8 +547,9 @@ HELP;
         $handle = fopen('php://stdin', 'r');
         $line = fgets($handle);
         fclose($handle);
-        if (trim($line) !== 'yes') {
+        if ('yes' !== trim($line)) {
             echo "已取消。\n";
+
             exit(0);
         }
     }
@@ -544,6 +557,7 @@ HELP;
     private function error($msg)
     {
         fwrite(STDERR, "错误: {$msg}\n");
+
         exit(1);
     }
 }
