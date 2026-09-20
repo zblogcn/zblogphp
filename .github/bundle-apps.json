@@ -1,0 +1,15 @@
+{
+  "output": "zblogphp-with-apps.zip",
+  "apps": [
+    {
+      "name": "AppCentre",
+      "source": "download",
+      "url": "https://app.zblogcn.com/?zba=231"
+    },
+    {
+      "name": "UEditor",
+      "source": "download",
+      "url": "https://github.com/wdssmq/zbp_UEditor/releases/download/v1.7.0/UEditor_1.7.0_2022-09-15.zba"
+    }
+  ]
+}

@@ -37,10 +37,9 @@ jobs:
       - name: Pack as zip
         run: git archive -o zblogphp-${{ steps.get_version.outputs.short }}.zip HEAD
 
-      - name: Put AppCentre Plugin
+      - name: Bundle Apps into Release
         run: |
-          php ./utils/put_appcentre.php
-          zip -g zblogphp-${{ steps.get_version.outputs.short }}.zip zb_users/plugin/AppCentre/* zb_users/plugin/AppCentre/**/*
+          php ./utils/zba_toolkit.php bundle -c .github/bundle-apps.json --into zblogphp-${{ steps.get_version.outputs.short }}.zip -f
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v3
