@@ -2,7 +2,7 @@
 <div class="head">
 	<div class="menuico"><span></span><span></span><span></span></div>
 	<a href="{$zbp->host}" target="_blank" class="backhome">浏览网站</a>
-	<a href="javascript:;" class="theme light"></a>
+	<a href="javascript:;" class="theme-toggler light"></a>
 	<div class="user">
 	<div class="userlink"><span class="userimg"><img src="{$zbp->user->Avatar}"
 	alt=""></span><span class="username"><strong>{$zbp->user->StaticName}</strong><em>{$zbp->user->LevelName}</em></span></div>

@@ -1,0 +1,98 @@
+.theme-img {
+  margin-right: 10px;
+}
+
+.theme-desc {
+  font-size: 14px;
+  color: var(--color-text-muted);
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  white-space: wrap;
+}
+.theme-info{
+  h4 {
+    small {
+      font-size: 14px;
+      color: var(--color-text-muted);
+    }
+    color: var(--color-primary);
+    font-size: 18px;
+  }
+  line-height: 1.5;
+
+}
+.theme p {
+  margin-top: 5px;
+  font-size: 14px;
+  letter-spacing: -1px;
+}
+.theme-style {
+  display: grid;
+  grid-template-rows: 1fr;
+  gap: 5px;
+}
+.icon-tools::before {
+  font-family: zblog;
+  content: "\f0e4";
+}
+.icon-pencil-square::before {
+  font-family: zblog;
+  content: "\ec86";
+}
+.icon-download::before {
+  font-family: zblog;
+  content: "📥︎";
+}
+.icon-grid-fill::before {
+  content: "\ee7f";
+  font-family: zblog;
+}
+.icon-cloud-arrow-up-fill::before {
+  content: "📤︎";
+  font-family: zblog;
+}
+.icon-trash::before {
+  content: "\ec24";
+  font-family: zblog;
+}
+.button.disabled {
+  background-color: #f5f5f5;
+  color: var(--color-text-muted);
+
+  border: none;
+  height: 38px;
+  min-width: 100px;
+  font-size: 15px;
+  font-weight: 600;
+  border-radius: var(--radius-button, 6px);
+  cursor: pointer;
+  box-shadow: 0 5px 5px 0px #999;
+  transition: all 0.2s ease;
+}
+@media screen and (max-width: 480px) {
+  .theme-desc {
+    order: 2;
+  }
+  .tr {
+    margin-bottom: 10px;
+  }
+  .theme-img {
+    width: 100%;
+    margin: 0;
+    aspect-ratio: 5/3;
+    object-fit: cover;
+  }
+  .theme-style {
+    display: grid;
+    grid-template-rows:  1fr;
+    grid-template-columns: 1fr 1fr;
+    gap: 5px;
+  }
+  .theme p {
+  margin-top: 10px;
+  font-size: 18px;
+  letter-spacing: 2px;
+}
+}
