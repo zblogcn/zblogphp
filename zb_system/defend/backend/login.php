@@ -22,61 +22,40 @@
     {php}HookFilterPlugin('Filter_Plugin_Login_Header');{/php}
 </head>
 
-<body class="admin-login body-login">
+<body class="admin-login">
     <header class="login-header">
         <h1 class="brand"><img src="{$host}zb_system/image/admin/none.gif" title="{htmlspecialchars($blogname)}" alt="{htmlspecialchars($blogname)}" /></h1>
     </header>
 
 
-    <main class="login-container login">
+    <main class="login-container">
         <form class="login-form" method="post" action="#">
             <input type="hidden" name="csrfToken" value="{$zbp.GetCSRFToken('login','minute')}">
-            <dl>
-                <dd class="username">
+            <div class="form-row">
+                <div class="field username">
                     <label for="edtUserName">{$lang['msg']['username']}</label>
                     <input type="text" id="edtUserName" name="edtUserName" size="20" value="{php}echo GetVars('username', 'COOKIE');{/php}" tabindex="1" />
-                </dd>
+                </div>
 
-                <dd class="password">
+                <div class="field password">
                     <label for="edtPassWord">{$lang['msg']['password']}</label>
                     <input type="password" id="edtPassWord" name="edtPassWord" size="20" tabindex="2" />
-                </dd>
+                </div>
 
                 {if $zbp->option['ZC_LOGIN_VERIFY_ENABLE']}
-                <dd class="validcode">
+                <div class="field validcode">
                     <label for="edtValidcode">{$lang['msg']['validcode']}</label>
                     <input type="text" maxlength="{$zbp.option['ZC_VERIFYCODE_LENGTH']}" id="edtValidcode" name="verify" size="20" tabindex="10" />
                     <img class="captcha-img" src="{$host}zb_system/script/c_validcode.php?id=login&time=m" onClick="javascript:this.src='{$host}zb_system/script/c_validcode.php?id=login&time=m&tm='+Math.random();" alt="validcode" />
-                </dd>
+                </div>
+                <div class="field placeholder"></div>
                 {/if}
+            </div>
 
-                {php}<?php
-                    $input_classname = $input_id = $input_label = $input_html = $input_style = '';
-                    $input_tabindex = 9998;
-                    $input_type = 'text';
-                    foreach ($GLOBALS['hooks']['Filter_Plugin_Login_Input_Insert'] as $fpname => &$fpsignal) {
-                        $fpreturn = $fpname($input_classname, $input_id, $input_label, $input_tabindex, $input_type, $input_style);
-                        if (null !== $input_label) { ?>{/php}
-                <dd class="{$input_classname}">
-                    <label for="{$input_id}">{$input_label}</label>
-                    <input type="{$input_type}" id="{$input_id}" name="{$input_id}" size="20" tabindex="{$input_tabindex}" style="{$input_style}"/>
-                </dd>
-                {php}<?php
-                        } else {
-                            $input_html = $input_id; ?>{/php}
-                <dd class="{$input_classname}">
-                    {$input_html}
-                </dd>
-                {php}<?php
-                        }
-                    }
-                ?>{/php}
-            </dl>
-
-            <dl>
-                <dd class="checkbox"><input type="checkbox" name="chkRemember" id="chkRemember"  tabindex="98" /><label for="chkRemember">{$lang['msg']['stay_signed_in']}</label></dd>
-                <dd class="submit"><input id="btnPost" name="btnPost" type="submit" value="{$lang['msg']['login']}" class="button" tabindex="99"/></dd>
-            </dl>
+            <div class="form-row actions">
+                <label class="remember"><input type="checkbox" name="chkRemember" id="chkRemember" tabindex="98" />{$lang['msg']['stay_signed_in']}</label>
+                <input id="btnPost" name="btnPost" type="submit" value="{$lang['msg']['login']}" class="button" tabindex="99" />
+            </div>
             <input type="hidden" name="username" id="username" value="" />
             <input type="hidden" name="password" id="password" value="" />
             <input type="hidden" name="savedate" id="savedate" value="1" />
