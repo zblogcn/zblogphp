@@ -727,8 +727,13 @@ body.admin-login {
 .login-container .field input[type=text],
 .login-container .field input[type=password] {
   flex: 1;
+  min-width: 0;
   height: 32px;
   border-radius: 2px;
+}
+.login-container .field.validcode {
+  flex: 0 0 50%;
+  max-width: 50%;
 }
 
 /* 响应式：小屏改为单列 */
@@ -739,8 +744,9 @@ body.admin-login {
   .login-form .form-row {
     padding: 0 30px 0 20px;
   }
-  .login-form .form-row .field.placeholder {
-    display: none;
+  .login-form .field.validcode {
+    flex-basis: 100%;
+    max-width: 100%;
   }
 }
 .module-layout {

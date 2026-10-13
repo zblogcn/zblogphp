@@ -64,8 +64,14 @@ body.admin-login {
   .field input[type="text"],
   .field input[type="password"] {
     flex: 1;
+    min-width: 0;
     height: 32px;
     border-radius: 2px;
+  }
+
+  .field.validcode {
+    flex: 0 0 50%;
+    max-width: 50%;
   }
 }
 
@@ -76,10 +82,11 @@ body.admin-login {
 
     .form-row {
       padding: 0 30px 0 20px;
+    }
 
-      .field.placeholder {
-        display: none;
-      }
+    .field.validcode {
+      flex-basis: 100%;
+      max-width: 100%;
     }
   }
 }
