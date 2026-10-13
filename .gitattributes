@@ -53,7 +53,7 @@ zb_users/plugin/SQLLog                export-ignore
 zb_users/plugin/STACentre
 zb_users/plugin/Totoro
 zb_users/plugin/tpluginmaker          export-ignore
-zb_users/plugin/UEditor
+zb_users/plugin/UEditor               export-ignore
 zb_users/plugin/upyun                 export-ignore
 zb_users/plugin/wearingtheme          export-ignore
 zb_users/plugin/wp2zbp                export-ignore
