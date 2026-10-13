@@ -49,6 +49,8 @@
                     <img class="captcha-img" src="{$host}zb_system/script/c_validcode.php?id=login&time=m" onClick="javascript:this.src='{$host}zb_system/script/c_validcode.php?id=login&time=m&tm='+Math.random();" alt="validcode" />
                 </div>
                 {/if}
+
+                {php}echo GetLoginInputInsertHtml('<div class="field %class%"><label for="%id%">%label%</label><input type="%input_type%" id="%id%" name="%name%" tabindex="%tabindex%" style="%style%" /></div>');{/php}
             </div>
 
             <div class="form-row actions">

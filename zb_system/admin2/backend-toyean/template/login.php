@@ -48,27 +48,7 @@
                 </dd>
                 {/if}
 
-                {php}<?php
-                    $input_classname = $input_id = $input_label = $input_html = $input_style = '';
-                    $input_tabindex = 9998;
-                    $input_type = 'text';
-                    foreach ($GLOBALS['hooks']['Filter_Plugin_Login_Input_Insert'] as $fpname => &$fpsignal) {
-                        $fpreturn = $fpname($input_classname, $input_id, $input_label, $input_tabindex, $input_type, $input_style);
-                        if (null !== $input_label) { ?>{/php}
-                <dd class="{$input_classname}">
-                    <label for="{$input_id}">{$input_label}</label>
-                    <input type="{$input_type}" id="{$input_id}" name="{$input_id}" size="20" tabindex="{$input_tabindex}" style="{$input_style}"/>
-                </dd>
-                {php}<?php
-                        } else {
-                            $input_html = $input_id; ?>{/php}
-                <dd class="{$input_classname}">
-                    {$input_html}
-                </dd>
-                {php}<?php
-                        }
-                    }
-                ?>{/php}
+                {php}echo GetLoginInputInsertHtml('<dd class="%class%"><label for="%id%">%label%</label><input type="%input_type%" id="%id%" name="%name%" size="20" tabindex="%tabindex%" style="%style%" /></dd>');{/php}
             </dl>
 
             <dl>

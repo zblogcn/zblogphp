@@ -957,9 +957,15 @@ DefinePluginFilter('Filter_Plugin_Login_Header');
 '**************************************************<
 '类型:Filter
 '名称:Filter_Plugin_Login_Input_Insert
-'参数:&$input_classname, &$input_id, &$input_label, &$input_tabindex, &$input_type, &$input_style
-'说明:定义Login.php首页Input_Insert接口
-'调用:第三个参数为null，就直接echo 第二个参数$input_id(html源码)以支持高级验证码;
+'参数:
+'说明:回调不接收参数，返回null或字段描述数组。
+'      标准字段示例：['type' => 'input', 'id' => 'plugin-input', 'label' => 'Plugin input']
+'      可选键：name、class、input_type、tabindex、style。
+'      标准字段的 HTML 结构由调用模板传入GetLoginInputInsertHtml()，支持%class%、%id%、
+'      %name%、%label%、%input_type%、%tabindex%、%style%占位符。
+'      自定义控件可返回['type' => 'html', 'html' => '<div>...</div>']完整HTML，
+'      原样输出且不额外套容器，必须是可信的插件生成内容。
+'调用:
 '**************************************************>
  */
 DefinePluginFilter('Filter_Plugin_Login_Input_Insert');

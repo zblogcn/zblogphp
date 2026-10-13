@@ -413,6 +413,90 @@ function GetList($count = 10, $cate = null, $auth = null, $date = null, $tags = 
 //###############################################################################################################
 
 /**
+ * 渲染登录输入扩展接口返回的字段.
+ *
+ * Hook 回调不接收参数，返回 null 表示不输出；否则返回一个字段描述数组。
+ * 标准字段由模板提供 HTML 格式，并可使用 %class%、%id%、%name%、%label%、
+ * %input_type%、%tabindex%、%style% 占位符；占位符内容会进行 HTML 转义。
+ * 自定义控件可返回 ['type' => 'html', 'html' => '<div>...</div>']，完整 HTML
+ * 会原样输出，不会再套用模板或容器。
+ *
+ * 自定义 HTML 会原样输出，仅应返回可信的插件生成内容。
+ *
+ * @param string $fieldTemplate 标准字段 HTML 模板
+ *
+ * @return string
+ */
+function GetLoginInputInsertHtml($fieldTemplate)
+{
+    if (!is_string($fieldTemplate) || '' === $fieldTemplate) {
+        trigger_error('Login input field template must be a non-empty string', E_USER_WARNING);
+
+        return '';
+    }
+
+    $html = '';
+    foreach ($GLOBALS['hooks']['Filter_Plugin_Login_Input_Insert'] as $fpname => &$fpsignal) {
+        $field = $fpname();
+        if (null === $field) {
+            continue;
+        }
+        if (!is_array($field) || !isset($field['type']) || !is_string($field['type'])) {
+            trigger_error('Login input hook must return null or a field descriptor array: ' . $fpname, E_USER_WARNING);
+
+            continue;
+        }
+
+        if ('html' === $field['type']) {
+            if (!isset($field['html']) || !is_string($field['html'])) {
+                trigger_error('Custom login input HTML must be a string: ' . $fpname, E_USER_WARNING);
+
+                continue;
+            }
+            $html .= $field['html'];
+        } elseif ('input' === $field['type']) {
+            foreach (['id', 'label'] as $requiredKey) {
+                if (!isset($field[$requiredKey]) || !is_string($field[$requiredKey])) {
+                    trigger_error('Login input field is missing string "' . $requiredKey . '": ' . $fpname, E_USER_WARNING);
+
+                    continue 2;
+                }
+            }
+
+            $fieldClass = isset($field['class']) ? $field['class'] : '';
+            $name = isset($field['name']) ? $field['name'] : $field['id'];
+            $inputType = isset($field['input_type']) ? $field['input_type'] : 'text';
+            $style = isset($field['style']) ? $field['style'] : '';
+            $tabindex = isset($field['tabindex']) ? $field['tabindex'] : 9998;
+            if (!is_string($fieldClass) || !is_string($name) || !is_string($inputType) || !is_string($style) || !is_numeric($tabindex)) {
+                trigger_error('Login input class/name/type/style must be strings and tabindex must be numeric: ' . $fpname, E_USER_WARNING);
+
+                continue;
+            }
+
+            $placeholders = [
+                '%class%' => htmlspecialchars($fieldClass, ENT_QUOTES, 'UTF-8'),
+                '%id%' => htmlspecialchars($field['id'], ENT_QUOTES, 'UTF-8'),
+                '%name%' => htmlspecialchars($name, ENT_QUOTES, 'UTF-8'),
+                '%label%' => htmlspecialchars($field['label'], ENT_QUOTES, 'UTF-8'),
+                '%input_type%' => htmlspecialchars($inputType, ENT_QUOTES, 'UTF-8'),
+                '%tabindex%' => htmlspecialchars((string) $tabindex, ENT_QUOTES, 'UTF-8'),
+                '%style%' => htmlspecialchars($style, ENT_QUOTES, 'UTF-8'),
+            ];
+            $html .= strtr($fieldTemplate, $placeholders);
+        } else {
+            trigger_error('Unknown login input field type "' . $field['type'] . '": ' . $fpname, E_USER_WARNING);
+
+            continue;
+        }
+    }
+
+    return $html;
+}
+
+//###############################################################################################################
+
+/**
  * 显示404页面(内置插件函数).
  *
  * 可通过主题中的404.php模板自定义显示效果
