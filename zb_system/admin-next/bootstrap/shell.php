@@ -94,6 +94,7 @@ function ZbpAdminNext_RenderShell(): void
     }
 
     header('Content-Type: text/html; charset=utf-8');
+    header('Cache-Control: no-cache, must-revalidate');
 
     $title = htmlspecialchars($zbp->name, ENT_QUOTES, 'UTF-8');
     $langCode = htmlspecialchars($boot['lang']['lang_bcp47'] ?: 'zh-CN', ENT_QUOTES, 'UTF-8');
