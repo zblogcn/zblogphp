@@ -12,6 +12,7 @@ if (!defined('ZBP_PATH')) {
 }
 
 require ZBP_PATH . 'zb_system/function/c_system_admin_function.php';
+require_once ZBP_PATH . 'zb_system/function/c_system_admin_ui.php';
 
 $zbp->ismanage = true;
 
@@ -1649,6 +1650,12 @@ function checkDomain(){
                     echo '</select></p></td></tr>';
                     echo '<tr><td><p><b>' . $zbp->lang['msg']['debug_mode'] . '</b></p></td><td><p><input id="ZC_DEBUG_MODE" name="ZC_DEBUG_MODE" type="text" value="' . $zbp->option['ZC_DEBUG_MODE'] . '" class="checkbox"/></p></td></tr>';
                     echo '<tr><td><p><b>' . @$zbp->langs->msg->show_warning_error . '</b></p></td><td><p><input id="ZC_DEBUG_MODE_WARNING" name="ZC_DEBUG_MODE_WARNING" type="text" value="' . $zbp->option['ZC_DEBUG_MODE_WARNING'] . '" class="checkbox"/></p></td></tr>';
+                    echo '<tr><td><p><b>后台界面</b><br/><span class="note">新版为 SPA，旧版为表格后台。</span></p></td><td><p><select id="ZC_ADMIN_UI" name="ZC_ADMIN_UI" style="max-width:600px;width:90%;" >';
+                    foreach (AdminUiOptions() as $uiKey => $uiName) {
+                        $uiSelected = ($zbp->option['ZC_ADMIN_UI'] ?? 'next') === $uiKey ? ' selected="selected"' : '';
+                        echo '<option value="' . $uiKey . '"' . $uiSelected . '>' . $uiName . '</option>';
+                    }
+                    echo '</select></p></td></tr>';
                     echo '<tr><td><p><b>' . $zbp->lang['msg']['additional_security'] . '</b></p></td><td><p><input id="ZC_ADDITIONAL_SECURITY" name="ZC_ADDITIONAL_SECURITY" type="text" value="' . $zbp->option['ZC_ADDITIONAL_SECURITY'] . '" class="checkbox"/></p></td></tr>';
                     echo '<tr><td><p><b>' . $zbp->lang['msg']['using_cdn_guest_type'] . '</b></p></td><td><p><select id="ZC_USING_CDN_GUESTIP_TYPE" name="ZC_USING_CDN_GUESTIP_TYPE" style="max-width:600px;width:90%;" >';
                     echo CreateOptionsOfGuestIPType($zbp->option['ZC_USING_CDN_GUESTIP_TYPE']);

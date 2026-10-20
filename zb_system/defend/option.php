@@ -235,6 +235,9 @@ return [
     'ZC_FIX_MODULE_MIXED_FILENAME'   => true,
     'ZC_LOGS_MORE_INFO'              => false,
 
+    // 后台界面：next（新版 SPA）/ legacy（旧表格后台）
+    'ZC_ADMIN_UI'                    => 'next',
+
     // API 相关
     'ZC_API_ENABLE'                     => false,
     'ZC_API_THROTTLE_ENABLE'            => false,

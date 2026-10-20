@@ -1,12 +1,4 @@
-import {
-  ExternalLink,
-  LogOut,
-  Menu,
-  Monitor,
-  Moon,
-  PanelLeft,
-  Sun,
-} from "lucide-react"
+import { ExternalLink, LogOut, Menu, Monitor, Moon, PanelLeft, Sun } from "lucide-react"
 import { useState, Suspense } from "react"
 import { Outlet } from "react-router-dom"
 
@@ -132,7 +124,7 @@ function UserMenu() {
           </a>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
-          <a href={zbp.legacy}>
+          <a href={zbp.legacy + (zbp.legacy.includes("?") ? "&" : "?") + "ui=legacy"}>
             <PanelLeft className="size-4" /> {t("legacy_admin")}
           </a>
         </DropdownMenuItem>

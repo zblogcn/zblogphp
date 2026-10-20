@@ -11,6 +11,11 @@ require '../function/c_system_admin.php';
 
 $zbp->Load();
 
+// 新版编辑器尚未实现，默认留在旧编辑器；仅在显式开启时跳转
+if ($zbp->CheckRights('admin') && ($zbp->option['ZC_ADMIN_EDITOR'] ?? 'legacy') === 'next' && GetVars('force', 'GET') !== '1') {
+    Redirect302('../' . AdminHomeUrl());
+}
+
 $zbp->csrfExpiration = 48;
 
 $action = '';

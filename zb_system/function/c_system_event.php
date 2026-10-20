@@ -2294,6 +2294,11 @@ function SaveSetting()
 
             continue;
         }
+        if ('ZC_ADMIN_UI' == $key) {
+            $zbp->option[$key] = ($value === 'legacy') ? 'legacy' : 'next';
+
+            continue;
+        }
         if ('ZC_UPLOAD_FILETYPE' == $key) {
             $value = strtolower($value);
             $value = str_replace([' ', '　'], '', $value);

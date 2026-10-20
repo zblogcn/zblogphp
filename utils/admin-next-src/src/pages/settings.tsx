@@ -10,17 +10,25 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 import { Skeleton } from "@/components/ui/skeleton"
 import { Switch } from "@/components/ui/switch"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
-type FieldType = "text" | "number" | "switch" | "textarea" | "readonly"
+type FieldType = "text" | "number" | "switch" | "textarea" | "readonly" | "select"
 
 interface Field {
   key: string
   label: string
   type: FieldType
   hint?: string
+  options?: Array<{ value: string; label: string }>
 }
 
 interface SettingsData {
@@ -53,6 +61,16 @@ const groups: Array<{ id: string; label: string; fields: Field[] }> = [
       { key: "ZC_DEBUG_MODE_WARNING", label: "显示警告与错误", type: "switch" },
       { key: "ZC_ADDITIONAL_SECURITY", label: "附加安全", type: "switch" },
       { key: "ZC_CLOSE_SITE", label: "关闭站点", type: "switch" },
+      {
+        key: "ZC_ADMIN_UI",
+        label: "后台界面",
+        type: "select",
+        hint: "新版为 SPA，旧版为表格后台。",
+        options: [
+          { value: "next", label: "新版后台（SPA）" },
+          { value: "legacy", label: "旧版后台（表格）" },
+        ],
+      },
     ],
   },
   {
@@ -179,6 +197,31 @@ export function SettingsPage() {
           checked={isOn(raw)}
           onCheckedChange={(checked) => setValue(field.key, checked ? "1" : "0")}
         />
+      )
+    }
+
+    if (field.type === "select") {
+      return (
+        <div className="flex flex-col gap-1">
+          <Select
+            value={value || field.options?.[0]?.value}
+            onValueChange={(next) => setValue(field.key, next)}
+          >
+            <SelectTrigger id={field.key} className="w-full sm:max-w-xs">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              {field.options?.map((option) => (
+                <SelectItem key={option.value} value={option.value}>
+                  {option.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          {field.hint ? (
+            <span className="text-xs text-muted-foreground">{field.hint}</span>
+          ) : null}
+        </div>
       )
     }
 

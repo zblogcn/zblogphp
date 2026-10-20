@@ -46,6 +46,7 @@ $GLOBALS['setting_keys'] = array(
     'ZC_DELMEMBER_WITH_ALLDATA',
     'ZC_CATEGORY_MANAGE_LEGACY_DISPLAY',
     'ZC_LOGIN_VERIFY_ENABLE',
+    'ZC_ADMIN_UI',
     'ZC_BLOG_HOST',
     'ZC_PERMANENT_DOMAIN_ENABLE',
     'ZC_PERMANENT_DOMAIN_FORCED_URL',
@@ -279,6 +280,12 @@ function api_system_save_setting()
 
     foreach ($_POST as $key => $value) {
         if (!in_array($key, $setting_keys, true)) {
+            continue;
+        }
+
+        if (in_array($key, ['ZC_ADMIN_UI'], true)) {
+            $zbp->option[$key] = ($value === 'legacy') ? 'legacy' : 'next';
+
             continue;
         }
 

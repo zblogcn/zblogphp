@@ -11,6 +11,11 @@ require '../function/c_system_admin.php';
 
 $zbp->Load();
 
+// 默认落到新版后台；?ui=legacy 或设置项可回到旧后台
+if ($zbp->CheckRights('admin') && AdminUiIsNext() && GetVars('force', 'GET') !== '1') {
+    Redirect302('../' . AdminHomeUrl());
+}
+
 $zbp->action = GetVars('act', 'GET');
 
 $admin_function = null;
