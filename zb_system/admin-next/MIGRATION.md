@@ -59,3 +59,19 @@ zb_system/cmd.php?act=admin   →   zb_system/admin-next/index.php
 - 本版本要求 PHP 8.0 及以上，安装器与 `composer.json` 已同步更新。
 - 升级不会改动已有的 `ZC_ADMIN_UI` 值；全新安装默认为 `next`。
 - 若新版出现白屏，先在 URL 加 `?ui=legacy` 进入旧后台，再到设置里切换。
+
+## 测试
+
+| 命令 | 范围 |
+|---|---|
+| `vendor/bin/phpunit tests/phpunit` | 全量 PHP 单元测试（含 admin-next） |
+| `vendor/bin/phpunit -c tests/phpunit-admin-next.xml` | 只跑 admin-next 相关用例 |
+| `cd tests/e2e && pnpm test` | 浏览器冒烟测试（见 `tests/e2e/README.md`） |
+
+admin-next 的单元测试位于 `tests/phpunit/AdminNextNavTest.php` 与
+`AdminNextHomeUrlTest.php`，覆盖导航采集、旧菜单解析、`<admin>` 声明解析、
+清单校验（路径穿越 / 路由越界 / 版本忽略）以及后台入口切换逻辑。
+
+浏览器冒烟测试覆盖「进入后台、导航、列表、设置、旧后台回退、深链刷新」，
+不写入数据，可对测试站点直接运行。
+

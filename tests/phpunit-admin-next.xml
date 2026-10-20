@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit colors="true" convertDeprecationsToExceptions="false">
+    <testsuites>
+        <testsuite name="admin-next">
+            <file>phpunit/AdminNextNavTest.php</file>
+            <file>phpunit/AdminNextHomeUrlTest.php</file>
+        </testsuite>
+    </testsuites>
+</phpunit>

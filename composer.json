@@ -30,6 +30,7 @@
         }
     },
     "scripts": {
-        "test": "sh ./vendor/bin/phpunit ./tests/phpunit"
+        "test": "sh ./vendor/bin/phpunit ./tests/phpunit",
+        "test:admin-next": "sh ./vendor/bin/phpunit -c ./tests/phpunit-admin-next.xml"
     }
 }
