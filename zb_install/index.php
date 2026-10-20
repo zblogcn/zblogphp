@@ -752,14 +752,6 @@ function Setup3()
                 <label>
                   <input value="pdo_mysql" type="radio" name="dbtype" /> pdo_mysql</label>&nbsp;&nbsp;&nbsp;&nbsp;
                     <?php
-            }
-            if (version_compare(PHP_VERSION, '5.5.0', '<')) {
-                if ($CheckResult['mysql'][0] && !$CheckResult['mysqli'][0] && !$CheckResult['pdo_mysql'][0]) { // 强制淘汰mysql
-                    ?>
-                  <label>
-                    <input value="mysql" type="radio" name="dbtype" /> mysql</label>&nbsp;&nbsp;&nbsp;&nbsp;
-                        <?php
-                }
             } ?>
               <br /><small><?php echo $zbp->lang['zb_install']['db_set_port']; ?></small>
             </p>
@@ -1052,7 +1044,7 @@ function CheckServer()
         'gethostbyname'   => [$zbp->lang['zb_install']['whois_dns'], ''],
     ];
 
-    if (version_compare(PHP_VERSION, '5.2.0') >= 0) {
+    if (version_compare(PHP_VERSION, '8.0.0') >= 0) {
         $CheckResult['phpver'][1] = BINGO;
     } else {
         $CheckResult['phpver'][1] = ERROR;
