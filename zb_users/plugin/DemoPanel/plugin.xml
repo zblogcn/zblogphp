@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<plugin version="php">
+<id>DemoPanel</id>
+<name>后台面板示例</name>
+<url>https://www.zblogcn.com/</url>
+<note>演示 admin-next 前端接入方式.</note>
+<description>演示插件如何声明 admin-next 前端页面（&lt;admin version="2"&gt;），包括菜单、入口、旧版回退。</description>
+<path>main.php</path>
+<include>include.php</include>
+<level>1</level>
+<author>
+  <name>Z-BlogPHP Team</name>
+  <email>noreply@example.com</email>
+  <url>https://www.zblogcn.com/</url>
+</author>
+<source>
+  <name></name>
+  <email></email>
+  <url></url>
+</source>
+<adapted>20261020</adapted>
+<version>1.0</version>
+<pubdate>2026-10-20</pubdate>
+<modified>2026-10-20</modified>
+<price>0</price>
+<phpver>8.0</phpver>
+<advanced>
+  <dependency></dependency>
+  <rewritefunctions></rewritefunctions>
+  <existsfunctions></existsfunctions>
+  <conflict></conflict>
+</advanced>
+<sidebars>
+  <sidebar1></sidebar1>
+  <sidebar2></sidebar2>
+  <sidebar3></sidebar3>
+  <sidebar4></sidebar4>
+  <sidebar5></sidebar5>
+</sidebars>
+<admin version="2">
+  <menu>
+    <item id="panel" title="后台面板示例" route="/plugin/DemoPanel" icon="puzzle" group="extend" order="150" require="admin"/>
+    <item id="about" title="关于示例" route="/plugin/DemoPanel/about" icon="info" group="extend" order="160" require="admin"/>
+  </menu>
+  <spa>
+    <entry>dist/admin.js</entry>
+    <style>dist/admin.css</style>
+  </spa>
+  <legacy>main.php</legacy>
+</admin>
+</plugin>

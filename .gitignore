@@ -34,6 +34,7 @@ mix-manifest.json
 !/zb_users/plugin/AuditRecords
 !/zb_users/plugin/CloudStorage
 !/zb_users/plugin/CustomMeta
+!/zb_users/plugin/DemoPanel
 !/zb_users/plugin/Gravatar
 !/zb_users/plugin/Howl
 !/zb_users/plugin/RegPage

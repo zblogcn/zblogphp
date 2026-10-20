@@ -10,6 +10,11 @@ class App
 {
 
     /**
+     * admin-next 前端声明协议版本
+     */
+    public const ADMIN_PROTOCOL_VERSION = 2;
+
+    /**
      * @var string 应用类型，'plugin'表示插件，'theme'表示主题
      */
     public $type = '';
@@ -195,6 +200,11 @@ class App
     public $css_crc32 = '';
 
     /**
+     * @var array|null admin-next 前端声明（plugin.xml / theme.xml 中的 <admin> 节点）
+     */
+    public $admin = null;
+
+    /**
      * @var string 静态访法返回unpack后的错误文件数
      */
     public static $check_error_count = 0;
@@ -303,6 +313,70 @@ class App
         global $zbp;
 
         return $zbp->host . 'zb_users/' . $this->type . '/' . $this->id . '/' . $this->path;
+    }
+
+    /**
+     * 解析 plugin.xml / theme.xml 中的 <admin> 声明.
+     *
+     * 只读取声明，不执行应用代码；未知版本整段忽略，保证向后兼容。
+     *
+     * @param SimpleXMLElement $xml
+     *
+     * @return array|null
+     */
+    public static function ParseAdminNode($xml)
+    {
+        if (!isset($xml->admin) || !isset($xml->admin->attributes()['version'])) {
+            return null;
+        }
+
+        $version = (int) $xml->admin->attributes()['version'];
+        if ($version !== self::ADMIN_PROTOCOL_VERSION) {
+            return null;
+        }
+
+        $admin = [
+            'version' => $version,
+            'entry'   => '',
+            'style'   => '',
+            'legacy'  => '',
+            'menu'    => [],
+        ];
+
+        if (isset($xml->admin->spa)) {
+            $admin['entry'] = trim((string) $xml->admin->spa->entry);
+            $admin['style'] = trim((string) $xml->admin->spa->style);
+        }
+
+        if (isset($xml->admin->legacy)) {
+            $admin['legacy'] = trim((string) $xml->admin->legacy);
+        }
+
+        if (isset($xml->admin->menu)) {
+            foreach ($xml->admin->menu->item as $item) {
+                $attrs = $item->attributes();
+
+                $id = trim((string) $attrs['id']);
+                $title = trim((string) $attrs['title']);
+                if ($id === '' || $title === '') {
+                    continue;
+                }
+
+                $require = trim((string) $attrs['require']);
+
+                $admin['menu'][] = [
+                    'id'      => $id,
+                    'title'   => $title,
+                    'route'   => trim((string) $attrs['route']),
+                    'icon'    => trim((string) $attrs['icon']),
+                    'group'   => trim((string) $attrs['group']),
+                    'order'   => (int) $attrs['order'],
+                    'require' => $require === '' ? null : $require,
+                ];
+            }
+        }
+
+        return $admin;
     }
 
     /**
@@ -442,6 +516,8 @@ class App
         $this->sidebars_sidebar7 = (string) $xml->sidebars->sidebar7;
         $this->sidebars_sidebar8 = (string) $xml->sidebars->sidebar8;
         $this->sidebars_sidebar9 = (string) $xml->sidebars->sidebar9;
+
+        $this->admin = self::ParseAdminNode($xml);
 
         $appIgnorePath = $this->app_path . 'zbignore.txt';
         $appIgnores = array();

@@ -59,6 +59,7 @@ function ZbpAdminNext_BootData(): array
         ],
         'rights'    => ZbpAdminNext_Rights(),
         'nav'       => ZbpAdminNext_Nav(),
+        'apps'      => ZbpAdminNext_AppManifests(),
         'lang'      => ZbpAdminNext_Lang(),
         'csrf'      => [
             'token'      => $zbp->GetCSRFToken('api'),
@@ -113,10 +114,26 @@ function ZbpAdminNext_RenderShell(): void
         echo '<link rel="stylesheet" href="' . htmlspecialchars($href, ENT_QUOTES, 'UTF-8') . '" />' . "\n";
     }
 
+    // 插件复用的 Tailwind 预设只生成插件可能用到的工具类，命名空间限于插件根节点
+    echo '<style>@layer base{}.zbp-plugin-root .tw-hidden{display:none}</style>' . "\n";
+
+    foreach ($assets['styles'] as $appId => $href) {
+        echo '<link rel="stylesheet" href="' . htmlspecialchars($href, ENT_QUOTES, 'UTF-8')
+            . '" data-plugin="' . htmlspecialchars($appId, ENT_QUOTES, 'UTF-8') . '" />' . "\n";
+    }
+
     // 主题色在首屏前应用，避免闪白
     echo '<script>(function(){try{var t=localStorage.getItem("zbp-admin-theme");'
         . 'if(t==="dark"||(t!=="light"&&window.matchMedia("(prefers-color-scheme: dark)").matches))'
         . '{document.documentElement.classList.add("dark")}}catch(e){}})();</script>' . "\n";
+
+    // 插件共享运行时：裸模块名 react 指向同一份实例，避免多份 React
+    if ($assets['runtime'] !== '') {
+        $runtime = htmlspecialchars($assets['runtime'], ENT_QUOTES, 'UTF-8');
+        echo '<script type="importmap">'
+            . '{"imports":{"react":"' . $runtime . '","react-dom":"' . $runtime . '","react-dom/client":"' . $runtime . '"}}'
+            . '</script>' . "\n";
+    }
 
     echo "</head>\n<body>\n";
     echo '<div id="zb-admin-root"></div>' . "\n";
@@ -124,6 +141,11 @@ function ZbpAdminNext_RenderShell(): void
 
     if ($assets['missing']) {
         echo '<script>window.__ZB_ASSETS_MISSING__=true;</script>' . "\n";
+    }
+
+    // 先加载共享运行时，再加载主入口，确保 window.__ZB_PLUGIN_RUNTIME__ 已就绪
+    if ($assets['runtime'] !== '') {
+        echo '<script type="module" src="' . htmlspecialchars($assets['runtime'], ENT_QUOTES, 'UTF-8') . '"></script>' . "\n";
     }
 
     foreach ($assets['js'] as $src) {

@@ -207,6 +207,7 @@ function ZbpAdminNext_ParseLegacyMenu(string $html): array
 function ZbpAdminNext_Nav(): array
 {
     $items = ZbpAdminNext_OfficialNav();
+    $manifests = ZbpAdminNext_AppManifests();
 
     // 原样跑一遍旧菜单，保留插件的 key 依赖语义
     $GLOBALS['leftmenus'] = [];
@@ -214,9 +215,23 @@ function ZbpAdminNext_Nav(): array
     ResponseAdmin_LeftMenu();
     $legacyHtml = (string) ob_get_clean();
 
+    $declaredApps = [];
+    foreach ($manifests as $manifest) {
+        $declaredApps[$manifest['appId']] = true;
+    }
+
     foreach (ZbpAdminNext_ParseLegacyMenu($legacyHtml) as $item) {
+        // 已声明 admin-next 前端的应用，不再重复出现旧入口
+        foreach ($declaredApps as $appId => $_) {
+            if (stripos((string) $item['url'], '/plugin/' . $appId . '/') !== false
+                || stripos((string) $item['url'], '/theme/' . $appId . '/') !== false) {
+                continue 2;
+            }
+        }
         $items[] = $item;
     }
+
+    ZbpAdminNext_AppendManifestNav($items, $manifests);
 
     foreach ($GLOBALS['hooks']['Filter_Plugin_Admin_Menu_Items'] ?? [] as $fn => $signal) {
         $fn($items);

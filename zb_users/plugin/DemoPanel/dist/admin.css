@@ -1,0 +1,8 @@
+/* DemoPanel 插件样式：只作用于插件根节点，避免污染宿主 */
+.zbp-plugin-root[data-plugin="DemoPanel"] {
+  --demo-accent: var(--primary);
+}
+
+.zbp-plugin-root[data-plugin="DemoPanel"] a {
+  color: var(--demo-accent);
+}

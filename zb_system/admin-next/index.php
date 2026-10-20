@@ -54,6 +54,7 @@ $action = 'admin-next';
 
 require __DIR__ . '/bootstrap/assets.php';
 require __DIR__ . '/bootstrap/rights.php';
+require __DIR__ . '/bootstrap/apps.php';
 require __DIR__ . '/bootstrap/nav.php';
 require __DIR__ . '/bootstrap/shell.php';
 

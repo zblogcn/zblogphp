@@ -9,6 +9,29 @@ export interface NavItem {
   badge?: string | null
   external?: boolean
   legacy?: boolean
+  app?: string
+}
+
+export interface PluginMenuItem {
+  id: string
+  title: string
+  route: string
+  icon: string
+  group: string
+  order: number
+  require: string | null
+}
+
+export interface AppManifest {
+  appId: string
+  type: "plugin" | "theme"
+  name: string
+  version: string
+  baseUrl: string
+  entry: string
+  style: string
+  legacy: string
+  menu: PluginMenuItem[]
 }
 
 export interface ZbzUser {
@@ -30,6 +53,7 @@ export interface BootData {
   user: ZbzUser
   rights: Record<string, boolean>
   nav: NavItem[]
+  apps: AppManifest[]
   lang: {
     msg: Record<string, string>
     post_status_name: Record<string, string>
@@ -86,6 +110,7 @@ function createDevBoot(): BootData {
     },
     rights: {},
     nav,
+    apps: [],
     lang: {
       msg: {
         dashboard: "仪表盘",

@@ -28,6 +28,7 @@ const ThemesPage = lazyNamed(() => import("@/pages/apps"), "ThemesPage")
 const ModulesPage = lazyNamed(() => import("@/pages/apps"), "ModulesPage")
 const PluginsPage = lazyNamed(() => import("@/pages/apps"), "PluginsPage")
 const SettingsPage = lazyNamed(() => import("@/pages/settings"), "SettingsPage")
+const PluginPage = lazyNamed(() => import("@/pages/plugin-page"), "PluginPage")
 const NotFoundPage = lazyNamed(() => import("@/pages/not-found"), "NotFoundPage")
 
 export function AppRouter() {
@@ -47,6 +48,7 @@ export function AppRouter() {
           <Route path="modules" element={<ModulesPage />} />
           <Route path="plugins" element={<PluginsPage />} />
           <Route path="settings" element={<SettingsPage />} />
+          <Route path="plugin/:appId/*" element={<PluginPage />} />
           <Route path="*" element={<NotFoundPage />} />
         </Route>
       </Routes>

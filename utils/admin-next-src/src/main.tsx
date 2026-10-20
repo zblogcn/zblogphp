@@ -4,6 +4,8 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 
 import "./index.css"
 
+import "@/plugin-host/runtime"
+
 import { t } from "@/lib/i18n"
 import { useUiStore } from "@/stores/ui"
 import { AppErrorBoundary } from "@/components/error-boundary"
