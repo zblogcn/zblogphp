@@ -362,3 +362,73 @@ function api_post_list()
         ),
     );
 }
+
+/**
+ * 批量删除文章/页面接口.
+ *
+ * @return array
+ */
+function api_post_batch()
+{
+    global $zbp;
+
+    ApiVerifyCSRF(true);
+    ApiCheckAuth(true, 'PostBat');
+
+    $type = (int) GetVars('type', 'POST');
+    $ids = GetVars('id', 'POST');
+
+    if (!is_array($ids) || count($ids) === 0) {
+        return array(
+            'code'    => 400,
+            'message' => $GLOBALS['lang']['error']['97'],
+        );
+    }
+
+    $ids = array_values(array_filter(array_map('intval', $ids)));
+    if (count($ids) === 0) {
+        return array(
+            'code'    => 400,
+            'message' => $GLOBALS['lang']['error']['97'],
+        );
+    }
+
+    // 只保留存在、类型匹配且当前用户有权删除的条目，避免虚报删除数量
+    $allActions = array(
+        ZC_POST_TYPE_ARTICLE => 'ArticleAll',
+        ZC_POST_TYPE_PAGE    => 'PageAll',
+    );
+    $allAction = $allActions[$type] ?? null;
+
+    $valid = array();
+    foreach ($ids as $id) {
+        $post = $zbp->GetPostByID($id);
+        if ($post->ID == 0 || (int) $post->Type !== $type) {
+            continue;
+        }
+        if ($allAction !== null && !$zbp->CheckRights($allAction) && (int) $post->AuthorID !== (int) $zbp->user->ID) {
+            continue;
+        }
+        $valid[] = $id;
+    }
+
+    if (count($valid) === 0) {
+        return array(
+            'code'    => 404,
+            'message' => $GLOBALS['lang']['error']['97'],
+        );
+    }
+
+    // Include_BatchPost_* 从 $_POST['id'] 读取待删除项
+    $_POST['id'] = $valid;
+
+    BatchPost($type);
+
+    $zbp->BuildModule();
+    $zbp->SaveCache();
+
+    return array(
+        'data'    => array('deleted' => count($valid)),
+        'message' => $GLOBALS['lang']['msg']['operation_succeed'],
+    );
+}

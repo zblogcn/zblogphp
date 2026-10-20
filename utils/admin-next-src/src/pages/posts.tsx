@@ -1,12 +1,19 @@
-import { keepPreviousData, useQuery } from "@tanstack/react-query"
+import {
+  keepPreviousData,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query"
 import type { ColumnDef } from "@tanstack/react-table"
-import { ExternalLink, Plus, Search } from "lucide-react"
+import { ExternalLink, Plus, Search, Trash2 } from "lucide-react"
 import { useMemo, useState } from "react"
+import { toast } from "sonner"
 
-import { apiGet, type Pagebar } from "@/lib/api"
+import { apiGet, apiPost, type Pagebar } from "@/lib/api"
 import { postStatusName, t } from "@/lib/i18n"
 import { zbp } from "@/lib/zbp"
 import { useDebouncedValue } from "@/hooks/use-debounced-value"
+import { ConfirmDialog } from "@/components/confirm-dialog"
 import { DataTable } from "@/components/data-table"
 import { PageHeader } from "@/components/page-header"
 import { Badge } from "@/components/ui/badge"
@@ -55,8 +62,11 @@ function PostListPage({
   editAction,
   manageAction,
 }: PostListPageProps) {
+  const queryClient = useQueryClient()
   const [page, setPage] = useState(1)
   const [keyword, setKeyword] = useState("")
+  const [selected, setSelected] = useState<string[]>([])
+  const [confirmOpen, setConfirmOpen] = useState(false)
   const search = useDebouncedValue(keyword)
 
   const { data, isLoading } = useQuery({
@@ -72,6 +82,24 @@ function PostListPage({
         search,
       }),
     placeholderData: keepPreviousData,
+  })
+
+  const remove = useMutation({
+    mutationFn: () =>
+      apiPost<{ deleted: number }>("post", "batch", {
+        type,
+        id: selected.map(Number),
+      }),
+    onSuccess: (result) => {
+      toast.success(`已删除 ${result.deleted ?? selected.length} 项`)
+      setSelected([])
+      setConfirmOpen(false)
+      queryClient.invalidateQueries({ queryKey: ["post", "list"] })
+    },
+    onError: (error: Error) => {
+      toast.error(error.message)
+      setConfirmOpen(false)
+    },
   })
 
   const columns = useMemo<ColumnDef<PostRow, unknown>[]>(() => {
@@ -100,9 +128,7 @@ function PostListPage({
         header: "作者",
         cell: ({ row }) => (
           <span className="whitespace-nowrap text-muted-foreground">
-            {row.original.Author?.StaticName ??
-              row.original.Author?.Name ??
-              "—"}
+            {row.original.Author?.StaticName ?? row.original.Author?.Name ?? "—"}
           </span>
         ),
       })
@@ -220,23 +246,52 @@ function PostListPage({
         columns={columns}
         data={data?.list ?? []}
         pagebar={data?.pagebar}
-        onPageChange={setPage}
+        onPageChange={(next) => {
+          setSelected([])
+          setPage(next)
+        }}
         isLoading={isLoading}
+        rowId={(row) => String(row.ID)}
+        selection={{ selectedIds: selected, onChange: setSelected }}
         toolbar={
-          <div className="relative w-full sm:w-72">
-            <Search className="pointer-events-none absolute top-1/2 left-2.5 size-4 -translate-y-1/2 text-muted-foreground" />
-            <Input
-              value={keyword}
-              onChange={(event) => {
-                setKeyword(event.target.value)
-                setPage(1)
-              }}
-              placeholder={`${t("search")}…`}
-              className="h-8 pl-8"
-              aria-label={t("search")}
-            />
-          </div>
+          <>
+            <div className="relative w-full sm:w-72">
+              <Search className="pointer-events-none absolute top-1/2 left-2.5 size-4 -translate-y-1/2 text-muted-foreground" />
+              <Input
+                value={keyword}
+                onChange={(event) => {
+                  setKeyword(event.target.value)
+                  setSelected([])
+                  setPage(1)
+                }}
+                placeholder={`${t("search")}…`}
+                className="h-8 pl-8"
+                aria-label={t("search")}
+              />
+            </div>
+
+            {selected.length > 0 ? (
+              <Button
+                variant="destructive"
+                size="sm"
+                onClick={() => setConfirmOpen(true)}
+              >
+                <Trash2 className="size-4" />
+                删除所选 ({selected.length})
+              </Button>
+            ) : null}
+          </>
         }
+      />
+
+      <ConfirmDialog
+        open={confirmOpen}
+        onOpenChange={setConfirmOpen}
+        title={`删除 ${selected.length} 项？`}
+        description="删除后无法恢复，相关评论会一并删除。"
+        confirmText="删除"
+        destructive
+        onConfirm={() => remove.mutate()}
       />
     </div>
   )

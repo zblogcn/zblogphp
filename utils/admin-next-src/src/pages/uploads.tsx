@@ -1,6 +1,6 @@
 import { keepPreviousData, useQuery } from "@tanstack/react-query"
 import type { ColumnDef } from "@tanstack/react-table"
-import { ExternalLink } from "lucide-react"
+import { Upload } from "lucide-react"
 import { useMemo, useState } from "react"
 
 import { apiGet, type Pagebar } from "@/lib/api"
@@ -21,12 +21,38 @@ interface UploadRow {
 
 interface UploadListData {
   list: UploadRow[]
-  pagebar: Pagebar
+  pagebar?: Pagebar
+}
+
+const EMPTY = "—"
+
+/**
+ * upload.list 的返回结构与其它 mod 不同（嵌套 data 数组），
+ * 这里统一成 { list, pagebar }。
+ */
+function normalize(payload: unknown): UploadListData {
+  while (Array.isArray(payload) && payload.length > 0) {
+    payload = payload[0]
+  }
+
+  if (payload && typeof payload === "object") {
+    const record = payload as Record<string, unknown>
+    const list = Array.isArray(record.list) ? (record.list as UploadRow[]) : []
+    const pagebar =
+      record.pagebar && typeof record.pagebar === "object"
+        ? (record.pagebar as Pagebar)
+        : record.pagination && typeof record.pagination === "object"
+          ? (record.pagination as Pagebar)
+          : undefined
+    return { list, pagebar }
+  }
+
+  return { list: [] }
 }
 
 function formatSize(bytes: number): string {
   if (!bytes) {
-    return "—"
+    return EMPTY
   }
   const units = ["B", "KB", "MB", "GB"]
   let value = bytes
@@ -40,14 +66,14 @@ function formatSize(bytes: number): string {
 
 function formatTime(value: number): string {
   if (!value) {
-    return "—"
+    return EMPTY
   }
   const date = new Date(value * 1000)
   const pad = (n: number) => String(n).padStart(2, "0")
   return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`
 }
 
- function isImage(mime: string): boolean {
+function isImage(mime: string): boolean {
   return typeof mime === "string" && mime.startsWith("image/")
 }
 
@@ -56,11 +82,10 @@ export function UploadsPage() {
 
   const { data, isLoading } = useQuery({
     queryKey: ["upload", "list", page],
-    queryFn: () =>
-      apiGet<UploadListData>("upload", "list", {
-        page,
-        perpage: 40,
-      }),
+    queryFn: async () =>
+      normalize(
+        await apiGet<unknown>("upload", "list", { page, perpage: 40 })
+      ),
     placeholderData: keepPreviousData,
   })
 
@@ -104,7 +129,7 @@ export function UploadsPage() {
         header: "类型",
         cell: ({ row }) => (
           <span className="text-xs text-muted-foreground">
-            {row.original.MimeType || "—"}
+            {row.original.MimeType || EMPTY}
           </span>
         ),
       },
@@ -126,24 +151,6 @@ export function UploadsPage() {
           </span>
         ),
       },
-      {
-        id: "actions",
-        header: "",
-        cell: ({ row }) => (
-          <div className="flex justify-end">
-            <Button asChild variant="ghost" size="icon-sm">
-              <a
-                href={row.original.Url}
-                target="_blank"
-                rel="noopener noreferrer"
-                title="打开"
-              >
-                <ExternalLink className="size-4" />
-              </a>
-            </Button>
-          </div>
-        ),
-      },
     ],
     []
   )
@@ -159,7 +166,7 @@ export function UploadsPage() {
               target="_blank"
               rel="noopener noreferrer"
             >
-              <ExternalLink className="size-4" /> 旧版上传
+              <Upload className="size-4" /> 上传（旧版）
             </a>
           </Button>
         }

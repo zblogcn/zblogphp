@@ -3,13 +3,15 @@ import {
   getCoreRowModel,
   useReactTable,
   type ColumnDef,
+  type RowSelectionState,
 } from "@tanstack/react-table"
 import { ChevronLeft, ChevronRight, Inbox } from "lucide-react"
-import type { ReactNode } from "react"
+import { useMemo, type ReactNode } from "react"
 
 import { t } from "@/lib/i18n"
 import type { Pagebar } from "@/lib/api"
 import { Button } from "@/components/ui/button"
+import { Checkbox } from "@/components/ui/checkbox"
 import { Empty } from "@/components/ui/empty"
 import { Skeleton } from "@/components/ui/skeleton"
 import {
@@ -21,6 +23,11 @@ import {
   TableRow,
 } from "@/components/ui/table"
 
+interface Selection {
+  selectedIds: string[]
+  onChange: (ids: string[]) => void
+}
+
 interface DataTableProps<T> {
   columns: ColumnDef<T, unknown>[]
   data: T[]
@@ -30,6 +37,8 @@ interface DataTableProps<T> {
   emptyTitle?: string
   emptyDescription?: string
   toolbar?: ReactNode
+  rowId?: (row: T) => string
+  selection?: Selection
 }
 
 export function DataTable<T>({
@@ -41,12 +50,68 @@ export function DataTable<T>({
   emptyTitle,
   emptyDescription,
   toolbar,
+  rowId,
+  selection,
 }: DataTableProps<T>) {
+  const rowSelection = useMemo<RowSelectionState>(() => {
+    const state: RowSelectionState = {}
+    for (const id of selection?.selectedIds ?? []) {
+      state[id] = true
+    }
+    return state
+  }, [selection?.selectedIds])
+
+  const tableColumns = useMemo<ColumnDef<T, unknown>[]>(() => {
+    if (!selection || !rowId) {
+      return columns
+    }
+
+    const selectColumn: ColumnDef<T, unknown> = {
+      id: "__select__",
+      header: ({ table }) => (
+        <Checkbox
+          aria-label="全选"
+          checked={
+            table.getIsAllRowsSelected()
+              ? true
+              : table.getIsSomeRowsSelected()
+                ? "indeterminate"
+                : false
+          }
+          onCheckedChange={(value) =>
+            table.toggleAllRowsSelected(value === true)
+          }
+        />
+      ),
+      cell: ({ row }) => (
+        <Checkbox
+          aria-label="选择此行"
+          checked={row.getIsSelected()}
+          onCheckedChange={(value) => row.toggleSelected(value === true)}
+        />
+      ),
+      size: 32,
+      enableSorting: false,
+    }
+
+    return [selectColumn, ...columns]
+  }, [columns, selection, rowId])
+
   const table = useReactTable({
     data,
-    columns,
+    columns: tableColumns,
     getCoreRowModel: getCoreRowModel(),
     manualPagination: true,
+    enableRowSelection: Boolean(selection),
+    state: { rowSelection },
+    getRowId: rowId ? (row) => rowId(row) : undefined,
+    onRowSelectionChange: (updater) => {
+      const next =
+        typeof updater === "function" ? updater(rowSelection) : updater
+      selection?.onChange(
+        Object.keys(next).filter((key) => next[key])
+      )
+    },
   })
 
   const empty = !isLoading && data.length === 0
@@ -66,7 +131,15 @@ export function DataTable<T>({
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id} className="hover:bg-transparent">
               {headerGroup.headers.map((header) => (
-                <TableHead key={header.id} className="h-10">
+                <TableHead
+                  key={header.id}
+                  className="h-10"
+                  style={
+                    header.column.id === "__select__"
+                      ? { width: 40 }
+                      : undefined
+                  }
+                >
                   {header.isPlaceholder
                     ? null
                     : flexRender(
@@ -82,7 +155,7 @@ export function DataTable<T>({
           {isLoading ? (
             Array.from({ length: 6 }).map((_, rowIndex) => (
               <TableRow key={`skeleton-${rowIndex}`}>
-                {columns.map((_, cellIndex) => (
+                {tableColumns.map((_, cellIndex) => (
                   <TableCell key={`skeleton-${rowIndex}-${cellIndex}`}>
                     <Skeleton className="h-4 w-full max-w-40" />
                   </TableCell>
@@ -91,7 +164,7 @@ export function DataTable<T>({
             ))
           ) : empty ? (
             <TableRow className="hover:bg-transparent">
-              <TableCell colSpan={columns.length} className="p-0">
+              <TableCell colSpan={tableColumns.length} className="p-0">
                 <Empty
                   icon={Inbox}
                   title={emptyTitle ?? t("empty_title")}
@@ -101,7 +174,10 @@ export function DataTable<T>({
             </TableRow>
           ) : (
             table.getRowModel().rows.map((row) => (
-              <TableRow key={row.id}>
+              <TableRow
+                key={row.id}
+                data-state={row.getIsSelected() ? "selected" : undefined}
+              >
                 {row.getVisibleCells().map((cell) => (
                   <TableCell key={cell.id}>
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}

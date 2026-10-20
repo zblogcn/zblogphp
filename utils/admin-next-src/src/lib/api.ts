@@ -111,6 +111,7 @@ export async function apiPost<T>(
     headers: {
       "Content-Type": "application/json",
       "X-Requested-With": "XMLHttpRequest",
+      "X-ZBP-Admin-Spa": "1",
     },
     body: JSON.stringify({ ...body, csrf_token: zbp.csrf.token }),
   })

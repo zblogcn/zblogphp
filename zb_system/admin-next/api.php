@@ -36,15 +36,12 @@ function ZbpAdminNext_JsonExit(int $status, string $message): void
         header('Content-Type: application/json; charset=utf-8');
     }
 
-    echo json_encode(
-        [
-            'code'    => $status,
-            'message' => $message,
-            'data'    => null,
-            'error'   => null,
-        ],
-        JSON_UNESCAPED_UNICODE
-    );
+    echo json_encode([
+        'code'    => $status,
+        'message' => $message,
+        'data'    => null,
+        'error'   => null,
+    ], JSON_UNESCAPED_UNICODE);
 
     exit;
 }
@@ -53,9 +50,19 @@ if (!$zbp->islogin || !$zbp->CheckRights('admin')) {
     ZbpAdminNext_JsonExit(401, 'Unauthorized');
 }
 
+// 后台 SPA 标记：只有在登录与 admin 校验通过后才会写入。
+// ApiVerifyCSRF() 据此区分「后台同源会话」与「公开 API 调用」，
+// 不从请求参数读取，避免被外部伪造。
+if (
+    isset($_SERVER['HTTP_X_ZBP_ADMIN_SPA'])
+    && $_SERVER['HTTP_X_ZBP_ADMIN_SPA'] === '1'
+) {
+    $GLOBALS['zbp_admin_spa_verified'] = true;
+}
+
 HookFilterPlugin('Filter_Plugin_API_Begin');
 
-// 后台内部调用按用户限流（ApiThrottle 内部仍会附加 IP 维度）
+// 后台内部调用按用户维度限流
 ApiThrottle('admin-spa-' . $zbp->user->ID, 600, 60);
 
 $mod = strtolower((string) GetVars('mod', 'GET', ''));

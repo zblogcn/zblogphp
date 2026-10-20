@@ -1,18 +1,22 @@
-import { useQuery } from "@tanstack/react-query"
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import {
   Eye,
   FileText,
   Folder,
   MessageSquare,
   RefreshCw,
+  RotateCcw,
   Users,
   Files,
 } from "lucide-react"
+import { useState } from "react"
 import { Link } from "react-router-dom"
+import { toast } from "sonner"
 
-import { apiGet } from "@/lib/api"
+import { apiGet, apiPost } from "@/lib/api"
 import { t } from "@/lib/i18n"
-import { zbp } from "@/lib/zbp"
+import { hasRight, zbp } from "@/lib/zbp"
+import { ConfirmDialog } from "@/components/confirm-dialog"
 import { Button } from "@/components/ui/button"
 import {
   Card,
@@ -50,9 +54,25 @@ const stats = [
 ] as const
 
 export function DashboardPage() {
+  const queryClient = useQueryClient()
+  const [confirmClear, setConfirmClear] = useState(false)
+
   const { data, isLoading, isError, refetch, isFetching } = useQuery({
     queryKey: ["system", "get_info"],
     queryFn: () => apiGet<{ info: SystemInfo }>("system", "get_info"),
+  })
+
+  const clearCache = useMutation({
+    mutationFn: () => apiPost<{ cleared: boolean }>("system", "clear_cache"),
+    onSuccess: () => {
+      toast.success("缓存已重建")
+      setConfirmClear(false)
+      queryClient.invalidateQueries({ queryKey: ["system"] })
+    },
+    onError: (error: Error) => {
+      toast.error(error.message)
+      setConfirmClear(false)
+    },
   })
 
   const info = data?.info
@@ -63,15 +83,28 @@ export function DashboardPage() {
         title={t("dashboard")}
         description={zbp.options.blogName}
         actions={
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => refetch()}
-            disabled={isFetching}
-          >
-            <RefreshCw className={isFetching ? "size-4 animate-spin" : "size-4"} />
-            {t("refresh")}
-          </Button>
+          <>
+            {hasRight("root") ? (
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setConfirmClear(true)}
+                disabled={clearCache.isPending}
+              >
+                <RotateCcw className="size-4" />
+                重建缓存
+              </Button>
+            ) : null}
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => refetch()}
+              disabled={isFetching}
+            >
+              <RefreshCw className={isFetching ? "size-4 animate-spin" : "size-4"} />
+              {t("refresh")}
+            </Button>
+          </>
         }
       />
 
@@ -154,6 +187,15 @@ export function DashboardPage() {
           </CardContent>
         </Card>
       </div>
+
+      <ConfirmDialog
+        open={confirmClear}
+        onOpenChange={setConfirmClear}
+        title="重建站点缓存？"
+        description="会重新生成模块与缓存配置，文章与设置不会受影响。"
+        confirmText="重建"
+        onConfirm={() => clearCache.mutate()}
+      />
     </div>
   )
 }

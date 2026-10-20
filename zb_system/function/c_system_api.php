@@ -742,6 +742,15 @@ function ApiVerifyCSRF($force_check = false)
     global $zbp, $mod, $act;
 
     if (!defined('ZBP_IN_API_VERIFYBYTOKEN')) {
+        if (!$force_check && $_SERVER['REQUEST_METHOD'] === 'POST') {
+            // 后台 SPA 与自己同源同会话，登录态本身已经是凭证；
+            // 管理 API 另有动作级权限校验，这里不额外要求 CSRF 令牌。
+            // CSRF 令牌绑定了 User-Agent，前端定时刷新会造成登录态误判。
+            if (!empty($GLOBALS['zbp_admin_spa_verified'])) {
+                return true;
+            }
+        }
+
         $csrf_token = GetVars('csrf_token');
 
         if (!$force_check) {

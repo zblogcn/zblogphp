@@ -46,6 +46,14 @@ $GLOBALS['setting_keys'] = array(
     'ZC_DELMEMBER_WITH_ALLDATA',
     'ZC_CATEGORY_MANAGE_LEGACY_DISPLAY',
     'ZC_LOGIN_VERIFY_ENABLE',
+    'ZC_BLOG_HOST',
+    'ZC_PERMANENT_DOMAIN_ENABLE',
+    'ZC_PERMANENT_DOMAIN_FORCED_URL',
+    'ZC_COMMENT_ORDERBY_TIME',
+    'ZC_LOGIN_CSRFCHECK_ENABLE',
+    'ZC_API_DISPLAY_COUNT',
+    'ZC_API_THROTTLE_ENABLE',
+    'ZC_API_THROTTLE_MAX_REQS_PER_MIN',
 );
 
 /**
@@ -287,6 +295,27 @@ function api_system_save_setting()
 
     return array(
         'data' => array('list' => $settingList,),
+        'message' => $GLOBALS['lang']['msg']['operation_succeed'],
+    );
+}
+
+/**
+ * 清空并重建缓存接口.
+ *
+ * @return array
+ */
+function api_system_clear_cache()
+{
+    global $zbp;
+
+    ApiVerifyCSRF(true);
+    ApiCheckAuth(true, 'root');
+
+    $zbp->BuildModule();
+    $zbp->SaveCache();
+
+    return array(
+        'data'    => array('cleared' => true),
         'message' => $GLOBALS['lang']['msg']['operation_succeed'],
     );
 }

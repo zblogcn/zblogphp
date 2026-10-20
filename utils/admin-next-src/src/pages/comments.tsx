@@ -1,11 +1,18 @@
-import { keepPreviousData, useQuery } from "@tanstack/react-query"
+import {
+  keepPreviousData,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query"
 import type { ColumnDef } from "@tanstack/react-table"
-import { ExternalLink } from "lucide-react"
+import { Check, ExternalLink, ShieldQuestion, Trash2 } from "lucide-react"
 import { useMemo, useState } from "react"
+import { toast } from "sonner"
 
-import { apiGet, type Pagebar } from "@/lib/api"
+import { apiGet, apiPost, type Pagebar } from "@/lib/api"
 import { t } from "@/lib/i18n"
 import { zbp } from "@/lib/zbp"
+import { ConfirmDialog } from "@/components/confirm-dialog"
 import { DataTable } from "@/components/data-table"
 import { PageHeader } from "@/components/page-header"
 import { Badge } from "@/components/ui/badge"
@@ -26,6 +33,8 @@ interface CommentListData {
   pagebar: Pagebar
 }
 
+type BatchAction = "all_pass" | "all_audit" | "all_del"
+
 function formatTime(value: number): string {
   if (!value) {
     return "—"
@@ -42,7 +51,10 @@ function stripTags(html: string): string {
 }
 
 export function CommentsPage() {
+  const queryClient = useQueryClient()
   const [page, setPage] = useState(1)
+  const [selected, setSelected] = useState<string[]>([])
+  const [pendingAction, setPendingAction] = useState<BatchAction | null>(null)
 
   const { data, isLoading } = useQuery({
     queryKey: ["comment", "list", page],
@@ -54,6 +66,24 @@ export function CommentsPage() {
         perpage: zbp.options.manageCount,
       }),
     placeholderData: keepPreviousData,
+  })
+
+  const batch = useMutation({
+    mutationFn: (action: BatchAction) =>
+      apiPost<Record<string, never>>("comment", "batch", {
+        [action]: 1,
+        id: selected.map(Number),
+      }),
+    onSuccess: () => {
+      toast.success("操作完成")
+      setSelected([])
+      setPendingAction(null)
+      queryClient.invalidateQueries({ queryKey: ["comment", "list"] })
+    },
+    onError: (error: Error) => {
+      toast.error(error.message)
+      setPendingAction(null)
+    },
   })
 
   const columns = useMemo<ColumnDef<CommentRow, unknown>[]>(
@@ -126,6 +156,8 @@ export function CommentsPage() {
     []
   )
 
+  const hasSelection = selected.length > 0
+
   return (
     <div className="flex flex-col gap-4">
       <PageHeader
@@ -147,9 +179,60 @@ export function CommentsPage() {
         columns={columns}
         data={data?.list ?? []}
         pagebar={data?.pagebar}
-        onPageChange={setPage}
+        onPageChange={(next) => {
+          setSelected([])
+          setPage(next)
+        }}
         isLoading={isLoading}
         emptyTitle="暂无评论"
+        rowId={(row) => String(row.ID)}
+        selection={{ selectedIds: selected, onChange: setSelected }}
+        toolbar={
+          hasSelection ? (
+            <>
+              <span className="text-xs text-muted-foreground">
+                已选 {selected.length} 项
+              </span>
+              <div className="flex flex-wrap gap-2">
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={() => batch.mutate("all_pass")}
+                >
+                  <Check className="size-4" /> 通过
+                </Button>
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={() => batch.mutate("all_audit")}
+                >
+                  <ShieldQuestion className="size-4" /> 转待审
+                </Button>
+                <Button
+                  size="sm"
+                  variant="destructive"
+                  onClick={() => setPendingAction("all_del")}
+                >
+                  <Trash2 className="size-4" /> 删除
+                </Button>
+              </div>
+            </>
+          ) : (
+            <span className="text-xs text-muted-foreground">
+              勾选评论后可批量操作
+            </span>
+          )
+        }
+      />
+
+      <ConfirmDialog
+        open={pendingAction === "all_del"}
+        onOpenChange={(open) => setPendingAction(open ? "all_del" : null)}
+        title={`删除 ${selected.length} 条评论？`}
+        description="删除后无法恢复。"
+        confirmText="删除"
+        destructive
+        onConfirm={() => batch.mutate("all_del")}
       />
     </div>
   )
