@@ -2,28 +2,25 @@
 
 require_once dirname(__DIR__) . '/AdminNextBootstrap.php';
 
-zbpn_boot();
-
 /**
- * admin-next 导航采集、权限与清单解析测试.
+ * admin-next navigation, rights and <admin> manifest tests.
  *
- * 只测试纯函数：不依赖数据库、不启动会话�? */
+ * Pure functions only: no database, no session.
+ */
+
+if (!defined('ZBP_PATH')) {
+    // Load the framework once, before PHPUnit snapshots the output buffer level.
+    zbpn_boot();
+}
+
 class AdminNextNavTest extends PHPUnit\Framework\TestCase
 {
-    /**
-     * 前序测试可能残留输出缓冲，类加载时先清理一次，避免误报 risky。
-     */
-    public static function setUpBeforeClass(): void
-    {
-        while (ob_get_level() > 0) {
-            ob_end_clean();
-        }
-    }
-
     private $fixtureDir = '';
 
     protected function setUp(): void
     {
+        zbpn_boot();
+
         $this->fixtureDir = sys_get_temp_dir() . '/zbpn-xml-' . uniqid('', true);
         mkdir($this->fixtureDir, 0777, true);
     }
@@ -43,7 +40,11 @@ class AdminNextNavTest extends PHPUnit\Framework\TestCase
     {
         $this->swapUser(zbpn_test_member());
 
+        $levelBefore = ob_get_level();
         $items = ZbpAdminNext_OfficialNav();
+
+        // Framework boot opens an output buffer; calling the collector must not change it.
+        $this->assertSame($levelBefore, ob_get_level());
 
         $this->assertIsArray($items);
         $this->assertGreaterThan(0, count($items));
@@ -361,8 +362,7 @@ class AdminNextNavTest extends PHPUnit\Framework\TestCase
 
     private function swapUser($member)
     {
-        global $zbp;
-
+        $zbp = $GLOBALS['zbp'];
         $zbp->user = $member;
         $zbp->islogin = true;
     }

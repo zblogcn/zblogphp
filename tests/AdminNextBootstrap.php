@@ -4,7 +4,10 @@
  * admin-next unit test bootstrap.
  *
  * Pure functions only: navigation collection, XML parsing, admin entry switch.
- * No database, no session.
+ * No database connection, no session.
+ *
+ * PHPUnit scans the test directory and will include this file; it only
+ * declares functions, the framework is loaded when zbpn_boot() is called.
  */
 
 function zbpn_boot()
@@ -14,7 +17,9 @@ function zbpn_boot()
         return;
     }
 
-    require_once dirname(__DIR__) . '/zb_system/function/c_system_base.php';
+    if (!defined('ZBP_PATH')) {
+        require_once dirname(__DIR__) . '/zb_system/function/c_system_base.php';
+    }
 
     if (!defined('ZBP_API_IN_TEST')) {
         define('ZBP_API_IN_TEST', true);
@@ -57,6 +62,9 @@ function zbpn_boot()
     $booted = true;
 }
 
+/**
+ * Build a member object without touching the database.
+ */
 function zbpn_test_member(array $data = [])
 {
     zbpn_boot();

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit colors="true" convertDeprecationsToExceptions="false">
+    <testsuites>
+        <testsuite name="core">
+            <file>phpunit/Class_Test.php</file>
+            <file>phpunit/ClassRegExpTest.php</file>
+            <file>phpunit/Class_UrlRuleTest.php</file>
+            <file>phpunit/APIFoundationTest.php</file>
+            <file>phpunit/ClassSQL__MySQLTest.php</file>
+            <file>phpunit/ClassSQL__SQLiteTest.php</file>
+            <file>phpunit/ClassSQL__PostgreSQLTest.php</file>
+            <file>phpunit/ClassSQLGlobalTest.php</file>
+        </testsuite>
+    </testsuites>
+</phpunit>

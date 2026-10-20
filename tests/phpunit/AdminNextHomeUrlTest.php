@@ -2,15 +2,18 @@
 
 require_once dirname(__DIR__) . '/AdminNextBootstrap.php';
 
-zbpn_boot();
-
-
 /**
- * 后台界面切换（AdminHomeUrl / AdminUiIsNext）测试.
+ * Admin entry switching tests (AdminUiIsNext / AdminHomeUrl).
  *
- * `ui` 查询参数由 GetVars 从 $_GET/$_REQUEST 读取，这里直接替换超全局数组，
- * 测试结束后恢复，避免污染其它用例。
+ * The `ui` query flag is read through GetVars from $_GET/$_REQUEST;
+ * both are swapped per test and restored afterwards.
  */
+
+if (!defined('ZBP_PATH')) {
+    // Load the framework once, before PHPUnit snapshots the output buffer level.
+    zbpn_boot();
+}
+
 class AdminNextHomeUrlTest extends PHPUnit\Framework\TestCase
 {
     private $getBackup = [];
@@ -19,17 +22,16 @@ class AdminNextHomeUrlTest extends PHPUnit\Framework\TestCase
 
     protected function setUp(): void
     {
-        global $zbp;
-
+        zbpn_boot();
 
         $this->getBackup = $_GET;
         $this->requestBackup = $_REQUEST;
-        $this->uiBackup = $zbp->option['ZC_ADMIN_UI'] ?? null;
+        $this->uiBackup = $GLOBALS['zbp']->option['ZC_ADMIN_UI'] ?? null;
     }
 
     protected function tearDown(): void
     {
-        global $zbp;
+        $zbp = $GLOBALS['zbp'];
 
         $_GET = $this->getBackup;
         $_REQUEST = $this->requestBackup;
@@ -49,7 +51,7 @@ class AdminNextHomeUrlTest extends PHPUnit\Framework\TestCase
 
     private function setUi(?string $value): void
     {
-        global $zbp;
+        $zbp = $GLOBALS['zbp'];
 
         if ($value === null) {
             unset($zbp->option['ZC_ADMIN_UI']);
@@ -155,7 +157,6 @@ class AdminNextHomeUrlTest extends PHPUnit\Framework\TestCase
         $this->setUi('legacy');
         $this->setQuery([]);
 
-        // 旧后台入口必须以 act=admin 结尾，否则会落进 switch 的 default 分支
         $this->assertStringEndsWith('act=admin', AdminHomeUrl());
     }
 

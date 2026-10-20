@@ -1,4 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+  admin-next unit tests.
+
+  Z-BlogPHP opens an output buffer in c_system_base.php; the framework is
+  loaded before PHPUnit snapshots the buffer level, so no strict-mode
+  warning is raised for the collector tests.
+-->
 <phpunit colors="true" convertDeprecationsToExceptions="false">
     <testsuites>
         <testsuite name="admin-next">
