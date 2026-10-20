@@ -22,16 +22,7 @@ interface AppRow {
   name: string
   version: string
   author_name: string
-  note?: string
   is_actived?: boolean
-}
-
-interface ModuleRow {
-  ID: number
-  Name: string
-  FileName: string
-  Type: string
-  SideID: number
 }
 
 function useApps(act: "get_plugins" | "get_themes") {
@@ -243,63 +234,6 @@ export function ThemesPage() {
   return (
     <div className="flex flex-col gap-4">
       <PageHeader title={t("theme_manage")} />
-      <DataTable
-        columns={columns}
-        data={data?.list ?? []}
-        isLoading={isLoading}
-      />
-    </div>
-  )
-}
-
-export function ModulesPage() {
-  const { data, isLoading } = useQuery({
-    queryKey: ["module", "list"],
-    queryFn: () =>
-      apiGet<{ list: ModuleRow[] }>("module", "list", { perpage: 200 }),
-  })
-
-  const columns = useMemo<ColumnDef<ModuleRow, unknown>[]>(
-    () => [
-      {
-        id: "Name",
-        header: "名称",
-        cell: ({ row }) => (
-          <span className="font-medium">{row.original.Name}</span>
-        ),
-      },
-      {
-        id: "FileName",
-        header: "文件名",
-        cell: ({ row }) => (
-          <code className="text-xs text-muted-foreground">
-            {row.original.FileName}
-          </code>
-        ),
-      },
-      {
-        id: "Type",
-        header: "类型",
-        cell: ({ row }) => (
-          <span className="text-muted-foreground">{row.original.Type}</span>
-        ),
-      },
-      {
-        id: "SideID",
-        header: "侧栏",
-        cell: ({ row }) => (
-          <span className="tabular-nums text-muted-foreground">
-            {row.original.SideID || "—"}
-          </span>
-        ),
-      },
-    ],
-    []
-  )
-
-  return (
-    <div className="flex flex-col gap-4">
-      <PageHeader title={t("module_manage")} />
       <DataTable
         columns={columns}
         data={data?.list ?? []}

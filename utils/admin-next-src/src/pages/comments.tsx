@@ -5,7 +5,7 @@ import {
   useQueryClient,
 } from "@tanstack/react-query"
 import type { ColumnDef } from "@tanstack/react-table"
-import { Check, ExternalLink, ShieldQuestion, Trash2 } from "lucide-react"
+import { Check, Pencil, ShieldQuestion, Trash2 } from "lucide-react"
 import { useMemo, useState } from "react"
 import { toast } from "sonner"
 
@@ -14,9 +14,18 @@ import { t } from "@/lib/i18n"
 import { zbp } from "@/lib/zbp"
 import { ConfirmDialog } from "@/components/confirm-dialog"
 import { DataTable } from "@/components/data-table"
+import { FormRow } from "@/components/form-row"
 import { PageHeader } from "@/components/page-header"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog"
+import { Textarea } from "@/components/ui/textarea"
 
 interface CommentRow {
   ID: number
@@ -24,6 +33,9 @@ interface CommentRow {
   AuthorID: number
   PostTime: number
   IsChecking: number
+  Name?: string
+  Email?: string
+  HomePage?: string
   Post?: { ID?: number; Title?: string }
   Author?: { Name?: string; StaticName?: string }
 }
@@ -55,6 +67,10 @@ export function CommentsPage() {
   const [page, setPage] = useState(1)
   const [selected, setSelected] = useState<string[]>([])
   const [pendingAction, setPendingAction] = useState<BatchAction | null>(null)
+  const [editing, setEditing] = useState<CommentRow | null>(null)
+  const [draft, setDraft] = useState("")
+  const [authorName, setAuthorName] = useState("")
+  const [authorEmail, setAuthorEmail] = useState("")
 
   const { data, isLoading } = useQuery({
     queryKey: ["comment", "list", page],
@@ -68,6 +84,42 @@ export function CommentsPage() {
     placeholderData: keepPreviousData,
   })
 
+  const refresh = () => {
+    setSelected([])
+    queryClient.invalidateQueries({ queryKey: ["comment", "list"] })
+  }
+
+  const save = useMutation({
+    mutationFn: (row: CommentRow) =>
+      apiPost<Record<string, unknown>>("comment", "post", {
+        ID: row.ID,
+        LogID: row.Post?.ID ?? 0,
+        ParentID: 0,
+        RootID: 0,
+        Content: draft,
+        Name: authorName,
+        Email: authorEmail,
+        AuthorID: row.AuthorID,
+        PostTime: row.PostTime,
+      }),
+    onSuccess: () => {
+      toast.success("评论已保存")
+      setEditing(null)
+      refresh()
+    },
+    onError: (error: Error) => toast.error(error.message),
+  })
+
+  const check = useMutation({
+    mutationFn: (id: number) =>
+      apiPost<Record<string, unknown>>("comment", "check", { id }),
+    onSuccess: () => {
+      toast.success("审核状态已更新")
+      refresh()
+    },
+    onError: (error: Error) => toast.error(error.message),
+  })
+
   const batch = useMutation({
     mutationFn: (action: BatchAction) =>
       apiPost<Record<string, never>>("comment", "batch", {
@@ -76,9 +128,8 @@ export function CommentsPage() {
       }),
     onSuccess: () => {
       toast.success("操作完成")
-      setSelected([])
       setPendingAction(null)
-      queryClient.invalidateQueries({ queryKey: ["comment", "list"] })
+      refresh()
     },
     onError: (error: Error) => {
       toast.error(error.message)
@@ -92,9 +143,19 @@ export function CommentsPage() {
         id: "Author",
         header: "作者",
         cell: ({ row }) => (
-          <span className="whitespace-nowrap font-medium">
-            {row.original.Author?.StaticName ?? row.original.Author?.Name ?? "游客"}
-          </span>
+          <div className="min-w-0">
+            <div className="whitespace-nowrap font-medium">
+              {row.original.Author?.StaticName ??
+                row.original.Author?.Name ??
+                row.original.Name ??
+                "游客"}
+            </div>
+            {row.original.Email ? (
+              <div className="truncate text-xs text-muted-foreground">
+                {row.original.Email}
+              </div>
+            ) : null}
+          </div>
         ),
       },
       {
@@ -137,43 +198,56 @@ export function CommentsPage() {
       {
         id: "actions",
         header: "",
-        cell: () => (
-          <div className="flex justify-end">
-            <Button asChild variant="ghost" size="icon-sm">
-              <a
-                href={`${zbp.host}zb_system/cmd.php?act=CommentMng`}
-                target="_blank"
-                rel="noopener noreferrer"
-                title="在旧版中管理"
-              >
-                <ExternalLink className="size-4" />
-              </a>
+        cell: ({ row }) => (
+          <div className="flex justify-end gap-1">
+            <Button
+              variant="ghost"
+              size="icon-sm"
+              aria-label="审核"
+              onClick={() => check.mutate(row.original.ID)}
+            >
+              {Number(row.original.IsChecking) > 0 ? (
+                <Check className="size-4" />
+              ) : (
+                <ShieldQuestion className="size-4" />
+              )}
+            </Button>
+            <Button
+              variant="ghost"
+              size="icon-sm"
+              aria-label="编辑"
+              onClick={() => {
+                setEditing(row.original)
+                setDraft(row.original.Content ?? "")
+                setAuthorName(row.original.Author?.Name ?? row.original.Name ?? "")
+                setAuthorEmail(row.original.Email ?? "")
+              }}
+            >
+              <Pencil className="size-4" />
+            </Button>
+            <Button
+              variant="ghost"
+              size="icon-sm"
+              aria-label="删除"
+              onClick={() => {
+                setSelected([String(row.original.ID)])
+                setPendingAction("all_del")
+              }}
+            >
+              <Trash2 className="size-4" />
             </Button>
           </div>
         ),
       },
     ],
-    []
+    [check]
   )
 
   const hasSelection = selected.length > 0
 
   return (
     <div className="flex flex-col gap-4">
-      <PageHeader
-        title={t("comment_manage")}
-        actions={
-          <Button asChild variant="outline" size="sm">
-            <a
-              href={`${zbp.host}zb_system/cmd.php?act=CommentMng`}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <ExternalLink className="size-4" /> 旧版管理
-            </a>
-          </Button>
-        }
-      />
+      <PageHeader title={t("comment_manage")} />
 
       <DataTable
         columns={columns}
@@ -224,6 +298,71 @@ export function CommentsPage() {
           )
         }
       />
+
+      <Dialog
+        open={editing !== null}
+        onOpenChange={(open) => {
+          if (!open) {
+            setEditing(null)
+          }
+        }}
+      >
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>编辑评论</DialogTitle>
+          </DialogHeader>
+
+          <div className="flex flex-col gap-3">
+            <FormRow label="所属文章">
+              <div className="text-sm">{editing?.Post?.Title ?? "—"}</div>
+            </FormRow>
+
+            <FormRow label="评论内容" htmlFor="comment-content" required>
+              <Textarea
+                id="comment-content"
+                rows={6}
+                value={draft}
+                onChange={(event) => setDraft(event.target.value)}
+              />
+            </FormRow>
+
+            <FormRow label="作者名称" htmlFor="comment-name">
+              <input
+                id="comment-name"
+                className="h-9 w-full rounded-md border border-input bg-transparent px-3 text-sm"
+                value={authorName}
+                onChange={(event) => setAuthorName(event.target.value)}
+              />
+            </FormRow>
+
+            <FormRow label="作者邮箱" htmlFor="comment-email">
+              <input
+                id="comment-email"
+                type="email"
+                className="h-9 w-full rounded-md border border-input bg-transparent px-3 text-sm"
+                value={authorEmail}
+                onChange={(event) => setAuthorEmail(event.target.value)}
+              />
+            </FormRow>
+          </div>
+
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setEditing(null)}>
+              取消
+            </Button>
+            <Button
+              disabled={!draft.trim() || save.isPending}
+              onClick={() => {
+                if (editing) {
+                  save.mutate(editing)
+                }
+              }}
+            >
+              {save.isPending ? "保存中…" : "保存"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
       <ConfirmDialog
         open={pendingAction === "all_del"}

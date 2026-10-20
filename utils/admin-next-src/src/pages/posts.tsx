@@ -11,7 +11,7 @@ import { toast } from "sonner"
 
 import { apiGet, apiPost, type Pagebar } from "@/lib/api"
 import { postStatusName, t } from "@/lib/i18n"
-import { zbp } from "@/lib/zbp"
+import { hasRight, zbp } from "@/lib/zbp"
 import { useDebouncedValue } from "@/hooks/use-debounced-value"
 import { ConfirmDialog } from "@/components/confirm-dialog"
 import { DataTable } from "@/components/data-table"
@@ -67,6 +67,7 @@ function PostListPage({
   const [keyword, setKeyword] = useState("")
   const [selected, setSelected] = useState<string[]>([])
   const [confirmOpen, setConfirmOpen] = useState(false)
+  const [rowDeleting, setRowDeleting] = useState<PostRow | null>(null)
   const search = useDebouncedValue(keyword)
 
   const { data, isLoading } = useQuery({
@@ -85,20 +86,19 @@ function PostListPage({
   })
 
   const remove = useMutation({
-    mutationFn: () =>
-      apiPost<{ deleted: number }>("post", "batch", {
-        type,
-        id: selected.map(Number),
-      }),
-    onSuccess: (result) => {
-      toast.success(`已删除 ${result.deleted ?? selected.length} 项`)
+    mutationFn: (ids: number[]) =>
+      apiPost<{ deleted: number }>("post", "batch", { type, id: ids }),
+    onSuccess: (result, ids) => {
+      toast.success(`已删除 ${result.deleted ?? ids.length} 项`)
       setSelected([])
       setConfirmOpen(false)
+      setRowDeleting(null)
       queryClient.invalidateQueries({ queryKey: ["post", "list"] })
     },
     onError: (error: Error) => {
       toast.error(error.message)
       setConfirmOpen(false)
+      setRowDeleting(null)
     },
   })
 
@@ -108,7 +108,9 @@ function PostListPage({
         id: "ID",
         header: "ID",
         cell: ({ row }) => (
-          <span className="tabular-nums text-muted-foreground">{row.original.ID}</span>
+          <span className="tabular-nums text-muted-foreground">
+            {row.original.ID}
+          </span>
         ),
       },
       {
@@ -194,7 +196,7 @@ function PostListPage({
         id: "actions",
         header: "",
         cell: ({ row }) => (
-          <div className="flex justify-end">
+          <div className="flex justify-end gap-1">
             <Button asChild variant="ghost" size="icon-sm">
               <a
                 href={`${zbp.host}zb_system/cmd.php?act=${editAction}&id=${row.original.ID}`}
@@ -204,6 +206,15 @@ function PostListPage({
               >
                 <ExternalLink className="size-4" />
               </a>
+            </Button>
+            <Button
+              variant="ghost"
+              size="icon-sm"
+              aria-label="删除"
+              disabled={!hasRight("PostBat")}
+              onClick={() => setRowDeleting(row.original)}
+            >
+              <Trash2 className="size-4" />
             </Button>
           </div>
         ),
@@ -291,7 +302,25 @@ function PostListPage({
         description="删除后无法恢复，相关评论会一并删除。"
         confirmText="删除"
         destructive
-        onConfirm={() => remove.mutate()}
+        onConfirm={() => remove.mutate(selected.map(Number))}
+      />
+
+      <ConfirmDialog
+        open={rowDeleting !== null}
+        onOpenChange={(open) => {
+          if (!open) {
+            setRowDeleting(null)
+          }
+        }}
+        title={`删除「${rowDeleting?.Title ?? ""}」？`}
+        description="删除后无法恢复，相关评论会一并删除。"
+        confirmText="删除"
+        destructive
+        onConfirm={() => {
+          if (rowDeleting) {
+            remove.mutate([rowDeleting.ID])
+          }
+        }}
       />
     </div>
   )

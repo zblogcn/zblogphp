@@ -8,11 +8,6 @@ export interface Pagebar {
   PageNow: number
 }
 
-export interface ListResponse<T> {
-  list: T[]
-  pagebar?: Pagebar
-}
-
 interface Envelope<T> {
   code: number
   message: string
@@ -37,6 +32,13 @@ function buildUrl(mod: string, act: string, query: Query = {}): string {
 
   for (const [key, value] of Object.entries(query)) {
     if (value === null || value === undefined || value === "") {
+      continue
+    }
+    // 数组按 id[] 传参，与 PHP 的 $_POST 结构保持一致
+    if (Array.isArray(value)) {
+      for (const item of value) {
+        params.append(`${key}[]`, String(item))
+      }
       continue
     }
     params.set(key, String(value))
@@ -119,6 +121,66 @@ export async function apiPost<T>(
   return read<T>(response)
 }
 
+/**
+ * multipart 提交（附件上传）。
+ *
+ * 不能用 JSON：PostUpload() 依赖 $_FILES。
+ * 也不要手动设置 Content-Type，浏览器需要自己补 boundary。
+ */
+export async function apiUpload<T>(
+  mod: string,
+  act: string,
+  form: FormData,
+  query: Query = {}
+): Promise<T> {
+  form.set("csrf_token", zbp.csrf.token)
+
+  const response = await fetch(buildUrl(mod, act, query), {
+    method: "POST",
+    credentials: "same-origin",
+    headers: {
+      "X-Requested-With": "XMLHttpRequest",
+      "X-ZBP-Admin-Spa": "1",
+    },
+    body: form,
+  })
+
+  return read<T>(response)
+}
+
+/**
+ * 表单编码提交。
+ *
+ * 删除类接口只从 $_GET 读 id，但 POST 请求里同名字段会合并进 $_REQUEST，
+ * 与 JSON body 的行为不一样。用 application/x-www-form-urlencoded 提交，
+ * 让 PHP 自己合并参数，避免逐个接口打补丁。
+ */
+export async function apiForm<T>(
+  mod: string,
+  act: string,
+  body: Record<string, string | number> = {},
+  query: Query = {}
+): Promise<T> {
+  const form = new URLSearchParams()
+  for (const [key, value] of Object.entries(body)) {
+    form.set(key, String(value))
+  }
+  form.set("csrf_token", zbp.csrf.token)
+
+  const response = await fetch(buildUrl(mod, act, query), {
+    method: "POST",
+    credentials: "same-origin",
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
+      "X-Requested-With": "XMLHttpRequest",
+      "X-ZBP-Admin-Spa": "1",
+    },
+    body: form.toString(),
+  })
+
+  return read<T>(response)
+}
+
 /* ------------------------------------------------------------------ */
 /* 开发模式假数据                                                       */
 /* ------------------------------------------------------------------ */
@@ -138,19 +200,21 @@ function mockGet(mod: string, act: string): unknown {
 
   if (mod === "system" && act === "get_info") {
     return {
-      environment: "PHP 8.4 / 开发模式",
-      version: "dev",
-      full_version: "dev",
-      articles: 128,
-      categories: 6,
-      pages: 4,
-      comments: 356,
-      views: 12800,
-      members: 3,
-      theme: "default",
-      style: "default",
-      https: false,
-      debugmode: true,
+      info: {
+        environment: "PHP 8.4 / 开发模式",
+        version: "dev",
+        full_version: "dev",
+        articles: 128,
+        categories: 6,
+        pages: 4,
+        comments: 356,
+        views: 12800,
+        members: 3,
+        theme: "default",
+        style: "default",
+        https: false,
+        debugmode: true,
+      },
     }
   }
 
