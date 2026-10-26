@@ -10,16 +10,15 @@ if (!defined('ZBP_PATH')) {
  */
 class Network__curl implements Network__Interface
 {
-
     private $readyState = 0; //状态
 
-    private $responseBody = null; //返回的二进制
+    private $responseBody; //返回的二进制
 
-    private $responseStream = null; //返回的数据流
+    private $responseStream; //返回的数据流
 
     private $responseText = ''; //返回的数据
 
-    private $responseXML = null; //尝试把responseText格式化为XMLDom
+    private $responseXML; //尝试把responseText格式化为XMLDom
 
     private $status = 0; //状态码
 
@@ -27,17 +26,17 @@ class Network__curl implements Network__Interface
 
     private $responseVersion = ''; //返回的HTTP版体
 
-    private $option = array();
+    private $option = [];
 
     private $url = '';
 
-    private $postdata = array();
+    private $postdata = [];
 
-    private $httpheader = array();
+    private $httpheader = [];
 
-    private $responseHeader = array();
+    private $responseHeader = [];
 
-    private $parsed_url = array();
+    private $parsed_url = [];
 
     private $timeout = 30;
 
@@ -47,7 +46,7 @@ class Network__curl implements Network__Interface
 
     private $errno = 0;
 
-    private $ch = null;
+    private $ch;
 
     private $isgzip = false;
 
@@ -55,7 +54,7 @@ class Network__curl implements Network__Interface
 
     private $private_isBinary = false;
 
-    private $curl = null;
+    private $curl;
 
     /**
      * @ignore
@@ -83,27 +82,28 @@ class Network__curl implements Network__Interface
      */
     public function __get($property_name)
     {
-        if (strtolower($property_name) == 'responsexml') {
+        if ('responsexml' == strtolower($property_name)) {
             $w = new DOMDocument();
 
             return $w->loadXML($this->responseText);
-        } elseif (strtolower($property_name) == 'scheme'
-            || strtolower($property_name) == 'host'
-            || strtolower($property_name) == 'port'
-            || strtolower($property_name) == 'user'
-            || strtolower($property_name) == 'pass'
-            || strtolower($property_name) == 'path'
-            || strtolower($property_name) == 'query'
-            || strtolower($property_name) == 'fragment'
+        }
+        if ('scheme' == strtolower($property_name)
+            || 'host' == strtolower($property_name)
+            || 'port' == strtolower($property_name)
+            || 'user' == strtolower($property_name)
+            || 'pass' == strtolower($property_name)
+            || 'path' == strtolower($property_name)
+            || 'query' == strtolower($property_name)
+            || 'fragment' == strtolower($property_name)
         ) {
             if (isset($this->parsed_url[strtolower($property_name)])) {
                 return $this->parsed_url[strtolower($property_name)];
-            } else {
-                return;
             }
-        } else {
-            return $this->$property_name;
+
+            return;
         }
+
+        return $this->{$property_name};
     }
 
     /**
@@ -165,7 +165,7 @@ class Network__curl implements Network__Interface
         }
 
         if (!isset($this->parsed_url['port'])) {
-            if (isset($this->parsed_url['scheme']) && $this->parsed_url['scheme'] == 'https') {
+            if (isset($this->parsed_url['scheme']) && 'https' == $this->parsed_url['scheme']) {
                 $this->parsed_url['port'] = 443;
             } else {
                 $this->parsed_url['port'] = 80;
@@ -177,7 +177,7 @@ class Network__curl implements Network__Interface
 
         curl_setopt($this->ch, CURLOPT_RETURNTRANSFER, 1);
         //curl_setopt($this->ch, CURLOPT_REFERER, 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']);
-        curl_setopt($this->ch, CURLOPT_POST, ($method == 'POST' ? 1 : 0));
+        curl_setopt($this->ch, CURLOPT_POST, ('POST' == $method ? 1 : 0));
 
         return true;
     }
@@ -210,8 +210,7 @@ class Network__curl implements Network__Interface
         }
         curl_setopt($this->ch, CURLOPT_HTTPHEADER, $this->httpheader);
 
-
-        if ($this->option['method'] == 'POST' || $this->option['method'] == 'PUT') {
+        if ('POST' == $this->option['method'] || 'PUT' == $this->option['method']) {
             if (is_string($varBody) && count($this->postdata) > 0) {
                 parse_str($varBody, $data);
                 $data = ($data + $this->postdata);
@@ -229,20 +228,20 @@ class Network__curl implements Network__Interface
         curl_setopt($this->ch, CURLOPT_RETURNTRANSFER, true);
 
         if ($this->maxredirs > 0) {
-            if (ini_get("safe_mode") == false && ini_get('open_basedir') == '') {
+            if (false == ini_get('safe_mode') && '' == ini_get('open_basedir')) {
                 curl_setopt($this->ch, CURLOPT_MAXREDIRS, $this->maxredirs);
                 @curl_setopt($this->ch, CURLOPT_FOLLOWLOCATION, true);
             }
         }
 
-        if ($this->isgzip == true) {
+        if (true == $this->isgzip) {
             curl_setopt($this->ch, CURLOPT_ENCODING, 'gzip');
         }
 
         curl_setopt($this->ch, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($this->ch, CURLOPT_SSL_VERIFYHOST, false);
 
-        if ($this->set_timeouts == false) {
+        if (false == $this->set_timeouts) {
             if (!isset($this->option['timeout'])) {
                 $this->option['timeout'] = $this->timeout;
             }
@@ -258,14 +257,13 @@ class Network__curl implements Network__Interface
         if (is_bool($this->responseText) && !$this->responseText) {
             $this->responseText = '';
         }
-        
+
         if (PHP_VERSION_ID < 80000) {
             curl_close($this->ch);
         }
 
-
         foreach ($this->responseHeader as $key => $value) {
-            if (strpos($value, 'HTTP/') === 0) {
+            if (0 === strpos($value, 'HTTP/')) {
                 if (isset($this->responseHeader[$key])) {
                     $this->statusText = $this->responseHeader[$key];
                     $a = explode(' ', $this->statusText);
@@ -293,7 +291,7 @@ class Network__curl implements Network__Interface
      */
     public function setRequestHeader($bstrHeader, $bstrValue, $append = false)
     {
-        if ($append == false) {
+        if (false == $append) {
             $this->httpheader[$bstrHeader] = $bstrHeader . ': ' . $bstrValue;
         } else {
             if (isset($this->httpheader[$bstrHeader])) {
@@ -318,8 +316,10 @@ class Network__curl implements Network__Interface
     }
 
     /**
-     * @param string $name
-     * @param string $entity
+     * @param string     $name
+     * @param string     $entity
+     * @param null|mixed $filename
+     * @param mixed      $mime
      *
      * @return mixed
      */
@@ -328,14 +328,14 @@ class Network__curl implements Network__Interface
         $this->private_isBinary = true;
 
         if (!is_file($entity)) {
-            $filename = ($filename === null ? $name : $filename);
-            $key = "$name\"; filename=\"$filename\"\r\nContent-Type: " . ($mime == '' ? 'application/octet-stream' : $mime) . "\r\n";
+            $filename = (null === $filename ? $name : $filename);
+            $key = "{$name}\"; filename=\"{$filename}\"\r\nContent-Type: " . ('' == $mime ? 'application/octet-stream' : $mime) . "\r\n";
             $this->postdata[$key] = $entity;
 
             return;
         }
 
-        if ($mime == '') {
+        if ('' == $mime) {
             if (function_exists('mime_content_type')) {
                 $mime = mime_content_type($entity);
             } elseif (function_exists('finfo_open')) {
@@ -350,7 +350,7 @@ class Network__curl implements Network__Interface
             }
         }
 
-        $filename = ($filename === null ? basename($entity) : $filename);
+        $filename = (null === $filename ? basename($entity) : $filename);
         if (class_exists('CURLFile')) {
             $this->postdata[$name] = new CURLFile(realpath($entity), $mime, $filename);
 
@@ -372,8 +372,6 @@ class Network__curl implements Network__Interface
     /**
      * @param string $name
      * @param string $entity
-     *
-     * @return void
      */
     public function addText($name, $entity)
     {
@@ -383,48 +381,10 @@ class Network__curl implements Network__Interface
     /**
      * @param string $name
      * @param string $entity
-     *
-     * @return void
      */
     public function addFormParam($name, $entity)
     {
         $this->addText($name, $entity);
-    }
-
-    /**
-     * 重置.
-     */
-    private function reinit()
-    {
-        $this->readyState = 0; //状态
-        $this->responseBody = null; //返回的二进制
-        $this->responseStream = null; //返回的数据流
-        $this->responseText = ''; //返回的数据
-        $this->responseXML = null; //尝试把responseText格式化为XMLDom
-        $this->status = 0; //状态码
-        $this->statusText = ''; //状态码文本
-
-        $this->private_isBinary = false;
-
-        $this->option = array();
-        $this->url = '';
-        $this->postdata = array();
-        $this->httpheader = array();
-        $this->responseHeader = array();
-        $this->parsed_url = array();
-        $this->timeout = 30;
-        $this->errstr = '';
-        $this->errno = 0;
-        $this->set_timeouts = false;
-
-        $this->ch = curl_init();
-
-        if (defined('ZBP_PATH')) {
-            $this->setRequestHeader('User-Agent', 'Mozilla/5.0 (' . $GLOBALS['zbp']->cache->system_environment . ') Z-BlogPHP/' . $GLOBALS['zbp']->version);
-        } else {
-            $this->setRequestHeader('User-Agent', 'Mozilla/5.0 (compatible; ZBP_NetWork)');
-        }
-        $this->setMaxRedirs(1);
     }
 
     /**
@@ -471,16 +431,17 @@ class Network__curl implements Network__Interface
 
     public function getHeaders()
     {
-        $headers = array();
+        $headers = [];
         foreach ($this->responseHeader as $h) {
             $array = explode(': ', $h, 2);
             if (count($array) > 1) {
-                if (isset($headers[$array[0]]) == false) {
-                    $headers[$array[0]] = array();
+                if (false == isset($headers[$array[0]])) {
+                    $headers[$array[0]] = [];
                 }
                 $headers[$array[0]][] = $array[1];
             }
         }
+
         return $headers;
     }
 
@@ -490,12 +451,14 @@ class Network__curl implements Network__Interface
         if (isset($headers[$name])) {
             return $headers[$name];
         }
-        return array();
+
+        return [];
     }
 
     public function hasHeader($name)
     {
         $headers = $this->getHeaders();
+
         return isset($headers[$name]);
     }
 
@@ -503,4 +466,39 @@ class Network__curl implements Network__Interface
     {
     }
 
+    /**
+     * 重置.
+     */
+    private function reinit()
+    {
+        $this->readyState = 0; //状态
+        $this->responseBody = null; //返回的二进制
+        $this->responseStream = null; //返回的数据流
+        $this->responseText = ''; //返回的数据
+        $this->responseXML = null; //尝试把responseText格式化为XMLDom
+        $this->status = 0; //状态码
+        $this->statusText = ''; //状态码文本
+
+        $this->private_isBinary = false;
+
+        $this->option = [];
+        $this->url = '';
+        $this->postdata = [];
+        $this->httpheader = [];
+        $this->responseHeader = [];
+        $this->parsed_url = [];
+        $this->timeout = 30;
+        $this->errstr = '';
+        $this->errno = 0;
+        $this->set_timeouts = false;
+
+        $this->ch = curl_init();
+
+        if (defined('ZBP_PATH')) {
+            $this->setRequestHeader('User-Agent', 'Mozilla/5.0 (' . $GLOBALS['zbp']->cache->system_environment . ') Z-BlogPHP/' . $GLOBALS['zbp']->version);
+        } else {
+            $this->setRequestHeader('User-Agent', 'Mozilla/5.0 (compatible; ZBP_NetWork)');
+        }
+        $this->setMaxRedirs(1);
+    }
 }

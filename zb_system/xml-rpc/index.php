@@ -3,7 +3,6 @@
 /**
  * XML-RPC接口.
  *
- *
  * https://codex.wordpress.org/XML-RPC_WordPress_API
  * https://codex.wordpress.org/XML-RPC_MetaWeblog_API
  * http://codex.wordpress.org.cn/XML-RPC_MetaWeblog_API
@@ -29,7 +28,7 @@ if (isset($_GET['rsd'])) {
     echo '  </service>' . "\n";
     echo '</rsd>' . "\n";
 
-    die();
+    exit();
 }
 
 /**
@@ -50,9 +49,9 @@ function xmlrpc_getUsersBlogs()
 
     $strXML = '<?xml version="1.0" encoding="UTF-8"?><methodResponse><params><param><value><array><data><value><struct><member><name>url</name><value><string>$%#1#%$</string></value></member><member><name>blogid</name><value><string>$%#2#%$</string></value></member><member><name>blogName</name><value><string>$%#3#%$</string></value></member></struct></value></data></array></value></param></params></methodResponse>';
 
-    $strXML = str_replace("$%#1#%$", htmlspecialchars($zbp->host), $strXML);
-    $strXML = str_replace("$%#2#%$", htmlspecialchars(md5($zbp->guid . sha1($zbp->path))), $strXML);
-    $strXML = str_replace("$%#3#%$", htmlspecialchars($zbp->name), $strXML);
+    $strXML = str_replace('$%#1#%$', htmlspecialchars($zbp->host), $strXML);
+    $strXML = str_replace('$%#2#%$', htmlspecialchars(md5($zbp->guid . sha1($zbp->path))), $strXML);
+    $strXML = str_replace('$%#3#%$', htmlspecialchars($zbp->name), $strXML);
 
     echo $strXML;
 }
@@ -77,11 +76,11 @@ function xmlrpc_wp_getUsersBlogs()
 <member><name>blogName</name><value><string>$%#4#%$</string></value></member>
 <member><name>xmlrpc</name><value><string>$%#5#%$</string></value></member>
 </struct></value></data></array></value></param></params></methodResponse>';
-    $strXML = str_replace("$%#1#%$", $zbp->user->Level === 1, $strXML);
-    $strXML = str_replace("$%#2#%$", htmlspecialchars($zbp->host), $strXML);
-    $strXML = str_replace("$%#3#%$", htmlspecialchars(md5($zbp->guid . sha1($zbp->path))), $strXML);
-    $strXML = str_replace("$%#4#%$", htmlspecialchars($zbp->name), $strXML);
-    $strXML = str_replace("$%#5#%$", $zbp->host . 'zb_system/xml-rpc/index.php', $strXML);
+    $strXML = str_replace('$%#1#%$', 1 === $zbp->user->Level, $strXML);
+    $strXML = str_replace('$%#2#%$', htmlspecialchars($zbp->host), $strXML);
+    $strXML = str_replace('$%#3#%$', htmlspecialchars(md5($zbp->guid . sha1($zbp->path))), $strXML);
+    $strXML = str_replace('$%#4#%$', htmlspecialchars($zbp->name), $strXML);
+    $strXML = str_replace('$%#5#%$', $zbp->host . 'zb_system/xml-rpc/index.php', $strXML);
     echo $strXML;
 }
 
@@ -118,17 +117,17 @@ function xmlrpc_getCategories()
 
     foreach ($zbp->categoriesbyorder as $key => $value) {
         $s = $strSingle;
-        $s = str_replace("$%#1#%$", htmlspecialchars($value->ID), $s);
-        $s = str_replace("$%#2#%$", htmlspecialchars($value->ParentID), $s);
-        $s = str_replace("$%#3#%$", htmlspecialchars($value->Name), $s);
-        $s = str_replace("$%#4#%$", htmlspecialchars($value->Intro), $s);
-        $s = str_replace("$%#5#%$", htmlspecialchars($value->Url), $s);
-        $s = str_replace("$%#6#%$", htmlspecialchars($value->Name), $s);
+        $s = str_replace('$%#1#%$', htmlspecialchars($value->ID), $s);
+        $s = str_replace('$%#2#%$', htmlspecialchars($value->ParentID), $s);
+        $s = str_replace('$%#3#%$', htmlspecialchars($value->Name), $s);
+        $s = str_replace('$%#4#%$', htmlspecialchars($value->Intro), $s);
+        $s = str_replace('$%#5#%$', htmlspecialchars($value->Url), $s);
+        $s = str_replace('$%#6#%$', htmlspecialchars($value->Name), $s);
 
         $strAll .= $s;
     }
 
-    $strXML = str_replace("$%#1#%$", $strAll, $strXML);
+    $strXML = str_replace('$%#1#%$', $strAll, $strXML);
     echo $strXML;
 }
 
@@ -165,24 +164,24 @@ function xmlrpc_getTags()
     $array = $zbp->GetTagList(
         '',
         '',
-        array('tag_Count' => 'DESC', 'tag_ID' => 'ASC'),
-        array(50),
-        ''
+        ['tag_Count' => 'DESC', 'tag_ID' => 'ASC'],
+        [50],
+        '',
     );
 
     foreach ($array as $key => $value) {
         $s = $strSingle;
-        $s = str_replace("$%#1#%$", htmlspecialchars($value->ID), $s);
-        $s = str_replace("$%#2#%$", htmlspecialchars($value->Name), $s);
-        $s = str_replace("$%#3#%$", htmlspecialchars($value->Count), $s);
-        $s = str_replace("$%#4#%$", htmlspecialchars($value->Url), $s);
-        $s = str_replace("$%#5#%$", htmlspecialchars($value->Url), $s);
-        $s = str_replace("$%#6#%$", htmlspecialchars($value->Url), $s);
+        $s = str_replace('$%#1#%$', htmlspecialchars($value->ID), $s);
+        $s = str_replace('$%#2#%$', htmlspecialchars($value->Name), $s);
+        $s = str_replace('$%#3#%$', htmlspecialchars($value->Count), $s);
+        $s = str_replace('$%#4#%$', htmlspecialchars($value->Url), $s);
+        $s = str_replace('$%#5#%$', htmlspecialchars($value->Url), $s);
+        $s = str_replace('$%#6#%$', htmlspecialchars($value->Url), $s);
 
         $strAll .= $s;
     }
 
-    $strXML = str_replace("$%#1#%$", $strAll, $strXML);
+    $strXML = str_replace('$%#1#%$', $strAll, $strXML);
     echo $strXML;
 }
 
@@ -212,13 +211,13 @@ function xmlrpc_getAuthors()
 
     foreach ($zbp->members as $key => $value) {
         $s = $strSingle;
-        $s = str_replace("$%#1#%$", htmlspecialchars($value->ID), $s);
-        $s = str_replace("$%#2#%$", htmlspecialchars($value->Name), $s);
-        $s = str_replace("$%#3#%$", htmlspecialchars($value->Alias), $s);
+        $s = str_replace('$%#1#%$', htmlspecialchars($value->ID), $s);
+        $s = str_replace('$%#2#%$', htmlspecialchars($value->Name), $s);
+        $s = str_replace('$%#3#%$', htmlspecialchars($value->Alias), $s);
         $strAll .= $s;
     }
 
-    $strXML = str_replace("$%#1#%$", $strAll, $strXML);
+    $strXML = str_replace('$%#1#%$', $strAll, $strXML);
     echo $strXML;
 }
 
@@ -249,36 +248,36 @@ function xmlrpc_getPages($n)
 
     $strAll = '';
 
-    $w = array();
+    $w = [];
     if (!$zbp->CheckRights('PageAll')) {
-        $w[] = array('=', 'log_AuthorID', $zbp->user->ID);
+        $w[] = ['=', 'log_AuthorID', $zbp->user->ID];
     }
 
     $array = $zbp->GetPageList(
         '',
         $w,
-        array('log_PostTime' => 'DESC'),
-        array($n),
-        ''
+        ['log_PostTime' => 'DESC'],
+        [$n],
+        '',
     );
 
     foreach ($array as $key => $value) {
         $s = $strSingle;
-        $s = str_replace("$%#1#%$", htmlspecialchars($value->Time('c')), $s);
-        $s = str_replace("$%#2#%$", htmlspecialchars($value->AuthorID), $s);
-        $s = str_replace("$%#3#%$", htmlspecialchars($value->ID), $s);
-        $s = str_replace("$%#4#%$", htmlspecialchars($value->Status == 0 ? 'publish' : 'draft'), $s);
-        $s = str_replace("$%#5#%$", htmlspecialchars($value->Content), $s);
-        $s = str_replace("$%#6#%$", htmlspecialchars($value->Title), $s);
-        $s = str_replace("$%#7#%$", htmlspecialchars($value->Url), $s);
-        $s = str_replace("$%#8#%$", htmlspecialchars($value->Url), $s);
-        $s = str_replace("$%#9#%$", htmlspecialchars($value->IsLock ? '2' : '1'), $s);
-        $s = str_replace("$%#10#%$", htmlspecialchars($value->Alias), $s);
+        $s = str_replace('$%#1#%$', htmlspecialchars($value->Time('c')), $s);
+        $s = str_replace('$%#2#%$', htmlspecialchars($value->AuthorID), $s);
+        $s = str_replace('$%#3#%$', htmlspecialchars($value->ID), $s);
+        $s = str_replace('$%#4#%$', htmlspecialchars(0 == $value->Status ? 'publish' : 'draft'), $s);
+        $s = str_replace('$%#5#%$', htmlspecialchars($value->Content), $s);
+        $s = str_replace('$%#6#%$', htmlspecialchars($value->Title), $s);
+        $s = str_replace('$%#7#%$', htmlspecialchars($value->Url), $s);
+        $s = str_replace('$%#8#%$', htmlspecialchars($value->Url), $s);
+        $s = str_replace('$%#9#%$', htmlspecialchars($value->IsLock ? '2' : '1'), $s);
+        $s = str_replace('$%#10#%$', htmlspecialchars($value->Alias), $s);
 
         $strAll .= $s;
     }
 
-    $strXML = str_replace("$%#1#%$", $strAll, $strXML);
+    $strXML = str_replace('$%#1#%$', $strAll, $strXML);
     echo $strXML;
 }
 
@@ -315,26 +314,26 @@ function xmlrpc_getPage($id)
         xmlrpc_ShowError(11, __FILE__, __LINE__);
     }
 
-    $array = array();
+    $array = [];
     $array[] = $article;
 
     foreach ($array as $key => $value) {
         $s = $strSingle;
-        $s = str_replace("$%#1#%$", htmlspecialchars($value->Time('c')), $s);
-        $s = str_replace("$%#2#%$", htmlspecialchars($value->AuthorID), $s);
-        $s = str_replace("$%#3#%$", htmlspecialchars($value->ID), $s);
-        $s = str_replace("$%#4#%$", htmlspecialchars($value->Status == 0 ? 'publish' : 'draft'), $s);
-        $s = str_replace("$%#5#%$", htmlspecialchars($value->Content), $s);
-        $s = str_replace("$%#6#%$", htmlspecialchars($value->Title), $s);
-        $s = str_replace("$%#7#%$", htmlspecialchars($value->Url), $s);
-        $s = str_replace("$%#8#%$", htmlspecialchars($value->Url), $s);
-        $s = str_replace("$%#9#%$", htmlspecialchars($value->IsLock ? '2' : '1'), $s);
-        $s = str_replace("$%#10#%$", htmlspecialchars($value->Alias), $s);
+        $s = str_replace('$%#1#%$', htmlspecialchars($value->Time('c')), $s);
+        $s = str_replace('$%#2#%$', htmlspecialchars($value->AuthorID), $s);
+        $s = str_replace('$%#3#%$', htmlspecialchars($value->ID), $s);
+        $s = str_replace('$%#4#%$', htmlspecialchars(0 == $value->Status ? 'publish' : 'draft'), $s);
+        $s = str_replace('$%#5#%$', htmlspecialchars($value->Content), $s);
+        $s = str_replace('$%#6#%$', htmlspecialchars($value->Title), $s);
+        $s = str_replace('$%#7#%$', htmlspecialchars($value->Url), $s);
+        $s = str_replace('$%#8#%$', htmlspecialchars($value->Url), $s);
+        $s = str_replace('$%#9#%$', htmlspecialchars($value->IsLock ? '2' : '1'), $s);
+        $s = str_replace('$%#10#%$', htmlspecialchars($value->Alias), $s);
 
         $strAll .= $s;
     }
 
-    $strXML = str_replace("$%#1#%$", $strAll, $strXML);
+    $strXML = str_replace('$%#1#%$', $strAll, $strXML);
     echo $strXML;
 }
 
@@ -370,17 +369,17 @@ function xmlrpc_getRecentPosts($n)
 
     $strAll = '';
 
-    $w = array();
+    $w = [];
     if (!$zbp->CheckRights('ArticleAll')) {
-        $w[] = array('=', 'log_AuthorID', $zbp->user->ID);
+        $w[] = ['=', 'log_AuthorID', $zbp->user->ID];
     }
 
     $array = $zbp->GetArticleList(
         '',
         $w,
-        array('log_PostTime' => 'DESC'),
-        array($n),
-        ''
+        ['log_PostTime' => 'DESC'],
+        [$n],
+        '',
     );
 
     foreach ($array as $key => $value) {
@@ -388,34 +387,34 @@ function xmlrpc_getRecentPosts($n)
         $description = '';
         $mt_excerpt = '';
         $mt_text_more = '';
-        if (strpos($value->Content, '<!--more-->') !== false) {
+        if (false !== strpos($value->Content, '<!--more-->')) {
             $description = GetValueInArray(explode('<!--more-->', $value->Content), 1);
             $mt_text_more = GetValueInArray(explode('<!--more-->', $value->Content), 0);
-            //$description=$value->Content;
+        //$description=$value->Content;
         } else {
             $description = $value->Content;
             $mt_excerpt = $value->Intro;
         }
 
-        $s = str_replace("$%#1#%$", htmlspecialchars($value->Title), $s);
-        $s = str_replace("$%#2#%$", htmlspecialchars($description), $s);
-        $s = str_replace("$%#3#%$", htmlspecialchars($value->Time('c')), $s);
-        $s = str_replace("$%#4#%$", htmlspecialchars($value->Category->Name), $s);
-        $s = str_replace("$%#5#%$", htmlspecialchars($value->ID), $s);
-        $s = str_replace("$%#6#%$", htmlspecialchars($value->AuthorID), $s);
-        $s = str_replace("$%#7#%$", htmlspecialchars($value->Url), $s);
-        $s = str_replace("$%#8#%$", htmlspecialchars($value->Url), $s);
-        $s = str_replace("$%#9#%$", htmlspecialchars($value->TagsToNameString()), $s);
-        $s = str_replace("$%#10#%$", htmlspecialchars($value->Alias), $s);
-        $s = str_replace("$%#11#%$", htmlspecialchars($mt_excerpt), $s);
-        $s = str_replace("$%#12#%$", htmlspecialchars($mt_text_more), $s);
-        $s = str_replace("$%#13#%$", htmlspecialchars($value->Alias), $s);
-        $s = str_replace("$%#14#%$", htmlspecialchars($value->IsLock ? '2' : '1'), $s);
-        $s = str_replace("$%#15#%$", htmlspecialchars($value->Status == 0 ? 'publish' : 'draft'), $s);
+        $s = str_replace('$%#1#%$', htmlspecialchars($value->Title), $s);
+        $s = str_replace('$%#2#%$', htmlspecialchars($description), $s);
+        $s = str_replace('$%#3#%$', htmlspecialchars($value->Time('c')), $s);
+        $s = str_replace('$%#4#%$', htmlspecialchars($value->Category->Name), $s);
+        $s = str_replace('$%#5#%$', htmlspecialchars($value->ID), $s);
+        $s = str_replace('$%#6#%$', htmlspecialchars($value->AuthorID), $s);
+        $s = str_replace('$%#7#%$', htmlspecialchars($value->Url), $s);
+        $s = str_replace('$%#8#%$', htmlspecialchars($value->Url), $s);
+        $s = str_replace('$%#9#%$', htmlspecialchars($value->TagsToNameString()), $s);
+        $s = str_replace('$%#10#%$', htmlspecialchars($value->Alias), $s);
+        $s = str_replace('$%#11#%$', htmlspecialchars($mt_excerpt), $s);
+        $s = str_replace('$%#12#%$', htmlspecialchars($mt_text_more), $s);
+        $s = str_replace('$%#13#%$', htmlspecialchars($value->Alias), $s);
+        $s = str_replace('$%#14#%$', htmlspecialchars($value->IsLock ? '2' : '1'), $s);
+        $s = str_replace('$%#15#%$', htmlspecialchars(0 == $value->Status ? 'publish' : 'draft'), $s);
         $strAll .= $s;
     }
 
-    $strXML = str_replace("$%#1#%$", $strAll, $strXML);
+    $strXML = str_replace('$%#1#%$', $strAll, $strXML);
     echo $strXML;
 }
 
@@ -434,8 +433,8 @@ function xmlrpc_delPage($id)
 
     $_GET['id'] = $id;
 
-    if (DelPage() == true) {
-        $strXML = str_replace("$%#1#%$", 1, $strXML);
+    if (true == DelPage()) {
+        $strXML = str_replace('$%#1#%$', 1, $strXML);
         echo $strXML;
     } else {
         xmlrpc_ShowError(0, __FILE__, __LINE__);
@@ -457,8 +456,8 @@ function xmlrpc_deletePost($id)
 
     $_GET['id'] = $id;
 
-    if (DelArticle() == true) {
-        $strXML = str_replace("$%#1#%$", 1, $strXML);
+    if (true == DelArticle()) {
+        $strXML = str_replace('$%#1#%$', 1, $strXML);
         echo $strXML;
     } else {
         xmlrpc_ShowError(0, __FILE__, __LINE__);
@@ -503,7 +502,7 @@ function xmlrpc_getPost($id)
         xmlrpc_ShowError(11, __FILE__, __LINE__);
     }
 
-    $array = array();
+    $array = [];
     $array[] = $article;
 
     foreach ($array as $key => $value) {
@@ -511,34 +510,34 @@ function xmlrpc_getPost($id)
         $description = '';
         $mt_excerpt = '';
         $mt_text_more = '';
-        if (strpos($value->Content, '<!--more-->') !== false) {
+        if (false !== strpos($value->Content, '<!--more-->')) {
             $description = GetValueInArray(explode('<!--more-->', $value->Content), 1);
             $mt_text_more = GetValueInArray(explode('<!--more-->', $value->Content), 0);
-            //$description=$value->Content;
+        //$description=$value->Content;
         } else {
             $description = $value->Content;
             $mt_excerpt = $value->Intro;
         }
 
-        $s = str_replace("$%#1#%$", htmlspecialchars($value->Title), $s);
-        $s = str_replace("$%#2#%$", htmlspecialchars($description), $s);
-        $s = str_replace("$%#3#%$", htmlspecialchars($value->Time('c')), $s);
-        $s = str_replace("$%#4#%$", htmlspecialchars($value->Category->Name), $s);
-        $s = str_replace("$%#5#%$", htmlspecialchars($value->ID), $s);
-        $s = str_replace("$%#6#%$", htmlspecialchars($value->AuthorID), $s);
-        $s = str_replace("$%#7#%$", htmlspecialchars($value->Url), $s);
-        $s = str_replace("$%#8#%$", htmlspecialchars($value->Url), $s);
-        $s = str_replace("$%#9#%$", htmlspecialchars($value->TagsToNameString()), $s);
-        $s = str_replace("$%#10#%$", htmlspecialchars($value->Alias), $s);
-        $s = str_replace("$%#11#%$", htmlspecialchars($mt_excerpt), $s);
-        $s = str_replace("$%#12#%$", htmlspecialchars($mt_text_more), $s);
-        $s = str_replace("$%#13#%$", htmlspecialchars($value->Alias), $s);
-        $s = str_replace("$%#14#%$", htmlspecialchars($value->IsLock ? '2' : '1'), $s);
-        $s = str_replace("$%#15#%$", htmlspecialchars($value->Status == 0 ? 'publish' : 'draft'), $s);
+        $s = str_replace('$%#1#%$', htmlspecialchars($value->Title), $s);
+        $s = str_replace('$%#2#%$', htmlspecialchars($description), $s);
+        $s = str_replace('$%#3#%$', htmlspecialchars($value->Time('c')), $s);
+        $s = str_replace('$%#4#%$', htmlspecialchars($value->Category->Name), $s);
+        $s = str_replace('$%#5#%$', htmlspecialchars($value->ID), $s);
+        $s = str_replace('$%#6#%$', htmlspecialchars($value->AuthorID), $s);
+        $s = str_replace('$%#7#%$', htmlspecialchars($value->Url), $s);
+        $s = str_replace('$%#8#%$', htmlspecialchars($value->Url), $s);
+        $s = str_replace('$%#9#%$', htmlspecialchars($value->TagsToNameString()), $s);
+        $s = str_replace('$%#10#%$', htmlspecialchars($value->Alias), $s);
+        $s = str_replace('$%#11#%$', htmlspecialchars($mt_excerpt), $s);
+        $s = str_replace('$%#12#%$', htmlspecialchars($mt_text_more), $s);
+        $s = str_replace('$%#13#%$', htmlspecialchars($value->Alias), $s);
+        $s = str_replace('$%#14#%$', htmlspecialchars($value->IsLock ? '2' : '1'), $s);
+        $s = str_replace('$%#15#%$', htmlspecialchars(0 == $value->Status ? 'publish' : 'draft'), $s);
         $strAll .= $s;
     }
 
-    $strXML = str_replace("$%#1#%$", $strAll, $strXML);
+    $strXML = str_replace('$%#1#%$', $strAll, $strXML);
     echo $strXML;
 }
 
@@ -565,19 +564,19 @@ function xmlrpc_getPostCategories($id)
     $article = new Post();
     $article->LoadInfoByID($id);
 
-    $array = array();
+    $array = [];
     $array[] = $article->Category;
 
     foreach ($array as $key => $value) {
         $s = $strSingle;
-        $s = str_replace("$%#1#%$", htmlspecialchars($value->Name), $s);
-        $s = str_replace("$%#2#%$", htmlspecialchars($value->ID), $s);
-        $s = str_replace("$%#3#%$", htmlspecialchars(1), $s);
+        $s = str_replace('$%#1#%$', htmlspecialchars($value->Name), $s);
+        $s = str_replace('$%#2#%$', htmlspecialchars($value->ID), $s);
+        $s = str_replace('$%#3#%$', htmlspecialchars(1), $s);
 
         $strAll .= $s;
     }
 
-    $strXML = str_replace("$%#1#%$", $strAll, $strXML);
+    $strXML = str_replace('$%#1#%$', $strAll, $strXML);
     echo $strXML;
 }
 
@@ -599,15 +598,15 @@ function xmlrpc_editPost($id, $xmlstring, $publish)
     $xml = simplexml_load_string($xmlstring);
 
     if ($xml) {
-        $post = array();
+        $post = [];
         foreach ($xml->children() as $x) {
             $a = (string) $x->name;
-            if ($a == 'categories') {
+            if ('categories' == $a) {
                 $b = $x->value->children()->asXML();
             } else {
                 $b = $x->value->children();
             }
-            $b = str_replace(array('<array>', '</array>', '<data>', '</data>', '<string>', '</string>'), array(''), $b);
+            $b = str_replace(['<array>', '</array>', '<data>', '</data>', '<string>', '</string>'], [''], $b);
             $post[$a] = $b;
         }
 
@@ -655,7 +654,7 @@ function xmlrpc_editPost($id, $xmlstring, $publish)
         }
         if (isset($post['mt_text_more']) || isset($post['description'])) {
             if (isset($post['mt_text_more'])) {
-                if ($post['mt_text_more'] != '') {
+                if ('' != $post['mt_text_more']) {
                     $_POST['Content'] = $post['description'] . '<!--more-->' . $post['mt_text_more'];
                 } else {
                     $_POST['Content'] = $post['description'];
@@ -667,8 +666,8 @@ function xmlrpc_editPost($id, $xmlstring, $publish)
 
         $strXML = '<methodResponse><params><param><value><boolean>$%#1#%$</boolean></value></param></params></methodResponse>';
 
-        if (PostArticle() == true) {
-            $strXML = str_replace("$%#1#%$", 1, $strXML);
+        if (true == PostArticle()) {
+            $strXML = str_replace('$%#1#%$', 1, $strXML);
             echo $strXML;
         } else {
             xmlrpc_ShowError(0, __FILE__, __LINE__);
@@ -684,7 +683,7 @@ function xmlrpc_editPost($id, $xmlstring, $publish)
 function xmlrpc_setPostCategories()
 {
     $strXML = '<methodResponse><params><param><value><boolean>$%#1#%$</boolean></value></param></params></methodResponse>';
-    $strXML = str_replace("$%#1#%$", 1, $strXML);
+    $strXML = str_replace('$%#1#%$', 1, $strXML);
     echo $strXML;
 }
 
@@ -706,15 +705,15 @@ function xmlrpc_editPage($id, $xmlstring, $publish)
     $xml = simplexml_load_string($xmlstring);
 
     if ($xml) {
-        $post = array();
+        $post = [];
         foreach ($xml->children() as $x) {
             $a = (string) $x->name;
-            if ($a == 'categories') {
+            if ('categories' == $a) {
                 $b = $x->value->children()->asXML();
             } else {
                 $b = $x->value->children();
             }
-            $b = str_replace(array('<array>', '</array>', '<data>', '</data>', '<string>', '</string>'), array(''), $b);
+            $b = str_replace(['<array>', '</array>', '<data>', '</data>', '<string>', '</string>'], [''], $b);
             $post[$a] = $b;
         }
 
@@ -752,8 +751,8 @@ function xmlrpc_editPage($id, $xmlstring, $publish)
 
         $strXML = '<methodResponse><params><param><value><boolean>$%#1#%$</boolean></value></param></params></methodResponse>';
 
-        if (PostPage() == true) {
-            $strXML = str_replace("$%#1#%$", 1, $strXML);
+        if (true == PostPage()) {
+            $strXML = str_replace('$%#1#%$', 1, $strXML);
             echo $strXML;
         } else {
             xmlrpc_ShowError(0, __FILE__, __LINE__);
@@ -776,7 +775,7 @@ function xmlrpc_newMediaObject($xmlstring)
     $xml = simplexml_load_string($xmlstring);
 
     if ($xml) {
-        $post = array();
+        $post = [];
         foreach ($xml->children() as $x) {
             $a = (string) $x->name;
             $b = $x->value->children();
@@ -793,7 +792,7 @@ function xmlrpc_newMediaObject($xmlstring)
         $upload->Save();
 
         $strXML = '<methodResponse><params><param><value><struct><member><name>url</name><value><string>$%#1#%$</string></value></member></struct></value></param></params></methodResponse>';
-        $strXML = str_replace("$%#1#%$", htmlspecialchars($upload->Url), $strXML);
+        $strXML = str_replace('$%#1#%$', htmlspecialchars($upload->Url), $strXML);
         echo $strXML;
     }
 }
@@ -805,19 +804,23 @@ function xmlrpc_newMediaObject($xmlstring)
  *
  * @param
  * @param
+ * @param mixed $username
+ * @param mixed $password
  */
 function xmlrpc_Verify($username, $password)
 {
     global $zbp;
-    if (isset($zbp->option['ZC_XMLRPC_USE_WEBTOKEN']) && $zbp->option['ZC_XMLRPC_USE_WEBTOKEN'] == true) {
+    if (isset($zbp->option['ZC_XMLRPC_USE_WEBTOKEN']) && true == $zbp->option['ZC_XMLRPC_USE_WEBTOKEN']) {
         if (!$zbp->Verify_Token($username, $password, 'xmlrpc', $zbp->user)) {
             xmlrpc_ShowError(8, __FILE__, __LINE__, 403);
-            die;
+
+            exit;
         }
     } else {
         if (!$zbp->Verify_Original($username, $password, $zbp->user)) {
             xmlrpc_ShowError(8, __FILE__, __LINE__, 403);
-            die;
+
+            exit;
         }
     }
 }
@@ -833,9 +836,10 @@ function xmlrpc_ShowError($code, $file, $line, $httpcode = 401)
 
 $zbp->Load();
 
-if (isset($zbp->option['ZC_XMLRPC_ENABLE']) && $zbp->option['ZC_XMLRPC_ENABLE'] == false) {
+if (isset($zbp->option['ZC_XMLRPC_ENABLE']) && false == $zbp->option['ZC_XMLRPC_ENABLE']) {
     Http404();
-    die;
+
+    exit;
 }
 
 Add_Filter_Plugin('Filter_Plugin_Debug_Handler_Common', 'RespondError');
@@ -855,6 +859,7 @@ if ($xml) {
         $fpreturn = $fpname($xml);
     }
     $method = (string) $xml->methodName;
+
     switch ($method) {
         case 'blogger.getUsersBlogs':
             $username = (string) $xml->params->param[1]->value->string;
@@ -865,7 +870,9 @@ if ($xml) {
             } else {
                 xmlrpc_ShowError(6, __FILE__, __LINE__);
             }
+
             break;
+
         case 'wp.getCategories':
         case 'metaWeblog.getCategories':
             $username = (string) $xml->params->param[1]->value->string;
@@ -876,7 +883,9 @@ if ($xml) {
             } else {
                 xmlrpc_ShowError(6, __FILE__, __LINE__);
             }
+
             break;
+
         case 'mt.setPostCategories':
             $username = (string) $xml->params->param[1]->value->string;
             $password = (string) $xml->params->param[2]->value->string;
@@ -886,7 +895,9 @@ if ($xml) {
             } else {
                 xmlrpc_ShowError(6, __FILE__, __LINE__);
             }
+
             break;
+
         case 'mt.getPostCategories':
             $username = (string) $xml->params->param[1]->value->string;
             $password = (string) $xml->params->param[2]->value->string;
@@ -896,7 +907,9 @@ if ($xml) {
             } else {
                 xmlrpc_ShowError(6, __FILE__, __LINE__);
             }
+
             break;
+
         case 'wp.getTags':
             $username = (string) $xml->params->param[1]->value->string;
             $password = (string) $xml->params->param[2]->value->string;
@@ -906,7 +919,9 @@ if ($xml) {
             } else {
                 xmlrpc_ShowError(6, __FILE__, __LINE__);
             }
+
             break;
+
         case 'wp.getAuthors':
             $username = (string) $xml->params->param[1]->value->string;
             $password = (string) $xml->params->param[2]->value->string;
@@ -916,7 +931,9 @@ if ($xml) {
             } else {
                 xmlrpc_ShowError(6, __FILE__, __LINE__);
             }
+
             break;
+
         case 'metaWeblog.getRecentPosts':
             $username = (string) $xml->params->param[1]->value->string;
             $password = (string) $xml->params->param[2]->value->string;
@@ -926,7 +943,9 @@ if ($xml) {
             } else {
                 xmlrpc_ShowError(6, __FILE__, __LINE__);
             }
+
             break;
+
         case 'metaWeblog.getPost':
             $username = (string) $xml->params->param[1]->value->string;
             $password = (string) $xml->params->param[2]->value->string;
@@ -936,7 +955,9 @@ if ($xml) {
             } else {
                 xmlrpc_ShowError(6, __FILE__, __LINE__);
             }
+
             break;
+
         case 'blogger.deletePost':
             $username = (string) $xml->params->param[2]->value->string;
             $password = (string) $xml->params->param[3]->value->string;
@@ -946,7 +967,9 @@ if ($xml) {
             } else {
                 xmlrpc_ShowError(6, __FILE__, __LINE__);
             }
+
             break;
+
         case 'metaWeblog.editPost':
             $username = (string) $xml->params->param[1]->value->string;
             $password = (string) $xml->params->param[2]->value->string;
@@ -955,12 +978,14 @@ if ($xml) {
                 xmlrpc_editPost(
                     (int) $xml->params->param[0]->value->string,
                     $xml->params->param[3]->value->struct->asXML(),
-                    (bool) $xml->params->param[4]->value->boolean->asXML()
+                    (bool) $xml->params->param[4]->value->boolean->asXML(),
                 );
             } else {
                 xmlrpc_ShowError(6, __FILE__, __LINE__);
             }
+
             break;
+
         case 'metaWeblog.newPost':
             $username = (string) $xml->params->param[1]->value->string;
             $password = (string) $xml->params->param[2]->value->string;
@@ -969,12 +994,14 @@ if ($xml) {
                 xmlrpc_editPost(
                     0,
                     $xml->params->param[3]->value->struct->asXML(),
-                    (bool) $xml->params->param[4]->value->boolean->asXML()
+                    (bool) $xml->params->param[4]->value->boolean->asXML(),
                 );
             } else {
                 xmlrpc_ShowError(6, __FILE__, __LINE__);
             }
+
             break;
+
         case 'wp.newPage':
             $username = (string) $xml->params->param[1]->value->string;
             $password = (string) $xml->params->param[2]->value->string;
@@ -983,12 +1010,14 @@ if ($xml) {
                 xmlrpc_editPage(
                     0,
                     $xml->params->param[3]->value->struct->asXML(),
-                    (bool) $xml->params->param[4]->value->boolean->asXML()
+                    (bool) $xml->params->param[4]->value->boolean->asXML(),
                 );
             } else {
                 xmlrpc_ShowError(6, __FILE__, __LINE__);
             }
+
             break;
+
         case 'wp.editPage':
             $username = (string) $xml->params->param[2]->value->string;
             $password = (string) $xml->params->param[3]->value->string;
@@ -997,12 +1026,14 @@ if ($xml) {
                 xmlrpc_editPage(
                     (int) $xml->params->param[1]->value->string,
                     $xml->params->param[4]->value->struct->asXML(),
-                    (bool) $xml->params->param[5]->value->boolean->asXML()
+                    (bool) $xml->params->param[5]->value->boolean->asXML(),
                 );
             } else {
                 xmlrpc_ShowError(6, __FILE__, __LINE__);
             }
+
             break;
+
         case 'wp.getPages':
             $username = (string) $xml->params->param[1]->value->string;
             $password = (string) $xml->params->param[2]->value->string;
@@ -1012,7 +1043,9 @@ if ($xml) {
             } else {
                 xmlrpc_ShowError(6, __FILE__, __LINE__);
             }
+
             break;
+
         case 'wp.getPage':
             $username = (string) $xml->params->param[2]->value->string;
             $password = (string) $xml->params->param[3]->value->string;
@@ -1022,7 +1055,9 @@ if ($xml) {
             } else {
                 xmlrpc_ShowError(6, __FILE__, __LINE__);
             }
+
             break;
+
         case 'wp.deletePage':
             $username = (string) $xml->params->param[1]->value->string;
             $password = (string) $xml->params->param[2]->value->string;
@@ -1032,7 +1067,9 @@ if ($xml) {
             } else {
                 xmlrpc_ShowError(6, __FILE__, __LINE__);
             }
+
             break;
+
         case 'metaWeblog.newMediaObject':
             $username = (string) $xml->params->param[1]->value->string;
             $password = (string) $xml->params->param[2]->value->string;
@@ -1042,7 +1079,9 @@ if ($xml) {
             } else {
                 xmlrpc_ShowError(6, __FILE__, __LINE__);
             }
+
             break;
+
         case 'wp.getUsersBlogs':
             $username = (string) $xml->params->param[0]->value->string;
             $password = (string) $xml->params->param[1]->value->string;
@@ -1052,9 +1091,12 @@ if ($xml) {
             } else {
                 xmlrpc_ShowError(6, __FILE__, __LINE__);
             }
+
             break;
+
         default:
             xmlrpc_ShowError(1, __FILE__, __LINE__);
+
             break;
     }
 }

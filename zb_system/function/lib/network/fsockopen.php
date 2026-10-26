@@ -8,16 +8,15 @@ if (!defined('ZBP_PATH')) {
  */
 class Network__fsockopen implements Network__Interface
 {
-
     private $readyState = 0; //状态
 
-    private $responseBody = null; //返回的二进制
+    private $responseBody; //返回的二进制
 
-    private $responseStream = null; //返回的数据流
+    private $responseStream; //返回的数据流
 
     private $responseText = ''; //返回的数据
 
-    private $responseXML = null; //尝试把responseText格式化为XMLDom
+    private $responseXML; //尝试把responseText格式化为XMLDom
 
     private $status = 0; //状态码
 
@@ -25,17 +24,17 @@ class Network__fsockopen implements Network__Interface
 
     private $responseVersion = ''; //返回的HTTP版体
 
-    private $option = array();
+    private $option = [];
 
     private $url = '';
 
-    private $postdata = array();
+    private $postdata = [];
 
-    private $httpheader = array();
+    private $httpheader = [];
 
-    private $responseHeader = array();
+    private $responseHeader = [];
 
-    private $parsed_url = array();
+    private $parsed_url = [];
 
     private $timeout = 30;
 
@@ -71,27 +70,28 @@ class Network__fsockopen implements Network__Interface
      */
     public function __get($property_name)
     {
-        if (strtolower($property_name) == 'responsexml') {
+        if ('responsexml' == strtolower($property_name)) {
             $w = new DOMDocument();
 
             return $w->loadXML($this->responseText);
-        } elseif (strtolower($property_name) == 'scheme'
-            || strtolower($property_name) == 'host'
-            || strtolower($property_name) == 'port'
-            || strtolower($property_name) == 'user'
-            || strtolower($property_name) == 'pass'
-            || strtolower($property_name) == 'path'
-            || strtolower($property_name) == 'query'
-            || strtolower($property_name) == 'fragment'
+        }
+        if ('scheme' == strtolower($property_name)
+            || 'host' == strtolower($property_name)
+            || 'port' == strtolower($property_name)
+            || 'user' == strtolower($property_name)
+            || 'pass' == strtolower($property_name)
+            || 'path' == strtolower($property_name)
+            || 'query' == strtolower($property_name)
+            || 'fragment' == strtolower($property_name)
         ) {
             if (isset($this->parsed_url[strtolower($property_name)])) {
                 return $this->parsed_url[strtolower($property_name)];
-            } else {
-                return;
             }
-        } else {
-            return $this->$property_name;
+
+            return;
         }
+
+        return $this->{$property_name};
     }
 
     public function abort()
@@ -157,14 +157,13 @@ class Network__fsockopen implements Network__Interface
         $this->url = $bstrUrl;
         if (!$this->parsed_url) {
             throw new Exception('URL Syntax Error!');
-        } else {
-            //bstrUser & bstrPassword ?
-            if (!isset($this->parsed_url['port'])) {
-                if ($this->parsed_url['scheme'] == 'https') {
-                    $this->parsed_url['port'] = 443;
-                } else {
-                    $this->parsed_url['port'] = 80;
-                }
+        }
+        //bstrUser & bstrPassword ?
+        if (!isset($this->parsed_url['port'])) {
+            if ('https' == $this->parsed_url['scheme']) {
+                $this->parsed_url['port'] = 443;
+            } else {
+                $this->parsed_url['port'] = 80;
             }
         }
 
@@ -185,15 +184,14 @@ class Network__fsockopen implements Network__Interface
             $data = http_build_query($data);
         }
 
-
-        if ($this->option['method'] == 'POST' || $this->option['method'] == 'PUT') {
+        if ('POST' == $this->option['method'] || 'PUT' == $this->option['method']) {
             if (is_array($varBody) && count($this->postdata) > 0) {
                 foreach ($varBody as $key => $value) {
                     $this->add_postdata($key, $value);
                 }
                 $data = '';
             }
-            if ($data == '') {
+            if ('' == $data) {
                 $data = $this->private_buildPostData(); //http_build_query($this->postdata);
             }
             $this->option['content'] = $data;
@@ -223,7 +221,7 @@ class Network__fsockopen implements Network__Interface
             }
         }
 
-        if ($this->isgzip == true) {
+        if (true == $this->isgzip) {
             $this->httpheader['Accept-Encoding'] = 'Accept-Encoding: gzip';
         }
 
@@ -244,19 +242,19 @@ class Network__fsockopen implements Network__Interface
             $this->option['max_redirects'] = 0;
         }
 
-        $contextOptions = array('http' => $this->option, 'ssl' => array('verify_peer' => false,'verify_peer_name' => false));
+        $contextOptions = ['http' => $this->option, 'ssl' => ['verify_peer' => false, 'verify_peer_name' => false]];
         $context = stream_context_create($contextOptions);
 
         if (defined('ZBP_PATH')) {
             ZbpErrorControl::SuspendErrorHook();
         }
         $socket = stream_socket_client(
-            (($this->scheme == 'https' ? 'ssl://' : '') . $this->parsed_url['host']) . ':' . $this->port,
+            (('https' == $this->scheme ? 'ssl://' : '') . $this->parsed_url['host']) . ':' . $this->port,
             $this->errno,
             $this->errstr,
             $this->timeout,
             STREAM_CLIENT_CONNECT,
-            $context
+            $context,
         );
         if (defined('ZBP_PATH')) {
             ZbpErrorControl::ResumeErrorHook();
@@ -265,14 +263,14 @@ class Network__fsockopen implements Network__Interface
             return;
         }
 
-        $url = $this->option['method'] . ' ' . ($this->parsed_url['path'] == '' ? '/' : $this->parsed_url['path']);
+        $url = $this->option['method'] . ' ' . ('' == $this->parsed_url['path'] ? '/' : $this->parsed_url['path']);
 
-        if (isset($this->parsed_url["query"])) {
-            $url .= "?" . $this->parsed_url["query"];
+        if (isset($this->parsed_url['query'])) {
+            $url .= '?' . $this->parsed_url['query'];
         }
         fwrite(
             $socket,
-            $url . ' HTTP/1.0' . "\r\n" // Not support 100 Continue
+            $url . ' HTTP/1.0' . "\r\n", // Not support 100 Continue
         );
         fwrite($socket, $this->option['header'] . "\r\n");
         fwrite($socket, "\r\n");
@@ -309,7 +307,7 @@ class Network__fsockopen implements Network__Interface
             }
         }
 
-        if ($this->getResponseHeader('Transfer-Encoding') == 'chunked') {
+        if ('chunked' == $this->getResponseHeader('Transfer-Encoding')) {
             if (!function_exists('http_chunked_decode')) {
                 $this->responseText = $this->http_chunked_decode($this->responseText);
             } else {
@@ -317,7 +315,7 @@ class Network__fsockopen implements Network__Interface
             }
         }
 
-        if ($this->getResponseHeader('Content-Encoding') == 'gzip') {
+        if ('gzip' == $this->getResponseHeader('Content-Encoding')) {
             if (!function_exists('gzdecode')) {
                 $this->responseText = $this->gzdecode($this->responseText);
             } else {
@@ -351,7 +349,7 @@ class Network__fsockopen implements Network__Interface
      */
     public function setRequestHeader($bstrHeader, $bstrValue, $append = false)
     {
-        if ($append == false) {
+        if (false == $append) {
             $this->httpheader[$bstrHeader] = $bstrHeader . ': ' . $bstrValue;
         } else {
             if (isset($this->httpheader[$bstrHeader])) {
@@ -365,34 +363,24 @@ class Network__fsockopen implements Network__Interface
     }
 
     /**
-     * @param $bstrItem
-     * @param $bstrValue
-     */
-    private function add_postdata($bstrItem, $bstrValue)
-    {
-        $this->postdata[$bstrItem] = array(
-            'data' => $bstrValue,
-            'type' => 'text',
-        );
-    }
-
-    /**
-     * @param string $name
-     * @param string $entity
+     * @param string     $name
+     * @param string     $entity
+     * @param null|mixed $filename
+     * @param mixed      $mime
      *
      * @return mixed
      */
     public function addBinary($name, $entity, $filename = null, $mime = '')
     {
         $this->private_isBinary = true;
-        $return = array();
+        $return = [];
 
         $return['type'] = 'binary';
         if (is_file($entity)) {
             $return['data'] = file_get_contents($entity);
-            $return['filename'] = ($filename === null ? basename($entity) : $filename);
+            $return['filename'] = (null === $filename ? basename($entity) : $filename);
 
-            if ($mime == '') {
+            if ('' == $mime) {
                 if (function_exists('mime_content_type')) {
                     $mime = mime_content_type($entity);
                 } elseif (function_exists('finfo_open')) {
@@ -408,8 +396,8 @@ class Network__fsockopen implements Network__Interface
         } else {
             $name = basename($name);
             $return['data'] = $entity;
-            $return['filename'] = ($filename === null ? basename($entity) : $filename);
-            $mime = $mime == '' ? 'application/octet-stream' : $mime;
+            $return['filename'] = (null === $filename ? basename($entity) : $filename);
+            $mime = '' == $mime ? 'application/octet-stream' : $mime;
         }
         $return['mime'] = $mime;
 
@@ -421,8 +409,6 @@ class Network__fsockopen implements Network__Interface
     /**
      * @param string $name
      * @param string $entity
-     *
-     * @return void
      */
     public function addText($name, $entity)
     {
@@ -432,12 +418,96 @@ class Network__fsockopen implements Network__Interface
     /**
      * @param string $name
      * @param string $entity
-     *
-     * @return void
      */
     public function addFormParam($name, $entity)
     {
         $this->addText($name, $entity);
+    }
+
+    public function enableGzip()
+    {
+        $this->isgzip = true;
+    }
+
+    /**
+     * @param int $n
+     */
+    public function setMaxRedirs($n = 0)
+    {
+        $this->maxredirs = $n;
+    }
+
+    public function getStatusCode()
+    {
+        return $this->status;
+    }
+
+    public function getStatusText()
+    {
+        return $this->statusText;
+    }
+
+    public function getReasonPhrase()
+    {
+        return substr($this->statusText, 13);
+    }
+
+    public function withStatus($code, $reasonPhrase = '')
+    {
+    }
+
+    public function getBody()
+    {
+        return $this->responseText;
+    }
+
+    public function getHeaders()
+    {
+        $headers = [];
+        foreach ($this->responseHeader as $h) {
+            $array = explode(': ', $h, 2);
+            if (count($array) > 1) {
+                if (false == isset($headers[$array[0]])) {
+                    $headers[$array[0]] = [];
+                }
+                $headers[$array[0]][] = $array[1];
+            }
+        }
+
+        return $headers;
+    }
+
+    public function getHeader($name)
+    {
+        $headers = $this->getHeaders();
+        if (isset($headers[$name])) {
+            return $headers[$name];
+        }
+
+        return [];
+    }
+
+    public function hasHeader($name)
+    {
+        $headers = $this->getHeaders();
+
+        return isset($headers[$name]);
+    }
+
+    public function addQuery($name, $entity)
+    {
+    }
+
+    /**
+     * @param $bstrItem
+     * @param $bstrValue
+     */
+    private function add_postdata($bstrItem, $bstrValue)
+    {
+        $this->postdata[$bstrItem] = [
+            'data' => $bstrValue,
+            'type' => 'text',
+        ];
     }
 
     /**
@@ -446,7 +516,7 @@ class Network__fsockopen implements Network__Interface
     private function private_buildPostData()
     {
         if (!$this->private_isBinary) {
-            $array = array();
+            $array = [];
             foreach ($this->postdata as $name => $value) {
                 $array[$name] = $value['data'];
             }
@@ -461,8 +531,8 @@ class Network__fsockopen implements Network__Interface
             $data .= "\r\n";
             $content = $value['data'];
             $data .= "--{$boundary}\r\n";
-            $data .= "Content-Disposition: form-data; ";
-            if ($value['type'] == 'text') {
+            $data .= 'Content-Disposition: form-data; ';
+            if ('text' == $value['type']) {
                 $data .= 'name="' . $name . '"' . "\r\n\r\n";
                 $data .= $content; // . "\r\n";
                 //$data .= "--{$boundary}";
@@ -470,8 +540,8 @@ class Network__fsockopen implements Network__Interface
                 $filename = $value['filename'];
                 $mime = $value['mime'];
                 $data .= 'name="' . $name . '"; filename="' . $filename . '"' . "\r\n";
-                $data .= "Content-Type: $mime\r\n";
-                $data .= "\r\n$content"; //"\r\n";
+                $data .= "Content-Type: {$mime}\r\n";
+                $data .= "\r\n{$content}"; //"\r\n";
                 //$data .= "--{$boundary}";
             }
         }
@@ -492,7 +562,7 @@ class Network__fsockopen implements Network__Interface
 
     private function reinit()
     {
-        $this->httpheader = array();
+        $this->httpheader = [];
 
         if (!$this->canreinit) {
             return;
@@ -509,11 +579,11 @@ class Network__fsockopen implements Network__Interface
         $this->private_isBinary = false;
         $this->private_boundary = '';
 
-        $this->option = array();
+        $this->option = [];
         $this->url = '';
-        $this->postdata = array();
-        $this->responseHeader = array();
-        $this->parsed_url = array();
+        $this->postdata = [];
+        $this->responseHeader = [];
+        $this->parsed_url = [];
         $this->timeout = 30;
         $this->errstr = '';
         $this->errno = 0;
@@ -565,7 +635,7 @@ class Network__fsockopen implements Network__Interface
     private function is_hex($hex)
     {
         // regex is for weenies
-        $hex = strtolower(trim(ltrim($hex, "0")));
+        $hex = strtolower(trim(ltrim($hex, '0')));
         if (empty($hex)) {
             $hex = 0;
         }
@@ -584,76 +654,4 @@ class Network__fsockopen implements Network__Interface
         // no support for 2nd argument
         return file_get_contents('compress.zlib://data:zbp/ths;base64,' . base64_encode($string));
     }
-
-    public function enableGzip()
-    {
-        $this->isgzip = true;
-    }
-
-    /**
-     * @param int $n
-     */
-    public function setMaxRedirs($n = 0)
-    {
-        $this->maxredirs = $n;
-    }
-
-    public function getStatusCode()
-    {
-        return $this->status;
-    }
-
-    public function getStatusText()
-    {
-        return $this->statusText;
-    }
-
-    public function getReasonPhrase()
-    {
-        return substr($this->statusText, 13);
-    }
-
-    public function withStatus($code, $reasonPhrase = '')
-    {
-    }
-
-    public function getBody()
-    {
-        return $this->responseText;
-    }
-
-    public function getHeaders()
-    {
-        $headers = array();
-        foreach ($this->responseHeader as $h) {
-            $array = explode(': ', $h, 2);
-            if (count($array) > 1) {
-                if (isset($headers[$array[0]]) == false) {
-                    $headers[$array[0]] = array();
-                }
-                $headers[$array[0]][] = $array[1];
-            }
-        }
-        return $headers;
-    }
-
-    public function getHeader($name)
-    {
-        $headers = $this->getHeaders();
-        if (isset($headers[$name])) {
-            return $headers[$name];
-        }
-        return array();
-    }
-
-    public function hasHeader($name)
-    {
-        $headers = $this->getHeaders();
-        return isset($headers[$name]);
-    }
-
-    public function addQuery($name, $entity)
-    {
-    }
-
 }
