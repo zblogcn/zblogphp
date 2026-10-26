@@ -219,12 +219,18 @@ class Network__filegetcontents implements Network__Interface
         if (defined('ZBP_PATH')) {
             ZbpErrorControl::SuspendErrorHook();
         }
-        $http_response_header = null;
-        $this->responseText = file_get_contents((true == $this->isgzip ? 'compress.zlib://' : '') . $this->url, false, stream_context_create(['http' => $this->option, 'ssl' => ['verify_peer' => false, 'verify_peer_name' => false]]));
+        if (PHP_VERSION_ID >= 80400 && function_exists('http_get_last_response_headers')) {
+            $this->responseText = file_get_contents((true == $this->isgzip ? 'compress.zlib://' : '') . $this->url, false, stream_context_create(['http' => $this->option, 'ssl' => ['verify_peer' => false, 'verify_peer_name' => false]]));
+            $responseHeader = (false === $this->responseText) ? null : http_get_last_response_headers();
+        } else {
+            $http_response_header = null;
+            $this->responseText = file_get_contents((true == $this->isgzip ? 'compress.zlib://' : '') . $this->url, false, stream_context_create(['http' => $this->option, 'ssl' => ['verify_peer' => false, 'verify_peer_name' => false]]));
+            $responseHeader = $http_response_header;
+        }
         if (is_bool($this->responseText) && !$this->responseText) {
             $this->responseText = '';
         }
-        $this->responseHeader = $http_response_header;
+        $this->responseHeader = $responseHeader;
         if (defined('ZBP_PATH')) {
             ZbpErrorControl::ResumeErrorHook();
         }

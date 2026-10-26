@@ -1610,7 +1610,9 @@ function tpure_IP($ip)
      curl_setopt ( $ch, CURLOPT_SSL_VERIFYPEER, false );
      curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
      $location = curl_exec($ch);
-     curl_close($ch);
+     if (PHP_VERSION_ID < 80000) {
+         curl_close($ch);
+     }
      $location = mb_convert_encoding($location, 'utf-8','GB2312');
      $location = substr($location, strlen('({')+strpos($location, '({'),(strlen($location) - strpos($location, '})'))*(-1));
      $location = str_replace('"',"",str_replace(":","=",str_replace(",","&",$location)));

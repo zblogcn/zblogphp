@@ -318,7 +318,9 @@ class Thumb
         $this->loadSrcWidthAndHeight();
 
         if ($this->srcWidth < self::$minWidthNeedToThumb || $this->srcHeight < self::$minHeightNeedToThumb) {
-            imagedestroy($this->srcRes);
+            if (PHP_VERSION_ID < 80000) {
+                imagedestroy($this->srcRes);
+            }
             throw new Exception($GLOBALS['zbp']->lang['error']['102']);
         }
 
@@ -395,7 +397,9 @@ class Thumb
         if (! $this->tmpRes) {
             return;
         }
-        imagedestroy($this->srcRes);
+        if (PHP_VERSION_ID < 80000) {
+            imagedestroy($this->srcRes);
+        }
         $this->srcRes = $this->tmpRes;
         $this->tmpRes = null;
     }
@@ -411,6 +415,11 @@ class Thumb
     protected function clip($clipx, $clipy, $clip_width, $clip_height)
     {
         $this->syncSrcFromTmp();
+
+        $clipx = (int) $clipx;
+        $clipy = (int) $clipy;
+        $clip_width = (int) $clip_width;
+        $clip_height = (int) $clip_height;
 
         $this->tmpRes = imagecreatetruecolor($clip_width, $clip_height);
 
@@ -457,13 +466,13 @@ class Thumb
             }
         }
 
-        $this->tmpRes = imagecreatetruecolor($dst_width, $dst_height);
+        $this->tmpRes = imagecreatetruecolor((int) $dst_width, (int) $dst_height);
 
         if (defined('ZC_THUMB_IMAGE_FILL') && ZC_THUMB_IMAGE_FILL == true) {
             imagefill($this->tmpRes, 0, 0, 0xffffff);
         }
 
-        imagecopyresampled($this->tmpRes, $this->srcRes, 0, 0, 0, 0, $dst_width, $dst_height, $this->srcWidth, $this->srcHeight);
+        imagecopyresampled($this->tmpRes, $this->srcRes, 0, 0, 0, 0, (int) $dst_width, (int) $dst_height, $this->srcWidth, $this->srcHeight);
     }
 
     /**
@@ -536,7 +545,9 @@ class Thumb
 
         $this->save();
 
-        imagedestroy($this->srcRes);
+        if (PHP_VERSION_ID < 80000) {
+            imagedestroy($this->srcRes);
+        }
     }
 
 }

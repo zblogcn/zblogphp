@@ -328,7 +328,9 @@ class UpYun
             throw new UpYunException('Connection Failed', $http_code);
         }
 
-        curl_close($ch);
+        if (PHP_VERSION_ID < 80000) {
+            curl_close($ch);
+        }
 
         $header_string = '';
         $body = '';

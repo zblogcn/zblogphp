@@ -32,7 +32,9 @@ function GetHttpContent($url)
         }
         curl_setopt($ch, CURLOPT_TIMEOUT, 300);
         $r = curl_exec($ch);
-        curl_close($ch);
+        if (PHP_VERSION_ID < 80000) {
+            curl_close($ch);
+        }
     } elseif (ini_get("allow_url_fopen")) {
         if (function_exists('ini_set')) {
             ini_set('default_socket_timeout', 300);

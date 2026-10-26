@@ -341,7 +341,6 @@ class Network__curl implements Network__Interface
             } elseif (function_exists('finfo_open')) {
                 $finfo = finfo_open(FILEINFO_MIME);
                 $mime = finfo_file($finfo, $name);
-                // finfo_close —— 8.5 起废弃
                 if (PHP_VERSION_ID < 80500) {
                     finfo_close($finfo);
                 }
