@@ -845,7 +845,9 @@ $zbp->CheckSiteClosed();
 $xmlstring = file_get_contents('php://input');
 //Logs($xmlstring);
 //defense XXE
-libxml_disable_entity_loader(true);
+if (PHP_VERSION_ID < 80000) {
+    libxml_disable_entity_loader(true);
+}
 $xml = simplexml_load_string($xmlstring);
 
 if ($xml) {
