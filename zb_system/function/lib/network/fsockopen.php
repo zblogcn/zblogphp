@@ -398,7 +398,9 @@ class Network__fsockopen implements Network__Interface
                 } elseif (function_exists('finfo_open')) {
                     $finfo = finfo_open(FILEINFO_MIME);
                     $mime = finfo_file($finfo, $name);
-                    finfo_close($finfo);
+                    if (PHP_VERSION_ID < 80500) {
+                        finfo_close($finfo);
+                    }
                 } else {
                     $mime = 'application/octet-stream';
                 }

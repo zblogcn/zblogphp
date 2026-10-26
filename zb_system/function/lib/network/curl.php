@@ -258,7 +258,11 @@ class Network__curl implements Network__Interface
         if (is_bool($this->responseText) && !$this->responseText) {
             $this->responseText = '';
         }
-        curl_close($this->ch);
+        
+        if (PHP_VERSION_ID < 80000) {
+            curl_close($this->ch);
+        }
+
 
         foreach ($this->responseHeader as $key => $value) {
             if (strpos($value, 'HTTP/') === 0) {
@@ -337,7 +341,10 @@ class Network__curl implements Network__Interface
             } elseif (function_exists('finfo_open')) {
                 $finfo = finfo_open(FILEINFO_MIME);
                 $mime = finfo_file($finfo, $name);
-                finfo_close($finfo);
+                // finfo_close —— 8.5 起废弃
+                if (PHP_VERSION_ID < 80500) {
+                    finfo_close($finfo);
+                }
             } else {
                 $mime = 'application/octet-stream';
             }
