@@ -27,12 +27,34 @@ class RegPage_ValidateCode
     }
 
     /**
+     *对外生成.
+     */
+    public function GetImg()
+    {
+        $this->createBg();
+        $this->createCode();
+        $this->createLine();
+        $this->createFont();
+        $this->outPut();
+    }
+
+    /**
+     * 获取验证码
+     *
+     * @return string
+     */
+    public function GetCode()
+    {
+        return strtolower($this->code);
+    }
+
+    /**
      *生成随机码
      */
     protected function createCode()
     {
         $_len = strlen($this->charset) - 1;
-        for ($i = 0; $i < $this->codelen; $i++) {
+        for ($i = 0; $i < $this->codelen; ++$i) {
             $this->code .= $this->charset[mt_rand(0, $_len)];
         }
     }
@@ -53,7 +75,7 @@ class RegPage_ValidateCode
     protected function createFont()
     {
         $_x = $this->width / $this->codelen;
-        for ($i = 0; $i < $this->codelen; $i++) {
+        for ($i = 0; $i < $this->codelen; ++$i) {
             $this->fontcolor = imagecolorallocate($this->img, mt_rand(0, 156), mt_rand(0, 156), mt_rand(0, 156));
             imagettftext($this->img, $this->fontsize, mt_rand(-30, 30), $_x * $i + mt_rand(1, 5), $this->height / 1.4, $this->fontcolor, $this->font, $this->code[$i]);
         }
@@ -64,11 +86,11 @@ class RegPage_ValidateCode
      */
     protected function createLine()
     {
-        for ($i = 50; $i < 100; $i++) {
+        for ($i = 50; $i < 100; ++$i) {
             $color = imagecolorallocate($this->img, mt_rand(200, 255), mt_rand(200, 255), mt_rand(200, 255));
             imagestring($this->img, mt_rand(1, 5), mt_rand(0, $this->width), mt_rand(0, $this->height), '*', $color);
         }
-        for ($i = 3; $i < 6; $i++) {
+        for ($i = 3; $i < 6; ++$i) {
             $color = imagecolorallocate($this->img, mt_rand(0, 156), mt_rand(0, 156), mt_rand(0, 156));
             imageline($this->img, mt_rand(0, $this->width), mt_rand(0, $this->height), mt_rand(0, $this->width), mt_rand(0, $this->height), $color);
         }
@@ -84,27 +106,5 @@ class RegPage_ValidateCode
         if (PHP_VERSION_ID < 80000) {
             imagedestroy($this->img);
         }
-    }
-
-    /**
-     *对外生成.
-     */
-    public function GetImg()
-    {
-        $this->createBg();
-        $this->createCode();
-        $this->createLine();
-        $this->createFont();
-        $this->outPut();
-    }
-
-    /**
-     * 获取验证码
-     *
-     * @return string
-     */
-    public function GetCode()
-    {
-        return strtolower($this->code);
     }
 }

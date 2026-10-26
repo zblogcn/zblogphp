@@ -14,48 +14,47 @@ if (!defined('ZBP_THUMB_DEFAULT_IMG')) {
  */
 class Thumb
 {
+    /**
+     * 最小需要缩略的图片宽度.（小于该值的图片抛默认图片）.
+     *
+     * @var int
+     */
+    public static $minWidthNeedToThumb = 50;
 
     /**
-     * 默认图片.
+     * 最小需要缩略的图片高度.（小于该值的图片抛默认图片）.
      *
-     * @var string|null
+     * @var int
      */
-    static protected $defaultImg;
+    public static $minHeightNeedToThumb = 50;
 
     /**
-     * 最小需要缩略的图片宽度.（小于该值的图片抛默认图片）
+     * 默认图片质量.
      *
-     * @var integer
+     * @var int
      */
-    static public $minWidthNeedToThumb = 50;
-
-    /**
-     * 最小需要缩略的图片高度.（小于该值的图片抛默认图片）
-     *
-     * @var integer
-     */
-    static public $minHeightNeedToThumb = 50;
-
-    /**
-     * 默认图片质量
-     *
-     * @var integer
-     */
-    static public $quality = 90;
+    public static $quality = 90;
 
     /**
      * 需要排除的本地路径.
      *
      * @var array
      */
-    static public $excludedPaths = array(
-        'zb_users/emotion/*'
-    );
+    public static $excludedPaths = [
+        'zb_users/emotion/*',
+    ];
+
+    /**
+     * 默认图片.
+     *
+     * @var null|string
+     */
+    protected static $defaultImg;
 
     /**
      * 是否需要裁剪.
      *
-     * @var boolean
+     * @var bool
      */
     protected $shouldClip = false;
 
@@ -76,28 +75,28 @@ class Thumb
     /**
      * 原图片宽度.
      *
-     * @var integer
+     * @var int
      */
     protected $srcWidth;
 
     /**
      * 原图片高度.
      *
-     * @var integer
+     * @var int
      */
     protected $srcHeight;
 
     /**
      * 目标缩略图宽度.
      *
-     * @var integer
+     * @var int
      */
     protected $dstWidth = 200;
 
     /**
      * 目标缩略图高度.
      *
-     * @var integer
+     * @var int
      */
     protected $dstHeight = 200;
 
@@ -111,19 +110,20 @@ class Thumb
     /**
      * 是否成功载入.
      *
-     * @var boolean
+     * @var bool
      */
     protected $loadedCompletely = false;
 
     /**
      * 更改默认图片.
      *
-     * @param string|null $default_img 默认图片路径
+     * @param null|string $default_img 默认图片路径
      */
     public static function changeDefaultImg($default_img)
     {
-        if ($default_img === null || $default_img === ZBP_THUMB_DEFAULT_IMG) {
+        if (null === $default_img || ZBP_THUMB_DEFAULT_IMG === $default_img) {
             self::$defaultImg = ZBP_THUMB_DEFAULT_IMG;
+
             return;
         }
 
@@ -133,22 +133,23 @@ class Thumb
     /**
      * 生成缩略图.
      *
-     * @param array   $images 图片
-     * @param integer $width  宽度
-     * @param integer $height 高度
-     * @param integer $count  数量
-     * @param boolean $clip   是否裁剪
+     * @param array $images 图片
+     * @param int   $width  宽度
+     * @param int   $height 高度
+     * @param int   $count  数量
+     * @param bool  $clip   是否裁剪
+     *
      * @return array
      */
     public static function Thumbs($images, $width = 200, $height = 150, $count = 1, $clip = true)
     {
         global $zbp;
 
-        if (! is_dir($thumb_dir = $zbp->usersdir . 'cache/thumbs/')) {
+        if (!is_dir($thumb_dir = $zbp->usersdir . 'cache/thumbs/')) {
             mkdir($thumb_dir);
         }
 
-        if (self::$defaultImg === null) {
+        if (null === self::$defaultImg) {
             self::$defaultImg = ZBP_THUMB_DEFAULT_IMG;
         }
 
@@ -157,31 +158,31 @@ class Thumb
             self::$quality = $default_quality;
         }
 
-        $thumbs = array();
+        $thumbs = [];
 
         $i = 0;
         foreach ($images as $image) {
             if ($i >= $count) {
                 break;
             }
-            if (! $image) {
+            if (!$image) {
                 continue;
             }
             if (PHP_SYSTEM === SYSTEM_WINDOWS) {
-                $image = iconv("UTF-8", "GBK//IGNORE", $image);
+                $image = iconv('UTF-8', 'GBK//IGNORE', $image);
             }
             $ext = GetFileExt($image);
-            $ext_arr = array('jpeg', 'jpg', 'png', 'gif', 'bmp');
+            $ext_arr = ['jpeg', 'jpg', 'png', 'gif', 'bmp'];
             if (function_exists('imageavif')) {
                 $ext_arr[] = 'avif';
             }
             if (function_exists('imagewebp')) {
                 $ext_arr[] = 'webp';
             }
-            if (! in_array($ext, $ext_arr)) {
+            if (!in_array($ext, $ext_arr)) {
                 continue;
             }
-            if (count($parsed_url = parse_url($image)) === 1 && isset($parsed_url['path'])) {
+            if (1 === count($parsed_url = parse_url($image)) && isset($parsed_url['path'])) {
                 // 是相对地址
                 // 特殊处理相对地址，但不包括所有情况，仍又失败的可能
                 self::handleRelativeUrl($image);
@@ -193,20 +194,22 @@ class Thumb
             }
 
             $image_name = str_replace(RemoveProtocolFromUrl($zbp->host), '{#ZC_BLOG_HOST#}', RemoveProtocolFromUrl($image));
-            $thumb_name = md5($image_name) . '-' . $width . '-' . $height . '-' . ($clip === true ? '1' : '0') . '.' . $ext;
+            $thumb_name = md5($image_name) . '-' . $width . '-' . $height . '-' . (true === $clip ? '1' : '0') . '.' . $ext;
             $thumb_path = $thumb_dir . $thumb_name;
             $thumb_url = $zbp->host . 'zb_users/cache/thumbs/' . $thumb_name;
 
             if (file_exists($thumb_path)) {
                 $thumbs[] = $thumb_url;
-                $i++;
+                ++$i;
+
                 continue;
             }
-            $thumb = new self;
+            $thumb = new self();
 
             ZbpErrorControl::SuspendErrorHook();
+
             try {
-                if (! CheckUrlIsLocal($image)) {
+                if (!CheckUrlIsLocal($image)) {
                     $thumb->loadSrcByExternalUrl($image);
                 } else {
                     $thumb->loadSrcByPath($img_path);
@@ -222,7 +225,7 @@ class Thumb
             if ($thumb->loadedCompletely) {
                 $thumb->shouldClip($clip)->setWidth($width)->setHeight($height)->setDstImagePath($thumb_path)->handle();
                 $thumbs[] = $thumb_url;
-                $i++;
+                ++$i;
             }
         }
 
@@ -230,50 +233,15 @@ class Thumb
     }
 
     /**
-     * 判断路径是否应该被排除.
-     *
-     * @param string $path
-     * @return boolean
-     */
-    protected static function checkIsExcluded($path)
-    {
-        foreach (self::$excludedPaths as $excluded_path) {
-            if (fnmatch(ZBP_PATH . $excluded_path, $path)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * 相对地址处理.
-     *
-     * @param string $url
-     * @return void
-     */
-    protected static function handleRelativeUrl(&$url)
-    {
-        global $zbp;
-
-        $parsed_host = parse_url($zbp->host);
-
-        if (substr($url, 0, 1) === '/') {
-            $url = $parsed_host['scheme'] . '://' . $parsed_host['host'] . $url;
-        } else {
-            $url = $zbp->host . $url;
-        }
-    }
-
-    /**
      * 通过路径载入原图片.
      *
      * @param string $img_path
+     *
      * @return Thumb
      */
     public function loadSrcByPath($img_path)
     {
-        if (! file_exists($img_path)) {
+        if (!file_exists($img_path)) {
             throw new Exception($GLOBALS['zbp']->lang['error']['99']);
         }
 
@@ -284,6 +252,7 @@ class Thumb
      * 从远程 Url 中载入图片.
      *
      * @param string $url
+     *
      * @return Thumb
      */
     public function loadSrcByExternalUrl($url)
@@ -294,7 +263,7 @@ class Thumb
         $http->open('GET', $url);
         $http->setRequestHeader('Referer', $bloghost);
         $http->send();
-        if ($http->status == 200 && ($r = $http->responseText)) {
+        if (200 == $http->status && ($r = $http->responseText)) {
             return $this->loadSrcByString($r);
         }
 
@@ -305,13 +274,14 @@ class Thumb
      * 通过二进制内容载入原图片.
      *
      * @param string $img_string
+     *
      * @return Thumb
      */
     public function loadSrcByString($img_string)
     {
         $this->srcRes = imagecreatefromstring($img_string);
 
-        if (! $this->srcRes) {
+        if (!$this->srcRes) {
             throw new Exception($GLOBALS['zbp']->lang['error']['101']);
         }
 
@@ -321,26 +291,20 @@ class Thumb
             if (PHP_VERSION_ID < 80000) {
                 imagedestroy($this->srcRes);
             }
+
             throw new Exception($GLOBALS['zbp']->lang['error']['102']);
         }
 
         $this->loadedCompletely = true;
-        return $this;
-    }
 
-    /**
-     * 载入原图宽高.
-     */
-    protected function loadSrcWidthAndHeight()
-    {
-        $this->srcWidth = imagesx($this->srcRes);
-        $this->srcHeight = imagesy($this->srcRes);
+        return $this;
     }
 
     /**
      * 设置是否需要裁剪.
      *
-     * @param boolean $should
+     * @param bool $should
+     *
      * @return Thumb
      */
     public function shouldClip($should = true)
@@ -354,6 +318,7 @@ class Thumb
      * 设置目标文件宽度.
      *
      * @param int $width
+     *
      * @return Thumb
      */
     public function setWidth($width)
@@ -367,6 +332,7 @@ class Thumb
      * 设置目标文件高度.
      *
      * @param int $height
+     *
      * @return Thumb
      */
     public function setHeight($height)
@@ -380,6 +346,7 @@ class Thumb
      * 设置目标缩略图路径.
      *
      * @param string $path
+     *
      * @return Thumb
      */
     public function setDstImagePath($path)
@@ -390,52 +357,10 @@ class Thumb
     }
 
     /**
-     * 将 tmp 同步到 src.
-     */
-    protected function syncSrcFromTmp()
-    {
-        if (! $this->tmpRes) {
-            return;
-        }
-        if (PHP_VERSION_ID < 80000) {
-            imagedestroy($this->srcRes);
-        }
-        $this->srcRes = $this->tmpRes;
-        $this->tmpRes = null;
-    }
-
-    /**
-     * 裁剪.
-     *
-     * @param int $clipx             被裁切图片的X坐标
-     * @param int $clipy             被裁切图片的Y坐标
-     * @param int $clip_width        被裁区域的宽度
-     * @param int $clip_height       被裁区域的高度
-     */
-    protected function clip($clipx, $clipy, $clip_width, $clip_height)
-    {
-        $this->syncSrcFromTmp();
-
-        $clipx = (int) $clipx;
-        $clipy = (int) $clipy;
-        $clip_width = (int) $clip_width;
-        $clip_height = (int) $clip_height;
-
-        $this->tmpRes = imagecreatetruecolor($clip_width, $clip_height);
-
-        if (defined('ZC_THUMB_IMAGE_FILL') && ZC_THUMB_IMAGE_FILL == true) {
-            imagefill($this->tmpRes, 0, 0, 0xffffff);
-        }
-
-        imagecopyresampled($this->tmpRes, $this->srcRes, 0, 0, $clipx, $clipy, $this->srcWidth, $this->srcHeight, $this->srcWidth, $this->srcHeight);
-    }
-
-    /**
      * 缩略.
      *
-     * @param integer $forced_width  生成的宽度
-     * @param integer $forced_height 生成的高度
-     * @return void
+     * @param int $forced_width  生成的宽度
+     * @param int $forced_height 生成的高度
      */
     public function zoom($forced_width, $forced_height = 0)
     {
@@ -447,7 +372,7 @@ class Thumb
         $src_scale = ($this->srcWidth / $this->srcHeight);
 
         // 如果裁剪的高为未定义，那么等比例缩小，高自适应
-        if (! $forced_height) {
+        if (!$forced_height) {
             $dst_width = $forced_width;
             $dst_height = ($forced_width / $src_scale);
         } else {
@@ -469,46 +394,10 @@ class Thumb
         $this->tmpRes = imagecreatetruecolor((int) $dst_width, (int) $dst_height);
 
         if (defined('ZC_THUMB_IMAGE_FILL') && ZC_THUMB_IMAGE_FILL == true) {
-            imagefill($this->tmpRes, 0, 0, 0xffffff);
+            imagefill($this->tmpRes, 0, 0, 0xFFFFFF);
         }
 
         imagecopyresampled($this->tmpRes, $this->srcRes, 0, 0, 0, 0, (int) $dst_width, (int) $dst_height, $this->srcWidth, $this->srcHeight);
-    }
-
-    /**
-     * 保存缩略图.
-     */
-    protected function save()
-    {
-        $this->syncSrcFromTmp();
-
-        $ext = GetFileExt($this->dstImagePath);
-
-        switch ($ext) {
-            case 'jpg':
-            case 'jpeg':
-                imagejpeg($this->srcRes, $this->dstImagePath, self::$quality);
-                break;
-            case 'gif':
-                imagegif($this->srcRes, $this->dstImagePath);
-                break;
-            case 'png':
-                imagepng($this->srcRes, $this->dstImagePath);
-                break;
-            case 'webp':
-                imagewebp($this->srcRes, $this->dstImagePath, self::$quality);
-                break;
-            case 'avif':
-                imageavif($this->srcRes, $this->dstImagePath, self::$quality);
-                break;
-            case 'bmp':
-                if (function_exists('imagebmp')) {
-                    imagebmp($this->srcRes, $this->dstImagePath);
-                } else {
-                    imagejpeg($this->srcRes, $this->dstImagePath, self::$quality);
-                }
-                break;
-        }
     }
 
     /**
@@ -550,4 +439,136 @@ class Thumb
         }
     }
 
+    /**
+     * 判断路径是否应该被排除.
+     *
+     * @param string $path
+     *
+     * @return bool
+     */
+    protected static function checkIsExcluded($path)
+    {
+        foreach (self::$excludedPaths as $excluded_path) {
+            if (fnmatch(ZBP_PATH . $excluded_path, $path)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * 相对地址处理.
+     *
+     * @param string $url
+     */
+    protected static function handleRelativeUrl(&$url)
+    {
+        global $zbp;
+
+        $parsed_host = parse_url($zbp->host);
+
+        if ('/' === substr($url, 0, 1)) {
+            $url = $parsed_host['scheme'] . '://' . $parsed_host['host'] . $url;
+        } else {
+            $url = $zbp->host . $url;
+        }
+    }
+
+    /**
+     * 载入原图宽高.
+     */
+    protected function loadSrcWidthAndHeight()
+    {
+        $this->srcWidth = imagesx($this->srcRes);
+        $this->srcHeight = imagesy($this->srcRes);
+    }
+
+    /**
+     * 将 tmp 同步到 src.
+     */
+    protected function syncSrcFromTmp()
+    {
+        if (!$this->tmpRes) {
+            return;
+        }
+        if (PHP_VERSION_ID < 80000) {
+            imagedestroy($this->srcRes);
+        }
+        $this->srcRes = $this->tmpRes;
+        $this->tmpRes = null;
+    }
+
+    /**
+     * 裁剪.
+     *
+     * @param int $clipx       被裁切图片的X坐标
+     * @param int $clipy       被裁切图片的Y坐标
+     * @param int $clip_width  被裁区域的宽度
+     * @param int $clip_height 被裁区域的高度
+     */
+    protected function clip($clipx, $clipy, $clip_width, $clip_height)
+    {
+        $this->syncSrcFromTmp();
+
+        $clipx = (int) $clipx;
+        $clipy = (int) $clipy;
+        $clip_width = (int) $clip_width;
+        $clip_height = (int) $clip_height;
+
+        $this->tmpRes = imagecreatetruecolor($clip_width, $clip_height);
+
+        if (defined('ZC_THUMB_IMAGE_FILL') && ZC_THUMB_IMAGE_FILL == true) {
+            imagefill($this->tmpRes, 0, 0, 0xFFFFFF);
+        }
+
+        imagecopyresampled($this->tmpRes, $this->srcRes, 0, 0, $clipx, $clipy, $this->srcWidth, $this->srcHeight, $this->srcWidth, $this->srcHeight);
+    }
+
+    /**
+     * 保存缩略图.
+     */
+    protected function save()
+    {
+        $this->syncSrcFromTmp();
+
+        $ext = GetFileExt($this->dstImagePath);
+
+        switch ($ext) {
+            case 'jpg':
+            case 'jpeg':
+                imagejpeg($this->srcRes, $this->dstImagePath, self::$quality);
+
+                break;
+
+            case 'gif':
+                imagegif($this->srcRes, $this->dstImagePath);
+
+                break;
+
+            case 'png':
+                imagepng($this->srcRes, $this->dstImagePath);
+
+                break;
+
+            case 'webp':
+                imagewebp($this->srcRes, $this->dstImagePath, self::$quality);
+
+                break;
+
+            case 'avif':
+                imageavif($this->srcRes, $this->dstImagePath, self::$quality);
+
+                break;
+
+            case 'bmp':
+                if (function_exists('imagebmp')) {
+                    imagebmp($this->srcRes, $this->dstImagePath);
+                } else {
+                    imagejpeg($this->srcRes, $this->dstImagePath, self::$quality);
+                }
+
+                break;
+        }
+    }
 }

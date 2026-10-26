@@ -2,32 +2,32 @@
 
 class UpYun
 {
-    const VERSION = '2.2.0';
+    public const VERSION = '2.2.0';
 
-    const ED_AUTO = 'v0.api.upyun.com';
-    const ED_TELECOM = 'v1.api.upyun.com';
-    const ED_CNC = 'v2.api.upyun.com';
-    const ED_CTT = 'v3.api.upyun.com';
+    public const ED_AUTO = 'v0.api.upyun.com';
+    public const ED_TELECOM = 'v1.api.upyun.com';
+    public const ED_CNC = 'v2.api.upyun.com';
+    public const ED_CTT = 'v3.api.upyun.com';
 
-    const CONTENT_TYPE = 'Content-Type';
-    const CONTENT_MD5 = 'Content-MD5';
-    const CONTENT_SECRET = 'Content-Secret';
+    public const CONTENT_TYPE = 'Content-Type';
+    public const CONTENT_MD5 = 'Content-MD5';
+    public const CONTENT_SECRET = 'Content-Secret';
 
     // 缩略图
-    const X_GMKERL_THUMBNAIL = 'x-gmkerl-thumbnail';
-    const X_GMKERL_TYPE = 'x-gmkerl-type';
-    const X_GMKERL_VALUE = 'x-gmkerl-value';
-    const X_GMKERL_QUALITY = 'x­gmkerl-quality';
-    const X_GMKERL_UNSHARP = 'x­gmkerl-unsharp';
+    public const X_GMKERL_THUMBNAIL = 'x-gmkerl-thumbnail';
+    public const X_GMKERL_TYPE = 'x-gmkerl-type';
+    public const X_GMKERL_VALUE = 'x-gmkerl-value';
+    public const X_GMKERL_QUALITY = 'x­gmkerl-quality';
+    public const X_GMKERL_UNSHARP = 'x­gmkerl-unsharp';
+
+    protected $endpoint;
 
     private $_bucketname;
     private $_username;
     private $_password;
     private $_timeout = 30;
-    private $_file_secret = null;
-    private $_content_md5 = null;
-
-    protected $endpoint;
+    private $_file_secret;
+    private $_content_md5;
 
     /**
      * @var string: UPYUN 请求唯一id, 出现错误时, 可以将该id报告给 UPYUN,进行调试
@@ -71,7 +71,7 @@ class UpYun
      */
     public function makeDir($path, $auto_mkdir = true)
     {
-        $headers = array('Folder' => 'true');
+        $headers = ['Folder' => 'true'];
         if ($auto_mkdir) {
             $headers['Mkdir'] = 'true';
         }
@@ -99,12 +99,12 @@ class UpYun
      * @param bool   $auto_mkdir 自动创建目录
      * @param array  $opts       可选参数
      *
-     * @return mixed|null
+     * @return null|mixed
      */
     public function writeFile($path, $file, $auto_mkdir = true, $opts = null)
     {
         if (is_null($opts)) {
-            $opts = array();
+            $opts = [];
         }
 
         if (!is_null($this->_content_md5)) {
@@ -114,7 +114,7 @@ class UpYun
             $opts[self::CONTENT_SECRET] = $this->_file_secret;
         }
 
-        if ($auto_mkdir === true) {
+        if (true === $auto_mkdir) {
             $opts['Mkdir'] = 'true';
         }
 
@@ -145,21 +145,21 @@ class UpYun
     {
         $rsp = $this->_do_request('GET', $path);
 
-        $list = array();
+        $list = [];
         if ($rsp) {
             $rsp = explode("\n", $rsp);
             foreach ($rsp as $item) {
                 @list($name, $type, $size, $time) = explode("\t", trim($item));
                 if (!empty($time)) {
-                    $type = ($type == 'N') ? 'file' : 'folder';
+                    $type = ('N' == $type) ? 'file' : 'folder';
                 }
 
-                $item = array(
+                $item = [
                     'name' => $name,
                     'type' => $type,
                     'size' => intval($size),
                     'time' => intval($time),
-                );
+                ];
                 array_push($list, $item);
             }
         }
@@ -176,9 +176,7 @@ class UpYun
      */
     public function getFileInfo($path)
     {
-        $rsp = $this->_do_request('HEAD', $path);
-
-        return $rsp;
+        return $this->_do_request('HEAD', $path);
     }
 
     /**
@@ -215,6 +213,8 @@ class UpYun
 
     /**
      * 设置文件访问密钥.
+     *
+     * @param mixed $str
      */
     public function setFileSecret($str)
     {
@@ -223,25 +223,12 @@ class UpYun
 
     /**
      * 这是文件 md5 校验值
+     *
+     * @param mixed $str
      */
     public function setContentMd5($str)
     {
         $this->_content_md5 = $str;
-    }
-
-    /**
-     * 连接签名方法.
-     *
-     * @param $method string 请求方式 {GET, POST, PUT, DELETE}
-     *
-     * @return string 签名字符串
-     */
-    private function sign($method, $uri, $date, $length)
-    {
-        //$uri = urlencode($uri);
-        $sign = "{$method}&{$uri}&{$date}&{$length}&{$this->_password}";
-
-        return 'UpYun ' . $this->_username . ':' . md5($sign);
     }
 
     /**
@@ -267,7 +254,7 @@ class UpYun
         $uri = "/{$this->_bucketname}{$path}";
         $ch = curl_init("http://{$this->endpoint}{$uri}");
 
-        $_headers = array('Expect:');
+        $_headers = ['Expect:'];
         if (!is_null($headers) && is_array($headers)) {
             foreach ($headers as $k => $v) {
                 array_push($_headers, "{$k}: {$v}");
@@ -306,25 +293,25 @@ class UpYun
         curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 0);
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $method);
 
-        if ($method == 'PUT' || $method == 'POST') {
+        if ('PUT' == $method || 'POST' == $method) {
             curl_setopt($ch, CURLOPT_POST, 1);
         } else {
             curl_setopt($ch, CURLOPT_POST, 0);
         }
 
-        if ($method == 'GET' && is_resource($file_handle)) {
+        if ('GET' == $method && is_resource($file_handle)) {
             curl_setopt($ch, CURLOPT_HEADER, 0);
             curl_setopt($ch, CURLOPT_FILE, $file_handle);
         }
 
-        if ($method == 'HEAD') {
+        if ('HEAD' == $method) {
             curl_setopt($ch, CURLOPT_NOBODY, true);
         }
 
         $response = curl_exec($ch);
         $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 
-        if ($http_code == 0) {
+        if (0 == $http_code) {
             throw new UpYunException('Connection Failed', $http_code);
         }
 
@@ -335,46 +322,73 @@ class UpYun
         $header_string = '';
         $body = '';
 
-        if ($method == 'GET' && is_resource($file_handle)) {
+        if ('GET' == $method && is_resource($file_handle)) {
             $header_string = '';
             $body = $response;
         } else {
             list($header_string, $body) = explode("\r\n\r\n", $response, 2);
         }
         $this->setXRequestId($header_string);
-        if ($http_code == 200) {
-            if ($method == 'GET' && is_null($file_handle)) {
+        if (200 == $http_code) {
+            if ('GET' == $method && is_null($file_handle)) {
                 return $body;
-            } else {
-                $data = $this->_getHeadersData($header_string);
+            }
+            $data = $this->_getHeadersData($header_string);
 
-                return count($data) > 0 ? $data : true;
-            }
-        } else {
-            $message = $this->_getErrorMessage($header_string);
-            if (is_null($message) && $method == 'GET' && is_resource($file_handle)) {
-                $message = 'File Not Found';
-            }
-            switch ($http_code) {
+            return count($data) > 0 ? $data : true;
+        }
+        $message = $this->_getErrorMessage($header_string);
+        if (is_null($message) && 'GET' == $method && is_resource($file_handle)) {
+            $message = 'File Not Found';
+        }
+
+        switch ($http_code) {
                 case 401:
                     throw new UpYunAuthorizationException($message);
+
                     break;
+
                 case 403:
                     throw new UpYunForbiddenException($message);
+
                     break;
+
                 case 404:
                     throw new UpYunNotFoundException($message);
+
                     break;
+
                 case 406:
                     throw new UpYunNotAcceptableException($message);
+
                     break;
+
                 case 503:
                     throw new UpYunServiceUnavailable($message);
+
                     break;
+
                 default:
                     throw new UpYunException($message, $http_code);
             }
-        }
+    }
+
+    /**
+     * 连接签名方法.
+     *
+     * @param $method string 请求方式 {GET, POST, PUT, DELETE}
+     * @param mixed $uri
+     * @param mixed $date
+     * @param mixed $length
+     *
+     * @return string 签名字符串
+     */
+    private function sign($method, $uri, $date, $length)
+    {
+        //$uri = urlencode($uri);
+        $sign = "{$method}&{$uri}&{$date}&{$length}&{$this->_password}";
+
+        return 'UpYun ' . $this->_username . ':' . md5($sign);
     }
 
     /**
@@ -387,12 +401,12 @@ class UpYun
     private function _getHeadersData($text)
     {
         $headers = explode("\r\n", $text);
-        $items = array();
+        $items = [];
         foreach ($headers as $header) {
             $header = trim($header);
-            if (stripos($header, 'x-upyun') !== false) {
+            if (false !== stripos($header, 'x-upyun')) {
                 list($k, $v) = explode(':', $header);
-                $items[trim($k)] = in_array(substr($k, 8, 5), array('width', 'heigh', 'frame')) ? intval($v) : trim($v);
+                $items[trim($k)] = in_array(substr($k, 8, 5), ['width', 'heigh', 'frame']) ? intval($v) : trim($v);
             }
         }
 
@@ -409,9 +423,9 @@ class UpYun
     private function _getErrorMessage($header_string)
     {
         list($status, $stash) = explode("\r\n", $header_string, 2);
-        list($v, $code, $message) = explode(" ", $status, 3);
+        list($v, $code, $message) = explode(' ', $status, 3);
 
-        return $message . " X-Request-Id: " . $this->getXRequestId();
+        return $message . ' X-Request-Id: ' . $this->getXRequestId();
     }
 
     private function setXRequestId($header_string)
