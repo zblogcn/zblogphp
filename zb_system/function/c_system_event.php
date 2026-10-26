@@ -1260,11 +1260,12 @@ function BatchComment()
         return;
     }
     $array = $_POST['id'];
-    if (is_array($array)) {
-        $array = array_unique($array);
-    } else {
+    if (!is_array($array)) {
         $array = [$array];
     }
+
+    $array = array_filter($array, 'is_scalar');
+    $array = array_unique(array_map('intval', $array));
 
     $childArray = $zbp->GetCommentByArray($array);
 
