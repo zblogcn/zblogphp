@@ -324,7 +324,9 @@ HELP;
             curl_setopt($ch, CURLOPT_TIMEOUT, 300);
             $data = curl_exec($ch);
             $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-            curl_close($ch);
+            if (PHP_VERSION_ID < 80000) {
+                curl_close($ch);
+            }
             if ($code < 200 || $code >= 300 || false === $data) {
                 $this->error("下载失败 HTTP {$code}: {$url}");
             }
