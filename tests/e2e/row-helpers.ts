@@ -8,8 +8,15 @@ export function rowByText(page: Page, text: string): Locator {
   return page.locator("table tbody tr").filter({ hasText: text }).first()
 }
 
+/**
+ * 行内动作：既可能是按钮（弹窗编辑），也可能是链接（跳转编辑页）。
+ */
 export function rowAction(row: Locator, label: "编辑" | "删除"): Locator {
   return row.locator(`button[aria-label="${label}"]`).first()
+}
+
+export function rowLink(row: Locator, title: "编辑"): Locator {
+  return row.locator(`a[title="${title}"]`).first()
 }
 
 /**

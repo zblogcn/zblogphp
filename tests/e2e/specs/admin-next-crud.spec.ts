@@ -2,7 +2,7 @@ import { expect } from "@playwright/test"
 
 import { expectAdminShell, login } from "../support"
 import { test } from "../crud-support"
-import { rowAction, rowByText, waitForList } from "../row-helpers"
+import { rowAction, rowByText, rowLink, waitForList } from "../row-helpers"
 
 /**
  * admin-next CRUD smoke tests.
@@ -170,10 +170,11 @@ test.describe("附件上传", () => {
 
   test("可以上传附件并删除", async ({ page }) => {
     const stamp = Date.now()
+    const fileName = `e2e-${stamp}.txt`
 
     await actAndSettle(page, "upload", async () => {
       await page.locator('input[type="file"]').setInputFiles({
-        name: `e2e-${stamp}.txt`,
+        name: fileName,
         mimeType: "text/plain",
         buffer: Buffer.from("zblogphp admin-next e2e"),
       })
@@ -181,10 +182,10 @@ test.describe("附件上传", () => {
 
     // 列表按 ID 倒序，刚上传的文件应在第一行；
     // 服务端会重命名文件，因此用 SourceName 里的原始名定位更稳。
-    const firstRow = page.locator("table tbody tr").first()
-    await expect(firstRow).toContainText("e2e-", { timeout: 10_000 })
+    const uploadedRow = rowByText(page, fileName)
+    await expect(uploadedRow).toBeVisible({ timeout: 10_000 })
 
-    await rowAction(firstRow, "删除").click()
+    await rowAction(uploadedRow, "删除").click()
     const confirm = page.getByRole("alertdialog")
     await expect(confirm).toBeVisible()
 
@@ -192,9 +193,7 @@ test.describe("附件上传", () => {
       await confirm.getByRole("button", { name: "删除" }).click()
     })
 
-    await expect(page.locator("table tbody tr").first()).not.toContainText(
-      "e2e-"
-    )
+    await expect(rowByText(page, fileName)).toHaveCount(0)
   })
 })
 
@@ -214,5 +213,163 @@ test.describe("文章删除", () => {
     // 只验证弹窗，不真的删除内容
     await confirm.getByRole("button", { name: "取消" }).click()
     await expect(confirm).toBeHidden()
+  })
+})
+
+test.describe("文章编辑器", () => {
+  test.beforeEach(async ({ page }) => {
+    test.skip(!writeEnabled, "set ZBP_E2E_WRITE=1 to run write tests")
+  })
+
+  test("新建页加载插件编辑器，没有则回退纯文本", async ({ page }) => {
+    await page.goto("zb_system/admin-next/index.php#/posts/new")
+    await expect(page.getByRole("heading", { name: "新建文章" })).toBeVisible()
+
+    const blockEditor = page.locator(".zbpe-content")
+    const fallback = page.locator('textarea[aria-label="正文"]')
+
+    // 编辑器是异步加载的：先等两者之一出现
+    await expect(blockEditor.or(fallback).first()).toBeVisible({
+      timeout: 15_000,
+    })
+
+    test.skip((await blockEditor.count()) === 0, "未启用区块编辑器插件")
+
+    await expect(page.locator(".zbpe-btn")).not.toHaveCount(0)
+    // 有插件编辑器时不应再显示回退文本框
+    await expect(fallback).toHaveCount(0)
+  })
+
+  test("可以新建文章、回填编辑并删除", async ({ page }) => {
+    const stamp = Date.now()
+    const title = `E2E-Post-${stamp}`
+    const editor = page.locator(".zbpe-content")
+    const fallback = page.locator('textarea[aria-label="正文"]')
+
+    await page.goto("zb_system/admin-next/index.php#/posts/new")
+    await expect(page.getByRole("heading", { name: "新建文章" })).toBeVisible()
+    await expect(editor.or(fallback).first()).toBeVisible({ timeout: 15_000 })
+
+    await page.fill('input[aria-label="标题"]', title)
+
+    const useBlockEditor = (await editor.count()) > 0
+    if (useBlockEditor) {
+      await editor.click()
+      await page.keyboard.type(`第一段 ${stamp}`)
+      // 分隔符在编辑器内显示为 <hr class="more">
+      await page.getByRole("button", { name: "插入更多分隔符" }).click()
+      await page.keyboard.type("第二段")
+    } else {
+      await fallback.fill(`<p>第一段 ${stamp}</p><hr class="more" /><p>第二段</p>`)
+    }
+
+    await actAndSettle(page, "post", async () => {
+      await page.getByRole("button", { name: /发布/ }).click()
+    })
+
+    // 新建成功后原地转到编辑态
+    await expect(page).toHaveURL(/posts\/\d+\/edit/)
+    const postId = Number(page.url().match(/posts\/(\d+)\/edit/)![1])
+
+    // 列表里能看到新文章
+    await page.goto("zb_system/admin-next/index.php#/posts")
+    const row = rowByText(page, title)
+    await expect(row).toBeVisible({ timeout: 15_000 })
+
+    // 打开编辑页，标题与正文都应回填
+    await rowLink(row, "编辑").click()
+    await expect(page).toHaveURL(new RegExp(`posts/${postId}/edit`))
+    await expect(page.locator('input[aria-label="标题"]')).toHaveValue(title)
+    if (useBlockEditor) {
+      await expect(editor).toContainText(`第一段 ${stamp}`)
+      await expect(editor.locator('hr.more')).toHaveCount(1)
+    } else {
+      await expect(fallback).toHaveValue(new RegExp(`第一段 ${stamp}`))
+    }
+
+    // 改标题后保存
+    const renamed = `${title}-改`
+    await page.fill('input[aria-label="标题"]', renamed)
+    await page.getByRole("button", { name: /发布/ }).click()
+    await expect(page.getByText("已保存")).toBeVisible({ timeout: 15_000 })
+
+    // 回列表确认改名生效，然后删除
+    await page.goto("zb_system/admin-next/index.php#/posts")
+    const renamedRow = rowByText(page, renamed)
+    await expect(renamedRow).toBeVisible({ timeout: 15_000 })
+
+    await rowAction(renamedRow, "删除").click()
+    const confirm = page.getByRole("alertdialog")
+    await expect(confirm).toBeVisible()
+    await actAndSettle(page, "post", async () => {
+      await confirm.getByRole("button", { name: "删除" }).click()
+    })
+
+    await expect(rowByText(page, renamed)).toHaveCount(0)
+  })
+
+  test("页面同样可以通过编辑器新建", async ({ page }) => {
+    const stamp = Date.now()
+    const title = `E2E-Page-${stamp}`
+
+    await page.goto("zb_system/admin-next/index.php#/pages/new")
+    await expect(page.getByRole("heading", { name: "新建页面" })).toBeVisible()
+
+    await page.fill('input[aria-label="标题"]', title)
+
+    const editor = page.locator(".zbpe-content")
+    const fallback = page.locator('textarea[aria-label="正文"]')
+    await expect(editor.or(fallback).first()).toBeVisible({ timeout: 15_000 })
+    if ((await editor.count()) > 0) {
+      await editor.click()
+      await page.keyboard.type(`页面正文 ${stamp}`)
+    } else {
+      await fallback.fill(`<p>页面正文 ${stamp}</p>`)
+    }
+
+    await actAndSettle(page, "post", async () => {
+      await page.getByRole("button", { name: /发布/ }).click()
+    })
+    await expect(page).toHaveURL(/pages\/\d+\/edit/)
+
+    await page.goto("zb_system/admin-next/index.php#/pages")
+    const row = rowByText(page, title)
+    await expect(row).toBeVisible({ timeout: 15_000 })
+
+    await rowAction(row, "删除").click()
+    const confirm = page.getByRole("alertdialog")
+    await actAndSettle(page, "post", async () => {
+      await confirm.getByRole("button", { name: "删除" }).click()
+    })
+    await expect(rowByText(page, title)).toHaveCount(0)
+  })
+})
+
+test.describe("评论审核", () => {
+  test("可以在待审与已审之间切换", async ({ page }) => {
+    test.skip(!writeEnabled, "set ZBP_E2E_WRITE=1 to run write tests")
+    await page.goto("zb_system/admin-next/index.php#/comments")
+    await expect(page.getByRole("heading", { name: "评论管理" })).toBeVisible()
+
+    const toggle = page
+      .locator('button[aria-label="通过审核"], button[aria-label="转为待审"]')
+      .first()
+    test.skip((await toggle.count()) === 0, "站点没有评论")
+
+    const wasChecking = (await toggle.getAttribute("aria-label")) === "通过审核"
+    await actAndSettle(page, "comment", async () => {
+      await toggle.click()
+    })
+
+    // 状态翻转后，同一行的按钮 aria-label 也应随之改变
+    const flipped = page.locator(
+      wasChecking ? 'button[aria-label="转为待审"]' : 'button[aria-label="通过审核"]'
+    )
+    await expect(flipped.first()).toBeVisible({ timeout: 15_000 })
+
+    // 还原
+    await actAndSettle(page, "comment", async () => {
+      await flipped.first().click()
+    })
   })
 })

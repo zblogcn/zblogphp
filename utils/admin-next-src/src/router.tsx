@@ -29,6 +29,8 @@ const ModulesPage = lazyNamed(() => import("@/pages/modules"), "ModulesPage")
 const PluginsPage = lazyNamed(() => import("@/pages/apps"), "PluginsPage")
 const SettingsPage = lazyNamed(() => import("@/pages/settings"), "SettingsPage")
 const PluginPage = lazyNamed(() => import("@/pages/plugin-page"), "PluginPage")
+const PostEditPage = lazyNamed(() => import("@/pages/post-editor"), "PostEditPage")
+const PageEditPage = lazyNamed(() => import("@/pages/post-editor"), "PageEditPage")
 const NotFoundPage = lazyNamed(() => import("@/pages/not-found"), "NotFoundPage")
 
 export function AppRouter() {
@@ -38,7 +40,11 @@ export function AppRouter() {
         <Route element={<AppShell />}>
           <Route index element={<DashboardPage />} />
           <Route path="posts" element={<PostsPage />} />
+          <Route path="posts/new" element={<PostEditPage />} />
+          <Route path="posts/:id/edit" element={<PostEditPage />} />
           <Route path="pages" element={<PagesPage />} />
+          <Route path="pages/new" element={<PageEditPage />} />
+          <Route path="pages/:id/edit" element={<PageEditPage />} />
           <Route path="categories" element={<CategoriesPage />} />
           <Route path="tags" element={<TagsPage />} />
           <Route path="comments" element={<CommentsPage />} />

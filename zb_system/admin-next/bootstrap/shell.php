@@ -21,10 +21,28 @@ function ZbpAdminNext_JsonForScript(mixed $data): string
 }
 
 /**
+ * 后台 SPA 使用的 API CSRF 令牌.
+ *
+ * GetCSRFToken() 在「附加安全」开启时会把浏览器 UA 算进哈希，
+ * 浏览器升级或换客户端后令牌就失效。后台是同源已登录会话，
+ * 这里生成不绑定 UA 的令牌，并由 ApiVerifyCSRF() 对 SPA 请求放行。
+ */
+function ZbpAdminNext_ApiCsrfToken(): string
+{
+    global $zbp;
+
+    $security = $zbp->option['ZC_ADDITIONAL_SECURITY'];
+    $zbp->option['ZC_ADDITIONAL_SECURITY'] = false;
+    $token = $zbp->GetCSRFToken('api');
+    $zbp->option['ZC_ADDITIONAL_SECURITY'] = $security;
+
+    return (string) $token;
+}
+
+/**
  * 前端需要的语言片段.
  */
-function ZbpAdminNext_Lang(): array
-{
+function ZbpAdminNext_Lang(): array{
     global $zbp;
 
     return [
@@ -60,9 +78,14 @@ function ZbpAdminNext_BootData(): array
         'rights'    => ZbpAdminNext_Rights(),
         'nav'       => ZbpAdminNext_Nav(),
         'apps'      => ZbpAdminNext_AppManifests(),
+        // 插件声明的编辑器（<admin><editor>），无则前端回退内置编辑器
+        'editor'    => ZbpAdminNext_EditorManifest(),
         'lang'      => ZbpAdminNext_Lang(),
         'csrf'      => [
-            'token'      => $zbp->GetCSRFToken('api'),
+            // 网站开启「附加安全」时，令牌会绑定浏览器 UA，
+            // 浏览器升级或页面来自不同 UA 客户端后旧令牌会失效；
+            // 后台是同源会话，这里只提供不绑定 UA 的令牌，避免写操作误报 419。
+            'token'      => ZbpAdminNext_ApiCsrfToken(),
             'admin'      => $zbp->GetCSRFToken(),
             'expiration' => (int) $zbp->csrfExpiration,
         ],
@@ -120,6 +143,12 @@ function ZbpAdminNext_RenderShell(): void
     foreach ($assets['styles'] as $appId => $href) {
         echo '<link rel="stylesheet" href="' . htmlspecialchars($href, ENT_QUOTES, 'UTF-8')
             . '" data-plugin="' . htmlspecialchars($appId, ENT_QUOTES, 'UTF-8') . '" />' . "\n";
+    }
+
+    // 插件提供的编辑器样式（<admin><editor> 声明）
+    if (!empty($boot['editor']['style'])) {
+        echo '<link rel="stylesheet" href="' . htmlspecialchars($boot['editor']['style'], ENT_QUOTES, 'UTF-8')
+            . '" data-editor="' . htmlspecialchars($boot['editor']['appId'], ENT_QUOTES, 'UTF-8') . '" />' . "\n";
     }
 
     // 主题色在首屏前应用，避免闪白

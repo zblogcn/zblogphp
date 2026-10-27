@@ -341,8 +341,10 @@ class App
             'style'   => '',
             'legacy'  => '',
             'menu'    => [],
+            'editor'  => null,
         ];
 
+        // <spa> 声明：插件提供的后台页面入口
         if (isset($xml->admin->spa)) {
             $admin['entry'] = trim((string) $xml->admin->spa->entry);
             $admin['style'] = trim((string) $xml->admin->spa->style);
@@ -350,6 +352,23 @@ class App
 
         if (isset($xml->admin->legacy)) {
             $admin['legacy'] = trim((string) $xml->admin->legacy);
+        }
+
+        // <editor> 声明：插件提供一个可被宿主加载的编辑器实现
+        if (isset($xml->admin->editor) && isset($xml->admin->editor->asset)) {
+            $capabilities = [];
+            foreach (explode(',', (string) $xml->admin->editor->capabilities) as $cap) {
+                $cap = trim($cap);
+                if ($cap !== '') {
+                    $capabilities[] = $cap;
+                }
+            }
+
+            $admin['editor'] = [
+                'asset'        => trim((string) $xml->admin->editor->asset),
+                'style'        => trim((string) $xml->admin->editor->style),
+                'capabilities' => $capabilities,
+            ];
         }
 
         if (isset($xml->admin->menu)) {

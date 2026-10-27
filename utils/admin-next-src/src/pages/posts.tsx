@@ -5,13 +5,15 @@ import {
   useQueryClient,
 } from "@tanstack/react-query"
 import type { ColumnDef } from "@tanstack/react-table"
-import { ExternalLink, Plus, Search, Trash2 } from "lucide-react"
+import { ExternalLink, Pencil, Plus, Search, Trash2 } from "lucide-react"
 import { useMemo, useState } from "react"
 import { toast } from "sonner"
 
 import { apiGet, apiPost, type Pagebar } from "@/lib/api"
 import { postStatusName, t } from "@/lib/i18n"
 import { hasRight, zbp } from "@/lib/zbp"
+import { Link } from "react-router-dom"
+
 import { useDebouncedValue } from "@/hooks/use-debounced-value"
 import { ConfirmDialog } from "@/components/confirm-dialog"
 import { DataTable } from "@/components/data-table"
@@ -52,16 +54,10 @@ function formatTime(value: number): string {
 interface PostListPageProps {
   type: 0 | 1
   title: string
-  editAction: "ArticleEdt" | "PageEdt"
   manageAction: "ArticleMng" | "PageMng"
 }
 
-function PostListPage({
-  type,
-  title,
-  editAction,
-  manageAction,
-}: PostListPageProps) {
+function PostListPage({ type, title, manageAction }: PostListPageProps) {
   const queryClient = useQueryClient()
   const [page, setPage] = useState(1)
   const [keyword, setKeyword] = useState("")
@@ -198,14 +194,12 @@ function PostListPage({
         cell: ({ row }) => (
           <div className="flex justify-end gap-1">
             <Button asChild variant="ghost" size="icon-sm">
-              <a
-                href={`${zbp.host}zb_system/cmd.php?act=${editAction}&id=${row.original.ID}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                title="在旧版编辑器中打开"
+              <Link
+                to={`/${type === 1 ? "pages" : "posts"}/${row.original.ID}/edit`}
+                title="编辑"
               >
-                <ExternalLink className="size-4" />
-              </a>
+                <Pencil className="size-4" />
+              </Link>
             </Button>
             <Button
               variant="ghost"
@@ -222,7 +216,7 @@ function PostListPage({
     )
 
     return base
-  }, [type, editAction])
+  }, [type])
 
   return (
     <div className="flex flex-col gap-4">
@@ -241,13 +235,9 @@ function PostListPage({
               </a>
             </Button>
             <Button asChild size="sm">
-              <a
-                href={`${zbp.host}zb_system/cmd.php?act=${editAction}`}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
+              <Link to={`/${type === 1 ? "pages" : "posts"}/new`}>
                 <Plus className="size-4" /> 新建
-              </a>
+              </Link>
             </Button>
           </>
         }
@@ -328,22 +318,12 @@ function PostListPage({
 
 export function PostsPage() {
   return (
-    <PostListPage
-      type={0}
-      title={t("article_manage")}
-      editAction="ArticleEdt"
-      manageAction="ArticleMng"
-    />
+    <PostListPage type={0} title={t("article_manage")} manageAction="ArticleMng" />
   )
 }
 
 export function PagesPage() {
   return (
-    <PostListPage
-      type={1}
-      title={t("page_manage")}
-      editAction="PageEdt"
-      manageAction="PageMng"
-    />
+    <PostListPage type={1} title={t("page_manage")} manageAction="PageMng" />
   )
 }

@@ -110,9 +110,13 @@ export function CommentsPage() {
     onError: (error: Error) => toast.error(error.message),
   })
 
+  // 单条审核：目标状态由调用方给出，避免服务端把缺失参数当成“取消审核”
   const check = useMutation({
-    mutationFn: (id: number) =>
-      apiPost<Record<string, unknown>>("comment", "check", { id }),
+    mutationFn: ({ id, checking }: { id: number; checking: boolean }) =>
+      apiPost<Record<string, unknown>>("comment", "check", {
+        id,
+        ischecking: checking ? 1 : 0,
+      }),
     onSuccess: () => {
       toast.success("审核状态已更新")
       refresh()
@@ -203,8 +207,15 @@ export function CommentsPage() {
             <Button
               variant="ghost"
               size="icon-sm"
-              aria-label="审核"
-              onClick={() => check.mutate(row.original.ID)}
+              aria-label={
+                Number(row.original.IsChecking) > 0 ? "通过审核" : "转为待审"
+              }
+              onClick={() =>
+                check.mutate({
+                  id: row.original.ID,
+                  checking: Number(row.original.IsChecking) > 0 ? false : true,
+                })
+              }
             >
               {Number(row.original.IsChecking) > 0 ? (
                 <Check className="size-4" />

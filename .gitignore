@@ -32,6 +32,7 @@ mix-manifest.json
 !/zb_users/plugin/api
 !/zb_users/plugin/AdminColor
 !/zb_users/plugin/AuditRecords
+!/zb_users/plugin/BlockEditor
 !/zb_users/plugin/CloudStorage
 !/zb_users/plugin/CustomMeta
 !/zb_users/plugin/DemoPanel
@@ -86,6 +87,8 @@ phpinfo.php
 /vendor1/
 /.idea/
 .php_cs.cache
+.phpunit.result.cache
+.openchamber/
 favicon.ico
 nologin.php
 test1.php

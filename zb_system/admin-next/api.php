@@ -54,10 +54,19 @@ if (!$zbp->islogin || !$zbp->CheckRights('admin')) {
 // 后台 SPA 标记：只有在登录与 admin 校验通过后才会写入。
 // ApiVerifyCSRF() 据此区分「后台同源会话」与「公开 API 调用」，
 // 不从请求参数读取，避免被外部伪造。
+// Token 鉴权（Bearer / token 参数）没有浏览器会话，不享受这条免校验。
 if (
-    isset($_SERVER['HTTP_X_ZBP_ADMIN_SPA'])
+    !defined('ZBP_IN_API_VERIFYBYTOKEN')
+    && isset($_SERVER['HTTP_X_ZBP_ADMIN_SPA'])
     && $_SERVER['HTTP_X_ZBP_ADMIN_SPA'] === '1'
 ) {
+    // 同源校验：跨站页面也能设置自定义头（经 CORS 预检后），
+    // 因此光凭 X-ZBP-Admin-Spa 不足以证明请求来自后台本身。
+    // 浏览器对跨站请求一定带 Origin（或 Referer），必须与当前站点一致。
+    if (!ZbpAdminNext_IsSameOriginRequest()) {
+        ZbpAdminNext_JsonExit(403, 'Cross-origin request denied');
+    }
+
     $GLOBALS['zbp_admin_spa_verified'] = true;
 }
 

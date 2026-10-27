@@ -1,0 +1,152 @@
+/* BlockEditor 样式：全部限定在 .zbpe 下，避免污染宿主 */
+.zbpe {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--card);
+  overflow: hidden;
+}
+
+.zbpe-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 2px;
+  padding: 6px;
+  border-bottom: 1px solid var(--border);
+  background: var(--muted);
+}
+
+.zbpe-btn {
+  min-width: 30px;
+  height: 28px;
+  padding: 0 8px;
+  border: 1px solid transparent;
+  border-radius: calc(var(--radius) - 4px);
+  background: transparent;
+  color: var(--foreground);
+  font-size: 13px;
+  line-height: 1;
+  cursor: pointer;
+  transition: background-color 120ms ease-out, border-color 120ms ease-out;
+}
+
+.zbpe-btn:hover {
+  background: var(--accent);
+  border-color: var(--border);
+}
+
+.zbpe-btn:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 1px;
+}
+
+.zbpe-sep {
+  width: 1px;
+  height: 18px;
+  margin: 0 4px;
+  background: var(--border);
+}
+
+.zbpe-content {
+  min-height: 320px;
+  max-height: 60vh;
+  overflow-y: auto;
+  padding: 16px;
+  font-size: 15px;
+  line-height: 1.75;
+  color: var(--foreground);
+  outline: none;
+}
+
+.zbpe-content:empty::before {
+  content: attr(data-placeholder);
+  color: var(--muted-foreground);
+}
+
+.zbpe-content:focus-visible {
+  box-shadow: inset 0 0 0 2px var(--ring);
+}
+
+.zbpe-content h2 {
+  margin: 1.2em 0 0.5em;
+  font-size: 1.4em;
+  font-weight: 600;
+}
+
+.zbpe-content h3 {
+  margin: 1em 0 0.4em;
+  font-size: 1.2em;
+  font-weight: 600;
+}
+
+.zbpe-content blockquote {
+  margin: 0.8em 0;
+  padding-left: 12px;
+  border-left: 3px solid var(--border);
+  color: var(--muted-foreground);
+}
+
+.zbpe-content pre {
+  margin: 0.8em 0;
+  padding: 12px;
+  border-radius: calc(var(--radius) - 4px);
+  background: var(--muted);
+  overflow-x: auto;
+  font-family: var(--app-font-mono, ui-monospace, monospace);
+  font-size: 13px;
+}
+
+.zbpe-content img {
+  max-width: 100%;
+  height: auto;
+  border-radius: calc(var(--radius) - 4px);
+}
+
+.zbpe-content hr.more {
+  height: 0;
+  margin: 20px 0;
+  border: 0;
+  border-top: 2px dashed var(--border);
+}
+
+.zbpe-source {
+  min-height: 320px;
+  max-height: 60vh;
+  padding: 16px;
+  border: 0;
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--app-font-mono, ui-monospace, monospace);
+  font-size: 13px;
+  line-height: 1.6;
+  resize: vertical;
+  outline: none;
+}
+
+.zbpe-status {
+  padding: 4px 12px;
+  border-top: 1px solid var(--border);
+  color: var(--muted-foreground);
+  font-size: 12px;
+}
+
+@media (max-width: 767px) {
+  .zbpe-content,
+  .zbpe-source {
+    min-height: 240px;
+    padding: 12px;
+  }
+
+  .zbpe-toolbar {
+    overflow-x: auto;
+    flex-wrap: nowrap;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .zbpe-btn {
+    transition: none;
+  }
+}

@@ -34,6 +34,16 @@ export interface AppManifest {
   menu: PluginMenuItem[]
 }
 
+/** 插件声明的编辑器实现（<admin><editor>）。 */
+export interface EditorManifest {
+  appId: string
+  name: string
+  version: string
+  asset: string
+  style: string
+  capabilities: string[]
+}
+
 export interface ZbzUser {
   id: number
   name: string
@@ -54,6 +64,7 @@ export interface BootData {
   rights: Record<string, boolean>
   nav: NavItem[]
   apps: AppManifest[]
+  editor: EditorManifest | null
   lang: {
     msg: Record<string, string>
     post_status_name: Record<string, string>
@@ -111,6 +122,7 @@ function createDevBoot(): BootData {
     rights: {},
     nav,
     apps: [],
+    editor: null,
     lang: {
       msg: {
         dashboard: "仪表盘",

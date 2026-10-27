@@ -87,6 +87,51 @@ function ZbpAdminNext_BuildManifest(array $admin, array $info): ?array
 }
 
 /**
+ * 解析 <admin><editor> 声明为可注入编辑器的资源描述.
+ *
+ * 与页面清单分开处理：编辑器不占菜单，也不要求 mount() 入口。
+ *
+ * @param array $admin  App::$admin
+ * @param array $info   应用基础信息
+ *
+ * @return array|null
+ */
+function ZbpAdminNext_BuildEditor(array $admin, array $info): ?array
+{
+    $editor = $admin['editor'] ?? null;
+    if (!is_array($editor) || empty($editor['asset'])) {
+        return null;
+    }
+
+    $asset = (string) $editor['asset'];
+    $style = (string) ($editor['style'] ?? '');
+
+    foreach ([$asset, $style] as $path) {
+        if ($path === '') {
+            continue;
+        }
+        if (str_contains($path, '..') || str_starts_with($path, '/')) {
+            ZbpAdminNext_Log('admin-next: 非法编辑器资源 ' . $path . ' (' . $info['id'] . ')');
+            return null;
+        }
+    }
+
+    if (!is_readable($info['path'] . $asset)) {
+        ZbpAdminNext_Log('admin-next: 编辑器资源不存在 ' . $info['id'] . ' -> ' . $asset);
+        return null;
+    }
+
+    return [
+        'appId'        => $info['id'],
+        'name'         => $info['name'],
+        'version'      => $info['version'],
+        'asset'        => $info['baseUrl'] . $asset,
+        'style'        => $style !== '' ? $info['baseUrl'] . $style : '',
+        'capabilities' => $editor['capabilities'] ?? [],
+    ];
+}
+
+/**
  * 记录一条声明错误，避免静默失败.
  */
 function ZbpAdminNext_Log(string $message): void
@@ -153,6 +198,45 @@ function ZbpAdminNext_AppManifests(): array
     }
 
     return $manifests;
+}
+
+/**
+ * 收集已启用插件声明的编辑器实现.
+ *
+ * 同一时间只允许一个编辑器生效：先声明者优先，其余忽略并记录日志。
+ *
+ * @return array|null
+ */
+function ZbpAdminNext_EditorManifest(): ?array
+{
+    global $zbp;
+
+    foreach ($zbp->GetPreActivePlugin() as $id) {
+        $id = trim((string) $id);
+        if (!ZbpAdminNext_ValidAppId($id)) {
+            continue;
+        }
+
+        $app = $zbp->LoadApp('plugin', $id);
+        if (!$app->isloaded || $app->admin === null) {
+            continue;
+        }
+
+        $editor = ZbpAdminNext_BuildEditor($app->admin, [
+            'id'      => $app->id,
+            'type'    => 'plugin',
+            'name'    => $app->name,
+            'version' => $app->version,
+            'path'    => $app->app_path,
+            'baseUrl' => $app->app_url,
+        ]);
+
+        if ($editor !== null) {
+            return $editor;
+        }
+    }
+
+    return null;
 }
 
 /**

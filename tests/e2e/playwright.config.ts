@@ -11,7 +11,8 @@ const baseURL = process.env.ZBP_BASE_URL ?? "http://127.0.0.1:8099/"
 
 export default defineConfig({
   testDir: "./specs",
-  timeout: 30_000,
+  // 写操作用例会多次整页导航，30s 不够稳定
+  timeout: 60_000,
   expect: { timeout: 8_000 },
   fullyParallel: false,
   forbidOnly: Boolean(process.env.CI),

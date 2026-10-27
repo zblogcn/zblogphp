@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<plugin version="php">
+<id>BlockEditor</id>
+<name>区块编辑器</name>
+<url>https://www.zblogcn.com/</url>
+<note>为 admin-next 提供富文本区块编辑器.</note>
+<description>基于 ProseMirror 的区块编辑器，作为 admin-next 的默认写文章编辑器。保留 &lt;!--more--&gt; 分隔符、摘要推导与本地草稿等全部旧行为。</description>
+<path>main.php</path>
+<include>include.php</include>
+<level>1</level>
+<author>
+  <name>Z-BlogPHP Team</name>
+  <email>noreply@example.com</email>
+  <url>https://www.zblogcn.com/</url>
+</author>
+<source>
+  <name></name>
+  <email></email>
+  <url></url>
+</source>
+<adapted>20261028</adapted>
+<version>1.0</version>
+<pubdate>2026-10-28</pubdate>
+<modified>2026-10-28</modified>
+<price>0</price>
+<phpver>8.0</phpver>
+<advanced>
+  <dependency>admin-next</dependency>
+  <rewritefunctions></rewritefunctions>
+  <existsfunctions></existsfunctions>
+  <conflict></conflict>
+</advanced>
+<sidebars>
+  <sidebar1></sidebar1>
+  <sidebar2></sidebar2>
+  <sidebar3></sidebar3>
+  <sidebar4></sidebar4>
+  <sidebar5></sidebar5>
+</sidebars>
+<admin version="2">
+  <editor>
+    <capabilities>rich-text,blocks,images,media,table,code,embed,source</capabilities>
+    <asset>dist/editor.js</asset>
+    <style>dist/editor.css</style>
+  </editor>
+</admin>
+</plugin>
