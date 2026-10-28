@@ -150,6 +150,10 @@ test.describe("评论管理", () => {
   })
 
   test("评论列表可以打开编辑弹窗并取消", async ({ page }) => {
+    // 列表是异步渲染的，先等表格出现再判断有没有评论
+    await expect(page.locator("table tbody tr").first()).toBeVisible({
+      timeout: 15_000,
+    })
     const editButton = page.locator('button[aria-label="编辑"]').first()
     test.skip((await editButton.count()) === 0, "站点没有评论")
 
@@ -203,6 +207,10 @@ test.describe("文章删除", () => {
   })
 
   test("文章行提供删除入口且需要二次确认", async ({ page }) => {
+    // 列表是异步渲染的，先等表格出现再判断有没有文章
+    await expect(page.locator("table tbody tr").first()).toBeVisible({
+      timeout: 15_000,
+    })
     const deleteButton = page.locator('button[aria-label="删除"]').first()
     test.skip((await deleteButton.count()) === 0, "站点没有文章")
 
@@ -351,25 +359,34 @@ test.describe("评论审核", () => {
     await page.goto("zb_system/admin-next/index.php#/comments")
     await expect(page.getByRole("heading", { name: "评论管理" })).toBeVisible()
 
-    const toggle = page
-      .locator('button[aria-label="通过审核"], button[aria-label="转为待审"]')
-      .first()
-    test.skip((await toggle.count()) === 0, "站点没有评论")
+    // 优先挑一条待审核的评论，避免默认首条已被审核。
+    // 列表异步渲染，先等表格出现再定位。
+    await expect(page.locator("table tbody tr").first()).toBeVisible({
+      timeout: 15_000,
+    })
 
-    const wasChecking = (await toggle.getAttribute("aria-label")) === "通过审核"
+    const pendingRow = page
+      .locator("table tbody tr")
+      .filter({ has: page.getByText("待审核", { exact: true }) })
+      .first()
+    const toggle = (await pendingRow.count())
+      ? pendingRow.locator('button[aria-label="通过审核"]')
+      : page.locator('button[aria-label="转为待审"]').first()
+
+    // 用断言代替 test.skip：站点已有评论时不应被跳过
+    await expect(toggle).toBeVisible({ timeout: 15_000 })
+
+    // 这一步点击后，该行按钮应从「通过审核」变成「转为待审」
     await actAndSettle(page, "comment", async () => {
       await toggle.click()
     })
+    await expect(
+      page.locator('button[aria-label="转为待审"]').first()
+    ).toBeVisible({ timeout: 15_000 })
 
-    // 状态翻转后，同一行的按钮 aria-label 也应随之改变
-    const flipped = page.locator(
-      wasChecking ? 'button[aria-label="转为待审"]' : 'button[aria-label="通过审核"]'
-    )
-    await expect(flipped.first()).toBeVisible({ timeout: 15_000 })
-
-    // 还原
+    // 还原：再点一次同一位置（此时它显示为「转为待审」）
     await actAndSettle(page, "comment", async () => {
-      await flipped.first().click()
+      await page.locator('button[aria-label="转为待审"]').first().click()
     })
   })
 })
