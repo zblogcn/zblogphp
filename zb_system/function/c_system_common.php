@@ -425,7 +425,7 @@ function GetGuestIP()
         $user_ip = GetVars("REMOTE_ADDR", "SERVER");
     } else {
         $user_ip = GetVars($zbp->option['ZC_USING_CDN_GUESTIP_TYPE'], "SERVER");
-        if (strpos($user_ip, ',') !== false) {
+        if (is_string($user_ip) && strpos($user_ip, ',') !== false) {
             $array = explode(",", $user_ip);
             $user_ip = trim($array[0]);
         }
@@ -447,7 +447,7 @@ function GetGuestIP()
         }
     }
 
-    $user_ip = trim($user_ip);
+    $user_ip = trim((string) $user_ip);
     if (!filter_var($user_ip, FILTER_VALIDATE_IP)) {
         $user_ip = GetVars("REMOTE_ADDR", "SERVER");
     }
