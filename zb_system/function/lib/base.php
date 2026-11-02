@@ -11,36 +11,35 @@ if (!defined('ZBP_PATH')) {
  */
 class Base
 {
+    /**
+     * @var null|Metas 扩展元数据
+     */
+    public $Metas;
 
     /**
      * @var string 数据表
      */
-    protected $table = null;
+    protected $table;
 
     /**
      * @var array 表结构信息
      */
-    protected $datainfo = null;
+    protected $datainfo;
 
     /**
      * @var array 数据
      */
-    protected $data = array();
+    protected $data = [];
 
     /**
      * @var array 原始数据
      */
-    protected $original = array();
-
-    /**
-     * @var Metas|null 扩展元数据
-     */
-    public $Metas = null;
+    protected $original = [];
 
     /**
      * @var Database__Interface db
      */
-    protected $db = null;
+    protected $db;
 
     /**
      * @var string 类名
@@ -53,7 +52,7 @@ class Base
     protected $idname = '';
 
     /**
-     * @var boolean 是否自动替换host
+     * @var bool 是否自动替换host
      */
     protected $isreplacehost = true;
 
@@ -66,7 +65,7 @@ class Base
      */
     public function __construct(&$table, &$datainfo, $classname = '', $hasmetas = true, &$db = null)
     {
-        if ($db !== null && is_object($db)) {
+        if (null !== $db && is_object($db)) {
             $this->db = &$db;
         } else {
             $this->db = &$GLOBALS['zbp']->db;
@@ -127,7 +126,45 @@ class Base
     }
 
     /**
+     * 将数据用JSON格式输出.
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+        return (string) json_encode($this->data);
+    }
+
+    /**
+     *  __clone().
+     *
+     * @return object
+     */
+    public function __clone()
+    {
+        $this->LoadInfoByDataArray($this->data);
+    }
+
+    /**
+     * DebugInfo >= php 5.6.
+     */
+    public function __debugInfo()
+    {
+        $array = [];
+        foreach ($this as $key => $value) {
+            if ('datainfo' == $key || 'db' == $key) {
+                continue;
+            }
+            $array[$key] = $value;
+        }
+
+        return $array;
+    }
+
+    /**
      * 获取数据库数据(不设$key就返回整个data数组).
+     *
+     * @param null|mixed $key
      *
      * @return array
      */
@@ -135,13 +172,15 @@ class Base
     {
         if (null == $key) {
             return $this->data;
-        } else {
-            return $this->data[$key];
         }
+
+        return $this->data[$key];
     }
 
     /**
      * 获取原始数据(不设$key就返回整个original数组).
+     *
+     * @param null|mixed $key
      *
      * @return array
      */
@@ -149,15 +188,16 @@ class Base
     {
         if (null == $key) {
             return $this->original;
-        } else {
-            return $this->original[$key];
         }
+
+        return $this->original[$key];
     }
 
     /**
      * 设置Data数据.
      *
-     * @param array|string $key 如果是array，就忽略$value
+     * @param array|string $key   如果是array，就忽略$value
+     * @param null|mixed   $value
      *
      * @return bool
      */
@@ -170,7 +210,7 @@ class Base
 
             return true;
         }
-        if ($value !== null) {
+        if (null !== $value) {
             $this->data[$key] = $value;
 
             return true;
@@ -182,12 +222,15 @@ class Base
     /**
      * 删除data的键，谨用.
      *
-     * @return boolean
+     * @param mixed $key
+     *
+     * @return bool
      */
     public function UnsetData($key)
     {
         if (array_key_exists($key, $this->data)) {
             unset($this->data[$key]);
+
             return true;
         }
 
@@ -199,17 +242,19 @@ class Base
      *
      * @param null|string $key
      *
-     * @return boolean
+     * @return bool
      */
     public function RevertChanges($key = null)
     {
         if (null == $key) {
             $this->data = $this->original;
+
             return true;
         }
 
         if (array_key_exists($key, $this->data) && array_key_exists($key, $this->original)) {
             $this->data[$key] = $this->original[$key];
+
             return true;
         }
 
@@ -259,16 +304,16 @@ class Base
         $id_name = $this->idname;
         $id_field = $this->datainfo[$id_name][0];
 
-        $s = $this->db->sql->Select($this->table, array('*'), array(array('=', $id_field, $id)), null, null, null);
+        $s = $this->db->sql->Select($this->table, ['*'], [['=', $id_field, $id]], null, null, null);
 
         $array = $this->db->Query($s);
         if (count($array) > 0) {
             $this->LoadInfoByAssoc($array[0]);
 
             return true;
-        } else {
-            return false;
         }
+
+        return false;
     }
 
     /**
@@ -290,14 +335,14 @@ class Base
             }
 
             $v = $array[$value[0]];
-            if ($value[1] == 'string' || $value[1] == 'char') {
-                if ($key != 'Meta') {
+            if ('string' == $value[1] || 'char' == $value[1]) {
+                if ('Meta' != $key) {
                     $this->data[$key] = ($this->isreplacehost) ? $this->ReplaceTag2Host($v) : $v;
                 } else {
                     $this->data[$key] = $v;
                     $this->Metas->Unserialize($this->data['Meta']);
                 }
-            } elseif ($value[1] != 'boolean') {
+            } elseif ('boolean' != $value[1]) {
                 $this->data[$key] = $v;
             } else {
                 $this->data[$key] = (bool) $v;
@@ -323,7 +368,7 @@ class Base
     public function LoadInfoByField($field, $field_value)
     {
         return $this->LoadInfoByFields(
-            array($field => $field_value)
+            [$field => $field_value],
         );
     }
 
@@ -339,30 +384,30 @@ class Base
         global $table, $datainfo;
         $field_table = array_flip($table);
         $field_table = $field_table[$this->table];
-        $conditions = array();
+        $conditions = [];
         foreach ($fields as $field_key => $field_value) {
-            if (strcasecmp($field_key, 'meta') === 0 && isset($this->datainfo['Meta'])) {
+            if (0 === strcasecmp($field_key, 'meta') && isset($this->datainfo['Meta'])) {
                 foreach ($field_value as $k => $v) {
                     if (is_numeric($k)) {
-                        $conditions[] = array('META_NAME', $this->datainfo['Meta'][0], $v);
+                        $conditions[] = ['META_NAME', $this->datainfo['Meta'][0], $v];
                     } else {
-                        $conditions[] = array('META_NAMEVALUE', $this->datainfo['Meta'][0], $k, $v);
+                        $conditions[] = ['META_NAMEVALUE', $this->datainfo['Meta'][0], $k, $v];
                     }
                 }
             } else {
                 $field_name = $datainfo[$field_table][$field_key][0];
-                $conditions[] = array('=', $field_name, $field_value);
+                $conditions[] = ['=', $field_name, $field_value];
             }
         }
-        $sql = $this->db->sql->Select($this->table, array('*'), $conditions, null, 1, null);
+        $sql = $this->db->sql->Select($this->table, ['*'], $conditions, null, 1, null);
         $array = $this->db->Query($sql);
         if (count($array) > 0) {
             $this->LoadInfoByAssoc($array[0]);
 
             return true;
-        } else {
-            return false;
         }
+
+        return false;
     }
 
     /**
@@ -385,19 +430,19 @@ class Base
             }
 
             $v = $array[$i];
-            if ($value[1] == 'string' || $value[1] == 'char') {
-                if ($key != 'Meta') {
+            if ('string' == $value[1] || 'char' == $value[1]) {
+                if ('Meta' != $key) {
                     $this->data[$key] = ($this->isreplacehost) ? $this->ReplaceTag2Host($v) : $v;
                 } else {
                     $this->data[$key] = $v;
                     $this->Metas->Unserialize($this->data['Meta']);
                 }
-            } elseif ($value[1] != 'boolean') {
+            } elseif ('boolean' != $value[1]) {
                 $this->data[$key] = $v;
             } else {
                 $this->data[$key] = (bool) $v;
             }
-            $i += 1;
+            ++$i;
         }
         //foreach ($GLOBALS['hooks']['Filter_Plugin_Base_Data_Load'] as $fpname => &$fpsignal) {
         //    $fpname($this, $this->data);
@@ -428,14 +473,14 @@ class Base
             }
 
             $v = $array[strtolower($key)];
-            if ($value[1] == 'string' || $value[1] == 'char') {
-                if ($key != 'Meta') {
+            if ('string' == $value[1] || 'char' == $value[1]) {
+                if ('Meta' != $key) {
                     $this->data[$key] = ($this->isreplacehost) ? $this->ReplaceTag2Host($v) : $v;
                 } else {
                     $this->data[$key] = $v;
                     $this->Metas->Unserialize($this->data['Meta']);
                 }
-            } elseif ($value[1] != 'boolean') {
+            } elseif ('boolean' != $value[1]) {
                 $this->data[$key] = $v;
             } else {
                 $this->data[$key] = (bool) $v;
@@ -462,7 +507,7 @@ class Base
             $this->data['Meta'] = $this->Metas->Serialize();
         }
 
-        $keys = array();
+        $keys = [];
         foreach ($this->datainfo as $key => $value) {
             if (!is_array($value) || count($value) < 4) {
                 continue;
@@ -471,7 +516,7 @@ class Base
             $keys[] = $value[0];
         }
         $keyvalue = array_fill_keys($keys, '');
-        $keyvalue_orig = array();
+        $keyvalue_orig = [];
 
         foreach ($this->datainfo as $key => $value) {
             if (!is_array($value) || count($value) < 4) {
@@ -480,23 +525,24 @@ class Base
             if (!array_key_exists($key, $this->data)) {
                 //如果unset(某个$key)就不再插入或修改该数据
                 unset($keyvalue[$value[0]]);
+
                 continue;
             }
 
-            if ($value[1] == 'boolean') {
+            if ('boolean' == $value[1]) {
                 $keyvalue[$value[0]] = (int) $this->data[$key];
                 $keyvalue_orig[$value[0]] = (int) $this->original[$key];
-            } elseif ($value[1] == 'integer') {
+            } elseif ('integer' == $value[1]) {
                 $keyvalue[$value[0]] = (int) $this->data[$key];
                 $keyvalue_orig[$value[0]] = (int) $this->original[$key];
-            } elseif ($value[1] == 'float') {
+            } elseif ('float' == $value[1]) {
                 $keyvalue[$value[0]] = (float) $this->data[$key];
                 $keyvalue_orig[$value[0]] = (float) $this->original[$key];
-            } elseif ($value[1] == 'double') {
+            } elseif ('double' == $value[1]) {
                 $keyvalue[$value[0]] = (float) $this->data[$key];
                 $keyvalue_orig[$value[0]] = (float) $this->original[$key];
-            } elseif ($value[1] == 'string' || $value[1] == 'char') {
-                if ($key == 'Meta' || $bloghost == '/') {
+            } elseif ('string' == $value[1] || 'char' == $value[1]) {
+                if ('Meta' == $key || '/' == $bloghost) {
                     $keyvalue[$value[0]] = $this->data[$key];
                     $keyvalue_orig[$value[0]] = $this->original[$key];
                 } else {
@@ -514,12 +560,12 @@ class Base
         $id_name = $this->idname;
         $id_field = $this->datainfo[$id_name][0];
 
-        if (empty($this->$id_name)) {
-            if (count($keyvalue) == 0) {
+        if (empty($this->{$id_name})) {
+            if (0 == count($keyvalue)) {
                 return true;
             }
             $sql = $this->db->sql->Insert($this->table, $keyvalue);
-            $this->$id_name = $this->db->Insert($sql);
+            $this->{$id_name} = $this->db->Insert($sql);
         } else {
             foreach ($keyvalue as $key => $value) {
                 if (array_key_exists($key, $keyvalue_orig)) {
@@ -528,17 +574,19 @@ class Base
                     }
                 }
             }
-            if (count($keyvalue) == 0) {
+            if (0 == count($keyvalue)) {
                 return true;
             }
-            $sql = $this->db->sql->Update($this->table, $keyvalue, array(array('=', $id_field, $this->$id_name)));
+            $sql = $this->db->sql->Update($this->table, $keyvalue, [['=', $id_field, $this->{$id_name}]]);
             $r = $this->db->Update($sql);
 
             $this->original = $this->data;
+
             return $r;
         }
 
         $this->original = $this->data;
+
         return true;
     }
 
@@ -551,36 +599,20 @@ class Base
     {
         $id_name = $this->idname;
         $id_field = $this->datainfo[$id_name][0];
-        $sql = $this->db->sql->Delete($this->table, array(array('=', $id_field, $this->$id_name)));
+        $sql = $this->db->sql->Delete($this->table, [['=', $id_field, $this->{$id_name}]]);
         $this->db->Delete($sql);
-        if ($this->classname !== 'Base') {
+        if ('Base' !== $this->classname) {
             $GLOBALS['zbp']->RemoveCache($this);
         }
+
         return true;
     }
 
     /**
-     * 将数据用JSON格式输出.
-     *
-     * @return string
-     */
-    public function __toString()
-    {
-        return (string) json_encode($this->data);
-    }
-
-    /**
-     *  __clone()
-     *
-     * @return object
-     */
-    public function __clone()
-    {
-        $this->LoadInfoByDataArray($this->data);
-    }
-
-    /**
      * Clone对象.
+     *
+     * @param mixed      $with_original
+     * @param null|mixed $classname
      *
      * @return object
      */
@@ -589,17 +621,18 @@ class Base
         if (empty($classname)) {
             $classname = $this->classname;
         }
-        if ($classname == 'Base') {
+        if ('Base' == $classname) {
             $new = new $classname($this->table, $this->datainfo);
         } else {
-            $new = new $classname;
+            $new = new $classname();
         }
 
-        if ($with_original == false) {
+        if (false == $with_original) {
             $new->LoadInfoByDataArray($this->data);
         } else {
             $new->LoadInfoByDataArray($this->original);
         }
+
         return $new;
     }
 
@@ -613,31 +646,17 @@ class Base
         return $this->idname;
     }
 
-    /**
-     * DebugInfo >= php 5.6
-     */
-    public function __debugInfo()
-    {
-        $array = array();
-        foreach ($this as $key => $value) {
-            if ($key == 'datainfo' || $key == 'db') {
-                continue;
-            }
-            $array[$key] = $value;
-        }
-        return $array;
-    }
-
     public function ReplaceTag2Host($s)
     {
         global $bloghost;
+
         return str_replace('{#ZC_BLOG_HOST#}', $bloghost, (string) $s);
     }
 
     public function ReplaceHost2Tag($s)
     {
         global $bloghost;
+
         return str_replace($bloghost, '{#ZC_BLOG_HOST#}', (string) $s);
     }
-
 }
