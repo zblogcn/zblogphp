@@ -631,13 +631,13 @@ class Base
     public function ReplaceTag2Host($s)
     {
         global $bloghost;
-        return str_replace('{#ZC_BLOG_HOST#}', $bloghost, $s);
+        return str_replace('{#ZC_BLOG_HOST#}', $bloghost, (string) $s);
     }
 
     public function ReplaceHost2Tag($s)
     {
         global $bloghost;
-        return str_replace($bloghost, '{#ZC_BLOG_HOST#}', $s);
+        return str_replace($bloghost, '{#ZC_BLOG_HOST#}', (string) $s);
     }
 
 }
