@@ -524,6 +524,14 @@ function PostArticle()
     }
 
     $article->Save();
+
+    // 修复：新建文章时 Save 执行前 ID=0，CountPost 会统计 comm_LogID=0 的孤儿评论（假设站点中有孤儿评论）
+    // Save 拿到真实自增 ID 后重算一次并写回
+    if ($orig_id == 0) {
+        CountPost($article, null);
+        $article->Save();
+    }
+    
     $zbp->AddCache($article);
 
     //更新统计信息
