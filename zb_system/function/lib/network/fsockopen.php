@@ -3,26 +3,27 @@
 if (!defined('ZBP_PATH')) {
     exit('Access denied');
 }
+
 /**
  * sock类.
  */
 class Network__fsockopen implements Network__Interface
 {
-    private $readyState = 0; //状态
+    private $readyState = 0; // 状态
 
-    private $responseBody; //返回的二进制
+    private $responseBody; // 返回的二进制
 
-    private $responseStream; //返回的数据流
+    private $responseStream; // 返回的数据流
 
-    private $responseText = ''; //返回的数据
+    private $responseText = ''; // 返回的数据
 
-    private $responseXML; //尝试把responseText格式化为XMLDom
+    private $responseXML; // 尝试把responseText格式化为XMLDom
 
-    private $status = 0; //状态码
+    private $status = 0; // 状态码
 
-    private $statusText = ''; //状态码文本
+    private $statusText = ''; // 状态码文本
 
-    private $responseVersion = ''; //返回的HTTP版体
+    private $responseVersion = ''; // 返回的HTTP版体
 
     private $option = [];
 
@@ -53,9 +54,6 @@ class Network__fsockopen implements Network__Interface
     private $private_boundary = '';
 
     /**
-     * @param $property_name
-     * @param $value
-     *
      * @throws Exception
      */
     public function __set($property_name, $value)
@@ -64,8 +62,6 @@ class Network__fsockopen implements Network__Interface
     }
 
     /**
-     * @param $property_name
-     *
      * @return mixed
      */
     public function __get($property_name)
@@ -107,8 +103,6 @@ class Network__fsockopen implements Network__Interface
     }
 
     /**
-     * @param $bstrHeader
-     *
      * @return string
      */
     public function getResponseHeader($bstrHeader)
@@ -123,32 +117,24 @@ class Network__fsockopen implements Network__Interface
         return '';
     }
 
-    /**
-     * @param $resolveTimeout
-     * @param $connectTimeout
-     * @param $sendTimeout
-     * @param $receiveTimeout
-     */
     public function setTimeOuts($resolveTimeout, $connectTimeout, $sendTimeout, $receiveTimeout)
     {
         $this->option['timeout'] = $resolveTimeout;
     }
 
     /**
-     * @param $bstrMethod
-     * @param $bstrUrl
      * @param bool   $varAsync
      * @param string $bstrUser
      * @param string $bstrPassword
      *
-     * @throws Exception
-     *
      * @return bool
+     *
+     * @throws Exception
      */
     public function open($bstrMethod, $bstrUrl, $varAsync = true, $bstrUser = '', $bstrPassword = '')
     {
-        //Async无用
-        //初始化变量
+        // Async无用
+        // 初始化变量
         $this->reinit();
         $method = strtoupper($bstrMethod);
         $this->option['method'] = $method;
@@ -158,7 +144,7 @@ class Network__fsockopen implements Network__Interface
         if (!$this->parsed_url) {
             throw new Exception('URL Syntax Error!');
         }
-        //bstrUser & bstrPassword ?
+        // bstrUser & bstrPassword ?
         if (!isset($this->parsed_url['port'])) {
             if ('https' == $this->parsed_url['scheme']) {
                 $this->parsed_url['port'] = 443;
@@ -173,9 +159,9 @@ class Network__fsockopen implements Network__Interface
     /**
      * @param string $varBody
      *
-     * @throws Exception
-     *
      * @return mixed|void
+     *
+     * @throws Exception
      */
     public function send($varBody = '')
     {
@@ -192,7 +178,7 @@ class Network__fsockopen implements Network__Interface
                 $data = '';
             }
             if ('' == $data) {
-                $data = $this->private_buildPostData(); //http_build_query($this->postdata);
+                $data = $this->private_buildPostData(); // http_build_query($this->postdata);
             }
             $this->option['content'] = $data;
             if (!isset($this->httpheader['Content-Type'])) {
@@ -206,7 +192,7 @@ class Network__fsockopen implements Network__Interface
         }
 
         $this->httpheader[] = 'Host: ' . $this->parsed_url['host'];
-        //$this->httpheader[] = 'Referer: ' . 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
+        // $this->httpheader[] = 'Referer: ' . 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
         $this->httpheader[] = 'Connection: close';
 
         if (!isset($this->httpheader['Accept'])) {
@@ -235,7 +221,7 @@ class Network__fsockopen implements Network__Interface
 
         if ($this->maxredirs > 0) {
             $this->option['follow_location'] = 1;
-            //补一个数字 要大于1才跳转
+            // 补一个数字 要大于1才跳转
             $this->option['max_redirects'] = ($this->maxredirs + 1);
         } else {
             $this->option['follow_location'] = 0;
@@ -285,7 +271,7 @@ class Network__fsockopen implements Network__Interface
 
         $responseHeaderText = substr($this->responseText, 0, strpos($this->responseText, "\r\n\r\n"));
 
-        $this->responseText = substr($this->responseText, (strpos($this->responseText, "\r\n\r\n") + 4));
+        $this->responseText = substr($this->responseText, strpos($this->responseText, "\r\n\r\n") + 4);
 
         $this->responseHeader = explode("\r\n", $responseHeaderText);
 
@@ -341,8 +327,6 @@ class Network__fsockopen implements Network__Interface
     }
 
     /**
-     * @param $bstrHeader
-     * @param $bstrValue
      * @param bool $append
      *
      * @return bool
@@ -498,10 +482,6 @@ class Network__fsockopen implements Network__Interface
     {
     }
 
-    /**
-     * @param $bstrItem
-     * @param $bstrValue
-     */
     private function add_postdata($bstrItem, $bstrValue)
     {
         $this->postdata[$bstrItem] = [
@@ -535,14 +515,14 @@ class Network__fsockopen implements Network__Interface
             if ('text' == $value['type']) {
                 $data .= 'name="' . $name . '"' . "\r\n\r\n";
                 $data .= $content; // . "\r\n";
-                //$data .= "--{$boundary}";
+            // $data .= "--{$boundary}";
             } else {
                 $filename = $value['filename'];
                 $mime = $value['mime'];
                 $data .= 'name="' . $name . '"; filename="' . $filename . '"' . "\r\n";
                 $data .= "Content-Type: {$mime}\r\n";
-                $data .= "\r\n{$content}"; //"\r\n";
-                //$data .= "--{$boundary}";
+                $data .= "\r\n{$content}"; // "\r\n";
+                // $data .= "--{$boundary}";
             }
         }
         $data .= "\r\n--{$boundary}--\r\n";
@@ -568,13 +548,13 @@ class Network__fsockopen implements Network__Interface
             return;
         }
 
-        $this->readyState = 0; //状态
-        $this->responseBody = null; //返回的二进制
-        $this->responseStream = null; //返回的数据流
-        $this->responseText = ''; //返回的数据
-        $this->responseXML = null; //尝试把responseText格式化为XMLDom
-        $this->status = 0; //状态码
-        $this->statusText = ''; //状态码文本
+        $this->readyState = 0; // 状态
+        $this->responseBody = null; // 返回的二进制
+        $this->responseStream = null; // 返回的数据流
+        $this->responseText = ''; // 返回的数据
+        $this->responseXML = null; // 尝试把responseText格式化为XMLDom
+        $this->status = 0; // 状态码
+        $this->statusText = ''; // 状态码文本
 
         $this->private_isBinary = false;
         $this->private_boundary = '';
@@ -598,8 +578,6 @@ class Network__fsockopen implements Network__Interface
     }
 
     /**
-     * @param $chunk
-     *
      * @return null|string
      */
     private function http_chunked_decode($chunk)
@@ -609,7 +587,7 @@ class Network__fsockopen implements Network__Interface
         $dechunk = null;
 
         while (($pos < $len)
-            && ($chunkLenHex = substr($chunk, $pos, (($newlineAt = strpos($chunk, "\n", ($pos + 1))) - $pos)))) {
+            && ($chunkLenHex = substr($chunk, $pos, ($newlineAt = strpos($chunk, "\n", $pos + 1)) - $pos))) {
             if (!$this->is_hex($chunkLenHex)) {
                 trigger_error('Value is not properly chunk encoded', E_USER_WARNING);
 
@@ -619,7 +597,7 @@ class Network__fsockopen implements Network__Interface
             $pos = ($newlineAt + 1);
             $chunkLen = hexdec(rtrim($chunkLenHex, "\r\n"));
             $dechunk .= substr($chunk, $pos, $chunkLen);
-            $pos = (strpos($chunk, "\n", ($pos + $chunkLen)) + 1);
+            $pos = (strpos($chunk, "\n", $pos + $chunkLen) + 1);
         }
 
         return $dechunk;
@@ -645,8 +623,6 @@ class Network__fsockopen implements Network__Interface
     }
 
     /**
-     * @param $string
-     *
      * @return string
      */
     private function gzdecode($string)

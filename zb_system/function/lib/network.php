@@ -3,21 +3,21 @@
 if (!defined('ZBP_PATH')) {
     exit('Access denied');
 }
+
 /**
  * 网络连接类.
  */
 class Network
 {
-
     /**
      * @var null
      */
-    public $networktype = null;
+    public $networktype;
 
     /**
      * @var string[]
      */
-    public $network_list = array();
+    public $network_list = [];
 
     /**
      * @var bool
@@ -35,9 +35,9 @@ class Network
     public $file_get_contents = false;
 
     /**
-     * @var Network|null
+     * @var null|Network
      */
-    private static $private_network = null;
+    private static $private_network;
 
     /**
      * 构造函数.
@@ -65,7 +65,7 @@ class Network
     /**
      * @param string $extension
      *
-     * @return Network__Interface|null
+     * @return null|Network__Interface
      */
     public static function Create($extension = '')
     {
@@ -76,10 +76,9 @@ class Network
             return null;
         }
 
-        $extension = ($extension == '' ? self::$private_network->network_list[0] : $extension);
+        $extension = ('' == $extension ? self::$private_network->network_list[0] : $extension);
         $type = 'Network__' . $extension;
-        $network = new $type();
-        return $network;
-    }
 
+        return new $type();
+    }
 }

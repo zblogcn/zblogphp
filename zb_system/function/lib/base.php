@@ -91,18 +91,12 @@ class Base
         $this->original = $this->data;
     }
 
-    /**
-     * @param $name
-     * @param $value
-     */
     public function __set($name, $value)
     {
         $this->data[$name] = $value;
     }
 
     /**
-     * @param $name
-     *
      * @return mixed
      */
     public function __get($name)
@@ -111,8 +105,6 @@ class Base
     }
 
     /**
-     * @param $name
-     *
      * @return bool
      */
     public function __isset($name)
@@ -120,9 +112,6 @@ class Base
         return array_key_exists($name, $this->data);
     }
 
-    /**
-     * @param $name
-     */
     public function __unset($name)
     {
         unset($this->data[$name]);
@@ -351,9 +340,9 @@ class Base
                 $this->data[$key] = (bool) $v;
             }
         }
-        //foreach ($GLOBALS['hooks']['Filter_Plugin_Base_Data_Load'] as $fpname => &$fpsignal) {
+        // foreach ($GLOBALS['hooks']['Filter_Plugin_Base_Data_Load'] as $fpname => &$fpsignal) {
         //    $fpname($this, $this->data);
-        //}
+        // }
 
         $this->original = $this->data;
 
@@ -416,8 +405,6 @@ class Base
     /**
      * 从数组(整数索引key)中加载数据.
      *
-     * @param $array
-     *
      * @return bool
      */
     public function LoadInfoByArray($array)
@@ -447,9 +434,9 @@ class Base
             }
             ++$i;
         }
-        //foreach ($GLOBALS['hooks']['Filter_Plugin_Base_Data_Load'] as $fpname => &$fpsignal) {
+        // foreach ($GLOBALS['hooks']['Filter_Plugin_Base_Data_Load'] as $fpname => &$fpsignal) {
         //    $fpname($this, $this->data);
-        //}
+        // }
 
         $this->original = $this->data;
 
@@ -458,8 +445,6 @@ class Base
 
     /**
      * 从Data数组中加载数据.
-     *
-     * @param $array
      *
      * @return bool
      */
@@ -489,9 +474,9 @@ class Base
                 $this->data[$key] = (bool) $v;
             }
         }
-        //foreach ($GLOBALS['hooks']['Filter_Plugin_Base_Data_Load'] as $fpname => &$fpsignal) {
+        // foreach ($GLOBALS['hooks']['Filter_Plugin_Base_Data_Load'] as $fpname => &$fpsignal) {
         //    $fpname($this, $this->data);
-        //}
+        // }
 
         $this->original = $this->data;
 
@@ -526,7 +511,7 @@ class Base
                 continue;
             }
             if (!array_key_exists($key, $this->data)) {
-                //如果unset(某个$key)就不再插入或修改该数据
+                // 如果unset(某个$key)就不再插入或修改该数据
                 unset($keyvalue[$value[0]]);
 
                 continue;

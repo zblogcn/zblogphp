@@ -22,6 +22,7 @@ class SQL__Global
 {
     /**
      * @var string 类名
+     *
      * @description 如果是PHP 5.3的话，可以用get_called_class
      */
     public $className = __CLASS__;
@@ -91,9 +92,9 @@ class SQL__Global
      * @param string $callName
      * @param array  $argu
      *
-     * @throws Exception
-     *
      * @return mixed|SQL__Global
+     *
+     * @throws Exception
      */
     public function __call($callName, $argu)
     {
@@ -116,7 +117,7 @@ class SQL__Global
 
                         break;
                     }
-                    //is_array($argu[0]) ? $argu[0] : $argu;
+                    // is_array($argu[0]) ? $argu[0] : $argu;
                     $this->index[key($value)] = current($value);
                 }
             } elseif ('TABLE' == $upperKeyword || 'DATABASE' == $upperKeyword) {
@@ -206,9 +207,6 @@ class SQL__Global
     }
 
     /**
-     * @param $name
-     * @param $value
-     *
      * @throws Exception
      */
     public function __set($name, $value)
@@ -231,8 +229,6 @@ class SQL__Global
      * It maybe a bug of PHP.
      *
      * @see  http://stackoverflow.com/questions/10454779/php-indirect-modification-of-overloaded-property
-     *
-     * @param $sql
      */
     public function sqlPush($sql)
     {
@@ -259,8 +255,6 @@ class SQL__Global
     /**
      * Set SQL query option.
      *
-     * @param $option
-     *
      * @return SQL__Global
      */
     public function option($option)
@@ -276,8 +270,6 @@ class SQL__Global
 
     /**
      * Set column for query.
-     *
-     * @param $columns
      *
      * @return SQL__Global
      */
@@ -367,8 +359,6 @@ class SQL__Global
     /**
      * Set having.
      *
-     * @param $having
-     *
      * @return SQL__Global
      */
     public function having($having)
@@ -397,8 +387,6 @@ class SQL__Global
 
     /**
      * GroupBy.
-     *
-     * @param $groupBy
      *
      * @return SQL__Global
      */
@@ -496,11 +484,11 @@ class SQL__Global
         $table = &$this->table;
         $tableData = [];
 
-        //array_walk
+        // array_walk
         foreach ($table as $index => $tableValue) {
             if (is_string($tableValue)) {
                 if (!is_integer($index)) {
-                    $tableData[] = " {$index} AS {$tableValue} "; //给表加AS
+                    $tableData[] = " {$index} AS {$tableValue} "; // 给表加AS
                 } else {
                     $tableData[] = " {$tableValue} "; // 为保证兼容性，不加反引号
                 }
@@ -599,21 +587,21 @@ class SQL__Global
             }
         } elseif ('BETWEEN' == $eq || 'NOT BETWEEN' == $eq) {
             $whereData = " ({$value[1]} BETWEEN '{$value[2]}' AND '{$value[3]}') ";
-        } elseif ('SEARCH' == $eq) { //SEARCH模式搜索字符自动两边加%
+        } elseif ('SEARCH' == $eq) { // SEARCH模式搜索字符自动两边加%
             $searchCount = count($value);
             $sqlSearch = [];
             for ($i = 1; $i <= ($searchCount - 1 - 1); ++$i) {
                 $x = (string) $value[$i];
-                $y = $this->db->EscapeString((string) $value[($searchCount - 1)]);
+                $y = $this->db->EscapeString((string) $value[$searchCount - 1]);
                 if ('SEARCH' == $eq) {
                     $sqlSearch[] = " ({$x} LIKE '%{$y}%') ";
                 }
             }
             $whereData = ' ((1 = 1) AND (' . implode(' OR ', $sqlSearch) . ') )';
-        } elseif (('OR' == $eq || 'ARRAY' == $eq) && count($value) > 2) { //此块是处理array('or','条件1','条件2','条件3')时
+        } elseif (('OR' == $eq || 'ARRAY' == $eq) && count($value) > 2) { // 此块是处理array('or','条件1','条件2','条件3')时
             $sqlArray = [];
             foreach ($value as $x => $y) {
-                if (0 == $x) { //当是or就跳开
+                if (0 == $x) { // 当是or就跳开
                     continue;
                 }
                 $sqlArray[] = $this->buildWhere_Single($y);
@@ -635,7 +623,7 @@ class SQL__Global
             if (!is_array($value[1]) || empty($value[1])) {
                 return ' (1 = 1) ';
             }
-            //fix 解决这种array('or', array('=','log_ID',1));bug问题的代码！
+            // fix 解决这种array('or', array('=','log_ID',1));bug问题的代码！
             if (2 == count($value) && is_array($value[1]) && isset($value[1][0]) && !is_array($value[1][0])) {
                 return $this->buildWhere_Single($value[1]);
             }
@@ -682,7 +670,7 @@ class SQL__Global
             if (4 != count($value)) {
                 return ' (1 = 1) ';
             }
-            $sqlMeta = 's:' . strlen($value[2]) . ':"' . $value[2] . '";' . 's:' . strlen($value[3]) . ':"' . $value[3] . '"';
+            $sqlMeta = 's:' . strlen($value[2]) . ':"' . $value[2] . '";s:' . strlen($value[3]) . ':"' . $value[3] . '"';
             $sqlMeta = $this->db->EscapeString($sqlMeta);
             $whereData = "({$value[1]} LIKE '%{$sqlMeta}%')";
         } elseif ('CUSTOM' == $eq) {
@@ -869,7 +857,7 @@ class SQL__Global
 
         $this->buildBeforeWhere();
 
-        //if (get_class($this) == 'SQL__MySQL' && array_key_exists('RANDOM', $this->extend)) {
+        // if (get_class($this) == 'SQL__MySQL' && array_key_exists('RANDOM', $this->extend)) {
         if (array_key_exists('RANDOM', $this->extend)) {
             $this->buildRandomBefore();
         }
@@ -903,7 +891,7 @@ class SQL__Global
     protected function buildSELECTANY()
     {
         $sql = &$this->pri_sql;
-        //no use
+        // no use
     }
 
     protected function buildADDCOLUMN()
