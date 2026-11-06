@@ -914,6 +914,8 @@ function DelPage()
 
 /**
  * 批量删除Post.
+ *
+ * @param mixed $type
  */
 function BatchPost($type)
 {

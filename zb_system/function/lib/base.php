@@ -97,6 +97,8 @@ class Base
     }
 
     /**
+     * @param mixed $name
+     *
      * @return mixed
      */
     public function __get($name)
@@ -105,6 +107,8 @@ class Base
     }
 
     /**
+     * @param mixed $name
+     *
      * @return bool
      */
     public function __isset($name)
@@ -405,6 +409,8 @@ class Base
     /**
      * 从数组(整数索引key)中加载数据.
      *
+     * @param mixed $array
+     *
      * @return bool
      */
     public function LoadInfoByArray($array)
@@ -445,6 +451,8 @@ class Base
 
     /**
      * 从Data数组中加载数据.
+     *
+     * @param mixed $array
      *
      * @return bool
      */

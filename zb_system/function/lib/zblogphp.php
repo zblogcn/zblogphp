@@ -700,6 +700,9 @@ class ZBlogPHP
     /**
      * 设置参数值
      *
+     * @param mixed $name
+     * @param mixed $value
+     *
      * @return mixed
      */
     public function __set($name, $value)
@@ -717,6 +720,8 @@ class ZBlogPHP
 
     /**
      * 获取参数值
+     *
+     * @param mixed $name
      *
      * @return mixed
      */
@@ -2557,6 +2562,9 @@ class ZBlogPHP
     /**
      * 已改名GetListType,1.5版中扔掉有歧义的GetList.
      *
+     * @param mixed $classname
+     * @param mixed $sql
+     *
      * @return Base[]
      */
     public function GetListType($classname, $sql)
@@ -2601,6 +2609,8 @@ class ZBlogPHP
 
     /**
      * GetListOrigin.
+     *
+     * @param mixed $sql
      *
      * @return Base[]
      */
@@ -3298,6 +3308,8 @@ class ZBlogPHP
     /**
      * 检查指定名称的用户是否存在(不区分大小写).
      *
+     * @param mixed $name
+     *
      * @return bool
      */
     public function CheckMemberNameExist($name)
@@ -3310,6 +3322,8 @@ class ZBlogPHP
     /**
      * 检查指定名称或别名的用户是否存在(不区分大小写).
      *
+     * @param mixed $name
+     *
      * @return bool
      */
     public function CheckMemberByNameOrAliasExist($name)
@@ -3321,6 +3335,8 @@ class ZBlogPHP
 
     /**
      * 检查指定邮箱的用户是否存在(不区分大小写).
+     *
+     * @param mixed $email
      *
      * @return bool
      */
@@ -3447,6 +3463,8 @@ class ZBlogPHP
     /**
      * 通过类似'{1}{2}{3}{4}'载入tags.
      *
+     * @param mixed $s
+     *
      * @return array
      */
     public function LoadTagsByIDString($s)
@@ -3557,6 +3575,9 @@ class ZBlogPHP
 
     /**
      * 验证评论key.
+     *
+     * @param mixed $id
+     * @param mixed $key
      *
      * @return bool
      */
@@ -3951,6 +3972,8 @@ class ZBlogPHP
     /**
      * 获得Action权限的名称.
      *
+     * @param mixed $name
+     *
      * @return mixed
      */
     public function GetActionName($name)
@@ -3966,6 +3989,8 @@ class ZBlogPHP
      * @param string $className 默认类名
      * @param string $actions   默认Actions 应是array()
      * @param string $routes    默认Routes 应是array()
+     * @param mixed  $typeId
+     * @param mixed  $name
      *
      * @throws Exception
      */
@@ -4071,6 +4096,8 @@ class ZBlogPHP
      *
      * @param $typeId
      * @param mixed $typeid
+     * @param mixed $name
+     * @param mixed $value
      *
      * @throws Exception
      */
@@ -4081,6 +4108,9 @@ class ZBlogPHP
 
     /**
      * 获取PostType信息(如果是修改的话请直接编辑$zbp->posttype).
+     *
+     * @param mixed $typeid
+     * @param mixed $key
      *
      * @return array|string
      */
@@ -4165,6 +4195,8 @@ class ZBlogPHP
     }
 
     /**
+     * @param mixed $typeid
+     *
      * @return string
      */
     public function GetPostType_Name($typeid)
@@ -4778,6 +4810,7 @@ class ZBlogPHP
      * 删除导航菜单中相应条目.
      *
      * @param string $type
+     * @param mixed  $id
      */
     public function DelItemToNavbar($type, $id)
     {
@@ -4798,6 +4831,7 @@ class ZBlogPHP
      * 检查条目是否在导航菜单中.
      *
      * @param string $type
+     * @param mixed  $id
      *
      * @return bool
      */
@@ -4921,6 +4955,9 @@ class ZBlogPHP
      *
      * @deprecated Use ``VerifyCSRFToken``
      *
+     * @param mixed $t
+     * @param mixed $id
+     *
      * @return bool
      */
     public function ValidToken($t, $id = '')
@@ -4969,6 +5006,9 @@ class ZBlogPHP
      * 验证会话WebToken.
      *
      * @deprecated 毫无意义，即将废弃
+     *
+     * @param mixed $wt
+     * @param mixed $wt_id
      *
      * @return bool
      */

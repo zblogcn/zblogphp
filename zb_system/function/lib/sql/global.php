@@ -207,6 +207,9 @@ class SQL__Global
     }
 
     /**
+     * @param mixed $name
+     * @param mixed $value
+     *
      * @throws Exception
      */
     public function __set($name, $value)
@@ -229,6 +232,8 @@ class SQL__Global
      * It maybe a bug of PHP.
      *
      * @see  http://stackoverflow.com/questions/10454779/php-indirect-modification-of-overloaded-property
+     *
+     * @param mixed $sql
      */
     public function sqlPush($sql)
     {
@@ -255,6 +260,8 @@ class SQL__Global
     /**
      * Set SQL query option.
      *
+     * @param mixed $option
+     *
      * @return SQL__Global
      */
     public function option($option)
@@ -270,6 +277,8 @@ class SQL__Global
 
     /**
      * Set column for query.
+     *
+     * @param mixed $columns
      *
      * @return SQL__Global
      */
@@ -359,6 +368,8 @@ class SQL__Global
     /**
      * Set having.
      *
+     * @param mixed $having
+     *
      * @return SQL__Global
      */
     public function having($having)
@@ -387,6 +398,8 @@ class SQL__Global
 
     /**
      * GroupBy.
+     *
+     * @param mixed $groupBy
      *
      * @return SQL__Global
      */

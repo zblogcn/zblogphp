@@ -48,6 +48,9 @@ class Network__filegetcontents implements Network__Interface
     private $timeout = 30;
 
     /**
+     * @param mixed $property_name
+     * @param mixed $value
+     *
      * @throws Exception
      */
     public function __set($property_name, $value)
@@ -56,6 +59,8 @@ class Network__filegetcontents implements Network__Interface
     }
 
     /**
+     * @param mixed $property_name
+     *
      * @return mixed
      */
     public function __get($property_name)
@@ -97,6 +102,8 @@ class Network__filegetcontents implements Network__Interface
     }
 
     /**
+     * @param mixed $bstrHeader
+     *
      * @return string
      */
     public function getResponseHeader($bstrHeader)
@@ -120,6 +127,8 @@ class Network__filegetcontents implements Network__Interface
      * @param bool   $varAsync
      * @param string $bstrUser
      * @param string $bstrPassword
+     * @param mixed  $bstrMethod
+     * @param mixed  $bstrUrl
      *
      * @return bool
      *
@@ -243,7 +252,9 @@ class Network__filegetcontents implements Network__Interface
     }
 
     /**
-     * @param bool $append
+     * @param bool  $append
+     * @param mixed $bstrHeader
+     * @param mixed $bstrValue
      *
      * @return bool
      */
