@@ -521,12 +521,17 @@ function PostArticle()
 
     FilterPost($article);
 
-    if (false == $zbp->option['ZC_LARGE_DATA']) {
-        //CountPostArray(array($post->ID));
+    if ($orig_id > 0 && false == $zbp->option['ZC_LARGE_DATA']) {
         CountPost($article, null);
     }
 
     $article->Save();
+
+    if (0 == $orig_id) {
+        CountPost($article, null);
+        $article->Save();
+    }
+
     $zbp->AddCache($article);
 
     //更新统计信息
@@ -1266,11 +1271,12 @@ function BatchComment()
         return;
     }
     $array = $_POST['id'];
-    if (is_array($array)) {
-        $array = array_unique($array);
-    } else {
+    if (!is_array($array)) {
         $array = [$array];
     }
+
+    $array = array_filter($array, 'is_scalar');
+    $array = array_unique(array_map('intval', $array));
 
     $childArray = $zbp->GetCommentByArray($array);
 

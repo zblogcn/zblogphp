@@ -36,6 +36,7 @@ class ZbaToolkit
     private $intoPath = '';
     private $force = false;
     private $verbose = false;
+    private $downloadedFiles = [];
 
     public function __construct(array $argv)
     {
@@ -270,6 +271,12 @@ HELP;
             $this->createBundleZip($workDir);
         } finally {
             $this->removeDirectory($workDir);
+            foreach ($this->downloadedFiles as $file) {
+                if (is_file($file)) {
+                    @unlink($file);
+                }
+            }
+            $this->downloadedFiles = [];
         }
     }
 
@@ -324,7 +331,9 @@ HELP;
             curl_setopt($ch, CURLOPT_TIMEOUT, 300);
             $data = curl_exec($ch);
             $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-            curl_close($ch);
+            if (PHP_VERSION_ID < 80000) {
+                curl_close($ch);
+            }
             if ($code < 200 || $code >= 300 || false === $data) {
                 $this->error("下载失败 HTTP {$code}: {$url}");
             }
@@ -337,6 +346,13 @@ HELP;
             file_put_contents($tmpFile, $data);
         } else {
             $this->error('当前环境不支持 curl 或 allow_url_fopen, 无法下载文件。');
+        }
+
+        $this->downloadedFiles[] = $tmpFile;
+
+        if (!$this->loadZbaXml($tmpFile)) {
+            $preview = substr(trim(preg_replace('/\s+/', ' ', substr($data, 0, 120))), 0, 120);
+            $this->error("下载内容不是有效的 .zba 文件: {$url} (大小 " . strlen($data) . " 字节, 开头: {$preview})");
         }
 
         return $tmpFile;

@@ -2717,7 +2717,7 @@ class ZBlogPHP
         }
         $array = array_unique($array);
 
-        $where[] = ['IN', $datainfo[$field_name][0], implode(',', $array)];
+        $where[] = ['IN', $datainfo[$field_name][0], array_values($array)];
         $sql = $this->db->sql->Select($table, '*', $where);
         $objects = $this->db->Query($sql);
         if (!isset($objects)) {
@@ -2876,7 +2876,7 @@ class ZBlogPHP
         $o = new $classname();
         $table = &$o->GetTable();
         $datainfo = &$o->GetDataInfo();
-        $where[] = ['IN', $datainfo[$field_name][0], implode(',', $array)];
+        $where[] = ['IN', $datainfo[$field_name][0], array_values($array)];
         $sql = $this->db->sql->Select($table, '*', $where);
         $objects = $this->db->Query($sql);
         if (!isset($objects)) {

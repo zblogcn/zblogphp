@@ -328,7 +328,7 @@ class ValidateCode
         // Apply effects
         if (!$this->ignoreAllEffects) {
             $square = ($width * $height);
-            $effects = $this->rand($square / 3000, $square / 2000);
+            $effects = $this->rand((int) ($square / 3000), (int) ($square / 2000));
 
             // set the maximum number of lines to draw in front of the text
             if (null != $this->maxBehindLines && $this->maxBehindLines > 0) {
@@ -348,7 +348,7 @@ class ValidateCode
         // Apply effects
         if (!$this->ignoreAllEffects) {
             $square = ($width * $height);
-            $effects = $this->rand($square / 2000, $square / 2000);
+            $effects = $this->rand((int) ($square / 2000), (int) ($square / 2000));
 
             // set the maximum number of lines to draw in front of the text
             if (null != $this->maxFrontLines && $this->maxFrontLines > 0) {
@@ -554,15 +554,15 @@ class ValidateCode
         }
 
         if ($this->rand(0, 1)) { // Horizontal
-            $Xa = $this->rand(0, $width / 2);
+            $Xa = $this->rand(0, (int) ($width / 2));
             $Ya = $this->rand(0, $height);
-            $Xb = $this->rand($width / 2, $width);
+            $Xb = $this->rand((int) ($width / 2), $width);
             $Yb = $this->rand(0, $height);
         } else { // Vertical
             $Xa = $this->rand(0, $width);
-            $Ya = $this->rand(0, $height / 2);
+            $Ya = $this->rand(0, (int) ($height / 2));
             $Xb = $this->rand(0, $width);
-            $Yb = $this->rand($height / 2, $height);
+            $Yb = $this->rand((int) ($height / 2), $height);
         }
         imagesetthickness($image, $this->rand(1, 2));
         imageline($image, $Xa, $Ya, $Xb, $Yb, $tcol);
@@ -623,8 +623,8 @@ class ValidateCode
         $box = imagettfbbox($size, 0, $font, $phrase);
         $textWidth = ($box[2] - $box[0]);
         $textHeight = ($box[1] - $box[7]);
-        $x = (($width - $textWidth) / 2);
-        $y = (($height - $textHeight) / 2 + $size);
+        $x = (int) (($width - $textWidth) / 2);
+        $y = (int) (($height - $textHeight) / 2 + $size);
 
         // if (isset($this->textCount) && is_array($this->textCount) && !count($this->textColor)) {
         $textColor = [$this->rand(0, 150), $this->rand(0, 150), $this->rand(0, 150)];
@@ -672,6 +672,13 @@ class ValidateCode
     }
 
     /**
+     * @param mixed $x
+     * @param mixed $y
+     * @param mixed $nw
+     * @param mixed $ne
+     * @param mixed $sw
+     * @param mixed $se
+     *
      * @return int
      */
     protected function interpolate($x, $y, $nw, $ne, $sw, $se)
@@ -701,6 +708,9 @@ class ValidateCode
 
     /**
      * @param mixed $background
+     * @param mixed $image
+     * @param mixed $x
+     * @param mixed $y
      *
      * @return int
      */
@@ -716,6 +726,8 @@ class ValidateCode
     }
 
     /**
+     * @param mixed $col
+     *
      * @return array
      */
     protected function getRGB($col)

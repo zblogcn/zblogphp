@@ -456,7 +456,7 @@ function GetGuestIP()
         $user_ip = GetVars('REMOTE_ADDR', 'SERVER');
     } else {
         $user_ip = GetVars($zbp->option['ZC_USING_CDN_GUESTIP_TYPE'], 'SERVER');
-        if (false !== strpos($user_ip, ',')) {
+        if (is_string($user_ip) && false !== strpos($user_ip, ',')) {
             $array = explode(',', $user_ip);
             $user_ip = trim($array[0]);
         }
@@ -478,7 +478,7 @@ function GetGuestIP()
         }
     }
 
-    $user_ip = trim($user_ip);
+    $user_ip = trim((string) $user_ip);
     if (!filter_var($user_ip, FILTER_VALIDATE_IP)) {
         $user_ip = GetVars('REMOTE_ADDR', 'SERVER');
     }
@@ -647,8 +647,8 @@ function GetEnvironment($more = false)
     } else {
         $uname = '';
     }
-    $system_environment = PHP_OS . $uname . '; ' .
-        GetValueInArray(
+    $system_environment = PHP_OS . $uname . '; '
+        . GetValueInArray(
             explode(
                 ' ',
                 str_replace(['Microsoft-', '/'], ['', ''], GetVars('SERVER_SOFTWARE', 'SERVER', '')),
@@ -863,6 +863,8 @@ function plugin_dir_url($file)
 
 /**
  * 通过文件获取应用目录路径.
+ *
+ * @param mixed $file
  *
  * @return string
  */
@@ -1520,11 +1522,13 @@ function SplitAndGet($string, $delimiter = ';', $n = 0)
 /**
  * 删除连续空格
  *
+ * @param mixed $s
+ *
  * @return null|string|string[]
  */
 function RemoveMoreSpaces($s)
 {
-    return preg_replace('/\\s(?=\\s)/', '\\1', $s);
+    return preg_replace('/\s(?=\s)/', '\1', $s);
 }
 
 /**
@@ -1598,15 +1602,15 @@ function HasNameInString($s, $name)
 function CheckRegExp($source, $para)
 {
     if (false !== strpos($para, '[username]')) {
-        $para = '/^[\\.\\_A-Za-z0-9·@\\x{4e00}-\\x{9fa5}]+$/u';
+        $para = '/^[\.\_A-Za-z0-9·@\x{4e00}-\x{9fa5}]+$/u';
     } elseif (false !== strpos($para, '[nickname]')) {
-        $para = '/([^\x{01}-\x{1F}\x{80}-\x{FF}\/:\\~&%;@\'"?<>|#$\*}{,\+=\[\]\(\)\{\}\t\r\n\p{C}])/u';
+        $para = '/([^\x{01}-\x{1F}\x{80}-\x{FF}\/:\~&%;@\'"?<>|#$\*}{,\+=\[\]\(\)\{\}\t\r\n\p{C}])/u';
     } elseif (false !== strpos($para, '[password]')) {
-        $para = '/^[A-Za-z0-9`~!@#$%\\^&\\*\\-_\\?\\.]+$/u';
+        $para = '/^[A-Za-z0-9`~!@#$%\^&\*\-_\?\.]+$/u';
     } elseif (false !== strpos($para, '[email]')) {
-        $para = '/^([0-9a-zA-Z]([-.\\w]*[0-9a-zA-Z])*@([0-9a-zA-Z][-\\w]*\\.)+[a-zA-Z]*)$/u';
+        $para = '/^([0-9a-zA-Z]([-.\w]*[0-9a-zA-Z])*@([0-9a-zA-Z][-\w]*\.)+[a-zA-Z]*)$/u';
     } elseif (false !== strpos($para, '[homepage]')) {
-        $para = '/^[a-zA-Z]+:\\/\\/[a-zA-Z0-9\\_\\-\\.\\&\\?\\/:=#\\x{4e00}-\\x{9fa5}]+$/u';
+        $para = '/^[a-zA-Z]+:\/\/[a-zA-Z0-9\_\-\.\&\?\/:=#\x{4e00}-\x{9fa5}]+$/u';
     } elseif (!$para) {
         return false;
     }
@@ -1906,7 +1910,7 @@ function CheckCanBeString($obj)
  */
 function utf84mb_filter(&$sql)
 {
-    $sql = preg_replace_callback('/[\\x{10000}-\\x{10FFFF}]/u', 'utf84mb_convertToUCS4', $sql);
+    $sql = preg_replace_callback('/[\x{10000}-\x{10FFFF}]/u', 'utf84mb_convertToUCS4', $sql);
 }
 
 /**
@@ -1915,8 +1919,8 @@ function utf84mb_filter(&$sql)
 function utf84mb_fixHtmlSpecialChars()
 {
     global $article;
-    $article->Content = preg_replace_callback('/\\&\\#x([0-9A-Z]{2,6})\\;/u', 'utf84mb_convertToUTF8', $article->Content);
-    $article->Intro = preg_replace_callback('/\\&\\#x([0-9A-Z]{2,6})\\;/u', 'utf84mb_convertToUTF8', $article->Intro);
+    $article->Content = preg_replace_callback('/\&\#x([0-9A-Z]{2,6})\;/u', 'utf84mb_convertToUTF8', $article->Content);
+    $article->Intro = preg_replace_callback('/\&\#x([0-9A-Z]{2,6})\;/u', 'utf84mb_convertToUTF8', $article->Intro);
 }
 
 /**
@@ -1984,7 +1988,7 @@ function JsonEncode($arr)
 
     if (version_compare(PHP_VERSION, '5.4.0', '<')) {
         return str_ireplace(
-            '\\/',
+            '\/',
             '/',
             preg_replace_callback(
                 '#\\\u([0-9a-f]{4})#i',
@@ -2000,6 +2004,8 @@ function JsonEncode($arr)
 /**
  * UCS-2BE 转 UTF-8，解决 JSON 中文转码问题.
  *
+ * @param mixed $matchs
+ *
  * @return false|string
  */
 function Ucs2Utf8($matchs)
@@ -2010,6 +2016,8 @@ function Ucs2Utf8($matchs)
 /**
  * 将Null转换为空字符串 (适应php8.2).
  *
+ * @param mixed $s
+ *
  * @return string
  */
 function Null2Empty($s)
@@ -2019,6 +2027,8 @@ function Null2Empty($s)
 
 /**
  * 将序列化后的string还原为array(自动判断empty,null).
+ *
+ * @param mixed $list
  *
  * @return array
  */
@@ -2079,7 +2089,7 @@ function FormatString($source, $para)
         $source = str_replace("\r\n", '<br/>', $source);
         $source = str_replace("\n", '<br/>', $source);
         $source = str_replace("\r", '<br/>', $source);
-        $source = preg_replace('/(<br\\/>)+/', '<br/>', $source);
+        $source = preg_replace('/(<br\/>)+/', '<br/>', $source);
     }
     if (false !== strpos($para, '[noenter]')) {
         $source = str_replace("\r\n", '', $source);
@@ -2303,8 +2313,7 @@ function UrlHostToPath($url)
 /**
  * rawurlencode转义但不转义/.
  *
- * @param string $url
- * @param mixed  $s
+ * @param mixed $s
  *
  * @return string
  */
@@ -2502,6 +2511,11 @@ function JsonReturn($data)
 
 /**
  * XML-RPC应答错误页面.
+ *
+ * @param mixed $errorCode
+ * @param mixed $errorString
+ * @param mixed $file
+ * @param mixed $line
  */
 function RespondError($errorCode, $errorString = '', $file = '', $line = '')
 {
@@ -2795,6 +2809,8 @@ function VerifyWebToken($webTokenString, $webTokenId, $key = '')
  * 创建Web Token.
  *
  * @param string $key
+ * @param mixed  $webTokenId
+ * @param mixed  $time
  *
  * @return string
  */
