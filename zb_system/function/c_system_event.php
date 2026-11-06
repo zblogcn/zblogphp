@@ -518,16 +518,13 @@ function PostArticle()
 
     FilterPost($article);
 
-    if (false == $zbp->option['ZC_LARGE_DATA']) {
-        //CountPostArray(array($post->ID));
+    if ($orig_id > 0 && false == $zbp->option['ZC_LARGE_DATA']) {
         CountPost($article, null);
     }
 
     $article->Save();
 
-    // 修复：新建文章时 Save 执行前 ID=0，CountPost 会统计 comm_LogID=0 的孤儿评论（假设站点中有孤儿评论）
-    // Save 拿到真实自增 ID 后重算一次并写回
-    if ($orig_id == 0) {
+    if (0 == $orig_id) {
         CountPost($article, null);
         $article->Save();
     }
