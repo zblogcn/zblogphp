@@ -3,26 +3,27 @@
 if (!defined('ZBP_PATH')) {
     exit('Access denied');
 }
+
 /**
  * 获取链接内容类.
  */
 class Network__filegetcontents implements Network__Interface
 {
-    private $readyState = 0; //状态
+    private $readyState = 0; // 状态
 
-    private $responseBody; //返回的二进制
+    private $responseBody; // 返回的二进制
 
-    private $responseStream; //返回的数据流
+    private $responseStream; // 返回的数据流
 
-    private $responseText = ''; //返回的数据
+    private $responseText = ''; // 返回的数据
 
-    private $responseXML; //尝试把responseText格式化为XMLDom
+    private $responseXML; // 尝试把responseText格式化为XMLDom
 
-    private $status = 0; //状态码
+    private $status = 0; // 状态码
 
-    private $statusText = ''; //状态码文本
+    private $statusText = ''; // 状态码文本
 
-    private $responseVersion = ''; //返回的HTTP版体
+    private $responseVersion = ''; // 返回的HTTP版体
 
     private $option = [];
 
@@ -47,9 +48,6 @@ class Network__filegetcontents implements Network__Interface
     private $timeout = 30;
 
     /**
-     * @param $property_name
-     * @param $value
-     *
      * @throws Exception
      */
     public function __set($property_name, $value)
@@ -58,8 +56,6 @@ class Network__filegetcontents implements Network__Interface
     }
 
     /**
-     * @param $property_name
-     *
      * @return mixed
      */
     public function __get($property_name)
@@ -101,8 +97,6 @@ class Network__filegetcontents implements Network__Interface
     }
 
     /**
-     * @param $bstrHeader
-     *
      * @return string
      */
     public function getResponseHeader($bstrHeader)
@@ -117,32 +111,24 @@ class Network__filegetcontents implements Network__Interface
         return '';
     }
 
-    /**
-     * @param $resolveTimeout
-     * @param $connectTimeout
-     * @param $sendTimeout
-     * @param $receiveTimeout
-     */
     public function setTimeOuts($resolveTimeout, $connectTimeout, $sendTimeout, $receiveTimeout)
     {
         $this->option['timeout'] = $resolveTimeout;
     }
 
     /**
-     * @param $bstrMethod
-     * @param $bstrUrl
      * @param bool   $varAsync
      * @param string $bstrUser
      * @param string $bstrPassword
      *
-     * @throws Exception
-     *
      * @return bool
+     *
+     * @throws Exception
      */
     public function open($bstrMethod, $bstrUrl, $varAsync = true, $bstrUser = '', $bstrPassword = '')
     {
-        //Async无用
-        //初始化变量
+        // Async无用
+        // 初始化变量
         $this->reinit();
         $method = strtoupper($bstrMethod);
         $this->option['method'] = $method;
@@ -152,7 +138,7 @@ class Network__filegetcontents implements Network__Interface
             throw new Exception('URL Syntax Error!');
         }
         if ('' != $bstrUser) {
-            $bstrUrl = substr($bstrUrl, 0, strpos($bstrUrl, ':')) . '://' . $bstrUser . ':' . $bstrPassword . '@' . substr($bstrUrl, (strpos($bstrUrl, '/') + 2));
+            $bstrUrl = substr($bstrUrl, 0, strpos($bstrUrl, ':')) . '://' . $bstrUser . ':' . $bstrPassword . '@' . substr($bstrUrl, strpos($bstrUrl, '/') + 2);
         }
         $this->url = $bstrUrl;
         if (!isset($this->parsed_url['port'])) {
@@ -184,7 +170,7 @@ class Network__filegetcontents implements Network__Interface
                 $data = '';
             }
             if ('' == $data) {
-                $data = $this->private_buildPostData(); //http_build_query($this->postdata);
+                $data = $this->private_buildPostData(); // http_build_query($this->postdata);
             }
             $this->option['content'] = $data;
 
@@ -199,7 +185,7 @@ class Network__filegetcontents implements Network__Interface
         }
 
         $this->option['header'] = implode("\r\n", $this->httpheader);
-        //$this->httpheader[] = 'Referer: ' . 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
+        // $this->httpheader[] = 'Referer: ' . 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
         $this->option['ignore_errors'] = true;
         if (isset($this->option['timeout'])) {
             $this->timeout = $this->option['timeout'];
@@ -209,7 +195,7 @@ class Network__filegetcontents implements Network__Interface
 
         if ($this->maxredirs > 0) {
             $this->option['follow_location'] = 1;
-            //补一个数字 要大于1才跳转
+            // 补一个数字 要大于1才跳转
             $this->option['max_redirects'] = ($this->maxredirs + 1);
         } else {
             $this->option['follow_location'] = 0;
@@ -257,8 +243,6 @@ class Network__filegetcontents implements Network__Interface
     }
 
     /**
-     * @param $bstrHeader
-     * @param $bstrValue
      * @param bool $append
      *
      * @return bool
@@ -419,10 +403,6 @@ class Network__filegetcontents implements Network__Interface
     {
     }
 
-    /**
-     * @param $bstrItem
-     * @param $bstrValue
-     */
     private function add_postdata($bstrItem, $bstrValue)
     {
         $this->postdata[$bstrItem] = [
@@ -456,14 +436,14 @@ class Network__filegetcontents implements Network__Interface
             if ('text' == $value['type']) {
                 $data .= 'name="' . $name . '"' . "\r\n\r\n";
                 $data .= $content; // . "\r\n";
-                //$data .= "--{$boundary}";
+            // $data .= "--{$boundary}";
             } else {
                 $filename = $value['filename'];
                 $mime = $value['mime'];
                 $data .= 'name="' . $name . '"; filename="' . $filename . '"' . "\r\n";
                 $data .= "Content-Type: {$mime}\r\n";
-                $data .= "\r\n{$content}"; //"\r\n";
-                //$data .= "--{$boundary}";
+                $data .= "\r\n{$content}"; // "\r\n";
+                // $data .= "--{$boundary}";
             }
         }
         $data .= "\r\n--{$boundary}--\r\n";
@@ -483,13 +463,13 @@ class Network__filegetcontents implements Network__Interface
 
     private function reinit()
     {
-        $this->readyState = 0; //状态
-        $this->responseBody = null; //返回的二进制
-        $this->responseStream = null; //返回的数据流
-        $this->responseText = ''; //返回的数据
-        $this->responseXML = null; //尝试把responseText格式化为XMLDom
-        $this->status = 0; //状态码
-        $this->statusText = ''; //状态码文本
+        $this->readyState = 0; // 状态
+        $this->responseBody = null; // 返回的二进制
+        $this->responseStream = null; // 返回的数据流
+        $this->responseText = ''; // 返回的数据
+        $this->responseXML = null; // 尝试把responseText格式化为XMLDom
+        $this->status = 0; // 状态码
+        $this->statusText = ''; // 状态码文本
 
         $this->private_isBinary = false;
         $this->private_boundary = '';
