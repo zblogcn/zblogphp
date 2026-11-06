@@ -114,7 +114,7 @@ function GetSystem()
     if (in_array(strtoupper(PHP_OS), ['WINNT', 'WIN32', 'WINDOWS'])) {
         return SYSTEM_WINDOWS;
     }
-    if (('UNIX' === strtoupper(PHP_OS))) {
+    if ('UNIX' === strtoupper(PHP_OS)) {
         return SYSTEM_UNIX;
     }
     if ('LINUX' === strtoupper(PHP_OS)) {
@@ -189,7 +189,7 @@ function GetCurrentHost($blogpath, &$cookiesPath)
         return '/';
     }
 
-    //下边没用了，但没有删除
+    // 下边没用了，但没有删除
     if (IS_CLI == true) {
         $cookiesPath = '/';
 
@@ -205,7 +205,7 @@ function GetCurrentHost($blogpath, &$cookiesPath)
             $x = '/' . $x;
         }
         for ($i = 0; $i < strlen($x); ++$i) {
-            $f = $y . substr($x, ($i - strlen($x)));
+            $f = $y . substr($x, $i - strlen($x));
             $z = substr($x, 0, $i);
             if (file_exists($f) && is_file($f)) {
                 $z = trim($z, '/');
@@ -230,7 +230,7 @@ function GetCurrentHost($blogpath, &$cookiesPath)
         $z = '';
         for ($i = strlen($x); $i > 0; --$i) {
             $z = substr($x, 0, $i);
-            if (strtolower(substr($y, (strlen($y) - $i))) == strtolower($z)) {
+            if (strtolower(substr($y, strlen($y) - $i)) == strtolower($z)) {
                 break;
             }
         }
@@ -356,7 +356,7 @@ function RedirectByScript($url)
 {
     echo '<script>location.href = decodeURIComponent("' . urlencode($url) . '");</script>';
 
-    exit();
+    exit;
 }
 
 /**
@@ -377,7 +377,7 @@ if (!function_exists('Redirect')) {
     {
         Redirect302($url);
 
-        exit();
+        exit;
     }
 }
 
@@ -434,10 +434,10 @@ function Http304($filename, $time)
     $etag = '"' . $md5 . '"';
     header('Last-Modified: ' . gmdate('D, d M Y H:i:s', $time) . ' GMT');
     header("ETag: {$etag}");
-    if ((isset($_SERVER['HTTP_IF_NONE_MATCH']) && $_SERVER['HTTP_IF_NONE_MATCH'] == $etag)) {
+    if (isset($_SERVER['HTTP_IF_NONE_MATCH']) && $_SERVER['HTTP_IF_NONE_MATCH'] == $etag) {
         SetHttpStatusCode(304);
 
-        exit();
+        exit;
     }
 }
 
@@ -779,7 +779,7 @@ function AutoloadClass($className)
         }
     }
 
-    //PSR4 load
+    // PSR4 load
     $psr4name = str_replace('\\', '/', $className);
     $psr4name = ltrim($psr4name, '/');
     foreach ($autoload_class_dirs as $dir) {
@@ -791,7 +791,7 @@ function AutoloadClass($className)
         }
     }
 
-    //ZBP mode load
+    // ZBP mode load
     $className = str_replace('__', '/', $className);
     foreach ($autoload_class_dirs as $dir) {
         $fileName = $dir . strtolower($className) . '.php';
@@ -863,8 +863,6 @@ function plugin_dir_url($file)
 
 /**
  * 通过文件获取应用目录路径.
- *
- * @param $file
  *
  * @return string
  */
@@ -1052,7 +1050,7 @@ function GetFilesInDir($dir, $type)
                     $t = '.' . $t;
                     $i = strlen($t);
                     if (substr($f, -$i, $i) == $t) {
-                        $sortname = substr($f, 0, (strlen($f) - $i));
+                        $sortname = substr($f, 0, strlen($f) - $i);
                         $files[$sortname] = $dir . $f;
 
                         break;
@@ -1070,7 +1068,7 @@ function GetFilesInDir($dir, $type)
                             $t = '.' . $t;
                             $i = strlen($t);
                             if (substr($file, -$i, $i) == $t) {
-                                $sortname = substr($file, 0, (strlen($file) - $i));
+                                $sortname = substr($file, 0, strlen($file) - $i);
                                 $files[$sortname] = $dir . $file;
 
                                 break;
@@ -1522,8 +1520,6 @@ function SplitAndGet($string, $delimiter = ';', $n = 0)
 /**
  * 删除连续空格
  *
- * @param $s
- *
  * @return null|string|string[]
  */
 function RemoveMoreSpaces($s)
@@ -1672,29 +1668,29 @@ function SubStrUTF8($sourcestr, $cutlength)
     $i = 0;
     $n = 0;
 
-    $str_length = strlen($sourcestr); //字符串的字节数
+    $str_length = strlen($sourcestr); // 字符串的字节数
 
     while (($n < $cutlength) && ($i <= $str_length)) {
         $temp_str = substr($sourcestr, $i, 1);
-        $ascnum = ord($temp_str); //得到字符串中第$i位字符的ascii码
-        if ($ascnum >= 224) { //如果ASCII位高与224，
-            $ret = $ret . substr($sourcestr, $i, 3); //根据UTF-8编码规范，将3个连续的字符计为单个字符
-            $i = ($i + 3); //实际Byte计为3
-            ++$n; //字串长度计1
-        } elseif ($ascnum >= 192) { //如果ASCII位高与192，
-            $ret = $ret . substr($sourcestr, $i, 2); //根据UTF-8编码规范，将2个连续的字符计为单个字符
-            $i = ($i + 2); //实际Byte计为2
-            ++$n; //字串长度计1
-        } elseif ($ascnum >= 65 && $ascnum <= 90) { //如果是大写字母，
+        $ascnum = ord($temp_str); // 得到字符串中第$i位字符的ascii码
+        if ($ascnum >= 224) { // 如果ASCII位高与224，
+            $ret = $ret . substr($sourcestr, $i, 3); // 根据UTF-8编码规范，将3个连续的字符计为单个字符
+            $i = ($i + 3); // 实际Byte计为3
+            ++$n; // 字串长度计1
+        } elseif ($ascnum >= 192) { // 如果ASCII位高与192，
+            $ret = $ret . substr($sourcestr, $i, 2); // 根据UTF-8编码规范，将2个连续的字符计为单个字符
+            $i = ($i + 2); // 实际Byte计为2
+            ++$n; // 字串长度计1
+        } elseif ($ascnum >= 65 && $ascnum <= 90) { // 如果是大写字母，
             $ret = $ret . substr($sourcestr, $i, 1);
-            $i = ($i + 1); //实际的Byte数仍计1个
-            ++$n; //但考虑整体美观，大写字母计成一个高位字符
+            $i = ($i + 1); // 实际的Byte数仍计1个
+            ++$n; // 但考虑整体美观，大写字母计成一个高位字符
         } else {
-            //其他情况下，包括小写字母和半角标点符号，
+            // 其他情况下，包括小写字母和半角标点符号，
 
             $ret = $ret . substr($sourcestr, $i, 1);
-            $i = ($i + 1); //实际的Byte数计1个
-            $n = ($n + 0.5); //小写字母和半角标点等与半个高位字符宽...
+            $i = ($i + 1); // 实际的Byte数计1个
+            $n = ($n + 0.5); // 小写字母和半角标点等与半个高位字符宽...
         }
         /*
         if ($str_length > $cutlength) {
@@ -1998,13 +1994,11 @@ function JsonEncode($arr)
         );
     }
 
-    return call_user_func('json_encode', $arr, (JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
+    return call_user_func('json_encode', $arr, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
 }
 
 /**
  * UCS-2BE 转 UTF-8，解决 JSON 中文转码问题.
- *
- * @param $matchs
  *
  * @return false|string
  */
@@ -2016,8 +2010,6 @@ function Ucs2Utf8($matchs)
 /**
  * 将Null转换为空字符串 (适应php8.2).
  *
- * @param $s
- *
  * @return string
  */
 function Null2Empty($s)
@@ -2027,8 +2019,6 @@ function Null2Empty($s)
 
 /**
  * 将序列化后的string还原为array(自动判断empty,null).
- *
- * @param $list
  *
  * @return array
  */
@@ -2068,11 +2058,11 @@ function FormatString($source, $para)
 {
     if (false !== strpos($para, '[html-format]')) {
         $source = htmlspecialchars((string) $source);
-        //if (version_compare(PHP_VERSION, '5.4.0') >= 0) {
+        // if (version_compare(PHP_VERSION, '5.4.0') >= 0) {
         //    $source = htmlspecialchars((string) $source, (ENT_COMPAT | ENT_HTML401 | ENT_SUBSTITUTE), "UTF-8");
-        //} else {
+        // } else {
         //    $source = htmlspecialchars((string) $source, ENT_COMPAT, "UTF-8");
-        //}
+        // }
     }
 
     if (false !== strpos($para, '[nohtml]')) {
@@ -2200,7 +2190,7 @@ function RecHtmlSpecialChars(&$arr)
 function GetImagesFromHtml($html)
 {
     $pattern = "/<img[^>]+src=[\\'|\"](.*?)[\\'|\"][^>]*>/i";
-    //$pattern = '/<img[^>]+src="([^">]+)"[^>]*>/i'; //沉水
+    // $pattern = '/<img[^>]+src="([^">]+)"[^>]*>/i'; //沉水
     preg_match_all($pattern, $html, $matches);
     $array = is_array($matches[1]) ? $matches[1] : [];
     foreach ($array as $key => $value) {
@@ -2400,7 +2390,7 @@ function http_request_convert_to_global($request)
 
     $ro = call_user_func('ini_get', 'request_order');
     if (empty($ro)) {
-        $ro = 'GP'; //variables_order "EGPCS"
+        $ro = 'GP'; // variables_order "EGPCS"
     }
     $array = str_split($ro, 1);
     foreach ($array as $a) {
@@ -2461,11 +2451,6 @@ function get_http_raw_post_data(&$request = null)
 
 /**
  * 以JSON形式输出错误信息（用于ShowError接口）.
- *
- * @param $errorCode
- * @param $errorString
- * @param $file
- * @param $line
  */
 function JsonError4ShowErrorHook($errorCode, $errorString, $file = null, $line = null)
 {
@@ -2493,7 +2478,7 @@ function JsonError($errorCode, $errorString, $data)
         'err'  => [
             'code' => $errorCode,
             'msg'  => $errorString,
-            //'runtime' => RunTime(),
+            // 'runtime' => RunTime(),
             'timestamp' => time(),
         ],
     ];
@@ -2517,11 +2502,6 @@ function JsonReturn($data)
 
 /**
  * XML-RPC应答错误页面.
- *
- * @param $errorCode
- * @param $errorString
- * @param $file
- * @param $line
  */
 function RespondError($errorCode, $errorString = '', $file = '', $line = '')
 {
@@ -2550,7 +2530,7 @@ function ScriptError($errorCode, $errorText = '', $file = '', $line = '')
     ob_clean();
     echo 'alert("' . str_replace('"', '\"', $errorCode . ':' . $errorText) . '")';
 
-    exit();
+    exit;
 }
 
 /**
@@ -2620,14 +2600,14 @@ function Logs($logString, $level = 'INFO', $source = 'system')
         }
     }
 
-    $s = '[' . $time . ']' . ' ' . $level . ' ' . $source . ' ' . $ip . "\r\n" . $logString . "\r\n";
+    $s = '[' . $time . '] ' . $level . ' ' . $source . ' ' . $ip . "\r\n" . $logString . "\r\n";
 
     if ($zbp->logs_more_info) {
         $s .= '--------------------------------' . "\r\n";
         $s .= var_export($addinfo, true) . "\r\n";
     }
 
-    @file_put_contents($f, $s, (FILE_APPEND | LOCK_EX));
+    @file_put_contents($f, $s, FILE_APPEND | LOCK_EX);
 
     return true;
 }
@@ -2653,7 +2633,7 @@ function Logs_Dump()
  */
 function RunTime_Begin()
 {
-    $_SERVER['_start_time'] = microtime(true); //RunTime
+    $_SERVER['_start_time'] = microtime(true); // RunTime
     $_SERVER['_query_count'] = 0;
     $_SERVER['_memory_usage'] = 0;
     $_SERVER['_error_count'] = 0;
@@ -2675,7 +2655,7 @@ function RunTime($isOutput = true)
 
     $rt = [];
     $_end_time = microtime(true);
-    $rt['time'] = number_format((1000 * ($_end_time - GetVars('_start_time', 'SERVER', 0))), 2);
+    $rt['time'] = number_format(1000 * ($_end_time - GetVars('_start_time', 'SERVER', 0)), 2);
     $rt['query'] = GetVars('_query_count', 'SERVER', 0);
     $rt['memory'] = GetVars('_memory_usage', 'SERVER', 0);
     $rt['debug'] = $zbp->isdebug ? 1 : 0;
@@ -2699,7 +2679,7 @@ function RunTime($isOutput = true)
         echo $rt['query'] . ($rt['query'] > 1 ? ' queries' : ' query');
         echo ' , ' . $rt['memory'] . 'kb memory';
         echo ' , ' . $rt['error'] . ' error' . ($rt['error'] > 1 ? 's' : '');
-        //echo print_r($rt['error_detail'], true);
+        // echo print_r($rt['error_detail'], true);
         echo '-->';
     }
 
@@ -2785,8 +2765,6 @@ function Zbp_PutEnv($item, $value)
 /**
  * 验证Web Token是否合法.
  *
- * @param $webTokenString
- * @param $webTokenId
  * @param string $key
  *
  * @return bool
@@ -2816,8 +2794,6 @@ function VerifyWebToken($webTokenString, $webTokenId, $key = '')
 /**
  * 创建Web Token.
  *
- * @param $webTokenId
- * @param $time
  * @param string $key
  *
  * @return string
@@ -2930,7 +2906,7 @@ function zbp_throttle($name = 'default', $max_reqs = 60, $period = 60)
         return false;
     }
     ++$cached_req['hits'];
-    $zbpcache->Set($cache_key, json_encode($cached_req), ($cached_req['expire_time'] - time()));
+    $zbpcache->Set($cache_key, json_encode($cached_req), $cached_req['expire_time'] - time());
 
     return true;
 }
@@ -2945,7 +2921,7 @@ function zbp_throttle($name = 'default', $max_reqs = 60, $period = 60)
 function is_intranet_ip($check_ip)
 {
     if (false !== filter_var($check_ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4)) {
-        if (false === filter_var($check_ip, FILTER_VALIDATE_IP, (FILTER_FLAG_NO_RES_RANGE | FILTER_FLAG_NO_PRIV_RANGE))) {
+        if (false === filter_var($check_ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_RES_RANGE | FILTER_FLAG_NO_PRIV_RANGE)) {
             return true;
         }
         $ip = explode('.', $check_ip);
@@ -2953,14 +2929,14 @@ function is_intranet_ip($check_ip)
                 || ($ip[0] >= 240)
                 || (127 == $ip[0])
                 || (169 == $ip[0] && 254 == $ip[1])
-            ) {
+        ) {
             return true;
         }
         if ((0 == $ip[0])
                 || ($ip[0] >= 240)
                 || (127 == $ip[0])
                 || (169 == $ip[0] && 254 == $ip[1])
-            ) {
+        ) {
             return true;
         }
         if ((100 == $ip[0] && $ip[1] >= 64 && $ip[1] <= 127)
@@ -2969,7 +2945,7 @@ function is_intranet_ip($check_ip)
                 || (198 == $ip[0] && $ip[1] >= 18 && $ip[1] <= 19)
                 || (198 == $ip[0] && 51 == $ip[1] && 100 == $ip[2])
                 || (203 == $ip[0] && 0 == $ip[1] && 113 == $ip[2])
-            ) {
+        ) {
             return true;
         }
 
@@ -2986,7 +2962,7 @@ function is_intranet_ip($check_ip)
                 || ($ip[0] >= 0xFE80 && $ip[0] <= 0xFEBF)
                 || (0x2001 == $ip[0] && (0x0DB8 == $ip[1] || ($ip[1] >= 0x0010 && $ip[1] <= 0x001F)))
                 || (0x3FF3 == $ip[0])
-            ) {
+        ) {
             return true;
         }
         if ($ip[0] >= 0xFC00 && $ip[0] <= 0xFDFF) {
@@ -2997,7 +2973,7 @@ function is_intranet_ip($check_ip)
                 || (0x2001 == $ip[0] && $ip[1] <= 0x01FF)
                 || (0x2001 == $ip[0] && 0x0002 == $ip[1] && 0 == $ip[2])
                 || ($ip[0] >= 0xFC00 && $ip[0] <= 0xFDFF)
-            ) {
+        ) {
             return true;
         }
 

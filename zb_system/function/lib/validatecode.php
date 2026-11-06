@@ -94,17 +94,17 @@ class ValidateCode
 
     protected $charset = 'ABCDEFGHKMNPRSTUVWXYZ123456789';
 
-    protected $codelen = 5; //位数
+    protected $codelen = 5; // 位数
 
-    protected $width = 90; //宽度
+    protected $width = 90; // 宽度
 
-    protected $height = 30; //高度
+    protected $height = 30; // 高度
 
-    protected $font = 'zb_system/defend/arial.ttf'; //字体
+    protected $font = 'zb_system/defend/arial.ttf'; // 字体
 
-    protected $fullfont; //字体全路径
+    protected $fullfont; // 字体全路径
 
-    protected $fontsize = 15; //字体大小
+    protected $fontsize = 15; // 字体大小
 
     /**
      * @var string 背景图
@@ -139,8 +139,8 @@ class ValidateCode
         if ($zc_codelen > 0) {
             $this->codelen = $zc_codelen;
         }
-        //$this->setMaxBehindLines(5);
-        //$this->setMaxFrontLines(5);
+        // $this->setMaxBehindLines(5);
+        // $this->setMaxFrontLines(5);
         if (isset($zbp->option['ZC_VERIFYCODE_MAXANGLE'])) {
             $zc_maxangle = (int) $zbp->option['ZC_VERIFYCODE_MAXANGLE'];
             if ($zc_maxangle > 0) {
@@ -328,7 +328,7 @@ class ValidateCode
         // Apply effects
         if (!$this->ignoreAllEffects) {
             $square = ($width * $height);
-            $effects = $this->rand(($square / 3000), ($square / 2000));
+            $effects = $this->rand($square / 3000, $square / 2000);
 
             // set the maximum number of lines to draw in front of the text
             if (null != $this->maxBehindLines && $this->maxBehindLines > 0) {
@@ -348,7 +348,7 @@ class ValidateCode
         // Apply effects
         if (!$this->ignoreAllEffects) {
             $square = ($width * $height);
-            $effects = $this->rand(($square / 2000), ($square / 2000));
+            $effects = $this->rand($square / 2000, $square / 2000);
 
             // set the maximum number of lines to draw in front of the text
             if (null != $this->maxFrontLines && $this->maxFrontLines > 0) {
@@ -410,8 +410,8 @@ class ValidateCode
 
                 if ($this->interpolation) {
                     $p = $this->interpolate(
-                        ($nX - floor($nX)),
-                        ($nY - floor($nY)),
+                        $nX - floor($nX),
+                        $nY - floor($nY),
                         $this->getCol($image, floor($nX), floor($nY), $bg),
                         $this->getCol($image, ceil($nX), floor($nY), $bg),
                         $this->getCol($image, floor($nX), ceil($nY), $bg),
@@ -548,21 +548,21 @@ class ValidateCode
      */
     protected function drawLine($image, $width, $height, $tcol = null)
     {
-        //return;
+        // return;
         if (null === $tcol) {
             $tcol = imagecolorallocate($image, $this->rand(100, 255), $this->rand(100, 255), $this->rand(100, 255));
         }
 
         if ($this->rand(0, 1)) { // Horizontal
-            $Xa = $this->rand(0, ($width / 2));
+            $Xa = $this->rand(0, $width / 2);
             $Ya = $this->rand(0, $height);
-            $Xb = $this->rand(($width / 2), $width);
+            $Xb = $this->rand($width / 2, $width);
             $Yb = $this->rand(0, $height);
         } else { // Vertical
             $Xa = $this->rand(0, $width);
-            $Ya = $this->rand(0, ($height / 2));
+            $Ya = $this->rand(0, $height / 2);
             $Xb = $this->rand(0, $width);
-            $Yb = $this->rand(($height / 2), $height);
+            $Yb = $this->rand($height / 2, $height);
         }
         imagesetthickness($image, $this->rand(1, 2));
         imageline($image, $Xa, $Ya, $Xb, $Yb, $tcol);
@@ -626,11 +626,11 @@ class ValidateCode
         $x = (($width - $textWidth) / 2);
         $y = (($height - $textHeight) / 2 + $size);
 
-        //if (isset($this->textCount) && is_array($this->textCount) && !count($this->textColor)) {
+        // if (isset($this->textCount) && is_array($this->textCount) && !count($this->textColor)) {
         $textColor = [$this->rand(0, 150), $this->rand(0, 150), $this->rand(0, 150)];
-        //} else {
+        // } else {
         //    $textColor = $this->textColor;
-        //}
+        // }
 
         @$col = imagecolorallocate($image, $textColor[0], $textColor[1], $textColor[2]);
 
@@ -640,7 +640,7 @@ class ValidateCode
             $w = ($box[2] - $box[0]);
             $angle = $this->rand(-$this->maxAngle, $this->maxAngle);
             $offset = $this->rand(-$this->maxOffset, $this->maxOffset);
-            imagettftext($image, $size, $angle, $x, ($y + $offset), $col, $font, $phrase[$i]);
+            imagettftext($image, $size, $angle, $x, $y + $offset, $col, $font, $phrase[$i]);
             $x += $w;
         }
 
@@ -672,21 +672,14 @@ class ValidateCode
     }
 
     /**
-     * @param $x
-     * @param $y
-     * @param $nw
-     * @param $ne
-     * @param $sw
-     * @param $se
-     *
      * @return int
      */
     protected function interpolate($x, $y, $nw, $ne, $sw, $se)
     {
-        [$r0, $g0, $b0] = $this->getRGB($nw);
-        [$r1, $g1, $b1] = $this->getRGB($ne);
-        [$r2, $g2, $b2] = $this->getRGB($sw);
-        [$r3, $g3, $b3] = $this->getRGB($se);
+        list($r0, $g0, $b0) = $this->getRGB($nw);
+        list($r1, $g1, $b1) = $this->getRGB($ne);
+        list($r2, $g2, $b2) = $this->getRGB($sw);
+        list($r3, $g3, $b3) = $this->getRGB($se);
 
         $cx = (1.0 - $x);
         $cy = (1.0 - $y);
@@ -707,9 +700,6 @@ class ValidateCode
     }
 
     /**
-     * @param $image
-     * @param $x
-     * @param $y
      * @param mixed $background
      *
      * @return int
@@ -726,8 +716,6 @@ class ValidateCode
     }
 
     /**
-     * @param $col
-     *
      * @return array
      */
     protected function getRGB($col)
@@ -735,7 +723,7 @@ class ValidateCode
         return [
             (int) ($col >> 16) & 0xFF,
             (int) ($col >> 8) & 0xFF,
-            (int) ($col) & 0xFF,
+            (int) $col & 0xFF,
         ];
     }
 }
