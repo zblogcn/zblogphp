@@ -448,7 +448,7 @@ HELP;
             }
         }
 
-        $xml = @simplexml_load_string($data, 'SimpleXMLElement', (LIBXML_COMPACT | LIBXML_PARSEHUGE));
+        $xml = @simplexml_load_string($data, 'SimpleXMLElement', LIBXML_COMPACT | LIBXML_PARSEHUGE);
 
         return $xml ?: false;
     }
@@ -485,10 +485,10 @@ HELP;
                 $this->error("要追加的 zip 文件不存在: {$intoPath}");
             }
             $zipPath = $intoPath;
-            $mode = ZIPARCHIVE::CREATE;
+            $mode = ZipArchive::CREATE;
         } else {
             $zipPath = $outputPath;
-            $mode = ZIPARCHIVE::CREATE | ZIPARCHIVE::OVERWRITE;
+            $mode = ZipArchive::CREATE | ZipArchive::OVERWRITE;
             $outDir = dirname($zipPath);
             if (!is_dir($outDir)) {
                 @mkdir($outDir, 0755, true);

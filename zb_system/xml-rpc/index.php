@@ -28,7 +28,7 @@ if (isset($_GET['rsd'])) {
     echo '  </service>' . "\n";
     echo '</rsd>' . "\n";
 
-    exit();
+    exit;
 }
 
 /**
@@ -390,7 +390,7 @@ function xmlrpc_getRecentPosts($n)
         if (false !== strpos($value->Content, '<!--more-->')) {
             $description = GetValueInArray(explode('<!--more-->', $value->Content), 1);
             $mt_text_more = GetValueInArray(explode('<!--more-->', $value->Content), 0);
-        //$description=$value->Content;
+        // $description=$value->Content;
         } else {
             $description = $value->Content;
             $mt_excerpt = $value->Intro;
@@ -513,7 +513,7 @@ function xmlrpc_getPost($id)
         if (false !== strpos($value->Content, '<!--more-->')) {
             $description = GetValueInArray(explode('<!--more-->', $value->Content), 1);
             $mt_text_more = GetValueInArray(explode('<!--more-->', $value->Content), 0);
-        //$description=$value->Content;
+        // $description=$value->Content;
         } else {
             $description = $value->Content;
             $mt_excerpt = $value->Intro;
@@ -802,8 +802,6 @@ function xmlrpc_newMediaObject($xmlstring)
  *
  * 验证用户登录
  *
- * @param
- * @param
  * @param mixed $username
  * @param mixed $password
  */
@@ -832,7 +830,7 @@ function xmlrpc_ShowError($code, $file, $line, $httpcode = 401)
     $zbp->ShowError($code, $file, $line);
 }
 
-//xml-rpc input
+// xml-rpc input
 
 $zbp->Load();
 
@@ -847,8 +845,8 @@ Add_Filter_Plugin('Filter_Plugin_Debug_Handler_Common', 'RespondError');
 $zbp->CheckSiteClosed();
 
 $xmlstring = file_get_contents('php://input');
-//Logs($xmlstring);
-//defense XXE
+// Logs($xmlstring);
+// defense XXE
 if (PHP_VERSION_ID < 80000) {
     libxml_disable_entity_loader(true);
 }

@@ -5,14 +5,14 @@
 class RegPage_ValidateCode
 {
     protected $charset = 'ABCDEFGHKMNPRSTUVWXYZ123456789';
-    protected $code; //验证码
-    protected $codelen = 5; //位数
-    protected $width = 90; //宽度
-    protected $height = 30; //高度
-    protected $img; //图形
-    protected $font; //字体
-    protected $fontsize = 15; //字体大小
-    protected $fontcolor; //字体颜色
+    protected $code; // 验证码
+    protected $codelen = 5; // 位数
+    protected $width = 90; // 宽度
+    protected $height = 30; // 高度
+    protected $img; // 图形
+    protected $font; // 字体
+    protected $fontsize = 15; // 字体大小
+    protected $fontcolor; // 字体颜色
 
     /**
      *构造方法初始化.

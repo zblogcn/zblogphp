@@ -184,14 +184,14 @@ class UpYun
      *
      * @param string $bucket
      *
+     * @return mixed
+     *
      * @throws UpYunAuthorizationException
      * @throws UpYunException
      * @throws UpYunForbiddenException
      * @throws UpYunNotAcceptableException
      * @throws UpYunNotFoundException
      * @throws UpYunServiceUnavailable
-     *
-     * @return mixed
      */
     public function getFolderUsage($bucket = '/')
     {
@@ -240,14 +240,14 @@ class UpYun
      * @param array  $body        需要POST发送的数据
      * @param null   $file_handle
      *
+     * @return mixed
+     *
      * @throws UpYunAuthorizationException
      * @throws UpYunException
      * @throws UpYunForbiddenException
      * @throws UpYunNotAcceptableException
      * @throws UpYunNotFoundException
      * @throws UpYunServiceUnavailable
-     *
-     * @return mixed
      */
     protected function _do_request($method, $path, $headers = null, $body = null, $file_handle = null)
     {
@@ -289,7 +289,7 @@ class UpYun
         curl_setopt($ch, CURLOPT_TIMEOUT, $this->_timeout);
         curl_setopt($ch, CURLOPT_HEADER, 1);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        //curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+        // curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
         curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 0);
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $method);
 
@@ -343,34 +343,34 @@ class UpYun
         }
 
         switch ($http_code) {
-                case 401:
-                    throw new UpYunAuthorizationException($message);
+            case 401:
+                throw new UpYunAuthorizationException($message);
 
-                    break;
+                break;
 
-                case 403:
-                    throw new UpYunForbiddenException($message);
+            case 403:
+                throw new UpYunForbiddenException($message);
 
-                    break;
+                break;
 
-                case 404:
-                    throw new UpYunNotFoundException($message);
+            case 404:
+                throw new UpYunNotFoundException($message);
 
-                    break;
+                break;
 
-                case 406:
-                    throw new UpYunNotAcceptableException($message);
+            case 406:
+                throw new UpYunNotAcceptableException($message);
 
-                    break;
+                break;
 
-                case 503:
-                    throw new UpYunServiceUnavailable($message);
+            case 503:
+                throw new UpYunServiceUnavailable($message);
 
-                    break;
+                break;
 
-                default:
-                    throw new UpYunException($message, $http_code);
-            }
+            default:
+                throw new UpYunException($message, $http_code);
+        }
     }
 
     /**
@@ -385,7 +385,7 @@ class UpYun
      */
     private function sign($method, $uri, $date, $length)
     {
-        //$uri = urlencode($uri);
+        // $uri = urlencode($uri);
         $sign = "{$method}&{$uri}&{$date}&{$length}&{$this->_password}";
 
         return 'UpYun ' . $this->_username . ':' . md5($sign);

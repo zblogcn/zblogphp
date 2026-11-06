@@ -3,6 +3,7 @@
 if (!defined('ZBP_PATH')) {
     exit('Access denied');
 }
+
 /**
  * curl类.
  *
@@ -10,21 +11,21 @@ if (!defined('ZBP_PATH')) {
  */
 class Network__curl implements Network__Interface
 {
-    private $readyState = 0; //状态
+    private $readyState = 0; // 状态
 
-    private $responseBody; //返回的二进制
+    private $responseBody; // 返回的二进制
 
-    private $responseStream; //返回的数据流
+    private $responseStream; // 返回的数据流
 
-    private $responseText = ''; //返回的数据
+    private $responseText = ''; // 返回的数据
 
-    private $responseXML; //尝试把responseText格式化为XMLDom
+    private $responseXML; // 尝试把responseText格式化为XMLDom
 
-    private $status = 0; //状态码
+    private $status = 0; // 状态码
 
-    private $statusText = ''; //状态码文本
+    private $statusText = ''; // 状态码文本
 
-    private $responseVersion = ''; //返回的HTTP版体
+    private $responseVersion = ''; // 返回的HTTP版体
 
     private $option = [];
 
@@ -65,9 +66,6 @@ class Network__curl implements Network__Interface
     }
 
     /**
-     * @param $property_name
-     * @param $value
-     *
      * @throws Exception
      */
     public function __set($property_name, $value)
@@ -76,8 +74,6 @@ class Network__curl implements Network__Interface
     }
 
     /**
-     * @param $property_name
-     *
      * @return mixed
      */
     public function __get($property_name)
@@ -124,8 +120,6 @@ class Network__curl implements Network__Interface
     /**
      * 获取返回头.
      *
-     * @param $bstrHeader
-     *
      * @return string
      */
     public function getResponseHeader($bstrHeader)
@@ -143,19 +137,17 @@ class Network__curl implements Network__Interface
     /**
      * 链接远程接口.
      *
-     * @param $bstrMethod
-     * @param $bstrUrl
      * @param bool   $varAsync
      * @param string $bstrUser
      * @param string $bstrPassword
      *
-     * @throws Exception
-     *
      * @return bool
+     *
+     * @throws Exception
      */
     public function open($bstrMethod, $bstrUrl, $varAsync = true, $bstrUser = '', $bstrPassword = '')
     {
-        //Async无用
+        // Async无用
         $this->reinit();
         $method = strtoupper($bstrMethod);
         $this->option['method'] = $method;
@@ -176,19 +168,14 @@ class Network__curl implements Network__Interface
         curl_setopt($this->ch, CURLOPT_HEADER, 1);
 
         curl_setopt($this->ch, CURLOPT_RETURNTRANSFER, 1);
-        //curl_setopt($this->ch, CURLOPT_REFERER, 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']);
-        curl_setopt($this->ch, CURLOPT_POST, ('POST' == $method ? 1 : 0));
+        // curl_setopt($this->ch, CURLOPT_REFERER, 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']);
+        curl_setopt($this->ch, CURLOPT_POST, 'POST' == $method ? 1 : 0);
 
         return true;
     }
 
     /**
      * 设置超时时间.
-     *
-     * @param $resolveTimeout
-     * @param $connectTimeout
-     * @param $sendTimeout
-     * @param $receiveTimeout
      */
     public function setTimeOuts($resolveTimeout, $connectTimeout, $sendTimeout, $receiveTimeout)
     {
@@ -252,7 +239,7 @@ class Network__curl implements Network__Interface
         $result = curl_exec($this->ch);
         $header_size = curl_getinfo($this->ch, CURLINFO_HEADER_SIZE);
 
-        $this->responseHeader = explode("\r\n", substr($result, 0, ($header_size - 4)));
+        $this->responseHeader = explode("\r\n", substr($result, 0, $header_size - 4));
         $this->responseText = substr($result, $header_size);
         if (is_bool($this->responseText) && !$this->responseText) {
             $this->responseText = '';
@@ -283,8 +270,6 @@ class Network__curl implements Network__Interface
     /**
      * 设置请求HTTP头.
      *
-     * @param $bstrHeader
-     * @param $bstrValue
      * @param bool $append
      *
      * @return bool
@@ -470,13 +455,13 @@ class Network__curl implements Network__Interface
      */
     private function reinit()
     {
-        $this->readyState = 0; //状态
-        $this->responseBody = null; //返回的二进制
-        $this->responseStream = null; //返回的数据流
-        $this->responseText = ''; //返回的数据
-        $this->responseXML = null; //尝试把responseText格式化为XMLDom
-        $this->status = 0; //状态码
-        $this->statusText = ''; //状态码文本
+        $this->readyState = 0; // 状态
+        $this->responseBody = null; // 返回的二进制
+        $this->responseStream = null; // 返回的数据流
+        $this->responseText = ''; // 返回的数据
+        $this->responseXML = null; // 尝试把responseText格式化为XMLDom
+        $this->status = 0; // 状态码
+        $this->statusText = ''; // 状态码文本
 
         $this->private_isBinary = false;
 

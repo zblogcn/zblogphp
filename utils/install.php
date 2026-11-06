@@ -1,7 +1,7 @@
 <?php
-/////////////////////////////////////////////////////////////////////////////////
-////              Z-BlogPHP 在线安装程序
-/////////////////////////////////////////////////////////////////////////////////
+// ///////////////////////////////////////////////////////////////////////////////
+// //              Z-BlogPHP 在线安装程序
+// ///////////////////////////////////////////////////////////////////////////////
 
 error_reporting(0);
 
@@ -61,7 +61,7 @@ function install1()
 
     $GLOBALS['xml'] = GetHttpContent('http://update.zblogcn.com/zblogphp/?install');
 
-    //file_put_contents('release.xml',$GLOBALS['xml']);
+    // file_put_contents('release.xml',$GLOBALS['xml']);
 }
 
 function install2()
@@ -76,7 +76,7 @@ function install2()
             $dirname = dirname($filename);
             mkdir($dirname, 0755, true);
             if (PHP_OS == 'WINNT' || PHP_OS == 'WIN32' || PHP_OS == 'Windows') {
-                //$fn=iconv("UTF-8","GBK//IGNORE",$filename);
+                // $fn=iconv("UTF-8","GBK//IGNORE",$filename);
                 $fn = $filename;
             } else {
                 $fn = $filename;
@@ -91,7 +91,7 @@ function install2()
 
 function install3()
 {
-    //unlink('release.xml');
+    // unlink('release.xml');
     @unlink('install.php');
     echo '<script type="text/javascript">window.location="./zb_install/"</script>';
 }
@@ -132,14 +132,14 @@ if ('POST' == $_SERVER['REQUEST_METHOD']) {
     install2();
     install3();
 
-    exit();
+    exit;
 }
-    ?>
+?>
 <p><?php echo (($v = GetHttpContent('http://update.zblogcn.com/zblogphp/')) == '') ? '不能联网获取Z-BlogPHP！' : '最新版本：' . $v; ?></p>
 <p><img id="logo" src="http://update.zblogcn.com/zblogphp/loading.png" alt="Z-BlogPHP在线安装" title="Z-BlogPHP在线安装"/></p>
 <p style="display:none;"><img id="logo2" src="http://update.zblogcn.com/zblogphp/loading.gif" alt="" title=""/></p>
 <?php
-    install0();
+install0();
 
 ?>
 <form method="post" action="#">

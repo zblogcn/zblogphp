@@ -2,15 +2,15 @@
 require dirname(__FILE__) . DIRECTORY_SEPARATOR . 'plugin' . DIRECTORY_SEPARATOR . 'searchstr.php';
 
 require dirname(__FILE__) . DIRECTORY_SEPARATOR . 'plugin' . DIRECTORY_SEPARATOR . 'phpmailer' . DIRECTORY_SEPARATOR . 'sendmail.php';
-//注册应用“tpure”
+// 注册应用“tpure”
 RegisterPlugin('tpure', 'ActivePlugin_tpure');
-//应用激活时执行的函数，在这个函数里挂接口
+// 应用激活时执行的函数，在这个函数里挂接口
 function ActivePlugin_tpure()
 {
     global $zbp;
-    //加载主题语言包
+    // 加载主题语言包
     $zbp->LoadLanguage('theme', 'tpure');
-    //主题接口
+    // 主题接口
     if ('1' == $zbp->Config('tpure')->SEOON) {
         Add_Filter_Plugin('Filter_Plugin_Category_Edit_Response', 'tpure_CategorySEO');
         Add_Filter_Plugin('Filter_Plugin_Tag_Edit_Response', 'tpure_TagSEO');
@@ -48,7 +48,7 @@ function ActivePlugin_tpure()
         Add_Filter_Plugin('Filter_Plugin_PostArticle_Succeed', 'tpure_ArticleSendmail');
         Add_Filter_Plugin('Filter_Plugin_PostComment_Succeed', 'tpure_CmtSendmail');
     }
-    //Add_Filter_Plugin('Filter_Plugin_Mebmer_Avatar', 'tpure_MemberAvatar');
+    // Add_Filter_Plugin('Filter_Plugin_Mebmer_Avatar', 'tpure_MemberAvatar');
     if ('1' == $zbp->Config('tpure')->PostLOGINON) {
         Add_Filter_Plugin('Filter_Plugin_Login_Header', 'tpure_LoginHeader');
     }
@@ -68,7 +68,7 @@ function ActivePlugin_tpure()
         Add_Filter_Plugin('Filter_Plugin_Zbp_BuildTemplate', 'tpure_ListIMGLazyLoad');
         Add_Filter_Plugin('Filter_Plugin_ViewPost_Template', 'tpure_ContentIMGLazyLoad');
     }
-    //自定义侧栏模块名称
+    // 自定义侧栏模块名称
     $zbp->lang['msg']['theme_module'] = $zbp->lang['tpure']['thememodule'];
     $zbp->lang['msg']['sidebar'] = $zbp->lang['tpure']['index'] . $zbp->lang['tpure']['sidebar'];
     $zbp->lang['msg']['sidebar2'] = $zbp->lang['tpure']['catalog'] . $zbp->lang['tpure']['sidebar'];
@@ -82,7 +82,7 @@ function ActivePlugin_tpure()
     $zbp->option['ZC_VERIFYCODE_STRING'] = $zbp->Config('tpure')->VerifyCode;
 }
 
-//花辰月夕ajax搜索
+// 花辰月夕ajax搜索
 function tpure_CmdAjax($src)
 {
     global $nice;
@@ -148,7 +148,7 @@ function tpure_json($code, $msg = '', $data = '')
     exit;
 }
 
-//主题设置页导航
+// 主题设置页导航
 function tpure_SubMenu($id)
 {
     global $zbp;
@@ -166,16 +166,16 @@ function tpure_SubMenu($id)
     }
 }
 
-//后台右上角添加主题设置入口；
-//挂接口：Add_Filter_Plugin('Filter_Plugin_Admin_TopMenu', 'tpure_AddMenu');
+// 后台右上角添加主题设置入口；
+// 挂接口：Add_Filter_Plugin('Filter_Plugin_Admin_TopMenu', 'tpure_AddMenu');
 function tpure_AddMenu(&$m)
 {
     global $zbp;
     $m[] = MakeTopMenu('root', $zbp->lang['tpure']['themeset'], $zbp->host . 'zb_users/theme/tpure/main.php?act=base', '', 'topmenu_tpure', 'icon-grid-1x2-fill');
 }
 
-//后台管理页面顶部的背景图片；
-//挂接口：Add_Filter_Plugin('Filter_Plugin_Admin_Header', 'tpure_Header');
+// 后台管理页面顶部的背景图片；
+// 挂接口：Add_Filter_Plugin('Filter_Plugin_Admin_Header', 'tpure_Header');
 function tpure_Header()
 {
     global $zbp,$bloghost;
@@ -188,8 +188,8 @@ function tpure_Header()
     echo '<script>window.theme = {ajaxpost:' . $ajaxpost . '}</script>';
 }
 
-//主题自带的登陆页面样式；
-//挂接口：Add_Filter_Plugin('Filter_Plugin_Login_Header', 'tpure_LoginHeader');
+// 主题自带的登陆页面样式；
+// 挂接口：Add_Filter_Plugin('Filter_Plugin_Login_Header', 'tpure_LoginHeader');
 function tpure_LoginHeader()
 {
     global $zbp;
@@ -241,8 +241,8 @@ function tpure_LoginHeader()
 CSSJS;
 }
 
-//开启“开发模式”后，修改主题源码保存将实时刷新，无需手动重建缓存；
-//挂接口：Add_Filter_Plugin('Filter_Plugin_Zbp_Load', 'tpure_Refresh');
+// 开启“开发模式”后，修改主题源码保存将实时刷新，无需手动重建缓存；
+// 挂接口：Add_Filter_Plugin('Filter_Plugin_Zbp_Load', 'tpure_Refresh');
 function tpure_Refresh()
 {
     global $zbp;
@@ -260,25 +260,25 @@ function tpure_Refresh()
     $zbp->lang['msg']['next_button'] = $zbp->lang['tpure']['nextpage'];
     $zbp->lang['msg']['last_button'] = $zbp->lang['tpure']['endpage'];
     $zbp->option['ZC_SEARCH_TYPE'] = 'list';
-    //$zbp->option['ZC_PAGEBAR_COUNT'] = 3;
-    //$zbp->option['ZC_SEARCH_COUNT'] = 10;
+    // $zbp->option['ZC_PAGEBAR_COUNT'] = 3;
+    // $zbp->option['ZC_SEARCH_COUNT'] = 10;
 }
 
-//分类列表页面包屑分类获取
+// 分类列表页面包屑分类获取
 function tpure_navcate($id)
 {
     $html = '';
     $navcate = new Category();
     $navcate->LoadInfoByID($id);
     $html = ' &gt; <a href="' . $navcate->Url . '" title="查看' . $navcate->Name . '中的全部文章">' . $navcate->Name . '</a> ' . $html;
-    if (($navcate->ParentID) > 0) {
+    if ($navcate->ParentID > 0) {
         tpure_navcate($navcate->ParentID);
     }
     echo $html;
 }
 
-//后台登陆过期时自动跳转到登录页，且网站关站时使用个性公告页面；
-//挂接口：Add_Filter_Plugin('Filter_Plugin_Zbp_ShowError', 'tpure_ErrorCode');
+// 后台登陆过期时自动跳转到登录页，且网站关站时使用个性公告页面；
+// 挂接口：Add_Filter_Plugin('Filter_Plugin_Zbp_ShowError', 'tpure_ErrorCode');
 function tpure_ErrorCode($errorCode)
 {
     global $zbp;
@@ -289,17 +289,17 @@ function tpure_ErrorCode($errorCode)
             Redirect($zbp->host . 'zb_system/login.php');
         }
 
-        exit();
+        exit;
     }
     if (82 == $errorCode) {
         echo tpure_CloseSite();
 
-        exit();
+        exit;
     }
 }
 
-//文章添加音频时在正文上方添加播放器
-//挂接口：Add_Filter_Plugin('Filter_Plugin_ViewPost_Template', 'tpure_ZBaudioLoad');
+// 文章添加音频时在正文上方添加播放器
+// 挂接口：Add_Filter_Plugin('Filter_Plugin_ViewPost_Template', 'tpure_ZBaudioLoad');
 function tpure_ZBaudioLoad(&$template)
 {
     global $zbp;
@@ -310,8 +310,8 @@ function tpure_ZBaudioLoad(&$template)
         $article->Content = $zbaudio_player . "\r\n" . $zbaudio_config . "\r\n" . $article->Content;
     }
 }
-//文章添加视频时在正文上方添加播放器
-//挂接口：Add_Filter_Plugin('Filter_Plugin_ViewPost_Template', 'tpure_ZBvideoLoad');
+// 文章添加视频时在正文上方添加播放器
+// 挂接口：Add_Filter_Plugin('Filter_Plugin_ViewPost_Template', 'tpure_ZBvideoLoad');
 function tpure_ZBvideoLoad(&$template)
 {
     global $zbp;
@@ -332,8 +332,8 @@ function tpure_ZBvideoLoad(&$template)
     }
 }
 
-//网站首尾添加通用代码
-//挂接口：Add_Filter_Plugin('Filter_Plugin_Zbp_MakeTemplatetags','tpure_CustomCode');
+// 网站首尾添加通用代码
+// 挂接口：Add_Filter_Plugin('Filter_Plugin_Zbp_MakeTemplatetags','tpure_CustomCode');
 function tpure_CustomCode()
 {
     global $zbp;
@@ -343,8 +343,8 @@ function tpure_CustomCode()
     $zbp->footer .= $footercode . "\r\n";
 }
 
-//文章顶部与底部添加通用代码
-//挂接口：Add_Filter_Plugin('Filter_Plugin_ViewPost_Template','tpure_SingleCode');
+// 文章顶部与底部添加通用代码
+// 挂接口：Add_Filter_Plugin('Filter_Plugin_ViewPost_Template','tpure_SingleCode');
 function tpure_SingleCode(&$template)
 {
     global $zbp;
@@ -357,7 +357,7 @@ function tpure_SingleCode(&$template)
     }
 }
 
-//网站关站页面
+// 网站关站页面
 function tpure_CloseSite()
 {
     global $zbp;
@@ -377,8 +377,8 @@ function tpure_CloseSite()
     return $str;
 }
 
-//文章页实现同一分类上下篇；
-//挂接口：Add_Filter_Plugin('Filter_Plugin_Post_Prev', 'tpure_Post_Prev');
+// 文章页实现同一分类上下篇；
+// 挂接口：Add_Filter_Plugin('Filter_Plugin_Post_Prev', 'tpure_Post_Prev');
 function tpure_Post_Prev(&$thispage)
 {
     global $zbp;
@@ -397,8 +397,8 @@ function tpure_Post_Prev(&$thispage)
     return null;
 }
 
-//文章页实现同一分类上下篇；
-//挂接口：Add_Filter_Plugin('Filter_Plugin_Post_Next', 'tpure_Post_Next');
+// 文章页实现同一分类上下篇；
+// 挂接口：Add_Filter_Plugin('Filter_Plugin_Post_Next', 'tpure_Post_Next');
 function tpure_Post_Next(&$thispage)
 {
     global $zbp;
@@ -417,7 +417,7 @@ function tpure_Post_Next(&$thispage)
     return null;
 }
 
-//判断参数内日期是否是今天，示例：tpure_IsToday('2020-12-30')
+// 判断参数内日期是否是今天，示例：tpure_IsToday('2020-12-30')
 function tpure_IsToday($date)
 {
     $greyday = $date;
@@ -430,8 +430,8 @@ function tpure_IsToday($date)
     return false;
 }
 
-//列表页按类型自动选择catalog模板并可设置其他模板；
-//挂接口：Add_Filter_Plugin('Filter_Plugin_ViewList_Template','tpure_DefaultTemplate');
+// 列表页按类型自动选择catalog模板并可设置其他模板；
+// 挂接口：Add_Filter_Plugin('Filter_Plugin_ViewList_Template','tpure_DefaultTemplate');
 function tpure_DefaultTemplate(&$template)
 {
     global $zbp;
@@ -470,8 +470,8 @@ function tpure_DefaultTemplate(&$template)
     }
 }
 
-//搜索功能函数；
-//挂接口：Add_Filter_Plugin('Filter_Plugin_ViewSearch_Template', 'tpure_SearchMain');
+// 搜索功能函数；
+// 挂接口：Add_Filter_Plugin('Filter_Plugin_ViewSearch_Template', 'tpure_SearchMain');
 function tpure_SearchMain(&$template)
 {
     global $zbp;
@@ -487,7 +487,7 @@ function tpure_SearchMain(&$template)
     }
 }
 
-//自定义模板样式名称
+// 自定义模板样式名称
 function tpure_JudgeListTemplate($listtype)
 {
     global $zbp;
@@ -521,7 +521,7 @@ function tpure_JudgeListTemplate($listtype)
     return $template;
 }
 
-//unicode字符转换实体
+// unicode字符转换实体
 function tpure_CodeToString($str)
 {
     $to = [' ', '  ', '   ', '    ', '"', '<', '>', '&'];
@@ -530,8 +530,8 @@ function tpure_CodeToString($str)
     return str_replace($pre, $to, $str);
 }
 
-//首页过滤指定分类文章并重建分页；
-//挂接口：Add_Filter_Plugin('Filter_Plugin_ViewList_Core', 'tpure_Exclude_Category');
+// 首页过滤指定分类文章并重建分页；
+// 挂接口：Add_Filter_Plugin('Filter_Plugin_ViewList_Core', 'tpure_Exclude_Category');
 function tpure_Exclude_Category($type, $page, $category, $author, $datetime, $tag, &$w, $pagebar)
 {
     global $zbp;
@@ -541,7 +541,7 @@ function tpure_Exclude_Category($type, $page, $category, $author, $datetime, $ta
     }
 }
 
-//主题设置页面获取分类的下拉控件
+// 主题设置页面获取分类的下拉控件
 function tpure_Exclude_CategorySelect($default)
 {
     global $zbp;
@@ -562,7 +562,7 @@ function tpure_Exclude_CategorySelect($default)
     return $s;
 }
 
-//个性化日期函数
+// 个性化日期函数
 function tpure_TimeAgo($ptime)
 {
     global $zbp;
@@ -609,19 +609,19 @@ function tpure_TimeAgo($ptime)
     }
 }
 
-//自定义色彩设置，色彩设置保存时执行
+// 自定义色彩设置，色彩设置保存时执行
 function tpure_color()
 {
     global $zbp;
     $skin = '';
     $color = $zbp->Config('tpure')->PostCOLOR;
-    $skin .= "a, a:hover,.menu li a:hover,.menu li.on a,.menu li .subnav a:hover:after,.menu li .subnav a.on,.menu li.subcate:hover a,.menu li.subcate:hover .subnav a:hover,.menu li.subcate:hover .subnav a.on,.menu li.subcate:hover .subnav a.on:after,.sch-m input,.sch-m input:focus,.sch-m button:after,.schfixed input:focus,.schclose,.schform input,.schform button:after,.post h2 a:hover,.post h2 .istop:before,.post .user a:hover,.post .date a:hover,.post .cate a:hover,.post .views a:hover,.post .cmtnum a:hover,.post .edit a:hover,.post .del a:hover,.post .readmore:hover,.post .readmore:hover:after,.post .tags a:hover,.pages a:hover,a.backlist:hover,.cmtsfoot .reply:hover,.cmtsfoot .reply:hover:before,.cmtarea textarea:focus,.cmtform input:focus,.night .cmtform input:focus,.cmtsubmit button:hover,.cmtsubmit button:hover:before,.sidebox dd a:hover,#divTags ul li a:hover,#divCalendar td a,#divCalendar #today,#divContorPanel .cp-login a:hover,#divContorPanel .cp-vrs a:hover,#divContorPanel .cp-login a:hover:before,#divContorPanel .cp-vrs a:hover:before,.footer a:hover,.goback:hover,.goback:hover:after,.relateinfo h3 a:hover,.teles, .telesmore,.relate,.sitemap a:hover,.night .post h2 a:hover,.night .relateinfo h3 a:hover,.night #cancel-reply,.night #cancel-reply:before,.night .pages a:hover,.night .errorpage .errschtxt:focus,.errschtxt:focus,.night .errorpage .goback:hover,.night .relatelist a:hover,.night .sidebox dd .sidecmtarticle a:hover,.sidebox dd .sidelink a:hover,.night .sidebox dd .sidelink a:hover,.night .sidebox dd .sideitem .itemtitle:hover,.sidebox dd .noimg .sidelink a:hover,.archivedate.on,.archivelist h3 a:hover,.night .archivelist h3 a:hover,.copynoticetxt a:hover,.friendlink li a:hover,.sign span a,.signusermenu a:hover,.filternav li.active,.filternav li.active i::before,.night .filternav li.active,.filter li:hover,.post mark,.sidebox dd .sidecmtarticle a:hover,.night .sidebox dd .avatartitle:hover,.night .sidebox dd .sidecmtcon a:hover,.block.forum .item h2.istop a::before,.block.forum .item h2.istop a,.block.forum .item h2 a:hover,.block.forum .item:hover h2 a,.night .block.forum .item h2.istop a,.night .block.forum .item h2 a:hover,.block.album .albumcon a:hover,.night .block.album .albumcon a:hover,.block.sticker .post h2 .istop::before,.block.hotspot .post h2 .istop::before,.schitemcon em mark,.schwords a:hover { color:#{$color}; }.single p.ue-upload a,.zbaudio_play em.pause::before,.night .zbaudio_play em.pause::before { color:#{$color}!important; }@media screen and (max-width:1080px){.menu ul li.subcate.slidedown > a:after {color:#{$color}}}"; //color
-    $skin .= ".menu li:before,.schfixed button,.post h2 em,.pagebar .now-page,.cmtpagebar .now-page,.pagebar a:hover,.cmtpagebar a:hover,a.backtotop:hover,.night .errorpage .errschbtn,.tagscloud li:hover,.night .tagscloud li:hover,.sign span a:hover,.night .signusermenu a:hover,.authinfo h1 span,.filternav li.active::after,.block.album .albumimg a em,.block.forum .item h2.istop em {background:#{$color};} .zbaudio_now,.zbaudio_bar::before {background:#{$color}!important;}"; //background
-    $skin .= ".menuico span,.lazyline,a.setnight:hover,a.lang:hover,.night a.backtotop:hover,.swiper-pagination-bullet-active,.indexcon .swiper-button-prev:hover::after,.indexcon .swiper-button-next:hover::after {background-color:#{$color}}"; //background-color
-    $skin .= ".menu li .subnav,.schfixed,.sideuserlink p a.wechat span {border-top-color:#{$color}}"; //border-top-color
+    $skin .= "a, a:hover,.menu li a:hover,.menu li.on a,.menu li .subnav a:hover:after,.menu li .subnav a.on,.menu li.subcate:hover a,.menu li.subcate:hover .subnav a:hover,.menu li.subcate:hover .subnav a.on,.menu li.subcate:hover .subnav a.on:after,.sch-m input,.sch-m input:focus,.sch-m button:after,.schfixed input:focus,.schclose,.schform input,.schform button:after,.post h2 a:hover,.post h2 .istop:before,.post .user a:hover,.post .date a:hover,.post .cate a:hover,.post .views a:hover,.post .cmtnum a:hover,.post .edit a:hover,.post .del a:hover,.post .readmore:hover,.post .readmore:hover:after,.post .tags a:hover,.pages a:hover,a.backlist:hover,.cmtsfoot .reply:hover,.cmtsfoot .reply:hover:before,.cmtarea textarea:focus,.cmtform input:focus,.night .cmtform input:focus,.cmtsubmit button:hover,.cmtsubmit button:hover:before,.sidebox dd a:hover,#divTags ul li a:hover,#divCalendar td a,#divCalendar #today,#divContorPanel .cp-login a:hover,#divContorPanel .cp-vrs a:hover,#divContorPanel .cp-login a:hover:before,#divContorPanel .cp-vrs a:hover:before,.footer a:hover,.goback:hover,.goback:hover:after,.relateinfo h3 a:hover,.teles, .telesmore,.relate,.sitemap a:hover,.night .post h2 a:hover,.night .relateinfo h3 a:hover,.night #cancel-reply,.night #cancel-reply:before,.night .pages a:hover,.night .errorpage .errschtxt:focus,.errschtxt:focus,.night .errorpage .goback:hover,.night .relatelist a:hover,.night .sidebox dd .sidecmtarticle a:hover,.sidebox dd .sidelink a:hover,.night .sidebox dd .sidelink a:hover,.night .sidebox dd .sideitem .itemtitle:hover,.sidebox dd .noimg .sidelink a:hover,.archivedate.on,.archivelist h3 a:hover,.night .archivelist h3 a:hover,.copynoticetxt a:hover,.friendlink li a:hover,.sign span a,.signusermenu a:hover,.filternav li.active,.filternav li.active i::before,.night .filternav li.active,.filter li:hover,.post mark,.sidebox dd .sidecmtarticle a:hover,.night .sidebox dd .avatartitle:hover,.night .sidebox dd .sidecmtcon a:hover,.block.forum .item h2.istop a::before,.block.forum .item h2.istop a,.block.forum .item h2 a:hover,.block.forum .item:hover h2 a,.night .block.forum .item h2.istop a,.night .block.forum .item h2 a:hover,.block.album .albumcon a:hover,.night .block.album .albumcon a:hover,.block.sticker .post h2 .istop::before,.block.hotspot .post h2 .istop::before,.schitemcon em mark,.schwords a:hover { color:#{$color}; }.single p.ue-upload a,.zbaudio_play em.pause::before,.night .zbaudio_play em.pause::before { color:#{$color}!important; }@media screen and (max-width:1080px){.menu ul li.subcate.slidedown > a:after {color:#{$color}}}"; // color
+    $skin .= ".menu li:before,.schfixed button,.post h2 em,.pagebar .now-page,.cmtpagebar .now-page,.pagebar a:hover,.cmtpagebar a:hover,a.backtotop:hover,.night .errorpage .errschbtn,.tagscloud li:hover,.night .tagscloud li:hover,.sign span a:hover,.night .signusermenu a:hover,.authinfo h1 span,.filternav li.active::after,.block.album .albumimg a em,.block.forum .item h2.istop em {background:#{$color};} .zbaudio_now,.zbaudio_bar::before {background:#{$color}!important;}"; // background
+    $skin .= ".menuico span,.lazyline,a.setnight:hover,a.lang:hover,.night a.backtotop:hover,.swiper-pagination-bullet-active,.indexcon .swiper-button-prev:hover::after,.indexcon .swiper-button-next:hover::after {background-color:#{$color}}"; // background-color
+    $skin .= ".menu li .subnav,.schfixed,.sideuserlink p a.wechat span {border-top-color:#{$color}}"; // border-top-color
     $skin .= '.menu li.subcate .subnav a {color:#333}';
-    $skin .= ".menu li .subnav:before,.sch-m input,.schfixed:before,.schform input,.single h1:after,.single h2:after,.single h3:after,.single h4:after,.single h5:after,.single h6:after,.contitle h1,.contitle h2 {border-bottom-color:#{$color}}"; //border-bottom-color
-    $skin .= ".post .readmore:hover,.post .tags a:hover,.telesmore i,.pagebar .now-page,.pagebar a:hover,a.backlist:hover,#divTags ul li a:hover,#divCalendar td a,#divContorPanel .cp-login a:hover,#divContorPanel .cp-vrs a:hover,.goback:hover,.night .post .readmore:hover,.night #divContorPanel .cp-login a:hover, .night #divContorPanel .cp-vrs a:hover,.night #cancel-reply,.night .pages a:hover,.cmtpagebar .now-page,.cmtpagebar a:hover,.cmtsubmit button:hover,.night .cmtsubmit button:hover,.night .errorpage .errschbtn,.night .errorpage .goback:hover,.closesite h1,.signuser.normal:hover,.sign span a,.searchnull a {border-color:#{$color}}"; //border-color
+    $skin .= ".menu li .subnav:before,.sch-m input,.schfixed:before,.schform input,.single h1:after,.single h2:after,.single h3:after,.single h4:after,.single h5:after,.single h6:after,.contitle h1,.contitle h2 {border-bottom-color:#{$color}}"; // border-bottom-color
+    $skin .= ".post .readmore:hover,.post .tags a:hover,.telesmore i,.pagebar .now-page,.pagebar a:hover,a.backlist:hover,#divTags ul li a:hover,#divCalendar td a,#divContorPanel .cp-login a:hover,#divContorPanel .cp-vrs a:hover,.goback:hover,.night .post .readmore:hover,.night #divContorPanel .cp-login a:hover, .night #divContorPanel .cp-vrs a:hover,.night #cancel-reply,.night .pages a:hover,.cmtpagebar .now-page,.cmtpagebar a:hover,.cmtsubmit button:hover,.night .cmtsubmit button:hover,.night .errorpage .errschbtn,.night .errorpage .goback:hover,.closesite h1,.signuser.normal:hover,.sign span a,.searchnull a {border-color:#{$color}}"; // border-color
     $bgcolor = $zbp->Config('tpure')->PostBGCOLOR;
     $skin .= ".wrapper,.main,.indexcon,.closepage { background:#{$bgcolor}; }";
     $sidelayout = $zbp->Config('tpure')->PostSIDELAYOUT;
@@ -655,8 +655,8 @@ function tpure_color()
     return $skin;
 }
 
-//文章或页面自动展示全文开关(开启)
-//挂接口：Add_Filter_Plugin('Filter_Plugin_Edit_Response3', 'tpure_ArticleViewall');
+// 文章或页面自动展示全文开关(开启)
+// 挂接口：Add_Filter_Plugin('Filter_Plugin_Edit_Response3', 'tpure_ArticleViewall');
 function tpure_ArticleViewall()
 {
     global $zbp,$article;
@@ -666,15 +666,15 @@ function tpure_ArticleViewall()
         </div>';
 }
 
-//文章编辑页面插入自定义表单；
-//挂接口：Add_Filter_Plugin('Filter_Plugin_Edit_Response5', 'tpure_Edit_Response');
+// 文章编辑页面插入自定义表单；
+// 挂接口：Add_Filter_Plugin('Filter_Plugin_Edit_Response5', 'tpure_Edit_Response');
 function tpure_Edit_Response()
 {
     global $zbp,$article;
     tpure_CustomMeta_Response($article);
 }
 
-//文章自定义Meta字段
+// 文章自定义Meta字段
 function tpure_CustomMeta_Response(&$object)
 {
     global $zbp; ?>
@@ -721,8 +721,8 @@ function tpure_CustomMeta_Response(&$object)
     }
 }
 
-//文章页面自定义Meta字段；
-//挂接口：Add_Filter_Plugin('Filter_Plugin_Edit_Response5', 'tpure_SingleSEO');
+// 文章页面自定义Meta字段；
+// 挂接口：Add_Filter_Plugin('Filter_Plugin_Edit_Response5', 'tpure_SingleSEO');
 function tpure_SingleSEO()
 {
     global $zbp,$article;
@@ -750,8 +750,8 @@ function tpure_SingleSEO()
     }
 }
 
-//分类自定义Meta字段；
-//挂接口：Add_Filter_Plugin('Filter_Plugin_Category_Edit_Response', 'tpure_CategorySEO');
+// 分类自定义Meta字段；
+// 挂接口：Add_Filter_Plugin('Filter_Plugin_Category_Edit_Response', 'tpure_CategorySEO');
 function tpure_CategorySEO()
 {
     global $zbp,$cate; ?>
@@ -786,8 +786,8 @@ function tpure_CategorySEO()
     }
 }
 
-//标签自定义Meta字段；
-//挂接口：Add_Filter_Plugin('Filter_Plugin_Tag_Edit_Response', 'tpure_TagSEO');
+// 标签自定义Meta字段；
+// 挂接口：Add_Filter_Plugin('Filter_Plugin_Tag_Edit_Response', 'tpure_TagSEO');
 function tpure_TagSEO()
 {
     global $zbp,$tag; ?>
@@ -822,8 +822,8 @@ function tpure_TagSEO()
     }
 }
 
-//用户上传头像及性别
-//挂接口：Add_Filter_Plugin('Filter_Plugin_Member_Edit_Response', 'tpure_MemberEdit_Response');
+// 用户上传头像及性别
+// 挂接口：Add_Filter_Plugin('Filter_Plugin_Member_Edit_Response', 'tpure_MemberEdit_Response');
 function tpure_MemberEdit_Response()
 {
     global $zbp,$member; ?>
@@ -855,8 +855,8 @@ function tpure_MemberEdit_Response()
     }
 }
 
-//文章图片灯箱引入样式及js；
-//挂接口：Add_Filter_Plugin('Filter_Plugin_Zbp_MakeTemplatetags','tpure_Fancybox');
+// 文章图片灯箱引入样式及js；
+// 挂接口：Add_Filter_Plugin('Filter_Plugin_Zbp_MakeTemplatetags','tpure_Fancybox');
 function tpure_Fancybox()
 {
     global $zbp;
@@ -865,8 +865,8 @@ function tpure_Fancybox()
     $zbp->header .= '    <script>$(document).ready(function() {$(".fancybox").fancybox();});</script>' . "\r\n";
 }
 
-//匹配文章中class值为ue-image的图片执行灯箱查看；
-//挂接口：Add_Filter_Plugin('Filter_Plugin_ViewPost_Template','tpure_FancyboxRegex');
+// 匹配文章中class值为ue-image的图片执行灯箱查看；
+// 挂接口：Add_Filter_Plugin('Filter_Plugin_ViewPost_Template','tpure_FancyboxRegex');
 function tpure_FancyboxRegex(&$template)
 {
     global $zbp;
@@ -884,17 +884,17 @@ function tpure_FancyboxRegex(&$template)
     }
 }
 
-//主题自带模块(热门阅读/热评文章/最新文章/推荐阅读/最新评论/站长简介)
-//编辑模块成功时执行接口：Add_Filter_Plugin('Filter_Plugin_PostModule_Succeed', 'tpure_CreateModule');
-//评论成功时执行接口：Add_Filter_Plugin('Filter_Plugin_PostComment_Succeed', 'tpure_CreateModule');
-//评论删除成功时执行接口：Add_Filter_Plugin('Filter_Plugin_DelComment_Succeed', 'tpure_CreateModule');
-//审核评论成功时执行接口：Add_Filter_Plugin('Filter_Plugin_CheckComment_Succeed', 'tpure_CreateModule');
-//文章提交成功时执行接口：Add_Filter_Plugin('Filter_Plugin_PostArticle_Succeed', 'tpure_CreateModule');
-//删除文章时执行接口：Add_Filter_Plugin('Filter_Plugin_PostArticle_Del', 'tpure_CreateModule');
+// 主题自带模块(热门阅读/热评文章/最新文章/推荐阅读/最新评论/站长简介)
+// 编辑模块成功时执行接口：Add_Filter_Plugin('Filter_Plugin_PostModule_Succeed', 'tpure_CreateModule');
+// 评论成功时执行接口：Add_Filter_Plugin('Filter_Plugin_PostComment_Succeed', 'tpure_CreateModule');
+// 评论删除成功时执行接口：Add_Filter_Plugin('Filter_Plugin_DelComment_Succeed', 'tpure_CreateModule');
+// 审核评论成功时执行接口：Add_Filter_Plugin('Filter_Plugin_CheckComment_Succeed', 'tpure_CreateModule');
+// 文章提交成功时执行接口：Add_Filter_Plugin('Filter_Plugin_PostArticle_Succeed', 'tpure_CreateModule');
+// 删除文章时执行接口：Add_Filter_Plugin('Filter_Plugin_PostArticle_Del', 'tpure_CreateModule');
 function tpure_CreateModule()
 {
     global $zbp;
-    //刷新浏览总量
+    // 刷新浏览总量
     $all_views = (true == $zbp->option['ZC_LARGE_DATA'] || true == $zbp->option['ZC_VIEWNUMS_TURNOFF']) ? 0 : GetValueInArrayByCurrent($zbp->db->Query('SELECT SUM(log_ViewNums) AS num FROM ' . $GLOBALS['table']['Post']), 'num');
     $zbp->cache->all_view_nums = $all_views;
     $zbp->SaveCache();
@@ -920,7 +920,7 @@ function tpure_CreateModule()
     foreach ($modules as $item) {
         $item->Content = tpure_SideContent($item);
         $item->Save();
-        //$zbp->AddBuildModule($item->FileName);
+        // $zbp->AddBuildModule($item->FileName);
         array_push($has_modules, $item->FileName);
     }
     foreach ($module_filenames as $k => $item) {
@@ -940,7 +940,7 @@ function tpure_CreateModule()
     }
 }
 
-//卸载主题时判断是否删除自定义模块
+// 卸载主题时判断是否删除自定义模块
 function tpure_DelModule()
 {
     global $zbp;
@@ -953,7 +953,7 @@ function tpure_DelModule()
     }
 }
 
-//模块内容
+// 模块内容
 function tpure_SideContent(&$module)
 {
     global $zbp;
@@ -988,7 +988,7 @@ function tpure_SideContent(&$module)
             </li>';
             }
 
-        break;
+            break;
 
         case 'tpure_hotcmtarticle':
             $num = $module->MaxLi > 0 ? $module->MaxLi : 5;
@@ -1013,7 +1013,7 @@ function tpure_SideContent(&$module)
             </li>';
             }
 
-        break;
+            break;
 
         case 'tpure_newarticle':
             $num = $module->MaxLi > 0 ? $module->MaxLi : 5;
@@ -1038,7 +1038,7 @@ function tpure_SideContent(&$module)
             </li>';
             }
 
-        break;
+            break;
 
         case 'tpure_recarticle':
             $tuiArtList = tpure_GetRecArticle();
@@ -1068,7 +1068,7 @@ function tpure_SideContent(&$module)
             </li>';
             }
 
-        break;
+            break;
 
         case 'tpure_avatarcomment':
             $num = $module->MaxLi > 0 ? $module->MaxLi : 5;
@@ -1086,7 +1086,7 @@ function tpure_SideContent(&$module)
                 </li>';
             }
 
-        break;
+            break;
 
         case 'tpure_newcomment':
             $num = $module->MaxLi > 0 ? $module->MaxLi : 5;
@@ -1099,7 +1099,7 @@ function tpure_SideContent(&$module)
             </li>';
             }
 
-        break;
+            break;
 
         case 'tpure_user':
             if ($zbp->Config('tpure')->PostSIDEUSERBG) {
@@ -1166,7 +1166,7 @@ function tpure_SideContent(&$module)
             $str .= '</div>
             </div>';
 
-        break;
+            break;
 
         case 'tpure_readers':
             $num = $module->MaxLi > 0 ? $module->MaxLi : 8;
@@ -1184,13 +1184,13 @@ function tpure_SideContent(&$module)
                 $str .= '</li>';
             }
 
-        break;
+            break;
     }
 
     return $str;
 }
 
-//获取热门文章列表
+// 获取热门文章列表
 function tpure_GetHotArticleList($num = 5, $type = 'view')
 {
     global $zbp;
@@ -1217,7 +1217,7 @@ function tpure_GetHotArticleList($num = 5, $type = 'view')
     return $articles;
 }
 
-//推荐阅读模块
+// 推荐阅读模块
 function tpure_GetRecArticle()
 {
     global $zbp;
@@ -1236,7 +1236,7 @@ function tpure_GetRecArticle()
     return $articles;
 }
 
-//获取最新评论
+// 获取最新评论
 function tpure_GetNewComment($num = 5)
 {
     global $zbp;
@@ -1254,7 +1254,7 @@ function tpure_GetNewComment($num = 5)
     return $comments;
 }
 
-//获取站内所有标签(标签云)
+// 获取站内所有标签(标签云)
 function tpure_GetTagCloudList()
 {
     global $zbp;
@@ -1270,7 +1270,7 @@ function tpure_GetTagCloudList()
     return count($result) ? $str : $tagsnull;
 }
 
-//获取文章归档列表(文章过多时不建议开启)
+// 获取文章归档列表(文章过多时不建议开启)
 function tpure_GetArchiveList()
 {
     global $zbp;
@@ -1321,7 +1321,7 @@ function tpure_GetArchiveList()
     return $list;
 }
 
-//创建文章归档HTML
+// 创建文章归档HTML
 function tpure_CreateArchiveHTML()
 {
     global $zbp;
@@ -1359,7 +1359,7 @@ function tpure_CreateArchiveHTML()
     return $str;
 }
 
-//创建文章归档缓存文件(缓存路径：zb_users/theme/tpure/archive.html)
+// 创建文章归档缓存文件(缓存路径：zb_users/theme/tpure/archive.html)
 function tpure_CreateArchiveCache($str = false)
 {
     global $zbp;
@@ -1384,7 +1384,7 @@ function tpure_CreateArchiveCache($str = false)
     return true;
 }
 
-//获取文章归档缓存文件
+// 获取文章归档缓存文件
 function tpure_GetArchives()
 {
     global $zbp;
@@ -1404,9 +1404,9 @@ function tpure_GetArchives()
     return $str;
 }
 
-//自动更新文章归档缓存
-//文章提交成功时更新归档缓存；挂接口：Add_Filter_Plugin('Filter_Plugin_PostArticle_Succeed', 'tpure_ArchiveAutoCache');
-//文章删除成功时更新归档缓存；挂接口：Add_Filter_Plugin('Filter_Plugin_PostArticle_Del', 'tpure_ArchiveAutoCache');
+// 自动更新文章归档缓存
+// 文章提交成功时更新归档缓存；挂接口：Add_Filter_Plugin('Filter_Plugin_PostArticle_Succeed', 'tpure_ArchiveAutoCache');
+// 文章删除成功时更新归档缓存；挂接口：Add_Filter_Plugin('Filter_Plugin_PostArticle_Del', 'tpure_ArchiveAutoCache');
 function tpure_ArchiveAutoCache()
 {
     global $zbp;
@@ -1415,7 +1415,7 @@ function tpure_ArchiveAutoCache()
     }
 }
 
-//删除文章归档缓存
+// 删除文章归档缓存
 function tpure_delArchive()
 {
     global $zbp;
@@ -1436,8 +1436,8 @@ function tpure_delArchive()
     }
 }
 
-//列表排序(可风)
-//挂接口：Add_Filter_Plugin('Filter_Plugin_LargeData_Article','tpure_LargeDataArticle');
+// 列表排序(可风)
+// 挂接口：Add_Filter_Plugin('Filter_Plugin_LargeData_Article','tpure_LargeDataArticle');
 function tpure_LargeDataArticle($select, $w, &$order, $limit, $option, $type = '')
 {
     global $zbp;
@@ -1475,7 +1475,7 @@ function tpure_LargeDataArticle($select, $w, &$order, $limit, $option, $type = '
     }
 }
 
-//读者墙(可风)
+// 读者墙(可风)
 function tpure_readers($limit = 100)
 {
     global $zbp;
@@ -1500,8 +1500,8 @@ function tpure_readers($limit = 100)
     return $list;
 }
 
-//新文章判断
-//挂接口：Add_Filter_Plugin('Filter_Plugin_PostArticle_Core', 'tpure_ArticleCore');
+// 新文章判断
+// 挂接口：Add_Filter_Plugin('Filter_Plugin_PostArticle_Core', 'tpure_ArticleCore');
 function tpure_ArticleCore($article)
 {
     if ($article->ID > 0) {
@@ -1511,8 +1511,8 @@ function tpure_ArticleCore($article)
     }
 }
 
-//新文章通知
-//挂接口：Add_Filter_Plugin('Filter_Plugin_PostArticle_Succeed', 'tpure_ArticleSendmail');
+// 新文章通知
+// 挂接口：Add_Filter_Plugin('Filter_Plugin_PostArticle_Succeed', 'tpure_ArticleSendmail');
 function tpure_ArticleSendmail($article)
 {
     global $zbp;
@@ -1551,8 +1551,8 @@ function tpure_ArticleSendmail($article)
     }
 }
 
-//新评论邮件通知
-//挂接口：Add_Filter_Plugin('Filter_Plugin_PostComment_Succeed', 'tpure_CmtSendmail');
+// 新评论邮件通知
+// 挂接口：Add_Filter_Plugin('Filter_Plugin_PostComment_Succeed', 'tpure_CmtSendmail');
 function tpure_CmtSendmail($cmt)
 {
     global $zbp;
@@ -1583,12 +1583,12 @@ function tpure_CmtSendmail($cmt)
     }
 }
 
-//头像优先级
+// 头像优先级
 function tpure_MemberAvatar($member, $email = null)
 {
     global $zbp;
     $avatar = '';
-    //自定义头像优先级最高
+    // 自定义头像优先级最高
     if ($member->Metas->memberimg) {
         $avatar = $member->Metas->memberimg;
     } elseif (isset($email)) {
@@ -1618,7 +1618,7 @@ function tpure_MemberAvatar($member, $email = null)
     return $avatar;
 }
 
-//判断移动端
+// 判断移动端
 function tpure_isMobile()
 {
     global $zbp;
@@ -1634,7 +1634,7 @@ function tpure_isMobile()
     return $is_mobile;
 }
 
-//主题缩略图
+// 主题缩略图
 function tpure_Thumb($Source, $IsThumb = '0')
 {
     global $zbp;
@@ -1670,7 +1670,7 @@ function tpure_Thumb($Source, $IsThumb = '0')
     return $ThumbSrc;
 }
 
-//Z-Blog1.7版本缩略图
+// Z-Blog1.7版本缩略图
 function tpure_Thumb_new($Source, $IsThumb)
 {
     global $zbp;
@@ -1700,7 +1700,7 @@ function tpure_Thumb_new($Source, $IsThumb)
     return $ThumbSrc;
 }
 
-//列表缩略图延迟加载
+// 列表缩略图延迟加载
 function tpure_ListIMGLazyLoad(&$template)
 {
     global $zbp;
@@ -1713,7 +1713,7 @@ function tpure_ListIMGLazyLoad(&$template)
     }
 }
 
-//匹配图片更新内容
+// 匹配图片更新内容
 function tpure_LazyLoadReplace($content)
 {
     global $zbp;
@@ -1724,7 +1724,7 @@ function tpure_LazyLoadReplace($content)
     return $content;
 }
 
-//文章正文替换匹配后的图片延迟加载格式
+// 文章正文替换匹配后的图片延迟加载格式
 function tpure_ContentIMGLazyLoad(&$template)
 {
     global $zbp;
@@ -1974,7 +1974,7 @@ function tpure_Config()
     }
 }
 
-//主题启用时的默认配置项
+// 主题启用时的默认配置项
 function InstallPlugin_tpure()
 {
     global $zbp;
@@ -1986,7 +1986,7 @@ function InstallPlugin_tpure()
     tpure_CreateModule();
 }
 
-//应用升级时执行
+// 应用升级时执行
 function UpdatePlugin_tpure()
 {
     global $zbp;
@@ -2001,19 +2001,19 @@ function UpdatePlugin_tpure()
     }
 }
 
-//旧版兼容
+// 旧版兼容
 function tpure_Updated()
 {
     UpdatePlugin_tpure();
 }
 
-//卸载主题时判断是否删除已保存的配置信息
+// 卸载主题时判断是否删除已保存的配置信息
 function UninstallPlugin_tpure()
 {
     global $zbp;
     if (0 == $zbp->Config('tpure')->PostSAVECONFIG) {
         $zbp->DelConfig('tpure');
     }
-    //删除主题在模块管理中创建的模块
+    // 删除主题在模块管理中创建的模块
     tpure_DelModule();
 }
