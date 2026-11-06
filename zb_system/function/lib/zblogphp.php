@@ -207,12 +207,12 @@ class ZBlogPHP
     public $categoriesbyorder;
 
     /**
-     * @var Category[] 按类型分类的2维数组 //本身无意义了，现引用自$categoriesbyorder_type
+     * @var Category[][] 按类型分类的2维数组 //本身无意义了，现引用自$categoriesbyorder_type
      */
     public $categories_type = [];
 
     /**
-     * @var Category[] 按类型分类2维数组（已排序）被categories_type引用
+     * @var Category[][] 按类型分类2维数组（已排序）被categories_type引用
      */
     public $categoriesbyorder_type = [];
 
@@ -242,12 +242,12 @@ class ZBlogPHP
     public $tags_all = [];
 
     /**
-     * @var array 标签数组 By Type 2维数组
+     * @var Tag[][] 标签数组 By Type 2维数组
      */
     public $tags_type = [];
 
     /**
-     * @var array 标签数组 By Type（以标签名为键）2维数组
+     * @var Tag[][] 标签数组 By Type（以标签名为键）2维数组
      */
     public $tagsbyname_type = [];
 
@@ -277,7 +277,7 @@ class ZBlogPHP
     public $subname;
 
     /**
-     * @var App 当前主题
+     * @var string 当前主题
      */
     public $theme;
 
@@ -4495,7 +4495,7 @@ class ZBlogPHP
     /**
      * 将对象附加到总缓存对象上.
      *
-     * @param mixed $object
+     * @param Base $object
      */
     public function AddCache(&$object)
     {
@@ -4548,7 +4548,7 @@ class ZBlogPHP
     /**
      * 将对象附从总缓存对象上删除掉.
      *
-     * @param mixed $object
+     * @param Base $object
      */
     public function RemoveCache(&$object)
     {
@@ -4596,7 +4596,7 @@ class ZBlogPHP
     /**
      * 将Post类对象附加到Post缓存对象上.
      *
-     * @param mixed $object
+     * @param Base $object
      */
     public function AddPostCache(&$object)
     {

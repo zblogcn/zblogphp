@@ -8,6 +8,9 @@ if (!defined('ZBP_PATH')) {
  * 数据操作基类.
  *
  * @property mixed ID
+ * @property mixed Type
+ * @property mixed Name
+ * @property mixed FileName
  */
 class Base
 {

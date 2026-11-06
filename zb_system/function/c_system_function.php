@@ -17,8 +17,6 @@ if (!defined('ZBP_PATH')) {
  */
 function GetPost($idorname, $option = null)
 {
-    //新版本的使用说明请看
-    //https://wiki.zblogcn.com/doku.php?id=zblogphp:development:functions:getpost
     global $zbp;
     $post = null;
     $id = null;

@@ -69,7 +69,7 @@ class SQL__Global
     private $complexKeyword = ['ADDCOLUMN', 'DROPCOLUMN', 'ALTERCOLUMN'];
 
     /**
-     * @var null 数据库连接实例
+     * @var Database__Interface 数据库连接实例
      */
     private $db;
 
@@ -79,7 +79,7 @@ class SQL__Global
     private $dbclass;
 
     /**
-     * @param object $db
+     * @param Database__Interface $db
      */
     public function __construct(&$db = null)
     {
@@ -88,8 +88,8 @@ class SQL__Global
     }
 
     /**
-     * @param $callName
-     * @param $argu
+     * @param string $callName
+     * @param array  $argu
      *
      * @throws Exception
      *

@@ -42,7 +42,7 @@ class ValidateCode
     protected $backgroundColor;
 
     /**
-     * @var resource
+     * @var GdImage|resource
      */
     protected $contents;
 
@@ -443,7 +443,7 @@ class ValidateCode
     /**
      * Gets the image contents.
      *
-     * @param mixed $quality
+     * @param int $quality
      */
     public function get($quality = 90)
     {
@@ -456,7 +456,7 @@ class ValidateCode
     /**
      * Gets the HTML inline base64.
      *
-     * @param mixed $quality
+     * @param int $quality
      */
     public function inline($quality = 90)
     {
@@ -466,7 +466,7 @@ class ValidateCode
     /**
      * Outputs the image.
      *
-     * @param mixed $quality
+     * @param int $quality
      */
     public function directOutput($quality = 90)
     {

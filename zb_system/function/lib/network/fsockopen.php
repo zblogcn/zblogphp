@@ -283,11 +283,11 @@ class Network__fsockopen implements Network__Interface
             $this->responseText .= fgets($socket, 128);
         }
 
-        $this->responseHeader = substr($this->responseText, 0, strpos($this->responseText, "\r\n\r\n"));
+        $responseHeaderText = substr($this->responseText, 0, strpos($this->responseText, "\r\n\r\n"));
 
         $this->responseText = substr($this->responseText, (strpos($this->responseText, "\r\n\r\n") + 4));
 
-        $this->responseHeader = explode("\r\n", $this->responseHeader);
+        $this->responseHeader = explode("\r\n", $responseHeaderText);
 
         $i = $this->maxredirs;
         if ($this->maxredirs > 0) {

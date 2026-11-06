@@ -696,7 +696,7 @@ class ZbpErrorControl
     /**
      * 解析异常信息.
      *
-     * @param Exception $exception
+     * @param Throwable $exception
      */
     public function ParseException($exception)
     {
@@ -706,7 +706,7 @@ class ZbpErrorControl
         if (is_a($exception, 'Error')) {
             $this->private_zee->messagefull = $exception->getMessage() . ' (set_exception_error_handler) ';
         }
-        if (get_class($exception) == 'ZbpErrorException') {
+        if ($exception instanceof ZbpErrorException) {
             $this->private_zee->moreinfo = $exception->moreinfo;
             $this->private_zee->messagefull = $exception->messagefull;
             $this->private_zee->httpcode = $exception->httpcode;

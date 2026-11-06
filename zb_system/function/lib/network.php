@@ -15,7 +15,7 @@ class Network
     public $networktype = null;
 
     /**
-     * @var array
+     * @var string[]
      */
     public $network_list = array();
 
@@ -35,7 +35,7 @@ class Network
     public $file_get_contents = false;
 
     /**
-     * @var Network__Interface[]
+     * @var Network|null
      */
     private static $private_network = null;
 
@@ -78,7 +78,8 @@ class Network
 
         $extension = ($extension == '' ? self::$private_network->network_list[0] : $extension);
         $type = 'Network__' . $extension;
-        return new $type();
+        $network = new $type();
+        return $network;
     }
 
 }
