@@ -528,7 +528,7 @@ function PostArticle()
         CountPost($article, null);
         $article->Save();
     }
-    
+
     $zbp->AddCache($article);
 
     //更新统计信息
