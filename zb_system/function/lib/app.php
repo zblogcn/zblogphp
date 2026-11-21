@@ -643,6 +643,9 @@ class App
         $s .= "\n";
 
         foreach ($this->ignore_files as $glob) {
+            if (false !== strpbrk($glob, '*?[')) {
+                continue;
+            }
             if (is_dir($d = $this->app_path . $glob)) {
                 $this->ignored_dirs[crc32($d)] = rtrim($d, '/') . '/';
             }
@@ -706,7 +709,7 @@ class App
                     }
                 }
             }
-            if (is_dir($path) && is_dir($d = $appPath . $glob)) {
+            if (is_dir($path) && false === strpbrk($glob, '*?[') && is_dir($d = $appPath . $glob)) {
                 $d = rtrim($d, '/') . '/';
                 if (stripos($path, $d) !== false) {
                     return true;
