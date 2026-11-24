@@ -75,7 +75,7 @@ class ZbaPacker
         $outputPath = $this->outputPath ?: getcwd();
 
         if (is_dir($outputPath)) {
-            $version  = (string) ($this->appData['version'] ?? '1.0');
+            $version = (string) ($this->appData['version'] ?? '1.0');
             $modified = (string) ($this->appData['modified'] ?? date('Ymd'));
             $filename = "{$this->appId}_{$version}_{$modified}.zba";
             $outputPath = rtrim($outputPath, '/\\');
