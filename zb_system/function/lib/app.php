@@ -3,12 +3,12 @@
 if (!defined('ZBP_PATH')) {
     exit('Access denied');
 }
+
 /**
  * App 应用类.
  */
 class App
 {
-
     /**
      * admin-next 前端声明协议版本
      */
@@ -187,7 +187,7 @@ class App
     /**
      * @var array 禁止打包文件glob
      */
-    public $ignore_files = array('.gitignore', '.DS_Store', 'Thumbs.db', 'composer.lock', 'zbignore.txt', '*.code-workspace');
+    public $ignore_files = ['.gitignore', '.DS_Store', 'Thumbs.db', 'composer.lock', 'zbignore.txt', '*.code-workspace'];
 
     /**
      * @var bool 加载xml成功否
@@ -212,17 +212,34 @@ class App
     /**
      * @var string 静态访法返回unpack成功后的app
      */
-    public static $unpack_app = null;
+    public static $unpack_app;
+
+    /**
+     * @var array 所有目录列表
+     *
+     * @private
+     */
+    private $dirs = [];
+
+    /**
+     * @var array 所有文件列表
+     *
+     * @private
+     */
+    private $files = [];
+
+    private $ignored_dirs = [];
 
     public function __get($key)
     {
         global $zbp;
-        if ($key === 'app_path') {
+        if ('app_path' === $key) {
             $appDirectory = $zbp->usersdir . FormatString($this->type, '[filename]');
             $appDirectory .= '/' . FormatString($this->id, '[filename]') . '/';
 
             return $appDirectory;
-        } elseif ($key === 'app_url') {
+        }
+        if ('app_url' === $key) {
             return $zbp->host . 'zb_users/' . $this->type . '/' . $this->id . '/';
         }
 
@@ -409,19 +426,20 @@ class App
     }
 
     /**
-     * 获取应用Logo图片地址(优先Logo)
+     * 获取应用Logo图片地址(优先Logo).
      *
      * @return string
      */
     public function GetLogo()
     {
-        if ($this->type == 'plugin') {
+        if ('plugin' == $this->type) {
             return $this->app_url . 'logo.png';
-        } elseif (is_readable($this->app_path . 'logo.png')) {
-            return $this->app_url . 'logo.png';
-        } else {
-            return $this->app_url . 'screenshot.png';
         }
+        if (is_readable($this->app_path . 'logo.png')) {
+            return $this->app_url . 'logo.png';
+        }
+
+        return $this->app_url . 'screenshot.png';
     }
 
     /**
@@ -445,12 +463,12 @@ class App
 
         $array = GetFilesInDir($dir, 'css');
         if (isset($array['default'])) {
-            $a = array('default' => $array['default']);
+            $a = ['default' => $array['default']];
             unset($array['default']);
             $array = array_merge($a, $array);
         }
         if (isset($array['style'])) {
-            $a = array('style' => $array['style']);
+            $a = ['style' => $array['style']];
             unset($array['style']);
             $array = array_merge($a, $array);
         }
@@ -486,7 +504,7 @@ class App
         }
 
         $appver = $xml->attributes();
-        if ((string) $appver->version !== 'php') {
+        if ('php' !== (string) $appver->version) {
             return false;
         }
 
@@ -539,7 +557,7 @@ class App
         $this->admin = self::ParseAdminNode($xml);
 
         $appIgnorePath = $this->app_path . 'zbignore.txt';
-        $appIgnores = array();
+        $appIgnores = [];
         if (is_readable($appIgnorePath)) {
             $appIgnores = explode("\n", str_replace("\r", "\n", trim(file_get_contents($appIgnorePath))));
         }
@@ -549,7 +567,6 @@ class App
             }
         }
         $this->ignore_files = array_unique($this->ignore_files);
-
 
         $stylecss_file = $this->app_path . 'style/' . $zbp->style . '.css';
         if (is_readable($stylecss_file)) {
@@ -630,38 +647,6 @@ class App
     }
 
     /**
-     * @var array 所有目录列表
-     * @private
-     */
-    private $dirs = array();
-
-    /**
-     * @var array 所有文件列表
-     * @private
-     */
-    private $files = array();
-
-    /**
-     * @param string $dir 获取所有目录及文件列表
-     * @private
-     */
-    private function GetAllFileDir($dir)
-    {
-        foreach (scandir($dir) as $d) {
-            if (is_dir($dir . $d)) {
-                if ((substr($d, 0, 1) != '.')
-                    && !($d == 'compile' && $this->type == 'theme')
-                ) {
-                    $this->GetAllFileDir($dir . $d . '/');
-                    $this->dirs[] = $dir . $d . '/';
-                }
-            } else {
-                $this->files[] = $dir . $d;
-            }
-        }
-    }
-
-    /**
      * 应用打包.
      *
      * @return string
@@ -669,8 +654,8 @@ class App
     public function Pack()
     {
         global $zbp;
-        $this->dirs = array();
-        $this->files = array();
+        $this->dirs = [];
+        $this->files = [];
 
         $dir = $this->app_path;
         $this->GetAllFileDir($dir);
@@ -738,6 +723,9 @@ class App
         $s .= "\n";
 
         foreach ($this->ignore_files as $glob) {
+            if (false !== strpbrk($glob, '*?[')) {
+                continue;
+            }
             if (is_dir($d = $this->app_path . $glob)) {
                 $this->ignored_dirs[crc32($d)] = rtrim($d, '/') . '/';
             }
@@ -758,7 +746,7 @@ class App
             }
             $d = $this->id . '/' . str_replace($dir, '', $value);
             $ext = pathinfo($value, PATHINFO_EXTENSION);
-            if ($ext == 'php' || $ext == 'inc') {
+            if ('php' == $ext || 'inc' == $ext) {
                 $c = base64_encode(RemoveBOM(file_get_contents($value)));
             } else {
                 $c = base64_encode(file_get_contents($value));
@@ -783,58 +771,27 @@ class App
         return gzencode($this->Pack(), 9, FORCE_GZIP);
     }
 
-    private $ignored_dirs = array();
-
-    private function IsPathIgnored($path)
-    {
-        $path = str_ireplace('\\', '/', $path);
-        $appPath = str_ireplace('\\', '/', $this->app_path);
-        $fileName = str_ireplace($appPath, '', $path);
-        foreach ($this->ignore_files as $glob) {
-            if (fnmatch($glob, $fileName)) {
-                return true;
-            }
-            if (is_file($path)) {
-                foreach ($this->ignored_dirs as $key => $value) {
-                    if (stripos($path, $value) !== false) {
-                        return true;
-                    }
-                }
-            }
-            if (is_dir($path) && is_dir($d = $appPath . $glob)) {
-                $d = rtrim($d, '/') . '/';
-                if (stripos($path, $d) !== false) {
-                    return true;
-                }
-            }
-        }
-
-        return false;
-    }
-
     /**
      * 解开应用包.
-     *
-     * @param $s
      *
      * @return bool
      */
     public static function UnPack($s)
     {
         global $zbp;
-        $charset = array();
+        $charset = [];
         $charset[1] = substr($s, 0, 1);
         $charset[2] = substr($s, 1, 1);
-        if (ord($charset[1]) == 31 && ord($charset[2]) == 139) {
+        if (31 == ord($charset[1]) && 139 == ord($charset[2])) {
             $s = gzdecode($s);
         }
 
-        $xml = @simplexml_load_string($s, 'SimpleXMLElement', (LIBXML_COMPACT | LIBXML_PARSEHUGE));
+        $xml = @simplexml_load_string($s, 'SimpleXMLElement', LIBXML_COMPACT | LIBXML_PARSEHUGE);
         if (!$xml) {
             return false;
         }
 
-        if ($xml['version'] != 'php') {
+        if ('php' != $xml['version']) {
             return false;
         }
 
@@ -879,22 +836,23 @@ class App
     }
 
     /**
-     * @return true | Exception
+     * @return Exception|true
      */
     public function CheckCompatibility()
     {
         global $zbp;
 
         if ((int) $this->adapted > (int) $zbp->version) {
-            //$zbp->ShowError(str_replace('%s', $this->adapted, $zbp->lang['error'][78]), __FILE__, __LINE__);
+            // $zbp->ShowError(str_replace('%s', $this->adapted, $zbp->lang['error'][78]), __FILE__, __LINE__);
             return new Exception(str_replace('%s', $this->adapted, $zbp->lang['error'][78]));
         }
 
-        if (trim($this->phpver) == '') {
+        if ('' == trim($this->phpver)) {
             $this->phpver = '5.2';
         }
         if (version_compare($this->phpver, GetPHPVersion()) > 0) {
             $zbp->ShowError(str_replace('%s', $this->phpver, $zbp->lang['error'][91]), __FILE__, __LINE__);
+
             return new Exception(str_replace('%s', $this->phpver, $zbp->lang['error'][91]));
         }
 
@@ -906,7 +864,7 @@ class App
             }
 
             if (!function_exists($e)) {
-                //$zbp->ShowError(str_replace('%s', $e, $zbp->lang['error'][92]), __FILE__, __LINE__);
+                // $zbp->ShowError(str_replace('%s', $e, $zbp->lang['error'][92]), __FILE__, __LINE__);
                 return new Exception(str_replace('%s', $e, $zbp->lang['error'][92]));
             }
         }
@@ -919,7 +877,7 @@ class App
 
             if (!in_array($d, $zbp->activedapps)) {
                 $d = '<a href="' . $zbp->host . 'zb_users/plugin/AppCentre/main.php?alias=' . $d . '">' . $d . '</a>';
-                //$zbp->ShowError(str_replace('%s', $d, $zbp->lang['error'][83]), __FILE__, __LINE__);
+                // $zbp->ShowError(str_replace('%s', $d, $zbp->lang['error'][83]), __FILE__, __LINE__);
                 return new Exception(str_replace('%s', $d, $zbp->lang['error'][83]));
             }
         }
@@ -931,7 +889,7 @@ class App
             }
 
             if (in_array($c, $zbp->activedapps)) {
-                //$zbp->ShowError(str_replace('%s', $c, $zbp->lang['error'][85]), __FILE__, __LINE__);
+                // $zbp->ShowError(str_replace('%s', $c, $zbp->lang['error'][85]), __FILE__, __LINE__);
                 return new Exception(str_replace('%s', $c, $zbp->lang['error'][85]));
             }
         }
@@ -940,14 +898,16 @@ class App
     }
 
     /**
-     * 从全局检查 依赖(关闭时) or 拒绝(开启时)
+     * 从全局检查 依赖(关闭时) or 拒绝(开启时).
+     *
      * @param $action string (Enable|Disable)
-     * @return true | Exception
+     *
+     * @return Exception|true
      */
     public function CheckCompatibility_Global($action)
     {
         global $zbp;
-        if ($action == 'Enable') {
+        if ('Enable' == $action) {
             $apps = $zbp->LoadPlugins();
             $apps[] = $zbp->LoadApp('theme', $zbp->theme);
             foreach ($apps as $app) {
@@ -957,13 +917,13 @@ class App
                 $conflictList = explode('|', $app->advanced_conflict);
                 foreach ($conflictList as $conflict) {
                     if ($conflict == $this->id) {
-                        //$zbp->ShowError(str_replace('%s', ' <b>' . $app->name . '</b> ', $zbp->lang['error'][85]), __FILE__, __LINE__);
+                        // $zbp->ShowError(str_replace('%s', ' <b>' . $app->name . '</b> ', $zbp->lang['error'][85]), __FILE__, __LINE__);
                         return new Exception(str_replace('%s', ' <b>' . $app->name . '</b> ', $zbp->lang['error'][85]));
                     }
                 }
             }
         }
-        if ($action == 'Disable') {
+        if ('Disable' == $action) {
             $apps = $zbp->LoadPlugins();
             $apps[] = $zbp->LoadApp('theme', $zbp->theme);
             foreach ($apps as $app) {
@@ -973,7 +933,7 @@ class App
                 $dependList = explode('|', $app->advanced_dependency);
                 foreach ($dependList as $depend) {
                     if ($depend == $this->id) {
-                        //$zbp->ShowError(str_replace('%s', ' <b>' . $app->name . '</b> ', $zbp->lang['error'][84]), __FILE__, __LINE__);
+                        // $zbp->ShowError(str_replace('%s', ' <b>' . $app->name . '</b> ', $zbp->lang['error'][84]), __FILE__, __LINE__);
                         return new Exception(str_replace('%s', ' <b>' . $app->name . '</b> ', $zbp->lang['error'][84]));
                     }
                 }
@@ -1022,11 +982,11 @@ class App
         }
 
         $s = '';
-        for ($i = 1; $i < 10; $i++) {
+        for ($i = 1; $i < 10; ++$i) {
             $s .= $this->{'sidebars_sidebar' . $i};
         }
         if (!empty($s)) {
-            for ($i = 1; $i < 10; $i++) {
+            for ($i = 1; $i < 10; ++$i) {
                 $zbp->option['ZC_SIDEBAR' . (($i > 1) ? $i : '') . '_ORDER'] = $this->{'sidebars_sidebar' . $i};
             }
         }
@@ -1041,11 +1001,58 @@ class App
     {
         global $zbp;
 
-        for ($i = 1; $i < 10; $i++) {
+        for ($i = 1; $i < 10; ++$i) {
             $a[$i] = $zbp->option['ZC_SIDEBAR' . (($i > 1) ? $i : '') . '_ORDER'];
         }
         $zbp->cache->{'sidebars_' . $this->id} = json_encode($a);
         $zbp->SaveCache();
     }
 
+    /**
+     * @param string $dir 获取所有目录及文件列表
+     *
+     * @private
+     */
+    private function GetAllFileDir($dir)
+    {
+        foreach (scandir($dir) as $d) {
+            if (is_dir($dir . $d)) {
+                if (('.' != substr($d, 0, 1))
+                    && !('compile' == $d && 'theme' == $this->type)
+                ) {
+                    $this->GetAllFileDir($dir . $d . '/');
+                    $this->dirs[] = $dir . $d . '/';
+                }
+            } else {
+                $this->files[] = $dir . $d;
+            }
+        }
+    }
+
+    private function IsPathIgnored($path)
+    {
+        $path = str_ireplace('\\', '/', $path);
+        $appPath = str_ireplace('\\', '/', $this->app_path);
+        $fileName = str_ireplace($appPath, '', $path);
+        foreach ($this->ignore_files as $glob) {
+            if (fnmatch($glob, $fileName)) {
+                return true;
+            }
+            if (is_file($path)) {
+                foreach ($this->ignored_dirs as $key => $value) {
+                    if (false !== stripos($path, $value)) {
+                        return true;
+                    }
+                }
+            }
+            if (is_dir($path) && false === strpbrk($glob, '*?[') && is_dir($d = $appPath . $glob)) {
+                $d = rtrim($d, '/') . '/';
+                if (false !== stripos($path, $d)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
 }

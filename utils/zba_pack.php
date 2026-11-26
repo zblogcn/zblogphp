@@ -3,10 +3,13 @@
  * Z-BlogPHP ZBA 打包工具 (CLI & GitHub Action 版).
  *
  * 用法:
- *   php pack_zba.php <应用目录路径> [选项]
+ *   php zba_pack.php <应用目录路径> [选项]
  *
  * 选项:
- *   -o, --output <路径>   指定输出 .zba 文件路径 (默认: <应用ID>_<版本号>_<修改时间>.zba)
+ *   -o, --output <路径>   指定输出 .zba 文件路径
+ *                         完整路径：-o /tmp/my_plugin.zba (文件名固定)
+ *                         目录路径：-o /tmp/ (自动拼接 appID_version_modified.zba)
+ *                         缺省：当前目录 + 自动文件名
  *   --no-gzip            不进行 gzip 压缩 (默认输出 gzip 压缩的 .zba)
  *   -v, --verbose        显示详细打包文件列表
  *   -h, --help           显示使用说明
@@ -27,20 +30,25 @@ class ZbaPacker
     private $appData = [];
 
     private $ignoreFiles = [
+        '.cnb.yml',
+        '.cnb',
+        '.DS_Store',
+        '.env',
         '.git',
+        '.gitattributes',
         '.github',
+        '.gitignore',
+        '.hg',
         '.history',
         '.idea',
-        '.vscode',
         '.svn',
-        '.hg',
-        '.DS_Store',
-        'Thumbs.db',
-        'app_update.lock',
-        '.gitignore',
-        '.gitattributes',
-        'zbignore.txt',
+        '.vscode',
+        '*.key',
+        '*.pem',
         '*.zba',
+        'app_update.lock',
+        'Thumbs.db',
+        'zbignore.txt',
     ];
 
     private $dirs = [];
@@ -64,12 +72,17 @@ class ZbaPacker
             $packData = $xmlContent;
         }
 
-        if (empty($this->outputPath)) {
+        $outputPath = $this->outputPath ?: getcwd();
+
+        if (is_dir($outputPath)) {
             $version = (string) ($this->appData['version'] ?? '1.0');
             $modified = (string) ($this->appData['modified'] ?? date('Ymd'));
             $filename = "{$this->appId}_{$version}_{$modified}.zba";
-            $this->outputPath = getcwd() . DIRECTORY_SEPARATOR . $filename;
+            $outputPath = rtrim($outputPath, '/\\');
+            $outputPath .= DIRECTORY_SEPARATOR . $filename;
         }
+
+        $this->outputPath = $outputPath;
 
         $outDir = dirname($this->outputPath);
         if (!is_dir($outDir)) {
@@ -100,18 +113,33 @@ class ZbaPacker
 
     private function exportGithubOutputs()
     {
+        $outputs = [
+            'zba-path' => $this->outputPath,
+            'zba-name' => basename($this->outputPath),
+            'app-id' => $this->appId,
+            'app-name' => (string) ($this->appData['name'] ?? ''),
+            'app-version' => (string) ($this->appData['version'] ?? ''),
+            'app-type' => $this->appType,
+            'app-modified' => (string) ($this->appData['modified'] ?? ''),
+        ];
+
+        // GitHub Actions: 追加写入 $GITHUB_OUTPUT 文件
         $githubOutput = getenv('GITHUB_OUTPUT');
         if ($githubOutput && is_file($githubOutput)) {
-            $outputs = [
-                'zba-path=' . $this->outputPath,
-                'zba-name=' . basename($this->outputPath),
-                'app-id=' . $this->appId,
-                'app-name=' . ($this->appData['name'] ?? ''),
-                'app-version=' . ($this->appData['version'] ?? ''),
-                'app-type=' . $this->appType,
-                'app-modified=' . ($this->appData['modified'] ?? ''),
-            ];
-            file_put_contents($githubOutput, implode("\n", $outputs) . "\n", FILE_APPEND);
+            $lines = [];
+            foreach ($outputs as $key => $value) {
+                $lines[] = $key . '=' . $value;
+            }
+            file_put_contents($githubOutput, implode("\n", $lines) . "\n", FILE_APPEND);
+        }
+
+        // CNB (.cnb.yml): 以 ##[set-output key=value] 输出到标准输出，配合 job/stage 的 exports 导出为环境变量
+        // 参考: https://docs.cnb.cool/zh/build/env.html
+        if (false !== getenv('CNB_REPO_SLUG') || false !== getenv('CNB_PIPELINE_ID')) {
+            foreach ($outputs as $key => $value) {
+                $value = str_replace(["\r", "\n"], ' ', $value);
+                echo '##[set-output ' . $key . '=' . $value . ']' . "\n";
+            }
         }
     }
 
@@ -121,7 +149,7 @@ class ZbaPacker
 Z-BlogPHP ZBA 打包工具 (CLI)
 
 使用方法:
-  php pack_zba.php <应用目录路径> [选项]
+  php zba_pack.php <应用目录路径> [选项]
 
 选项:
   -o, --output <文件路径>  指定输出 .zba 目标路径
@@ -130,9 +158,9 @@ Z-BlogPHP ZBA 打包工具 (CLI)
   -h, --help              显示帮助信息
 
 示例:
-  php pack_zba.php /path/to/plugin_dir
-  php pack_zba.php /path/to/plugin_dir -o /tmp/my_plugin.zba
-  php pack_zba.php /path/to/theme_dir --no-gzip
+  php zba_pack.php /path/to/plugin_dir
+  php zba_pack.php /path/to/plugin_dir -o /tmp/my_plugin.zba
+  php zba_pack.php /path/to/theme_dir --no-gzip
 
 HELP;
     }

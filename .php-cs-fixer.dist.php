@@ -20,8 +20,8 @@ return (new Config())
 
         /* 后续显式覆盖或添加的规则 */
 
-        // // 单行注释后确保有一个空格，然而实际没有这个规则，不知道是不是 PhpCsFixer 版本太低。
-        // 'single_line_comment_spacing' => true,
+        // 单行注释后确保有一个空格。
+        'single_line_comment_spacing' => true,
         // 多行数组与参数列表保留尾随逗号。
         'trailing_comma_in_multiline' => ['elements' => ['arrays', 'arguments']],
         // 垂直对齐 PHPDoc 注解列。

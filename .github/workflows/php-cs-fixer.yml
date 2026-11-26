@@ -23,7 +23,7 @@ jobs:
         if: steps.changed.outputs.any_changed == 'true'
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '7.3'
+          php-version: '8.2'
           coverage: none
 
       - name: Install dependencies
