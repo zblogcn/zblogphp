@@ -132,6 +132,34 @@ class AdminNextCsrfTest extends PHPUnit\Framework\TestCase
     }
 
     /** @test */
+    public function testJsonPostDataIsReadableFromRequestAndOverridesGet()
+    {
+        $_GET['ischecking'] = '0';
+        $_POST = [];
+        $_REQUEST = $_GET;
+
+        ApiMergePostData(['ischecking' => 1]);
+
+        $this->assertSame(1, $_POST['ischecking']);
+        $this->assertSame(1, $_REQUEST['ischecking']);
+        $this->assertSame(1, GetVars('ischecking'));
+    }
+
+    /** @test */
+    public function testFormPostDataKeepsPrecedenceOverJsonAndGet()
+    {
+        $_GET['ischecking'] = '0';
+        $_POST['ischecking'] = '0';
+        $_REQUEST = array_merge($_GET, $_POST);
+
+        ApiMergePostData(['ischecking' => 1]);
+
+        $this->assertSame('0', $_POST['ischecking']);
+        $this->assertSame('0', $_REQUEST['ischecking']);
+        $this->assertSame('0', GetVars('ischecking'));
+    }
+
+    /** @test */
     public function testPostTokenTakesPrecedenceOverRequestToken()
     {
         global $zbp;

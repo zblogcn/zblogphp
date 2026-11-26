@@ -796,8 +796,21 @@ function ApiLoadPostData()
 {
     $input = file_get_contents('php://input');
     if ($input && ($data = json_decode($input, true)) && is_array($data)) {
-        $_POST = array_merge($data, $_POST);
+        ApiMergePostData($data);
     }
+}
+
+/**
+ * 合并 JSON 请求数据，并同步到 $_REQUEST.
+ *
+ * 已有 POST 字段优先于 JSON；两者都优先于 GET。
+ *
+ * @param array $data
+ */
+function ApiMergePostData(array $data)
+{
+    $_POST = array_merge($data, $_POST);
+    $_REQUEST = array_merge($_REQUEST, $_POST);
 }
 
 /**

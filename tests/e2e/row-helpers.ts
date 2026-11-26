@@ -1,4 +1,4 @@
-import type { Page, Locator } from "@playwright/test"
+import { expect, type Page, type Locator } from "@playwright/test"
 
 /**
  * 行内操作按钮有 aria-label 与图标，这里统一按行定位，
@@ -19,22 +19,58 @@ export function rowLink(row: Locator, title: "编辑"): Locator {
   return row.locator(`a[title="${title}"]`).first()
 }
 
+interface ApiEnvelope<T> {
+  code: number
+  message?: string
+  data: T
+  error: unknown
+}
+
 /**
- * 等列表数据落定。
+ * 等指定内部 API 响应，并同时校验 HTTP 状态与 JSON envelope。
  *
  * 不用 waitForLoadState("networkidle")：后台会周期性轮询，永远不会 idle。
- * 这里等当前页对目标接口的响应返回即可。
+ * 超时、非 2xx、非 JSON 或 code !== 200 都必须让用例失败，不能降级为等待 UI 断言。
  */
-export async function waitForList(page: Page, mod: string): Promise<void> {
-  await page
-    .waitForResponse(
-      (response) =>
-        response.url().includes(`mod=${mod}`) &&
-        response.url().includes("act=list") &&
-        response.ok(),
-      { timeout: 15_000 }
-    )
-    .catch(() => {
-      // 某些操作不触发列表刷新，交给后续断言报错
-    })
+export async function waitForApi<T = unknown>(
+  page: Page,
+  mod: string,
+  act: string
+): Promise<T> {
+  const response = await page.waitForResponse(
+    (candidate) => {
+      const url = new URL(candidate.url())
+      return (
+        url.pathname.endsWith("/zb_system/admin-next/api.php") &&
+        url.searchParams.get("mod") === mod &&
+        url.searchParams.get("act") === act
+      )
+    },
+    { timeout: 15_000 }
+  )
+
+  const text = await response.text()
+  expect(
+    response.ok(),
+    `${mod}.${act} HTTP ${response.status()}: ${text.slice(0, 500)}`
+  ).toBe(true)
+
+  let payload: ApiEnvelope<T>
+  try {
+    payload = JSON.parse(text) as ApiEnvelope<T>
+  } catch {
+    throw new Error(`${mod}.${act} returned a non-JSON response: ${text.slice(0, 500)}`)
+  }
+  expect(payload, `${mod}.${act} returned an invalid API envelope`).not.toBeNull()
+  expect(payload.code, `${mod}.${act} API error: ${payload.message ?? ""}`).toBe(
+    200
+  )
+  expect(payload.error, `${mod}.${act} API error: ${payload.message ?? ""}`).toBeNull()
+
+  return payload.data
+}
+
+/** 等列表数据落定，并校验列表接口的 HTTP 与 envelope。 */
+export async function waitForList<T = unknown>(page: Page, mod: string): Promise<T> {
+  return waitForApi<T>(page, mod, "list")
 }

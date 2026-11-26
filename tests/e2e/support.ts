@@ -37,10 +37,17 @@ export async function login(page: import("@playwright/test").Page) {
 export async function expectAdminShell(page: import("@playwright/test").Page) {
   await expect(page.locator("#zb-admin-root")).toBeVisible()
 
-  // 移动端侧栏收在抽屉里，只校验顶部栏；桌面端校验侧边导航
+  // 移动端侧栏收在抽屉里；桌面折叠态会隐藏导航文字，不能强制要求展开文案。
   const aside = page.locator("#zb-admin-root aside")
   if (await aside.isVisible()) {
-    await expect(aside.locator("nav")).toContainText("文章管理")
+    const navigation = aside.locator("nav")
+    const toggle = page.getByRole("button", { name: "折叠/展开侧栏" })
+    await expect(navigation).toBeVisible()
+    if ((await toggle.getAttribute("aria-expanded")) === "false") {
+      await expect(toggle).toHaveAttribute("aria-expanded", "false")
+    } else {
+      await expect(navigation).toContainText("文章管理")
+    }
   } else {
     await expect(
       page.getByRole("button", { name: "打开菜单" })

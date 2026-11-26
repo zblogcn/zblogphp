@@ -8,6 +8,10 @@
     "dev": "vite",
     "build": "tsc --noEmit && vite build && node scripts/clean-html.mjs",
     "typecheck": "tsc --noEmit",
+    "verify": "pnpm build && pnpm verify:assets && pnpm verify:size && pnpm verify:release",
+    "verify:assets": "node scripts/verify-assets.mjs",
+    "verify:size": "node scripts/verify-size.mjs",
+    "verify:release": "node scripts/verify-release.mjs",
     "preview": "vite preview"
   },
   "pnpm": {

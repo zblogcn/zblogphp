@@ -1,28 +1,62 @@
-import { expect } from "@playwright/test"
-
 import { expectAdminShell, login } from "../support"
-import { test } from "../crud-support"
-import { rowAction, rowByText, rowLink, waitForList } from "../row-helpers"
+import {
+  cleanupCommentRecords,
+  cleanupNamedRecords,
+  cleanupPostRecords,
+  cleanupUploadRecords,
+  expect,
+  fixtureName,
+  restoreCommentFixture,
+  test,
+} from "../crud-support"
+import {
+  rowAction,
+  rowByText,
+  rowLink,
+  waitForApi,
+  waitForList,
+} from "../row-helpers"
 
 /**
  * admin-next CRUD smoke tests.
  *
- * These create and delete their own records, so they are safe on a development
- * site but should not be pointed at production data.
- * Enable with ZBP_E2E_WRITE=1.
+ * 写用例只接受显式隔离标记与 loopback 地址；每个用例创建自己的唯一 fixture，
+ * 并由 afterEach/finally 按 ID 或精确名称强制清理。
  */
 
-const writeEnabled = process.env.ZBP_E2E_WRITE === "1"
+const writeRequested = process.env.ZBP_E2E_WRITE === "1"
+const isolatedLoopback = (() => {
+  try {
+    const url = new URL(process.env.ZBP_BASE_URL ?? "http://127.0.0.1:8099/")
+    return (
+      process.env.ZBP_E2E_ISOLATED === "1" &&
+      (url.protocol === "http:" || url.protocol === "https:") &&
+      ["127.0.0.1", "localhost", "[::1]", "::1"].includes(url.hostname)
+    )
+  } catch {
+    return false
+  }
+})()
 
-/** 等待一次列表刷新后再断言（发送动作前挂监听，避免错过响应）。 */
-async function actAndSettle(
+if (writeRequested && !isolatedLoopback) {
+  throw new Error(
+    "ZBP_E2E_WRITE=1 requires ZBP_E2E_ISOLATED=1 and a loopback ZBP_BASE_URL"
+  )
+}
+
+const writeEnabled = writeRequested
+const seededComment = process.env.ZBP_E2E_COMMENT_MARKER ?? "Isolated E2E comment"
+const seededUser = process.env.ZBP_E2E_USER_NAME ?? "e2e_user"
+
+/** 等待一次 API 落定；监听必须在动作前挂好。 */
+async function actAndSettle<T = unknown>(
   page: Parameters<typeof waitForList>[0],
   mod: string,
-  action: () => Promise<void>
-) {
-  const settled = waitForList(page, mod)
-  await action()
-  await settled
+  action: () => Promise<void>,
+  act = "list"
+): Promise<T> {
+  const [data] = await Promise.all([waitForApi<T>(page, mod, act), action()])
+  return data
 }
 
 test.beforeEach(async ({ page }) => {
@@ -32,20 +66,31 @@ test.beforeEach(async ({ page }) => {
   await expectAdminShell(page)
 })
 
-/** 进入指定 hash 路由，并等待目标页面渲染完成。 */
-async function gotoPage(page: Parameters<typeof waitForList>[0], hash: string, marker: string) {
+/** 进入指定 hash 路由；列表页同时严格校验列表 API。 */
+async function gotoPage(
+  page: Parameters<typeof waitForList>[0],
+  hash: string,
+  marker: string,
+  mod?: string
+) {
+  const settled = mod ? waitForList(page, mod) : Promise.resolve()
   await page.goto(`zb_system/admin-next/index.php${hash}`)
+  await settled
   await expect(page.getByRole("heading", { name: marker })).toBeVisible()
 }
 
 test.describe("分类增删改", () => {
   test.beforeEach(async ({ page }) => {
     test.skip(!writeEnabled, "set ZBP_E2E_WRITE=1 to run write tests")
-    await gotoPage(page, "#/categories", "分类管理")
+    await gotoPage(page, "#/categories", "分类管理", "category")
   })
 
-  test("可以新建、编辑并删除分类", async ({ page }) => {
-    const name = `E2E-Category-${Date.now()}`
+  test("可以新建、编辑并删除分类", async ({ page, writeFixture }) => {
+    const name = fixtureName(writeFixture, "Category")
+    const renamed = `${name}-x`
+    writeFixture.cleanup((api) =>
+      cleanupNamedRecords(api, "category", [name, renamed])
+    )
 
     await page.getByRole("button", { name: "新建" }).click()
     const dialog = page.getByRole("dialog")
@@ -60,33 +105,34 @@ test.describe("分类增删改", () => {
 
     await rowAction(rowByText(page, name), "编辑").click()
     await expect(dialog).toBeVisible()
-    await dialog.locator("#term-name").fill(`${name}-x`)
+    await dialog.locator("#term-name").fill(renamed)
 
     await actAndSettle(page, "category", async () => {
       await dialog.getByRole("button", { name: "保存" }).click()
     })
     await expect(dialog).toBeHidden()
-    await expect(page.locator("table")).toContainText(`${name}-x`)
+    await expect(page.locator("table")).toContainText(renamed)
 
-    await rowAction(rowByText(page, `${name}-x`), "删除").click()
+    await rowAction(rowByText(page, renamed), "删除").click()
     const confirm = page.getByRole("alertdialog")
     await expect(confirm).toBeVisible()
 
     await actAndSettle(page, "category", async () => {
       await confirm.getByRole("button", { name: "删除" }).click()
     })
-    await expect(page.locator("table")).not.toContainText(`${name}-x`)
+    await expect(page.locator("table")).not.toContainText(renamed)
   })
 })
 
 test.describe("标签增删", () => {
   test.beforeEach(async ({ page }) => {
     test.skip(!writeEnabled, "set ZBP_E2E_WRITE=1 to run write tests")
-    await gotoPage(page, "#/tags", "标签管理")
+    await gotoPage(page, "#/tags", "标签管理", "tag")
   })
 
-  test("可以新建并删除标签", async ({ page }) => {
-    const name = `E2E-Tag-${Date.now()}`
+  test("可以新建并删除标签", async ({ page, writeFixture }) => {
+    const name = fixtureName(writeFixture, "Tag")
+    writeFixture.cleanup((api) => cleanupNamedRecords(api, "tag", [name]))
 
     await page.getByRole("button", { name: "新建" }).click()
     const dialog = page.getByRole("dialog")
@@ -113,11 +159,12 @@ test.describe("标签增删", () => {
 test.describe("模块增删", () => {
   test.beforeEach(async ({ page }) => {
     test.skip(!writeEnabled, "set ZBP_E2E_WRITE=1 to run write tests")
-    await gotoPage(page, "#/modules", "模块管理")
+    await gotoPage(page, "#/modules", "模块管理", "module")
   })
 
-  test("可以新建并删除自定义模块", async ({ page }) => {
-    const name = `E2E-Module-${Date.now()}`
+  test("可以新建并删除自定义模块", async ({ page, writeFixture }) => {
+    const name = fixtureName(writeFixture, "Module")
+    writeFixture.cleanup((api) => cleanupNamedRecords(api, "module", [name]))
 
     await page.getByRole("button", { name: "新建" }).click()
     const dialog = page.getByRole("dialog")
@@ -146,23 +193,16 @@ test.describe("模块增删", () => {
 
 test.describe("用户删除确认", () => {
   test("按删除数据选项说明文章评论处理方式，并明确附件会删除", async ({ page }) => {
-    const memberListResponse = page.waitForResponse(
-      (response) =>
-        response.url().includes("mod=member") &&
-        response.url().includes("act=list")
-    )
+    const memberListResponse = waitForList<{
+      delete_member_with_all_data: boolean
+    }>(page, "member")
     await gotoPage(page, "#/members", "用户管理")
-    const memberList = await (await memberListResponse).json()
-    const deleteWithAllData =
-      memberList.data.delete_member_with_all_data === true
+    const memberList = await memberListResponse
+    const deleteWithAllData = memberList.delete_member_with_all_data === true
 
-    await expect(page.locator("table tbody tr").first()).toBeVisible({
-      timeout: 15_000,
-    })
-
-    const deleteButton = page
-      .locator('button[aria-label="删除"]:not([disabled])')
-      .first()
+    const userRow = rowByText(page, seededUser)
+    await expect(userRow).toBeVisible({ timeout: 15_000 })
+    const deleteButton = rowAction(userRow, "删除")
     test.skip((await deleteButton.count()) === 0, "没有可删除的其他用户")
 
     await deleteButton.click()
@@ -179,16 +219,14 @@ test.describe("用户删除确认", () => {
 
 test.describe("评论管理", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("zb_system/admin-next/index.php#/comments")
+    await gotoPage(page, "#/comments", "评论管理", "comment")
   })
 
   test("评论列表可以打开编辑弹窗并取消", async ({ page }) => {
-    // 列表是异步渲染的，先等表格出现再判断有没有评论
-    await expect(page.locator("table tbody tr").first()).toBeVisible({
-      timeout: 15_000,
-    })
-    const editButton = page.locator('button[aria-label="编辑"]').first()
-    test.skip((await editButton.count()) === 0, "站点没有评论")
+    const commentRow = rowByText(page, seededComment)
+    await expect(commentRow).toBeVisible({ timeout: 15_000 })
+    const editButton = rowAction(commentRow, "编辑")
+    test.skip((await editButton.count()) === 0, "站点没有隔离评论 fixture")
 
     await editButton.click()
     const dialog = page.getByRole("dialog")
@@ -197,17 +235,150 @@ test.describe("评论管理", () => {
     await dialog.getByRole("button", { name: "取消" }).click()
     await expect(dialog).toBeHidden()
   })
+
+  test("编辑自建评论时数量不变、内容更新且作者不变，随后还原", async ({
+    page,
+    writeFixture,
+  }) => {
+    test.skip(!writeEnabled, "set ZBP_E2E_WRITE=1 to run write tests")
+    const originalContent = fixtureName(writeFixture, "Comment")
+    const updatedContent = fixtureName(writeFixture, "CommentEdited")
+    let commentId = 0
+    writeFixture.cleanup((api) =>
+      cleanupCommentRecords(api, commentId, [originalContent, updatedContent])
+    )
+
+    const created = await writeFixture.api<{ comment: { ID: number } }>(
+      "comment",
+      "post",
+      {
+        method: "POST",
+        body: {
+          postid: 1,
+          content: originalContent,
+          email: "e2e-comment@example.invalid",
+        },
+      }
+    )
+    commentId = Number(created.comment.ID)
+    if (!Number.isSafeInteger(commentId) || commentId <= 0) {
+      throw new Error("评论 fixture 创建失败")
+    }
+
+    interface CommentFixtureRow {
+      ID: number
+      Content: string
+      AuthorID: number
+      Name: string
+      Email: string
+      Author?: { Name?: string }
+    }
+    interface CommentFixtureList {
+      list: CommentFixtureRow[]
+      pagebar: { AllCount: number }
+    }
+    const listComments = () =>
+      writeFixture.api<CommentFixtureList>("comment", "list", {
+        query: { manage: 1, perpage: 100 },
+      })
+
+    let original: CommentFixtureRow | undefined
+    try {
+      // beforeEach 已经在 #/comments；创建评论后重新加载并等待新的列表响应，
+      // 不能对同一 hash 再 page.goto，否则不会产生列表请求。
+      const refreshed = waitForList(page, "comment")
+      await page.reload()
+      await refreshed
+      await expect(page.getByRole("heading", { name: "评论管理" })).toBeVisible()
+      const beforeList = await listComments()
+      original = beforeList.list.find((row) => row.ID === commentId)
+      if (!original) {
+        throw new Error(`评论 fixture ID ${commentId} 未出现在管理列表`)
+      }
+      const countBefore = beforeList.pagebar.AllCount
+      const authorName = original.Author?.Name ?? original.Name
+      const commentRow = rowByText(page, originalContent)
+      await expect(commentRow).toBeVisible()
+      await expect(commentRow).toContainText(authorName)
+
+      await rowAction(commentRow, "编辑").click()
+      const dialog = page.getByRole("dialog")
+      await expect(dialog).toBeVisible()
+      await expect(dialog.locator("#comment-content")).toHaveValue(
+        originalContent
+      )
+      await dialog.locator("#comment-content").fill(updatedContent)
+      await actAndSettle(
+        page,
+        "comment",
+        async () => {
+          await dialog.getByRole("button", { name: "保存" }).click()
+        },
+        "put"
+      )
+      await expect(dialog).toBeHidden()
+
+      const updatedRow = rowByText(page, updatedContent)
+      await expect(updatedRow).toBeVisible()
+      await expect(updatedRow).toContainText(authorName)
+      const afterList = await listComments()
+      expect(afterList.pagebar.AllCount).toBe(countBefore)
+      const updated = afterList.list.find((row) => row.ID === commentId)
+      expect(updated).toBeDefined()
+      expect(updated!.Content).toBe(updatedContent)
+      expect(updated!.AuthorID).toBe(original.AuthorID)
+      expect(updated!.Name).toBe(original.Name)
+
+      await rowAction(updatedRow, "编辑").click()
+      await expect(dialog).toBeVisible()
+      await expect(dialog.locator("#comment-content")).toHaveValue(
+        updatedContent
+      )
+      await dialog.locator("#comment-content").fill(originalContent)
+      await actAndSettle(
+        page,
+        "comment",
+        async () => {
+          await dialog.getByRole("button", { name: "保存" }).click()
+        },
+        "put"
+      )
+      await expect(dialog).toBeHidden()
+      await expect(rowByText(page, originalContent)).toBeVisible()
+
+      const restoredList = await listComments()
+      const restored = restoredList.list.find((row) => row.ID === commentId)
+      expect(restored?.Content).toBe(originalContent)
+      expect(restored?.AuthorID).toBe(original.AuthorID)
+      expect(restored?.Name).toBe(original.Name)
+      expect(restoredList.pagebar.AllCount).toBe(countBefore)
+    } finally {
+      if (original) {
+        await writeFixture.api("comment", "put", {
+          method: "POST",
+          body: {
+            ID: commentId,
+            Content: originalContent,
+            Name: original.Name,
+            Email: original.Email,
+          },
+        })
+      }
+    }
+  })
 })
 
 test.describe("附件上传", () => {
   test.beforeEach(async ({ page }) => {
     test.skip(!writeEnabled, "set ZBP_E2E_WRITE=1 to run write tests")
-    await gotoPage(page, "#/uploads", "附件管理")
+    await gotoPage(page, "#/uploads", "附件管理", "upload")
   })
 
-  test("可以上传附件并删除", async ({ page }) => {
-    const stamp = Date.now()
-    const fileName = `e2e-${stamp}.txt`
+  test("可以上传附件并删除", async ({ page, writeFixture }) => {
+    const fileName = `${fixtureName(writeFixture, "Upload")}.txt`
+    writeFixture.cleanup((api) =>
+      cleanupUploadRecords(api, fileName, writeFixture.token)
+    )
 
     await actAndSettle(page, "upload", async () => {
       await page.locator('input[type="file"]').setInputFiles({
@@ -217,8 +388,7 @@ test.describe("附件上传", () => {
       })
     })
 
-    // 列表按 ID 倒序，刚上传的文件应在第一行；
-    // 服务端会重命名文件，因此用 SourceName 里的原始名定位更稳。
+    // 服务端可能重命名文件，用 SourceName 里的原始名定位。
     const uploadedRow = rowByText(page, fileName)
     await expect(uploadedRow).toBeVisible({ timeout: 10_000 })
 
@@ -236,14 +406,10 @@ test.describe("附件上传", () => {
 
 test.describe("文章删除", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("zb_system/admin-next/index.php#/posts")
+    await gotoPage(page, "#/posts", "文章管理", "post")
   })
 
   test("文章行提供删除入口且需要二次确认", async ({ page }) => {
-    // 列表是异步渲染的，先等表格出现再判断有没有文章
-    await expect(page.locator("table tbody tr").first()).toBeVisible({
-      timeout: 15_000,
-    })
     const deleteButton = page.locator('button[aria-label="删除"]').first()
     test.skip((await deleteButton.count()) === 0, "站点没有文章")
 
@@ -251,14 +417,14 @@ test.describe("文章删除", () => {
     const confirm = page.getByRole("alertdialog")
     await expect(confirm).toBeVisible()
 
-    // 只验证弹窗，不真的删除内容
+    // 只验证弹窗，不真的删除内容。
     await confirm.getByRole("button", { name: "取消" }).click()
     await expect(confirm).toBeHidden()
   })
 })
 
 test.describe("文章编辑器", () => {
-  test.beforeEach(async ({ page }) => {
+  test.beforeEach(async () => {
     test.skip(!writeEnabled, "set ZBP_E2E_WRITE=1 to run write tests")
   })
 
@@ -269,7 +435,6 @@ test.describe("文章编辑器", () => {
     const blockEditor = page.locator(".zbpe-content")
     const fallback = page.locator('textarea[aria-label="正文"]')
 
-    // 编辑器是异步加载的：先等两者之一出现
     await expect(blockEditor.or(fallback).first()).toBeVisible({
       timeout: 15_000,
     })
@@ -277,13 +442,81 @@ test.describe("文章编辑器", () => {
     test.skip((await blockEditor.count()) === 0, "未启用区块编辑器插件")
 
     await expect(page.locator(".zbpe-btn")).not.toHaveCount(0)
-    // 有插件编辑器时不应再显示回退文本框
     await expect(fallback).toHaveCount(0)
   })
 
-  test("可以新建文章、回填编辑并删除", async ({ page }) => {
-    const stamp = Date.now()
-    const title = `E2E-Post-${stamp}`
+  test("BlockEditor 可上传并插入 1x1 PNG，且上传记录可清理", async ({
+    page,
+    writeFixture,
+  }) => {
+    const editor = page.locator(".zbpe-content")
+    await page.goto("zb_system/admin-next/index.php#/posts/new")
+    await expect(page.getByRole("heading", { name: "新建文章" })).toBeVisible()
+    await expect(editor).toBeVisible({ timeout: 15_000 })
+    test.skip((await editor.count()) === 0, "未启用区块编辑器插件")
+
+    const fileName = `${fixtureName(writeFixture, "Image")}.png`
+    const onePixelPng = Buffer.from(
+      "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=",
+      "base64"
+    )
+    writeFixture.cleanup((api) =>
+      cleanupUploadRecords(api, fileName, writeFixture.token)
+    )
+
+    await page.fill('input[aria-label="标题"]', fixtureName(writeFixture, "ImagePost"))
+    await editor.click()
+    await page.keyboard.type(`图片测试 ${writeFixture.token}`)
+
+    const fileChooserPromise = page.waitForEvent("filechooser")
+    await page.getByRole("button", { name: "插入图片" }).click()
+    const fileChooser = await fileChooserPromise
+    const uploadedPromise = waitForApi<{
+      upload: { ID: number; Name: string; Url: string }
+    }>(page, "upload", "post")
+    await fileChooser.setFiles({
+      name: fileName,
+      mimeType: "image/png",
+      buffer: onePixelPng,
+    })
+    const { upload } = await uploadedPromise
+
+    const image = editor.locator("img")
+    await expect(image).toHaveCount(1)
+    await expect(image).toBeVisible()
+    await expect(image).toHaveAttribute(
+      "src",
+      new URL(upload.Url, page.url()).href
+    )
+    await expect
+      .poll(() =>
+        image.evaluate((element) => (element as HTMLImageElement).naturalWidth)
+      )
+      .toBe(1)
+
+    const uploadList = await writeFixture.api<
+      Array<{
+        list: Array<{ ID: number; Name: string; SourceName?: string }>
+      }>
+    >("upload", "list", {
+      query: { page: 1, perpage: 100, sortby: "ID", order: "DESC" },
+    })
+    expect(
+      uploadList[0]?.list.some(
+        (row) => row.ID === Number(upload.ID) && row.SourceName === fileName
+      )
+    ).toBe(true)
+
+    await cleanupUploadRecords(writeFixture.api, fileName, writeFixture.token)
+  })
+
+  test("可以新建文章、回填编辑并删除", async ({ page, writeFixture }) => {
+    const title = fixtureName(writeFixture, "Post")
+    const renamed = `${title}-改`
+    const postIds = new Set<number>()
+    writeFixture.cleanup((api) =>
+      cleanupPostRecords(api, 0, [title, renamed], postIds)
+    )
     const editor = page.locator(".zbpe-content")
     const fallback = page.locator('textarea[aria-label="正文"]')
 
@@ -296,46 +529,54 @@ test.describe("文章编辑器", () => {
     const useBlockEditor = (await editor.count()) > 0
     if (useBlockEditor) {
       await editor.click()
-      await page.keyboard.type(`第一段 ${stamp}`)
-      // 分隔符在编辑器内显示为 <hr class="more">
+      await page.keyboard.type(`第一段 ${writeFixture.token}`)
       await page.getByRole("button", { name: "插入更多分隔符" }).click()
       await page.keyboard.type("第二段")
     } else {
-      await fallback.fill(`<p>第一段 ${stamp}</p><hr class="more" /><p>第二段</p>`)
+      await fallback.fill(
+        `<p>第一段 ${writeFixture.token}</p><hr class="more" /><p>第二段</p>`
+      )
     }
 
-    await actAndSettle(page, "post", async () => {
-      await page.getByRole("button", { name: /发布/ }).click()
-    })
+    await actAndSettle(
+      page,
+      "post",
+      async () => {
+        await page.getByRole("button", { name: /发布/ }).click()
+      },
+      "post"
+    )
 
-    // 新建成功后原地转到编辑态
     await expect(page).toHaveURL(/posts\/\d+\/edit/)
     const postId = Number(page.url().match(/posts\/(\d+)\/edit/)![1])
+    postIds.add(postId)
 
-    // 列表里能看到新文章
-    await page.goto("zb_system/admin-next/index.php#/posts")
+    await gotoPage(page, "#/posts", "文章管理", "post")
     const row = rowByText(page, title)
     await expect(row).toBeVisible({ timeout: 15_000 })
 
-    // 打开编辑页，标题与正文都应回填
     await rowLink(row, "编辑").click()
     await expect(page).toHaveURL(new RegExp(`posts/${postId}/edit`))
     await expect(page.locator('input[aria-label="标题"]')).toHaveValue(title)
     if (useBlockEditor) {
-      await expect(editor).toContainText(`第一段 ${stamp}`)
-      await expect(editor.locator('hr.more')).toHaveCount(1)
+      await expect(editor).toContainText(`第一段 ${writeFixture.token}`)
+      await expect(editor.locator("hr.more")).toHaveCount(1)
     } else {
-      await expect(fallback).toHaveValue(new RegExp(`第一段 ${stamp}`))
+      await expect(fallback).toHaveValue(new RegExp(`第一段 ${writeFixture.token}`))
     }
 
-    // 改标题后保存
-    const renamed = `${title}-改`
     await page.fill('input[aria-label="标题"]', renamed)
-    await page.getByRole("button", { name: /发布/ }).click()
+    await actAndSettle(
+      page,
+      "post",
+      async () => {
+        await page.getByRole("button", { name: /发布/ }).click()
+      },
+      "post"
+    )
     await expect(page.getByText("已保存")).toBeVisible({ timeout: 15_000 })
 
-    // 回列表确认改名生效，然后删除
-    await page.goto("zb_system/admin-next/index.php#/posts")
+    await gotoPage(page, "#/posts", "文章管理", "post")
     const renamedRow = rowByText(page, renamed)
     await expect(renamedRow).toBeVisible({ timeout: 15_000 })
 
@@ -349,9 +590,12 @@ test.describe("文章编辑器", () => {
     await expect(rowByText(page, renamed)).toHaveCount(0)
   })
 
-  test("页面同样可以通过编辑器新建", async ({ page }) => {
-    const stamp = Date.now()
-    const title = `E2E-Page-${stamp}`
+  test("页面同样可以通过编辑器新建", async ({ page, writeFixture }) => {
+    const title = fixtureName(writeFixture, "Page")
+    const pageIds = new Set<number>()
+    writeFixture.cleanup((api) =>
+      cleanupPostRecords(api, 1, [title], pageIds)
+    )
 
     await page.goto("zb_system/admin-next/index.php#/pages/new")
     await expect(page.getByRole("heading", { name: "新建页面" })).toBeVisible()
@@ -363,22 +607,29 @@ test.describe("文章编辑器", () => {
     await expect(editor.or(fallback).first()).toBeVisible({ timeout: 15_000 })
     if ((await editor.count()) > 0) {
       await editor.click()
-      await page.keyboard.type(`页面正文 ${stamp}`)
+      await page.keyboard.type(`页面正文 ${writeFixture.token}`)
     } else {
-      await fallback.fill(`<p>页面正文 ${stamp}</p>`)
+      await fallback.fill(`<p>页面正文 ${writeFixture.token}</p>`)
     }
 
-    await actAndSettle(page, "post", async () => {
-      await page.getByRole("button", { name: /发布/ }).click()
-    })
+    await actAndSettle(
+      page,
+      "post",
+      async () => {
+        await page.getByRole("button", { name: /发布/ }).click()
+      },
+      "post"
+    )
     await expect(page).toHaveURL(/pages\/\d+\/edit/)
+    pageIds.add(Number(page.url().match(/pages\/(\d+)\/edit/)![1]))
 
-    await page.goto("zb_system/admin-next/index.php#/pages")
+    await gotoPage(page, "#/pages", "页面管理", "post")
     const row = rowByText(page, title)
     await expect(row).toBeVisible({ timeout: 15_000 })
 
     await rowAction(row, "删除").click()
     const confirm = page.getByRole("alertdialog")
+    await expect(confirm).toBeVisible()
     await actAndSettle(page, "post", async () => {
       await confirm.getByRole("button", { name: "删除" }).click()
     })
@@ -387,39 +638,80 @@ test.describe("文章编辑器", () => {
 })
 
 test.describe("评论审核", () => {
-  test("可以在待审与已审之间切换", async ({ page }) => {
+  test("使用隔离评论切换审核状态并按固定 ID 还原", async ({
+    page,
+    writeFixture,
+  }) => {
     test.skip(!writeEnabled, "set ZBP_E2E_WRITE=1 to run write tests")
-    await page.goto("zb_system/admin-next/index.php#/comments")
-    await expect(page.getByRole("heading", { name: "评论管理" })).toBeVisible()
+    const configuredId = Number(process.env.ZBP_E2E_COMMENT_ID)
+    const hasConfiguredId = Number.isSafeInteger(configuredId) && configuredId > 0
+    let fixture:
+      | { ID: number; Content: string; IsChecking: number }
+      | undefined
 
-    // 优先挑一条待审核的评论，避免默认首条已被审核。
-    // 列表异步渲染，先等表格出现再定位。
-    await expect(page.locator("table tbody tr").first()).toBeVisible({
-      timeout: 15_000,
-    })
+    for (const ischecking of [0, 1]) {
+      const data = await writeFixture.api<{
+        list: Array<{ ID: number; Content: string; IsChecking: number }>
+      }>("comment", "list", {
+        query: { manage: 1, ischecking, perpage: 100 },
+      })
+      fixture = data.list.find(
+        (row) =>
+          row.Content === seededComment &&
+          (!hasConfiguredId || row.ID === configuredId)
+      )
+      if (fixture) {
+        break
+      }
+    }
 
-    const pendingRow = page
-      .locator("table tbody tr")
-      .filter({ has: page.getByText("待审核", { exact: true }) })
-      .first()
-    const toggle = (await pendingRow.count())
-      ? pendingRow.locator('button[aria-label="通过审核"]')
-      : page.locator('button[aria-label="转为待审"]').first()
+    if (!fixture) {
+      throw new Error("未找到唯一隔离评论 fixture")
+    }
+    const commentId = fixture.ID
+    const originalChecking = Number(fixture.IsChecking)
+    if (originalChecking !== 0 && originalChecking !== 1) {
+      throw new Error(`评论 fixture ID ${commentId} 审核状态无效`)
+    }
+    expect(originalChecking, "评论管理列表需要已通过的隔离评论").toBe(0)
+    writeFixture.cleanup((api) =>
+      restoreCommentFixture(api, commentId, originalChecking)
+    )
 
-    // 用断言代替 test.skip：站点已有评论时不应被跳过
-    await expect(toggle).toBeVisible({ timeout: 15_000 })
+    await gotoPage(page, "#/comments", "评论管理", "comment")
+    const commentRow = rowByText(page, seededComment)
+    await expect(commentRow).toBeVisible()
+    const toggle = commentRow.getByRole("button", { name: "转为待审" })
+    await expect(toggle).toBeVisible()
 
-    // 这一步点击后，该行按钮应从「通过审核」变成「转为待审」
-    await actAndSettle(page, "comment", async () => {
+    try {
+      const checked = waitForApi(page, "comment", "check")
       await toggle.click()
-    })
-    await expect(
-      page.locator('button[aria-label="转为待审"]').first()
-    ).toBeVisible({ timeout: 15_000 })
+      await checked
 
-    // 还原：再点一次同一位置（此时它显示为「转为待审」）
-    await actAndSettle(page, "comment", async () => {
-      await page.locator('button[aria-label="转为待审"]').first().click()
-    })
+      // 管理列表默认只显示已通过评论；转为待审后该 fixture 行应消失。
+      // 不能拿全局第一个按钮的状态代替，也不能要求已隐藏行继续显示按钮。
+      await expect(commentRow).toHaveCount(0)
+      const pending = await writeFixture.api<{ list: Array<{ ID: number }> }>(
+        "comment",
+        "list",
+        { query: { manage: 1, ischecking: 1, perpage: 100 } }
+      )
+      expect(pending.list.some((row) => row.ID === commentId)).toBe(true)
+    } finally {
+      // 还原只认固定 ID，绝不点击页面上的全局第一个按钮。
+      await restoreCommentFixture(
+        writeFixture.api,
+        commentId,
+        originalChecking
+      )
+      const settled = waitForList(page, "comment")
+      await page.reload()
+      await settled
+      await expect(rowByText(page, seededComment)).toBeVisible()
+      await expect(
+        rowByText(page, seededComment).getByRole("button", { name: "转为待审" })
+      ).toBeVisible()
+    }
   })
 })

@@ -5,17 +5,24 @@ Z-BlogPHP 新版后台（SPA）的前端工程。构建产物输出到
 
 ## 环境
 
-- Node 22+（当前开发使用 24）
-- pnpm 10+
+- Node 22+
+- pnpm 10.30.3（与 `packageManager` 和 CI 一致）
 
 ## 命令
 
 ```bash
-pnpm install
+pnpm install --frozen-lockfile
 pnpm dev        # 本地开发（无 PHP 时使用内置假数据）
-pnpm build      # 类型检查 + 构建到 zb_system/admin-next/assets/
 pnpm typecheck
+pnpm build      # 类型检查 + 构建到 zb_system/admin-next/assets/
+pnpm verify     # build + verify:assets（build 自身包含类型检查）
+pnpm verify:assets
+git diff --exit-code -- ../../zb_system/admin-next/assets
 ```
+
+`verify:assets` 校验 Vite manifest 的必需入口、路径安全、文件存在、imports/dynamicImports
+引用、未登记产物与不可达 JS。构建成功不等于产物一致；提交前必须同时确认重构建后
+`zb_system/admin-next/assets/` 没有 diff 或未跟踪文件。
 
 开发模式下如果没有 `window.__ZB__`，会自动使用 `src/lib/zbp.ts` 里的假数据，
 只用于调界面；接口相关逻辑请通过 PHP 入口验证：

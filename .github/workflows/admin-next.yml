@@ -1,0 +1,221 @@
+name: admin-next CI
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: admin-next-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  frontend:
+    name: Frontend build and artifact gate
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: utils/admin-next-src
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.30.3
+
+      - name: Setup Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: utils/admin-next-src/pnpm-lock.yaml
+
+      - name: Install with frozen lockfile
+        run: pnpm install --frozen-lockfile
+
+      - name: Typecheck
+        run: pnpm typecheck
+
+      - name: Build
+        run: pnpm build
+
+      - name: Verify assets against manifest
+        run: pnpm verify:assets
+
+      - name: Verify gzip size budgets
+        run: pnpm verify:size
+
+      - name: Require committed assets to match rebuild
+        working-directory: .
+        run: |
+          git diff --exit-code -- zb_system/admin-next/assets
+          test -z "$(git status --porcelain -- zb_system/admin-next/assets)"
+
+      - name: Verify release archive boundary
+        run: pnpm verify:release
+
+  phpunit:
+    name: PHPUnit (admin-next and core)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.4"
+          extensions: dom, mbstring, simplexml, sqlite3, pdo_sqlite
+          coverage: none
+          tools: composer:v2
+
+      - name: Validate Composer lockfile
+        run: composer validate --strict --no-check-publish
+
+      - name: Install dependencies
+        run: composer install --prefer-dist --no-progress --no-interaction
+
+      - name: Run admin-next PHPUnit
+        run: vendor/bin/phpunit -c tests/phpunit-admin-next.xml
+
+      - name: Run core PHPUnit
+        run: vendor/bin/phpunit -c tests/phpunit.xml
+
+  e2e-isolated:
+    name: Playwright (disposable PHP 8.0 site)
+    needs: [frontend, phpunit]
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      ZBP_BASE_URL: http://127.0.0.1:8099/
+      ZBP_USER: admin
+      ZBP_PASS: admin-next-e2e-${{ github.run_id }}
+      # Write tests are enabled only inside this disposable job.
+      ZBP_E2E_ISOLATED: "1"
+      ZBP_E2E_WRITE: "1"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Verify E2E isolation contract
+        run: |
+          test "$ZBP_E2E_ISOLATED" = "1"
+          case "$ZBP_BASE_URL" in
+            http://127.0.0.1:*/*|http://localhost:*/*) ;;
+            *) echo "Refusing non-loopback E2E target: $ZBP_BASE_URL"; exit 1 ;;
+          esac
+          test ! -f zb_users/c_option.php
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.0"
+          extensions: dom, mbstring, simplexml, sqlite3, pdo_sqlite, gd, curl
+          coverage: none
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.30.3
+
+      - name: Setup Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: tests/e2e/pnpm-lock.yaml
+
+      - name: Install E2E dependencies with frozen lockfile
+        working-directory: tests/e2e
+        run: pnpm install --frozen-lockfile
+
+      - name: Install Chromium
+        working-directory: tests/e2e
+        run: pnpm exec playwright install --with-deps chromium
+
+      - name: Install disposable SQLite site
+        run: |
+          php zb_install/cli.php \
+            --db-type=pdo_sqlite \
+            --site-name="admin-next isolated E2E" \
+            --admin-user="$ZBP_USER" \
+            --admin-password="$ZBP_PASS"
+
+      - name: Enable BlockEditor and seed isolated fixtures
+        run: |
+          php -r '
+            require "zb_system/function/c_system_base.php";
+            $zbp->Load();
+            $zbp->option["ZC_ADMIN_UI"] = "next";
+            $zbp->option["ZC_USING_PLUGIN_LIST"] = "BlockEditor";
+            $zbp->SaveOption();
+            $app = $zbp->LoadApp("plugin", "BlockEditor");
+            if (!$app->isloaded || $app->admin === null || empty($app->admin["editor"])) {
+                fwrite(STDERR, "BlockEditor manifest is unavailable\n");
+                exit(1);
+            }
+            $member = new Member();
+            $member->Guid = GetGuid();
+            $member->Name = "e2e_user";
+            $member->Alias = "E2E User";
+            $member->Email = "user@example.invalid";
+            $member->Level = 5;
+            $member->Status = 0;
+            $member->Password = Member::GetPassWordByGuid("isolated-only", $member->Guid);
+            $member->PostTime = time();
+            $member->Save();
+            $comment = new Comment();
+            $comment->LogID = 1;
+            $comment->ParentID = 0;
+            $comment->RootID = 0;
+            $comment->AuthorID = 0;
+            $comment->Name = "E2E Guest";
+            $comment->Email = "e2e@example.invalid";
+            $comment->HomePage = "";
+            $comment->Content = "Isolated E2E comment";
+            $comment->PostTime = time();
+            $comment->Save();
+          '
+
+      - name: Start isolated PHP server
+        run: |
+          php -S 127.0.0.1:8099 -t . > /tmp/admin-next-php.log 2>&1 &
+          echo $! > /tmp/admin-next-php.pid
+
+      - name: Wait for isolated site
+        run: |
+          curl --fail --silent --show-error \
+            --retry 30 --retry-connrefused --retry-delay 1 \
+            http://127.0.0.1:8099/zb_system/login.php -o /dev/null
+
+      - name: Run Playwright gate
+        working-directory: tests/e2e
+        run: pnpm test
+
+      - name: Upload Playwright report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: admin-next-playwright-report
+          path: |
+            tests/e2e/test-results/
+            tests/e2e/playwright-report/
+          if-no-files-found: ignore
+          retention-days: 7
+
+      - name: Stop isolated PHP server
+        if: always()
+        run: |
+          if [ -f /tmp/admin-next-php.pid ]; then
+            kill "$(cat /tmp/admin-next-php.pid)" 2>/dev/null || true
+          fi
+          if [ -f /tmp/admin-next-php.log ]; then
+            cat /tmp/admin-next-php.log
+          fi
