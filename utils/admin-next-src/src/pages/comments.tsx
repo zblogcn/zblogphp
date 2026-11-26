@@ -11,7 +11,7 @@ import { toast } from "sonner"
 
 import { apiGet, apiPost, type Pagebar } from "@/lib/api"
 import { t } from "@/lib/i18n"
-import { zbp } from "@/lib/zbp"
+import { hasRight, zbp } from "@/lib/zbp"
 import { ConfirmDialog } from "@/components/confirm-dialog"
 import { DataTable } from "@/components/data-table"
 import { FormRow } from "@/components/form-row"
@@ -91,16 +91,11 @@ export function CommentsPage() {
 
   const save = useMutation({
     mutationFn: (row: CommentRow) =>
-      apiPost<Record<string, unknown>>("comment", "post", {
+      apiPost<Record<string, unknown>>("comment", "put", {
         ID: row.ID,
-        LogID: row.Post?.ID ?? 0,
-        ParentID: 0,
-        RootID: 0,
         Content: draft,
         Name: authorName,
         Email: authorEmail,
-        AuthorID: row.AuthorID,
-        PostTime: row.PostTime,
       }),
     onSuccess: () => {
       toast.success("评论已保存")
@@ -227,6 +222,7 @@ export function CommentsPage() {
               variant="ghost"
               size="icon-sm"
               aria-label="编辑"
+              disabled={!hasRight("CommentEdt") || !hasRight("CommentSav")}
               onClick={() => {
                 setEditing(row.original)
                 setDraft(row.original.Content ?? "")

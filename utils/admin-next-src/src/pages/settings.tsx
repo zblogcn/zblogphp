@@ -1,10 +1,11 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
-import { Save, Undo2 } from "lucide-react"
+import { ExternalLink, Save, Undo2 } from "lucide-react"
 import { useEffect, useMemo, useState } from "react"
 import { toast } from "sonner"
 
 import { apiGet, apiPost } from "@/lib/api"
 import { t } from "@/lib/i18n"
+import { zbp } from "@/lib/zbp"
 import { PageHeader } from "@/components/page-header"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
@@ -28,6 +29,7 @@ interface Field {
   label: string
   type: FieldType
   hint?: string
+  legacyHref?: string
   options?: Array<{ value: string; label: string }>
 }
 
@@ -53,14 +55,33 @@ const groups: Array<{ id: string; label: string; fields: Field[] }> = [
         key: "ZC_BLOG_HOST",
         label: "站点地址",
         type: "readonly",
-        hint: "修改需要域名校验，请在旧版后台操作。",
+        hint: "站点地址只读，必须通过旧版后台的域名校验后修改。",
+        legacyHref: `${zbp.host}zb_system/admin/index.php?act=SettingMng&force=1`,
       },
       { key: "ZC_TIME_ZONE_NAME", label: "时区", type: "text" },
       { key: "ZC_BLOG_LANGUAGEPACK", label: "语言包", type: "text" },
       { key: "ZC_DEBUG_MODE", label: "调试模式", type: "switch" },
       { key: "ZC_DEBUG_MODE_WARNING", label: "显示警告与错误", type: "switch" },
       { key: "ZC_ADDITIONAL_SECURITY", label: "附加安全", type: "switch" },
+      {
+        key: "ZC_USING_CDN_GUESTIP_TYPE",
+        label: "访客 IP 来源",
+        type: "select",
+        options: [
+          { value: "REMOTE_ADDR", label: "REMOTE_ADDR（默认）" },
+          { value: "HTTP_X_FORWARDED_FOR", label: "HTTP_X_FORWARDED_FOR" },
+          { value: "HTTP_X_REAL_IP", label: "HTTP_X_REAL_IP" },
+          { value: "HTTP_CF_CONNECTING_IP", label: "HTTP_CF_CONNECTING_IP" },
+          { value: "HTTP_CLIENT_IP", label: "HTTP_CLIENT_IP" },
+        ],
+      },
       { key: "ZC_CLOSE_SITE", label: "关闭站点", type: "switch" },
+      { key: "ZC_PERMANENT_DOMAIN_ENABLE", label: "启用固定域名", type: "switch" },
+      {
+        key: "ZC_PERMANENT_DOMAIN_FORCED_URL",
+        label: "固定域名强制地址",
+        type: "text",
+      },
       {
         key: "ZC_ADMIN_UI",
         label: "后台界面",
@@ -102,6 +123,30 @@ const groups: Array<{ id: string; label: string; fields: Field[] }> = [
         key: "ZC_COMMENTS_DISPLAY_COUNT",
         label: "评论每页数量",
         type: "number",
+      },
+    ],
+  },
+  {
+    id: "backend",
+    label: "后台与上传",
+    fields: [
+      { key: "ZC_UPLOAD_FILETYPE", label: "允许上传的文件类型", type: "text" },
+      { key: "ZC_UPLOAD_FILESIZE", label: "上传文件大小上限（MB）", type: "number" },
+      { key: "ZC_ARTICLE_INTRO_WITH_TEXT", label: "摘要保留正文内容", type: "switch" },
+      { key: "ZC_ARTICLE_THUMB_SWITCH", label: "启用文章缩略图", type: "switch" },
+      { key: "ZC_ARTICLE_THUMB_TYPE", label: "文章缩略图类型", type: "number" },
+      { key: "ZC_ARTICLE_THUMB_WIDTH", label: "文章缩略图宽度", type: "number" },
+      { key: "ZC_ARTICLE_THUMB_HEIGHT", label: "文章缩略图高度", type: "number" },
+      { key: "ZC_POST_BATCH_DELETE", label: "允许批量删除文章", type: "switch" },
+      {
+        key: "ZC_DELMEMBER_WITH_ALLDATA",
+        label: "删除用户时删除其全部数据",
+        type: "switch",
+      },
+      {
+        key: "ZC_CATEGORY_MANAGE_LEGACY_DISPLAY",
+        label: "分类管理使用旧版显示",
+        type: "switch",
       },
     ],
   },
@@ -185,6 +230,17 @@ export function SettingsPage() {
           <Input id={field.key} value={value} readOnly className="bg-muted/50" />
           {field.hint ? (
             <span className="text-xs text-muted-foreground">{field.hint}</span>
+          ) : null}
+          {field.legacyHref ? (
+            <a
+              href={field.legacyHref}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex w-fit items-center gap-1 text-xs text-primary underline-offset-4 hover:underline"
+            >
+              <ExternalLink className="size-3" />
+              打开旧版后台（legacy）网站设置
+            </a>
           ) : null}
         </div>
       )

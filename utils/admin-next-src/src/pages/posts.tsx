@@ -226,7 +226,7 @@ function PostListPage({ type, title, manageAction }: PostListPageProps) {
           <>
             <Button asChild variant="outline" size="sm">
               <a
-                href={`${zbp.host}zb_system/cmd.php?act=${manageAction}`}
+                href={`${zbp.host}zb_system/admin/index.php?act=${manageAction}&force=1`}
                 target="_blank"
                 rel="noopener noreferrer"
               >

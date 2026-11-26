@@ -102,6 +102,79 @@ function api_comment_post()
 }
 
 /**
+ * 更新评论接口.
+ *
+ * @return array
+ */
+function api_comment_put()
+{
+    global $zbp;
+
+    ApiCheckAuth(true, 'CommentEdt');
+    ApiCheckAuth(true, 'CommentSav');
+
+    ApiVerifyCSRF(true);
+
+    $id = (int) GetVars('ID', 'POST');
+    if (0 == $id) {
+        $id = (int) GetVars('id', 'POST');
+    }
+    $comment = $zbp->GetCommentByID($id);
+    if (0 == $comment->ID) {
+        return array(
+            'code' => 404,
+            'message' => $GLOBALS['lang']['error']['97'],
+        );
+    }
+
+    if (!$zbp->CheckRights('CommentAll')
+        && $comment->AuthorID != $zbp->user->ID
+        && $comment->Post->AuthorID != $zbp->user->ID
+    ) {
+        return array(
+            'code' => 403,
+            'message' => $GLOBALS['lang']['error']['6'],
+        );
+    }
+
+    $content = GetVars('Content', 'POST');
+    if (null === $content || !is_scalar($content)) {
+        return array(
+            'code' => 400,
+            'message' => $GLOBALS['lang']['error']['46'],
+        );
+    }
+
+    // 只更新评论自身可编辑字段，ID、作者、时间、Meta 和审核状态保持不变。
+    $comment->Content = (string) $content;
+    $unchangedFields = array();
+    foreach (array('Name', 'Email', 'HomePage') as $field) {
+        if (array_key_exists($field, $_POST) && is_scalar($_POST[$field])) {
+            $comment->{$field} = (string) $_POST[$field];
+        } else {
+            $unchangedFields[$field] = $comment->{$field};
+        }
+    }
+
+    FilterComment($comment);
+    foreach ($unchangedFields as $field => $value) {
+        $comment->{$field} = $value;
+    }
+    $comment->Save();
+    $zbp->AddCache($comment);
+    $zbp->AddBuildModule('comments');
+    $zbp->BuildModule();
+    $zbp->SaveCache();
+
+    return array(
+        'message' => $GLOBALS['lang']['msg']['operation_succeed'],
+        'data' => array(
+            'comment' => ApiGetObjectArray($comment),
+        ),
+    );
+}
+
+/**
  * 删除评论接口.
  *
  * @return array

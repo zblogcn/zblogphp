@@ -267,6 +267,7 @@ function api_member_list()
                 $zbp->GetMemberList('*', $where, $order, $limit, $option)
             ),
             'pagebar' => ApiGetPagebarInfo($option),
+            'delete_member_with_all_data' => (bool) $zbp->option['ZC_DELMEMBER_WITH_ALLDATA'],
         ),
     );
 }

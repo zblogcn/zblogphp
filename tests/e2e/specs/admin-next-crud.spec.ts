@@ -144,6 +144,39 @@ test.describe("模块增删", () => {
   })
 })
 
+test.describe("用户删除确认", () => {
+  test("按删除数据选项说明文章评论处理方式，并明确附件会删除", async ({ page }) => {
+    const memberListResponse = page.waitForResponse(
+      (response) =>
+        response.url().includes("mod=member") &&
+        response.url().includes("act=list")
+    )
+    await gotoPage(page, "#/members", "用户管理")
+    const memberList = await (await memberListResponse).json()
+    const deleteWithAllData =
+      memberList.data.delete_member_with_all_data === true
+
+    await expect(page.locator("table tbody tr").first()).toBeVisible({
+      timeout: 15_000,
+    })
+
+    const deleteButton = page
+      .locator('button[aria-label="删除"]:not([disabled])')
+      .first()
+    test.skip((await deleteButton.count()) === 0, "没有可删除的其他用户")
+
+    await deleteButton.click()
+    const confirm = page.getByRole("alertdialog")
+    await expect(confirm).toBeVisible()
+    await expect(confirm).toContainText(
+      deleteWithAllData ? "文章、评论和附件将被永久删除" : "文章和评论将保留"
+    )
+    await expect(confirm).toContainText("附件")
+    await confirm.getByRole("button", { name: "取消" }).click()
+    await expect(confirm).toBeHidden()
+  })
+})
+
 test.describe("评论管理", () => {
   test.beforeEach(async ({ page }) => {
     await page.goto("zb_system/admin-next/index.php#/comments")

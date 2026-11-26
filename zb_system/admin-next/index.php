@@ -22,7 +22,7 @@ if (PHP_VERSION_ID < 80000) {
         . '<body style="font:14px/1.7 system-ui;padding:48px;max-width:640px;margin:0 auto">'
         . '<h1 style="font-size:18px">无法加载新版后台</h1>'
         . '<p>新版后台需要 PHP 8.0 或更高版本，当前版本为 ' . htmlspecialchars(PHP_VERSION) . '。</p>'
-        . '<p><a href="../cmd.php?act=admin">返回旧版后台</a></p>'
+        . '<p><a href="../admin/index.php?force=1">返回旧版后台</a></p>'
         . '</body></html>';
     exit;
 }
@@ -35,9 +35,9 @@ DefinePluginFilter('Filter_Plugin_Admin_Menu_Items');
 
 $zbp->Load();
 
-// 显式回退到旧后台
+// 显式回退到旧后台；force=1 避免旧后台入口再次跳回新版
 if (GetVars('ui', 'GET') === 'legacy') {
-    Redirect($zbp->cmdurl . '?act=admin');
+    Redirect($zbp->host . 'zb_system/admin/index.php?force=1');
 }
 
 if (!$zbp->islogin) {

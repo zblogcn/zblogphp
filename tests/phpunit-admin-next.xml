@@ -11,6 +11,10 @@
         <testsuite name="admin-next">
             <file>phpunit/AdminNextNavTest.php</file>
             <file>phpunit/AdminNextHomeUrlTest.php</file>
+            <file>phpunit/CommentApiTest.php</file>
+            <file>phpunit/AdminNextSettingsTest.php</file>
+            <file>phpunit/AdminNextCsrfTest.php</file>
+            <file>phpunit/AdminNextLegacyFallbackTest.php</file>
         </testsuite>
     </testsuites>
 </phpunit>

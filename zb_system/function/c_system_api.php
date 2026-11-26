@@ -741,15 +741,10 @@ function ApiVerifyCSRF($force_check = false)
 {
     global $zbp, $mod, $act;
 
-    // 后台 SPA：同源会话 + 同源校验通过，登录态本身即凭证，无需令牌。
-    // 不分 $force_check：令牌绑定了浏览器 UA，浏览器升级后整站写操作都会 419。
-    // 跨站请求已在 admin-next/api.php 的同源校验中拒绝。
-    if (!empty($GLOBALS['zbp_admin_spa_verified'])) {
-        return true;
-    }
-
     if (!defined('ZBP_IN_API_VERIFYBYTOKEN')) {
-        $csrf_token = GetVars('csrf_token');
+        // JSON body 由 ApiLoadPostData() 合并到 $_POST，不一定进入 $_REQUEST。
+        // POST 优先可确保后台 SPA 的真实令牌参与校验，并保留原有 REQUEST 兼容。
+        $csrf_token = GetVars('csrf_token', 'POST') ?? GetVars('csrf_token');
 
         if (!$force_check) {
             if (isset($_SERVER['REQUEST_METHOD']) && 'POST' !== $_SERVER['REQUEST_METHOD']) {

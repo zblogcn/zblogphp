@@ -149,7 +149,8 @@ function RouteFallback() {
   )
 }
 
-export function AppShell() {  const collapsed = useUiStore((state) => state.sidebarCollapsed)
+export function AppShell() {
+  const collapsed = useUiStore((state) => state.sidebarCollapsed)
   const toggleSidebar = useUiStore((state) => state.toggleSidebar)
   const [mobileOpen, setMobileOpen] = useState(false)
 
@@ -157,7 +158,7 @@ export function AppShell() {  const collapsed = useUiStore((state) => state.side
     <div className="flex min-h-dvh w-full bg-background">
       <aside
         className={cn(
-          "sticky top-0 hidden h-dvh shrink-0 flex-col border-r border-sidebar-border bg-sidebar transition-[width] duration-200 ease-[cubic-bezier(0.22,1,0.36,1)] md:flex",
+          "sticky top-0 hidden h-dvh shrink-0 flex-col border-r border-sidebar-border bg-sidebar md:flex",
           collapsed ? "w-14" : "w-60"
         )}
       >
@@ -206,7 +207,7 @@ export function AppShell() {  const collapsed = useUiStore((state) => state.side
           <UserMenu />
         </header>
 
-        <main className="mx-auto w-full max-w-[1440px] flex-1 px-3 py-4 pb-[max(1rem,env(safe-area-inset-bottom))] sm:px-5 md:py-6">
+        <main className="w-full max-w-none flex-1 px-3 py-4 pb-[max(1rem,env(safe-area-inset-bottom))] sm:px-5 md:py-6">
           <Suspense fallback={<RouteFallback />}>
             <Outlet />
           </Suspense>

@@ -4,8 +4,8 @@
  * 契约（由 <admin><editor> 声明加载）：
  *   export function mount(el, ctx) => { getHTML, setHTML, focus, destroy }
  *
- * 不使用外部依赖：内容以 contenteditable 承载，命令走 document.execCommand
- * 的现代替代（insertHTML / formatBlock）。这样插件无构建步骤即可发布，
+ * 不使用外部依赖：内容以 contenteditable 承载，格式化命令走
+ * document.execCommand，插入内容走 DOM Range。这样插件无构建步骤即可发布，
  * 体积也远小于完整 ProseMirror 打包。
  *
  * 必须保证的既有语义：
@@ -14,6 +14,164 @@
  */
 
 const MORE_HTML = '<hr class="more" />'
+
+export const SAFE_LINK_PROTOCOLS = new Set(['http:', 'https:', 'mailto:', 'tel:'])
+export const SAFE_IMAGE_PROTOCOLS = new Set(['http:', 'https:'])
+
+const ALLOWED_ELEMENTS = new Set([
+  'p', 'div', 'span', 'br', 'h2', 'h3', 'h4', 'h5', 'h6',
+  'strong', 'b', 'i', 'em', 'u', 's', 'strike', 'del',
+  'blockquote', 'ul', 'ol', 'li', 'pre', 'code',
+  'a', 'img', 'hr', 'table', 'thead', 'tbody', 'tfoot', 'tr', 'th', 'td',
+  'figure', 'figcaption', 'sup', 'sub',
+])
+
+const DROP_WITH_CONTENT = new Set([
+  'script', 'style', 'iframe', 'object', 'embed', 'svg', 'math', 'template',
+  'noscript', 'noembed', 'noframes', 'xmp', 'plaintext',
+  'form', 'input', 'button', 'textarea', 'select', 'option', 'optgroup',
+  'link', 'meta', 'base', 'title', 'head',
+])
+
+const ALLOWED_ATTRIBUTES = {
+  a: ['href', 'title'],
+  img: ['src', 'alt', 'width', 'height'],
+  ol: ['start'],
+  th: ['colspan', 'rowspan', 'scope'],
+  td: ['colspan', 'rowspan'],
+  hr: ['class'],
+}
+
+/** 解析并校验 URL；返回规范化后的安全地址，非法协议返回 null。 */
+export function sanitizeUrl(
+  value,
+  baseURI = globalThis.location?.href ?? globalThis.document?.baseURI,
+  protocols = SAFE_LINK_PROTOCOLS
+) {
+  if (typeof value !== 'string' || value.trim() === '') {
+    return null
+  }
+
+  try {
+    const url = new URL(value.trim(), baseURI)
+    return protocols.has(url.protocol.toLowerCase()) ? url.href : null
+  } catch {
+    return null
+  }
+}
+
+function removeComments(node) {
+  for (const child of Array.from(node.childNodes)) {
+    if (child.nodeType === 8) {
+      child.remove()
+    } else if (child.nodeType === 1 || child.nodeType === 11) {
+      removeComments(child)
+    }
+  }
+}
+
+function sanitizeTree(root, baseURI) {
+  for (const node of Array.from(root.querySelectorAll('*'))) {
+    const tag = node.tagName.toLowerCase()
+
+    if (DROP_WITH_CONTENT.has(tag)) {
+      node.remove()
+      continue
+    }
+
+    if (!ALLOWED_ELEMENTS.has(tag)) {
+      node.replaceWith(...Array.from(node.childNodes))
+      continue
+    }
+
+    const allowedAttributes = ALLOWED_ATTRIBUTES[tag] ?? []
+    for (const attribute of Array.from(node.attributes)) {
+      const name = attribute.name.toLowerCase()
+      if (!allowedAttributes.includes(name)) {
+        node.removeAttribute(attribute.name)
+        continue
+      }
+
+      if (name === 'href' || name === 'src') {
+        const protocols = name === 'src' ? SAFE_IMAGE_PROTOCOLS : SAFE_LINK_PROTOCOLS
+        const safeUrl = sanitizeUrl(attribute.value, baseURI, protocols)
+        if (safeUrl === null) {
+          node.removeAttribute(attribute.name)
+        } else {
+          node.setAttribute(name, safeUrl)
+        }
+      } else if (name === 'class') {
+        if (tag === 'hr' && attribute.value.split(/\s+/).includes('more')) {
+          node.setAttribute('class', 'more')
+        } else {
+          node.removeAttribute(attribute.name)
+        }
+      } else if (['width', 'height', 'colspan', 'rowspan'].includes(name)) {
+        if (!/^\d{1,4}$/.test(attribute.value)) {
+          node.removeAttribute(attribute.name)
+        }
+      } else if (name === 'start' && !/^-?\d{1,4}$/.test(attribute.value)) {
+        node.removeAttribute(attribute.name)
+      } else if (name === 'scope' && !['col', 'row'].includes(attribute.value)) {
+        node.removeAttribute(attribute.name)
+      }
+    }
+
+    if (tag === 'img' && !node.hasAttribute('src')) {
+      node.remove()
+    }
+  }
+
+  removeComments(root)
+}
+
+function parseSanitizedBody(html, documentInstance) {
+  const Parser = documentInstance?.defaultView?.DOMParser ?? globalThis.DOMParser
+  if (typeof Parser !== 'function') {
+    return null
+  }
+
+  const parsed = new Parser().parseFromString(String(html ?? ''), 'text/html')
+  if (!parsed.body) {
+    return null
+  }
+
+  sanitizeTree(parsed.body, documentInstance?.baseURI ?? globalThis.location?.href)
+  return parsed.body
+}
+
+/** 返回净化后的 HTML 字符串，供源码模式使用。 */
+export function sanitizeHTML(html, documentInstance = globalThis.document) {
+  const body = parseSanitizedBody(html, documentInstance)
+  return body ? body.innerHTML : ''
+}
+
+/** 返回净化后的 DocumentFragment，直接插入实时 DOM，避免序列化后再解析。 */
+export function sanitizeFragment(html, documentInstance = globalThis.document) {
+  const body = parseSanitizedBody(html, documentInstance)
+  if (!body || typeof documentInstance?.createDocumentFragment !== 'function') {
+    return null
+  }
+
+  const fragment = documentInstance.createDocumentFragment()
+  while (body.firstChild) {
+    fragment.appendChild(body.firstChild)
+  }
+  return fragment
+}
+
+/** 创建安全链接节点；URL 协议不安全时返回 null。 */
+export function createLink(value, text, documentInstance = globalThis.document) {
+  const url = sanitizeUrl(value, documentInstance?.baseURI)
+  if (!url || typeof documentInstance?.createElement !== 'function') {
+    return null
+  }
+
+  const link = documentInstance.createElement('a')
+  link.setAttribute('href', url)
+  link.textContent = String(text ?? '')
+  return link
+}
 
 /** 用 hr.more 表示 <!--more-->，读出时反转。 */
 function decodeMore(html) {
@@ -105,16 +263,53 @@ export function mount(container, ctx) {
     updateStatus()
   }
 
-  function insertHTML(html) {
+  function insertFragment(fragment) {
+    if (!fragment || !fragment.firstChild) {
+      return
+    }
+
     editor.focus()
-    document.execCommand('insertHTML', false, html)
+    const selection = window.getSelection()
+    let range = null
+
+    if (selection && selection.rangeCount > 0) {
+      const selectedRange = selection.getRangeAt(0)
+      if (editor.contains(selectedRange.commonAncestorContainer)) {
+        range = selectedRange
+      }
+    }
+
+    if (!range) {
+      range = document.createRange()
+      range.selectNodeContents(editor)
+      range.collapse(false)
+    }
+
+    const lastNode = fragment.lastChild
+    range.deleteContents()
+    range.insertNode(fragment)
+
+    if (lastNode) {
+      range.setStartAfter(lastNode)
+      range.collapse(true)
+      if (selection) {
+        selection.removeAllRanges()
+        selection.addRange(range)
+      }
+    }
+
     updateStatus()
   }
 
-  function wrapSelection(openTag, closeTag, placeholder) {
+  function insertNode(node) {
+    const fragment = document.createDocumentFragment()
+    fragment.appendChild(node)
+    insertFragment(fragment)
+  }
+
+  function selectedText(placeholder) {
     const selection = window.getSelection()
-    const text = selection && selection.toString() ? selection.toString() : placeholder
-    insertHTML(openTag + text + closeTag)
+    return selection && selection.toString() ? selection.toString() : placeholder
   }
 
   async function insertImage() {
@@ -134,10 +329,16 @@ export function mount(container, ctx) {
         form.append('file', file)
         form.set('auto_rename', '1')
         const result = await api.upload('upload', 'post', form)
-        const url = result?.upload?.Url
-        if (url) {
-          insertHTML(`<img src="${url}" alt="" />`)
+        const url = sanitizeUrl(result?.upload?.Url, undefined, SAFE_IMAGE_PROTOCOLS)
+        if (!url) {
+          ctx?.toast?.error?.('上传返回了不安全的图片地址')
+          return
         }
+
+        const image = document.createElement('img')
+        image.setAttribute('src', url)
+        image.setAttribute('alt', '')
+        insertNode(image)
       } catch (error) {
         ctx?.toast?.error?.(error.message || '上传失败')
       }
@@ -146,19 +347,32 @@ export function mount(container, ctx) {
   }
 
   function insertLink() {
-    const url = window.prompt('链接地址')
-    if (!url) {
+    const value = window.prompt('链接地址')
+    if (!value) {
       return
     }
-    wrapSelection(`<a href="${url}">`, '</a>', '链接文字')
+
+    const link = createLink(value, selectedText('链接文字'))
+    if (!link) {
+      ctx?.toast?.error?.('链接地址协议不安全')
+      return
+    }
+
+    insertNode(link)
   }
 
   function insertCode() {
-    wrapSelection('<pre><code>', '</code></pre>', '代码')
+    const pre = document.createElement('pre')
+    const code = document.createElement('code')
+    code.textContent = selectedText('代码')
+    pre.appendChild(code)
+    insertNode(pre)
   }
 
   function insertMore() {
-    insertHTML(MORE_HTML)
+    const separator = document.createElement('hr')
+    separator.setAttribute('class', 'more')
+    insertNode(separator)
   }
 
   // ---- 工具栏 ---------------------------------------------------------
@@ -209,7 +423,7 @@ export function mount(container, ctx) {
       editor.hidden = true
       source.focus()
     } else {
-      editor.innerHTML = decodeMore(source.value)
+      editor.replaceChildren(sanitizeFragment(decodeMore(source.value)))
       source.hidden = true
       editor.hidden = false
       editor.focus()
@@ -227,17 +441,14 @@ export function mount(container, ctx) {
   editor.addEventListener('input', updateStatus)
   source.addEventListener('input', updateStatus)
 
-  // 粘贴时去掉外部样式，只保留基本结构
+  // 粘贴 HTML 按白名单净化后直接插入，不使用正则清理或 HTML 字符串拼接
   editor.addEventListener('paste', (event) => {
     const html = event.clipboardData?.getData('text/html')
     if (!html) {
       return
     }
     event.preventDefault()
-    const cleaned = html
-      .replace(/<(script|style)[\s\S]*?<\/\1>/gi, '')
-      .replace(/\s(class|id|style|on\w+)="[^"]*"/gi, '')
-    insertHTML(cleaned)
+    insertFragment(sanitizeFragment(html))
   })
 
   // 快捷键：Ctrl/Cmd+S 交给宿主保存
@@ -253,14 +464,14 @@ export function mount(container, ctx) {
   // ---- 对外接口 -------------------------------------------------------
   return {
     getHTML() {
-      return sourceMode ? source.value : encodeMore(editor.innerHTML)
+      return sourceMode ? encodeMore(sanitizeHTML(source.value)) : encodeMore(editor.innerHTML)
     },
     setHTML(html) {
       const decoded = decodeMore(html)
       if (sourceMode) {
-        source.value = encodeMore(decoded)
+        source.value = encodeMore(sanitizeHTML(decoded))
       } else {
-        editor.innerHTML = decoded
+        editor.replaceChildren(sanitizeFragment(decoded))
       }
       updateStatus()
     },
@@ -273,7 +484,7 @@ export function mount(container, ctx) {
         return
       }
       destroyed = true
-      container.innerHTML = ''
+      container.replaceChildren()
     },
   }
 }

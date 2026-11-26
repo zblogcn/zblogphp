@@ -23,20 +23,14 @@ function ZbpAdminNext_JsonForScript(mixed $data): string
 /**
  * 后台 SPA 使用的 API CSRF 令牌.
  *
- * GetCSRFToken() 在「附加安全」开启时会把浏览器 UA 算进哈希，
- * 浏览器升级或换客户端后令牌就失效。后台是同源已登录会话，
- * 这里生成不绑定 UA 的令牌，并由 ApiVerifyCSRF() 对 SPA 请求放行。
+ * 必须与 ApiVerifyCSRF() 使用相同的附加安全设置，否则开启 UA 绑定时，
+ * 页面签发的令牌无法通过服务端校验。
  */
 function ZbpAdminNext_ApiCsrfToken(): string
 {
     global $zbp;
 
-    $security = $zbp->option['ZC_ADDITIONAL_SECURITY'];
-    $zbp->option['ZC_ADDITIONAL_SECURITY'] = false;
-    $token = $zbp->GetCSRFToken('api');
-    $zbp->option['ZC_ADDITIONAL_SECURITY'] = $security;
-
-    return (string) $token;
+    return (string) $zbp->GetCSRFToken('api');
 }
 
 /**
@@ -82,9 +76,7 @@ function ZbpAdminNext_BootData(): array
         'editor'    => ZbpAdminNext_EditorManifest(),
         'lang'      => ZbpAdminNext_Lang(),
         'csrf'      => [
-            // 网站开启「附加安全」时，令牌会绑定浏览器 UA，
-            // 浏览器升级或页面来自不同 UA 客户端后旧令牌会失效；
-            // 后台是同源会话，这里只提供不绑定 UA 的令牌，避免写操作误报 419。
+            // 与 API 校验共用同一附加安全设置；令牌失效时刷新页面重新获取。
             'token'      => ZbpAdminNext_ApiCsrfToken(),
             'admin'      => $zbp->GetCSRFToken(),
             'expiration' => (int) $zbp->csrfExpiration,

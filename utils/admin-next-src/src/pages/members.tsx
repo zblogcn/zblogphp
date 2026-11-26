@@ -46,6 +46,7 @@ interface MemberRow {
 interface MemberListData {
   list: MemberRow[]
   pagebar: Pagebar
+  delete_member_with_all_data: boolean
 }
 
 interface MemberForm {
@@ -436,7 +437,11 @@ export function MembersPage() {
           }
         }}
         title={`删除用户「${deleting?.StaticName || deleting?.Name || ""}」？`}
-        description="该用户的文章会保留，但作者信息将失效。"
+        description={
+          data?.delete_member_with_all_data
+            ? "该用户的文章、评论和附件将被永久删除，且无法恢复。"
+            : "该用户的文章和评论将保留，但作者信息将失效；该用户的附件仍会被删除。"
+        }
         confirmText="删除"
         destructive
         onConfirm={() => {

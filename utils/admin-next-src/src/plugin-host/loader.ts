@@ -89,19 +89,6 @@ export function loadPluginBundle(app: AppManifest): Promise<LoadedPlugin> {
   return promise
 }
 
-export function findAppRoute(
-  apps: AppManifest[],
-  path: string
-): { app: AppManifest; route: string } | null {
-  for (const app of apps) {
-    const prefix = `/plugin/${app.appId}`
-    if (path === prefix || path.startsWith(`${prefix}/`)) {
-      return { app, route: path.slice(prefix.length) || "/" }
-    }
-  }
-  return null
-}
-
 /** 供 PluginPage 使用的 ctx 构造器。 */
 export function usePluginContext(app: AppManifest, route: string) {
   const navigate = useCallback((to: string) => {

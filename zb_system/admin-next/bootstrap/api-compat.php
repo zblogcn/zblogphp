@@ -31,24 +31,49 @@ function ZbpAdminNext_NormalizeIdParam(): void
 /**
  * 当前请求是否来自本站同源页面.
  *
- * 浏览器对跨站 fetch 一定会带 Origin（旧浏览器退化为 Referer），
- * 因此只要两者之一存在就必须与当前站点一致；都缺失时才退回
- * 信任 X-ZBP-Admin-Spa 头（例如非浏览器客户端）。
+ * Origin 优先，缺失时使用 Referer；两者都缺失或无法解析时拒绝。
+ * 按 scheme/host/port 元组比较，避免前缀匹配和默认端口误判。
  */
 function ZbpAdminNext_IsSameOriginRequest(): bool
 {
     global $zbp;
 
-    $source = $_SERVER['HTTP_ORIGIN'] ?? $_SERVER['HTTP_REFERER'] ?? '';
+    $source = $_SERVER['HTTP_ORIGIN'] ?? '';
+    if (!is_string($source)) {
+        return false;
+    }
+    $source = trim($source);
+
     if ($source === '') {
-        return true;
+        $source = $_SERVER['HTTP_REFERER'] ?? '';
+        if (!is_string($source)) {
+            return false;
+        }
+        $source = trim($source);
     }
 
-    $expected = rtrim($zbp->host, '/');
-    $actual = rtrim(preg_match('#^[a-z][a-z0-9+.\-]*://#i', $source) ? parse_url(
-        $source,
-        PHP_URL_SCHEME
-    ) . '://' . parse_url($source, PHP_URL_HOST) . (parse_url($source, PHP_URL_PORT) ? ':' . parse_url($source, PHP_URL_PORT) : '') : $source, '/');
+    if ($source === '' || preg_match('/[\x00-\x20\x7f]/', $source) === 1) {
+        return false;
+    }
 
-    return strcasecmp($actual, $expected) === 0;
+    $normalize = static function ($parts): ?array {
+        if (!is_array($parts)) {
+            return null;
+        }
+
+        $scheme = strtolower((string) ($parts['scheme'] ?? ''));
+        $host = strtolower((string) ($parts['host'] ?? ''));
+        if ($host === '' || !in_array($scheme, ['http', 'https'], true)) {
+            return null;
+        }
+
+        $port = $parts['port'] ?? ($scheme === 'https' ? 443 : 80);
+
+        return [$scheme, $host, (int) $port];
+    };
+
+    $expected = $normalize(parse_url(rtrim((string) $zbp->host, '/')));
+    $actual = $normalize(parse_url($source));
+
+    return $expected !== null && $actual === $expected;
 }

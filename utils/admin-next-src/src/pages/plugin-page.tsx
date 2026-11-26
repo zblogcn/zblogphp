@@ -9,12 +9,8 @@ import { Button } from "@/components/ui/button"
 import { Empty } from "@/components/ui/empty"
 import { PageHeader } from "@/components/page-header"
 import { PluginHost } from "@/plugin-host/plugin-host"
-import {
-  findAppRoute,
-  loadPluginBundle,
-  type AdminCtx,
-  type AppManifest,
-} from "@/plugin-host/loader"
+import { loadPluginBundle, type AdminCtx, type AppManifest } from "@/plugin-host/loader"
+import { canLoadPluginRoute, findAppRoute } from "@/plugin-host/route"
 
 function buildCtx(app: AppManifest, route: string): AdminCtx {
   return {
@@ -55,7 +51,9 @@ export function PluginPage() {
 
   const matched = findAppRoute(zbp.apps ?? [], location.pathname)
   const app = matched?.app
+  const activeMenu = matched?.menu ?? null
   const route = matched?.route ?? "/"
+  const canLoad = canLoadPluginRoute(matched, hasRight)
 
   const routeRef = useRef(route)
   routeRef.current = route
@@ -68,7 +66,7 @@ export function PluginPage() {
   const routeKey = location.pathname
 
   useEffect(() => {
-    if (!app) {
+    if (!app || !canLoad) {
       return
     }
 
@@ -115,7 +113,7 @@ export function PluginPage() {
     return () => {
       cancelled = true
     }
-  }, [app, routeKey])
+  }, [app, routeKey, canLoad])
 
   if (!app) {
     return (
@@ -131,8 +129,6 @@ export function PluginPage() {
       />
     )
   }
-
-  const activeMenu = app.menu.find((item) => item.route === location.pathname)
 
   return (
     <div className="flex flex-col gap-4">
@@ -150,7 +146,7 @@ export function PluginPage() {
         }
       />
 
-      {!hasRight(activeMenu?.require ?? null) ? (
+      {!canLoad ? (
         <Empty icon={PackageX} title="没有访问权限" />
       ) : status.kind === "error" ? (
         <div className="rounded-lg border border-destructive/40 bg-destructive/5 p-4 text-sm">
