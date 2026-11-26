@@ -4321,7 +4321,7 @@ class ZBlogPHP
         $new_name = $array['type'] . '_' . $array['name'];
 
         $postid = GetValueInArray($array, 'posttype', 0);
-        //$postname = $this->GetPostType($postid, 'name');
+        // $postname = $this->GetPostType($postid, 'name');
         $postname = is_null($postid) ? '' : $this->GetPostType($postid, 'name');
         if (!is_null($postid) && empty($array['urlrule'])) {
             $prefix_name = 'post_' . $postname . '_';
