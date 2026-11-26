@@ -653,11 +653,7 @@ class SQL__Global
             $sqlArray = [];
             if (!is_array($value[2])) {
                 if ($this->validateParamater($value[2])) {
-                    if (preg_match('/^\s*\'?[\w.\-]+\'?(\s*,\s*\'?[\w.\-]+\'?)*\s*$/', (string) $value[2])) {
-                        return " ({$value[1]} {$eq} ({$value[2]})) ";
-                    }
-
-                    return ' (1 = 0) ';
+                    return " ({$value[1]} {$eq} ({$value[2]})) ";
                 }
 
                 return ' (1 = 1) ';
