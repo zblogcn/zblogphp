@@ -74,6 +74,11 @@ export interface BootData {
   entry: string
   api: string
   legacy: string
+  appCentre: {
+    enabled: boolean
+    url: string | null
+  }
+  legacyPluginManageUrl: string
   version: string
   debug: boolean
   user: ZbzUser
@@ -126,6 +131,8 @@ function createDevBoot(): BootData {
     entry: "http://localhost/zb_system/admin-next/index.php",
     api: "/api.php",
     legacy: "http://localhost/zb_system/cmd.php?act=admin",
+    appCentre: { enabled: false, url: null },
+    legacyPluginManageUrl: "http://localhost/zb_system/admin/index.php?act=PluginMng&force=1",
     version: "dev",
     debug: true,
     user: {
@@ -161,6 +168,8 @@ function createDevBoot(): BootData {
         theme_manage: "主题管理",
         module_manage: "模块管理",
         plugin_manage: "插件管理",
+        app_center: "应用中心",
+        legacy_plugin_manage: "旧版插件管理",
         web_settings: "网站设置",
         search: "搜索",
         submit: "提交",

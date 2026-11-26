@@ -103,6 +103,8 @@ return [
         'member_manage'                     => '用户管理',
         'theme_manage'                      => '主题管理',
         'plugin_manage'                     => '插件管理',
+        'app_center'                        => '应用中心',
+        'legacy_plugin_manage'              => '旧版插件管理',
         'module_manage'                     => '模块管理',
         'site_analyze'                      => '网站信息',
         'info_intro'                        => '网站摘要',

@@ -54,11 +54,15 @@ function ZbpAdminNext_BootData(): array
 {
     global $zbp;
 
+    $appManagement = ZbpAdminNext_AppManagement();
+
     return [
         'host'    => $zbp->host,
         'entry'   => $zbp->host . 'zb_system/admin-next/index.php',
         'api'     => $zbp->host . 'zb_system/admin-next/api.php',
         'legacy'  => $zbp->cmdurl . '?act=admin',
+        'appCentre' => $appManagement['appCentre'],
+        'legacyPluginManageUrl' => $appManagement['legacyPluginManageUrl'],
         'version' => ZC_VERSION_FULL,
         'debug'   => (bool) $zbp->isdebug,
         'user'    => [

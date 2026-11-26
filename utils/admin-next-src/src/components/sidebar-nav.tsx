@@ -44,14 +44,22 @@ function routeOf(item: NavItem): string {
 
 interface SidebarNavProps {
   collapsed?: boolean
+  label?: string
   onNavigate?: () => void
 }
 
-export function SidebarNav({ collapsed = false, onNavigate }: SidebarNavProps) {
+export function SidebarNav({
+  collapsed = false,
+  label = t("primary_nav"),
+  onNavigate,
+}: SidebarNavProps) {
   const groups = groupNav(zbp.nav)
 
   return (
-    <nav className="flex flex-1 flex-col gap-4 overflow-y-auto px-2 py-3">
+    <nav
+      aria-label={label}
+      className="flex flex-1 flex-col gap-4 overflow-y-auto px-2 py-3"
+    >
       {groups.map(([group, items]) => (
         <div key={group} className="flex flex-col gap-1">
           {groupLabelKey[group] && !collapsed ? (
@@ -95,6 +103,7 @@ export function SidebarNav({ collapsed = false, onNavigate }: SidebarNavProps) {
                 href={item.url}
                 target="_blank"
                 rel="noopener noreferrer"
+                aria-label={item.title}
                 className={baseClass}
                 onClick={onNavigate}
               >
@@ -105,6 +114,7 @@ export function SidebarNav({ collapsed = false, onNavigate }: SidebarNavProps) {
                 key={item.id}
                 to={routeOf(item)}
                 end={item.id === "dashboard"}
+                aria-label={item.title}
                 className={({ isActive }) =>
                   cn(
                     baseClass,

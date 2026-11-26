@@ -145,6 +145,27 @@
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";
   }
 
+  .skip-link {
+    position: fixed;
+    inset-block-start: 1rem;
+    inset-inline-start: 1rem;
+    z-index: 100;
+    border-radius: calc(var(--radius) - 2px);
+    padding: 0.75rem 1rem;
+    background: var(--primary);
+    color: var(--primary-foreground);
+    font-size: 0.875rem;
+    font-weight: 600;
+    line-height: 1.25rem;
+    box-shadow: 0 10px 15px -3px rgb(0 0 0 / 15%);
+    transform: translateY(-200%);
+    transition: none;
+  }
+
+  .skip-link:focus {
+    transform: translateY(0);
+  }
+
   /* 触控设备上不依赖 hover；键盘用户必须有可见焦点 */
   :focus-visible {
     @apply outline-2 outline-offset-2 outline-ring;

@@ -230,6 +230,8 @@ function api_app_get_plugins()
             $new->$key = $app->$key;
         }
         $new->is_actived = $zbp->CheckPlugin($new->id);
+        $new->can_manage = $app->CanManage();
+        $new->manage_url = $app->GetManageUrl();
         $app = (array) $new;
         $apps[] = $app;
     }
@@ -261,6 +263,8 @@ function api_app_get_themes()
             $new->$key = $app->$key;
         }
         $new->is_actived = $zbp->CheckPlugin($new->id);
+        $new->can_manage = $app->CanManage();
+        $new->manage_url = $app->GetManageUrl();
         $app = (array) $new;
         $apps[] = $app;
     }

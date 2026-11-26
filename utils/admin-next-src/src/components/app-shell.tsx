@@ -1,5 +1,5 @@
 import { ExternalLink, LogOut, Menu, Monitor, Moon, PanelLeft, Sun } from "lucide-react"
-import { useState, Suspense } from "react"
+import { useRef, useState, Suspense } from "react"
 import { Outlet } from "react-router-dom"
 
 import { t } from "@/lib/i18n"
@@ -25,12 +25,19 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip"
 
-function Brand({ collapsed = false }: { collapsed?: boolean }) {
+function Brand({
+  collapsed = false,
+  className,
+}: {
+  collapsed?: boolean
+  className?: string
+}) {
   return (
     <div
       className={cn(
         "flex h-14 shrink-0 items-center gap-2 border-b border-sidebar-border px-3",
-        collapsed && "justify-center px-0"
+        collapsed && "justify-center px-0",
+        className
       )}
     >
       <div className="flex size-8 shrink-0 items-center justify-center rounded-md bg-primary text-xs font-bold text-primary-foreground">
@@ -153,10 +160,24 @@ export function AppShell() {
   const collapsed = useUiStore((state) => state.sidebarCollapsed)
   const toggleSidebar = useUiStore((state) => state.toggleSidebar)
   const [mobileOpen, setMobileOpen] = useState(false)
+  const mainRef = useRef<HTMLElement>(null)
+  const mobileMenuButtonRef = useRef<HTMLButtonElement>(null)
 
   return (
     <div className="flex min-h-dvh w-full bg-background">
+      <a
+        href="#admin-main-content"
+        className="skip-link"
+        onClick={(event) => {
+          event.preventDefault()
+          mainRef.current?.focus()
+        }}
+      >
+        {t("skip_to_content")}
+      </a>
+
       <aside
+        id="admin-sidebar"
         className={cn(
           "sticky top-0 hidden h-dvh shrink-0 flex-col border-r border-sidebar-border bg-sidebar md:flex",
           collapsed ? "w-14" : "w-60"
@@ -167,20 +188,36 @@ export function AppShell() {
       </aside>
 
       <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
-        <SheetContent side="left" className="w-64 gap-0 bg-sidebar p-0">
-          <SheetTitle className="sr-only">{t("open_menu")}</SheetTitle>
-          <Brand />
-          <SidebarNav onNavigate={() => setMobileOpen(false)} />
+        <SheetContent
+          id="admin-mobile-menu"
+          side="left"
+          closeLabel={t("close_menu")}
+          className="w-64 gap-0 bg-sidebar p-0"
+          onCloseAutoFocus={(event) => {
+            event.preventDefault()
+            mobileMenuButtonRef.current?.focus()
+          }}
+        >
+          <SheetTitle className="sr-only">{t("navigation_menu")}</SheetTitle>
+          <Brand className="pr-14" />
+          <SidebarNav
+            label={t("mobile_nav")}
+            onNavigate={() => setMobileOpen(false)}
+          />
         </SheetContent>
       </Sheet>
 
       <div className="flex min-w-0 flex-1 flex-col">
         <header className="sticky top-0 z-30 flex h-14 items-center gap-1 border-b bg-background/85 px-2 backdrop-blur sm:px-4">
           <Button
+            ref={mobileMenuButtonRef}
             variant="ghost"
             size="icon"
             className="md:hidden"
             aria-label={t("open_menu")}
+            aria-haspopup="dialog"
+            aria-controls="admin-mobile-menu"
+            aria-expanded={mobileOpen}
             onClick={() => setMobileOpen(true)}
           >
             <Menu className="size-5" />
@@ -193,6 +230,8 @@ export function AppShell() {
                 size="icon"
                 className="hidden md:inline-flex"
                 aria-label={t("toggle_sidebar")}
+                aria-controls="admin-sidebar"
+                aria-expanded={!collapsed}
                 onClick={toggleSidebar}
               >
                 <PanelLeft className="size-4" />
@@ -207,7 +246,13 @@ export function AppShell() {
           <UserMenu />
         </header>
 
-        <main className="w-full max-w-none flex-1 px-3 py-4 pb-[max(1rem,env(safe-area-inset-bottom))] sm:px-5 md:py-6">
+        <main
+          ref={mainRef}
+          id="admin-main-content"
+          tabIndex={-1}
+          aria-label={t("main_content")}
+          className="w-full max-w-none flex-1 scroll-mt-20 px-3 py-4 pb-[max(1rem,env(safe-area-inset-bottom))] sm:px-5 md:py-6"
+        >
           <Suspense fallback={<RouteFallback />}>
             <Outlet />
           </Suspense>

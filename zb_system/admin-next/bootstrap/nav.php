@@ -42,6 +42,48 @@ function ZbpAdminNext_MapIcon(?string $legacy): string
 }
 
 /**
+ * 已启用 AppCentre 的管理地址.
+ *
+ * 仅接受已安装、已启用且声明管理页面的 AppCentre；地址统一由 App 提供。
+ */
+function ZbpAdminNext_AppCentreUrl(): ?string
+{
+    global $zbp;
+
+    if (!in_array('AppCentre', $zbp->GetPreActivePlugin(), true)) {
+        return null;
+    }
+
+    $app = $zbp->LoadApp('plugin', 'AppCentre');
+    if (!$app->isloaded || !$app->CanManage()) {
+        return null;
+    }
+
+    return $app->GetManageUrl();
+}
+
+/**
+ * SPA 与官方导航共用的应用管理入口.
+ *
+ * @return array{appCentre: array{enabled: bool, url: string|null}, legacyPluginManageUrl: string}
+ */
+function ZbpAdminNext_AppManagement(): array
+{
+    global $zbp;
+
+    $appCentreUrl = ZbpAdminNext_AppCentreUrl();
+
+    return [
+        'appCentre' => [
+            'enabled' => $appCentreUrl !== null,
+            'url'     => $appCentreUrl,
+        ],
+        // force=1 防止旧版入口在 ZC_ADMIN_UI=next 时再次跳回 SPA。
+        'legacyPluginManageUrl' => $zbp->host . 'zb_system/admin/index.php?act=PluginMng&force=1',
+    ];
+}
+
+/**
  * 官方菜单项（结构化，不经过 HTML）.
  *
  * @return array<int, array<string, mixed>>
@@ -95,6 +137,24 @@ function ZbpAdminNext_OfficialNav(): array
             'require' => $require,
             'external' => false,
             'legacy'  => false,
+        ];
+    }
+
+    $appManagement = ZbpAdminNext_AppManagement();
+    $appCentreUrl = $appManagement['appCentre']['url'];
+    if ($zbp->CheckRights('PluginMng')) {
+        $items[] = [
+            'id'       => $appCentreUrl === null ? 'legacy_plugin_manage' : 'app_centre',
+            'title'    => $appCentreUrl === null
+                ? ($zbp->lang['msg']['legacy_plugin_manage'] ?? '旧版插件管理')
+                : ($zbp->lang['msg']['app_center'] ?? '应用中心'),
+            'url'      => $appCentreUrl ?? $appManagement['legacyPluginManageUrl'],
+            'icon'     => $appCentreUrl === null ? 'layout-panel-left' : 'puzzle',
+            'group'    => 'extend',
+            'order'    => 105,
+            'require'  => 'PluginMng',
+            'external' => true,
+            'legacy'   => true,
         ];
     }
 

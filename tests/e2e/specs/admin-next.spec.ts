@@ -142,7 +142,7 @@ test("移动端抽屉忽略桌面折叠状态并显示完整导航文字", async
   await expectAdminShell(page)
 
   await page.getByRole("button", { name: "打开菜单" }).click()
-  const drawer = page.getByRole("dialog", { name: "打开菜单" })
+  const drawer = page.getByRole("dialog", { name: "导航菜单" })
   await expect(drawer).toBeVisible()
   await expect(drawer).toHaveCSS("width", "256px")
   await expect(drawer.getByText("文章管理", { exact: true })).toBeVisible()

@@ -8,8 +8,9 @@ import { useMemo, useState } from "react"
 import { toast } from "sonner"
 
 import { apiGet, apiPost } from "@/lib/api"
+import { appManageLink, appManagementEntry } from "@/lib/app-management"
 import { t } from "@/lib/i18n"
-import { hasRight } from "@/lib/zbp"
+import { hasRight, zbp } from "@/lib/zbp"
 import { ConfirmDialog } from "@/components/confirm-dialog"
 import { DataTable } from "@/components/data-table"
 import { PageHeader } from "@/components/page-header"
@@ -23,6 +24,8 @@ interface AppRow {
   version: string
   author_name: string
   is_actived?: boolean
+  can_manage?: boolean
+  manage_url?: string | null
 }
 
 function useApps(act: "get_plugins" | "get_themes") {
@@ -30,6 +33,35 @@ function useApps(act: "get_plugins" | "get_themes") {
     queryKey: ["app", act],
     queryFn: () => apiGet<{ list: AppRow[] }>("app", act),
   })
+}
+
+function AppManageLink({ app }: { app: AppRow }) {
+  const link = appManageLink(app)
+  if (!link) {
+    return null
+  }
+
+  return (
+    <Button asChild size="sm" variant="outline">
+      <a href={link.href}>{t(link.labelKey)}</a>
+    </Button>
+  )
+}
+
+function AppPageHeader({ title }: { title: string }) {
+  const entry = appManagementEntry(zbp)
+
+  return (
+    <PageHeader
+      title={title}
+      description={t("legacy_app_operations_desc")}
+      actions={
+        <Button asChild variant="outline">
+          <a href={entry.url}>{t(entry.labelKey)}</a>
+        </Button>
+      }
+    />
+  )
 }
 
 export function PluginsPage() {
@@ -99,7 +131,8 @@ export function PluginsPage() {
         id: "actions",
         header: "",
         cell: ({ row }) => (
-          <div className="flex justify-end">
+          <div className="flex items-center justify-end gap-2">
+            <AppManageLink app={row.original} />
             <Switch
               aria-label={row.original.is_actived ? "停用" : "启用"}
               checked={Boolean(row.original.is_actived)}
@@ -121,7 +154,7 @@ export function PluginsPage() {
 
   return (
     <div className="flex flex-col gap-4">
-      <PageHeader title={t("plugin_manage")} />
+      <AppPageHeader title={t("plugin_manage")} />
       <DataTable
         columns={columns}
         data={data?.list ?? []}
@@ -213,9 +246,10 @@ export function ThemesPage() {
       {
         id: "actions",
         header: "",
-        cell: ({ row }) =>
-          row.original.id === activeId ? null : (
-            <div className="flex justify-end">
+        cell: ({ row }) => (
+          <div className="flex items-center justify-end gap-2">
+            <AppManageLink app={row.original} />
+            {row.original.id !== activeId ? (
               <Button
                 size="sm"
                 variant="outline"
@@ -224,8 +258,9 @@ export function ThemesPage() {
               >
                 启用
               </Button>
-            </div>
-          ),
+            ) : null}
+          </div>
+        ),
       },
     ],
     [activeId, activate]
@@ -233,7 +268,7 @@ export function ThemesPage() {
 
   return (
     <div className="flex flex-col gap-4">
-      <PageHeader title={t("theme_manage")} />
+      <AppPageHeader title={t("theme_manage")} />
       <DataTable
         columns={columns}
         data={data?.list ?? []}

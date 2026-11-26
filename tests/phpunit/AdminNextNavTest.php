@@ -54,8 +54,14 @@ class AdminNextNavTest extends PHPUnit\Framework\TestCase
                 $this->assertArrayHasKey($key, $item);
             }
 
-            $this->assertFalse($item['external']);
-            $this->assertStringStartsWith('#/', $item['url']);
+            if (in_array($item['id'], ['app_centre', 'legacy_plugin_manage'], true)) {
+                $this->assertTrue($item['external']);
+                $this->assertTrue($item['legacy']);
+                $this->assertFalse(str_starts_with($item['url'], '#/'));
+            } else {
+                $this->assertFalse($item['external']);
+                $this->assertStringStartsWith('#/', $item['url']);
+            }
             $this->assertNotEmpty($item['title']);
         }
     }
@@ -74,6 +80,8 @@ class AdminNextNavTest extends PHPUnit\Framework\TestCase
 
         $this->assertNotContains('plugins', $ids);
         $this->assertNotContains('themes', $ids);
+        $this->assertNotContains('app_centre', $ids);
+        $this->assertNotContains('legacy_plugin_manage', $ids);
     }
 
     /** @test */

@@ -105,6 +105,8 @@ return array(
         'member_manage'                     => 'Users',
         'theme_manage'                      => 'Themes',
         'plugin_manage'                     => 'Plugins',
+        'app_center'                        => 'App Center',
+        'legacy_plugin_manage'              => 'Legacy Plugin Management',
         'module_manage'                     => 'Modules',
         'site_analyze'                      => 'Site Information',
         'info_intro'                        => 'Dashboard',

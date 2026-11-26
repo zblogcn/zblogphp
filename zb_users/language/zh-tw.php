@@ -108,6 +108,8 @@ return array(
         'member_manage'                     => '帳號管理',
         'theme_manage'                      => '佈景主題',
         'plugin_manage'                     => '外掛管理',
+        'app_center'                        => '應用中心',
+        'legacy_plugin_manage'              => '舊版外掛管理',
         'module_manage'                     => '模組管理',
         'site_analyze'                      => '網站資訊',
         'info_intro'                        => '控制台',

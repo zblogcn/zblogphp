@@ -21,9 +21,11 @@ function SheetClose(props: React.ComponentProps<typeof SheetPrimitive.Close>) {
 function SheetContent({
   className,
   children,
+  closeLabel = "关闭",
   side = "left",
   ...props
 }: React.ComponentProps<typeof SheetPrimitive.Content> & {
+  closeLabel?: string
   side?: "top" | "right" | "bottom" | "left"
 }) {
   return (
@@ -52,9 +54,12 @@ function SheetContent({
         {...props}
       >
         {children}
-        <SheetPrimitive.Close className="absolute top-4 right-4 rounded-xs opacity-70 transition-opacity hover:opacity-100 focus-visible:ring-2 focus-visible:ring-ring">
+        <SheetPrimitive.Close
+          type="button"
+          aria-label={closeLabel}
+          className="absolute top-3 right-3 flex size-11 items-center justify-center rounded-xs opacity-70 transition-opacity hover:opacity-100 focus-visible:ring-2 focus-visible:ring-ring"
+        >
           <XIcon className="size-4" />
-          <span className="sr-only">Close</span>
         </SheetPrimitive.Close>
       </SheetPrimitive.Content>
     </SheetPrimitive.Portal>
