@@ -12,7 +12,7 @@
 
 1. 使用全新的 GitHub runner，确认仓库中没有 `zb_users/c_option.php`。
 2. 用 PHP 8.0 + SQLite 通过 CLI 安装一个临时站点。
-3. 只启用 BlockEditor，并植入隔离评论与测试用户作为对应用例数据。
+3. 在 `SaveOption()` 前关闭登录验证码和评论开关，设置默认 `next`，只启用 BlockEditor，并植入隔离评论与测试用户。
 4. 在 `127.0.0.1:8099` 启动临时 PHP 服务器。
 5. 只在该作业设置 `ZBP_E2E_WRITE=1`，运行桌面 Chrome 与 Pixel 7 两个项目。
 6. 上传 Playwright 报告并停止服务器；runner 随后销毁，不复用任何站点数据。
@@ -79,3 +79,9 @@ pnpm exec playwright test --project=desktop
 ```
 
 失败时截图与 trace 保存在 `test-results/`。CI 同时上传该目录（及 `playwright-report/`，若生成）。
+
+## 本轮最终隔离验证
+
+PHP 8.0.30 + Node 22.20.0，全新 SQLite 站点，Desktop Chrome + Pixel 7，`--retries=0`：
+53 passed / 0 failed / 7 expected skips。7 个跳过均为桌面侧栏/超宽屏与移动抽屉的项目专属用例。
+测试后数据库文本列无 `E2E-*` fixture，上传目录无额外文件，记录为 0 残留。

@@ -153,6 +153,8 @@ jobs:
           php -r '
             require "zb_system/function/c_system_base.php";
             $zbp->Load();
+            $zbp->option["ZC_LOGIN_VERIFY_ENABLE"] = false;
+            $zbp->option["ZC_COMMENT_TURNOFF"] = false;
             $zbp->option["ZC_ADMIN_UI"] = "next";
             $zbp->option["ZC_USING_PLUGIN_LIST"] = "BlockEditor";
             $zbp->SaveOption();

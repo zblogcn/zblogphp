@@ -61,21 +61,21 @@ class AdminNextHomeUrlTest extends PHPUnit\Framework\TestCase
     }
 
     /** @test */
-    public function testDefaultIsLegacyUiUntilFinalAcceptance()
+    public function testDefaultIsNextUiAfterReleaseGates()
     {
         $this->setUi(null);
         $this->setQuery([]);
 
-        $this->assertFalse(AdminUiIsNext());
-        $this->assertSame('admin/index.php?act=admin', AdminHomeUrl());
+        $this->assertTrue(AdminUiIsNext());
+        $this->assertSame('admin-next/index.php', AdminHomeUrl());
     }
 
     /** @test */
-    public function testDefaultOptionIsLegacy()
+    public function testDefaultOptionIsNext()
     {
         $options = include dirname(__DIR__, 2) . '/zb_system/defend/option.php';
 
-        $this->assertSame('legacy', $options['ZC_ADMIN_UI']);
+        $this->assertSame('next', $options['ZC_ADMIN_UI']);
     }
 
     /** @test */
@@ -102,6 +102,16 @@ class AdminNextHomeUrlTest extends PHPUnit\Framework\TestCase
     public function testQueryLegacyOverridesOptionNext()
     {
         $this->setUi('next');
+        $this->setQuery(['ui' => 'legacy']);
+
+        $this->assertFalse(AdminUiIsNext());
+        $this->assertSame('admin/index.php?act=admin', AdminHomeUrl());
+    }
+
+    /** @test */
+    public function testQueryLegacyOverridesDefaultNext()
+    {
+        $this->setUi(null);
         $this->setQuery(['ui' => 'legacy']);
 
         $this->assertFalse(AdminUiIsNext());

@@ -5,7 +5,7 @@
 
 > 当前只有已启用的插件和当前主题会被采集。协议版本不匹配时整段忽略，旧菜单/旧页面仍可能通过
 > legacy 导航出现。`@zblogphp/admin-ui` 组件包尚未发布。
-> 后台默认仍为 `ZC_ADMIN_UI=legacy`，只有显式 `next` 才默认进入 SPA；插件验收应分别覆盖 legacy 与 SPA。
+> 后台默认已为 `ZC_ADMIN_UI=next`；已有显式 `legacy` 保持不变，并可用 `ui=legacy` 或 `force=1` 回退。插件验收应分别覆盖 legacy 与 SPA。
 
 ## 1. 声明页面
 
@@ -252,4 +252,4 @@ upload: async (_mod, _act, form) => apiUpload("upload", "post", form)
 - 在 SPA 与 legacy 两种后台分别验证菜单权限、页面加载、保存、应用管理入口和回退。
 - 对编辑器验证新建、回填、保存、`<!--more-->`、选择图片上传和无插件时的 textarea 回退。
 - 对插件页面验证键盘焦点、弹层焦点回转、移动抽屉和窄屏无横向溢出。
-- 不要把未运行的浏览器测试写成已通过；跳过必须单独说明。当前隔离 E2E 未被本次文档同步宣称通过。
+- 不要把未运行的浏览器测试写成已通过；跳过必须单独说明。本轮 PHP 8.0.30 完整隔离 E2E 为 53 passed / 0 failed / 7 expected skips，0 残留。

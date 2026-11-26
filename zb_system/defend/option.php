@@ -235,8 +235,8 @@ return [
     'ZC_FIX_MODULE_MIXED_FILENAME'   => true,
     'ZC_LOGS_MORE_INFO'              => false,
 
-    // 后台界面：最终验收通过前默认 legacy；显式 next 才启用新版 SPA
-    'ZC_ADMIN_UI'                    => 'legacy',
+    // 后台界面：默认启用新版 SPA；可显式设置 legacy 或使用 URL 参数回退
+    'ZC_ADMIN_UI'                    => 'next',
 
     // API 相关
     'ZC_API_ENABLE'                     => false,

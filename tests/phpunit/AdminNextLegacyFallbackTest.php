@@ -44,4 +44,16 @@ class AdminNextLegacyFallbackTest extends PHPUnit\Framework\TestCase
         );
         $this->assertStringNotContainsString('cmd.php?act=admin', $source);
     }
+
+    /** @test */
+    public function testLegacyEntryHonorsForceQuery()
+    {
+        $file = dirname(__DIR__, 2) . '/zb_system/admin/index.php';
+        $source = (string) file_get_contents($file);
+
+        $this->assertStringContainsString(
+            "AdminUiIsNext() && GetVars('force', 'GET') !== '1'",
+            $source
+        );
+    }
 }

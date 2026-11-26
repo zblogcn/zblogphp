@@ -2,29 +2,29 @@
 
 > 范围：`zb_system/admin-next/`、`utils/admin-next-src/`、`zb_users/plugin/BlockEditor/`、
 > `tests/phpunit/`、`tests/e2e/` 与 `.github/workflows/admin-next.yml`。
-> 本文是当前代码、发布配置与本地验证状态记录，不是 CI 报告。代码已落地、测试已发现、测试已通过是三个不同状态；
-> 本地定向 E2E 已执行，完整 CI/全套 E2E 最终报告仍待运行。
+> 本文是当前代码、发布配置与本地验证状态记录，不是 GitHub Actions 报告。代码已落地、测试已发现、测试已通过是三个不同状态；
+> 本轮完整隔离 E2E 已执行并通过，推送后的远程 CI 报告仍需单独查看。
 
 ## 1. 当前进度
 
 | 阶段 | 状态 | 事实基线 |
 |---|---|---|
-| 0：前端工程与安全网 | 进行中 | 本地 frozen install、构建、产物/体积/归档校验、Composer validate 与 PHPUnit 已通过；完整 CI 报告待运行 |
+| 0：前端工程与安全网 | 已完成（本地） | Node 22 frozen install、构建、产物/体积/归档校验、Composer validate、PHPUnit 与完整隔离 E2E 已通过 |
 | 1：SPA 壳与只读页面 | 已落地 | HashRouter、`__ZB__`、导航、仪表盘、官方列表/设置读取、无障碍与响应式外壳已实现 |
 | 2：官方写操作 | 部分 | 文章/页面、分类标签、评论、附件、用户、模块、主题切换、插件启停、43 字段设置已实现；不等同旧页全部维护动作 |
 | 3：插件/主题与编辑器接入 | 部分 | v2 清单、按需 ESM、共享 runtime、legacy 回退、编辑器契约、图片选择上传、应用管理入口已实现；组件包未发布 |
-| 4：默认策略与发布加固 | 进行中 | 默认暂为 `ZC_ADMIN_UI=legacy`，显式 `next` 才启用 SPA；体积/归档/Composer 门禁已落地，本地关键 E2E 通过，完整 CI 待运行 |
+| 4：默认策略与发布加固 | 已完成（本地） | 默认 `ZC_ADMIN_UI=next`，保留 legacy 回退；PHP 8.0.30 完整隔离 E2E 为 53 passed / 0 failed / 7 expected skips，0 残留 |
 | 5：兼容深化 | 部分 | 旧编辑 Hook 自动回退和核心旧库补列已有；新 Hook 插槽、高级编辑器、组件包等未完成 |
 
-不再使用“默认进入新版”“自动补列由 SPA 执行”“评论审核等于评论编辑”“附件上传等于编辑器图片上传”
+不再使用“自动补列由 SPA 执行”“评论审核等于评论编辑”“附件上传等于编辑器图片上传”
 “XML capabilities 等于实际能力”“作业存在等于 E2E 通过”等表述。
 
 ## 2. 已落地的实现
 
 ### 2.1 默认入口、Schema 与兼容回退
 
-- `zb_system/defend/option.php` 将 `ZC_ADMIN_UI` 默认设为 `legacy`；
-  `AdminUiIsNext()` 只在显式 `next` 时返回 true，`ui=legacy` 可临时覆盖。
+- `zb_system/defend/option.php` 将 `ZC_ADMIN_UI` 默认设为 `next`，`AdminUiIsNext()` 在选项缺失时同样返回 true；
+  已有显式 `legacy` 保持不变，未知值仍回退 legacy，`ui=legacy` 可临时覆盖。
 - `admin/index.php?force=1` 可强制停留旧后台；`admin-next/index.php?ui=legacy` 直接跳转到该入口。
 - `c_system_updatedb.php` 的 `updatedb_migrate()` 幂等补齐 Post/Category/Tag/Member/Config 的历史缺失列；
   全部 DDL 成功后才推进 `ZC_LAST_VERSION`，没有自动 down migration。
@@ -69,7 +69,7 @@
 - 桌面侧栏键盘开关、折叠链接保留名称、`aria-expanded` / `aria-controls`。
 - 移动抽屉支持键盘开关、Escape 关闭、焦点回转，关闭按钮触控尺寸至少 44px。
 - 全局可见焦点、`prefers-reduced-motion`、深浅色/跟随系统主题。
-- Playwright 已定义 320/375/768/1024/1440/1920px 横向溢出检查；测试定义不等于已通过。
+- Playwright 已定义 320/375/768/1024/1440/1920px 横向溢出检查，并已在 PHP 8.0.30 完整隔离 E2E 的桌面/移动项目通过。
 
 ## 3. BlockEditor 实际能力
 
@@ -105,17 +105,18 @@
 
 - `pnpm install --frozen-lockfile`：前端与 E2E 作业均已覆盖。
 - `pnpm typecheck` / `pnpm build` / `pnpm verify:assets`：前端作业均已覆盖；
-  `utils/admin-next-src/package.json` 另提供聚合 `verify`（build + verify:assets，build 自身包含 typecheck）。
+  `utils/admin-next-src/package.json` 另提供聚合 `verify`（build + verify:assets + verify:size + verify:release，build 自身包含 typecheck）。
 - PHPUnit：Composer scripts `test:admin-next` / `test` 与 CI 两条 PHPUnit 命令均已定义。
 - 隔离 E2E：`needs: [frontend, phpunit]`，一次性 runner、loopback 地址、全新 SQLite 安装和写入开关均已定义。
+- CLI 安装后的初始化在 `SaveOption()` 前设置 `ZC_LOGIN_VERIFY_ENABLE=false`、`ZC_COMMENT_TURNOFF=false`，避免验证码和评论开关阻断登录/写用例。
 - 修正了产物零差异步骤的 Git 路径问题：该步骤显式从仓库根目录运行，避免 job 默认目录导致检查错误路径。
-- 门禁定义存在不等于某次运行通过；本地关键定向 E2E 已执行，完整 CI/全套 E2E 报告仍待运行。
+- 本地完整隔离 E2E 已通过；GitHub Actions 远程报告仍需推送后查看，不能把本地结果写成远程 CI 已运行。
 
-## 5. 已知问题与风险
+## 5. 已知问题与风险（不阻断本轮提交）
 
 | 级别 | 问题 | 影响与规避 |
 |---|---|---|
-| 高 | 完整 CI 与全套隔离 E2E 未最终重跑 | 本地关键定向 E2E 已通过，但发布前仍需全新 runner 的完整报告，不能把定向通过写成全套通过 |
+| 低 | GitHub Actions 远程报告待查看 | 本轮本地完整门禁已通过；推送后需确认三个远程作业，不把本地结果冒充远程 CI |
 | 中 | PHP 8.0 开发依赖兼容未单独证明 | 运行时最低 8.0；CI PHPUnit 使用 8.4，不能据此宣称 8.0 开发依赖兼容 |
 | 中 | 旧表格行 Hook 缺失 | `Filter_Plugin_Admin_ArticleMng_Table` 追加列不在 SPA 列表显示；使用“旧版（含插件列）” |
 | 中 | 旧编辑 Hook 仅自动回退 | SPA 不执行旧回调，也没有新结构化插槽；依赖旧 Hook 的编辑必须走 legacy |
@@ -123,24 +124,23 @@
 | 中 | 图片上传仅选择文件链路 | 无拖拽/粘贴、媒体库、进度与重试 |
 | 中 | 应用中心未 SPA 化 | 使用 AppCentre 外部管理页或 forced legacy 插件管理；安装/卸载/上传仍在旧流程 |
 | 中 | 组件包未发布 | `@zblogphp/admin-ui` 不可用；插件需复用 runtime 或手写 ESM |
-| 中 | 全套 E2E 最终报告待生成 | `comment.put` 保存、评论审核和 BlockEditor 图片上传已有独立断言并定向通过；仍需完整 CI 报告 |
 | 低 | CSP/浏览器基线 | import map 与插件 ESM 需要较新浏览器；旧插件脚本仍依赖 legacy |
 
 ## 6. 本轮核对记录
 
-本轮本地验证环境为 Windows + Node 24.22.3 + pnpm 10.30.3 + PHP 8.4.2；CI 前端使用 Node 22，
-PHPUnit 使用 PHP 8.4，隔离 E2E 使用 PHP 8.0。本地通过不等于对应 CI 作业已经运行。
+本轮本地验证环境为 Windows + Node 22.20.0（Volta）+ pnpm 10.30.3 + PHP 8.4.2；完整隔离 E2E 使用
+PHP 8.0.30 + Node 22.20.0。CI 前端使用 Node 22，PHPUnit 使用 PHP 8.4；本地通过不等于 GitHub Actions 已运行。
 
 | 检查 | 状态 | 结果 |
 |---|---|---|
-| 默认 UI 代码与 PHPUnit 测试定义 | 已核对 | 默认 `legacy`，显式 `next` 才启用 SPA |
+| 默认 UI 代码与 PHPUnit 测试 | 通过 | 默认 `next`；缺失选项进入 SPA，显式 `legacy` 保持旧后台、未知值安全回退，`ui=legacy` 与 `force=1` 均有回归覆盖 |
 | 旧库补列与 Schema 阻断 | 已核对 | 核心 `updatedb()` 补列；SPA 只预检并阻断缺列 |
 | 旧编辑 Hook 自动回退 | 已核对 | 8 个旧 Hook 任一项注册即跳转 forced legacy 编辑页 |
 | 评论 `comment.put` | 已核对 | 前端保存与 API 原地更新路径存在 |
 | 设置字段 | 已核对 | 服务端 43 项，SPA 43 项且唯一 |
 | 编辑器图片上传 | 已核对 | 选择文件上传链路存在；拖拽/粘贴仍未实现 |
 | 应用中心/管理入口 | 已核对 | AppCentre 管理地址与 forced legacy 回退存在 |
-| 无障碍/响应式 | 已核对实现与测试定义 | 代码路径存在；定向浏览器验收通过，完整 CI 报告待运行 |
+| 无障碍/响应式 | 通过 | PHP 8.0.30 完整隔离 E2E 桌面/移动通过，含 320–1920px 溢出检查 |
 | Composer lock | 通过 | `composer validate --strict --no-check-publish` 与 `composer install --dry-run` 均通过；56 个依赖版本未变化 |
 | 前端 frozen install | 通过 | `pnpm install --frozen-lockfile` 退出 0，lockfile 未变化 |
 | 前端 typecheck | 通过 | `pnpm typecheck` 退出 0 |
@@ -148,19 +148,22 @@ PHPUnit 使用 PHP 8.4，隔离 E2E 使用 PHP 8.0。本地通过不等于对应
 | 体积预算 | 通过 | 首屏静态 gzip 170,392 bytes（166.40KB）/ 180KB；最大单页 chunk 12,091 bytes（11.81KB）/ 80KB |
 | 发布包边界 | 通过 | `git archive HEAD` 包含 assets 35 个文件；前端源码与 tests 均为 0 |
 | 产物零差异 | 通过 | 重构建后 `git diff --exit-code -- zb_system/admin-next/assets` 与 `git status --porcelain` 均无输出 |
-| admin-next PHPUnit | 通过 | PHP 8.4.2：83 tests / 781 assertions；有既有 Scheduler CronExpression nullable 参数弃用警告 |
+| admin-next PHPUnit | 通过 | PHP 8.4.2：85 tests / 784 assertions；有既有 Scheduler CronExpression nullable 参数弃用警告 |
 | 核心 PHPUnit | 通过 | PHP 8.4.2：61 tests / 181 assertions；有同一既有 Scheduler 弃用警告 |
-| Playwright frozen install / 用例发现 | 通过（仅发现） | `pnpm install --frozen-lockfile` 退出 0；`playwright test --list` 发现 3 个文件、56 个 desktop/mobile 用例 |
+| PHP 语法 / YAML / 差异检查 | 通过 | 本次改动 PHP 文件 `php -l`、工作流 PyYAML 解析与 `git diff --check` 均退出 0 |
+| Playwright frozen install / 用例发现 | 通过（仅发现） | Node 22.20.0 下 `pnpm install --frozen-lockfile` 退出 0；完整运行共 60 个 desktop/mobile 用例 |
 | 工作流 YAML | 通过 | Python PyYAML 解析 `.github/workflows/admin-next.yml` 成功 |
 | 隔离定向写 E2E | 通过 | BlockEditor 图片上传 2/2；评论审核与评论管理 6/6；Desktop/Mobile、`--retries=0`、0 skip；数据库 SHA256 与基线一致、0 残留 |
-| 全套隔离 E2E | 待最终重跑 | 最终修复前 47 passed / 2 failed / 7 skipped；两项失败已修复并定向通过，但完整最终报告尚未生成 |
+| 全套隔离 E2E | 通过 | PHP 8.0.30 + Node 22.20.0、全新 SQLite、Desktop Chrome + Pixel 7、`--retries=0`：53 passed / 0 failed / 7 expected skips |
+| E2E 残留扫描 | 通过 | 数据库全部文本列无 `E2E-*` fixture，上传目录无额外文件；种子评论保持已审核，记录为 0 残留 |
 
 ## 7. 后续工作
 
 ### 阶段 4：发布加固（当前优先）
 
 - [x] 同步 Composer lock，并保持锁定依赖版本不变。
-- [ ] 在全新 runner 实际运行全套隔离 E2E，检查 skipped 项并保存报告。
+- [x] 在全新隔离 SQLite 站点运行全套 E2E，检查 7 个预期跳过并确认 0 残留。
+- [ ] 推送后查看 GitHub Actions 三个作业的远程报告。
 - [x] 为评论 `comment.put` 保存与编辑器图片选择上传补独立 E2E 断言。
 - [x] 验证发布包包含 `assets/` 且按约定排除 `utils/admin-next-src/` 与 `tests/`。
 - [x] 增加壳首屏与单页 chunk 体积预算。
@@ -187,6 +190,9 @@ PHPUnit 使用 PHP 8.4，隔离 E2E 使用 PHP 8.0。本地通过不等于对应
 | 删除接口收不到 body id | 删除接口只读 URL 参数 | CSRF 校验后统一回填 id |
 | 列表异步渲染导致误判无数据 | 过早统计按钮/行数 | 先等待首行或目标控件，再判断数据状态 |
 | CI 产物零差异检查漏检 | job 默认目录下使用了仓库根路径 | 零差异步骤显式 `working-directory: .` |
+| 全新 CLI E2E 登录/评论失败 | 安装默认启用登录验证码或关闭评论 | `SaveOption()` 前将 `ZC_LOGIN_VERIFY_ENABLE`、`ZC_COMMENT_TURNOFF` 均设为 `false` |
+| 评论/附件 ID 严格比较失败 | PHP 8.0 SQLite API 可能将 ID 返回为字符串 | 读取时统一 `Number(row.ID)`，类型声明允许 `number \| string` |
+| 桌面/移动评论审核互相干扰 | 两个项目并行修改同一条种子评论 | 每个项目独立创建评论 fixture，按固定 ID 还原并删除 |
 | 中文被破坏 | 非 UTF-8 的 PowerShell 写文件方式 | 使用 UTF-8 编辑器/工具，避免默认编码改写 |
 
 ## 9. 关键文件索引
@@ -213,7 +219,7 @@ PHPUnit 使用 PHP 8.4，隔离 E2E 使用 PHP 8.0。本地通过不等于对应
 ## 10. 开发备忘
 
 - 前端构建：`cd utils/admin-next-src && pnpm build`，产物落到 `zb_system/admin-next/assets/`。
-- 聚合校验：`pnpm verify`（先 build，再 `verify:assets`）；提交前从仓库根目录确认产物无 diff。
+- 聚合校验：Node 22 下执行 `pnpm verify`（build + verify:assets + verify:size + verify:release）；提交前从仓库根目录确认产物无 diff。
 - 本地站点：在仓库根目录执行 `php -S 127.0.0.1:8099 -t .`，确保站点配置地址与访问地址一致。
 - 本地写 E2E：只能指向独立安装、独立数据库的隔离站点，并显式设置 `ZBP_E2E_WRITE=1`。
 - 缺少 `ZBP_USER` / `ZBP_PASS` 或用例主动跳过时，跳过不是通过。

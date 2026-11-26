@@ -2,13 +2,13 @@
 
 > 状态：当前已实现基线（2026-11-27 对照 SPA、内部 API、前端产物、PHPUnit 与 CI 配置核对）。
 > 根目录 `1792152278422-z-blogphp-shadcn-ui.md` 保留为历史设计稿；当前阶段、功能矩阵、验收门禁与回退策略以本文为准。
-> 本文区分“代码已落地”和“验证已通过”。未运行、已跳过或仅有测试定义的项不计为通过，隔离 E2E 结果必须以对应 CI 运行及 Playwright 报告为准。
+> 本文区分“代码已落地”和“验证已通过”。未运行、已跳过或仅有测试定义的项不计为通过，隔离 E2E 结果必须以对应隔离运行及 Playwright 输出为准；本地完整验证不代表 GitHub Actions 已运行。
 
 ## 1. 当前基线
 
 | 领域 | 当前实现 | 边界 |
 |---|---|---|
-| 默认后台 | `ZC_ADMIN_UI` 默认值为 `legacy`；`zb_system/cmd.php?act=admin` 默认进入 `zb_system/admin/index.php?act=admin` | 只有显式设置 `ZC_ADMIN_UI=next` 才默认进入 SPA；已有 `next` 值不会被升级过程主动改写 |
+| 默认后台 | `ZC_ADMIN_UI` 默认值为 `next`；`zb_system/cmd.php?act=admin` 默认进入 `zb_system/admin-next/index.php` | 新安装和缺失选项时启用 SPA；已有显式 `legacy` 保持不变，未知值仍安全回退 legacy |
 | 新版入口 | `zb_system/admin-next/index.php` 提供 React 19 + TypeScript + Vite 7 的 HashRouter SPA | 登录页仍是旧版；直接访问 SPA 入口不等同于更改默认后台 |
 | 旧后台回退 | `admin/index.php?force=1` 可强制停留 legacy；`admin-next/index.php?ui=legacy` 直接跳转到该入口 | `force=1` 必须保留，否则旧入口在 `ZC_ADMIN_UI=next` 时会再次跳回 SPA |
 | 数据入口 | `zb_system/admin-next/api.php` 复用系统 API 的 mod/act、鉴权、限流与响应 | 独立于公开 `zb_system/api.php`，不受 `ZC_API_ENABLE` 影响；要求登录及 `admin` 权限 |
@@ -27,26 +27,27 @@
 | PHP 版本 | `composer.json` 与安装器要求 PHP >= 8.0；SPA 入口对低版本显示可读错误页 | 不支持在 PHP < 8.0 上通过 legacy 回退运行当前版本 |
 | 插件协议 | `plugin.xml` / `theme.xml` 使用 `<admin version="2">`，支持菜单、SPA、legacy 与 editor 声明 | 只采集已启用插件和当前主题；`@zblogphp/admin-ui` 尚未发布 |
 
-### 1.1 当前明确限制
+### 1.1 当前明确限制（不阻断本次代码发布）
 
 - 登录、密码找回、应用中心的 SPA 化未完成；插件/主题包安装、卸载、上传也未迁移。
 - 旧表格行 Hook（如 `Filter_Plugin_Admin_ArticleMng_Table`）追加的列不在 SPA 列表渲染；文章/页面列表提供“旧版（含插件列）”入口。
 - 旧编辑 Hook 采用检测后自动回退，不是兼容执行；新的结构化编辑 Hook 插槽尚未实现。
 - BlockEditor 实际是 `contenteditable + document.execCommand`，不是 ProseMirror；没有块事务、块拖拽/嵌套、表格编辑、嵌入、代码高亮、协同或本地草稿。
 - XML 中的 `capabilities` 只是元数据，不能作为功能存在或测试通过的证据。
-- Composer lock、发布包边界和首屏/chunk 体积预算已有自动门禁；完整 CI 与全套隔离 E2E 的最终报告仍待运行，当前默认保持 `legacy`。
+- Composer lock、发布包边界和首屏/chunk 体积预算已有自动门禁；PHP 8.0.30 全新隔离站点完整 E2E 已通过（53 passed / 0 failed / 7 expected skips，0 残留）。本次为本地完整验证，GitHub Actions 远程报告仍需在推送后查看。
+- PHPUnit CI 使用 PHP 8.4；PHP 8.0 的完整运行时已由隔离 E2E 覆盖，但 PHP 8.0 开发依赖兼容未单独证明。
 
 ## 2. 阶段 0–5
 
-状态含义：**已落地**表示代码路径存在；**部分**表示只覆盖矩阵内的子集；**进行中**表示门禁或发布工作尚未完成；**计划**表示不能作为发布承诺。
+状态含义：**已完成（本地）**表示本轮本地门禁已通过；**已落地**表示代码路径存在；**部分**表示只覆盖矩阵内的子集；**进行中**表示门禁或发布工作尚未完成；**计划**表示不能作为发布承诺。
 
 | 阶段 | 目标 | 当前状态 | 退出条件 |
 |---|---|---|---|
-| 0：基线与安全网 | 固定 PHP/Node/pnpm 基线，保留 legacy，建立可重复构建与测试门禁 | **进行中**：本地 frozen install、typecheck、build、产物/体积/归档校验、Composer validate 与 PHPUnit 已通过；完整 CI 报告待运行 | frozen lockfile 安装、typecheck、build、`verify`、admin-next/core PHPUnit 全部通过；隔离 E2E 有完整报告且意外跳过已处理 |
+| 0：基线与安全网 | 固定 PHP/Node/pnpm 基线，保留 legacy 回退，建立可重复构建与测试门禁 | **已完成（本地）**：Node 22、frozen install、typecheck、build、产物/体积/归档校验、Composer validate、admin-next/core PHPUnit 与完整隔离 E2E 均通过 | frozen lockfile 安装、typecheck、build、`verify`、admin-next/core PHPUnit 全部通过；隔离 E2E 有完整报告且意外跳过已处理 |
 | 1：SPA 壳与只读页面 | Hash 路由、`__ZB__`、导航、官方列表/设置读取、响应式与无障碍外壳 | **已落地** | 官方菜单深链可渲染；权限由服务端复核；manifest 注入正确；无障碍/响应式检查在隔离站点实际通过 |
 | 2：官方写操作与编辑 | 文章/页面、分类标签、评论、附件、用户、模块、主题、插件、设置 | **部分**：矩阵内官方写路径已实现，包含 `comment.put`、43 字段设置和编辑器图片选择上传；不等同旧后台全量功能 | 已覆盖路径有自动化门禁；缺列、旧编辑 Hook 和设置边界均有可验证回退 |
 | 3：插件与编辑器接入 | v2 清单、按需 bundle、legacy 回退、编辑器契约、应用管理入口 | **部分**：协议、宿主、legacy 回退、编辑器上传上下文与应用管理入口已落地；BlockEditor 能力有限，组件包未发布 | 插件入口/样式/管理/回退可验证；编辑器能力以实现为准；发布可复用的组件包与模板 |
-| 4：发布加固 | 可复现产物、隔离 E2E、发布包边界、性能与浏览器基线 | **进行中**：manifest/产物、体积、归档边界、Composer lock 与三作业 CI 已落地；本地关键 E2E 已通过，完整 CI 报告待运行 | CI 全绿且无意外跳过；重构建产物零差异；发布包包含 `assets/` 并按约定排除前端源码 |
+| 4：发布加固 | 可复现产物、隔离 E2E、发布包边界、性能与浏览器基线 | **已完成（本地）**：manifest/产物、体积、归档边界、Composer lock 与三作业 CI 已落地；PHP 8.0.30 完整隔离 E2E 为 53 passed / 0 failed / 7 expected skips，0 残留 | 本地门禁全绿且无意外跳过；重构建产物零差异；发布包包含 `assets/` 并按约定排除前端源码；推送后远程 CI 结果另行确认 |
 | 5：兼容深化 | 旧 Hook 新插槽、旧库迁移深化、块编辑、插件组件生态 | **部分**：旧编辑 Hook 自动回退和核心旧库补列已有；新插槽、高级编辑器、组件包等未完成 | 先完成新插槽与数据回退验证，再扩大编辑器能力；不得绕过阶段 4 门禁 |
 
 ## 3. 功能覆盖矩阵
@@ -55,7 +56,7 @@
 
 | 功能 | SPA/API 基线 | 当前限制或回退 |
 |---|---|---|
-| 默认入口 | 默认 `ZC_ADMIN_UI=legacy`；显式 `next` 才进入 SPA | 直接访问 `admin-next/index.php` 可预览/使用 SPA，但不会改写默认设置 |
+| 默认入口 | 默认 `ZC_ADMIN_UI=next`；显式 `legacy` 或 `ui=legacy` 回退旧后台 | 已有 `legacy` 设置在升级后保持不变；直接访问 SPA 入口不会改写默认设置 |
 | 仪表盘 | 已覆盖：统计、环境信息 | 旧版统计维护/缓存操作未迁移 |
 | 文章列表 | 已覆盖：列表、搜索、分页、单选/批量删除、新建/编辑入口 | 旧表格行 Hook 追加列不显示；提供 `ArticleMng&force=1` 的“旧版（含插件列）”入口 |
 | 页面列表 | 与文章同一列表组件，`Type=1` | 同上，旧入口为 `PageMng&force=1` |
@@ -74,8 +75,8 @@
 | 网站设置 | 六个分组、43 个白名单字段 | `ZC_BLOG_HOST` 只读；只保存服务端白名单字段；缓存/统计等维护动作仍在 legacy |
 | 插件/主题 SPA | 已覆盖：v2 声明、菜单、按需 ESM、共享 React、样式、legacy 入口/加载失败回退 | 动态 import 前要求精确命中声明菜单且权限通过；`@zblogphp/admin-ui` 尚未发布 |
 | BlockEditor | 基础富文本、标题/段落、粗斜体/删除线、列表/引用、链接、`pre/code`、源码、撤销/重做、`<!--more-->` 转换、HTML 白名单净化、选择图片上传 | 非 ProseMirror；无块事务、拖拽/嵌套、表格、嵌入、高亮、协同、本地草稿 |
-| 无障碍 | 跳转链接、主内容焦点、命名/状态、抽屉焦点管理、键盘操作、可见焦点、减少动效 | 以实际浏览器报告为准；本次未宣称通过 |
-| 响应式 | 桌面折叠侧栏、移动抽屉、安全区、响应式表格/表单/编辑布局 | Playwright 定义 320/375/768/1024/1440/1920px 溢出检查；本次未宣称通过 |
+| 无障碍 | 跳转链接、主内容焦点、命名/状态、抽屉焦点管理、键盘操作、可见焦点、减少动效 | PHP 8.0.30 完整隔离 E2E 已覆盖桌面/移动并通过 |
+| 响应式 | 桌面折叠侧栏、移动抽屉、安全区、响应式表格/表单/编辑布局 | 320/375/768/1024/1440/1920px 溢出检查已在完整隔离 E2E 通过 |
 | 登录/找回/应用中心 | 未 SPA 化 | 使用 legacy 或外部应用中心入口 |
 
 ## 4. 验收门禁
@@ -128,7 +129,7 @@ composer test
 - 运行时最低版本为 PHP 8.0。
 - `composer.lock` 已同步，`composer validate --strict --no-check-publish` 与 `composer install --dry-run` 均通过；56 个锁定依赖版本未变化。
 - CI PHPUnit 作业使用 PHP 8.4，不能据此宣称 PHP 8.0 开发依赖兼容。
-- PHP 8.0 运行时路径由隔离 E2E 作业使用全新 SQLite 安装覆盖；运行时覆盖也不等于完整 E2E 已通过。
+- PHP 8.0.30 运行时路径已由全新 SQLite 隔离安装的完整 E2E 覆盖；53 passed / 0 failed / 7 expected skips，0 残留。
 
 ### 4.3 Playwright 与写操作隔离
 
@@ -143,22 +144,23 @@ CI 工作流：`.github/workflows/admin-next.yml`。
 - `ZBP_E2E_WRITE=1` 只设置在 `e2e-isolated` 作业；runner 是一次性环境，不使用生产或长期站点地址/密码。
 - 本地写 E2E 必须使用独立安装、独立数据库和独立上传目录；严禁对生产或现有站点设置该变量。
 - 测试定义、`playwright test --list` 或作业存在都不等于执行通过。跳过不是通过，必须查看报告中的 skipped 项。
-- 本地一次性 SQLite 站点已完成关键定向验收：BlockEditor 图片上传 Desktop/Mobile 2/2；评论审核与评论管理 Desktop/Mobile 6/6；均使用 `--retries=0`、0 skip，测试后数据库 SHA256 与基线一致、0 残留 fixture。
-- 全套 56 个 desktop/mobile 用例已在最终修复前跑出 47 passed / 2 failed / 7 skipped；两项失败对应的测试问题已修复并定向复跑通过，但最终全套尚未重新完整执行，不能把定向通过写成完整 CI 通过。
+- CI 初始化在 `SaveOption()` 前设置 `ZC_LOGIN_VERIFY_ENABLE=false`、`ZC_COMMENT_TURNOFF=false`，避免全新 CLI 安装的登录验证码或评论开关阻断 E2E。
+- 最终完整隔离 E2E 使用 Node 22.20.0、PHP 8.0.30、全新 SQLite 站点、Desktop Chrome + Pixel 7，共 60 个用例：53 passed / 0 failed / 7 expected skips；使用 `--retries=0`。
+- 7 个跳过均为项目专属用例（桌面侧栏/超宽屏与移动抽屉的跨项目跳过）；评论审核改为每个项目独立创建 fixture，避免并行操作共享种子评论。
+- 测试后扫描数据库全部文本列无 `E2E-*` fixture，上传目录无额外文件，种子评论保持已审核，记录为 0 残留。
 
 ### 4.4 发布门禁
 
 发布前逐项确认：
 
-- [x] 本地前端构建、产物、体积、归档边界、Composer validate 与 PHPUnit 门禁通过。
-- [x] 本地隔离定向 E2E 覆盖桌面/移动，0 skip、0 残留数据。
+- [x] Node 22 本地前端构建、产物、体积、归档边界、Composer validate 与 PHPUnit 门禁通过。
+- [x] PHP 8.0.30 全新隔离站点完整 E2E：53 passed / 0 failed / 7 expected skips，0 残留。
 - [x] `assets/manifest.json` 与同目录 JS/CSS 同提交，无旧 hash 残留，重构建零差异。
 - [x] 发布包包含 `zb_system/admin-next/assets/`，并排除 `utils/admin-next-src/` 与 `tests/`。
-- [ ] 在全新 runner 完成前端、PHPUnit、全套隔离 E2E CI，失败与意外跳过已处理。
-- [ ] 全套 E2E 最终报告覆盖桌面/移动，且没有把跳过描述成通过。
-- [ ] 升级前备份数据库、`zb_users/c_option.php`、上传目录与当前插件/主题配置。
-- [ ] 已用 `MIGRATION.md` 中的可靠回退路径验证 legacy 可访问。
-- [ ] 已评估旧库补列结果、旧编辑 Hook、旧表格行 Hook 和 43 字段设置边界。
+- [x] 已用 `MIGRATION.md` 中的可靠回退路径验证 legacy 可访问，包括 `force=1` 与 `ui=legacy`。
+- [x] 已评估旧库补列结果、旧编辑 Hook、旧表格行 Hook 和 43 字段设置边界，并记录为非阻断限制。
+- [ ] 推送后查看 GitHub Actions 三个作业的远程报告；本轮本地完整验证不冒充远程 CI 已运行。
+- [ ] 实际部署前由运维备份数据库、`zb_users/c_option.php`、上传目录与当前插件/主题配置。
 
 ## 5. 回退策略
 
@@ -166,7 +168,7 @@ CI 工作流：`.github/workflows/admin-next.yml`。
 
 | 场景 | 可靠操作 | 说明 |
 |---|---|---|
-| 默认行为 | 保持 `ZC_ADMIN_UI=legacy` | 当前默认值；新安装和未显式切换的站点不会自动进入 SPA |
+| 默认行为 | `ZC_ADMIN_UI=next` | 新安装和缺失选项时进入 SPA；已有显式 `legacy` 继续使用旧后台 |
 | 临时进入旧后台 | `/zb_system/admin/index.php?act=admin&force=1` | `force=1` 阻止旧入口自动跳回 SPA |
 | 从 SPA 入口回退 | `/zb_system/admin-next/index.php?ui=legacy` | 直接跳转到 `admin/index.php?force=1` |
 | 从命令入口回退 | `/zb_system/cmd.php?act=admin&ui=legacy` | `ui=legacy` 参与 `AdminHomeUrl()` 判定 |
@@ -201,7 +203,7 @@ CI 工作流：`.github/workflows/admin-next.yml`。
 | `zb_system/admin-next/bootstrap/schema.php` | 必需列检查、409 阻断页与写请求冲突 |
 | `zb_system/admin-next/bootstrap/compat.php` | 旧编辑 Hook 诊断与自动回退数据 |
 | `zb_system/admin-next/bootstrap/nav.php` / `shell.php` | 导航、应用管理入口、兼容诊断与引导数据 |
-| `zb_system/function/c_system_admin_ui.php` / `defend/option.php` | 默认 legacy、`next` 显式启用与 `ui=legacy` 判定 |
+| `zb_system/function/c_system_admin_ui.php` / `defend/option.php` | 默认 next、显式 legacy 与 `ui=legacy` 回退判定 |
 | `zb_system/function/c_system_updatedb.php` | 旧库幂等补列与版本推进 |
 | `zb_system/api/comment.php` / `api/system.php` / `api/app.php` | `comment.put`、43 字段设置、应用管理元数据 |
 | `utils/admin-next-src/src/pages/post-editor.tsx` | 旧编辑 Hook 回退与编辑器上传上下文 |

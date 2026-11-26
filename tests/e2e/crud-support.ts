@@ -369,7 +369,7 @@ export async function cleanupUploadRecords(
 }
 
 interface CommentRow {
-  ID: number
+  ID: number | string
   Content: string
   AuthorID?: number
   Name?: string
@@ -393,7 +393,7 @@ export async function cleanupCommentRecords(
     })
     for (const row of rows) {
       if (wanted.has(row.Content)) {
-        ids.add(row.ID)
+        ids.add(Number(row.ID))
       }
     }
   }
@@ -417,7 +417,7 @@ export async function cleanupCommentRecords(
       ischecking,
     })
     const leftovers = rows.filter(
-      (row) => ids.has(row.ID) || wanted.has(row.Content)
+      (row) => ids.has(Number(row.ID)) || wanted.has(row.Content)
     )
     if (leftovers.length > 0) {
       throw new Error(
@@ -439,7 +439,7 @@ export async function restoreCommentFixture(
     body: { id: commentId, ischecking },
   })
   const rows = await listAll<CommentRow>(api, "comment", { manage: 1, ischecking })
-  if (!rows.some((row) => row.ID === commentId)) {
+  if (!rows.some((row) => Number(row.ID) === commentId)) {
     throw new Error(`comment fixture ID ${commentId} was not restored to ${ischecking}`)
   }
 }

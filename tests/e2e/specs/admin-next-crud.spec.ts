@@ -266,7 +266,7 @@ test.describe("评论管理", () => {
     }
 
     interface CommentFixtureRow {
-      ID: number
+      ID: number | string
       Content: string
       AuthorID: number
       Name: string
@@ -291,7 +291,7 @@ test.describe("评论管理", () => {
       await refreshed
       await expect(page.getByRole("heading", { name: "评论管理" })).toBeVisible()
       const beforeList = await listComments()
-      original = beforeList.list.find((row) => row.ID === commentId)
+      original = beforeList.list.find((row) => Number(row.ID) === commentId)
       if (!original) {
         throw new Error(`评论 fixture ID ${commentId} 未出现在管理列表`)
       }
@@ -323,7 +323,7 @@ test.describe("评论管理", () => {
       await expect(updatedRow).toContainText(authorName)
       const afterList = await listComments()
       expect(afterList.pagebar.AllCount).toBe(countBefore)
-      const updated = afterList.list.find((row) => row.ID === commentId)
+      const updated = afterList.list.find((row) => Number(row.ID) === commentId)
       expect(updated).toBeDefined()
       expect(updated!.Content).toBe(updatedContent)
       expect(updated!.AuthorID).toBe(original.AuthorID)
@@ -347,7 +347,7 @@ test.describe("评论管理", () => {
       await expect(rowByText(page, originalContent)).toBeVisible()
 
       const restoredList = await listComments()
-      const restored = restoredList.list.find((row) => row.ID === commentId)
+      const restored = restoredList.list.find((row) => Number(row.ID) === commentId)
       expect(restored?.Content).toBe(originalContent)
       expect(restored?.AuthorID).toBe(original.AuthorID)
       expect(restored?.Name).toBe(original.Name)
@@ -472,7 +472,7 @@ test.describe("文章编辑器", () => {
     await page.getByRole("button", { name: "插入图片" }).click()
     const fileChooser = await fileChooserPromise
     const uploadedPromise = waitForApi<{
-      upload: { ID: number; Name: string; Url: string }
+      upload: { ID: number | string; Name: string; Url: string }
     }>(page, "upload", "post")
     await fileChooser.setFiles({
       name: fileName,
@@ -496,14 +496,15 @@ test.describe("文章编辑器", () => {
 
     const uploadList = await writeFixture.api<
       Array<{
-        list: Array<{ ID: number; Name: string; SourceName?: string }>
+        list: Array<{ ID: number | string; Name: string; SourceName?: string }>
       }>
     >("upload", "list", {
       query: { page: 1, perpage: 100, sortby: "ID", order: "DESC" },
     })
     expect(
       uploadList[0]?.list.some(
-        (row) => row.ID === Number(upload.ID) && row.SourceName === fileName
+        (row) =>
+          Number(row.ID) === Number(upload.ID) && row.SourceName === fileName
       )
     ).toBe(true)
 
@@ -643,22 +644,42 @@ test.describe("评论审核", () => {
     writeFixture,
   }) => {
     test.skip(!writeEnabled, "set ZBP_E2E_WRITE=1 to run write tests")
-    const configuredId = Number(process.env.ZBP_E2E_COMMENT_ID)
-    const hasConfiguredId = Number.isSafeInteger(configuredId) && configuredId > 0
+    const commentContent = fixtureName(writeFixture, "AuditComment")
+    const created = await writeFixture.api<{
+      comment: { ID: number | string }
+    }>("comment", "post", {
+      method: "POST",
+      body: {
+        postid: 1,
+        content: commentContent,
+        email: "e2e-audit@example.invalid",
+      },
+    })
+    const commentId = Number(created.comment.ID)
+    if (!Number.isSafeInteger(commentId) || commentId <= 0) {
+      throw new Error("评论审核 fixture 创建失败")
+    }
+    writeFixture.cleanup((api) =>
+      cleanupCommentRecords(api, commentId, [commentContent])
+    )
+
     let fixture:
-      | { ID: number; Content: string; IsChecking: number }
+      | { ID: number | string; Content: string; IsChecking: number }
       | undefined
 
     for (const ischecking of [0, 1]) {
       const data = await writeFixture.api<{
-        list: Array<{ ID: number; Content: string; IsChecking: number }>
+        list: Array<{
+          ID: number | string
+          Content: string
+          IsChecking: number
+        }>
       }>("comment", "list", {
         query: { manage: 1, ischecking, perpage: 100 },
       })
       fixture = data.list.find(
         (row) =>
-          row.Content === seededComment &&
-          (!hasConfiguredId || row.ID === configuredId)
+          row.Content === commentContent && Number(row.ID) === commentId
       )
       if (fixture) {
         break
@@ -668,7 +689,6 @@ test.describe("评论审核", () => {
     if (!fixture) {
       throw new Error("未找到唯一隔离评论 fixture")
     }
-    const commentId = fixture.ID
     const originalChecking = Number(fixture.IsChecking)
     if (originalChecking !== 0 && originalChecking !== 1) {
       throw new Error(`评论 fixture ID ${commentId} 审核状态无效`)
@@ -679,7 +699,7 @@ test.describe("评论审核", () => {
     )
 
     await gotoPage(page, "#/comments", "评论管理", "comment")
-    const commentRow = rowByText(page, seededComment)
+    const commentRow = rowByText(page, commentContent)
     await expect(commentRow).toBeVisible()
     const toggle = commentRow.getByRole("button", { name: "转为待审" })
     await expect(toggle).toBeVisible()
@@ -692,12 +712,14 @@ test.describe("评论审核", () => {
       // 管理列表默认只显示已通过评论；转为待审后该 fixture 行应消失。
       // 不能拿全局第一个按钮的状态代替，也不能要求已隐藏行继续显示按钮。
       await expect(commentRow).toHaveCount(0)
-      const pending = await writeFixture.api<{ list: Array<{ ID: number }> }>(
+      const pending = await writeFixture.api<{
+        list: Array<{ ID: number | string }>
+      }>(
         "comment",
         "list",
         { query: { manage: 1, ischecking: 1, perpage: 100 } }
       )
-      expect(pending.list.some((row) => row.ID === commentId)).toBe(true)
+      expect(pending.list.some((row) => Number(row.ID) === commentId)).toBe(true)
     } finally {
       // 还原只认固定 ID，绝不点击页面上的全局第一个按钮。
       await restoreCommentFixture(
@@ -708,9 +730,9 @@ test.describe("评论审核", () => {
       const settled = waitForList(page, "comment")
       await page.reload()
       await settled
-      await expect(rowByText(page, seededComment)).toBeVisible()
+      await expect(rowByText(page, commentContent)).toBeVisible()
       await expect(
-        rowByText(page, seededComment).getByRole("button", { name: "转为待审" })
+        rowByText(page, commentContent).getByRole("button", { name: "转为待审" })
       ).toBeVisible()
     }
   })

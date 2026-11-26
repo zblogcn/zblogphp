@@ -2,20 +2,20 @@
 
 > 本文对应当前 SPA/内部 API 实现。完整阶段计划、功能矩阵和验收门禁见
 > [`IMPLEMENTATION_PLAN.md`](IMPLEMENTATION_PLAN.md)。
-> 文中的命令是验证方式，不代表测试已经运行或通过；隔离 E2E 未完成前不得写成“已通过”。
+> 文中的命令是验证方式；本轮完整隔离 E2E 结果记录在 `WORKLOG.md`，项目专属跳过单独说明，本地验证不代表 GitHub Actions 已运行。
 
-## 1. 默认行为：暂不切换 legacy 站点
+## 1. 默认行为：新安装默认 SPA，既有 legacy 保持不变
 
-当前版本**默认继续使用旧后台**：
+当前版本**默认进入新版后台**：
 
 ```text
-ZC_ADMIN_UI = legacy（默认）
+ZC_ADMIN_UI = next（默认）
 zb_system/cmd.php?act=admin
-  → zb_system/admin/index.php?act=admin
+  → zb_system/admin-next/index.php
 ```
 
-- 只有显式设置 `ZC_ADMIN_UI=next` 才默认进入 `zb_system/admin-next/index.php`。
-- 已有 `next` 值不会被升级过程主动改写；未知值按 `legacy` 处理。
+- 新安装和缺失 `ZC_ADMIN_UI` 选项时默认进入 `zb_system/admin-next/index.php`。
+- 已有显式 `ZC_ADMIN_UI=legacy` 在升级后保持不变；未知值仍按 `legacy` 安全处理。
 - 旧后台 `zb_system/admin/index.php` 保留；检测到 `next` 且没有 `force=1` 时才跳转 SPA。
 - 登录页仍是旧版登录页，不属于已迁移的 SPA 页面。
 - 直接访问 `admin-next/index.php` 可以进入 SPA，但不会修改 `ZC_ADMIN_UI`。
@@ -35,9 +35,11 @@ zb_system/cmd.php?act=admin
 判定顺序：
 
 ```text
-请求带 ui=legacy  → 旧后台
-ZC_ADMIN_UI=legacy → 旧后台
-其他情况          → 新版后台
+请求带 ui=legacy       → 旧后台
+ZC_ADMIN_UI=legacy    → 旧后台
+ZC_ADMIN_UI 未知值     → 旧后台（安全回退）
+ZC_ADMIN_UI=next      → 新版后台
+ZC_ADMIN_UI 缺失       → 新版后台（默认）
 ```
 
 对应实现：`zb_system/function/c_system_admin_ui.php` 的 `AdminUiIsNext()`。
@@ -49,7 +51,7 @@ ZC_ADMIN_UI=legacy → 旧后台
 3. 在旧库上执行数据库升级流程，让核心迁移补齐历史缺失列；不要只升级 PHP 文件而跳过数据库升级。
 4. 列出依赖 `Filter_Plugin_Edit_*`、`Filter_Plugin_Edit_Response*` 和 `Filter_Plugin_Admin_ArticleMng_Table` 的插件。
 5. 需要修改域名、安装/卸载应用、使用应用中心或执行缓存/统计维护时，直接使用旧后台或外部应用中心。
-6. 升级后先访问 `/zb_system/admin/index.php?act=admin&force=1`，确认 legacy 可读，再显式尝试 SPA。
+6. 升级后先访问 `/zb_system/cmd.php?act=admin` 确认默认 SPA，再访问 `/zb_system/admin/index.php?act=admin&force=1` 确认 legacy 可读。
 
 ## 4. 旧库自动补列与 Schema 阻断
 
@@ -95,12 +97,12 @@ ZC_ADMIN_UI=legacy → 旧后台
 | 应用中心/管理入口 | 部分 | 使用已启用 AppCentre 的管理地址；否则回退 `PluginMng&force=1`。不是 SPA 内应用中心 |
 | 网站设置 | 部分 | 六个分组、43 个白名单字段；`ZC_BLOG_HOST` 只读并提供 legacy 链接 |
 | 插件/主题 SPA | ✅ | `<admin version="2">`；未升级插件打开旧页面；`@zblogphp/admin-ui` 尚未发布 |
-| 无障碍/响应式 | 已实现 | 跳转链接、焦点管理、ARIA、移动抽屉、减少动效、响应式布局；实际通过与否看隔离 E2E 报告 |
+| 无障碍/响应式 | 已实现并通过 | 跳转链接、焦点管理、ARIA、移动抽屉、减少动效、响应式布局；PHP 8.0.30 完整隔离 E2E 桌面/移动通过 |
 | 登录、找回密码、应用中心 | ❌ | 继续使用旧入口或外部应用中心 |
 
 “✅”表示存在实现，不表示与 legacy 功能完全等价，也不表示测试已通过。
 
-## 6. 插件兼容限制
+## 6. 插件兼容限制（非阻断）
 
 - **旧编辑 Hook**：当前已注册 `Filter_Plugin_Edit_Begin`、`Filter_Plugin_Edit_End`、
   `Filter_Plugin_Edit_SubMenu`、`Filter_Plugin_Edit_Response`、`Response2`、`Response3`、
@@ -119,9 +121,8 @@ ZC_ADMIN_UI=legacy → 旧后台
 - 当前 `composer.json` 和安装器要求 **PHP >= 8.0**。
 - `admin-next/index.php` 对 PHP < 8.0 显示可读错误页；这不是低版本 PHP 支持声明。
 - 不要在 PHP < 8.0 环境通过 `force=1` 尝试规避版本闸门。应升级 PHP，或部署仍支持该环境的旧版本。
-- 当前 Composer lock 与 `composer.json` 不同步，`composer validate` 会报告 lock 过期；
-  CI PHPUnit 因此使用 PHP 8.4。开发依赖安装结果不能当作 PHP 8.0 运行时证明。
-- 隔离 E2E 使用 PHP 8.0 全新安装，用于覆盖运行时路径；该作业存在或测试被发现不等于 E2E 已通过。
+- `composer.lock` 已与 `composer.json` 同步，`composer validate --strict --no-check-publish` 通过；CI PHPUnit 使用 PHP 8.4。
+- PHP 8.0.30 全新 SQLite 隔离站点完整 E2E 已通过：53 passed / 0 failed / 7 expected skips，0 残留；这证明运行时路径，不代表 PHP 8.0 开发依赖兼容已单独验证。
 
 ## 8. 版本级回滚
 
@@ -140,11 +141,9 @@ vendor/bin/phpunit -c tests/phpunit-admin-next.xml
 # 核心 PHPUnit（含旧库迁移回归）
 vendor/bin/phpunit -c tests/phpunit.xml
 
-# 前端（utils/admin-next-src/）
+# 前端（utils/admin-next-src/，使用 Node 22）
 pnpm install --frozen-lockfile
-pnpm typecheck
-pnpm build
-pnpm verify:assets
+pnpm verify
 
 # 从仓库根目录检查产物
 git diff --exit-code -- zb_system/admin-next/assets
@@ -154,3 +153,6 @@ Playwright 的写操作用例会创建、修改并删除数据。CI 只在全新
 `ZBP_E2E_WRITE=1`。本地运行写用例前必须准备独立站点、数据库和上传目录，不能指向生产或现有站点。
 隔离要求见 [`IMPLEMENTATION_PLAN.md`](IMPLEMENTATION_PLAN.md) 和
 [`tests/e2e/README.md`](../../tests/e2e/README.md)。跳过不是通过。
+
+本轮最终完整隔离 E2E 使用 PHP 8.0.30、Node 22.20.0、`--retries=0`，结果为
+53 passed / 0 failed / 7 expected skips；数据库与上传目录扫描均为 0 残留。
