@@ -11,7 +11,7 @@ require '../function/c_system_admin.php';
 
 $zbp->Load();
 
-// 默认落到新版后台；?ui=legacy 或设置项可回到旧后台
+// 按 ZC_ADMIN_UI 选择后台；最终验收通过前默认旧版，显式 next 才进入新版
 if ($zbp->CheckRights('admin') && AdminUiIsNext() && GetVars('force', 'GET') !== '1') {
     Redirect302('../' . AdminHomeUrl());
 }

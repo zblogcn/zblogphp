@@ -24,6 +24,7 @@ define('ZBP_IN_ADMIN_SPA', true);
 
 require '../function/c_system_base.php';
 require __DIR__ . '/bootstrap/api-compat.php';
+require __DIR__ . '/bootstrap/schema.php';
 
 $zbp->Load();
 
@@ -76,6 +77,13 @@ ApiVerifyCSRF(!in_array(strtoupper($_SERVER['REQUEST_METHOD'] ?? ''), ['GET', 'H
 // 写操作统一用 JSON body，删除接口却只读 URL 的 id，这里补齐。
 // 必须放在 CSRF 校验之后：先校验再回填，避免同名字段冲突导致 419。
 ZbpAdminNext_NormalizeIdParam();
+
+// 旧库缺列时拒绝所有写请求，避免在部分迁移的结构上写入数据。
+// GET/HEAD/OPTIONS 保持只读，可继续加载列表用于诊断。
+$schemaError = ZbpAdminNext_WriteSchemaError();
+if ($schemaError !== null) {
+    ZbpAdminNext_JsonExit(409, $schemaError);
+}
 
 $api_public_mods = $GLOBALS['api_public_mods'];
 

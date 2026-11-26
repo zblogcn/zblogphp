@@ -54,8 +54,17 @@ $action = 'admin-next';
 
 require __DIR__ . '/bootstrap/assets.php';
 require __DIR__ . '/bootstrap/rights.php';
+require __DIR__ . '/bootstrap/schema.php';
+
+$missingSchemaColumns = ZbpAdminNext_MissingSchemaColumns();
+if ($missingSchemaColumns !== []) {
+    ZbpAdminNext_RenderSchemaBlock($missingSchemaColumns);
+    exit;
+}
+
 require __DIR__ . '/bootstrap/apps.php';
 require __DIR__ . '/bootstrap/nav.php';
+require __DIR__ . '/bootstrap/compat.php';
 require __DIR__ . '/bootstrap/shell.php';
 
 ZbpAdminNext_RenderShell();

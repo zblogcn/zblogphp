@@ -200,6 +200,193 @@ function ZbpAdminNext_ParseLegacyMenu(string $html): array
 }
 
 /**
+ * 旧菜单只允许页面地址和 SPA 哈希路由.
+ */
+function ZbpAdminNext_SafeMenuUrl(string $href): bool
+{
+    if ($href === '' || preg_match('/[\x00-\x1f\x7f]/', $href)) {
+        return false;
+    }
+
+    $scheme = parse_url($href, PHP_URL_SCHEME);
+    if ($scheme !== null && !is_string($scheme)) {
+        return false;
+    }
+
+    return $scheme === null || in_array(strtolower($scheme), ['http', 'https'], true);
+}
+
+/**
+ * 判断旧顶部菜单是否只是官方菜单的重复入口.
+ */
+function ZbpAdminNext_IsOfficialTopMenuUrl(string $href): bool
+{
+    $parts = parse_url($href);
+    if (!is_array($parts)) {
+        return false;
+    }
+
+    $host = strtolower((string) ($parts['host'] ?? ''));
+    $path = (string) ($parts['path'] ?? '');
+    if (in_array($host, ['www.zblogcn.com', 'www.zblogcn.net'], true)
+        && ($path === '' || $path === '/')) {
+        return true;
+    }
+
+    $query = [];
+    parse_str((string) ($parts['query'] ?? ''), $query);
+    $action = isset($query['act']) && is_string($query['act']) ? $query['act'] : '';
+
+    return in_array($action, [
+        'admin',
+        'ArticleMng',
+        'PageMng',
+        'CategoryMng',
+        'TagMng',
+        'CommentMng',
+        'UploadMng',
+        'MemberMng',
+        'ThemeMng',
+        'ModuleMng',
+        'PluginMng',
+        'SettingMng',
+    ], true);
+}
+
+/**
+ * 单菜单应用可以安全映射到其 SPA 路由；多入口应用无法推断目标，保留旧页面。
+ *
+ * @param array<int, array<string, mixed>> $manifests
+ */
+function ZbpAdminNext_MapTopMenuRoute(string $href, array $manifests): ?string
+{
+    if (str_starts_with($href, '#/')) {
+        return $href;
+    }
+
+    $path = (string) parse_url($href, PHP_URL_PATH);
+    foreach ($manifests as $manifest) {
+        $basePath = rtrim((string) parse_url((string) $manifest['baseUrl'], PHP_URL_PATH), '/');
+        if ($basePath === '' || ($path !== $basePath && !str_starts_with($path, $basePath . '/'))) {
+            continue;
+        }
+        if (count($manifest['menu']) === 1) {
+            return '#' . $manifest['menu'][0]['route'];
+        }
+    }
+
+    return null;
+}
+
+/**
+ * 解析旧顶部菜单，跳过官方项；无法安全映射的插件项标记为 legacy.
+ *
+ * @param array<int, array<string, mixed>> $manifests
+ * @return array<int, array<string, mixed>>
+ */
+function ZbpAdminNext_ParseLegacyTopMenu(string $html, array $manifests = []): array
+{
+    $html = trim($html);
+    if ($html === '') {
+        return [];
+    }
+
+    $doc = new DOMDocument();
+    $previous = libxml_use_internal_errors(true);
+    $doc->loadHTML(
+        '<?xml encoding="UTF-8"?><ul id="zbp-legacy-top-nav">' . $html . '</ul>',
+        LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD
+    );
+    libxml_clear_errors();
+    libxml_use_internal_errors($previous);
+
+    $items = [];
+    $seen = [];
+
+    foreach ($doc->getElementsByTagName('li') as $li) {
+        $anchor = null;
+        foreach ($li->childNodes as $node) {
+            if ($node->nodeName === 'a') {
+                $anchor = $node;
+                break;
+            }
+        }
+        if ($anchor === null) {
+            continue;
+        }
+
+        $href = trim($anchor->getAttribute('href'));
+        if (!ZbpAdminNext_SafeMenuUrl($href)
+            || ZbpAdminNext_IsOfficialTopMenuUrl($href)
+            || isset($seen[$href])) {
+            continue;
+        }
+        $seen[$href] = true;
+
+        $label = trim($anchor->textContent);
+        if ($label === '') {
+            continue;
+        }
+        $title = trim($anchor->getAttribute('title'));
+        if ($title === '') {
+            $title = $label;
+        }
+
+        $iconClass = null;
+        foreach ($anchor->getElementsByTagName('i') as $i) {
+            $iconClass = $i->getAttribute('class');
+            break;
+        }
+
+        $route = ZbpAdminNext_MapTopMenuRoute($href, $manifests);
+        $legacy = $route === null;
+        $items[] = [
+            'id'       => 'legacy_top_' . substr(md5($href), 0, 8),
+            'title'    => $title,
+            'url'      => $route ?? $href,
+            'icon'     => ZbpAdminNext_MapIcon($iconClass),
+            'group'    => 'extend',
+            'order'    => 910,
+            'require'  => null,
+            'external' => $legacy || strtolower($anchor->getAttribute('target')) === '_blank',
+            'legacy'   => $legacy,
+        ];
+    }
+
+    return $items;
+}
+
+/**
+ * 最后按 id 和 URL 去重，官方结构化菜单优先保留.
+ *
+ * @param array<int, array<string, mixed>> $items
+ * @return array<int, array<string, mixed>>
+ */
+function ZbpAdminNext_DedupeNav(array $items): array
+{
+    $result = [];
+    $seenIds = [];
+    $seenUrls = [];
+
+    foreach ($items as $item) {
+        $id = (string) ($item['id'] ?? '');
+        $url = (string) ($item['url'] ?? '');
+        if (($id !== '' && isset($seenIds[$id])) || ($url !== '' && isset($seenUrls[$url]))) {
+            continue;
+        }
+        if ($id !== '') {
+            $seenIds[$id] = true;
+        }
+        if ($url !== '') {
+            $seenUrls[$url] = true;
+        }
+        $result[] = $item;
+    }
+
+    return $result;
+}
+
+/**
  * 完整导航树.
  *
  * @return array<int, array<string, mixed>>
@@ -233,9 +420,20 @@ function ZbpAdminNext_Nav(): array
 
     ZbpAdminNext_AppendManifestNav($items, $manifests);
 
+    // 顶部菜单同样必须调用原钩子，部分插件依赖 $topmenus 的既有内容。
+    $GLOBALS['topmenus'] = [];
+    ob_start();
+    ResponseAdmin_TopMenu();
+    $legacyTopHtml = (string) ob_get_clean();
+    foreach (ZbpAdminNext_ParseLegacyTopMenu($legacyTopHtml, $manifests) as $item) {
+        $items[] = $item;
+    }
+
     foreach ($GLOBALS['hooks']['Filter_Plugin_Admin_Menu_Items'] ?? [] as $fn => $signal) {
         $fn($items);
     }
+
+    $items = ZbpAdminNext_DedupeNav($items);
 
     usort($items, static function (array $a, array $b): int {
         return ($a['order'] ?? 500) <=> ($b['order'] ?? 500);

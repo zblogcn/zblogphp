@@ -6,7 +6,12 @@ import {
   canLoadPluginRoute,
   findAppRoute,
 } from "../utils/admin-next-src/src/plugin-host/route.js"
+import { legacyEditUrl } from "../utils/admin-next-src/src/lib/legacy-edit.js"
 const root = new URL("../", import.meta.url)
+const postEditorSource = await readFile(
+  new URL("utils/admin-next-src/src/pages/post-editor.tsx", root),
+  "utf8"
+)
 const editorSource = await readFile(
   new URL("zb_users/plugin/BlockEditor/dist/editor.js", root),
   "utf8"
@@ -66,6 +71,28 @@ test("plugin bundle requires the menu permission before loading", () => {
 
 test("plugin namespace matching does not accept sibling prefixes", () => {
   assert.equal(findAppRoute([app], "/plugin/DemoPanelExtra"), null)
+})
+
+test("legacy editor fallback URL forces the old post and page editors", () => {
+  assert.equal(
+    legacyEditUrl("https://site.example/blog/", 0),
+    "https://site.example/blog/zb_system/admin/edit.php?act=ArticleEdt&force=1"
+  )
+  assert.equal(
+    legacyEditUrl("https://site.example/blog/", 0, 42),
+    "https://site.example/blog/zb_system/admin/edit.php?act=ArticleEdt&id=42&force=1"
+  )
+  assert.equal(
+    legacyEditUrl("https://site.example/", 1, 7),
+    "https://site.example/zb_system/admin/edit.php?act=PageEdt&id=7&force=1"
+  )
+})
+
+test("SPA editor redirects before mounting when legacy edit hooks are registered", () => {
+  assert.match(postEditorSource, /if \(zbp\.compat\.legacyEditRequired\)/)
+  assert.match(postEditorSource, /return <PostEditor type=\{type\} \/>/)
+  assert.match(postEditorSource, /sessionStorage\.setItem\(\s*"zbp-admin-legacy-edit"/)
+  assert.match(postEditorSource, /window\.location\.replace\(url\)/)
 })
 
 test("PluginPage guards dynamic import with route authorization", async () => {
@@ -154,6 +181,17 @@ test("HTML sanitizer removes comments and foreign content", () => {
   assert.equal(
     sanitizeHTML('<!-- secret --><svg><script>alert(1)</script></svg><p>safe</p>', document),
     "<p>safe</p>"
+  )
+})
+
+test("post editor wires BlockEditor uploads to the hardened API client", () => {
+  assert.match(
+    postEditorSource,
+    /upload:\s*async\s*\([^)]*form:\s*FormData[^)]*\)\s*=>\s*apiUpload\("upload",\s*"post",\s*form\)/
+  )
+  assert.match(
+    editorSource,
+    /api\.upload\('upload',\s*'post',\s*form\)[\s\S]*?sanitizeUrl\(result\?\.upload\?\.Url,\s*undefined,\s*SAFE_IMAGE_PROTOCOLS\)/
   )
 })
 

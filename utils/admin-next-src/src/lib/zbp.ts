@@ -53,6 +53,22 @@ export interface ZbzUser {
   avatar: string
 }
 
+export interface CompatHook {
+  hook: string
+  callback: string
+  plugin: string | null
+  signal: string
+}
+
+export interface CompatData {
+  legacyEditRequired: boolean
+  legacyEditHooks: CompatHook[]
+  legacyEditPlugins: string[]
+  adminHeaderHooks: CompatHook[]
+  topMenuHooks: CompatHook[]
+  legacyTopMenu: boolean
+}
+
 export interface BootData {
   host: string
   entry: string
@@ -63,6 +79,7 @@ export interface BootData {
   user: ZbzUser
   rights: Record<string, boolean>
   nav: NavItem[]
+  compat: CompatData
   apps: AppManifest[]
   editor: EditorManifest | null
   lang: {
@@ -121,6 +138,14 @@ function createDevBoot(): BootData {
     },
     rights: {},
     nav,
+    compat: {
+      legacyEditRequired: false,
+      legacyEditHooks: [],
+      legacyEditPlugins: [],
+      adminHeaderHooks: [],
+      topMenuHooks: [],
+      legacyTopMenu: false,
+    },
     apps: [],
     editor: null,
     lang: {

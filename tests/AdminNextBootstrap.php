@@ -58,6 +58,7 @@ function zbpn_boot()
     require_once ZBP_PATH . 'zb_system/admin-next/bootstrap/rights.php';
     require_once ZBP_PATH . 'zb_system/admin-next/bootstrap/apps.php';
     require_once ZBP_PATH . 'zb_system/admin-next/bootstrap/nav.php';
+    require_once ZBP_PATH . 'zb_system/admin-next/bootstrap/compat.php';
 
     $booted = true;
 }

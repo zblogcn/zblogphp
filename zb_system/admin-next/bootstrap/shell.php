@@ -71,6 +71,7 @@ function ZbpAdminNext_BootData(): array
         ],
         'rights'    => ZbpAdminNext_Rights(),
         'nav'       => ZbpAdminNext_Nav(),
+        'compat'    => ZbpAdminNext_CompatData(),
         'apps'      => ZbpAdminNext_AppManifests(),
         // 插件声明的编辑器（<admin><editor>），无则前端回退内置编辑器
         'editor'    => ZbpAdminNext_EditorManifest(),

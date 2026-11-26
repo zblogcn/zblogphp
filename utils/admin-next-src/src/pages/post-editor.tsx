@@ -4,8 +4,10 @@ import { useEffect, useRef, useState } from "react"
 import { useNavigate, useParams } from "react-router-dom"
 import { toast } from "sonner"
 
-import { apiGet, apiPost } from "@/lib/api"
+import { apiGet, apiPost, apiUpload } from "@/lib/api"
 import { t } from "@/lib/i18n"
+import { legacyEditUrl } from "@/lib/legacy-edit"
+import { zbp } from "@/lib/zbp"
 import { useOptions } from "@/hooks/use-options"
 import { ConfirmDialog } from "@/components/confirm-dialog"
 import { FormRow } from "@/components/form-row"
@@ -75,7 +77,58 @@ interface PostEditorPageProps {
   type: 0 | 1
 }
 
+function LegacyEditorRedirect({ type, postId }: PostEditorPageProps & { postId: number }) {
+  const url = legacyEditUrl(zbp.host, type, postId)
+  const redirected = useRef(false)
+  const plugins = zbp.compat.legacyEditPlugins.join("、")
+
+  useEffect(() => {
+    if (redirected.current) {
+      return
+    }
+    redirected.current = true
+
+    try {
+      sessionStorage.setItem(
+        "zbp-admin-legacy-edit",
+        JSON.stringify({
+          from: window.location.href,
+          to: url,
+          plugins: zbp.compat.legacyEditPlugins,
+          hooks: zbp.compat.legacyEditHooks,
+        })
+      )
+    } catch {
+      // 隐私模式下 sessionStorage 可能不可用，URL 仍会在页面和跳转中保留。
+    }
+    window.location.replace(url)
+  }, [url])
+
+  return (
+    <section className="mx-auto max-w-2xl space-y-3 text-sm" role="status" aria-live="polite">
+      <h1 className="text-lg font-semibold">需要旧版编辑器</h1>
+      <p className="text-muted-foreground">
+        {plugins
+          ? `已启用插件 ${plugins} 依赖旧编辑钩子，正在跳转到旧版编辑页以避免自定义字段丢失。`
+          : "已启用插件依赖旧编辑钩子，正在跳转到旧版编辑页以避免自定义字段丢失。"}
+      </p>
+      <a className="text-primary underline" href={url}>
+        若未自动跳转，请打开旧版编辑页
+      </a>
+      <p className="break-all rounded border bg-muted/40 p-2 font-mono text-xs">{url}</p>
+    </section>
+  )
+}
+
 export function PostEditorPage({ type }: PostEditorPageProps) {
+  const params = useParams()
+  if (zbp.compat.legacyEditRequired) {
+    return <LegacyEditorRedirect type={type} postId={Number(params.id ?? 0)} />
+  }
+  return <PostEditor type={type} />
+}
+
+function PostEditor({ type }: PostEditorPageProps) {
   const params = useParams()
   const navigate = useNavigate()
   const queryClient = useQueryClient()
@@ -111,9 +164,8 @@ export function PostEditorPage({ type }: PostEditorPageProps) {
   const editor = usePluginEditor(editorRef, {
     get: apiGet,
     post: apiPost,
-    upload: async () => {
-      throw new Error("请通过附件管理上传")
-    },
+    upload: async (_mod: string, _act: string, form: FormData) =>
+      apiUpload("upload", "post", form),
   })
 
   /** 详情只回填一次，之后用户编辑不应被覆盖。 */

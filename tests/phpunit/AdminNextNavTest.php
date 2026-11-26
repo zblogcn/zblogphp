@@ -118,6 +118,135 @@ class AdminNextNavTest extends PHPUnit\Framework\TestCase
     }
 
     /** @test */
+    public function testParseLegacyTopMenuSkipsOfficialItemsAndKeepsPluginItem()
+    {
+        $html = '<li id="topmenu1"><a href="http://localhost/zb_system/cmd.php?act=admin" title="Dashboard"><span>Dashboard</span></a></li>'
+            . '<li id="topmenu2"><a href="http://localhost/zb_system/cmd.php?act=SettingMng" title="Settings"><span>Settings</span></a></li>'
+            . '<li id="topmenu3"><a href="https://www.zblogcn.com/" title="Official"><span>Official</span></a></li>'
+            . '<li id="duplicate-posts"><a href="http://localhost/zb_system/cmd.php?act=ArticleMng" title="Posts again"><span>Posts again</span></a></li>'
+            . '<li id="zbpdk"><a href="http://localhost/zb_users/plugin/ZBPDK/main.php" title="Dev tools"><i class="icon-tools"></i><span>Dev tools</span></a></li>';
+
+        $items = ZbpAdminNext_ParseLegacyTopMenu($html);
+
+        $this->assertCount(1, $items);
+        $this->assertSame('Dev tools', $items[0]['title']);
+        $this->assertSame('http://localhost/zb_users/plugin/ZBPDK/main.php', $items[0]['url']);
+        $this->assertTrue($items[0]['legacy']);
+        $this->assertTrue($items[0]['external']);
+    }
+
+    /** @test */
+    public function testParseLegacyTopMenuMapsSingleManifestRoute()
+    {
+        $manifest = [
+            'appId'   => 'DemoPanel',
+            'baseUrl' => 'https://example.com/zb_users/plugin/DemoPanel/',
+            'menu'    => [['route' => '/plugin/DemoPanel']],
+        ];
+        $html = '<li><a href="https://example.com/zb_users/plugin/DemoPanel/main.php" title="Demo"><span>Demo</span></a></li>';
+
+        $items = ZbpAdminNext_ParseLegacyTopMenu($html, [$manifest]);
+
+        $this->assertCount(1, $items);
+        $this->assertSame('#/plugin/DemoPanel', $items[0]['url']);
+        $this->assertFalse($items[0]['legacy']);
+        $this->assertFalse($items[0]['external']);
+    }
+
+    /** @test */
+    public function testParseLegacyTopMenuKeepsAmbiguousManifestAsLegacy()
+    {
+        $manifest = [
+            'appId'   => 'DemoPanel',
+            'baseUrl' => 'https://example.com/zb_users/plugin/DemoPanel/',
+            'menu'    => [
+                ['route' => '/plugin/DemoPanel'],
+                ['route' => '/plugin/DemoPanel/settings'],
+            ],
+        ];
+        $html = '<li><a href="https://example.com/zb_users/plugin/DemoPanel/main.php"><span>Demo</span></a></li>';
+
+        $items = ZbpAdminNext_ParseLegacyTopMenu($html, [$manifest]);
+
+        $this->assertTrue($items[0]['legacy']);
+        $this->assertTrue($items[0]['external']);
+    }
+
+    /** @test */
+    public function testParseLegacyTopMenuRejectsUnsafeSchemesAndDeduplicatesUrls()
+    {
+        $safe = '<li><a href="https://example.com/plugin/main.php"><span>Safe</span></a></li>';
+        $html = '<li><a href="java&#10;script:alert(1)"><span>Bad</span></a></li>'
+            . '<li><a href="data:text/html,x"><span>Bad data</span></a></li>'
+            . $safe . $safe;
+
+        $items = ZbpAdminNext_ParseLegacyTopMenu($html);
+
+        $this->assertCount(1, $items);
+        $this->assertSame('Safe', $items[0]['title']);
+    }
+
+    /** @test */
+    public function testDedupeNavKeepsOfficialItemBeforeLegacyDuplicate()
+    {
+        $items = [
+            ['id' => 'posts', 'url' => '#/posts'],
+            ['id' => 'legacy_posts', 'url' => '#/posts'],
+            ['id' => 'posts', 'url' => '#/duplicate-id'],
+        ];
+
+        $this->assertSame([['id' => 'posts', 'url' => '#/posts']], ZbpAdminNext_DedupeNav($items));
+    }
+
+    /** @test */
+    public function testNavRunsTopMenuHookWithoutDuplicatingOfficialMenus()
+    {
+        global $zbp;
+
+        $this->swapUser(zbpn_test_member());
+        $hadHook = isset($GLOBALS['hooks']['Filter_Plugin_Admin_TopMenu']);
+        $savedHook = $GLOBALS['hooks']['Filter_Plugin_Admin_TopMenu'] ?? [];
+        $savedTopMenus = $GLOBALS['topmenus'] ?? [];
+        $savedLeftMenus = $GLOBALS['leftmenus'] ?? [];
+        $hadPluginList = array_key_exists('ZC_USING_PLUGIN_LIST', $zbp->option);
+        $savedPluginList = $zbp->option['ZC_USING_PLUGIN_LIST'] ?? '';
+
+        try {
+            ClearFilterPlugin('Filter_Plugin_Admin_TopMenu');
+            Add_Filter_Plugin('Filter_Plugin_Admin_TopMenu', self::class . '::addTopMenuFixture');
+            $zbp->option['ZC_USING_PLUGIN_LIST'] = '';
+
+            $items = ZbpAdminNext_Nav();
+            $dashboard = array_values(array_filter(
+                $items,
+                static fn (array $item): bool => ($item['id'] ?? '') === 'dashboard'
+            ));
+            $legacy = array_values(array_filter(
+                $items,
+                static fn (array $item): bool => ($item['title'] ?? '') === 'Legacy top fixture'
+            ));
+
+            $this->assertCount(1, $dashboard);
+            $this->assertCount(1, $legacy);
+            $this->assertTrue($legacy[0]['legacy']);
+            $this->assertTrue($legacy[0]['external']);
+        } finally {
+            if ($hadHook) {
+                $GLOBALS['hooks']['Filter_Plugin_Admin_TopMenu'] = $savedHook;
+            } else {
+                unset($GLOBALS['hooks']['Filter_Plugin_Admin_TopMenu']);
+            }
+            $GLOBALS['topmenus'] = $savedTopMenus;
+            $GLOBALS['leftmenus'] = $savedLeftMenus;
+            if ($hadPluginList) {
+                $zbp->option['ZC_USING_PLUGIN_LIST'] = $savedPluginList;
+            } else {
+                unset($zbp->option['ZC_USING_PLUGIN_LIST']);
+            }
+        }
+    }
+
+    /** @test */
     public function testMapIconFallsBackForUnknownClass()
     {
         $this->assertSame('puzzle', ZbpAdminNext_MapIcon('icon-puzzle-fill'));
@@ -358,6 +487,26 @@ class AdminNextNavTest extends PHPUnit\Framework\TestCase
             'path'    => $this->fixtureDir . '/',
             'baseUrl' => 'https://example.com/zb_users/plugin/DemoPanel/',
         ];
+    }
+
+    public static function addTopMenuFixture(array &$topmenus): void
+    {
+        global $zbp;
+
+        $topmenus[] = MakeTopMenu(
+            'admin',
+            'Duplicate dashboard',
+            $zbp->cmdurl . '?act=admin',
+            '',
+            'fixture_top_dashboard'
+        );
+        $topmenus[] = MakeTopMenu(
+            'admin',
+            'Legacy top fixture',
+            $zbp->host . 'zb_users/plugin/LegacyTopPanel/main.php',
+            '',
+            'fixture_top_legacy'
+        );
     }
 
     private function swapUser($member)

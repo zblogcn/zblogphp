@@ -15,6 +15,8 @@
             <file>phpunit/AdminNextSettingsTest.php</file>
             <file>phpunit/AdminNextCsrfTest.php</file>
             <file>phpunit/AdminNextLegacyFallbackTest.php</file>
+            <file>phpunit/AdminNextCompatTest.php</file>
+            <file>phpunit/AdminNextSchemaTest.php</file>
         </testsuite>
     </testsuites>
 </phpunit>
