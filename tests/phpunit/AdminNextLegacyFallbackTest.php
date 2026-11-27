@@ -2,18 +2,13 @@
 
 /**
  * admin-next legacy fallback entry contract.
+ *
+ * @internal
+ *
+ * @coversNothing
  */
 class AdminNextLegacyFallbackTest extends PHPUnit\Framework\TestCase
 {
-    private function entrySource(): string
-    {
-        $file = dirname(__DIR__, 2) . '/zb_system/admin-next/index.php';
-
-        $this->assertFileExists($file);
-
-        return (string) file_get_contents($file);
-    }
-
     /** @test */
     public function testLegacyQueryRedirectsStraightToForcedLegacyAdmin()
     {
@@ -21,15 +16,15 @@ class AdminNextLegacyFallbackTest extends PHPUnit\Framework\TestCase
 
         $this->assertStringContainsString(
             "if (GetVars('ui', 'GET') === 'legacy') {",
-            $source
+            $source,
         );
         $this->assertStringContainsString(
             "Redirect(\$zbp->host . 'zb_system/admin/index.php?force=1');",
-            $source
+            $source,
         );
         $this->assertStringNotContainsString(
             "Redirect(\$zbp->cmdurl . '?act=admin');",
-            $source
+            $source,
         );
     }
 
@@ -40,7 +35,7 @@ class AdminNextLegacyFallbackTest extends PHPUnit\Framework\TestCase
 
         $this->assertStringContainsString(
             '<a href="../admin/index.php?force=1">返回旧版后台</a>',
-            $source
+            $source,
         );
         $this->assertStringNotContainsString('cmd.php?act=admin', $source);
     }
@@ -53,7 +48,16 @@ class AdminNextLegacyFallbackTest extends PHPUnit\Framework\TestCase
 
         $this->assertStringContainsString(
             "AdminUiIsNext() && GetVars('force', 'GET') !== '1'",
-            $source
+            $source,
         );
+    }
+
+    private function entrySource(): string
+    {
+        $file = dirname(__DIR__, 2) . '/zb_system/admin-next/index.php';
+
+        $this->assertFileExists($file);
+
+        return (string) file_get_contents($file);
     }
 }

@@ -17,7 +17,7 @@ function AdminUiIsNext(): bool
 {
     global $zbp;
 
-    if (GetVars('ui', 'GET') === 'legacy') {
+    if ('legacy' === GetVars('ui', 'GET')) {
         return false;
     }
 

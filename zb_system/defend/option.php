@@ -31,7 +31,7 @@ return [
     'ZC_BLOG_LANGUAGEPACK' => 'zh-cn',
 
     // '----------------------------数据库配置---------------------------------------
-    //mysql|mysqli|pdo_mysql|sqlite|sqlite3|pdo_sqlite
+    // mysql|mysqli|pdo_mysql|sqlite|sqlite3|pdo_sqlite
     'ZC_DATABASE_TYPE' => '',
 
     'ZC_SQLITE_NAME' => '',
@@ -186,7 +186,7 @@ return [
     'ZC_SEARCH_COUNT' => 20,
     'ZC_SEARCH_REGEX' => '{%host%}search.php?q={%q%}&page={%page%}',
 
-    //列表页，POST页，搜索页的默认模板
+    // 列表页，POST页，搜索页的默认模板
     'ZC_INDEX_DEFAULT_TEMPLATE' => 'index',
     'ZC_POST_DEFAULT_TEMPLATE'  => 'single',
     'ZC_SEARCH_DEFAULT_TEMPLATE'  => 'search',
@@ -200,7 +200,7 @@ return [
     'ZC_SIDEBAR7_ORDER' => '',
     'ZC_SIDEBAR8_ORDER' => '',
     'ZC_SIDEBAR9_ORDER' => '',
-    //'ZC_SIDEBARS_DEFAULT'  => '{"1":"calendar|controlpanel|catalog|searchpanel|comments|archives|favorite|link|misc","2":"","3":"","4":"","5":"","6":"","7":"","8":"","9":""}';
+    // 'ZC_SIDEBARS_DEFAULT'  => '{"1":"calendar|controlpanel|catalog|searchpanel|comments|archives|favorite|link|misc","2":"","3":"","4":"","5":"","6":"","7":"","8":"","9":""}';
 
     // '--------------------------其它----------------------------------------
     // '代码高亮
@@ -211,7 +211,7 @@ return [
     'ZC_OUTPUT_OPTION_MEMBER_MAX_LEVEL' => 0,
     'ZC_CATEGORY_MANAGE_LEGACY_DISPLAY' => true,
     'ZC_LOADMEMBERS_LEVEL'           => 1,
-    //ZC_LAST_VERSION 本意是指数据库对应的系统版本号，非当前系统未更新版本号
+    // ZC_LAST_VERSION 本意是指数据库对应的系统版本号，非当前系统未更新版本号
     'ZC_LAST_VERSION'                => '',
     'ZC_MODULE_CATALOG_STYLE'        => 0,
     'ZC_MODULE_ARCHIVES_STYLE'       => 0,

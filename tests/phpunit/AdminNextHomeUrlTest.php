@@ -2,7 +2,7 @@
 
 require_once dirname(__DIR__) . '/AdminNextBootstrap.php';
 
-/**
+/*
  * Admin entry switching tests (AdminUiIsNext / AdminHomeUrl).
  *
  * The `ui` query flag is read through GetVars from $_GET/$_REQUEST;
@@ -14,11 +14,16 @@ if (!defined('ZBP_PATH')) {
     zbpn_boot();
 }
 
+/**
+ * @internal
+ *
+ * @coversNothing
+ */
 class AdminNextHomeUrlTest extends PHPUnit\Framework\TestCase
 {
     private $getBackup = [];
     private $requestBackup = [];
-    private $uiBackup = null;
+    private $uiBackup;
 
     protected function setUp(): void
     {
@@ -36,27 +41,10 @@ class AdminNextHomeUrlTest extends PHPUnit\Framework\TestCase
         $_GET = $this->getBackup;
         $_REQUEST = $this->requestBackup;
 
-        if ($this->uiBackup === null) {
+        if (null === $this->uiBackup) {
             unset($zbp->option['ZC_ADMIN_UI']);
         } else {
             $zbp->option['ZC_ADMIN_UI'] = $this->uiBackup;
-        }
-    }
-
-    private function setQuery(array $query): void
-    {
-        $_GET = $query;
-        $_REQUEST = $query;
-    }
-
-    private function setUi(?string $value): void
-    {
-        $zbp = $GLOBALS['zbp'];
-
-        if ($value === null) {
-            unset($zbp->option['ZC_ADMIN_UI']);
-        } else {
-            $zbp->option['ZC_ADMIN_UI'] = $value;
         }
     }
 
@@ -154,7 +142,7 @@ class AdminNextHomeUrlTest extends PHPUnit\Framework\TestCase
 
         $this->assertSame(
             'admin-next/index.php?act=ArticleMng',
-            AdminHomeUrl('?act=ArticleMng')
+            AdminHomeUrl('?act=ArticleMng'),
         );
     }
 
@@ -166,7 +154,7 @@ class AdminNextHomeUrlTest extends PHPUnit\Framework\TestCase
 
         $this->assertSame(
             'admin/index.php?act=admin&act=ArticleMng',
-            AdminHomeUrl('&act=ArticleMng')
+            AdminHomeUrl('&act=ArticleMng'),
         );
     }
 
@@ -188,5 +176,22 @@ class AdminNextHomeUrlTest extends PHPUnit\Framework\TestCase
         $this->assertArrayHasKey('next', $options);
         $this->assertArrayHasKey('legacy', $options);
         $this->assertCount(2, $options);
+    }
+
+    private function setQuery(array $query): void
+    {
+        $_GET = $query;
+        $_REQUEST = $query;
+    }
+
+    private function setUi(?string $value): void
+    {
+        $zbp = $GLOBALS['zbp'];
+
+        if (null === $value) {
+            unset($zbp->option['ZC_ADMIN_UI']);
+        } else {
+            $zbp->option['ZC_ADMIN_UI'] = $value;
+        }
     }
 }

@@ -4,15 +4,17 @@
  * Z-Blog with PHP.
  *
  * @author  Z-BlogPHP Team
+ *
  * @version 2.0 2013-07-05
  */
 require '../function/c_system_base.php';
+
 require '../function/c_system_admin.php';
 
 $zbp->Load();
 
 // 按 ZC_ADMIN_UI 选择后台；默认进入新版，force=1 可强制停留旧版
-if ($zbp->CheckRights('admin') && AdminUiIsNext() && GetVars('force', 'GET') !== '1') {
+if ($zbp->CheckRights('admin') && AdminUiIsNext() && '1' !== GetVars('force', 'GET')) {
     Redirect302('../' . AdminHomeUrl());
 }
 
@@ -20,11 +22,12 @@ $zbp->action = GetVars('act', 'GET');
 
 $admin_function = null;
 
-$zbp->action = ($zbp->action == '') ? 'admin' : $zbp->action;
+$zbp->action = ('' == $zbp->action) ? 'admin' : $zbp->action;
 
 if (!$zbp->CheckRights($zbp->action)) {
     $zbp->ShowError(6, __FILE__, __LINE__);
-    die();
+
+    exit;
 }
 
 HookFilterPlugin('Filter_Plugin_Admin_Begin');
@@ -35,95 +38,121 @@ switch ($zbp->action) {
             $admin_function = 'Admin_ArticleMng';
             $blogtitle = $lang['msg']['article_manage'];
         }
+
         break;
+
     case 'PageMng':
         if (is_null($admin_function)) {
             $admin_function = 'Admin_PageMng';
             $blogtitle = $lang['msg']['page_manage'];
         }
+
         break;
+
     case 'CategoryMng':
         if (is_null($admin_function)) {
             $admin_function = 'Admin_CategoryMng';
             $blogtitle = $lang['msg']['category_manage'];
         }
+
         break;
+
     case 'CommentMng':
         if (is_null($admin_function)) {
             $admin_function = 'Admin_CommentMng';
             $blogtitle = $lang['msg']['comment_manage'];
-            if (GetVars('ischecking', 'GET') == true) {
+            if (true == GetVars('ischecking', 'GET')) {
                 $blogtitle .= ' - ' . $GLOBALS['lang']['msg']['check_comment'];
             }
         }
+
         break;
+
     case 'MemberMng':
         if (is_null($admin_function)) {
             $admin_function = 'Admin_MemberMng';
             $blogtitle = $lang['msg']['member_manage'];
         }
+
         break;
+
     case 'UploadMng':
         if (is_null($admin_function)) {
             $admin_function = 'Admin_UploadMng';
             $blogtitle = $lang['msg']['upload_manage'];
         }
+
         break;
+
     case 'TagMng':
         if (is_null($admin_function)) {
             $admin_function = 'Admin_TagMng';
             $blogtitle = $lang['msg']['tag_manage'];
         }
+
         break;
+
     case 'PluginMng':
         if (is_null($admin_function)) {
             $admin_function = 'Admin_PluginMng';
             $blogtitle = $lang['msg']['plugin_manage'];
         }
+
         break;
+
     case 'ThemeMng':
         if (is_null($admin_function)) {
             $admin_function = 'Admin_ThemeMng';
             $blogtitle = $lang['msg']['theme_manage'];
         }
+
         break;
+
     case 'ModuleMng':
         if (is_null($admin_function)) {
             $admin_function = 'Admin_ModuleMng';
             $blogtitle = $lang['msg']['module_manage'];
         }
+
         break;
+
     case 'SettingMng':
         if (is_null($admin_function)) {
             $admin_function = 'Admin_SettingMng';
             $blogtitle = $lang['msg']['settings'];
         }
+
         break;
+
     case 'admin':
         if (is_null($admin_function)) {
             $admin_function = 'Admin_SiteInfo';
             $blogtitle = $lang['msg']['dashboard'];
         }
+
         break;
+
     default:
         foreach ($GLOBALS['hooks']['Filter_Plugin_Admin_Other_Action'] as $fpname => &$fpsignal) {
             $fpsignal = $fpname($zbp->action, $admin_function);
-            if ($fpsignal == PLUGIN_EXITSIGNAL_RETURN || $fpsignal == PLUGIN_EXITSIGNAL_BREAK) {
+            if (PLUGIN_EXITSIGNAL_RETURN == $fpsignal || PLUGIN_EXITSIGNAL_BREAK == $fpsignal) {
                 break;
             }
         }
         unset($fpsignal);
+
         break;
 }
 
 require ZBP_PATH . 'zb_system/admin/admin_header.php';
+
 require ZBP_PATH . 'zb_system/admin/admin_top.php';
 
 ?>
 <div id="divMain">
     <?php
     $admin_function();
-    ?>
+?>
 </div>
 <?php
 require ZBP_PATH . 'zb_system/admin/admin_footer.php';
